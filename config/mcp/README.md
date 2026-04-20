@@ -18,6 +18,12 @@ O workspace agora carrega uma malha MCP em duas camadas:
 
 Essa separacao evita autenticacao duplicada e reduz colisao entre configuracao repo-local e conectores nativos do host.
 
+## Escopo GitHub deste projeto
+
+- Toda integracao de repositorio via GitHub neste workspace fica limitada a `Ecossistema-Nexora/valley`.
+- O conector `github` continua `platform-managed`, mas a referencia canonica do repo fica em `config/mcp/VALLEY_MCP_MANIFEST.json` e `config/github/VALLEY_GITHUB_REPOSITORY.json`.
+- O remote Git esperado do worktree e `origin -> https://github.com/Ecossistema-Nexora/valley.git`.
+
 ## Onboarding rapido
 
 - Use `config/VALLEY_FIRST_CONNECTION_CHECKLIST.md` como checklist operacional de primeira conexao.

@@ -342,6 +342,55 @@ def build_release_summary(modules: list[dict[str, object]]) -> dict[str, object]
     }
 
 
+def build_release_queue_summary(modules: list[dict[str, object]]) -> dict[str, object]:
+    """Prioriza os proximos modulos de release para o cockpit."""
+
+    tier_rank = {
+        'foundation': 0,
+        'core': 1,
+        'expansion': 2,
+        'frontier': 3,
+    }
+    queue_items: list[dict[str, object]] = []
+
+    for module in sorted(
+        modules,
+        key=lambda item: (
+            tier_rank.get(str(item.get('tier')), 99),
+            0 if str(item.get('automation_status')) == 'planned' else 1,
+            -int(item['checklist']['pending']),
+            module_readiness(item),
+            int(item.get('number', 0)),
+        ),
+    ):
+        pending = int(module['checklist']['pending'])
+
+        if pending <= 0:
+            continue
+
+        queue_items.append({
+            'number': module['number'],
+            'code': module['code'],
+            'name': module['name'],
+            'subtitle': module['subtitle'],
+            'domain': module['domain'],
+            'tier': module['tier'],
+            'data_home': module['data_home'],
+            'automation_status': module['automation_status'],
+            'status_label': module['status_label'],
+            'checklist_done': module['checklist']['done'],
+            'checklist_pending': pending,
+            'checklist_total': module['checklist']['total'],
+            'module_readiness_percentage': module_readiness(module),
+            'next_focus': module['admin_actions'][:3],
+        })
+
+    return {
+        'items_total': len(queue_items),
+        'items': queue_items[:12],
+    }
+
+
 def build_public_runtime_summary() -> dict[str, object]:
     """Resume o runtime publico do painel admin a partir do manifesto do ngrok."""
 
@@ -446,6 +495,7 @@ def build_payload() -> dict[str, object]:
             'by_domain': dict(sorted(by_domain.items())),
         },
         'release_summary': build_release_summary(modules),
+        'release_queue_summary': build_release_queue_summary(modules),
         'public_runtime': build_public_runtime_summary(),
         'database_summary': {
             'postgres_migrations': len(manifest.get('postgres', [])),

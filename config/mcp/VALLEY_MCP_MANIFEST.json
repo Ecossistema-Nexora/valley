@@ -10,7 +10,14 @@
       "mode": "platform-managed",
       "platform_name": "GitHub",
       "auth": "platform_token",
-      "reason": "GitHub tooling ja e fornecido pelo host do agente e permanece fora do workspace para evitar autenticacao duplicada."
+      "reason": "GitHub tooling ja e fornecido pelo host do agente e permanece fora do workspace para evitar autenticacao duplicada.",
+      "repository_scope": {
+        "policy": "single_repository_only",
+        "owner": "Ecossistema-Nexora",
+        "repo": "valley",
+        "url": "https://github.com/Ecossistema-Nexora/valley",
+        "remote_name": "origin"
+      }
     },
     "docker": {
       "mode": "platform-managed",

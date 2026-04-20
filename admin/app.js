@@ -130,6 +130,21 @@
     };
   }
 
+  function normalizeReleaseQueueSummary(summary) {
+    return {
+      items_total: Number(summary?.items_total) || 0,
+      items: Array.isArray(summary?.items)
+        ? summary.items.map((item) => ({
+            ...normalizePendingModule(item),
+            subtitle: item?.subtitle || "Sem subtitulo",
+            domain: item?.domain || "sem_dominio",
+            data_home: item?.data_home || "indefinido",
+            next_focus: Array.isArray(item?.next_focus) ? item.next_focus : [],
+          }))
+        : [],
+    };
+  }
+
   function normalizePublicRuntime(runtime) {
     return {
       available: Boolean(runtime?.available),
@@ -156,6 +171,7 @@
       public_access: source.public_access || {},
       public_runtime: normalizePublicRuntime(source.public_runtime),
       release_summary: normalizeReleaseSummary(source.release_summary),
+      release_queue_summary: normalizeReleaseQueueSummary(source.release_queue_summary),
       roadmap: source.roadmap || {},
       database_summary: {
         postgres_migrations: Number(databaseSummary.postgres_migrations) || 0,
@@ -1126,10 +1142,13 @@
   }
 
   function renderReleaseQueue(modules) {
-    const queue = modules
-      .slice()
-      .sort((left, right) => modulePriorityScore(left) - modulePriorityScore(right))
-      .slice(0, 6);
+    const queue =
+      data.release_queue_summary.items.length > 0
+        ? data.release_queue_summary.items.slice(0, 6)
+        : modules
+            .slice()
+            .sort((left, right) => modulePriorityScore(left) - modulePriorityScore(right))
+            .slice(0, 6);
 
     if (!queue.length) {
       elements.releaseQueue.innerHTML = `<div class="empty-state">Nenhum modulo disponivel para fila de evolucao.</div>`;
@@ -1155,6 +1174,9 @@
               ${rowPill(`${formatCount(module.checklist.pending)} pendencias`, module.checklist.pending ? "pill-warn" : "pill-accent")}
             </div>
             ${progressMarkup(readiness)}
+            <div class="pill-row">
+              ${(module.next_focus || []).map((action) => rowPill(action)).join("")}
+            </div>
           </article>
         `;
       })

@@ -1,0 +1,11 @@
+# GitHub repository binding
+GITHUB_REPOSITORY_OWNER=Ecossistema-Nexora
+GITHUB_REPOSITORY_NAME=valley
+GITHUB_REPOSITORY_URL=https://github.com/Ecossistema-Nexora/valley
+GIT_REMOTE_NAME=origin
+GIT_REMOTE_FETCH_URL=https://github.com/Ecossistema-Nexora/valley.git
+GIT_REMOTE_PUSH_URL=https://github.com/Ecossistema-Nexora/valley.git
+
+# Public release runtime
+# Defina somente quando tiver um dominio reservado no ngrok.
+VALLEY_NGROK_ADMIN_DOMAIN=

@@ -1,5 +1,7 @@
 {
   "recommendations": [
+    "GitHub.vscode-pull-request-github",
+    "github.vscode-github-actions",
     "Google.geminicodeassist",
     "ms-python.python",
     "ms-python.vscode-pylance",

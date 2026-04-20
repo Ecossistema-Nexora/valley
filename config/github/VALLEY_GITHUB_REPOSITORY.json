@@ -1,0 +1,14 @@
+{
+  "provider": "github",
+  "scope_policy": "single_repository_only",
+  "owner": "Ecossistema-Nexora",
+  "repo": "valley",
+  "url": "https://github.com/Ecossistema-Nexora/valley",
+  "fetch_url": "https://github.com/Ecossistema-Nexora/valley.git",
+  "push_url": "https://github.com/Ecossistema-Nexora/valley.git",
+  "remote_name": "origin",
+  "notes": [
+    "Este workspace deve operar somente contra o repositorio Valley.",
+    "Qualquer configuracao GitHub fora deste repo e considerada divergencia de release."
+  ]
+}

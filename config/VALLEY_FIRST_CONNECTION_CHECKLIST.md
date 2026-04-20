@@ -19,8 +19,18 @@ Checklist curto para subir MCP e acesso externo sem ambiguidade.
 - `platform-managed`: conectores fornecidos pelo host do agente, fora do repositorio.
 - Neste projeto: `github`, `docker`.
 - Regra: nao duplicar esses conectores em arquivo local do workspace.
+- Regra adicional para GitHub: toda automacao e leitura de repositorio deve apontar somente para `Ecossistema-Nexora/valley`.
+- Remote esperado neste worktree: `origin -> https://github.com/Ecossistema-Nexora/valley.git`.
 
 Referencia: `config/mcp/VALLEY_MCP_MANIFEST.json`
+
+## 2.1. Binding canonico do repositorio GitHub
+
+- Repo oficial: `https://github.com/Ecossistema-Nexora/valley`
+- Owner: `Ecossistema-Nexora`
+- Nome: `valley`
+- Remote Git canonico: `origin`
+- Nao use `valley_omniverse` como repo de operacao deste workspace.
 
 ## 3. ngrok: URL externa dinamica
 

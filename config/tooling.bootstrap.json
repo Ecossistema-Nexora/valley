@@ -1,6 +1,8 @@
 {
   "version": "v47",
   "workspace_extensions": [
+    "GitHub.vscode-pull-request-github",
+    "github.vscode-github-actions",
     "Google.geminicodeassist",
     "ms-python.python",
     "ms-python.vscode-pylance",
@@ -34,6 +36,11 @@
       "required": true
     },
     {
+      "name": "git",
+      "type": "command",
+      "required": true
+    },
+    {
       "name": "MongoDB Shell",
       "type": "winget",
       "id": "MongoDB.Shell",
@@ -46,5 +53,15 @@
       "required": false
     }
   ],
-  "canonical_builder_command": "docker compose --profile builder run --rm --build builder"
+  "canonical_builder_command": "docker compose --profile builder run --rm --build builder",
+  "github_repository_binding": {
+    "provider": "github",
+    "owner": "Ecossistema-Nexora",
+    "repo": "valley",
+    "url": "https://github.com/Ecossistema-Nexora/valley",
+    "fetch_url": "https://github.com/Ecossistema-Nexora/valley.git",
+    "push_url": "https://github.com/Ecossistema-Nexora/valley.git",
+    "remote_name": "origin",
+    "scope_policy": "single_repository_only"
+  }
 }

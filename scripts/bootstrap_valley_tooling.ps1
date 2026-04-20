@@ -33,6 +33,72 @@ function Add-Result {
     })
 }
 
+function Configure-GitRepositoryBinding {
+  param(
+    [object]$Binding
+  )
+
+  if ($null -eq $Binding) {
+    Add-Result -Name 'github-repository-binding' -Kind 'git' -Status 'skipped' -Detail 'binding nao declarado no manifesto'
+    return
+  }
+
+  $gitCommand = Get-Command git -ErrorAction SilentlyContinue
+
+  if ($null -eq $gitCommand) {
+    Add-Result -Name 'github-repository-binding' -Kind 'git' -Status 'missing' -Detail 'git nao encontrado no PATH'
+    return
+  }
+
+  try {
+    $isGitWorkTree = (& $gitCommand.Source -C $root rev-parse --is-inside-work-tree 2>$null).Trim()
+  }
+  catch {
+    $isGitWorkTree = ''
+  }
+
+  if ($isGitWorkTree -ne 'true') {
+    Add-Result -Name 'github-repository-binding' -Kind 'git' -Status 'skipped' -Detail 'workspace nao esta em um git worktree'
+    return
+  }
+
+  $remoteName = if ($Binding.remote_name) { [string]$Binding.remote_name } else { 'origin' }
+  $fetchUrl = [string]$Binding.fetch_url
+  $pushUrl = if ($Binding.push_url) { [string]$Binding.push_url } else { $fetchUrl }
+
+  if ([string]::IsNullOrWhiteSpace($fetchUrl)) {
+    Add-Result -Name 'github-repository-binding' -Kind 'git' -Status 'failed' -Detail 'fetch_url vazio no manifesto'
+    return
+  }
+
+  try {
+    $existingFetchUrl = (& $gitCommand.Source -C $root remote get-url $remoteName 2>$null).Trim()
+  }
+  catch {
+    $existingFetchUrl = ''
+  }
+
+  if ([string]::IsNullOrWhiteSpace($existingFetchUrl)) {
+    & $gitCommand.Source -C $root remote add $remoteName $fetchUrl | Out-Null
+  }
+  elseif ($existingFetchUrl -ne $fetchUrl) {
+    & $gitCommand.Source -C $root remote set-url $remoteName $fetchUrl | Out-Null
+  }
+
+  try {
+    $existingPushUrl = (& $gitCommand.Source -C $root remote get-url --push $remoteName 2>$null).Trim()
+  }
+  catch {
+    $existingPushUrl = ''
+  }
+
+  if ($existingPushUrl -ne $pushUrl) {
+    & $gitCommand.Source -C $root remote set-url --push $remoteName $pushUrl | Out-Null
+  }
+
+  Add-Result -Name 'github-repository-binding' -Kind 'git' -Status 'ok' -Detail ("{0} -> {1}" -f $remoteName, $fetchUrl)
+}
+
 foreach ($tool in $manifest.host_tools) {
   if ($tool.type -eq 'command') {
     $command = Get-Command $tool.name -ErrorAction SilentlyContinue
@@ -44,6 +110,8 @@ foreach ($tool in $manifest.host_tools) {
     }
   }
 }
+
+Configure-GitRepositoryBinding -Binding $manifest.github_repository_binding
 
 if ($InstallExtensions) {
   $codeCommand = Get-Command code -ErrorAction SilentlyContinue

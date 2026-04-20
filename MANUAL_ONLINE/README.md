@@ -166,6 +166,18 @@ Esse script tambem aplica migrations via `psql`, `mongosh` ou Docker Compose qua
 
 `output/deployment/VALLEY_DEPLOYMENT_STATUS.md` registra a ultima checagem operacional gerada pelo orquestrador.
 
+## Atualizacao Release - Lote Core Health, Finance e Media
+
+`HEALTH` agora esta tecnicamente revisado sobre `health_profiles`, `health_care_plans` e `health_prescriptions`, mantendo o master clinico no PostgreSQL e usando `ai_memory` apenas como contexto complementar de acompanhamento.
+
+`FINANCAS` agora esta tecnicamente revisado sobre `financial_goals`, com integracao direta ao eixo `wallets` + `transactions` e protecao adicional da regra `BR-FIN-002` para ring-fence financeiro.
+
+`MENTE` agora esta tecnicamente revisado sobre `teletherapy_sessions`, com notas cifradas, timeline validada e ponte opcional para planos de cuidado de `HEALTH`.
+
+`UP` agora esta tecnicamente revisado sobre `affiliate_referrals`, `social_videos`, `influencer_metrics` e a regra `BR-UP-COMMISSION-001`, confirmando a fronteira entre afiliacao, atribuicao e repasse.
+
+`MEDIA` agora esta tecnicamente revisado sobre `creator_uploads` e `social_videos`, sem abrir tabela redundante para pipeline editorial ou creator ops nesta fase.
+
 ## Passo 1 - Nucleo de Identidade e Wallets
 
 `users` e o no central absoluto do ecossistema.
