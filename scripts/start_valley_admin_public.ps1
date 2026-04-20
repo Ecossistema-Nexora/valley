@@ -1,7 +1,8 @@
 param(
     [string]$BindHost = '127.0.0.1',
     [int]$AdminPort = 8080,
-    [string]$ReservedDomain = $env:VALLEY_NGROK_ADMIN_DOMAIN,
+    [string]$ReservedDomain = '',
+    [string]$NgrokAuthtoken = '',
     [string]$NgrokApiHost = '127.0.0.1',
     [int]$NgrokApiPort = 4040
 )
@@ -11,20 +12,78 @@ $ErrorActionPreference = 'Stop'
 
 $RepoRoot = Split-Path -Parent $PSScriptRoot
 $RuntimeDir = Join-Path $RepoRoot 'tmp\runtime'
-$ServeStdoutLog = Join-Path $RuntimeDir 'valley-admin-http.out.log'
-$ServeStderrLog = Join-Path $RuntimeDir 'valley-admin-http.err.log'
-$NgrokStdoutLog = Join-Path $RuntimeDir 'valley-admin-ngrok.out.log'
-$NgrokStderrLog = Join-Path $RuntimeDir 'valley-admin-ngrok.err.log'
+$RuntimePortSuffix = $AdminPort.ToString()
+$ServeStdoutLog = Join-Path $RuntimeDir ("valley-admin-http.{0}.out.log" -f $RuntimePortSuffix)
+$ServeStderrLog = Join-Path $RuntimeDir ("valley-admin-http.{0}.err.log" -f $RuntimePortSuffix)
+$NgrokStdoutLog = Join-Path $RuntimeDir ("valley-admin-ngrok.{0}.out.log" -f $RuntimePortSuffix)
+$NgrokStderrLog = Join-Path $RuntimeDir ("valley-admin-ngrok.{0}.err.log" -f $RuntimePortSuffix)
+$NgrokConfigPath = Join-Path $RuntimeDir ("valley-admin-ngrok.{0}.runtime.yml" -f $RuntimePortSuffix)
 $RuntimeManifest = Join-Path $RuntimeDir 'valley-admin-public-runtime.json'
 $ServeScript = Join-Path $RepoRoot 'scripts\serve_valley_admin.py'
 $AdminRoot = Join-Path $RepoRoot 'admin'
 $AdminData = Join-Path $AdminRoot 'valley_admin_data.json'
+$EnvExamplePath = Join-Path $RepoRoot '.env.example'
+$ReleaseEnvExamplePath = Join-Path $RepoRoot 'config\VALLEY_RELEASE_ENV.example'
+$EnvPath = Join-Path $RepoRoot '.env'
+$NgrokGlobalConfig = Join-Path $env:LOCALAPPDATA 'ngrok\ngrok.yml'
 
 New-Item -ItemType Directory -Path $RuntimeDir -Force | Out-Null
 
 function Write-Step {
     param([string]$Message)
     Write-Output ("[thor] {0}" -f $Message)
+}
+
+function Parse-EnvFile {
+    param(
+        [string]$Path
+    )
+
+    $Values = @{}
+
+    if (-not (Test-Path -LiteralPath $Path)) {
+        return $Values
+    }
+
+    foreach ($RawLine in Get-Content -LiteralPath $Path) {
+        $Line = $RawLine.Trim()
+
+        if (-not $Line -or $Line.StartsWith('#') -or -not $Line.Contains('=')) {
+            continue
+        }
+
+        $Key, $Value = $Line.Split('=', 2)
+        $Key = $Key.Trim()
+        $Value = $Value.Trim().Trim('"').Trim("'")
+
+        if ($Key) {
+            $Values[$Key] = $Value
+        }
+    }
+
+    return $Values
+}
+
+function Import-ValleyEnv {
+    param(
+        [string[]]$Paths
+    )
+
+    $LoadedSources = @{}
+
+    foreach ($Path in $Paths) {
+        foreach ($Entry in (Parse-EnvFile -Path $Path).GetEnumerator()) {
+            $CurrentValue = [Environment]::GetEnvironmentVariable($Entry.Key, 'Process')
+            $CanOverride = $LoadedSources.ContainsKey($Entry.Key)
+
+            if ([string]::IsNullOrWhiteSpace($CurrentValue) -or $CanOverride) {
+                [Environment]::SetEnvironmentVariable($Entry.Key, $Entry.Value, 'Process')
+                $LoadedSources[$Entry.Key] = Split-Path -Leaf $Path
+            }
+        }
+    }
+
+    return $LoadedSources
 }
 
 function Resolve-PythonLauncher {
@@ -201,6 +260,62 @@ function Wait-NgrokTunnel {
     return $null
 }
 
+function Write-NgrokRuntimeConfig {
+    param(
+        [string]$Path,
+        [string]$TargetAddr,
+        [string]$ApiHost,
+        [int]$ApiPort,
+        [string]$ReservedDomain,
+        [string]$Authtoken
+    )
+
+    $Lines = [System.Collections.Generic.List[string]]::new()
+    $Lines.Add('version: "2"')
+
+    if ($Authtoken) {
+        $Lines.Add(("authtoken: {0}" -f $Authtoken))
+    }
+
+    $Lines.Add(("web_addr: {0}:{1}" -f $ApiHost, $ApiPort))
+    $Lines.Add('tunnels:')
+    $Lines.Add('  valley-admin:')
+    $Lines.Add('    proto: http')
+    $Lines.Add(("    addr: {0}" -f $TargetAddr))
+    $Lines.Add('    inspect: true')
+
+    if ($ReservedDomain) {
+        $Lines.Add(("    domain: {0}" -f $ReservedDomain))
+    }
+
+    $Content = ($Lines -join "`n") + "`n"
+    [System.IO.File]::WriteAllText($Path, $Content, [System.Text.UTF8Encoding]::new($false))
+}
+
+function Get-NgrokStartArgs {
+    param(
+        [string]$RuntimeConfigPath,
+        [string]$GlobalConfigPath,
+        [bool]$UseGlobalConfig
+    )
+
+    $Args = [System.Collections.Generic.List[string]]::new()
+    $Args.Add('start')
+    $Args.Add('valley-admin')
+
+    if ($UseGlobalConfig) {
+        $Args.Add('--config')
+        $Args.Add($GlobalConfigPath)
+    }
+
+    $Args.Add('--config')
+    $Args.Add($RuntimeConfigPath)
+    $Args.Add('--log')
+    $Args.Add('stdout')
+
+    return @($Args)
+}
+
 function Write-RuntimeManifest {
     param(
         [hashtable]$Payload
@@ -218,6 +333,20 @@ if (-not (Test-Path -LiteralPath $AdminRoot)) {
     throw "Diretorio admin nao encontrado: $AdminRoot"
 }
 
+$EnvSources = Import-ValleyEnv -Paths @($EnvExamplePath, $ReleaseEnvExamplePath, $EnvPath)
+
+if (-not $PSBoundParameters.ContainsKey('ReservedDomain') -and $env:VALLEY_NGROK_ADMIN_DOMAIN) {
+    $ReservedDomain = $env:VALLEY_NGROK_ADMIN_DOMAIN
+}
+
+if (-not $PSBoundParameters.ContainsKey('NgrokAuthtoken')) {
+    if ($env:VALLEY_NGROK_AUTHTOKEN) {
+        $NgrokAuthtoken = $env:VALLEY_NGROK_AUTHTOKEN
+    } elseif ($env:NGROK_AUTHTOKEN) {
+        $NgrokAuthtoken = $env:NGROK_AUTHTOKEN
+    }
+}
+
 $PythonLauncher = Resolve-PythonLauncher
 $Ngrok = Resolve-CommandSource -Name 'ngrok' -InstallHint "Instale o ngrok e autentique a CLI. Exemplo: baixe em https://ngrok.com/download e rode 'ngrok config add-authtoken <TOKEN>'."
 $LocalTarget = '{0}:{1}' -f $BindHost, $AdminPort
@@ -225,9 +354,24 @@ $LocalBaseUrl = 'http://{0}:{1}' -f $BindHost, $AdminPort
 $LocalHealthUrl = '{0}/healthz' -f $LocalBaseUrl
 $LocalDataUrl = '{0}/api/admin-data' -f $LocalBaseUrl
 $NgrokVersion = (& $Ngrok version) 2>$null
+$UseGlobalNgrokConfig = (-not $NgrokAuthtoken) -and (Test-Path -LiteralPath $NgrokGlobalConfig)
+$NgrokAuthSource = 'missing'
+
+if ($NgrokAuthtoken) {
+    if ($env:VALLEY_NGROK_AUTHTOKEN -and $NgrokAuthtoken -eq $env:VALLEY_NGROK_AUTHTOKEN) {
+        $NgrokAuthSource = if ($EnvSources.ContainsKey('VALLEY_NGROK_AUTHTOKEN')) { $EnvSources['VALLEY_NGROK_AUTHTOKEN'] } else { 'ambiente' }
+    } elseif ($env:NGROK_AUTHTOKEN -and $NgrokAuthtoken -eq $env:NGROK_AUTHTOKEN) {
+        $NgrokAuthSource = 'ambiente'
+    } else {
+        $NgrokAuthSource = 'parametro'
+    }
+} elseif ($UseGlobalNgrokConfig) {
+    $NgrokAuthSource = 'ngrok global config'
+}
 
 Write-Step ("Python: {0}" -f $PythonLauncher.FilePath)
 Write-Step ("ngrok: {0}" -f $NgrokVersion)
+Write-Step ("Autenticacao ngrok: {0}" -f $NgrokAuthSource)
 
 $HealthPayload = Test-JsonEndpoint -Url $LocalHealthUrl
 $ServeProcess = $null
@@ -318,16 +462,8 @@ if (-not $SelectedTunnel) {
         [System.IO.File]::WriteAllText($NgrokStdoutLog, '', [System.Text.UTF8Encoding]::new($false))
         [System.IO.File]::WriteAllText($NgrokStderrLog, '', [System.Text.UTF8Encoding]::new($false))
 
-        $NgrokArgs = @(
-            'http',
-            $LocalTarget,
-            '--web-addr', ('{0}:{1}' -f $NgrokApiHost, $CandidatePort),
-            '--log', 'stdout'
-        )
-
-        if ($ReservedDomain) {
-            $NgrokArgs += @('--domain', $ReservedDomain)
-        }
+        Write-NgrokRuntimeConfig -Path $NgrokConfigPath -TargetAddr $LocalTarget -ApiHost $NgrokApiHost -ApiPort $CandidatePort -ReservedDomain $ReservedDomain -Authtoken $NgrokAuthtoken
+        $NgrokArgs = Get-NgrokStartArgs -RuntimeConfigPath $NgrokConfigPath -GlobalConfigPath $NgrokGlobalConfig -UseGlobalConfig $UseGlobalNgrokConfig
 
         Write-Step ("Subindo ngrok em API local {0}" -f $CandidateApiUrl)
         $NgrokProcess = Start-Process -FilePath $Ngrok -ArgumentList $NgrokArgs -WorkingDirectory $RepoRoot -RedirectStandardOutput $NgrokStdoutLog -RedirectStandardError $NgrokStderrLog -WindowStyle Hidden -PassThru
@@ -347,6 +483,9 @@ if (-not $SelectedTunnel) {
 
 if (-not $SelectedTunnel) {
     Stop-ProcessIfOwned -ProcessObject $NgrokProcess
+    if (-not $ServeReused) {
+        Stop-ProcessIfOwned -ProcessObject $ServeProcess
+    }
     $NgrokStdoutTail = Get-FileTail -Path $NgrokStdoutLog
     $NgrokStderrTail = Get-FileTail -Path $NgrokStderrLog
     throw "Nao foi possivel obter um tunnel publico do ngrok para $LocalTarget.`nSTDOUT ngrok:`n$NgrokStdoutTail`nSTDERR ngrok:`n$NgrokStderrTail"
@@ -373,6 +512,7 @@ $Manifest = @{
         inspect_url = $SelectedTunnel.inspect_url
         tunnel_name = $SelectedTunnel.name
         permanence = $(if ($ReservedDomain) { 'reserved-domain' } else { 'ephemeral' })
+        auth_source = $NgrokAuthSource
     }
     files = @{
         runtime_manifest = $RuntimeManifest
@@ -382,6 +522,7 @@ $Manifest = @{
         ngrok_log = $NgrokStdoutLog
         ngrok_stdout_log = $NgrokStdoutLog
         ngrok_stderr_log = $NgrokStderrLog
+        ngrok_runtime_config = $NgrokConfigPath
         serve_script = $ServeScript
         admin_root = $AdminRoot
         admin_data = $AdminData
