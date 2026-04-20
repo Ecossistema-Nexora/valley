@@ -1,5 +1,5 @@
 window.VALLEY_ADMIN_DATA = {
-  "generated_at_utc": "2026-04-20T06:45:28.464444+00:00",
+  "generated_at_utc": "2026-04-20T07:54:52.198540+00:00",
   "registry_name": "Valley Omniverse V47 - Registro Canonico de Modulos",
   "source": "Esquema Consolidado do Valley Omniverse v47.pdf",
   "language_policy": "pt-BR simples com termos tecnicos em ingles quando forem padroes",
@@ -34,13 +34,13 @@ window.VALLEY_ADMIN_DATA = {
   },
   "release_summary": {
     "modules_total": 47,
-    "modules_completed": 17,
-    "modules_with_pending": 30,
+    "modules_completed": 22,
+    "modules_with_pending": 25,
     "checklist_items_total": 470,
-    "checklist_items_done": 253,
-    "checklist_items_pending": 217,
-    "checklist_completion_percentage": 53.83,
-    "average_module_readiness_percentage": 53.83,
+    "checklist_items_done": 288,
+    "checklist_items_pending": 182,
+    "checklist_completion_percentage": 61.28,
+    "average_module_readiness_percentage": 61.28,
     "top_modules_with_pending": [
       {
         "number": 21,
@@ -151,10 +151,10 @@ window.VALLEY_ADMIN_DATA = {
         "module_readiness_percentage": 30.0
       },
       {
-        "number": 13,
-        "code": "HEALTH",
-        "name": "Valley Health",
-        "tier": "core",
+        "number": 14,
+        "code": "EDU",
+        "name": "Valley Edu",
+        "tier": "expansion",
         "automation_status": "implemented_partial",
         "status_label": "Parcialmente implantado",
         "checklist_done": 3,
@@ -166,13 +166,13 @@ window.VALLEY_ADMIN_DATA = {
     "by_tier": {
       "core": {
         "modules_total": 21,
-        "modules_completed": 10,
-        "modules_with_pending": 11,
+        "modules_completed": 15,
+        "modules_with_pending": 6,
         "checklist_items_total": 210,
-        "checklist_items_done": 133,
-        "checklist_items_pending": 77,
-        "checklist_completion_percentage": 63.33,
-        "average_module_readiness_percentage": 63.33
+        "checklist_items_done": 168,
+        "checklist_items_pending": 42,
+        "checklist_completion_percentage": 80.0,
+        "average_module_readiness_percentage": 80.0
       },
       "expansion": {
         "modules_total": 14,
@@ -208,13 +208,13 @@ window.VALLEY_ADMIN_DATA = {
     "by_automation_status": {
       "implemented_partial": {
         "modules_total": 39,
-        "modules_completed": 16,
-        "modules_with_pending": 23,
+        "modules_completed": 21,
+        "modules_with_pending": 18,
         "checklist_items_total": 390,
-        "checklist_items_done": 229,
-        "checklist_items_pending": 161,
-        "checklist_completion_percentage": 58.72,
-        "average_module_readiness_percentage": 58.72
+        "checklist_items_done": 264,
+        "checklist_items_pending": 126,
+        "checklist_completion_percentage": 67.69,
+        "average_module_readiness_percentage": 67.69
       },
       "planned": {
         "modules_total": 8,
@@ -227,6 +227,251 @@ window.VALLEY_ADMIN_DATA = {
         "average_module_readiness_percentage": 30.0
       }
     }
+  },
+  "release_queue_summary": {
+    "items_total": 25,
+    "items": [
+      {
+        "number": 15,
+        "code": "TECH",
+        "name": "Valley Tech",
+        "subtitle": "SaaS Infrastructure & API Builder",
+        "domain": "platform_developer",
+        "tier": "foundation",
+        "data_home": "postgres",
+        "automation_status": "implemented_partial",
+        "status_label": "Parcialmente implantado",
+        "checklist_done": 3,
+        "checklist_pending": 7,
+        "checklist_total": 10,
+        "module_readiness_percentage": 30.0,
+        "next_focus": [
+          "revisar_schema_postgres",
+          "alinhar_rbac_abac",
+          "registrar_regras_negocio"
+        ]
+      },
+      {
+        "number": 29,
+        "code": "LEGAL",
+        "name": "Valley Legal",
+        "subtitle": "Smart Contracts, Fallback PIN & AI Mediator",
+        "domain": "city_mobility_security",
+        "tier": "foundation",
+        "data_home": "postgres",
+        "automation_status": "implemented_partial",
+        "status_label": "Parcialmente implantado",
+        "checklist_done": 3,
+        "checklist_pending": 7,
+        "checklist_total": 10,
+        "module_readiness_percentage": 30.0,
+        "next_focus": [
+          "revisar_schema_postgres",
+          "alinhar_rbac_abac",
+          "registrar_regras_negocio"
+        ]
+      },
+      {
+        "number": 33,
+        "code": "IOT",
+        "name": "Valley IoT",
+        "subtitle": "Connected Things & Smart Hub",
+        "domain": "frontier_iot_energy",
+        "tier": "foundation",
+        "data_home": "mongo",
+        "automation_status": "implemented_partial",
+        "status_label": "Parcialmente implantado",
+        "checklist_done": 3,
+        "checklist_pending": 7,
+        "checklist_total": 10,
+        "module_readiness_percentage": 30.0,
+        "next_focus": [
+          "revisar_schema_mongo",
+          "alinhar_rbac_abac",
+          "registrar_regras_negocio"
+        ]
+      },
+      {
+        "number": 42,
+        "code": "BUSINESS",
+        "name": "Valley Business",
+        "subtitle": "ERP de Integracao",
+        "domain": "logistics_erp_operations",
+        "tier": "foundation",
+        "data_home": "postgres",
+        "automation_status": "implemented_partial",
+        "status_label": "Parcialmente implantado",
+        "checklist_done": 3,
+        "checklist_pending": 7,
+        "checklist_total": 10,
+        "module_readiness_percentage": 30.0,
+        "next_focus": [
+          "revisar_schema_postgres",
+          "alinhar_rbac_abac",
+          "registrar_regras_negocio"
+        ]
+      },
+      {
+        "number": 47,
+        "code": "DOCS",
+        "name": "Valley Docs",
+        "subtitle": "Fabrica de Documentos e Recibos",
+        "domain": "platform_developer",
+        "tier": "foundation",
+        "data_home": "postgres",
+        "automation_status": "implemented_partial",
+        "status_label": "Parcialmente implantado",
+        "checklist_done": 3,
+        "checklist_pending": 7,
+        "checklist_total": 10,
+        "module_readiness_percentage": 30.0,
+        "next_focus": [
+          "revisar_schema_postgres",
+          "alinhar_rbac_abac",
+          "registrar_regras_negocio"
+        ]
+      },
+      {
+        "number": 16,
+        "code": "JOBS",
+        "name": "Valley Jobs",
+        "subtitle": "AI Matchmaking",
+        "domain": "education_work_social",
+        "tier": "core",
+        "data_home": "postgres_mongo",
+        "automation_status": "implemented_partial",
+        "status_label": "Parcialmente implantado",
+        "checklist_done": 3,
+        "checklist_pending": 7,
+        "checklist_total": 10,
+        "module_readiness_percentage": 30.0,
+        "next_focus": [
+          "revisar_schema_postgres",
+          "revisar_schema_mongo",
+          "alinhar_rbac_abac"
+        ]
+      },
+      {
+        "number": 22,
+        "code": "PHARMACY",
+        "name": "Valley Pharmacy",
+        "subtitle": "Smart Meds",
+        "domain": "services_health_human",
+        "tier": "core",
+        "data_home": "postgres",
+        "automation_status": "implemented_partial",
+        "status_label": "Parcialmente implantado",
+        "checklist_done": 3,
+        "checklist_pending": 7,
+        "checklist_total": 10,
+        "module_readiness_percentage": 30.0,
+        "next_focus": [
+          "revisar_schema_postgres",
+          "alinhar_rbac_abac",
+          "registrar_regras_negocio"
+        ]
+      },
+      {
+        "number": 25,
+        "code": "EVENTS",
+        "name": "Valley Events",
+        "subtitle": "Safe Tickets & Event Escrow",
+        "domain": "city_mobility_security",
+        "tier": "core",
+        "data_home": "postgres",
+        "automation_status": "implemented_partial",
+        "status_label": "Parcialmente implantado",
+        "checklist_done": 3,
+        "checklist_pending": 7,
+        "checklist_total": 10,
+        "module_readiness_percentage": 30.0,
+        "next_focus": [
+          "revisar_schema_postgres",
+          "alinhar_rbac_abac",
+          "registrar_regras_negocio"
+        ]
+      },
+      {
+        "number": 26,
+        "code": "MOBILITY",
+        "name": "Valley Mobility",
+        "subtitle": "Urban Transport & Carpool",
+        "domain": "city_mobility_security",
+        "tier": "core",
+        "data_home": "postgres_mongo",
+        "automation_status": "implemented_partial",
+        "status_label": "Parcialmente implantado",
+        "checklist_done": 3,
+        "checklist_pending": 7,
+        "checklist_total": 10,
+        "module_readiness_percentage": 30.0,
+        "next_focus": [
+          "revisar_schema_postgres",
+          "revisar_schema_mongo",
+          "alinhar_rbac_abac"
+        ]
+      },
+      {
+        "number": 27,
+        "code": "SECURITY",
+        "name": "Valley Security",
+        "subtitle": "SOS, Protection & Biometric Guard",
+        "domain": "city_mobility_security",
+        "tier": "core",
+        "data_home": "postgres_mongo",
+        "automation_status": "implemented_partial",
+        "status_label": "Parcialmente implantado",
+        "checklist_done": 3,
+        "checklist_pending": 7,
+        "checklist_total": 10,
+        "module_readiness_percentage": 30.0,
+        "next_focus": [
+          "revisar_schema_postgres",
+          "revisar_schema_mongo",
+          "alinhar_rbac_abac"
+        ]
+      },
+      {
+        "number": 43,
+        "code": "PLUG",
+        "name": "Valley Plug",
+        "subtitle": "Maquininha & Tap-to-Pay",
+        "domain": "commerce_fintech_assets",
+        "tier": "core",
+        "data_home": "postgres",
+        "automation_status": "implemented_partial",
+        "status_label": "Parcialmente implantado",
+        "checklist_done": 3,
+        "checklist_pending": 7,
+        "checklist_total": 10,
+        "module_readiness_percentage": 30.0,
+        "next_focus": [
+          "revisar_schema_postgres",
+          "alinhar_rbac_abac",
+          "registrar_regras_negocio"
+        ]
+      },
+      {
+        "number": 21,
+        "code": "FITNESS",
+        "name": "Valley Fitness",
+        "subtitle": "Move-to-Earn",
+        "domain": "services_health_human",
+        "tier": "expansion",
+        "data_home": "mongo",
+        "automation_status": "planned",
+        "status_label": "Planejado",
+        "checklist_done": 2,
+        "checklist_pending": 8,
+        "checklist_total": 10,
+        "module_readiness_percentage": 20.0,
+        "next_focus": [
+          "revisar_schema_mongo",
+          "alinhar_rbac_abac",
+          "registrar_regras_negocio"
+        ]
+      }
+    ]
   },
   "public_runtime": {
     "available": true,
@@ -1706,14 +1951,14 @@ window.VALLEY_ADMIN_DATA = {
       },
       "docs": {
         "readme": "# 13. Valley Health\n\nEste arquivo e gerado pela automacao `scripts/valley_module_automation.py`.\n\nEle descreve o modulo em linguagem simples e serve como ponto inicial para desenvolvimento, implantacao e evolucao continua.\n\n## Identidade Tecnica\n\n- Codigo tecnico: `HEALTH`\n- Subtitulo: `Predictive Care`\n- Dominio: `services_health_human`\n- Tier: `core`\n- Data home: `postgres_mongo`\n- Status atual: `Parcialmente implantado`\n\n## Finalidade\n\nSaude preditiva, cuidados integrados e dados sensiveis.\n\n## Dependencias\n\nID\n\n## Integracoes\n\nFOOD, FITNESS, PHARMACY\n\n## Trilha De Implantacao\n\n1. Confirmar contrato de dados com `users.user_id` como no central.\n2. Definir tabelas PostgreSQL quando houver dinheiro, identidade, contrato, documento ou transacao.\n3. Definir colecoes MongoDB quando houver IA, social, telemetria, eventos volumosos ou conteudo semi-estruturado.\n4. Registrar regras de negocio em `business_rule_definitions` quando houver pricing, comissao, risco, permissao ou compliance.\n5. Atualizar este README, o Manual Online e a vertente PDF a cada mudanca.\n\n## Criterios De Pronto\n\n- Schema validado ou justificativa de descarte registrada.\n- Integracoes com `PAY`, `ID`, `DOCS`, `ORDERS` ou `TRANSACTIONS` documentadas quando existirem.\n- Teste ou validacao tecnica registrada.\n- Comentarios em portugues simples com termos tecnicos em ingles onde fizer sentido.\n",
-        "status": "# Status - Valley Health\n\n- [x] Registry canonico criado.\n- [x] Suporte base de schema ja implantado ou parcialmente implantado.\n- [x] Contrato operacional inicial gerado.\n- [ ] Schema PostgreSQL especifico revisado.\n- [ ] Schema MongoDB especifico revisado.\n- [ ] Regras de negocio cadastradas ou descartadas.\n- [ ] Fluxos Admin/RBAC/ABAC definidos.\n- [ ] Testes de integracao planejados.\n- [ ] Manual Online atualizado.\n- [ ] PDF regenerado.\n\nObservacao: este status e inicial e deve evoluir junto com o modulo.\n",
+        "status": "# Status - Valley Health\n\n- [x] Registry canonico criado.\n- [x] Suporte base de schema ja implantado ou parcialmente implantado.\n- [x] Contrato operacional inicial gerado.\n- [x] Schema PostgreSQL especifico revisado.\n- [x] Schema MongoDB especifico revisado.\n- [x] Regras de negocio cadastradas ou descartadas.\n- [x] Fluxos Admin/RBAC/ABAC definidos.\n- [x] Testes de integracao planejados.\n- [x] Manual Online atualizado.\n- [x] PDF regenerado.\n\nEvidencias da revisao:\n\n- PostgreSQL: `database/postgres/012_v47_core_services_health_jobs_pharmacy_events.sql` cobre `health_profiles`, `health_care_plans` e `health_prescriptions`, todos ancorados em `users.user_id`, com `module_code = 'HEALTH'`, consentimentos estruturados, checks de timeline e validade clinica.\n- Integracao sensivel: a mesma migration `012` conecta `health_care_plans.source_session_id` a `teletherapy_sessions` e `health_prescriptions.document_id` a `document_records`, fechando a ponte com `MENTE` e `DOCS` sem duplicar prontuario ou anexos juridicos.\n- MongoDB: `database/mongodb/001_ai_social_telemetry.mongo.js` cobre `ai_memory`, usada como memoria contextual e follow-up assistido quando `HEALTH` precisar resumo operacional nao relacional. A decisao revisada e nao abrir collection clinica propria neste momento; o master sensivel permanece no PostgreSQL.\n- Regras de negocio: nao existe, ate aqui, regra exclusiva do modulo em `business_rule_definitions`. A decisao revisada e considerar isso descartado por enquanto, porque consentimento, risco e prescricao ja estao cobertos por checks, enums, FKs e ownership relacional.\n- Admin/RBAC/ABAC: o modulo herda `module_catalog`, `admin_permissions` e `admin_action_audit`, suficiente para separar operacao clinica, suporte, farmacia e backoffice.\n- Manual/PDF: `MANUAL_ONLINE/README.md` agora registra `HEALTH` como fronteira revisada sobre `health_profiles`, `health_care_plans`, `health_prescriptions` e `ai_memory` complementar. O PDF oficial foi regenerado apos esta atualizacao documental.\n\nPlano minimo de testes de integracao:\n\n1. Criar `health_profile` com `user_id`, `primary_care_user_id`, `consent_json`, `risk_flags_json` e `profile_status`, validando checks de JSON, usuarios distintos e `module_code = 'HEALTH'`.\n2. Criar `teletherapy_session` e, em seguida, `health_care_plan` com `patient_user_id`, `professional_user_id`, `care_plan_json` e `source_session_id`, validando a ponte entre cuidado continuo e sessao sensivel.\n3. Criar `health_prescription` com `patient_user_id`, `prescriber_user_id`, `prescription_code`, `medication_summary_json`, `issued_at` e `valid_until`, confirmando validade temporal e documento referenciavel.\n4. Inserir memoria em `ai_memory` com `source_module = 'HEALTH'`, `consent_scope` apropriado e prazo de expiracao, validando o lado contextual nao relacional do modulo.\n5. Consultar o conjunto `health_profiles` -> `health_care_plans` -> `health_prescriptions` por paciente e status, validando a leitura operacional do modulo sem collection clinica paralela.\n\nObservacao: este status deixou de ser apenas inicial e agora registra a primeira revisao tecnica do modulo.\n",
         "contract": "# Contrato Operacional - 13. Valley Health\n\nEste arquivo e gerado pela automacao `scripts/valley_module_automation.py`.\n\nEle define a fronteira inicial do modulo para guiar desenvolvimento, implantacao e evolucao sem quebrar o nucleo Valley.\n\n## Identidade Do Modulo\n\n- Codigo tecnico: `HEALTH`\n- Dominio: `services_health_human`\n- Tier: `core`\n- Data home: `postgres_mongo`\n- Status atual: `Parcialmente implantado`\n\n## Objetivo Simples\n\nSaude preditiva, cuidados integrados e dados sensiveis.\n\n## Politica De Dados\n\nPersistencia hibrida: PostgreSQL guarda o contrato operacional e MongoDB guarda payload volumoso, IA, social, telemetria ou eventos semi-estruturados.\n\n`users.user_id` deve ser a primeira integracao relacional quando houver usuario, empresa, rider, admin ou system actor.\n\n`wallets.wallet_id` e `transactions.transaction_id` devem ser usados quando houver dinheiro, saldo, pagamento, repasse, refund, fee, split ou escrow.\n\n`user_id` em MongoDB deve ser string UUID validada por regex para manter ponte segura com PostgreSQL.\n\n## Integracoes\n\nDependencias minimas: ID. Integracoes previstas: FOOD, FITNESS, PHARMACY.\n\n## Regras De Evolucao\n\n1. Nao criar tabela duplicada de usuario; usar sempre `public.users`.\n2. Nao criar schema legado paralelo; manter objetos novos em `public` enquanto esta worktree exigir core-first.\n3. Usar `UUID` para chaves e referencias quando o dado for relacional.\n4. Usar `DECIMAL(18,4)` para BRL e `DECIMAL(18,8)` para `$NEX`.\n5. Usar `TIMESTAMPTZ` para eventos com tempo operacional.\n6. Usar `append-only` quando o dado representar dinheiro, auditoria, certificado, receipt, regra versionada ou trilha legal.\n7. Atualizar Manual Online e PDF em qualquer mudanca de schema, script ou contrato.\n\n## Primeiro Backlog Tecnico\n\n- Confirmar se o modulo precisa de tabela propria ou se usa tabelas compartilhadas ja existentes.\n- Definir eventos de entrada e saida com nomes tecnicos estaveis.\n- Definir permissao Admin/RBAC/ABAC quando houver operacao sensivel.\n- Registrar regra de negocio em `business_rule_definitions` quando houver pricing, comissao, limite, risco ou compliance.\n- Validar se dados volumosos ficam fora do PostgreSQL.\n",
         "readme_preview": "# 13. Valley Health\nEste arquivo e gerado pela automacao `scripts/valley_module_automation.py`.\nEle descreve o modulo em linguagem simples e serve como ponto inicial para desenvolvimento, implantacao e evolucao continua.\n## Identidade Tecnica\n- Codigo tecnico: `HEALTH`\n- Subtitulo: `Predictive Care`\n- Dominio: `services_health_human`\n- Tier: `core`\n- Data home: `postgres_mongo`\n- Status atual: `Parcialmente implantado`\n...",
         "contract_preview": "# Contrato Operacional - 13. Valley Health\nEste arquivo e gerado pela automacao `scripts/valley_module_automation.py`.\nEle define a fronteira inicial do modulo para guiar desenvolvimento, implantacao e evolucao sem quebrar o nucleo Valley.\n## Identidade Do Modulo\n- Codigo tecnico: `HEALTH`\n- Dominio: `services_health_human`\n- Tier: `core`\n- Data home: `postgres_mongo`\n- Status atual: `Parcialmente implantado`\n## Objetivo Simples\n..."
       },
       "checklist": {
-        "done": 3,
-        "pending": 7,
+        "done": 10,
+        "pending": 0,
         "total": 10,
         "items": [
           {
@@ -1729,31 +1974,31 @@ window.VALLEY_ADMIN_DATA = {
             "label": "Contrato operacional inicial gerado."
           },
           {
-            "done": false,
+            "done": true,
             "label": "Schema PostgreSQL especifico revisado."
           },
           {
-            "done": false,
+            "done": true,
             "label": "Schema MongoDB especifico revisado."
           },
           {
-            "done": false,
+            "done": true,
             "label": "Regras de negocio cadastradas ou descartadas."
           },
           {
-            "done": false,
+            "done": true,
             "label": "Fluxos Admin/RBAC/ABAC definidos."
           },
           {
-            "done": false,
+            "done": true,
             "label": "Testes de integracao planejados."
           },
           {
-            "done": false,
+            "done": true,
             "label": "Manual Online atualizado."
           },
           {
-            "done": false,
+            "done": true,
             "label": "PDF regenerado."
           }
         ]
@@ -4115,14 +4360,14 @@ window.VALLEY_ADMIN_DATA = {
       },
       "docs": {
         "readme": "# 40. Valley Financas\n\nEste arquivo e gerado pela automacao `scripts/valley_module_automation.py`.\n\nEle descreve o modulo em linguagem simples e serve como ponto inicial para desenvolvimento, implantacao e evolucao continua.\n\n## Identidade Tecnica\n\n- Codigo tecnico: `FINANCAS`\n- Subtitulo: `PFM & Gestao de Micro-Negocios`\n- Dominio: `commerce_fintech_assets`\n- Tier: `core`\n- Data home: `postgres`\n- Status atual: `Parcialmente implantado`\n\n## Finalidade\n\nFinancas pessoais, metas, micro-negocios e round-up.\n\n## Dependencias\n\nPAY\n\n## Integracoes\n\nADVISOR, BUSINESS\n\n## Trilha De Implantacao\n\n1. Confirmar contrato de dados com `users.user_id` como no central.\n2. Definir tabelas PostgreSQL quando houver dinheiro, identidade, contrato, documento ou transacao.\n3. Definir colecoes MongoDB quando houver IA, social, telemetria, eventos volumosos ou conteudo semi-estruturado.\n4. Registrar regras de negocio em `business_rule_definitions` quando houver pricing, comissao, risco, permissao ou compliance.\n5. Atualizar este README, o Manual Online e a vertente PDF a cada mudanca.\n\n## Criterios De Pronto\n\n- Schema validado ou justificativa de descarte registrada.\n- Integracoes com `PAY`, `ID`, `DOCS`, `ORDERS` ou `TRANSACTIONS` documentadas quando existirem.\n- Teste ou validacao tecnica registrada.\n- Comentarios em portugues simples com termos tecnicos em ingles onde fizer sentido.\n",
-        "status": "# Status - Valley Financas\n\n- [x] Registry canonico criado.\n- [x] Suporte base de schema ja implantado ou parcialmente implantado.\n- [x] Contrato operacional inicial gerado.\n- [ ] Schema PostgreSQL especifico revisado.\n- [ ] Schema MongoDB especifico revisado.\n- [ ] Regras de negocio cadastradas ou descartadas.\n- [ ] Fluxos Admin/RBAC/ABAC definidos.\n- [ ] Testes de integracao planejados.\n- [ ] Manual Online atualizado.\n- [ ] PDF regenerado.\n\nObservacao: este status e inicial e deve evoluir junto com o modulo.\n",
+        "status": "# Status - Valley Financas\n\n- [x] Registry canonico criado.\n- [x] Suporte base de schema ja implantado ou parcialmente implantado.\n- [x] Contrato operacional inicial gerado.\n- [x] Schema PostgreSQL especifico revisado.\n- [x] Schema MongoDB especifico revisado.\n- [x] Regras de negocio cadastradas ou descartadas.\n- [x] Fluxos Admin/RBAC/ABAC definidos.\n- [x] Testes de integracao planejados.\n- [x] Manual Online atualizado.\n- [x] PDF regenerado.\n\nEvidencias da revisao:\n\n- PostgreSQL: `database/postgres/005_v47_domain_tables_core_first.sql` cobre `financial_goals`, que fecha metas, round-up e planejamento financeiro com checks de alvo, acumulado e `auto_round_up`.\n- Nucleo financeiro complementar: `database/postgres/001_core_identity_wallets.sql` e `database/postgres/002_financial_ledger_equity_orders.sql` continuam sendo a espinha do modulo com `wallets` e `transactions`, enquanto `database/postgres/005_v47_domain_tables_core_first.sql` tambem cobre `plug_transactions` para fluxo presencial e micro-negocio.\n- MongoDB: `FINANCAS` permanece com `data_home = postgres` no registry. A decisao revisada e descartar collection propria por enquanto, mantendo saldo, metas, cashflow e reconciliacao apenas na trilha relacional e append-only.\n- Regras de negocio: `database/postgres/004_v47_control_plane_modules_rules.sql` ja registra `BR-FIN-002`, que impede uso de dados de endividamento e score em publicidade. A decisao revisada e considerar isso como regra canonica suficiente nesta fase, sem abrir runtime extra.\n- Admin/RBAC/ABAC: o modulo herda `module_catalog`, `admin_permissions` e `admin_action_audit`, separando operacao financeira, suporte e backoffice.\n- Manual/PDF: `MANUAL_ONLINE/README.md` agora registra `FINANCAS` como modulo revisado sobre `financial_goals` e sobre o backbone `wallets + transactions`. O PDF oficial foi regenerado apos esta atualizacao documental.\n\nPlano minimo de testes de integracao:\n\n1. Criar `financial_goal` com `user_id`, `goal_name`, `target_amount_brl`, `current_amount_brl`, `auto_round_up` e `goal_status`, validando target positivo e limite `current_amount_brl <= target_amount_brl`.\n2. Criar `wallet` BRL do usuario e registrar `transaction` de compra ou transferencia no ledger central, confirmando que o modulo reaproveita a trilha financeira append-only em vez de duplicar saldo.\n3. Criar `plug_transaction` ligado a `wallet_id` e `transaction_id`, validando o recorte de micro-negocio/presencial integrado ao modulo.\n4. Consultar a visao combinada `wallets` -> `transactions` -> `financial_goals` -> `plug_transactions`, validando dashboard financeiro sem NoSQL proprio.\n5. Ler `business_rule_definitions` para `BR-FIN-002` e confirmar que a regra de ring-fence financeiro esta registrada e versionada no plano de controle.\n\nObservacao: este status deixou de ser apenas inicial e agora registra a primeira revisao tecnica do modulo.\n",
         "contract": "# Contrato Operacional - 40. Valley Financas\n\nEste arquivo e gerado pela automacao `scripts/valley_module_automation.py`.\n\nEle define a fronteira inicial do modulo para guiar desenvolvimento, implantacao e evolucao sem quebrar o nucleo Valley.\n\n## Identidade Do Modulo\n\n- Codigo tecnico: `FINANCAS`\n- Dominio: `commerce_fintech_assets`\n- Tier: `core`\n- Data home: `postgres`\n- Status atual: `Parcialmente implantado`\n\n## Objetivo Simples\n\nFinancas pessoais, metas, micro-negocios e round-up.\n\n## Politica De Dados\n\nPersistencia principal em PostgreSQL, porque o modulo exige consistencia, `foreign key`, auditoria, dinheiro, contrato ou documento.\n\n`users.user_id` deve ser a primeira integracao relacional quando houver usuario, empresa, rider, admin ou system actor.\n\n`wallets.wallet_id` e `transactions.transaction_id` devem ser usados quando houver dinheiro, saldo, pagamento, repasse, refund, fee, split ou escrow.\n\n`user_id` em MongoDB deve ser string UUID validada por regex para manter ponte segura com PostgreSQL.\n\n## Integracoes\n\nDependencias minimas: PAY. Integracoes previstas: ADVISOR, BUSINESS.\n\n## Regras De Evolucao\n\n1. Nao criar tabela duplicada de usuario; usar sempre `public.users`.\n2. Nao criar schema legado paralelo; manter objetos novos em `public` enquanto esta worktree exigir core-first.\n3. Usar `UUID` para chaves e referencias quando o dado for relacional.\n4. Usar `DECIMAL(18,4)` para BRL e `DECIMAL(18,8)` para `$NEX`.\n5. Usar `TIMESTAMPTZ` para eventos com tempo operacional.\n6. Usar `append-only` quando o dado representar dinheiro, auditoria, certificado, receipt, regra versionada ou trilha legal.\n7. Atualizar Manual Online e PDF em qualquer mudanca de schema, script ou contrato.\n\n## Primeiro Backlog Tecnico\n\n- Confirmar se o modulo precisa de tabela propria ou se usa tabelas compartilhadas ja existentes.\n- Definir eventos de entrada e saida com nomes tecnicos estaveis.\n- Definir permissao Admin/RBAC/ABAC quando houver operacao sensivel.\n- Registrar regra de negocio em `business_rule_definitions` quando houver pricing, comissao, limite, risco ou compliance.\n- Validar se dados volumosos ficam fora do PostgreSQL.\n",
         "readme_preview": "# 40. Valley Financas\nEste arquivo e gerado pela automacao `scripts/valley_module_automation.py`.\nEle descreve o modulo em linguagem simples e serve como ponto inicial para desenvolvimento, implantacao e evolucao continua.\n## Identidade Tecnica\n- Codigo tecnico: `FINANCAS`\n- Subtitulo: `PFM & Gestao de Micro-Negocios`\n- Dominio: `commerce_fintech_assets`\n- Tier: `core`\n- Data home: `postgres`\n- Status atual: `Parcialmente implantado`\n...",
         "contract_preview": "# Contrato Operacional - 40. Valley Financas\nEste arquivo e gerado pela automacao `scripts/valley_module_automation.py`.\nEle define a fronteira inicial do modulo para guiar desenvolvimento, implantacao e evolucao sem quebrar o nucleo Valley.\n## Identidade Do Modulo\n- Codigo tecnico: `FINANCAS`\n- Dominio: `commerce_fintech_assets`\n- Tier: `core`\n- Data home: `postgres`\n- Status atual: `Parcialmente implantado`\n## Objetivo Simples\n..."
       },
       "checklist": {
-        "done": 3,
-        "pending": 7,
+        "done": 10,
+        "pending": 0,
         "total": 10,
         "items": [
           {
@@ -4138,31 +4383,31 @@ window.VALLEY_ADMIN_DATA = {
             "label": "Contrato operacional inicial gerado."
           },
           {
-            "done": false,
+            "done": true,
             "label": "Schema PostgreSQL especifico revisado."
           },
           {
-            "done": false,
+            "done": true,
             "label": "Schema MongoDB especifico revisado."
           },
           {
-            "done": false,
+            "done": true,
             "label": "Regras de negocio cadastradas ou descartadas."
           },
           {
-            "done": false,
+            "done": true,
             "label": "Fluxos Admin/RBAC/ABAC definidos."
           },
           {
-            "done": false,
+            "done": true,
             "label": "Testes de integracao planejados."
           },
           {
-            "done": false,
+            "done": true,
             "label": "Manual Online atualizado."
           },
           {
-            "done": false,
+            "done": true,
             "label": "PDF regenerado."
           }
         ]
@@ -4173,8 +4418,7 @@ window.VALLEY_ADMIN_DATA = {
         "registrar_regras_negocio",
         "planejar_testes_integracao",
         "atualizar_manual",
-        "regenerar_pdf",
-        "revisar_schema_mongo"
+        "regenerar_pdf"
       ]
     },
     {
@@ -4205,14 +4449,14 @@ window.VALLEY_ADMIN_DATA = {
       },
       "docs": {
         "readme": "# 41. Valley Mente\n\nEste arquivo e gerado pela automacao `scripts/valley_module_automation.py`.\n\nEle descreve o modulo em linguagem simples e serve como ponto inicial para desenvolvimento, implantacao e evolucao continua.\n\n## Identidade Tecnica\n\n- Codigo tecnico: `MENTE`\n- Subtitulo: `Saude Mental Digital`\n- Dominio: `services_health_human`\n- Tier: `core`\n- Data home: `postgres`\n- Status atual: `Parcialmente implantado`\n\n## Finalidade\n\nSaude mental digital, teleterapia e notas cifradas.\n\n## Dependencias\n\nHEALTH, ID\n\n## Integracoes\n\nADVISOR, DOCS\n\n## Trilha De Implantacao\n\n1. Confirmar contrato de dados com `users.user_id` como no central.\n2. Definir tabelas PostgreSQL quando houver dinheiro, identidade, contrato, documento ou transacao.\n3. Definir colecoes MongoDB quando houver IA, social, telemetria, eventos volumosos ou conteudo semi-estruturado.\n4. Registrar regras de negocio em `business_rule_definitions` quando houver pricing, comissao, risco, permissao ou compliance.\n5. Atualizar este README, o Manual Online e a vertente PDF a cada mudanca.\n\n## Criterios De Pronto\n\n- Schema validado ou justificativa de descarte registrada.\n- Integracoes com `PAY`, `ID`, `DOCS`, `ORDERS` ou `TRANSACTIONS` documentadas quando existirem.\n- Teste ou validacao tecnica registrada.\n- Comentarios em portugues simples com termos tecnicos em ingles onde fizer sentido.\n",
-        "status": "# Status - Valley Mente\n\n- [x] Registry canonico criado.\n- [x] Suporte base de schema ja implantado ou parcialmente implantado.\n- [x] Contrato operacional inicial gerado.\n- [ ] Schema PostgreSQL especifico revisado.\n- [ ] Schema MongoDB especifico revisado.\n- [ ] Regras de negocio cadastradas ou descartadas.\n- [ ] Fluxos Admin/RBAC/ABAC definidos.\n- [ ] Testes de integracao planejados.\n- [ ] Manual Online atualizado.\n- [ ] PDF regenerado.\n\nObservacao: este status e inicial e deve evoluir junto com o modulo.\n",
+        "status": "# Status - Valley Mente\n\n- [x] Registry canonico criado.\n- [x] Suporte base de schema ja implantado ou parcialmente implantado.\n- [x] Contrato operacional inicial gerado.\n- [x] Schema PostgreSQL especifico revisado.\n- [x] Schema MongoDB especifico revisado.\n- [x] Regras de negocio cadastradas ou descartadas.\n- [x] Fluxos Admin/RBAC/ABAC definidos.\n- [x] Testes de integracao planejados.\n- [x] Manual Online atualizado.\n- [x] PDF regenerado.\n\nEvidencias da revisao:\n\n- PostgreSQL: `database/postgres/005_v47_domain_tables_core_first.sql` cobre `teletherapy_sessions`, com `patient_id`, `professional_id`, `encrypted_notes`, `notes_access_policy`, checks de usuarios distintos e timeline de atendimento.\n- Integracao entre dominios: `teletherapy_sessions` e reaproveitada por `ADVISOR` e pode originar `health_care_plans` em `database/postgres/012_v47_core_services_health_jobs_pharmacy_events.sql`, o que fecha a ponte entre saude mental e cuidado continuo sem duplicar agenda clinica.\n- MongoDB: `MENTE` permanece com `data_home = postgres` no registry. A decisao revisada e descartar collection propria neste momento, mantendo sessoes, notas sensiveis e auditoria no relacional com armazenamento cifrado.\n- Regras de negocio: nao existe regra exclusiva do modulo em `business_rule_definitions`. A decisao revisada e considerar isso descartado por enquanto, porque a sensibilidade da sessao ja esta protegida por ownership, checks de timeline e politica JSON de acesso a notas.\n- Admin/RBAC/ABAC: o modulo herda `module_catalog`, `admin_permissions` e `admin_action_audit`, suficiente para separar profissional, suporte e operacao administrativa.\n- Manual/PDF: `MANUAL_ONLINE/README.md` agora registra `MENTE` como modulo revisado sobre `teletherapy_sessions` e sua ponte opcional com `HEALTH`. O PDF oficial foi regenerado apos esta atualizacao documental.\n\nPlano minimo de testes de integracao:\n\n1. Criar `teletherapy_session` com `patient_id`, `professional_id`, `session_status = 'SCHEDULED'`, `encrypted_notes`, `notes_access_policy` e `scheduled_at`, validando usuarios distintos e politica de acesso sensivel.\n2. Atualizar a sessao para `IN_PROGRESS` e `COMPLETED`, preenchendo `started_at` e `completed_at`, confirmando os checks de timeline.\n3. Tentar criar sessao com `patient_id = professional_id`, validando bloqueio por coerencia clinica.\n4. Criar `health_care_plan` apontando `source_session_id` para a sessao concluida, validando a ponte operacional entre `MENTE` e `HEALTH`.\n5. Registrar `document_record` ou trilha documental complementar com `module_code = 'MENTE'`, validando anexos operacionais sem mover notas cifradas para fora do relacional.\n\nObservacao: este status deixou de ser apenas inicial e agora registra a primeira revisao tecnica do modulo.\n",
         "contract": "# Contrato Operacional - 41. Valley Mente\n\nEste arquivo e gerado pela automacao `scripts/valley_module_automation.py`.\n\nEle define a fronteira inicial do modulo para guiar desenvolvimento, implantacao e evolucao sem quebrar o nucleo Valley.\n\n## Identidade Do Modulo\n\n- Codigo tecnico: `MENTE`\n- Dominio: `services_health_human`\n- Tier: `core`\n- Data home: `postgres`\n- Status atual: `Parcialmente implantado`\n\n## Objetivo Simples\n\nSaude mental digital, teleterapia e notas cifradas.\n\n## Politica De Dados\n\nPersistencia principal em PostgreSQL, porque o modulo exige consistencia, `foreign key`, auditoria, dinheiro, contrato ou documento.\n\n`users.user_id` deve ser a primeira integracao relacional quando houver usuario, empresa, rider, admin ou system actor.\n\n`wallets.wallet_id` e `transactions.transaction_id` devem ser usados quando houver dinheiro, saldo, pagamento, repasse, refund, fee, split ou escrow.\n\n`user_id` em MongoDB deve ser string UUID validada por regex para manter ponte segura com PostgreSQL.\n\n## Integracoes\n\nDependencias minimas: HEALTH, ID. Integracoes previstas: ADVISOR, DOCS.\n\n## Regras De Evolucao\n\n1. Nao criar tabela duplicada de usuario; usar sempre `public.users`.\n2. Nao criar schema legado paralelo; manter objetos novos em `public` enquanto esta worktree exigir core-first.\n3. Usar `UUID` para chaves e referencias quando o dado for relacional.\n4. Usar `DECIMAL(18,4)` para BRL e `DECIMAL(18,8)` para `$NEX`.\n5. Usar `TIMESTAMPTZ` para eventos com tempo operacional.\n6. Usar `append-only` quando o dado representar dinheiro, auditoria, certificado, receipt, regra versionada ou trilha legal.\n7. Atualizar Manual Online e PDF em qualquer mudanca de schema, script ou contrato.\n\n## Primeiro Backlog Tecnico\n\n- Confirmar se o modulo precisa de tabela propria ou se usa tabelas compartilhadas ja existentes.\n- Definir eventos de entrada e saida com nomes tecnicos estaveis.\n- Definir permissao Admin/RBAC/ABAC quando houver operacao sensivel.\n- Registrar regra de negocio em `business_rule_definitions` quando houver pricing, comissao, limite, risco ou compliance.\n- Validar se dados volumosos ficam fora do PostgreSQL.\n",
         "readme_preview": "# 41. Valley Mente\nEste arquivo e gerado pela automacao `scripts/valley_module_automation.py`.\nEle descreve o modulo em linguagem simples e serve como ponto inicial para desenvolvimento, implantacao e evolucao continua.\n## Identidade Tecnica\n- Codigo tecnico: `MENTE`\n- Subtitulo: `Saude Mental Digital`\n- Dominio: `services_health_human`\n- Tier: `core`\n- Data home: `postgres`\n- Status atual: `Parcialmente implantado`\n...",
         "contract_preview": "# Contrato Operacional - 41. Valley Mente\nEste arquivo e gerado pela automacao `scripts/valley_module_automation.py`.\nEle define a fronteira inicial do modulo para guiar desenvolvimento, implantacao e evolucao sem quebrar o nucleo Valley.\n## Identidade Do Modulo\n- Codigo tecnico: `MENTE`\n- Dominio: `services_health_human`\n- Tier: `core`\n- Data home: `postgres`\n- Status atual: `Parcialmente implantado`\n## Objetivo Simples\n..."
       },
       "checklist": {
-        "done": 3,
-        "pending": 7,
+        "done": 10,
+        "pending": 0,
         "total": 10,
         "items": [
           {
@@ -4228,31 +4472,31 @@ window.VALLEY_ADMIN_DATA = {
             "label": "Contrato operacional inicial gerado."
           },
           {
-            "done": false,
+            "done": true,
             "label": "Schema PostgreSQL especifico revisado."
           },
           {
-            "done": false,
+            "done": true,
             "label": "Schema MongoDB especifico revisado."
           },
           {
-            "done": false,
+            "done": true,
             "label": "Regras de negocio cadastradas ou descartadas."
           },
           {
-            "done": false,
+            "done": true,
             "label": "Fluxos Admin/RBAC/ABAC definidos."
           },
           {
-            "done": false,
+            "done": true,
             "label": "Testes de integracao planejados."
           },
           {
-            "done": false,
+            "done": true,
             "label": "Manual Online atualizado."
           },
           {
-            "done": false,
+            "done": true,
             "label": "PDF regenerado."
           }
         ]
@@ -4263,8 +4507,7 @@ window.VALLEY_ADMIN_DATA = {
         "registrar_regras_negocio",
         "planejar_testes_integracao",
         "atualizar_manual",
-        "regenerar_pdf",
-        "revisar_schema_mongo"
+        "regenerar_pdf"
       ]
     },
     {
@@ -4474,14 +4717,14 @@ window.VALLEY_ADMIN_DATA = {
       },
       "docs": {
         "readme": "# 44. Valley Up\n\nEste arquivo e gerado pela automacao `scripts/valley_module_automation.py`.\n\nEle descreve o modulo em linguagem simples e serve como ponto inicial para desenvolvimento, implantacao e evolucao continua.\n\n## Identidade Tecnica\n\n- Codigo tecnico: `UP`\n- Subtitulo: `Motor de Afiliados CAC Zero`\n- Dominio: `commerce_fintech_assets`\n- Tier: `core`\n- Data home: `postgres_mongo`\n- Status atual: `Parcialmente implantado`\n\n## Finalidade\n\nAfiliados, indicacoes, comissoes e links de atribuicao.\n\n## Dependencias\n\nPAY, MARKETPLACE\n\n## Integracoes\n\nINFLUENCERS, LOYALTY\n\n## Trilha De Implantacao\n\n1. Confirmar contrato de dados com `users.user_id` como no central.\n2. Definir tabelas PostgreSQL quando houver dinheiro, identidade, contrato, documento ou transacao.\n3. Definir colecoes MongoDB quando houver IA, social, telemetria, eventos volumosos ou conteudo semi-estruturado.\n4. Registrar regras de negocio em `business_rule_definitions` quando houver pricing, comissao, risco, permissao ou compliance.\n5. Atualizar este README, o Manual Online e a vertente PDF a cada mudanca.\n\n## Criterios De Pronto\n\n- Schema validado ou justificativa de descarte registrada.\n- Integracoes com `PAY`, `ID`, `DOCS`, `ORDERS` ou `TRANSACTIONS` documentadas quando existirem.\n- Teste ou validacao tecnica registrada.\n- Comentarios em portugues simples com termos tecnicos em ingles onde fizer sentido.\n",
-        "status": "# Status - Valley Up\n\n- [x] Registry canonico criado.\n- [x] Suporte base de schema ja implantado ou parcialmente implantado.\n- [x] Contrato operacional inicial gerado.\n- [ ] Schema PostgreSQL especifico revisado.\n- [ ] Schema MongoDB especifico revisado.\n- [ ] Regras de negocio cadastradas ou descartadas.\n- [ ] Fluxos Admin/RBAC/ABAC definidos.\n- [ ] Testes de integracao planejados.\n- [ ] Manual Online atualizado.\n- [ ] PDF regenerado.\n\nObservacao: este status e inicial e deve evoluir junto com o modulo.\n",
+        "status": "# Status - Valley Up\n\n- [x] Registry canonico criado.\n- [x] Suporte base de schema ja implantado ou parcialmente implantado.\n- [x] Contrato operacional inicial gerado.\n- [x] Schema PostgreSQL especifico revisado.\n- [x] Schema MongoDB especifico revisado.\n- [x] Regras de negocio cadastradas ou descartadas.\n- [x] Fluxos Admin/RBAC/ABAC definidos.\n- [x] Testes de integracao planejados.\n- [x] Manual Online atualizado.\n- [x] PDF regenerado.\n\nEvidencias da revisao:\n\n- PostgreSQL: `database/postgres/005_v47_domain_tables_core_first.sql` cobre `affiliate_referrals`, com integridade para `order_id` ou `purchase_transaction_id`, valor de comissao em BRL e triggers append-only que impedem `UPDATE` e `DELETE`.\n- Runtime de incentivo complementar: `database/postgres/004_v47_control_plane_modules_rules.sql` entrega `gamification_campaigns` e a regra `BR-UP-COMMISSION-001`, enquanto `database/postgres/010_v47_rule_growth_marketplace_runtime.sql` entrega `pepita_accounts`, `pepita_ledger`, `gold_campaigns` e `gold_campaign_events`, formando a retaguarda de atribuicao e incentivo conectada ao funil de afiliacao.\n- MongoDB: `database/mongodb/001_ai_social_telemetry.mongo.js` cobre `social_videos` e `influencer_metrics`, que fecham o lado de acquisicao, `commission_link` e performance de creator/campanha ligado ao modulo.\n- Regras de negocio: `BR-UP-COMMISSION-001` ja registra a comissao de afiliados no plano de controle. A decisao revisada e considerar isso suficiente por agora, sem abrir rule runtime duplicado para settle basico.\n- Admin/RBAC/ABAC: o modulo herda `module_catalog`, `admin_permissions` e `admin_action_audit`, suficiente para growth ops, creator ops e suporte.\n- Manual/PDF: `MANUAL_ONLINE/README.md` agora registra `UP` como modulo revisado sobre `affiliate_referrals`, `social_videos`, `influencer_metrics` e regra canonica de comissao. O PDF oficial foi regenerado apos esta atualizacao documental.\n\nPlano minimo de testes de integracao:\n\n1. Criar `affiliate_referral` com `referrer_id`, `order_id` ou `purchase_transaction_id`, `commission_amount_brl` e `payout_at` nulo, validando a trilha append-only de comissao.\n2. Tentar `UPDATE` ou `DELETE` em `affiliate_referrals`, confirmando que a protecao append-only esta ativa.\n3. Inserir `social_video` com `creator_user_id`, `commission_link`, `product_refs`, `status = 'ACTIVE'` e `visibility`, validando a superficie publica de atribuicao.\n4. Inserir `influencer_metrics` para a mesma campanha com `campaign_id`, `views`, `clicks`, `conversions`, `gross_sales_brl` e `commission_brl`, confirmando analytics do funil.\n5. Ler a cadeia `social_videos` -> `influencer_metrics` -> `affiliate_referrals`, validando a ponte entre conteudo, performance e settle financeiro do modulo.\n\nObservacao: este status deixou de ser apenas inicial e agora registra a primeira revisao tecnica do modulo.\n",
         "contract": "# Contrato Operacional - 44. Valley Up\n\nEste arquivo e gerado pela automacao `scripts/valley_module_automation.py`.\n\nEle define a fronteira inicial do modulo para guiar desenvolvimento, implantacao e evolucao sem quebrar o nucleo Valley.\n\n## Identidade Do Modulo\n\n- Codigo tecnico: `UP`\n- Dominio: `commerce_fintech_assets`\n- Tier: `core`\n- Data home: `postgres_mongo`\n- Status atual: `Parcialmente implantado`\n\n## Objetivo Simples\n\nAfiliados, indicacoes, comissoes e links de atribuicao.\n\n## Politica De Dados\n\nPersistencia hibrida: PostgreSQL guarda o contrato operacional e MongoDB guarda payload volumoso, IA, social, telemetria ou eventos semi-estruturados.\n\n`users.user_id` deve ser a primeira integracao relacional quando houver usuario, empresa, rider, admin ou system actor.\n\n`wallets.wallet_id` e `transactions.transaction_id` devem ser usados quando houver dinheiro, saldo, pagamento, repasse, refund, fee, split ou escrow.\n\n`user_id` em MongoDB deve ser string UUID validada por regex para manter ponte segura com PostgreSQL.\n\n## Integracoes\n\nDependencias minimas: PAY, MARKETPLACE. Integracoes previstas: INFLUENCERS, LOYALTY.\n\n## Regras De Evolucao\n\n1. Nao criar tabela duplicada de usuario; usar sempre `public.users`.\n2. Nao criar schema legado paralelo; manter objetos novos em `public` enquanto esta worktree exigir core-first.\n3. Usar `UUID` para chaves e referencias quando o dado for relacional.\n4. Usar `DECIMAL(18,4)` para BRL e `DECIMAL(18,8)` para `$NEX`.\n5. Usar `TIMESTAMPTZ` para eventos com tempo operacional.\n6. Usar `append-only` quando o dado representar dinheiro, auditoria, certificado, receipt, regra versionada ou trilha legal.\n7. Atualizar Manual Online e PDF em qualquer mudanca de schema, script ou contrato.\n\n## Primeiro Backlog Tecnico\n\n- Confirmar se o modulo precisa de tabela propria ou se usa tabelas compartilhadas ja existentes.\n- Definir eventos de entrada e saida com nomes tecnicos estaveis.\n- Definir permissao Admin/RBAC/ABAC quando houver operacao sensivel.\n- Registrar regra de negocio em `business_rule_definitions` quando houver pricing, comissao, limite, risco ou compliance.\n- Validar se dados volumosos ficam fora do PostgreSQL.\n",
         "readme_preview": "# 44. Valley Up\nEste arquivo e gerado pela automacao `scripts/valley_module_automation.py`.\nEle descreve o modulo em linguagem simples e serve como ponto inicial para desenvolvimento, implantacao e evolucao continua.\n## Identidade Tecnica\n- Codigo tecnico: `UP`\n- Subtitulo: `Motor de Afiliados CAC Zero`\n- Dominio: `commerce_fintech_assets`\n- Tier: `core`\n- Data home: `postgres_mongo`\n- Status atual: `Parcialmente implantado`\n...",
         "contract_preview": "# Contrato Operacional - 44. Valley Up\nEste arquivo e gerado pela automacao `scripts/valley_module_automation.py`.\nEle define a fronteira inicial do modulo para guiar desenvolvimento, implantacao e evolucao sem quebrar o nucleo Valley.\n## Identidade Do Modulo\n- Codigo tecnico: `UP`\n- Dominio: `commerce_fintech_assets`\n- Tier: `core`\n- Data home: `postgres_mongo`\n- Status atual: `Parcialmente implantado`\n## Objetivo Simples\n..."
       },
       "checklist": {
-        "done": 3,
-        "pending": 7,
+        "done": 10,
+        "pending": 0,
         "total": 10,
         "items": [
           {
@@ -4497,31 +4740,31 @@ window.VALLEY_ADMIN_DATA = {
             "label": "Contrato operacional inicial gerado."
           },
           {
-            "done": false,
+            "done": true,
             "label": "Schema PostgreSQL especifico revisado."
           },
           {
-            "done": false,
+            "done": true,
             "label": "Schema MongoDB especifico revisado."
           },
           {
-            "done": false,
+            "done": true,
             "label": "Regras de negocio cadastradas ou descartadas."
           },
           {
-            "done": false,
+            "done": true,
             "label": "Fluxos Admin/RBAC/ABAC definidos."
           },
           {
-            "done": false,
+            "done": true,
             "label": "Testes de integracao planejados."
           },
           {
-            "done": false,
+            "done": true,
             "label": "Manual Online atualizado."
           },
           {
-            "done": false,
+            "done": true,
             "label": "PDF regenerado."
           }
         ]
@@ -4563,14 +4806,14 @@ window.VALLEY_ADMIN_DATA = {
       },
       "docs": {
         "readme": "# 45. Valley Media\n\nEste arquivo e gerado pela automacao `scripts/valley_module_automation.py`.\n\nEle descreve o modulo em linguagem simples e serve como ponto inicial para desenvolvimento, implantacao e evolucao continua.\n\n## Identidade Tecnica\n\n- Codigo tecnico: `MEDIA`\n- Subtitulo: `Painel de Criadores`\n- Dominio: `media_social_growth`\n- Tier: `core`\n- Data home: `postgres_mongo`\n- Status atual: `Parcialmente implantado`\n\n## Finalidade\n\nPainel de criadores, uploads, monetizacao e distribuicao de conteudo.\n\n## Dependencias\n\nCREATOR\n\n## Integracoes\n\nSOCIAL, ADS\n\n## Trilha De Implantacao\n\n1. Confirmar contrato de dados com `users.user_id` como no central.\n2. Definir tabelas PostgreSQL quando houver dinheiro, identidade, contrato, documento ou transacao.\n3. Definir colecoes MongoDB quando houver IA, social, telemetria, eventos volumosos ou conteudo semi-estruturado.\n4. Registrar regras de negocio em `business_rule_definitions` quando houver pricing, comissao, risco, permissao ou compliance.\n5. Atualizar este README, o Manual Online e a vertente PDF a cada mudanca.\n\n## Criterios De Pronto\n\n- Schema validado ou justificativa de descarte registrada.\n- Integracoes com `PAY`, `ID`, `DOCS`, `ORDERS` ou `TRANSACTIONS` documentadas quando existirem.\n- Teste ou validacao tecnica registrada.\n- Comentarios em portugues simples com termos tecnicos em ingles onde fizer sentido.\n",
-        "status": "# Status - Valley Media\n\n- [x] Registry canonico criado.\n- [x] Suporte base de schema ja implantado ou parcialmente implantado.\n- [x] Contrato operacional inicial gerado.\n- [ ] Schema PostgreSQL especifico revisado.\n- [ ] Schema MongoDB especifico revisado.\n- [ ] Regras de negocio cadastradas ou descartadas.\n- [ ] Fluxos Admin/RBAC/ABAC definidos.\n- [ ] Testes de integracao planejados.\n- [ ] Manual Online atualizado.\n- [ ] PDF regenerado.\n\nObservacao: este status e inicial e deve evoluir junto com o modulo.\n",
+        "status": "# Status - Valley Media\n\n- [x] Registry canonico criado.\n- [x] Suporte base de schema ja implantado ou parcialmente implantado.\n- [x] Contrato operacional inicial gerado.\n- [x] Schema PostgreSQL especifico revisado.\n- [x] Schema MongoDB especifico revisado.\n- [x] Regras de negocio cadastradas ou descartadas.\n- [x] Fluxos Admin/RBAC/ABAC definidos.\n- [x] Testes de integracao planejados.\n- [x] Manual Online atualizado.\n- [x] PDF regenerado.\n\nEvidencias da revisao:\n\n- PostgreSQL: `database/postgres/005_v47_domain_tables_core_first.sql` cobre `creator_uploads`, que fecha ingestao, status de processamento, `checksum_sha256`, `monetization_enabled` e ponte logica para `social_videos`.\n- Cobertura documental complementar: `database/postgres/004_v47_control_plane_modules_rules.sql` cobre `document_records`, o que permite anexar prova editorial, contratos, roteiros ou recibos sem abrir tabela redundante no modulo.\n- MongoDB: `database/mongodb/001_ai_social_telemetry.mongo.js` cobre `social_videos`, que fecha metadata de publicacao, caption, visibilidade, owner, status e refs de produto para distribuicao e monetizacao.\n- Regras de negocio: nao existe, ate aqui, regra exclusiva de `MEDIA` em `business_rule_definitions`. A decisao revisada e considerar isso descartado por enquanto, porque ingestao, publish state e monetizacao basica ja estao sustentados por `creator_uploads`, `social_videos` e o plano de controle compartilhado.\n- Admin/RBAC/ABAC: o modulo herda `module_catalog`, `admin_permissions` e `admin_action_audit`, suficiente para creator ops, moderacao e backoffice.\n- Manual/PDF: `MANUAL_ONLINE/README.md` agora registra `MEDIA` como modulo revisado sobre `creator_uploads`, `social_videos` e `document_records` complementares. O PDF oficial foi regenerado apos esta atualizacao documental.\n\nPlano minimo de testes de integracao:\n\n1. Criar `creator_upload` com `user_id`, `file_url`, `upload_status`, `checksum_sha256` e `monetization_enabled`, validando ownership e integridade do arquivo.\n2. Atualizar o upload para um estado processado e preencher `social_video_id`, confirmando a ponte logica para a camada publica.\n3. Inserir `social_video` com `creator_user_id`, `owner_user_id`, `caption`, `visibility`, `status` e `product_refs`, validando a publicacao e distribuicao do conteudo.\n4. Criar `document_record` com `module_code = 'MEDIA'`, `file_url` e `checksum_sha256`, validando anexos editoriais ou contratuais sem schema proprio extra.\n5. Consultar o fluxo `creator_uploads` -> `social_videos` por creator e status, validando a esteira operacional completa do modulo.\n\nObservacao: este status deixou de ser apenas inicial e agora registra a primeira revisao tecnica do modulo.\n",
         "contract": "# Contrato Operacional - 45. Valley Media\n\nEste arquivo e gerado pela automacao `scripts/valley_module_automation.py`.\n\nEle define a fronteira inicial do modulo para guiar desenvolvimento, implantacao e evolucao sem quebrar o nucleo Valley.\n\n## Identidade Do Modulo\n\n- Codigo tecnico: `MEDIA`\n- Dominio: `media_social_growth`\n- Tier: `core`\n- Data home: `postgres_mongo`\n- Status atual: `Parcialmente implantado`\n\n## Objetivo Simples\n\nPainel de criadores, uploads, monetizacao e distribuicao de conteudo.\n\n## Politica De Dados\n\nPersistencia hibrida: PostgreSQL guarda o contrato operacional e MongoDB guarda payload volumoso, IA, social, telemetria ou eventos semi-estruturados.\n\n`users.user_id` deve ser a primeira integracao relacional quando houver usuario, empresa, rider, admin ou system actor.\n\n`wallets.wallet_id` e `transactions.transaction_id` devem ser usados quando houver dinheiro, saldo, pagamento, repasse, refund, fee, split ou escrow.\n\n`user_id` em MongoDB deve ser string UUID validada por regex para manter ponte segura com PostgreSQL.\n\n## Integracoes\n\nDependencias minimas: CREATOR. Integracoes previstas: SOCIAL, ADS.\n\n## Regras De Evolucao\n\n1. Nao criar tabela duplicada de usuario; usar sempre `public.users`.\n2. Nao criar schema legado paralelo; manter objetos novos em `public` enquanto esta worktree exigir core-first.\n3. Usar `UUID` para chaves e referencias quando o dado for relacional.\n4. Usar `DECIMAL(18,4)` para BRL e `DECIMAL(18,8)` para `$NEX`.\n5. Usar `TIMESTAMPTZ` para eventos com tempo operacional.\n6. Usar `append-only` quando o dado representar dinheiro, auditoria, certificado, receipt, regra versionada ou trilha legal.\n7. Atualizar Manual Online e PDF em qualquer mudanca de schema, script ou contrato.\n\n## Primeiro Backlog Tecnico\n\n- Confirmar se o modulo precisa de tabela propria ou se usa tabelas compartilhadas ja existentes.\n- Definir eventos de entrada e saida com nomes tecnicos estaveis.\n- Definir permissao Admin/RBAC/ABAC quando houver operacao sensivel.\n- Registrar regra de negocio em `business_rule_definitions` quando houver pricing, comissao, limite, risco ou compliance.\n- Validar se dados volumosos ficam fora do PostgreSQL.\n",
         "readme_preview": "# 45. Valley Media\nEste arquivo e gerado pela automacao `scripts/valley_module_automation.py`.\nEle descreve o modulo em linguagem simples e serve como ponto inicial para desenvolvimento, implantacao e evolucao continua.\n## Identidade Tecnica\n- Codigo tecnico: `MEDIA`\n- Subtitulo: `Painel de Criadores`\n- Dominio: `media_social_growth`\n- Tier: `core`\n- Data home: `postgres_mongo`\n- Status atual: `Parcialmente implantado`\n...",
         "contract_preview": "# Contrato Operacional - 45. Valley Media\nEste arquivo e gerado pela automacao `scripts/valley_module_automation.py`.\nEle define a fronteira inicial do modulo para guiar desenvolvimento, implantacao e evolucao sem quebrar o nucleo Valley.\n## Identidade Do Modulo\n- Codigo tecnico: `MEDIA`\n- Dominio: `media_social_growth`\n- Tier: `core`\n- Data home: `postgres_mongo`\n- Status atual: `Parcialmente implantado`\n## Objetivo Simples\n..."
       },
       "checklist": {
-        "done": 3,
-        "pending": 7,
+        "done": 10,
+        "pending": 0,
         "total": 10,
         "items": [
           {
@@ -4586,31 +4829,31 @@ window.VALLEY_ADMIN_DATA = {
             "label": "Contrato operacional inicial gerado."
           },
           {
-            "done": false,
+            "done": true,
             "label": "Schema PostgreSQL especifico revisado."
           },
           {
-            "done": false,
+            "done": true,
             "label": "Schema MongoDB especifico revisado."
           },
           {
-            "done": false,
+            "done": true,
             "label": "Regras de negocio cadastradas ou descartadas."
           },
           {
-            "done": false,
+            "done": true,
             "label": "Fluxos Admin/RBAC/ABAC definidos."
           },
           {
-            "done": false,
+            "done": true,
             "label": "Testes de integracao planejados."
           },
           {
-            "done": false,
+            "done": true,
             "label": "Manual Online atualizado."
           },
           {
-            "done": false,
+            "done": true,
             "label": "PDF regenerado."
           }
         ]
