@@ -1,0 +1,100 @@
+﻿[
+    {
+        "name":  "code",
+        "kind":  "command",
+        "status":  "ok",
+        "detail":  "C:\\Users\\ereta\\AppData\\Local\\Programs\\Microsoft VS Code\\bin\\code.cmd",
+        "timestamp":  "2026-04-20T05:12:38.9046864Z"
+    },
+    {
+        "name":  "python",
+        "kind":  "command",
+        "status":  "ok",
+        "detail":  "C:\\Users\\ereta\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "timestamp":  "2026-04-20T05:12:38.9222387Z"
+    },
+    {
+        "name":  "node",
+        "kind":  "command",
+        "status":  "ok",
+        "detail":  "C:\\Users\\ereta\\AppData\\Local\\Microsoft\\WinGet\\Packages\\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\\node-v24.14.1-win-x64\\node.exe",
+        "timestamp":  "2026-04-20T05:12:39.0076313Z"
+    },
+    {
+        "name":  "docker",
+        "kind":  "command",
+        "status":  "ok",
+        "detail":  "C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.exe",
+        "timestamp":  "2026-04-20T05:12:39.0126760Z"
+    },
+    {
+        "name":  "Google.geminicodeassist",
+        "kind":  "extension",
+        "status":  "ok",
+        "detail":  "instalada ou atualizada",
+        "timestamp":  "2026-04-20T05:12:40.4880840Z"
+    },
+    {
+        "name":  "ms-python.python",
+        "kind":  "extension",
+        "status":  "ok",
+        "detail":  "instalada ou atualizada",
+        "timestamp":  "2026-04-20T05:12:42.2359228Z"
+    },
+    {
+        "name":  "ms-python.vscode-pylance",
+        "kind":  "extension",
+        "status":  "ok",
+        "detail":  "instalada ou atualizada",
+        "timestamp":  "2026-04-20T05:12:44.1390442Z"
+    },
+    {
+        "name":  "ms-azuretools.vscode-docker",
+        "kind":  "extension",
+        "status":  "ok",
+        "detail":  "instalada ou atualizada",
+        "timestamp":  "2026-04-20T05:12:46.1891550Z"
+    },
+    {
+        "name":  "ms-kubernetes-tools.vscode-kubernetes-tools",
+        "kind":  "extension",
+        "status":  "ok",
+        "detail":  "instalada ou atualizada",
+        "timestamp":  "2026-04-20T05:12:48.2589221Z"
+    },
+    {
+        "name":  "mongodb.mongodb-vscode",
+        "kind":  "extension",
+        "status":  "ok",
+        "detail":  "instalada ou atualizada",
+        "timestamp":  "2026-04-20T05:12:50.9088259Z"
+    },
+    {
+        "name":  "redhat.vscode-yaml",
+        "kind":  "extension",
+        "status":  "ok",
+        "detail":  "instalada ou atualizada",
+        "timestamp":  "2026-04-20T05:12:52.4831880Z"
+    },
+    {
+        "name":  "esbenp.prettier-vscode",
+        "kind":  "extension",
+        "status":  "ok",
+        "detail":  "instalada ou atualizada",
+        "timestamp":  "2026-04-20T05:12:54.4638160Z"
+    },
+    {
+        "name":  "dbaeumer.vscode-eslint",
+        "kind":  "extension",
+        "status":  "ok",
+        "detail":  "instalada ou atualizada",
+        "timestamp":  "2026-04-20T05:12:56.3668414Z"
+    },
+    {
+        "name":  "ms-vscode-remote.remote-containers",
+        "kind":  "extension",
+        "status":  "ok",
+        "detail":  "instalada ou atualizada",
+        "timestamp":  "2026-04-20T05:12:58.1575574Z"
+    }
+]

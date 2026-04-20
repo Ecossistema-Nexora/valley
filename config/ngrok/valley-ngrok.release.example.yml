@@ -1,0 +1,8 @@
+version: "2"
+web_addr: 127.0.0.1:4040
+tunnels:
+  valley-admin:
+    proto: http
+    addr: 127.0.0.1:8080
+    inspect: true
+    domain: valley-admin-release.ngrok.app

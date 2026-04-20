@@ -1,0 +1,53 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Valley: Sync Modules",
+      "type": "shell",
+      "command": "python scripts/valley_module_automation.py sync",
+      "problemMatcher": []
+    },
+    {
+      "label": "Valley: Build Admin Dataset",
+      "type": "shell",
+      "command": "python scripts/valley_admin_builder.py build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Valley: Report",
+      "type": "shell",
+      "command": "python scripts/valley_db_orchestrator.py report",
+      "problemMatcher": []
+    },
+    {
+      "label": "Valley: Compose Up",
+      "type": "shell",
+      "command": "python scripts/valley_db_orchestrator.py compose-up",
+      "problemMatcher": []
+    },
+    {
+      "label": "Valley: Apply Compose",
+      "type": "shell",
+      "command": "python scripts/valley_db_orchestrator.py apply-compose",
+      "problemMatcher": []
+    },
+    {
+      "label": "Valley: Builder Release",
+      "type": "shell",
+      "command": "docker compose --profile builder run --rm --build builder",
+      "problemMatcher": []
+    },
+    {
+      "label": "Valley: Generate Manual PDF",
+      "type": "shell",
+      "command": "python scripts/generate_manual_pdf.py",
+      "problemMatcher": []
+    },
+    {
+      "label": "Valley: Bootstrap Tooling",
+      "type": "shell",
+      "command": "powershell -ExecutionPolicy Bypass -File scripts/bootstrap_valley_tooling.ps1",
+      "problemMatcher": []
+    }
+  ]
+}

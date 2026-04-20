@@ -1,0 +1,21 @@
+{
+  "terminal.integrated.defaultProfile.windows": "PowerShell",
+  "editor.formatOnSave": true,
+  "editor.tabSize": 2,
+  "files.eol": "\n",
+  "files.associations": {
+    "*.mongo.js": "javascript",
+    "*.sql": "sql"
+  },
+  "search.exclude": {
+    "**/tmp/**": true,
+    "**/__pycache__/**": true
+  },
+  "files.watcherExclude": {
+    "**/tmp/**": true,
+    "**/__pycache__/**": true
+  },
+  "yaml.format.enable": true,
+  "docker.showStartPage": false,
+  "typescript.tsdk": "C:\\Users\\ereta\\AppData\\Local\\Programs\\Microsoft VS Code\\resources\\app\\extensions\\node_modules\\typescript\\lib"
+}

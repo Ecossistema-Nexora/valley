@@ -1,0 +1,22 @@
+{
+  "status": "booting",
+  "service": "valley-admin",
+  "pid": 18904,
+  "started_at_utc": "2026-04-20T06:38:54.506139Z",
+  "local": {
+    "host": "127.0.0.1",
+    "port": 8098,
+    "base_url": "http://127.0.0.1:8098",
+    "health_url": "http://127.0.0.1:8098/healthz",
+    "data_url": "http://127.0.0.1:8098/api/admin-data"
+  },
+  "paths": {
+    "root": "C:\\Users\\ereta\\.codex\\worktrees\\VALLEY\\admin",
+    "data_file": "C:\\Users\\ereta\\.codex\\worktrees\\VALLEY\\admin\\valley_admin_data.json",
+    "startup_file": "C:\\Users\\ereta\\.codex\\worktrees\\VALLEY\\tmp\\runtime\\serve-manifest-test.json"
+  },
+  "checks": {
+    "root_exists": true,
+    "data_exists": true
+  }
+}

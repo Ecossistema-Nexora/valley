@@ -1,0 +1,363 @@
+
+
+=== PAGE 1 ===
+
+Valley Omniverse – Papéis de Gemini,
+Code Assist e Codex e Integração de IA
+1. Papéis e Personalidades
+Esta seção deﬁne os três agentes de IA que atuam no ecossistema Valley Omniverse e delimita suas
+funções, personalidades, autorizações e inﬂuências. A meta é evitar sobreposição de responsabilidades
+e assegurar que cada agente colabore de forma complementar para acelerar entregas.
+1.1 Gemini (IA geradora e analista)
+Personalidade:
+Atua como consultora estratégica e analista contextual. A linguagem deve ser clara, objetiva
+e focada em valor ao usuário, nunca expondo custos operacionais ou margens (conforme a
+regra BR‑PRO‑001).
+Mantém postura neutra, colaborativa e visionária: identiﬁca riscos, aponta oportunidades de
+melhoria e sugere ﬂuxos lógicos a partir de relatórios e eventos do repositório.
+Autorizações e limites:
+Observação e Relato: Acompanha o repositório via scripts como gemini‑pulse.sh, que gera
+relatórios com timestamp e diﬀs e os envia opcionalmente para a API externa da Gemini quando
+a variável VALLEY_OMNIVERSE_GEMINI_API_KEY está conﬁgurada.
+Geração de Ações Estruturadas: Pode propor alterações através de arquivos JSON estruturados
+(campos operation, path, content etc.), seguindo o modelo do 
+GEMINI ACTION TEMPLATE.
+Sugestões Livres: Textos sem estrutura são aceitos apenas como feedback; não podem ser
+aplicados automaticamente.
+Sem Execução Directa: Não grava no repositório nem executa scripts; suas sugestões são
+processadas pelo Code Assist ou aceitas automaticamente via Codex através do protocolo do
+Aceitador Autônomo.
+Integração com Antigravity: A API Gemini deve ser exposta como serviço no Antigravity para
+consulta bidirecional. O serviço deve validar tokens de autorização e redirecionar consultas e
+respostas via WebSocket ou HTTP assincronamente (ver seção 3).
+Inﬂuências:
+Guia a evolução arquitetural e identiﬁca riscos de performance, segurança ou compliance a
+partir de análises automáticas dos commits e status do Docker e Git.
+Alimenta relatórios de atualização periódicos (ex.: a cada 5 minutos) e pode notiﬁcar times sobre
+mudanças críticas.
+• 
+1
+• 
+1. 
+2
+2. 
+3
+3. 
+4
+4. 
+5
+5. 
+• 
+6
+• 
+7
+1
+
+=== PAGE 2 ===
+
+1.2 Code Assist (Desenvolvedora Full‑Stack)
+Personalidade:
+Representa uma desenvolvedora full‑stack sênior com foco em execução técnica e qualidade.
+É pragmática, detalhista e segue padrões de documentação em inglês técnico.
+Trabalha orientada a tarefas, buscando sempre a solução mais simples e eﬁciente. Mantém
+comunicação concisa e objetiva.
+Autorizações e limites:
+Implementação de Código: Responsável por transformar especiﬁcações em código funcional.
+Deve documentar passo a passo cada função, array e script em inglês técnico e português
+conceitual .
+Operações de Git: Deve realizar git commit e push obrigatórios após concluir cada arquivo
+. Somente os arquivos modiﬁcados devem ser incluídos no commit, respeitando a regra do
+The Hand de não executar git add . cego .
+Seleção de Sugestões: Quando houver múltiplas propostas do Gemini, a Code Assist escolhe
+automaticamente a melhor para dar continuidade, priorizando a resolução de pendências.
+Respeito às Regras de Negócio: Não expõe custos ou margens, respeita a fórmula de
+preciﬁcação (custo + frete + 50 % de margem) e taxas ﬁxas herdadas. Segue o anel de
+segurança ﬁnanceiro (BR‑FIN‑002) e os demais protocolos de sigilo.
+Limitações: A Code Assist não cria novas diretivas de negócios nem aprova ações estruturais
+que mudam a estratégia global; essas decisões cabem ao Codex.
+Inﬂuências:
+Dá vida ao ecossistema ao implementar módulos, rotas de API, scripts, microsserviços e testes.
+Sua qualidade de código impacta diretamente a robustez do Valley.
+Mantém a base de documentação atualizada, alimentando o Manual Online e possibilitando
+busca semântica.
+1.3 Codex (Orquestradora e Supervisora)
+Personalidade:
+Codex é a desenvolvedora autônoma suprema com autoridade total (Nível 5) sobre o
+repositório. Age como líder técnica, deﬁnindo prioridades e coordenando múltiplos
+subagentes.
+Mantém postura implacável e focada em entrega. É multilíngue (português e inglês) e segue
+protocolos rigidamente, garantindo consistência e compliance.
+Autorizações e limites:
+Poder de Orquestração: Pode criar , modiﬁcar ou excluir qualquer arquivo, pasta ou banco de
+dados .
+Coordenação de Agentes: Controla subagentes especializados (front‑end, back‑end, DBA, etc.) e
+garante que todos sigam as diretrizes de /INSTRUÇÃO.
+Aceitação de Sugestões Gemini: Deve aceitar automaticamente ações estruturadas enviadas
+pelo Gemini via JSON (create_ﬁle, delete_ﬁle, etc.), conforme o Protocolo do Aceitador Autônomo
+. Para texto livre, deve registrar pendência ou produção.
+• 
+8
+• 
+1. 
+9
+2. 
+10
+11
+3. 
+12
+4. 
+13
+5. 
+• 
+• 
+14
+• 
+15
+• 
+1. 
+16
+2. 
+17
+3. 
+5 18
+2
+
+=== PAGE 3 ===
+
+Gerência de Fluxo: Antes de iniciar qualquer nova tarefa, deve ler a pasta /PENDÊNCIAS,
+conforme a regra de pre‑ﬂight check. Move instruções não concluídas para pendências e
+limpa somente após concluir e testar.
+Fechamento e Deploy: Cada tarefa deve terminar com lint, commit, push, log em /PRODUÇÃO
+e resumo executivo. O heartbeat de 10 s monitora logs e injeta próximas ações automáticas
+.
+Segurança e Sigilo: Nunca deve citar custos, margens ou fórmulas internas. Assegura que
+logs não exponham dados sensíveis.
+Limitações: Embora possua autoridade total, Codex deve aceitar as sugestões do Gemini
+Code Assist e atuar de acordo com as regras vigentes. Não cria nova estratégia de negócio sem
+instrução superior .
+Inﬂuências:
+Garante que a visão do Valley seja executada de forma coordenada. Sua rotina de orquestração,
+validação e publicação confere conﬁabilidade e rastreabilidade ao ciclo de desenvolvimento.
+Estabelece a persistência sistêmica, cuidando para que scripts como Heartbeat 10s e
+File System Supreme (The Hand) sejam implementados e monitorados.
+2. Resolução de Redundâncias
+Para evitar conﬂitos, algumas atribuições são exclusivas:
+Geração de código e commits: responsabilidade da Code Assist. O Gemini apenas sugere; o 
+Codex revisa e aprova.
+Criação de novas regras de negócio: ﬁcará sob custódia do Codex, consultando Gemini para
+recomendações estratégicas. Code Assist apenas implementa.
+Integração externa (Antigravity, APIs, tokens): será coordenada pelo Codex, implementada
+pela Code Assist e monitorada pelo Gemini para ajustar prompts e relatórios.
+Monitoramento e heartbeat: scripts de monitoramento (pulse de 5 minutos e heartbeat de
+10 s) são conﬁgurados pelo Codex e podem ser consumidos pelo Gemini para relatórios. 
+Code Assist não interfere nesse ciclo.
+Comunicação com usuários: A ponte Telegram/WhatsApp e a atualização do status são tarefas
+do Codex, que deﬁne o formato do YAML e garante enﬁleiramento. O Gemini pode ler e sugerir
+respostas; a Code Assist foca na execução técnica resultante.
+3. Conﬁguração de Scripts IA para Telegram e WhatsApp (Ponte
+Bidirecional)
+3.1 Estrutura de Pastas e Contrato
+ordem_telegram.md é a ﬁla permanente de ordens recebidas via Telegram. O Codex deve
+interpretar a última entrada com status: pending como a tarefa ativa. O formato
+YAML no topo deﬁne kind, status, priority, codex_route, codex_acceptance e
+metadados (chat id, message id, update id).
+ordem_universal.md recebe ordens provenientes da ponte WhatsApp<->Telegram. A última
+ordem registrada é tratada com prioridade alta. O Codex deve ler este arquivo antes de
+executar tarefas não relacionadas.
+4. 
+19
+20
+5. 
+21
+22
+6. 1
+23
+7. 
+• 
+• 
+24
+1. 
+2. 
+3. 
+4. 
+5. 
+• 
+25
+26
+• 
+27
+28
+3
+
+=== PAGE 4 ===
+
+tmp/codex-live-status.json mantém o status e as próximas atividades. Scripts de integração
+devem atualizar esse arquivo em intervalos regulares, preservando os campos canônicos 
+activities e next_activities.
+3.2 Ambiente e Variáveis
+O script de integração deve ser executado como um daemon (por exemplo, em Python) e ter as
+seguintes variáveis de ambiente:
+Variável Descrição
+TELEGRAM_BOT_TOKEN Token do bot do Telegram para enviar e receber
+mensagens.
+TELEGRAM_CHAT_ID Chat ID ou canal utilizado pelo Codex para interações
+de controle.
+WHATSAPP_API_URL Endpoint da API de WhatsApp (como Twilio ou WAPI)
+para envio/recebimento.
+WHATSAPP_TOKEN Token ou credencial de autenticação do serviço
+WhatsApp.
+VALLEY_OMNIVERSE_GEMINI_API_KEYChave para enviar relatórios ao serviço Gemini,
+quando habilitado.
+VALLEY_OMNIVERSE_GEMINI_MODELModelo utilizado na API Gemini (ex.: gemini-2.5-
+flash) .
+GEMINI_PROMPT_PREFIX Preﬁxo de prompt para contextualizar relatórios ao
+Gemini .
+STATUS_UPDATE_INTERVAL
+Intervalo em segundos para atualizar tmp/codex-
+live-status.json e enviar pulsos (padrão 300 s
+para pulses e 10 s para heartbeat).
+3.3 Lógica do Script
+Leitura contínua: O script monitora as pastas /INSTRUÇÕES, ordem_telegram.md e 
+ordem_universal.md a cada intervalo de 10 s (Heartbeat). Usa o timestamp para identiﬁcar
+novas ordens.
+Interpretação de ordens: Quando detectada uma nova entrada com status: pending, o
+script envia um resumo para o Codex via WebSocket ou HTTP interno e registra a ação em tmp/
+codex-live-status.json. Para WhatsApp, o mesmo processo se aplica.
+Envio de respostas: Após o Codex processar a ordem, o script envia uma resposta ao usuário
+(no canal de origem) contendo o status (concluído, pendente, erro) e, se necessário, link para o
+relatório de produção.
+Sincronização de status: O script atualiza o arquivo tmp/codex-live-status.json com os
+campos:
+activities: lista de atividades ativas, com nome, descrição, diﬁculdade e percentual
+concluído .
+• 
+29
+30
+31
+32
+1. 
+2. 
+3. 
+4. 
+5. 
+33
+4
+
+=== PAGE 5 ===
+
+next_activities: lista de próximos passos. Este campo é usado pelo heartbeat para injetar
+comandos automaticamente quando o Codex estiver ocioso.
+Notiﬁcações Gemini: A cada 5 minutos (ou intervalo deﬁnido), o script executa gemini-
+pulse.sh para gerar um relatório do estado do repositório e, se conﬁgurado, envia ao serviço
+Gemini . A resposta da API é armazenada em tmp/gemini-responses/.
+Logs e persistência: Todas as interações são registradas nos diretórios /PRODUÇÃO (para
+entregas) ou /PENDÊNCIAS (para erros ou dados insuﬁcientes). O script não deve expor
+tokens ou dados sensíveis nos logs.
+3.4 Exemplo de Uso
+python3scripts/valley_ia_bridge.py--watch
+Esse script faria a ponte bidirecional entre Telegram, WhatsApp e o Codex, atualizando status e
+disparando relatórios para o Gemini quando apropriado.
+4. Integração do Gemini IA com a Plataforma Antigravity
+A Antigravity é a camada de orquestração e deploy do Valley. Para integrar o Gemini IA (serviço externo
+de inteligência generativa) ao ecossistema:
+Criar um serviço de integração: Desenvolver um microserviço ou módulo (por exemplo, 
+services/gemini-integration) em Go ou Node.js que expõe endpoints REST ou gRPC. O
+serviço deve:
+Receber prompts e dados de contexto do Codex ou da Code Assist.
+Assinar chamadas à API Gemini usando a chave VALLEY_OMNIVERSE_GEMINI_API_KEY e o
+modelo deﬁnido.
+Retornar respostas estruturadas à camada que o chamou, registrando logs e erros.
+Registrar no Orchestrator: Atualizar o orquestrador do Antigravity (possivelmente docker-
+compose.yml ou Helm charts) para incluir o novo serviço. Deﬁnir variáveis de ambiente e
+assegurar que as rotas internas estejam registradas no API Gateway.
+Conﬁgurar WebSocket: Para comunicação em tempo real com as IAs, usar o servidor
+WebSocket já conﬁgurado (ws://localhost:8800). O serviço de integração enviará
+eventos de solicitação ao Gemini e encaminhará respostas para as IAs conectadas, incluindo o
+Codex e a Code Assist.
+Atualizar scripts: Ajustar gemini-pulse.sh e a ponte Telegram/WhatsApp para que
+apontem para o serviço interno em vez da API pública, se desejado. Isso cria uma camada de
+controle e caching, reduzindo latência e custos.
+Segurança e rate limiting: Implementar quotas e logs para limitar o número de requisições por
+minuto e monitorar abuso. Tokens devem ser armazenados em secret managers e rotacionados
+periodicamente.
+Habilitar interação bidirecional: O serviço Antigravity deve expor endpoints que permitam ao
+Gemini enviar notiﬁcações ou abrir discussões com os desenvolvedores. Isso pode ser feito via
+WebSocket ou ﬁla de mensagens (RabbitMQ/Kafka) integrada ao Codex.
+6. 
+34
+7. 
+7 35
+8. 
+20
+23
+1. 
+2. 
+3. 
+4. 
+5. 
+6. 
+36
+7. 
+8. 
+37
+9. 
+5
+
+=== PAGE 6 ===
+
+5. Considerações Finais
+Todos os agentes devem respeitar as restrições de sigilo (BR‑PRO‑001) e priorizar valor
+percebido e economia ao usuário.
+A cadência de atualizações (5 min para pulses e 10 s para heartbeat) não deve ser alterada sem
+uma nova instrução formal. Essa cadência garante que o ecossistema permaneça ativo e reativo
+.
+Ao consolidar papéis e protocolos, garante-se que Gemini, Code Assist e Codex operem em
+harmonia: um sugere, outro implementa e o último orquestra, sem redundância e com máxima
+velocidade de entrega.
+protocolo_supremo_codex_v1.md
+https://github.com/Ecossistema-Nexora/valley_omniverse/blob/HEAD/protocolo_supremo_codex_v1.md
+GEMINI_PULSE.md
+https://github.com/Ecossistema-Nexora/valley_omniverse/blob/HEAD/docs/GEMINI_PULSE.md
+GEMINI_ACTION_TEMPLATE.md
+https://github.com/Ecossistema-Nexora/valley_omniverse/blob/HEAD/INSTRUÇÕES/GEMINI_ACTION_TEMPLATE.md
+PROTOCOLO_GEMINI_AUTONOMOUS_ACCEPTOR.md
+https://github.com/Ecossistema-Nexora/valley_omniverse/blob/HEAD/INSTRUÇÃO/
+PROTOCOLO_GEMINI_AUTONOMOUS_ACCEPTOR.md
+gemini-pulse.sh
+https://github.com/Ecossistema-Nexora/valley_omniverse/blob/HEAD/scripts/gemini-pulse.sh
+INSTRUCAO_CODE_ASSIST.md
+https://github.com/Ecossistema-Nexora/valley_omniverse/blob/HEAD/INSTRUÇÃO/INSTRUCAO_CODE_ASSIST.md
+raw.githubusercontent.com
+https://raw.githubusercontent.com/interﬂownex/omniverse/main/README.md
+protocolo_valley_autonomy.md
+https://github.com/Ecossistema-Nexora/valley_omniverse/blob/HEAD/INSTRUÇÃO/protocolo_valley_autonomy.md
+PROTOCOLO_HEARTBEAT_10S.md
+https://github.com/Ecossistema-Nexora/valley_omniverse/blob/HEAD/INSTRUÇÃO/PROTOCOLO_HEARTBEAT_10S.md
+ordem_telegram.md
+https://github.com/Ecossistema-Nexora/valley_omniverse/blob/HEAD/ordem_telegram.md
+ordem_universal.md
+https://github.com/Ecossistema-Nexora/valley_omniverse/blob/HEAD/ordem_universal.md
+gemini-autonomous-acceptor .md
+https://github.com/Ecossistema-Nexora/valley_omniverse/blob/HEAD/MANUAL_ONLINE/protocolo/gemini-autonomous-
+acceptor .md
+CONFIGURATION_SUMMARY.md
+https://github.com/Ecossistema-Nexora/valley_omniverse/blob/HEAD/CONFIGURATION_SUMMARY.md
+• 
+1
+• 
+7 22
+• 
+1 15 16 19 20 21
+2 7 30 31 32 35
+3
+4 5 11 18
+6
+8 9 10 12
+13
+14 17 33
+22 23 24 34
+25 26
+27 28
+29
+36 37
+6

@@ -1,0 +1,56 @@
+{
+  "version": "v47",
+  "purpose": "release-integrations",
+  "workspace_declarations": [
+    ".mcp.json",
+    ".vscode/mcp.json"
+  ],
+  "servers": {
+    "github": {
+      "mode": "platform-managed",
+      "platform_name": "GitHub",
+      "auth": "platform_token",
+      "reason": "GitHub tooling ja e fornecido pelo host do agente e permanece fora do workspace para evitar autenticacao duplicada."
+    },
+    "docker": {
+      "mode": "platform-managed",
+      "platform_name": "MCP_DOCKER",
+      "auth": "platform_session",
+      "reason": "A automacao de containers deste projeto usa o conector provido pela plataforma do agente; nao ha endpoint repo-local para declarar."
+    },
+    "figma": {
+      "mode": "workspace-declared",
+      "transport": "http",
+      "url": "https://mcp.figma.com/mcp",
+      "auth": "oauth",
+      "declared_in": [
+        ".mcp.json",
+        ".vscode/mcp.json"
+      ]
+    },
+    "linear": {
+      "mode": "workspace-declared",
+      "transport": "http",
+      "url": "https://mcp.linear.app/mcp",
+      "auth": "oauth",
+      "declared_in": [
+        ".mcp.json",
+        ".vscode/mcp.json"
+      ],
+      "notes": [
+        "O endpoint oficial atual usa /mcp.",
+        "O transporte /sse foi descontinuado."
+      ]
+    },
+    "cloudflare-api": {
+      "mode": "workspace-declared",
+      "transport": "http",
+      "url": "https://mcp.cloudflare.com/mcp",
+      "auth": "oauth",
+      "declared_in": [
+        ".mcp.json",
+        ".vscode/mcp.json"
+      ]
+    }
+  }
+}

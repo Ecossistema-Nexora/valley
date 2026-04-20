@@ -1,0 +1,61 @@
+# Compose local para validar implantacao do banco hibrido Valley.
+# PostgreSQL guarda identidade, dinheiro, contratos, orders e delivery registry.
+# MongoDB guarda IA, Social, Influencer metrics e Telemetria.
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: valley-postgres
+    environment:
+      POSTGRES_DB: valley
+      POSTGRES_USER: valley
+      POSTGRES_PASSWORD: valley_dev_password
+      POSTGRES_INITDB_ARGS: --no-sync
+    ports:
+      - "55432:5432"
+    volumes:
+      - valley-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U valley -d valley"]
+      start_period: 30s
+      interval: 5s
+      timeout: 10s
+      retries: 40
+
+  mongodb:
+    image: mongo:7
+    container_name: valley-mongodb
+    ports:
+      - "57017:27017"
+    volumes:
+      - valley-mongodb-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      start_period: 20s
+      interval: 5s
+      timeout: 10s
+      retries: 40
+
+  builder:
+    profiles: ["builder"]
+    build:
+      context: .
+      dockerfile: docker/builder/Dockerfile
+    container_name: valley-builder
+    working_dir: /workspace
+    environment:
+      DATABASE_URL: postgresql://valley:valley_dev_password@postgres:5432/valley
+      MONGODB_URI: mongodb://mongodb:27017/valley
+      VALLEY_SKIP_DOCKER_CHECKS: "true"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+    volumes:
+      - .:/workspace
+    restart: "no"
+
+volumes:
+  valley-postgres-data:
+  valley-mongodb-data:

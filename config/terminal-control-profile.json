@@ -1,0 +1,17 @@
+{
+  "profile_name": "terminal_control",
+  "shell": "powershell",
+  "login": false,
+  "command_policy": {
+    "prefer_non_interactive": true,
+    "prefer_absolute_paths": true,
+    "prefer_structured_scripts": true,
+    "report_blocked_state_honestly": true,
+    "avoid_shell_chains_when_noisy": true
+  },
+  "release_runtime": {
+    "database": "docker compose --profile builder run --rm --build builder",
+    "report": "python scripts/valley_db_orchestrator.py report",
+    "module_sync": "python scripts/valley_module_automation.py sync"
+  }
+}

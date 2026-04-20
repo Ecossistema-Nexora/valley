@@ -1,0 +1,1413 @@
+
+
+=== PAGE 1 ===
+
+Painel Web Admin — Especiﬁcação Consolidada
+(v47)
+Este documento uniﬁca todos os requisitos, regras de negócio, estrutura de dados e funcionalidades já
+solicitados para o Painel Web Admin do Valley Omniverse (versão 47). Ele serve como referência para o
+Codex e para a integração com o Gemini, garantindo que a implementação siga as mesmas diretrizes
+de negócios, segurança e arquitetura de todo o ecossistema.
+1 — Finalidade do Painel Web Admin
+O Painel Web Admin (implementado com Next.js) é a interface central que permite às equipes internas
+e parceiros operacionais:
+Gerenciar usuários e empresas (PF e PJ) com controle de permissões (RBAC/ABAC).
+Visualizar e auditar transações ﬁnanceiras (Valley Pay, Valley Finanças) com logs completos.
+Administrar catálogos e estoques (Marketplace, Stock, Business) com sincronização em tempo
+real.
+Conﬁgurar e versionar regras de negócio (pricing, validações, risco, gamiﬁcação) com histórico
+e rollback.
+Acompanhar analytics de uso (métricas, logs, eventos e traces) e tomar decisões baseadas em
+dados.
+Orquestrar campanhas de marketing e gamiﬁcação (Ads, Loyalty, Gamiﬁed Ecosystem) com
+simulações e aprovação em dois níveis.
+Operar um centro de comando uniﬁcado com observabilidade, AIOps e automações de
+runbooks.
+2 — Estrutura de Módulos e Funções Admin
+A seguir , uma visão de como cada módulo do Valley Omniverse v47 se reﬂete em funcionalidades de
+administração. Para cada módulo, destacam‑se as principais ações de gestão (CRUD, relatórios,
+conﬁgurações), com foco nas perspectivas de PF (quando o admin age como usuário interno ou
+suporte ao cliente) e PJ (quando se trata de parceiros/empresas).
+nº Módulo Funcionalidade
+administrativa PF (Interno/Support)PJ (Empresa/Loja)
+1 Valley REPLY (ERP/WMS)
+Criar empresas,
+gerenciar notas
+ﬁscais, conciliar
+estoque, conﬁgurar
+ﬂuxos de supply
+chain, deﬁnir taxas e
+integrações com 
+Business e Pay
+Suporte a
+microempreendedores
+na emissão de notas e
+integração com
+estoque
+Gestão de ERP
+completo:
+adicionar centros
+de custo, auditar
+ordens de
+compra, ajustar
+cadastros ﬁscais
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+1
+
+=== PAGE 2 ===
+
+nº Módulo Funcionalidade
+administrativa PF (Interno/Support)PJ (Empresa/Loja)
+2 Valley Stock
+(Dropshipping)
+Importar catálogos,
+deﬁnir margem
+padrão (+50 %),
+ajustar regras de
+frete, monitorar
+status de pedidos e
+rastreamento
+multi‑transportadora
+Analisar pedidos de
+usuários e intermediar
+devoluções
+Habilitar/
+dessabilitar
+produtos,
+conﬁgurar
+preços,
+acompanhar
+repasses e
+desempenho de
+fornecedores
+3 Valley Log (Smart
+Tracking)
+Visualizar
+rastreamento em
+tempo real,
+conﬁgurar SLA por
+modalidade de
+entrega, reprocessar
+eventos de tracking,
+emitir relatórios de
+incidentes
+Veriﬁcar status de
+encomendas a pedido
+dos clientes,
+reencaminhar
+entregas
+Ajustar SLA para
+diferentes
+regiões, acessar
+relatórios de
+performance e
+gargalos
+4 Valley Food (Delivery
+Saudável)
+Aprovar
+restaurantes, deﬁnir
+comissões (15 %),
+aprovar cardápios e
+informações
+nutricionais, gerir
+promoções e taxas
+adicionais
+Abrir chamados para
+reembolso/
+insatisfação, ajustar
+pedidos
+Cadastrar
+restaurantes,
+atualizar
+cardápios, deﬁnir
+horários e
+monitorar
+indicadores
+5 Valley Delivery (Courier
+urbano)
+Conﬁgurar
+categorias de
+pacote, políticas de
+seguro, tabelas de
+preço por peso/
+distância e repasse,
+gerir ocorrências
+Realizar rastreamento
+e reagendar entregas
+sob solicitação
+Integrar SLA
+corporativo,
+deﬁnir janelas de
+coleta e
+acompanhar
+performance
+6 Valley WMS
+(Warehouse Intelligence)
+Gerenciar depósitos,
+sensores IoT, áreas
+de armazenamento,
+limites de ocupação,
+inventários e
+auditoria logística
+Consultar inventário e
+atender requisições de
+devolução
+Ajustar
+parâmetros de
+picking, impor
+segregação de
+estoque e
+acessar
+dashboards
+1
+2
+
+=== PAGE 3 ===
+
+nº Módulo Funcionalidade
+administrativa PF (Interno/Support)PJ (Empresa/Loja)
+9 Valley Fleet (Gestão de
+Frotas)
+Cadastrar veículos,
+motoristas,
+monitorar telemetria
+(velocidade,
+combustível), deﬁnir
+regras de condução
+segura, relatórios de
+manutenção
+Acompanhar
+reclamações de
+motoristas,
+reorganizar rotas
+Controlar custos
+de frota,
+acompanhar
+multas e
+incidentes,
+planejar
+manutenção
+preventiva
+42 Valley Business (ERP
+micro/médio)
+Gerir perﬁl de
+empresa, emissores
+de NFe, sincronizar
+estoque com
+Marketplace,
+processar folha via
+Pay , deﬁnir
+impostos e contas
+contábeis
+Auxiliar MEIs e
+pequenas empresas a
+conﬁgurar ERP , tirar
+dúvidas
+Conﬁgurar
+tributações,
+cadastrar
+contadores,
+exportar
+relatórios ﬁscais
+7 Valley Marketplace
+Aprovar produtos,
+controlar comissão
+de vendas, moderar
+avaliações, gerir
+estoques e
+promoções,
+conﬁgurar split
+automático
+Resolver disputas
+entre comprador e
+vendedor , editar
+detalhes de compra
+Publicar/excluir
+ofertas, ajustar
+preços, criar
+cupons e
+monitorar
+métricas de
+vendas
+8 Valley Pay
+Auditar transações,
+conﬁgurar limites de
+transferência,
+gerenciar saldo e
+antecipação,
+consultar ledger
+imutável, integrar
+bancos externos,
+aplicar ring‑fence
+ﬁnanceiro
+Suporte a usuários
+com falhas de
+pagamento,
+reembolso, estorno e
+disputas
+Gerenciar split de
+recebíveis,
+antecipar
+pagamentos,
+conﬁgurar
+planos de
+cobrança
+11 Valley Digital
+Aprovar NFTs,
+conﬁgurar taxas de
+minting e royalties,
+auditar transações
+blockchain, deﬁnir
+políticas de
+compliance
+Auxiliar artistas em
+criação de NFTs,
+reemitir tokens
+perdidos
+Aprovar coleções
+corporativas,
+conﬁgurar leilões
+e distribuição de
+royalties
+2
+3
+3
+
+=== PAGE 4 ===
+
+nº Módulo Funcionalidade
+administrativa PF (Interno/Support)PJ (Empresa/Loja)
+12 Valley Real Estate
+Validar
+documentação de
+imóveis, aprovar
+tokenização, gerir
+frações, monitorar
+pagamento de
+aluguel tokenizado
+Atender investidores
+PF, bloquear frações
+suspeitas
+Incluir novos
+projetos,
+conﬁgurar
+dividendos e
+controles de
+compliance
+31 Valley Insurance
+Conﬁgurar planos
+(vida, aparelho,
+viagem), prêmios e
+regras de adesão;
+aprovar sinistros e
+repasses
+Suportar usuários na
+contratação e
+acionamento de
+seguros
+Deﬁnir
+coberturas,
+limites,
+franquias;
+analisar sinistros
+corporativos
+40 Valley Finanças
+Administrar
+categorizações de
+despesas/receitas,
+metas, análises de
+crédito preditivo,
+gerar relatórios e
+alertas, manter 
+ring‑fence para
+dados sensíveis
+Apoiar usuários em
+criação de orçamentos
+e amortização
+Preaprovar
+créditos para
+lojistas com base
+em notas e
+histórico, ajustar
+critérios
+13 Valley Health
+Cadastrar hospitais
+e médicos, deﬁnir
+protocolos de
+teleconsulta,
+integrar prontuário
+eletrônico, aprovar
+campanhas de
+prevenção
+Suporte em marcação
+de consulta e
+teleatendimento,
+corrigir dados de
+prontuário
+Homologar
+clínicas,
+acompanhar
+dashboards de
+saúde
+corporativa e
+compliance
+22 Valley Pharmacy
+Homologar
+farmácias, validar
+prescrições digitais,
+monitorar estoques
+de medicamentos
+controlados, deﬁnir
+recompensas de
+adesão
+Auxiliar usuários com
+trocas e renovações
+de receita
+Conﬁgurar
+catálogo e
+promoções,
+acompanhar
+alertas de
+estoque crítico
+23 Valley Vet
+Aprovar clínicas
+veterinárias, deﬁnir
+planos de saúde
+animal, gerenciar
+teleconsultas e
+procedimentos,
+acompanhar vacinas
+Suporte em
+agendamento de
+consultas e compra de
+produtos pet
+Monitorar casos
+e planos, criar
+campanhas de
+vacinação
+4
+4
+
+=== PAGE 5 ===
+
+nº Módulo Funcionalidade
+administrativa PF (Interno/Support)PJ (Empresa/Loja)
+41 Valley Mente
+Gerenciar
+proﬁssionais de
+saúde mental,
+agendar sessões,
+monitorar uso e
+estatísticas, moderar
+conteúdo de
+mindfulness
+Suporte a usuários em
+emergências, triagem
+de urgência
+Validar
+credenciais de
+terapeutas,
+conﬁgurar
+protocolos de
+conﬁdencialidade
+14 Valley Edu
+Homologar cursos,
+conﬁgurar
+recompensas
+(Pepitas), aprovar
+instrutores,
+monitorar progresso
+dos alunos,
+gerenciar
+certiﬁcados digitais
+Suporte a estudantes,
+reativar acesso e
+validar provas
+Criar trilhas
+corporativas,
+acompanhar
+resultados e
+relatórios de
+treinamento
+15 Valley Tech
+Controlar
+provisionamento de
+infraestrutura,
+deﬁnir políticas de
+uso e planos de
+cobrança, aprovar
+APIs e serviços SaaS
+Suporte a devs
+independentes com
+quotas e uso justo
+Gerenciar
+ambientes de
+startups,
+monitorar
+consumo e
+faturamento
+16 Valley Jobs
+Conﬁgurar
+algoritmos de
+matching, publicar
+vagas, monitorar
+funil de candidatos,
+aprovar testes e
+entrevistas
+Intermediar
+candidaturas e ajustar
+perﬁs
+Criar vagas,
+avaliar
+candidatos, gerar
+contratos
+30 Valley Charity
+Gerir projetos,
+validar
+organizações,
+conﬁgurar
+campanhas de
+doação, monitorar
+relatórios de
+impacto
+Suporte a doadores e
+beneﬁciados, resolver
+inconsistências de
+repasse
+Monitorar
+compliance das
+ONGs,
+acompanhar KPIs
+e transparência
+5
+
+=== PAGE 6 ===
+
+nº Módulo Funcionalidade
+administrativa PF (Interno/Support)PJ (Empresa/Loja)
+17 Valley News & Podcast
+Moderar conteúdos
+(feeds, podcasts),
+aprovar canais,
+deﬁnir algoritmo de
+recomendação,
+conﬁgurar
+monetização
+Responder a
+denúncias de
+conteúdo, ajustar feed
+Publicar podcasts
+corporativos,
+gerenciar direitos
+autorais
+18 Valley Ads
+Criar e aprovar
+campanhas, deﬁnir
+geofencing,
+segmentação,
+limites de
+orçamento,
+monitorar
+conversões e
+relatórios
+Auxiliar usuários que
+recebem anúncios
+irrelevantes (opt‑out)
+Conﬁgurar
+campanhas
+detalhadas,
+segmentar por
+perﬁl/
+localização,
+monitorar ROI
+19 Valley Inﬂuencers
+Aprovar inﬂuencers,
+gerenciar contratos
+de publicidade,
+deﬁnir comissões e
+exclusividade,
+monitorar métricas
+Auxiliar criadores com
+repasses e disputas
+Criar campanhas,
+analisar
+performance,
+pagar comissões
+e repasses
+20 Valley Social
+Moderação de
+grupos, eventos e
+posts; controle de
+spam e discurso de
+ódio; integração
+com Eventos e
+Marketplace
+Responder a
+denúncias, ajustar
+conteúdo
+Criar
+comunidades
+empresariais,
+promover
+eventos e
+marketplace
+21 Valley Fitness
+Conﬁgurar
+programas de
+move‑to‑earn,
+deﬁnir recompensas,
+monitorar fraude,
+aprovar desaﬁos
+Ajudar usuários a
+recuperar dados e
+refutar contagem
+Criar campanhas
+corporativas de
+bem‑estar ,
+monitorar
+engajamento
+32 Valley Gaming
+Gerir jogos e
+missões, aprovar
+parcerias de game
+devs, deﬁnir
+economia de tokens,
+monitorar idade
+mínima
+Suporte a gamers em
+recompensas e
+eventos
+Patrocinar
+torneios,
+conﬁgurar metas
+de engajamento
+6
+
+=== PAGE 7 ===
+
+nº Módulo Funcionalidade
+administrativa PF (Interno/Support)PJ (Empresa/Loja)
+24 Valley Tourism
+Aprovar parceiros
+turísticos, conﬁgurar
+roteiros e reservas,
+gerenciar parcerias
+de hotéis e passeios
+Atender clientes e
+resolver reclamações
+Criar pacotes,
+gerenciar
+calendário,
+monitorar
+reservas
+25 Valley Events
+Emitir ingressos,
+aprovar eventos,
+deﬁnir política de
+reembolso e escrow,
+controlar check‑in
+Suporte a
+compradores de
+ingressos
+Cadastrar
+eventos,
+controlar lotes,
+repassar receitas
+26 Valley Mobility
+Cadastrar
+motoristas, aprovar
+veículos, deﬁnir
+taxas ﬁxas (10 %)
+, conﬁgurar
+rotas, monitorar
+incidentes e
+avaliações
+Reprocessar
+pagamentos,
+intermediar conﬂitos
+Monitorar KPIs
+de transporte
+corporativo,
+controlar frota
+27 Valley Security
+Cadastrar agentes
+de segurança,
+conﬁgurar alertas
+SOS, monitorar
+eventos, estabelecer
+política de resposta
+Fornecer suporte e
+alertas emergenciais
+Administrar
+planos
+corporativos de
+segurança,
+acompanhar
+estatísticas
+28 Valley Gov
+Conectar serviços
+públicos, conﬁgurar
+integrações, auditar
+licenças e
+protocolos,
+monitorar KPIs
+cívicos
+Suporte a usuários PF
+em processos
+burocráticos
+Gerenciar
+licenças,
+pagamentos de
+tributos e
+solicitações
+empresariais
+29 Valley Legal
+Gerar templates de
+contratos
+inteligentes, aprovar
+cláusulas, conﬁgurar
+fallback PIN e
+AI Mediator ,
+acompanhar
+disputas
+Suporte a usuários em
+recuperação de chaves
+e mediação
+Conﬁgurar
+contratos
+corporativos,
+registrar
+propriedades
+intelectuais
+5
+7
+
+=== PAGE 8 ===
+
+nº Módulo Funcionalidade
+administrativa PF (Interno/Support)PJ (Empresa/Loja)
+33 Valley IoT
+Aprovar dispositivos,
+deﬁnir protocolos de
+segurança e
+interoperabilidade,
+monitorar
+telemetria,
+conﬁgurar rotinas
+automatizadas
+Suporte a usuários
+com problemas de
+conectividade
+Gerenciar parque
+de dispositivos
+industrial, deﬁnir
+alertas
+34 Valley Bio
+Cadastrar empresas
+de coleta, deﬁnir
+políticas de logística
+reversa, monitorar
+reciclagem, gerar
+créditos verdes,
+aplicar taxas
+ambientais
+Ajudar usuários em
+agendamento de
+coleta especial
+Gerenciar
+programas
+corporativos de
+sustentabilidade,
+gerar relatórios
+de carbono
+35 Valley Home
+Gerir integração de
+devices domésticos,
+conﬁgurar
+automações, deﬁnir
+políticas de dados
+locais vs. nuvem
+Suporte a usuários em
+conﬁguração e falhas
+Prover serviços
+para
+condomínios e
+hotéis, gerenciar
+automação
+massiva
+36 Valley Energy
+Homologar
+geradores e
+medidores
+inteligentes,
+monitorar P2P
+trading, deﬁnir
+tarifas, auditar
+transações em
+blockchain
+Suporte a
+prosumidores,
+resolver disputas de
+medição
+Criar hubs de
+energia
+corporativa,
+administrar pool
+de energia
+37 Valley Space
+Aprovar aplicações
+AR, gerenciar
+âncoras e
+localização, moderar
+conteúdo, deﬁnir
+pricing de
+ancoragem
+Suporte a usuários em
+experiências AR,
+corrigir imprecisões
+Criar campanhas
+de AR
+corporativas,
+monetizar
+espaços
+8
+
+=== PAGE 9 ===
+
+nº Módulo Funcionalidade
+administrativa PF (Interno/Support)PJ (Empresa/Loja)
+38 Valley Agenda
+Gerenciar políticas
+de privacidade,
+priorização
+automática,
+integrações com
+módulos, conﬁgurar
+lembretes e listas
+globais
+Suporte a usuários
+que perderam acesso
+ou querem backup de
+dados
+Criar planos
+corporativos de
+agendas
+compartilhadas,
+deﬁnir acessos
+39 Valley Advisor
+Conﬁgurar modelos
+preditivos
+(economia,
+investimento,
+energia), deﬁnir
+níveis de risco,
+auditar
+recomendações e
+aprovações
+(consentimento)
+Auxiliar usuários com
+explicações das
+recomendações e
+ajustar perﬁs
+Ajustar
+parâmetros para
+empresas, deﬁnir
+pools de
+investimento,
+revisar alertas
+automáticos
+45 Valley Media
+Homologar
+criadores, controlar
+limites de upload
+(MP4 via MinIO),
+deﬁnir políticas de
+monetização,
+moderar conteúdos
+Ajudar inﬂuenciadores
+a resolver strikes e
+recuperar vídeos
+Deﬁnir
+campanhas
+corporativas de
+media, controlar
+revenue share
+46 Valley Chat
+Gerenciar salas,
+moderadores, ﬁltrar
+mensagens,
+monitorar logs,
+diferenciar persona
+pessoal vs.
+proﬁssional
+Atender denúncias de
+chat, bloquear
+usuários abusivos
+Criar canais
+corporativos,
+gerenciar bots e
+integrações
+47 Valley Docs
+Deﬁnir layout de
+recibos, monitorar
+geração de PDFs,
+auditar ﬁlas
+(RabbitMQ),
+conﬁgurar
+armazenamento
+(MinIO)
+Suporte a usuários
+que não encontram
+comprovantes
+Gerar relatórios
+em lote, integrar
+com ERP e
+contabilidade
+6
+7
+8
+9
+9
+
+=== PAGE 10 ===
+
+3 — Regras de Negócio e Condições Globais
+Esta seção compila as principais regras estabelecidas nos módulos, bem como condições e politíticas
+que devem ser respeitadas pelo painel admin e por todos os microserviços.
+Split Automático no Valley Pay: Qualquer transação originada de Marketplace, Stock, Mobility,
+Food, Business, Plug ou Up deve ser liquidada com repasse automático entre lojista, aﬁliado e
+plataforma. O painel deve exibir a regra aplicada e permitir auditoria de cada parcela
+(margem, imposto, taxa).
+Fórmula de Preço Stock: valor ﬁnal do dropshipping = custo + frete + 50 % de margem. O
+admin não pode editar esta fórmula sem versionamento e aprovação crítica; apenas aplicar
+descontos ou promoções.
+Taxas Fixas: 
+Mobility: 10 % de taxa por corrida.
+Food: 15 % de taxa por pedido.
+Up (aﬁliados): 5 % da margem repassada imediatamente.
+BR‑ADV‑001 — Autonomia Consentida: Valley Advisor apenas recomenda ações. A execução
+ﬁnanceira só ocorre após consentimento do usuário via biometria.
+BR‑FIN‑002 — Ring‑Fence Financeiro: dados de endividamento e score de crédito não podem
+ser usados por Valley Ads ou outros módulos de marketing. O admin deve garantir
+segregação de dados e auditoria de acesso.
+BR‑MEN‑003 — Sigilo Médico Absoluto: conteúdo de sessões no Valley Mente é inacessível para
+outros módulos e para os admins; apenas metadados são exibidos para gestão de agenda.
+BR‑STO‑008 — Matriz de Desconto: exclusiva do módulo Stock; recompensa adicional quando o
+pagamento é feito 100 % em Pepitas.
+Tokens & Moedas: 
+Pepita (PEP): valor ﬁxo de R$ 3,00; lojas podem ofertar 1, 10 ou 100 como bônus por venda. 
+Gold: recarga para lojistas; conversão de R$ 500 para 100 Pepitas. 
+V‑Coin: selo de veriﬁcação para criadores e lojistas.
+Protocolo de Execução (Diretrizes Gerais de Implantação): 
+Entregar tarefas sem paralisação, evitando conﬁrmações redundantes. 
+Atualização de status detalhada em ordens complexas (atividade, passo, % concluído). 
+Builds de produção sem ferramentas de debug, logs de desenvolvimento ou dependências
+desnecessárias.
+Isolamento de Contas: no Plano Essencial, cada CNPJ opera isolado. Filiais usam contas
+separadas. O admin deve reforçar esse isolamento.
+Gamiﬁcação: 
+Sistema de pontos e missões; contratos de comando (grant_points, redeem_reward, 
+expire_points) com events idempotentes. 
+1. 
+10
+2. 1
+3. 
+4. 5
+5. 11
+6. 12
+7. 
+6
+8. 
+3
+9. 
+3
+10. 
+13
+11. 
+12. 14
+13. 15
+14. 16
+15. 17
+16. 
+17. 
+18. 
+19. 18
+20. 
+21. 
+19
+10
+
+=== PAGE 11 ===
+
+Painel de gamiﬁcação com simulação de custo, segmentação e aprovação em dois níveis. 
+Integrado com Auth, Payments, Marketplace e Social.
+Rules Engine: 
+Inventariar regras de negócio por módulo, classiﬁcando por criticidade e origem. 
+Criar modelo canônico (id, scope, version, enabled, constraints, audit) com
+versionamento e diﬀ. 
+Painel de edição com RBAC/ABAC, histórico e rollback, modo dry‑run.
+Centro de Comando (Observabilidade + AIOps): 
+Uniﬁcar métricas, logs, eventos e traces【410312901557603†L57-L63】. 
+Deﬁnir taxonomia de incidentes e runbooks automáticos. 
+Assistente operacional por chat/voz, com aprovação humana para ações automatizadas
+【410312901557603†L67-L71】.
+Design System & Experiência Uniﬁcada: 
+Compartilhar tokens e componentes entre web, mobile e admin【410312901557603†L81-L86】. 
+Testes visuais e contratos de acessibilidade【410312901557603†L83-L86】. 
+Studio de prototipagem para experimentação【410312901557603†L87-L90】.
+Segurança, CI/CD e Deploy: 
+Contratos de domínio com validação forte e idempotência【410312901557603†L96-L100】. 
+CI/CD com security gates (SAST, DAST, SBOM) e bloqueio de builds críticos
+【410312901557603†L102-L106】. 
+K8s com rotação de segredos e menor privilégio【410312901557603†L108-L110】.
+4 — Telas e Fluxos Principais do Painel
+4.1 Dashboard Geral
+Visão global do ecossistema com KPIs: número de usuários ativos, vendas, tickets abertos,
+estado dos serviços e incidentes. 
+Atalhos para módulos mais acessados e pendências urgentes (ex.: requisições de aprovação). 
+Widget de IA Helena para insights e alertas preditivos (eventos críticos, oportunidades de
+economia, necessidades de escalonamento). 
+Filtro de período para deﬁnir intervalo de análise (últimas 24 h, semana, mês).
+4.2 Gestão de Usuários
+Listagem ﬁltrável por tipo (PF/PJ/Inﬂuencer), status (ativo/inativo/suspeito), região e data de
+cadastro. 
+Detalhe de usuário com informações de identidade (ID Valley), histórico de transações,
+módulos utilizados, tickets de suporte e status de veriﬁcação (KYC). 
+22. 20
+23. 21
+24. 
+25. 22
+26. 
+23
+27. 24
+28. 
+29. 
+30. 
+31. 
+32. 
+33. 
+34. 
+35. 
+36. 
+37. 
+38. 
+39. 
+• 
+• 
+• 
+• 
+• 
+• 
+11
+
+=== PAGE 12 ===
+
+Ações: reset de senha, alteração de limite de transação, bloqueio/desbloqueio de contas, ajustes
+de permissões. 
+Registro de auditoria (audit trail) para cada alteração, conforme o modelo de regras (inclui
+timestamp, responsável e mudanças).
+4.3 Gestão de Empresas/Loja (PJ)
+Cadastro completo de CNPJ, documentos, contratos e planos selecionados (Essencial, Premium,
+Enterprise). 
+Conﬁguração de módulos ativos (Stock, Mobility, Food, Business, etc.) por empresa. 
+Painel ﬁnanceiro com recebíveis, adiantamentos, split aplicado e histórico de saque. 
+Inventário de produtos/serviços, com botões para importação (Stock), sincronização (Business)
+e promoções. 
+Equipe: permitir gestão de usuários corporativos (RBAC), deﬁnir papéis (admin, ﬁnanceiro,
+marketing) e acesso a módulos.
+4.4 Regras e Motor de Políticas
+Catálogo de regras por módulo, com ﬁltros por criticidade e tipo (validação, pricing,
+compliance, gamiﬁcação). 
+Editor com versionamento: exibir mudanças (diﬀ), permitir ativar/desativar regras, adicionar
+restrições (constraints) e agendar publicação. 
+Dry‑run: testar impacto de novas regras sem afetar o ambiente de produção. 
+Histórico de alterações com autor , data, escopo e justiﬁcativa. 
+Notiﬁcações automáticas para regras críticas que afetam múltiplos módulos (ex.: alteração de
+split Pay). 
+RBAC/ABAC: apenas perﬁs autorizados podem criar ou aprovar regras; regras de alta criticidade
+requerem aprovação dupla.
+4.5 Pagamentos e Ledger
+Consulta de transações (pagamentos, recebimentos, splits) com ﬁltros (data, módulo, status). 
+Visualização do ledger imutável para auditoria, com detecção de anomalias e função de
+reconciliação. 
+Conﬁgurações: limites de transação, antecipação de recebíveis, atualização de taxas por
+módulo, controle de moedas virtuais (Pepitas, Gold, V‑Coins). 
+Relatórios ﬁnanceiros exportáveis (CSV/PDF) e integração com sistemas contábeis (via API). 
+Função de estorno com justiﬁcativa e aprovação (com checagem de fraude e políticas de
+devolução).
+4.6 Marketplace & Estoque
+Catálogo uniﬁcado de produtos: edição de descrições, imagens e estoque. 
+Gestão de categorias e ﬁltros, deﬁnição de promoções, cupons e descontos. 
+Integração com Stock: importar produtos de dropshipping e aplicar fórmula de margem (não
+editável diretamente). 
+Gestão de logística: vincular produtos a parceiros de entrega (Delivery, Mobility) e deﬁnir
+prazos. 
+Dashboard de vendas: acompanhar conversões, ticket médio, produtos mais vendidos e
+devoluções.
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+12
+
+=== PAGE 13 ===
+
+4.7 Saúde e Bem‑Estar
+Prontuários (Health): visualizar metadados de pacientes (somente com consentimento) e status
+de consultas; agendar teleconsultas. 
+Medicamentos (Pharmacy): aprovar prescrições e renovações, monitorar estoques críticos e
+prazos de entrega. 
+Pets (Vet): gerenciar cadastros de pets, agendar serviços, aprovar teleconsulta. 
+Saúde mental (Mente): acessar relatórios anônimos de utilização, agendar sessões e validar
+proﬁssionais credenciados. 
+Painel corporativo de saúde: empresas acompanham adesão de colaboradores e programam
+campanhas de prevenção.
+4.8 Social, Mídia e Ads
+Moderação de conteúdo: aprovar/reprovar vídeos, posts, podcasts, anúncios e eventos. 
+Gestão de inﬂuencers: avaliar métricas, ﬁrmar contratos e ajustar percentuais de remuneração.
+Painel de Ads: criar campanhas, conﬁgurar segmentação, deﬁnir budgets e visualizar
+dashboards de conversão. 
+Mídia (Media): aprovar uploads, ativar monetização e aplicar strikes. 
+Chat: conﬁgurar canais, monitorar logs e deﬁnir moderação automática.
+4.9 Gamiﬁcação & Loyalty
+Campanhas: criar missões, pontos, badges e recompensas, segmentando por perﬁl e região. 
+Deﬁnição de regras de pontos (grant/redeem/expire) e limites de ganhos. 
+Aprovação em dois níveis para gamiﬁcação crítica (ex.: recompensas ﬁnanceiras). 
+Monitoramento de saldo, relatórios de engajamento e impacto de gamiﬁcação na retenção. 
+Programa de ﬁdelidade (Loyalty): gerenciar Pepitas e benefícios, conﬁgurar tiers e cashback.
+4.10 Centro de Comando & Observabilidade
+Dashboards técnicos: uniﬁcar métricas (latência, throughput), logs (aplicações, containers),
+eventos (Kafka) e traces distribuídos. 
+Alertas e incidentes: deﬁnir SLOs por módulo, receber notiﬁcações de violações e disparar
+automações (escalonamento, rollback) via AIOps. 
+Visualização de topologia e saúde em tempo real; POC de realidade aumentada para
+visualização 3D (Wave 3)【410312901557603†L68-L75】. 
+Assistente operacional: interface de chat/voz para consultas rápidas e execução de runbooks
+com aprovação. 
+Relatórios de incidentes: timeline, responsáveis, ações executadas e recomendações
+preventivas.
+4.11 Design System & Acessibilidade
+Galeria de componentes: catálogo de botões, cards, listas e modais com tokens de design. 
+Conﬁguração de temas (cores, tipograﬁa, dark mode) conforme identidade Valley. 
+Testes visuais: snapshots e validações de acessibilidade (WCAG) para cada tela. 
+Governança: versionamento semântico dos componentes e deﬁnição de guidelines de uso.
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+13
+
+=== PAGE 14 ===
+
+5 — Esquema de Banco de Dados
+O Painel Web Admin se apoia nas estruturas já modeladas para os módulos, além de tabelas adicionais
+para administração de regras, usuários internos e auditoria. As deﬁnições a seguir usam
+PostgreSQL/Citus como base.
+5.1 Tipos Enum
+CREATETYPErules.severity_enumASENUM('low', 'medium', 'high',
+'critical');
+CREATETYPEgamification.reward_type_enumASENUM('points','token',
+'badge', 'pepita');
+CREATETYPEadmin.role_enumASENUM('superadmin', 'operator', 'analyst',
+'viewer');
+CREATETYPEadmin.module_enumASENUM(
+'reply', 'stock', 'log', 'food', 'delivery', 'wms','fleet', 'business',
+'marketplace', 'pay', 'digital', 'real_estate', 'insurance', 'financas',
+'services', 'health', 'pharmacy', 'vet', 'mente', 'edu', 'tech', 'jobs',
+'charity','news','ads','influencers', 'social','fitness', 'gaming',
+'tourism','events', 'mobility', 'security', 'gov','legal', 'iot','bio',
+'home', 'energy', 'space','agenda', 'advisor', 'media', 'chat', 'docs'
+);
+5.2 Tabelas de Usuários e Empresas
+CREATESCHEMAIFNOTEXISTSplatform;
+-- Usuários internos do painel admin
+CREATETABLEplatform.admin_users(
+admin_idUUIDPRIMARYKEYDEFAULTuuid_generate_v4(),
+usernameVARCHAR(255) UNIQUENOTNULL,
+password_hashVARCHAR(255) NOTNULL,
+roleadmin.role_enumNOTNULLDEFAULT'viewer',
+created_atTIMESTAMPTZDEFAULTNOW(),
+updated_atTIMESTAMPTZDEFAULTNOW()
+);
+-- Permissões específicas por módulo e ação
+CREATETABLEplatform.admin_permissions(
+permission_idUUIDPRIMARYKEYDEFAULTuuid_generate_v4(),
+admin_idUUIDREFERENCESplatform.admin_users(admin_id)ONDELETE
+CASCADE,
+moduleadmin.module_enumNOTNULL,
+can_readBOOLEANDEFAULTTRUE,
+can_writeBOOLEANDEFAULTFALSE,
+can_approveBOOLEANDEFAULTFALSE,
+created_atTIMESTAMPTZDEFAULTNOW()
+);
+14
+
+=== PAGE 15 ===
+
+-- Usuários (PF) e empresas (PJ) existentes no ecossistema
+CREATETABLEplatform.users(
+user_idUUIDPRIMARYKEYDEFAULTuuid_generate_v4(),
+typeENUM('PF', 'PJ', 'INFLUENCER') NOTNULL,
+full_nameVARCHAR(255),
+emailVARCHAR(255) UNIQUE,
+phoneVARCHAR(30),
+document_idVARCHAR(20),
+company_nameVARCHAR(255),
+cnpjVARCHAR(20),
+created_atTIMESTAMPTZDEFAULTNOW(),
+updated_atTIMESTAMPTZDEFAULTNOW()
+);
+-- Empresas PJ e parametrizações por módulo
+CREATETABLEplatform.companies(
+company_idUUIDPRIMARYKEYDEFAULTuuid_generate_v4(),
+user_idUUIDREFERENCESplatform.users(user_id),
+planVARCHAR(50),
+is_activeBOOLEANDEFAULTTRUE,
+modulesJSONBDEFAULT'{}'::JSONB, -- lista de módulos habilitados
+created_atTIMESTAMPTZDEFAULTNOW(),
+updated_atTIMESTAMPTZDEFAULTNOW()
+);
+5.3 Motor de Regras
+CREATESCHEMAIFNOTEXISTSrules;
+CREATETABLErules.rule_definitions(
+rule_idUUIDPRIMARYKEYDEFAULTuuid_generate_v4(),
+moduleadmin.module_enumNOTNULL,
+nameVARCHAR(255)NOTNULL,
+descriptionTEXT,
+severityrules.severity_enumNOTNULL,
+constraintsJSONB,
+created_byUUIDREFERENCESplatform.admin_users(admin_id),
+created_atTIMESTAMPTZDEFAULTNOW(),
+updated_atTIMESTAMPTZDEFAULTNOW()
+);
+CREATETABLErules.rule_versions(
+version_idUUIDPRIMARYKEYDEFAULTuuid_generate_v4(),
+rule_idUUIDREFERENCESrules.rule_definitions(rule_id)ONDELETE
+CASCADE,
+versionINTEGERNOTNULL,
+definitionJSONBNOTNULL,
+enabledBOOLEANDEFAULTTRUE,
+change_logTEXT,
+approved_byUUIDREFERENCESplatform.admin_users(admin_id),
+15
+
+=== PAGE 16 ===
+
+approved_atTIMESTAMPTZ,
+created_atTIMESTAMPTZDEFAULTNOW()
+);
+CREATETABLErules.rule_audit(
+audit_idUUIDPRIMARYKEYDEFAULTuuid_generate_v4(),
+version_idUUIDREFERENCESrules.rule_versions(version_id) ONDELETE
+CASCADE,
+actionENUM('create', 'update', 'activate', 'deactivate', 'delete') NOT
+NULL,
+performed_byUUIDREFERENCESplatform.admin_users(admin_id),
+performed_atTIMESTAMPTZDEFAULTNOW(),
+detailsJSONB
+);
+5.4 Gamiﬁcação & Loyalty
+CREATESCHEMAIFNOTEXISTSgamification;
+CREATETABLEgamification.campaigns(
+campaign_idUUIDPRIMARYKEYDEFAULTuuid_generate_v4(),
+nameVARCHAR(255)NOTNULL,
+descriptionTEXT,
+start_dateDATE,
+end_dateDATE,
+reward_typegamification.reward_type_enumNOTNULL,
+target_audienceJSONB, -- critérios de segmentação
+approval_statusENUM('draft', 'pending','approved', 'rejected')DEFAULT
+'draft',
+created_byUUIDREFERENCESplatform.admin_users(admin_id),
+created_atTIMESTAMPTZDEFAULTNOW(),
+updated_atTIMESTAMPTZDEFAULTNOW()
+);
+CREATETABLEgamification.points_ledger(
+ledger_idUUIDPRIMARYKEYDEFAULTuuid_generate_v4(),
+user_idUUIDREFERENCESplatform.users(user_id) ONDELETECASCADE,
+campaign_idUUIDREFERENCESgamification.campaigns(campaign_id),
+pointsINTEGERNOTNULL,
+reasonVARCHAR(255),
+granted_atTIMESTAMPTZDEFAULTNOW(),
+expires_atTIMESTAMPTZ
+);
+5.5 Observabilidade & Auditoria
+CREATESCHEMAIFNOTEXISTSobservability;
+CREATETABLEobservability.logs(
+16
+
+=== PAGE 17 ===
+
+log_idUUIDPRIMARYKEYDEFAULTuuid_generate_v4(),
+service_nameVARCHAR(100),
+levelENUM('debug','info','warn','error','critical') NOTNULL,
+messageTEXT,
+contextJSONB,
+created_atTIMESTAMPTZDEFAULTNOW()
+);
+CREATETABLEobservability.metrics(
+metric_idUUIDPRIMARYKEYDEFAULTuuid_generate_v4(),
+moduleadmin.module_enum,
+nameVARCHAR(100),
+valueDOUBLEPRECISION,
+labelsJSONB,
+recorded_atTIMESTAMPTZDEFAULTNOW()
+);
+CREATETABLEobservability.incidents(
+incident_idUUIDPRIMARYKEYDEFAULTuuid_generate_v4(),
+moduleadmin.module_enum,
+severityrules.severity_enum,
+descriptionTEXT,
+statusENUM('open','in_progress','resolved'),
+detected_atTIMESTAMPTZDEFAULTNOW(),
+resolved_atTIMESTAMPTZ,
+runbook_referenceTEXT
+);
+5.6 Documentos & Recibos
+CREATESCHEMAIFNOTEXISTSdocs;
+CREATETABLEdocs.pdf_records(
+pdf_idUUIDPRIMARYKEYDEFAULTuuid_generate_v4(),
+user_idUUIDREFERENCESplatform.users(user_id),
+moduleadmin.module_enum,
+file_pathVARCHAR(255) NOTNULL,
+event_referenceUUID,
+created_atTIMESTAMPTZDEFAULTNOW(),
+checksumVARCHAR(64) NOTNULL
+);
+5.7 Integração com Módulos Existentes
+Os módulos Finance, Advisor , Agenda, Health, etc., possuem suas próprias tabelas especíﬁcas (ver
+documento de schema anterior). O Painel Admin deve acessar essas tabelas via schemas especíﬁcos
+(e.g., memory.advisor_insights, fintech.financial_goals, 
+mental_health.teletherapy_sessions) com visões (views) limitadas, a ﬁm de respeitar políticas
+17
+
+=== PAGE 18 ===
+
+de sigilo e ring‑fence. Recomenda‑se a criação de views no schema admin que selecionam apenas
+colunas necessárias ao painel.
+6 — Ferramentas e Integrações
+Grafana/Prometheus: monitoramento de métricas e logs. O painel deve exibir dashboards com
+KPIs técnicos e de negócios. 
+Kibana/Elastic (opcional): para consulta de logs profundos e correlação de eventos. 
+RabbitMQ: ﬁla de mensagens para geração de PDFs (Valley Docs), eventos de gamiﬁcação e
+notiﬁcações assíncronas. 
+Kafka: bus de eventos para todos os microserviços; permite feed de dados para analytics e
+AIOps. 
+Rules Engine (microserviço dedicado): executa e versiona regras de negócio. Deve expor API
+para leitura/escrita, diﬀ e auditoria. 
+Helena AI: assistente que fornece insights no dashboard e suporta a execução de runbooks em
+AIOps. 
+Design System: biblioteca de componentes compartilhados entre admin, web e mobile;
+mantido no monorepo com versionamento e testes visuais. 
+Codex: motor de integração com o código e automatização de deploy; responsável por garantir
+conformidade do schema e das regras. 
+CI/CD: pipeline GitHub Actions com etapas de build, teste, security gates, geração de imagens
+Docker e deploy em Kubernetes. 
+Terraform: provisionamento de infraestrutura, namespaces e segredos (Kubernetes). 
+7 — Condições e Políticas de Segurança
+KYC/AML: todos os usuários que movimentam valores devem passar por veriﬁcação de
+identidade (CPF/CNPJ) e checagem de lavagem de dinheiro. 
+Criptograﬁa: dados sensíveis (prontuários, transações, notas clínicas, documentos) são
+criptografados em repouso e em trânsito; vídeos/áudios de teleterapia usam E2E. 
+Política de Retenção de Dados: logs e dados ﬁnanceiros são retidos conforme legislação
+(5 anos para transações), enquanto dados de saúde seguem regras especíﬁcas de cada país. 
+Auditoria Contínua: todas as ações administrativas geram entradas na tabela 
+rules.rule_audit ou equivalentes, com rastreabilidade e justiﬁcativa. 
+Segregação de Funções: superadmins têm acesso irrestrito; operadores e analistas têm
+permissões segmentadas por módulo; ações críticas requerem aprovação dupla (quorum). 
+Proteção contra Fraudes: sistemas de detecção baseados em IA monitoram transações
+atípicas, padrões de login e anomalias de uso. 
+Compliance Regulatório: seguir LGPD (Brasil) e GDPR (Europa) no tratamento de dados
+pessoais, com consentimento explícito e direito ao esquecimento.
+8 — Considerações Finais
+O Painel Web Admin v47 é o pilar de governança do ecossistema Valley Omniverse. Ele consolida a
+administração de todos os módulos e centraliza regras, transações, campanhas e análises. A estrutura
+descrita aqui deve ser considerada contínua e perpétua, sendo atualizada sempre que novos módulos
+ou regras forem incorporados. 
+As deﬁnições de módulos, regras de negócio e esquemas de dados apresentadas formam o contrato
+oﬁcial para desenvolvedores e equipes operacionais. Qualquer divergência em relação ao que já foi
+1. 
+2. 
+3. 9
+4. 
+5. 
+25
+6. 
+7. 
+8. 
+9. 
+26
+10. 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+18
+
+=== PAGE 19 ===
+
+documentado deverá ser corrigida neste documento, mantendo a consistência com as diretrizes
+originais de implantação. 
+O material aqui descrito deve ser entregue ao Codex para validação e ao Gemini para execução
+automatizada de operações, garantindo que todas as instâncias do Valley Omniverse estejam alinhadas
+e em conformidade. 
+raw.githubusercontent.com
+https://raw.githubusercontent.com/interﬂownex/omniverse/main/README.md
+VALLEY_ISSUE_BREAKDOWN_2026-04-19.md
+https://github.com/Ecossistema-Nexora/valley_omniverse/blob/main/docs/roadmap/
+VALLEY_ISSUE_BREAKDOWN_2026-04-19.md
+VALLEY-OMNIVERSE-ARCHITECTURE.md
+https://github.com/Ecossistema-Nexora/valley_omniverse/blob/main/docs/VALLEY-OMNIVERSE-ARCHITECTURE.md
+17
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18
+19 20 21 22 23 24 25
+26
+19

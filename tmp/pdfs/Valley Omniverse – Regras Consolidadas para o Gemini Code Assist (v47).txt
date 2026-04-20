@@ -1,0 +1,462 @@
+
+
+=== PAGE 1 ===
+
+Valley Omniverse – Regras Consolidadas para o
+Gemini Code Assist (v47)
+Este documento reúne todas as regras de negócio, diretivas de segurança, protocolos de execução e
+orientações de autonomia que foram enviados ao Gemini Code Assist ao longo dos últimos módulos
+do Valley Omniverse. Cada regra foi classiﬁcada por categoria e, em caso de conﬂito, foi escolhida a
+abordagem mais benéﬁca para a continuidade e integridade do ecossistema. As regras eliminadas por
+duplicidade ou conﬂito estão assinaladas nas observações.
+1 — Regras de Negócio & Economia
+1.1 Preciﬁcação e Margens
+Regra Descrição Justiﬁcativa
+Fórmula de preço
+do Valley Stock
+O preço ﬁnal dos produtos de
+dropshipping é calculado como custo
++ frete + 50 % de margem.
+Preserva a rentabilidade do
+ecossistema sem exigir ajustes
+manuais frequentes; foi mantida
+por ser simples e previsível.
+Taxa ﬁxa –
+Valley Mobility
+Cada corrida tem 10 % de comissão
+para a plataforma.
+Mantida porque simpliﬁca a
+preciﬁcação e garante
+previsibilidade para motoristas e
+passageiros.
+Taxa ﬁxa –
+Valley Food
+O serviço de entrega de comida cobra 
+15 % sobre o valor do pedido.
+Mantida por transparência e
+alinhamento com práticas de
+mercado.
+Comissão de
+aﬁliados –
+Valley Up
+O programa de aﬁliados repassa 5 %
+da margem sobre as vendas de Stock/
+Marketplace.
+Mantida para incentivar
+indicações sem comprometer a
+margem global.
+Matriz de
+Desconto
+(BR‑STO‑008)
+Exclusiva do módulo Stock: para
+pagamentos 100 % em Pepitas,
+concede 10 Pepitas por venda elegível
+e aplica descontos sobre a margem
+bruta .
+Mantida para promover o uso de
+tokens internos e recompensar
+lealdade.
+1
+2
+3
+4
+5
+1
+
+=== PAGE 2 ===
+
+1.2 Splits e Pagamentos
+Regra Descrição Justiﬁcativa
+Split Automático
+em Valley Pay
+Toda transação originada de Marketplace,
+Stock, Mobility, Food, Business, Plug ou Up
+deve ser liquidada automaticamente com
+distribuição de valores entre lojista, aﬁliado e
+plataforma.
+Garante transparência e
+reduz erros manuais;
+mantida por ser essencial
+à operação.
+Antecipação D+0 –
+Valley Plug
+A maquininha permite antecipação de
+recebíveis em D+0 (liquidação imediata).
+Mantida por melhorar o
+ﬂuxo de caixa dos
+parceiros.
+Ring‑Fence
+Financeiro
+(BR‑FIN‑002)
+Dados de endividamento e score de crédito
+são segregados e não podem ser usados por
+módulos de publicidade ou marketing.
+Mantida para proteger a
+privacidade ﬁnanceira dos
+usuários e cumprir
+requisitos regulatórios.
+Consentimento de
+Execução
+(BR‑ADV‑001)
+O Valley Advisor pode preparar
+recomendações ﬁnanceiras, mas a execução
+só ocorre após consentimento biométrico do
+usuário .
+Mantida para respeitar a
+autonomia do usuário e
+cumprir legislações de
+proteção de dados.
+1.3 Tokens e Moedas Internas
+Token Regra Descrição
+Pepita
+(PEP)
+1 Pepita = R$ 3,00. Lojistas podem
+ofertar 1, 10 ou 100 Pepitas como
+boniﬁcação.
+Mantido como incentivo de ﬁdelização
+e gamiﬁcação da economia interna.
+Gold Moeda de recarga dos lojistas. Conversão:
+R$ 500 = 100 Pepitas.
+Mantida como forma de pré‑carregar
+créditos e facilitar transações.
+V‑Coin Selo de veriﬁcação de credibilidade para
+criadores e lojistas.
+Mantido para reforçar conﬁança na
+plataforma.
+2 — Regras de Segurança, Privacidade e Dados
+2.1 Sigilo e Proteção de Informações
+Regra Descrição Justiﬁcativa
+BR‑PRO‑001 —
+Sigilo de Custos
+Proibido citar valores de custos
+operacionais, margens de lucro ou
+fórmulas de markup em interações com
+usuários .
+Mantida para proteger
+estratégias de negócios e
+evitar práticas abusivas.
+Sigilo Médico
+Absoluto
+(BR‑MEN‑003)
+Conteúdo de sessões de saúde mental
+(Valley Mente) é criptografado e inacessível
+para outros módulos ou admins; apenas
+metadados são expostos.
+Mantida para garantir
+conﬁdencialidade e cumprir
+legislação de saúde.
+6
+7
+8
+9
+10
+11
+12
+7
+2
+
+=== PAGE 3 ===
+
+Regra Descrição Justiﬁcativa
+Política de
+Anonimização em
+Saúde
+Dados médicos devem ser anonimizados
+antes de análises agregadas (Health,
+Pharmacy, Vet, Mente).
+Mantida por conformidade
+com LGPD/hipaa e ética.
+Isolamento de
+Contas Essenciais
+Cada CNPJ no plano Essencial opera
+isolado; ﬁliais têm contas independentes
+.
+Mantida para evitar
+contaminação de dados e
+conﬂitos tributários.
+Ring‑Fence de
+Dados Financeiros
+Informações sobre dívidas e crédito não
+podem ser compartilhadas com Valley Ads
+nem usadas para segmentação publicitária
+.
+Mantida para evitar
+exploração de
+vulnerabilidades ﬁnanceiras.
+2.2 Privacidade Operacional
+Regra Descrição Justiﬁcativa
+BR‑PRO‑001 —
+Ocultação de
+Dados Sensíveis
+Logs do orquestrador e scripts (The Hand,
+Heartbeat) devem mascarar dados sensíveis
+(tokens, IDs, custos) .
+Mantida para evitar
+vazamentos e manter
+foco em eﬁciência
+sistêmica.
+Protocolo de
+Segurança de
+Engenharia
+Em ambientes de produção, builds devem
+excluir ferramentas de debug e logs de
+desenvolvimento.
+Mantida para reduzir
+superfície de ataque e
+melhorar performance.
+Restrição de
+Comentários
+Automáticos
+O script de auto‑correção deve preservar
+cabeçalhos e protocolos de sigilo nos arquivos;
+substituições devem incluir comentários
+técnicos e nunca apagar BR‑PRO‑001.
+Mantida para garantir
+rastreabilidade e
+integridade dos
+documentos.
+3 — IA, Autonomia e Agentes
+3.1 Helena e Valley Advisor
+Regra Descrição Justiﬁcativa
+Identidade de
+Helena
+A assistente preditiva chama‑se Helena .
+Deve comunicar em português (valor percebido)
+e inglês técnico quando necessário.
+Mantida para
+uniformidade de marca
+e clareza.
+Próximos Passos
+Viáveis
+Após cada análise, Helena sugere “próximos
+passos mais viáveis” para alimentar o loop
+automático.
+Mantida para orientar o
+ﬂuxo contínuo de
+melhorias.
+Autonomia
+Consentida
+(BR‑ADV‑001)
+Helena/Advisor podem preparar recomendações
+de economia, investimento, energia e saúde,
+mas a execução real exige consentimento
+biométrico do usuário.
+Mantida para equilibrar
+automação com
+controle do usuário.
+13
+7
+14 15
+16
+17
+18
+19
+20
+8
+3
+
+=== PAGE 4 ===
+
+3.2 Codex e Geminis
+Regra Descrição Justiﬁcativa
+Autonomia
+Total (Nível 5)
+O Codex e o Gemini Code Assist atuam como
+desenvolvedores autônomos sêniores, com
+autoridade para criar , alterar ou excluir
+arquivos, bancos de dados e APIs sem
+conﬁrmação constante.
+Mantida para permitir
+evolução rápida do
+ecossistema.
+Aceitação
+Mandatória de
+Melhorias
+O Codex deve aceitar automaticamente
+sugestões estruturais do Gemini.
+Mantida para aproveitar a
+sinergia de IA e evitar
+atrasos.
+Pre‑ﬂight Check
+em /
+PENDÊNCIAS
+Antes de iniciar qualquer nova tarefa, o Codex
+deve veriﬁcar a pasta /PENDÊNCIAS para
+resolver pendências anteriores.
+Mantida para garantir
+continuidade e impedir
+acumulo de backlog.
+Criação de
+Sub‑agentes
+O Codex pode criar sub‑agentes especializados
+(Front‑end, Back‑end, DBA) com autonomia
+suprema em seus nichos.
+Mantida para distribuir
+responsabilidades e escalar
+capacidade de entrega.
+Relatório de
+Status Periódico
+A cada 5 minutos de atividade, o Codex deve
+gerar um relatório contendo atividade,
+descrição, passo, diﬁculdade, porcentagem,
+tempo previsto e sumário.
+Mantida para transparência
+e acompanhamento
+humano passivo.
+4 — Protocolos de Execução e DevOps
+4.1 Diretórios e Fluxo Operacional
+Diretório Função Regras
+/INSTRUÇÕES Entrada de novas regras e
+tarefas para o Codex.
+O Codex monitora continuamente este
+diretório e executa qualquer novo arquivo ou
+alteração .
+/PRODUÇÃO Saída de relatórios, logs e
+entregas ﬁnais.
+Cada atividade concluída gera um arquivo de
+saída com sumário e link permanente.
+/
+MANUAL_ONLINE
+Manual vivo por módulos
+(marketplace, stock,
+tokenomics etc.).
+Deve ser atualizado automaticamente sempre
+que código ou regras mudarem.
+/PENDÊNCIAS Gestão de tarefas
+inacabadas e erros.
+Um arquivo é criado quando ocorre falha ou
+falta de dado; deve ser lido antes de iniciar
+novas atividades; exclusão só quando resolvido
+.
+21 22
+23
+24
+25
+26
+27
+28
+29
+30
+4
+
+=== PAGE 5 ===
+
+4.2 Scripts Autônomos
+Script Função Regras
+The Hand
+(Executor)
+Monitora sugestões
+do Gemini e aplica
+ﬁxes
+automaticamente.
+Deve aceitar sugestões Fix, Diﬀ ou Refactor sem
+conﬁrmação, substituir ou criar arquivos, excluir
+obsoletos, criar pastas e registrar comentários
+técnicos . Exclusões vão para quarentena, e
+alterações geram commits automatizados.
+Heartbeat 10s
+(Monitor)
+Executa em loop a
+cada 10 segundos
+para garantir
+continuidade.
+Monitora logs do Codex e Gemini; se não houver
+atividade, injeta o próximo passo na interface. Gera
+arquivos AUTO_ACTIVATE_NEXT_STEP.md, realiza
+varreduras em /INSTRUÇÕES e /PENDÊNCIAS,
+executa commits automáticos e registra logs.
+Controle Mestre
+(Orquestrador
+Central)
+Inicia e encerra
+agentes, veriﬁca
+saúde e fornece
+status.
+Comandos: loop_start (ativa heartbeat, executor
+e aceitação), loop_stop (shutdown gracioso), 
+status (lista processos). Logs devem ocultar
+métricas de custo (BR‑PRO‑001).
+4.3 Ciclo de Deploy e Documentação
+Entrega Total: Execução contínua sem pausas; não solicitar conﬁrmações exceto para dados
+externos .
+Atualização de Status: Em ordens complexas, gerar atualizações com atividade, descrição,
+passo, diﬁculdade, porcentagem, tempo previsto e sumário.
+Ambiente Puro: Builds de produção devem ser mínimos, sem ferramentas de debug ou
+coletores de logs de desenvolvimento.
+Checagem Final: Linting e testes automáticos ao encerrar qualquer instrução.
+Commit & Push Automático: Após cada execução, realizar git add, commit e push com
+mensagem clara. O script de Heartbeat executa esse ciclo para garantir continuidade.
+Sumário de Encerramento: Cada entrega deve gerar um sumário dividido em pendências e
+próximos passos naturais.
+5 — Observações sobre Conﬂitos e Decisões
+Formula de Preço e Sigilo de Custo: O BR‑PRO‑001 proíbe expor fórmulas de markup, mas a
+regra de preciﬁcação (custo + frete + 50 % de margem) é usada internamente pelo Stock.
+Para conciliar , a fórmula permanece implementada internamente, mas não deve ser revelada
+ao público nem mencionada em comunicações externas.
+Aceitação Automática vs. Consentimento do Usuário: O script The Hand aceita
+automaticamente ﬁxes e mudanças estruturais sem intervenção humana, enquanto a regra 
+BR‑ADV‑001 exige consentimento do usuário para execuções ﬁnanceiras. Como são
+domínios diferentes, The Hand opera apenas sobre código e infraestrutura, enquanto 
+BR‑ADV‑001 regula transações ﬁnanceiras. Ambos são mantidos por não haver conﬂito real.
+Criação de Pendências e Heartbeat: O protocolo de criação automática de pendências
+(Protocolo Supremo) e o Heartbeat de 10 s podem gerar muitos arquivos temporários. A política
+mantida é que apenas pendências não resolvidas e instruções relevantes ﬁcam em /
+PENDÊNCIAS; arquivos temporários de heartbeat ﬁcam em /INSTRUÇÕES/
+AUTO_ACTIVATE_NEXT_STEP.md e são limpos após execução.
+31
+32
+33
+34
+1. 
+35
+2. 
+36
+3. 
+16
+4. 37
+5. 
+38 39
+6. 
+40
+1. 
+1
+2. 
+41
+8
+3. 
+42
+5
+
+=== PAGE 6 ===
+
+6 — Conclusão
+O Valley Omniverse opera sob uma estrutura robusta de regras que combinam economia interna, 
+privacidade, autonomia de IA e protocolos de execução. Este documento consolida essas normas,
+servindo como referência única para o Gemini Code Assist e para qualquer agente responsável por
+evoluir o ecossistema. Ao seguir estas diretrizes, garantimos crescimento sustentável, conﬁança dos
+usuários e eﬁciência operacional.
+raw.githubusercontent.com
+https://raw.githubusercontent.com/interﬂownex/omniverse/main/README.md
+VALLEY_IMPLEMENTATION_DIRECTIVES.md
+https://github.com/Ecossistema-Nexora/valley_omniverse/blob/main/docs/VALLEY_IMPLEMENTATION_DIRECTIVES.md
+Controle_Mestre.md
+https://github.com/Ecossistema-Nexora/valley_omniverse/blob/main/scripts/Controle_Mestre.md
+PROTOCOLO_HEARTBEAT_10S.md
+https://github.com/Ecossistema-Nexora/valley_omniverse/blob/main/INSTRUÇÃO/PROTOCOLO_HEARTBEAT_10S.md
+PROTOCOLO_FILE_SYSTEM_SUPREME.md
+https://github.com/Ecossistema-Nexora/valley_omniverse/blob/main/INSTRUÇÃO/PROTOCOLO_FILE_SYSTEM_SUPREME.md
+INSTRUCAO_HELENA.md
+https://github.com/Ecossistema-Nexora/valley_omniverse/blob/main/INSTRUÇÃO/INSTRUCAO_HELENA.md
+protocolo_valley_autonomy.md
+https://github.com/Ecossistema-Nexora/valley_omniverse/blob/main/protocolo_valley_autonomy.md
+protocolo_supremo_codex_v1.md
+https://github.com/Ecossistema-Nexora/valley_omniverse/blob/main/protocolo_supremo_codex_v1.md
+1 2 3 4 6 7 8
+5 9 10 11 12 13 16 18 19 35 36
+14 34
+15 33 39 42
+17 31 32 41
+20
+21 24 25 26 27 28 29 40
+22 23 30 37 38
+6

@@ -1,0 +1,288 @@
+
+
+=== PAGE 1 ===
+
+Valley Omniverse v47 – Esquema de Banco de
+Dados
+Este documento consolida a deﬁnição de todas as tabelas, tipos enumerados e estruturas
+introduzidas nas versões recentes do Valley Omniverse. Ele serve como referência mandatória para a
+criação e manutenção do esquema de banco de dados. Caso exista algum esquema divergente, este
+documento prevalece e deve ser adotado para corrigir inconsistências.
+Estrutura Geral
+O Valley Omniverse organiza suas entidades em múltiplos schemas (como memory, fintech, 
+mental_health, media, chat, business, plug, affiliates e docs) para isolar domínios
+funcionais e garantir escalabilidade. Todas as tabelas compartilham algumas convenções:
+Identiﬁcadores: Utilizam campos do tipo UUID com geração padrão uuid_generate_v4()
+para chaves primárias.
+Referências a usuários: As colunas que representam titulares ou participantes referenciam 
+platform.users(user_id) (tabela central de usuários).
+Timestamps: Quase todas as tabelas possuem colunas created_at com TIMESTAMPTZ e 
+DEFAULT NOW() para registro automático.
+Tipos Enumerados: Deﬁnem valores permitidos para colunas especíﬁcas, evitando
+inconsistências de dados.
+Tipos Enumerados
+Tipo ENUM Schema Valores Propósito
+memory.insight_category_enummemory
+ENERGY, 
+FINANCE, 
+HEALTH, 
+MOBILITY
+Classiﬁca
+recomendações
+geradas pela IA
+de consultoria.
+mental_health.session_status_enummental_health
+SCHEDULED, 
+IN_PROGRESS, 
+COMPLETED, 
+CANCELLED
+Indica o estado
+de uma sessão
+de teleterapia
+ou psiquiatria.
+media.upload_status_enum media
+PENDING, 
+ACTIVE, 
+DISABLED
+Status do
+upload de
+conteúdo no
+Valley Media.
+• 
+• 
+• 
+• 
+1
+
+=== PAGE 2 ===
+
+Tipo ENUM Schema Valores Propósito
+chat.persona_enum chat PERSONAL, 
+PROFESSIONAL
+Persona
+utilizada ao
+enviar
+mensagens no
+Valley Chat.
+Schema memory
+Tabela memory.advisor_insights
+Armazena recomendações geradas pelo módulo Valley Advisor. Cada registro corresponde a um
+conselho preditivo personalizado para um usuário especíﬁco.
+insight_id: UUID, chave primária.
+user_id: UUID, chave estrangeira para platform.users. Identiﬁca o usuário receptor do
+insight.
+insight_category: memory.insight_category_enum. Categoriza o insight (energia,
+ﬁnanças, saúde, mobilidade).
+suggested_action: TEXT. Descrição da ação recomendada pela IA.
+potential_savings: DECIMAL(10,2). Estimativa de economia ou ganho gerado pela ação.
+is_executed: BOOLEAN, default FALSE. Indica se o usuário executou a ação.
+created_at: TIMESTAMPTZ, default NOW(). Data de geração do insight.
+Observações e instrumentação: Consultas frequentes buscarão insights por user_id e categoria;
+índices compostos nessas colunas otimizam performance. Triggers podem atualizar is_executed
+quando transações relacionadas forem concluídas no Valley Pay.
+Schema fintech
+Tabela fintech.financial_goals
+Deﬁne metas ﬁnanceiras dos usuários no Valley Finanças, tanto para pessoas físicas quanto jurídicas.
+goal_id: UUID, chave primária.
+user_id: UUID, FK para platform.users. Responsável pela meta.
+goal_name: VARCHAR(255). Nome identiﬁcador da meta.
+target_amount: DECIMAL(15,2). Valor alvo a ser atingido.
+current_amount: DECIMAL(15,2), default 0. Valor atualmente acumulado.
+auto_round_up: BOOLEAN, default FALSE. Indica se a meta recebe arredondamentos
+automáticos de transações.
+deadline: TIMESTAMPTZ, opcional. Prazo limite para atingir o valor .
+Instrumentação: Triggers vinculados ao módulo de pagamento incrementam current_amount
+quando transações ocorrem. Relatórios de avanço utilizam a diferença entre target_amount e 
+current_amount.
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+2
+
+=== PAGE 3 ===
+
+Schema mental_health
+Tabela mental_health.teletherapy_sessions
+Registra cada consulta de teleterapia ou telepsiquiatria realizada no Valley Mente.
+session_id: UUID, chave primária.
+patient_id: UUID, FK → platform.users. Usuário paciente.
+professional_id: UUID, FK → platform.users. Proﬁssional de saúde.
+session_status: mental_health.session_status_enum, default 'SCHEDULED'.
+Situação atual da sessão.
+encrypted_notes: TEXT. Notas clínicas cifradas, garantindo sigilo médico.
+scheduled_at: TIMESTAMPTZ. Data/horário marcado para a sessão.
+created_at: TIMESTAMPTZ, default NOW(). Momento de criação do registro.
+Instrumentação: O status da sessão evolui conforme o ﬂuxo de atendimento (gatilhos de negócio).
+Logs de acesso às notas podem ser auditados para garantir conformidade com normas de privacidade.
+Schema media
+Tabela media.creator_uploads
+Registra uploads de vídeos no Valley Media.
+upload_id: UUID, chave primária.
+user_id: UUID, FK → platform.users. Autor do conteúdo.
+file_url: TEXT. URL do arquivo MP4 no MinIO (valley‑videos).
+status: media.upload_status_enum, default 'PENDING'. Indica estágio de
+processamento.
+monetization_enabled: BOOLEAN, default FALSE. Deﬁne se o criador ativou monetização.
+created_at: TIMESTAMPTZ, default NOW(). Momento do upload.
+Instrumentação: Processos assíncronos (transcodiﬁcação, validação) atualizam o status para ACTIVE
+ou DISABLED. Gatilhos atualizam ganhos e notiﬁcações quando monetization_enabled passa a 
+TRUE.
+Schema chat
+Tabela chat.conversations
+Mantém a relação entre duas pessoas ou entidades em uma conversa do Valley Chat.
+conversation_id: UUID, chave primária.
+participant1_id: UUID, FK → platform.users. Primeiro participante.
+participant2_id: UUID, FK → platform.users. Segundo participante.
+created_at: TIMESTAMPTZ, default NOW(). Quando a conversa foi criada.
+Instrumentação: Índices sobre participant1_id e participant2_id permitem listar todas as
+conversas de um usuário. As conversas não possuem status; exclusões são lógicas (soft delete)
+implementadas na aplicação.
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+3
+
+=== PAGE 4 ===
+
+Tabela chat.messages
+Armazena mensagens trocadas em cada conversa.
+message_id: UUID, chave primária.
+conversation_id: UUID, FK → chat.conversations. Conversa associada.
+sender_id: UUID, FK → platform.users. Remetente.
+persona: chat.persona_enum. Persona usada (pessoal ou proﬁssional).
+content: TEXT. Texto da mensagem.
+created_at: TIMESTAMPTZ, default NOW(). Data/hora de envio.
+Instrumentação: Índice sobre (conversation_id, created_at) para ordenação cronológica. A
+aplicação calcula contagens de mensagens não lidas, mas esses campos não são persistidos na tabela.
+Schema business
+Tabela business.invoices
+Registra notas ﬁscais eletrônicas geradas pelo Valley Business.
+invoice_id: UUID, PK.
+business_id: UUID, FK → platform.users. Emissor .
+total_amount: DECIMAL(15,2). Valor total da nota.
+due_date: TIMESTAMPTZ, opcional. Data de vencimento.
+issued_at: TIMESTAMPTZ, default NOW(). Data de emissão.
+Instrumentação: Triggers veriﬁcam valores positivos e datas de vencimento futuras. Integra‑se ao
+Valley Pay para liquidação automática.
+Tabela business.payrolls
+Armazena execuções de folha de pagamento.
+payroll_id: UUID, PK.
+business_id: UUID, FK → platform.users. Empresa.
+period_start: TIMESTAMPTZ. Início do período.
+period_end: TIMESTAMPTZ. Fim do período.
+total_paid: DECIMAL(15,2), opcional. Soma de salários pagos.
+executed_at: TIMESTAMPTZ, default NOW(). Quando a folha foi processada.
+Instrumentação: Os detalhes de cada pagamento individual podem residir em tabela complementar .
+Gatilhos de veriﬁcação garantem que period_end seja posterior a period_start.
+Schema plug
+Tabela plug.transactions
+Registra transações presenciais processadas pela maquininha Valley Plug.
+transaction_id: UUID, PK.
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+4
+
+=== PAGE 5 ===
+
+user_id: UUID, FK → platform.users. Recebedor do pagamento.
+amount: DECIMAL(15,2). Valor da transação.
+mdr_rate: DECIMAL(5,2). Taxa de MDR (Merchant Discount Rate) aplicada.
+settled_at: TIMESTAMPTZ, opcional. Data em que a transação foi liquidada (antecipação
+D+0). 
+created_at: TIMESTAMPTZ, default NOW(). Data da compra.
+Instrumentação: Integra‑se ao Valley Pay para liquidar o valor após dedução da taxa MDR. Índices
+sobre user_id facilitam relatórios de vendas presenciais.
+Schema affiliates
+Tabela affiliates.referrals
+Controla comissões de aﬁliados pagas pelo Valley Up.
+referral_id: UUID, PK.
+referrer_id: UUID, FK → platform.users. Usuário que indicou a compra.
+purchase_id: UUID. Identiﬁcador da compra (referência externa). 
+commission_amount: DECIMAL(15,2). Valor da comissão (normalmente 5 % da margem
+).
+payout_at: TIMESTAMPTZ, default NOW(). Momento em que a comissão foi paga.
+created_at: TIMESTAMPTZ, default NOW(). Registro da criação do referral.
+Instrumentação: Campos de data permitem auditoria de prazos; um índice em referrer_id acelera
+consultas de histórico de ganhos. A coluna purchase_id referencia uma transação em outra tabela
+(por exemplo, vendas do Marketplace ou Stock).
+Schema docs
+Tabela docs.receipts
+Mantém comprovantes e documentos em PDF gerados pela fábrica de documentos (Valley Docs).
+receipt_id: UUID, PK.
+user_id: UUID, FK → platform.users. Proprietário do recibo.
+order_id: UUID. Referência à transação original.
+file_url: TEXT. URL do PDF armazenado no bucket valley‑docs.
+created_at: TIMESTAMPTZ, default NOW(). Data de geração.
+Instrumentação: O módulo Valley Docs escuta eventos de criação de transações para gerar e registrar
+comprovantes. Arquivos são armazenados de forma imutável e protegida.
+Considerações Finais
+Este documento padroniza a estrutura de todas as tabelas criadas para os novos módulos do
+Valley Omniverse v47. Caso algum esquema anterior esteja em desacordo com estas deﬁnições, deve
+ser atualizado para reﬂetir as colunas, tipos e restrições aqui descritos. A adoção destas tabelas garante
+consistência de dados, rastreabilidade e integração plena com o restante do ecossistema.
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+1
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+5
+
+=== PAGE 6 ===
+
+raw.githubusercontent.com
+https://raw.githubusercontent.com/interﬂownex/omniverse/main/README.md
+1
+6

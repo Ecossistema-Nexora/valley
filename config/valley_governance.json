@@ -1,0 +1,33 @@
+{
+  "version": "v47",
+  "norm_name": "Norma Unificada V47",
+  "decision_order": [
+    "security_privacy_repo_integrity",
+    "canonical_data_contracts",
+    "continuous_delivery_with_real_status",
+    "controlled_automation",
+    "documented_maintainability"
+  ],
+  "canonical_sources": [
+    "Valley Omniverse — Regras Consolidadas do Codex.pdf",
+    "Valley Omniverse – Regras Consolidadas para o Gemini Code Assist (v47).pdf",
+    "Painel Web Admin — Especificação Consolidada (v47).pdf",
+    "Esquema Consolidado do Valley Omniverse v47.pdf",
+    "Valley Omniverse v47 – Esquema de Banco de Dados.pdf",
+    "Valley Omniverse v47 – Esquema de Banco de Dados  2.pdf",
+    "Valley Omniverse – Mapeamento de Módulos (v47).pdf",
+    "Índice Oficial Valley Omniverse.pdf",
+    "Valley Omniverse – Papéis de Gemini, Code Assist e Codex e Integração de IA.pdf"
+  ],
+  "project_norms": {
+    "admin_panel_runtime": "generated_static_console_bootstrap",
+    "admin_panel_target_framework": "nextjs",
+    "database_release_runtime": "docker_compose_builder",
+    "telemetry_truth_policy": "report_blocked_state_honestly",
+    "sensitive_data_policy": [
+      "mental_health_content_hidden_from_admin",
+      "financial_score_ring_fenced",
+      "append_only_for_critical_ledger_audit"
+    ]
+  }
+}

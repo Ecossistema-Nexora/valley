@@ -1,0 +1,103 @@
+{
+  "version": "v47",
+  "coordination_model": "codex_primary",
+  "release_mode": "autonomous_release",
+  "human_operator": "Anderson",
+  "squad_width": 5,
+  "command_rule": "Quando o operador mandar evoluir, o Codex despacha o proximo passo natural sem pedir confirmacao intermediaria.",
+  "dispatch_policy": {
+    "single_commander": "Codex",
+    "single_writer_per_path": true,
+    "redispatch_on_idle": true,
+    "handoff_required_for_cross_boundary": true,
+    "never_revert_other_agent_changes": true,
+    "blocked_path_policy": "Se houver bloqueio em caminho alheio, o agente reporta ao Codex e aguarda redistribuicao sem invadir ownership."
+  },
+  "non_collision_protocol": [
+    "Cada caminho versionado tem um owner primario.",
+    "Nenhum agente sobrescreve, move ou reverte trabalho de outro agente sem handoff do Codex.",
+    "Ao concluir uma frente, o agente devolve status e recebe nova frente imediatamente.",
+    "Agentes trabalham em paralelo apenas quando os caminhos nao se sobrepoem.",
+    "Release notes e status devem sempre refletir o estado real do workspace."
+  ],
+  "release_sequence": [
+    {
+      "step": 1,
+      "lead": "BANNER",
+      "goal": "fechar schema, contratos e fronteiras de dados"
+    },
+    {
+      "step": 2,
+      "lead": "THOR",
+      "goal": "estabilizar runtime, automacao e trilha de deploy"
+    },
+    {
+      "step": 3,
+      "lead": "NATASHA",
+      "goal": "garantir acesso externo, MCP e integracoes de release"
+    },
+    {
+      "step": 4,
+      "lead": "STARK",
+      "goal": "polir superficies front-end e cockpit operacional"
+    },
+    {
+      "step": 5,
+      "lead": "STEVE",
+      "goal": "fechar governanca, QA, runbooks e gate final de release"
+    }
+  ],
+  "agents": [
+    {
+      "name": "STARK",
+      "personality": "estrategista, rapido, orientado a release e experiencia final",
+      "role": "product_release_frontend",
+      "ownership": [
+        "admin/",
+        "front-end release surfaces",
+        "module control plane UX"
+      ]
+    },
+    {
+      "name": "BANNER",
+      "personality": "analitico, profundo, disciplinado em modelo e consistencia",
+      "role": "data_architecture",
+      "ownership": [
+        "database/",
+        "modules/*/CONTRACT.md",
+        "schema boundaries and data contracts"
+      ]
+    },
+    {
+      "name": "NATASHA",
+      "personality": "precisa, silenciosa, focada em integracoes e infraestrutura",
+      "role": "integration_infrastructure",
+      "ownership": [
+        "config/ngrok/",
+        "config/mcp/",
+        "output/deployment/VALLEY_EXTERNAL_ACCESS.md",
+        "workspace MCP declarations"
+      ]
+    },
+    {
+      "name": "THOR",
+      "personality": "executor pesado, decisivo, voltado a runtime e entrega",
+      "role": "platform_runtime",
+      "ownership": [
+        "docker/",
+        "scripts/",
+        "ci, tooling and runtime automation"
+      ]
+    },
+    {
+      "name": "STEVE",
+      "personality": "estavel, criterioso, protetor da governanca e do fechamento",
+      "role": "quality_governance",
+      "ownership": [
+        "MANUAL_ONLINE/",
+        "output/module-roadmap/",
+        "status, QA and release governance"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "mcpServers": {
+    "figma": {
+      "type": "http",
+      "url": "https://mcp.figma.com/mcp",
+      "note": "Official remote Figma MCP server. Requires OAuth on first connection."
+    },
+    "linear": {
+      "type": "http",
+      "url": "https://mcp.linear.app/mcp",
+      "note": "Official Linear MCP endpoint. Uses /mcp; the older /sse transport is deprecated."
+    },
+    "cloudflare-api": {
+      "type": "http",
+      "url": "https://mcp.cloudflare.com/mcp",
+      "note": "Official Cloudflare API MCP server. Requires OAuth on first connection."
+    }
+  }
+}

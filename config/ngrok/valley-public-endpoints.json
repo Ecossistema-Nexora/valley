@@ -1,0 +1,15 @@
+{
+  "profile": "release-public-admin",
+  "base_domain_env": "VALLEY_NGROK_ADMIN_DOMAIN",
+  "reserved_domain_example": "valley-admin-release.ngrok.app",
+  "stable_endpoints": {
+    "dashboard": "https://${VALLEY_NGROK_ADMIN_DOMAIN}/",
+    "healthz": "https://${VALLEY_NGROK_ADMIN_DOMAIN}/healthz",
+    "admin_data": "https://${VALLEY_NGROK_ADMIN_DOMAIN}/api/admin-data"
+  },
+  "notes": [
+    "A URL permanente depende de um dominio reservado na conta ngrok.",
+    "Sem o dominio reservado, o launcher atual continua entregando URL dinamica para testes externos.",
+    "O mesmo host publica a UI, o healthcheck e o payload JSON do painel admin."
+  ]
+}

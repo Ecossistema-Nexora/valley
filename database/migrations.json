@@ -1,0 +1,121 @@
+{
+  "name": "Valley Hybrid Database Migration Manifest",
+  "language_policy": "pt-BR simples com termos tecnicos em ingles",
+  "safety_policy": "Core-first, append-only para ledger/auditoria e sem DROP destrutivo automatico.",
+  "postgres": [
+    {
+      "id": "001",
+      "path": "database/postgres/001_core_identity_wallets.sql",
+      "purpose_ptbr": "Cria identidade central, perfis PF/PJ/Rider, wallets e LED Cards.",
+      "requires": [],
+      "provides": ["users", "pj_profiles", "rider_profiles", "wallets", "led_cards"]
+    },
+    {
+      "id": "002",
+      "path": "database/postgres/002_financial_ledger_equity_orders.sql",
+      "purpose_ptbr": "Cria orders, transactions e equity_ledger com regras append-only.",
+      "requires": ["001"],
+      "provides": ["orders", "transactions", "equity_ledger"]
+    },
+    {
+      "id": "004",
+      "path": "database/postgres/004_v47_control_plane_modules_rules.sql",
+      "purpose_ptbr": "Cria plano de controle v47 com catalogo, Admin, regras, Loyalty e auditoria.",
+      "requires": ["001", "002"],
+      "provides": ["module_catalog", "admin_users", "business_rule_definitions", "points_ledger"]
+    },
+    {
+      "id": "005",
+      "path": "database/postgres/005_v47_domain_tables_core_first.sql",
+      "purpose_ptbr": "Cria tabelas dominio v47 adaptadas ao modelo public.users.",
+      "requires": ["001", "002", "004"],
+      "provides": ["advisor_insights", "financial_goals", "teletherapy_sessions", "creator_uploads", "chat_conversations"]
+    },
+    {
+      "id": "003",
+      "path": "database/postgres/003_database_comments_ptbr.sql",
+      "purpose_ptbr": "Adiciona comentarios nativos aos objetos base dos scripts 001 e 002.",
+      "requires": ["001", "002"],
+      "provides": ["comments_base_ptbr"]
+    },
+    {
+      "id": "006",
+      "path": "database/postgres/006_v47_column_comments_ptbr.sql",
+      "purpose_ptbr": "Adiciona comentarios nativos aos objetos v47 dos scripts 004 e 005.",
+      "requires": ["004", "005"],
+      "provides": ["comments_v47_ptbr"]
+    },
+    {
+      "id": "007",
+      "path": "database/postgres/007_v47_module_delivery_automation.sql",
+      "purpose_ptbr": "Cria delivery registry, backlog evolutivo e historico de automacao dos 47 modulos.",
+      "requires": ["001", "002", "004", "005"],
+      "provides": ["module_delivery_registry", "module_evolution_backlog", "module_automation_runs"]
+    },
+    {
+      "id": "008",
+      "path": "database/postgres/008_v47_foundation_commerce_operations.sql",
+      "purpose_ptbr": "Cria contratos operacionais para REPLY, STOCK, WMS e MARKETPLACE.",
+      "requires": ["001", "002", "004", "005", "007"],
+      "provides": ["suppliers", "warehouses", "inventory_items", "inventory_lots", "inventory_movements", "marketplace_listings", "procurement_orders", "service_work_orders", "warehouse_cycle_counts"]
+    },
+    {
+      "id": "009",
+      "path": "database/postgres/009_v47_tech_legal_platform_contracts.sql",
+      "purpose_ptbr": "Cria contratos operacionais para TECH e LEGAL sem armazenar segredo bruto.",
+      "requires": ["001", "002", "004", "005", "007", "008"],
+      "provides": ["tech_api_clients", "tech_api_credentials", "tech_integration_connectors", "tech_webhook_subscriptions", "tech_webhook_delivery_attempts", "tech_api_usage_daily", "legal_contracts", "legal_contract_parties", "legal_signatures", "legal_disputes", "legal_audit_events", "legal_fallback_pin_credentials"]
+    },
+    {
+      "id": "010",
+      "path": "database/postgres/010_v47_rule_growth_marketplace_runtime.sql",
+      "purpose_ptbr": "Cria runtime de regras, storefronts, Pepitas, GOLD e validacao de venda para Marketplace e Ads.",
+      "requires": ["001", "002", "004", "005", "007", "008", "009"],
+      "provides": ["rule_runtime_bindings", "rule_execution_events", "merchant_storefronts", "merchant_service_zones", "marketplace_listing_controls", "marketplace_competitor_snapshots", "pepita_accounts", "gold_campaigns", "sale_validation_events", "gold_campaign_events", "pepita_ledger"]
+    },
+    {
+      "id": "011",
+      "path": "database/postgres/011_v47_city_ops_delivery_mobility_security.sql",
+      "purpose_ptbr": "Cria contratos relacionais para Delivery, Mobility e Security com trilhas append-only e biometria por hash.",
+      "requires": ["001", "002", "004", "007", "009", "010"],
+      "provides": ["delivery_shipments", "delivery_shipment_events", "mobility_trips", "mobility_trip_events", "security_trusted_contacts", "security_biometric_credentials", "security_incidents", "security_incident_events"]
+    },
+    {
+      "id": "012",
+      "path": "database/postgres/012_v47_core_services_health_jobs_pharmacy_events.sql",
+      "purpose_ptbr": "Fecha o tier core com contratos para Services, Health, Jobs, Pharmacy e Events, incluindo trilhas append-only onde a prova operacional exige imutabilidade.",
+      "requires": ["001", "002", "004", "007", "009", "011"],
+      "provides": ["service_provider_profiles", "service_catalog_services", "service_bookings", "service_booking_events", "health_profiles", "health_care_plans", "health_prescriptions", "job_postings", "job_applications", "job_engagements", "pharmacy_catalog_items", "pharmacy_fulfillments", "pharmacy_fulfillment_items", "pharmacy_dispense_events", "event_programs", "event_ticket_types", "event_ticket_ledger"]
+    },
+    {
+      "id": "013",
+      "path": "database/postgres/013_v47_expansion_assets_civic_impact.sql",
+      "purpose_ptbr": "Cria a camada expansion em PostgreSQL para Digital, Real Estate, Edu, Vet, Gov, Charity e Insurance com contratos, auditoria e ledgers append-only.",
+      "requires": ["001", "002", "004", "007", "009", "011", "012"],
+      "provides": ["digital_asset_collections", "digital_assets", "digital_asset_events", "real_estate_properties", "real_estate_listings", "real_estate_deals", "edu_learning_paths", "edu_learning_units", "edu_enrollments", "vet_pet_profiles", "vet_service_cases", "vet_prescriptions", "gov_service_catalog", "gov_service_requests", "gov_request_events", "charity_causes", "charity_grants", "charity_fund_ledger", "insurance_products", "insurance_policies", "insurance_claims", "insurance_claim_events"]
+    }
+  ],
+  "mongodb": [
+    {
+      "id": "mongo-001",
+      "path": "database/mongodb/001_ai_social_telemetry.mongo.js",
+      "purpose_ptbr": "Cria validators e indices para IA, Social, Influencer e Telemetria.",
+      "requires": [],
+      "provides": ["ai_memory", "social_videos", "influencer_metrics", "telemetry_logs"]
+    },
+    {
+      "id": "mongo-002",
+      "path": "database/mongodb/002_v47_log_iot_foundation.mongo.js",
+      "purpose_ptbr": "Cria validators e indices para Valley Log, IoT e snapshots WMS.",
+      "requires": ["mongo-001"],
+      "provides": ["log_tracking_events", "iot_device_registry", "iot_sensor_events", "warehouse_sensor_snapshots"]
+    },
+    {
+      "id": "mongo-003",
+      "path": "database/mongodb/003_v47_field_ops_security_agenda.mongo.js",
+      "purpose_ptbr": "Cria validators e indices para dispatch, frota, sinais de seguranca e agenda inteligente.",
+      "requires": ["mongo-001", "mongo-002"],
+      "provides": ["delivery_dispatch_runs", "fleet_vehicle_profiles", "fleet_maintenance_events", "security_signal_logs", "agenda_items"]
+    }
+  ]
+}
