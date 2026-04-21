@@ -10,7 +10,8 @@ Ele define a fronteira inicial do modulo para guiar desenvolvimento, implantacao
 - Dominio: `frontier_iot_energy`
 - Tier: `expansion`
 - Data home: `postgres_mongo`
-- Status atual: `Planejado`
+- Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
 
 ## Objetivo Simples
 
@@ -30,6 +31,47 @@ Persistencia hibrida: PostgreSQL guarda o contrato operacional e MongoDB guarda 
 
 Dependencias minimas: LOG. Integracoes previstas: IOT, ENERGY.
 
+## Atores Primarios
+
+- operador de coleta
+- parceiro ambiental
+- auditor de impacto
+
+## Capacidades-Chave
+
+- programas de material
+- ordem de coleta reversa
+- log de impacto
+
+## Entidades Relacionais
+
+- `bio_material_programs`
+- `bio_collection_orders`
+- `bio_collection_events`
+
+## Payloads Volumosos E Colecoes
+
+- `bio_impact_logs`
+- `iot_sensor_events`
+
+## Eventos Canonicos
+
+- `bio.program.opened`
+- `bio.collection.scheduled`
+- `bio.impact.measured`
+
+## Compliance, Risco E Guarda
+
+- reverse_logistics_traceability
+- impact_audit
+- chain_of_custody
+
+## Superficies Admin E Operacao
+
+- painel ambiental
+- fila de coleta
+- monitor de impacto
+
 ## Regras De Evolucao
 
 1. Nao criar tabela duplicada de usuario; usar sempre `public.users`.
@@ -42,8 +84,6 @@ Dependencias minimas: LOG. Integracoes previstas: IOT, ENERGY.
 
 ## Primeiro Backlog Tecnico
 
-- Confirmar se o modulo precisa de tabela propria ou se usa tabelas compartilhadas ja existentes.
-- Definir eventos de entrada e saida com nomes tecnicos estaveis.
-- Definir permissao Admin/RBAC/ABAC quando houver operacao sensivel.
-- Registrar regra de negocio em `business_rule_definitions` quando houver pricing, comissao, limite, risco ou compliance.
-- Validar se dados volumosos ficam fora do PostgreSQL.
+- fechar score de impacto por material
+- definir prova de coleta
+- ligar conciliacao com parceiro ambiental

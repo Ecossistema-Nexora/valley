@@ -12,10 +12,24 @@ Ele descreve o modulo em linguagem simples e serve como ponto inicial para desen
 - Tier: `core`
 - Data home: `postgres_mongo`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
+- Cobertura mapeada: Hibrido: 2 entidades PostgreSQL e 2 colecoes MongoDB.
 
 ## Finalidade
 
 Mensageria com persona pessoal/profissional e retencao segura.
+
+## Atores Primarios
+
+- usuario pessoal
+- usuario profissional
+- motor de assistencia
+
+## Capacidades-Chave
+
+- conversa dual persona
+- retencao segura
+- ponte com agenda e advisor
 
 ## Dependencias
 
@@ -24,6 +38,42 @@ ID
 ## Integracoes
 
 AGENDA, ADVISOR
+
+## Mapa De Dados
+
+### PostgreSQL
+
+- `chat_conversations`
+- `users`
+
+### MongoDB
+
+- `ai_memory`
+- `agenda_items`
+
+## Eventos Canonicos
+
+- `chat.conversation.opened`
+- `chat.message.persisted`
+- `chat.context.promoted`
+
+## Compliance E Operacao
+
+- message_retention_policy
+- persona_separation
+- consent_audit
+
+## Superficies Admin
+
+- painel de conversas
+- monitor de contexto
+- fila de retencao
+
+## Proxima Onda
+
+- fechar politica de retention
+- definir separacao pessoal x profissional
+- ligar contexto com advisor
 
 ## Trilha De Implantacao
 
@@ -39,3 +89,4 @@ AGENDA, ADVISOR
 - Integracoes com `PAY`, `ID`, `DOCS`, `ORDERS` ou `TRANSACTIONS` documentadas quando existirem.
 - Teste ou validacao tecnica registrada.
 - Comentarios em portugues simples com termos tecnicos em ingles onde fizer sentido.
+- Blueprint operacional alinhado ao registry detalhado.

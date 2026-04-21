@@ -1,0 +1,43 @@
+param()
+
+$ErrorActionPreference = 'Stop'
+
+$root = Resolve-Path (Join-Path $PSScriptRoot '..')
+$runtime = Join-Path $root 'tmp\runtime'
+$outLog = Join-Path $runtime 'termius-cloudflared.out.log'
+$errLog = Join-Path $runtime 'termius-cloudflared.err.log'
+$envFile = Join-Path $root '.env'
+
+if (Test-Path -LiteralPath $envFile) {
+    foreach ($line in Get-Content -LiteralPath $envFile) {
+        if ($line -match '^\s*#' -or $line -notmatch '=') {
+            continue
+        }
+        $index = $line.IndexOf('=')
+        $key = $line.Substring(0, $index).Trim()
+        $value = $line.Substring($index + 1).Trim().Trim('"').Trim("'")
+        if (-not [string]::IsNullOrWhiteSpace($key) -and [string]::IsNullOrWhiteSpace([Environment]::GetEnvironmentVariable($key, 'Process'))) {
+            [Environment]::SetEnvironmentVariable($key, $value, 'Process')
+        }
+    }
+}
+
+if (-not (Test-Path -LiteralPath $runtime)) {
+    New-Item -ItemType Directory -Path $runtime | Out-Null
+}
+
+if ([string]::IsNullOrWhiteSpace($env:CLOUDFLARED_TOKEN)) {
+    throw 'CLOUDFLARED_TOKEN nao configurado. Defina no ambiente local ou .env operacional fora do Git.'
+}
+
+$cloudflared = Get-Command cloudflared -ErrorAction Stop
+
+Start-Process `
+    -FilePath $cloudflared.Source `
+    -ArgumentList @('tunnel', 'run', '--token', $env:CLOUDFLARED_TOKEN) `
+    -WorkingDirectory $root `
+    -WindowStyle Minimized `
+    -RedirectStandardOutput $outLog `
+    -RedirectStandardError $errLog
+
+Write-Host "Cloudflare Tunnel iniciado em background. Logs=$outLog $errLog"

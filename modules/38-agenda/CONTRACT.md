@@ -11,6 +11,7 @@ Ele define a fronteira inicial do modulo para guiar desenvolvimento, implantacao
 - Tier: `core`
 - Data home: `mongo`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
 
 ## Objetivo Simples
 
@@ -30,6 +31,45 @@ Persistencia principal em MongoDB, porque o modulo trabalha com IA, social, tele
 
 Dependencias minimas: AI. Integracoes previstas: ADVISOR, CHAT.
 
+## Atores Primarios
+
+- usuario final
+- helena persona
+- operador de produtividade
+
+## Capacidades-Chave
+
+- agenda inteligente
+- listas
+- memoria operacional
+
+## Entidades Relacionais
+
+- Nao aplicavel.
+
+## Payloads Volumosos E Colecoes
+
+- `agenda_items`
+- `ai_memory`
+
+## Eventos Canonicos
+
+- `agenda.item.created`
+- `agenda.reminder.triggered`
+- `agenda.memory.linked`
+
+## Compliance, Risco E Guarda
+
+- personal_data_retention
+- consent_management
+- assistant_audit
+
+## Superficies Admin E Operacao
+
+- painel de agenda
+- fila de lembretes
+- console de memoria
+
 ## Regras De Evolucao
 
 1. Nao criar tabela duplicada de usuario; usar sempre `public.users`.
@@ -42,8 +82,6 @@ Dependencias minimas: AI. Integracoes previstas: ADVISOR, CHAT.
 
 ## Primeiro Backlog Tecnico
 
-- Confirmar se o modulo precisa de tabela propria ou se usa tabelas compartilhadas ja existentes.
-- Definir eventos de entrada e saida com nomes tecnicos estaveis.
-- Definir permissao Admin/RBAC/ABAC quando houver operacao sensivel.
-- Registrar regra de negocio em `business_rule_definitions` quando houver pricing, comissao, limite, risco ou compliance.
-- Validar se dados volumosos ficam fora do PostgreSQL.
+- fechar recorrencia canonica
+- definir hierarquia de listas
+- ligar memoria de contexto

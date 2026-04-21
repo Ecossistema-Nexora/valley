@@ -11,6 +11,7 @@ Ele define a fronteira inicial do modulo para guiar desenvolvimento, implantacao
 - Tier: `core`
 - Data home: `postgres_mongo`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
 
 ## Objetivo Simples
 
@@ -30,6 +31,47 @@ Persistencia hibrida: PostgreSQL guarda o contrato operacional e MongoDB guarda 
 
 Dependencias minimas: ID. Integracoes previstas: FOOD, FITNESS, PHARMACY.
 
+## Atores Primarios
+
+- paciente
+- profissional de saude
+- operador clinico
+
+## Capacidades-Chave
+
+- perfil clinico
+- plano de cuidado
+- prescricao segura
+
+## Entidades Relacionais
+
+- `health_profiles`
+- `health_care_plans`
+- `health_prescriptions`
+
+## Payloads Volumosos E Colecoes
+
+- `ai_memory`
+- `telemetry_logs`
+
+## Eventos Canonicos
+
+- `health.profile.updated`
+- `health.care_plan.activated`
+- `health.prescription.issued`
+
+## Compliance, Risco E Guarda
+
+- lgpd_sensitive_data
+- clinical_audit
+- consent_management
+
+## Superficies Admin E Operacao
+
+- painel clinico
+- fila de consentimento
+- monitor de risco assistencial
+
 ## Regras De Evolucao
 
 1. Nao criar tabela duplicada de usuario; usar sempre `public.users`.
@@ -42,8 +84,6 @@ Dependencias minimas: ID. Integracoes previstas: FOOD, FITNESS, PHARMACY.
 
 ## Primeiro Backlog Tecnico
 
-- Confirmar se o modulo precisa de tabela propria ou se usa tabelas compartilhadas ja existentes.
-- Definir eventos de entrada e saida com nomes tecnicos estaveis.
-- Definir permissao Admin/RBAC/ABAC quando houver operacao sensivel.
-- Registrar regra de negocio em `business_rule_definitions` quando houver pricing, comissao, limite, risco ou compliance.
-- Validar se dados volumosos ficam fora do PostgreSQL.
+- amarrar consentimento granular
+- definir trilha de acesso clinico
+- ligar sinais de risco preditivo

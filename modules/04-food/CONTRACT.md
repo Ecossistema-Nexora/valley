@@ -11,6 +11,7 @@ Ele define a fronteira inicial do modulo para guiar desenvolvimento, implantacao
 - Tier: `core`
 - Data home: `postgres`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `DATA_CONTRACT` (Contrato de dados)
 
 ## Objetivo Simples
 
@@ -30,6 +31,46 @@ Persistencia principal em PostgreSQL, porque o modulo exige consistencia, `forei
 
 Dependencias minimas: PAY, LOG, HEALTH. Integracoes previstas: ORDERS, MOBILITY, DOCS.
 
+## Atores Primarios
+
+- restaurante
+- consumidor
+- operador de atendimento
+
+## Capacidades-Chave
+
+- pedido alimentar
+- split operacional
+- restricoes nutricionais
+
+## Entidades Relacionais
+
+- `orders`
+- `transactions`
+- `health_profiles`
+
+## Payloads Volumosos E Colecoes
+
+- Nao aplicavel.
+
+## Eventos Canonicos
+
+- `food.order.placed`
+- `food.order.prepared`
+- `food.order.delivered`
+
+## Compliance, Risco E Guarda
+
+- food_safety_traceability
+- payment_split_audit
+- allergen_notice
+
+## Superficies Admin E Operacao
+
+- painel de pedidos
+- gestao de cardapio
+- monitor de cozinha
+
 ## Regras De Evolucao
 
 1. Nao criar tabela duplicada de usuario; usar sempre `public.users`.
@@ -42,8 +83,6 @@ Dependencias minimas: PAY, LOG, HEALTH. Integracoes previstas: ORDERS, MOBILITY,
 
 ## Primeiro Backlog Tecnico
 
-- Confirmar se o modulo precisa de tabela propria ou se usa tabelas compartilhadas ja existentes.
-- Definir eventos de entrada e saida com nomes tecnicos estaveis.
-- Definir permissao Admin/RBAC/ABAC quando houver operacao sensivel.
-- Registrar regra de negocio em `business_rule_definitions` quando houver pricing, comissao, limite, risco ou compliance.
-- Validar se dados volumosos ficam fora do PostgreSQL.
+- criar contrato especifico de cardapio e loja
+- definir SLA de preparo
+- amarrar taxonomia nutricional

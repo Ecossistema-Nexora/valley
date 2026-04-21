@@ -12,10 +12,24 @@ Ele descreve o modulo em linguagem simples e serve como ponto inicial para desen
 - Tier: `foundation`
 - Data home: `postgres`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
+- Cobertura mapeada: PostgreSQL: 3 entidades mapeadas.
 
 ## Finalidade
 
 Motor de dropshipping com fornecedores externos, margem padrao e tracking.
+
+## Atores Primarios
+
+- analista de catalogo
+- operador de estoque
+- fornecedor parceiro
+
+## Capacidades-Chave
+
+- dropshipping centralizado
+- margem dinamica
+- tracking de fornecedor
 
 ## Dependencias
 
@@ -24,6 +38,42 @@ MARKETPLACE, PAY
 ## Integracoes
 
 LOG, UP, DOCS
+
+## Mapa De Dados
+
+### PostgreSQL
+
+- `marketplace_listings`
+- `procurement_orders`
+- `inventory_lots`
+
+### MongoDB
+
+- Nao aplicavel.
+
+## Eventos Canonicos
+
+- `stock.catalog.synced`
+- `stock.margin.repriced`
+- `stock.tracking.updated`
+
+## Compliance E Operacao
+
+- pricing_traceability
+- supplier_settlement
+- catalog_governance
+
+## Superficies Admin
+
+- painel de catalogo
+- monitor de margem
+- painel de tracking
+
+## Proxima Onda
+
+- definir politica de margem por canal
+- fechar conciliacao com fornecedor
+- amarrar excecao de ruptura
 
 ## Trilha De Implantacao
 
@@ -39,3 +89,4 @@ LOG, UP, DOCS
 - Integracoes com `PAY`, `ID`, `DOCS`, `ORDERS` ou `TRANSACTIONS` documentadas quando existirem.
 - Teste ou validacao tecnica registrada.
 - Comentarios em portugues simples com termos tecnicos em ingles onde fizer sentido.
+- Blueprint operacional alinhado ao registry detalhado.

@@ -12,10 +12,24 @@ Ele descreve o modulo em linguagem simples e serve como ponto inicial para desen
 - Tier: `foundation`
 - Data home: `postgres_mongo`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
+- Cobertura mapeada: Hibrido: 4 entidades PostgreSQL e 2 colecoes MongoDB.
 
 ## Finalidade
 
 Gestao inteligente de armazens, sensores e estoque multi-deposito.
+
+## Atores Primarios
+
+- coordenador de armazem
+- separador
+- auditor operacional
+
+## Capacidades-Chave
+
+- enderecamento de estoque
+- contagem ciclica
+- sensoriamento de armazem
 
 ## Dependencias
 
@@ -24,6 +38,44 @@ REPLY
 ## Integracoes
 
 STOCK, IOT, BUSINESS
+
+## Mapa De Dados
+
+### PostgreSQL
+
+- `warehouses`
+- `inventory_items`
+- `warehouse_cycle_counts`
+- `inventory_movements`
+
+### MongoDB
+
+- `warehouse_sensor_snapshots`
+- `iot_sensor_events`
+
+## Eventos Canonicos
+
+- `wms.cycle_count.started`
+- `wms.inventory.variance_detected`
+- `wms.sensor.threshold_breached`
+
+## Compliance E Operacao
+
+- inventory_audit
+- cold_chain_monitoring
+- warehouse_traceability
+
+## Superficies Admin
+
+- painel de armazem
+- monitor de variancia
+- console de sensores
+
+## Proxima Onda
+
+- fechar mapa de enderecamento
+- amarrar ajuste de variancia
+- ligar alarmes por temperatura
 
 ## Trilha De Implantacao
 
@@ -39,3 +91,4 @@ STOCK, IOT, BUSINESS
 - Integracoes com `PAY`, `ID`, `DOCS`, `ORDERS` ou `TRANSACTIONS` documentadas quando existirem.
 - Teste ou validacao tecnica registrada.
 - Comentarios em portugues simples com termos tecnicos em ingles onde fizer sentido.
+- Blueprint operacional alinhado ao registry detalhado.

@@ -11,11 +11,25 @@ Ele descreve o modulo em linguagem simples e serve como ponto inicial para desen
 - Dominio: `city_mobility_security`
 - Tier: `expansion`
 - Data home: `postgres_mongo`
-- Status atual: `Planejado`
+- Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
+- Cobertura mapeada: Hibrido: 3 entidades PostgreSQL e 2 colecoes MongoDB.
 
 ## Finalidade
 
 Turismo local, experiencias, reservas e exploracao.
+
+## Atores Primarios
+
+- turista
+- guia
+- operador local
+
+## Capacidades-Chave
+
+- experiencias locais
+- booking
+- feed exploratorio
 
 ## Dependencias
 
@@ -24,6 +38,43 @@ PAY
 ## Integracoes
 
 EVENTS, MOBILITY
+
+## Mapa De Dados
+
+### PostgreSQL
+
+- `tourism_experiences`
+- `tourism_bookings`
+- `tourism_booking_events`
+
+### MongoDB
+
+- `tourism_experience_feeds`
+- `space_anchor_maps`
+
+## Eventos Canonicos
+
+- `tourism.experience.published`
+- `tourism.booking.confirmed`
+- `tourism.checkin.recorded`
+
+## Compliance E Operacao
+
+- booking_audit
+- guide_accountability
+- settlement_traceability
+
+## Superficies Admin
+
+- painel de experiencias
+- fila de bookings
+- monitor de check-in
+
+## Proxima Onda
+
+- fechar politica de cancelamento
+- definir no-show do guia
+- ligar reputacao por experiencia
 
 ## Trilha De Implantacao
 
@@ -39,3 +90,4 @@ EVENTS, MOBILITY
 - Integracoes com `PAY`, `ID`, `DOCS`, `ORDERS` ou `TRANSACTIONS` documentadas quando existirem.
 - Teste ou validacao tecnica registrada.
 - Comentarios em portugues simples com termos tecnicos em ingles onde fizer sentido.
+- Blueprint operacional alinhado ao registry detalhado.

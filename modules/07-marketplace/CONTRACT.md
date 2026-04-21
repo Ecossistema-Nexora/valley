@@ -11,6 +11,7 @@ Ele define a fronteira inicial do modulo para guiar desenvolvimento, implantacao
 - Tier: `foundation`
 - Data home: `postgres`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
 
 ## Objetivo Simples
 
@@ -30,6 +31,46 @@ Persistencia principal em PostgreSQL, porque o modulo exige consistencia, `forei
 
 Dependencias minimas: PAY, ID. Integracoes previstas: STOCK, ADS, UP.
 
+## Atores Primarios
+
+- seller
+- comprador
+- curador comercial
+
+## Capacidades-Chave
+
+- listagem local
+- storefront por merchant
+- validacao de venda
+
+## Entidades Relacionais
+
+- `marketplace_listings`
+- `merchant_storefronts`
+- `sale_validation_events`
+
+## Payloads Volumosos E Colecoes
+
+- Nao aplicavel.
+
+## Eventos Canonicos
+
+- `marketplace.listing.published`
+- `marketplace.cart.checked_out`
+- `marketplace.sale.validated`
+
+## Compliance, Risco E Guarda
+
+- merchant_kyb
+- pricing_audit
+- listing_governance
+
+## Superficies Admin E Operacao
+
+- painel de seller
+- aprovacao de listing
+- monitor de conversao
+
 ## Regras De Evolucao
 
 1. Nao criar tabela duplicada de usuario; usar sempre `public.users`.
@@ -42,8 +83,6 @@ Dependencias minimas: PAY, ID. Integracoes previstas: STOCK, ADS, UP.
 
 ## Primeiro Backlog Tecnico
 
-- Confirmar se o modulo precisa de tabela propria ou se usa tabelas compartilhadas ja existentes.
-- Definir eventos de entrada e saida com nomes tecnicos estaveis.
-- Definir permissao Admin/RBAC/ABAC quando houver operacao sensivel.
-- Registrar regra de negocio em `business_rule_definitions` quando houver pricing, comissao, limite, risco ou compliance.
-- Validar se dados volumosos ficam fora do PostgreSQL.
+- fechar politica de seller score
+- definir moderacao de catalogo
+- amarrar regras anti-fraude de checkout

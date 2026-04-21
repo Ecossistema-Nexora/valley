@@ -11,6 +11,7 @@ Ele define a fronteira inicial do modulo para guiar desenvolvimento, implantacao
 - Tier: `core`
 - Data home: `mongo`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
 
 ## Objetivo Simples
 
@@ -30,6 +31,46 @@ Persistencia principal em MongoDB, porque o modulo trabalha com IA, social, tele
 
 Dependencias minimas: IOT, MOBILITY. Integracoes previstas: LOG, SECURITY.
 
+## Atores Primarios
+
+- gestor de frota
+- motorista
+- tecnico de manutencao
+
+## Capacidades-Chave
+
+- perfil de veiculo
+- telemetria de uso
+- manutencao preventiva
+
+## Entidades Relacionais
+
+- `mobility_trips`
+
+## Payloads Volumosos E Colecoes
+
+- `fleet_vehicle_profiles`
+- `fleet_maintenance_events`
+- `telemetry_logs`
+
+## Eventos Canonicos
+
+- `fleet.vehicle.registered`
+- `fleet.maintenance.logged`
+- `fleet.telemetry.alerted`
+
+## Compliance, Risco E Guarda
+
+- driver_accountability
+- maintenance_traceability
+- vehicle_compliance
+
+## Superficies Admin E Operacao
+
+- painel de frota
+- calendario de manutencao
+- monitor de telemetria
+
 ## Regras De Evolucao
 
 1. Nao criar tabela duplicada de usuario; usar sempre `public.users`.
@@ -42,8 +83,6 @@ Dependencias minimas: IOT, MOBILITY. Integracoes previstas: LOG, SECURITY.
 
 ## Primeiro Backlog Tecnico
 
-- Confirmar se o modulo precisa de tabela propria ou se usa tabelas compartilhadas ja existentes.
-- Definir eventos de entrada e saida com nomes tecnicos estaveis.
-- Definir permissao Admin/RBAC/ABAC quando houver operacao sensivel.
-- Registrar regra de negocio em `business_rule_definitions` quando houver pricing, comissao, limite, risco ou compliance.
-- Validar se dados volumosos ficam fora do PostgreSQL.
+- fechar score de saude do veiculo
+- definir corte por manutencao critica
+- ligar custo por km

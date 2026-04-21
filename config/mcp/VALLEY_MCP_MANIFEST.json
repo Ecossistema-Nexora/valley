@@ -5,6 +5,22 @@
     ".mcp.json",
     ".vscode/mcp.json"
   ],
+  "network_overlay": {
+    "provider": "tailscale",
+    "docker_compose_profile": "tailscale",
+    "mcp_compose_profile": "mcp",
+    "docker_service": "tailscale",
+    "container_name": "valley-tailscale-mcp",
+    "wsl2_bootstrap": "scripts/start_tailscale_wsl.ps1",
+    "wsl2_keepalive": "scripts/start_tailscale_wsl_keepalive.ps1",
+    "termius_status": "scripts/termius_tailscale_status.ps1",
+    "runbook": "config/termius/TAILSCALE_DOCKER_WSL.md",
+    "secrets": [
+      "TAILSCALE_AUTHKEY",
+      "TS_AUTHKEY"
+    ],
+    "secret_policy": "local_env_only"
+  },
   "servers": {
     "github": {
       "mode": "platform-managed",

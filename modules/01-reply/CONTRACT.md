@@ -11,6 +11,7 @@ Ele define a fronteira inicial do modulo para guiar desenvolvimento, implantacao
 - Tier: `foundation`
 - Data home: `postgres`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
 
 ## Objetivo Simples
 
@@ -30,6 +31,47 @@ Persistencia principal em PostgreSQL, porque o modulo exige consistencia, `forei
 
 Dependencias minimas: ID, PAY, BUSINESS. Integracoes previstas: STOCK, MARKETPLACE, WMS.
 
+## Atores Primarios
+
+- operador interno
+- comprador
+- gestor empresarial
+
+## Capacidades-Chave
+
+- compras e sourcing
+- ordens de servico
+- faturamento operacional
+
+## Entidades Relacionais
+
+- `suppliers`
+- `procurement_orders`
+- `service_work_orders`
+- `inventory_items`
+
+## Payloads Volumosos E Colecoes
+
+- Nao aplicavel.
+
+## Eventos Canonicos
+
+- `reply.procurement_order.created`
+- `reply.service_work_order.closed`
+- `reply.billing_cycle.closed`
+
+## Compliance, Risco E Guarda
+
+- financial_audit
+- tax_traceability
+- supplier_approval
+
+## Superficies Admin E Operacao
+
+- painel de compras
+- cadastro de fornecedores
+- fila de faturamento
+
 ## Regras De Evolucao
 
 1. Nao criar tabela duplicada de usuario; usar sempre `public.users`.
@@ -42,8 +84,6 @@ Dependencias minimas: ID, PAY, BUSINESS. Integracoes previstas: STOCK, MARKETPLA
 
 ## Primeiro Backlog Tecnico
 
-- Confirmar se o modulo precisa de tabela propria ou se usa tabelas compartilhadas ja existentes.
-- Definir eventos de entrada e saida com nomes tecnicos estaveis.
-- Definir permissao Admin/RBAC/ABAC quando houver operacao sensivel.
-- Registrar regra de negocio em `business_rule_definitions` quando houver pricing, comissao, limite, risco ou compliance.
-- Validar se dados volumosos ficam fora do PostgreSQL.
+- fechar fluxo fiscal ponta a ponta
+- amarrar aprovacao por unidade
+- instrumentar SLA de compras

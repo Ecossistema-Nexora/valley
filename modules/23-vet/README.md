@@ -12,10 +12,24 @@ Ele descreve o modulo em linguagem simples e serve como ponto inicial para desen
 - Tier: `expansion`
 - Data home: `postgres`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
+- Cobertura mapeada: PostgreSQL: 3 entidades mapeadas.
 
 ## Finalidade
 
 Cuidados veterinarios, pet care e servicos.
+
+## Atores Primarios
+
+- tutor
+- veterinario
+- operador pet
+
+## Capacidades-Chave
+
+- perfil pet
+- caso clinico
+- prescricao veterinaria
 
 ## Dependencias
 
@@ -24,6 +38,42 @@ ID
 ## Integracoes
 
 PHARMACY, SERVICES
+
+## Mapa De Dados
+
+### PostgreSQL
+
+- `vet_pet_profiles`
+- `vet_service_cases`
+- `vet_prescriptions`
+
+### MongoDB
+
+- Nao aplicavel.
+
+## Eventos Canonicos
+
+- `vet.pet.registered`
+- `vet.case.opened`
+- `vet.prescription.issued`
+
+## Compliance E Operacao
+
+- clinical_pet_traceability
+- controlled_medication_audit
+- owner_consent
+
+## Superficies Admin
+
+- painel pet
+- fila de casos
+- monitor de prescricoes
+
+## Proxima Onda
+
+- fechar historico vacinal
+- definir agenda de retorno
+- ligar integracao com farmacia
 
 ## Trilha De Implantacao
 
@@ -39,3 +89,4 @@ PHARMACY, SERVICES
 - Integracoes com `PAY`, `ID`, `DOCS`, `ORDERS` ou `TRANSACTIONS` documentadas quando existirem.
 - Teste ou validacao tecnica registrada.
 - Comentarios em portugues simples com termos tecnicos em ingles onde fizer sentido.
+- Blueprint operacional alinhado ao registry detalhado.

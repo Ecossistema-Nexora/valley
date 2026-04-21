@@ -11,6 +11,7 @@ Ele define a fronteira inicial do modulo para guiar desenvolvimento, implantacao
 - Tier: `core`
 - Data home: `postgres_mongo`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
 
 ## Objetivo Simples
 
@@ -30,6 +31,46 @@ Persistencia hibrida: PostgreSQL guarda o contrato operacional e MongoDB guarda 
 
 Dependencias minimas: ID, AI. Integracoes previstas: EDU, SERVICES.
 
+## Atores Primarios
+
+- candidato
+- recrutador
+- operador de matching
+
+## Capacidades-Chave
+
+- vagas
+- aplicacoes
+- engagement com IA
+
+## Entidades Relacionais
+
+- `job_postings`
+- `job_applications`
+- `job_engagements`
+
+## Payloads Volumosos E Colecoes
+
+- `ai_memory`
+
+## Eventos Canonicos
+
+- `jobs.posting.opened`
+- `jobs.application.submitted`
+- `jobs.match.scored`
+
+## Compliance, Risco E Guarda
+
+- candidate_privacy
+- matching_auditability
+- anti_bias_review
+
+## Superficies Admin E Operacao
+
+- painel de vagas
+- fila de matching
+- monitor de funil
+
 ## Regras De Evolucao
 
 1. Nao criar tabela duplicada de usuario; usar sempre `public.users`.
@@ -42,8 +83,6 @@ Dependencias minimas: ID, AI. Integracoes previstas: EDU, SERVICES.
 
 ## Primeiro Backlog Tecnico
 
-- Confirmar se o modulo precisa de tabela propria ou se usa tabelas compartilhadas ja existentes.
-- Definir eventos de entrada e saida com nomes tecnicos estaveis.
-- Definir permissao Admin/RBAC/ABAC quando houver operacao sensivel.
-- Registrar regra de negocio em `business_rule_definitions` quando houver pricing, comissao, limite, risco ou compliance.
-- Validar se dados volumosos ficam fora do PostgreSQL.
+- fechar score explicavel
+- definir sinais de aderencia
+- ligar consentimento para recomendacao

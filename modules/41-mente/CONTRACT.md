@@ -11,6 +11,7 @@ Ele define a fronteira inicial do modulo para guiar desenvolvimento, implantacao
 - Tier: `core`
 - Data home: `postgres`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
 
 ## Objetivo Simples
 
@@ -30,6 +31,45 @@ Persistencia principal em PostgreSQL, porque o modulo exige consistencia, `forei
 
 Dependencias minimas: HEALTH, ID. Integracoes previstas: ADVISOR, DOCS.
 
+## Atores Primarios
+
+- paciente
+- terapeuta
+- operador de cuidado
+
+## Capacidades-Chave
+
+- teleterapia
+- notas seguras
+- sinais de acompanhamento
+
+## Entidades Relacionais
+
+- `teletherapy_sessions`
+- `health_profiles`
+
+## Payloads Volumosos E Colecoes
+
+- Nao aplicavel.
+
+## Eventos Canonicos
+
+- `mente.session.scheduled`
+- `mente.session.completed`
+- `mente.followup.created`
+
+## Compliance, Risco E Guarda
+
+- lgpd_sensitive_data
+- therapy_confidentiality
+- clinical_access_audit
+
+## Superficies Admin E Operacao
+
+- painel terapeutico
+- fila de sessoes
+- monitor de follow-up
+
 ## Regras De Evolucao
 
 1. Nao criar tabela duplicada de usuario; usar sempre `public.users`.
@@ -42,8 +82,6 @@ Dependencias minimas: HEALTH, ID. Integracoes previstas: ADVISOR, DOCS.
 
 ## Primeiro Backlog Tecnico
 
-- Confirmar se o modulo precisa de tabela propria ou se usa tabelas compartilhadas ja existentes.
-- Definir eventos de entrada e saida com nomes tecnicos estaveis.
-- Definir permissao Admin/RBAC/ABAC quando houver operacao sensivel.
-- Registrar regra de negocio em `business_rule_definitions` quando houver pricing, comissao, limite, risco ou compliance.
-- Validar se dados volumosos ficam fora do PostgreSQL.
+- fechar trilha de nota cifrada
+- definir protocolo de risco
+- ligar agenda terapeutica

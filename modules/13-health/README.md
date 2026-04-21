@@ -12,10 +12,24 @@ Ele descreve o modulo em linguagem simples e serve como ponto inicial para desen
 - Tier: `core`
 - Data home: `postgres_mongo`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
+- Cobertura mapeada: Hibrido: 3 entidades PostgreSQL e 2 colecoes MongoDB.
 
 ## Finalidade
 
 Saude preditiva, cuidados integrados e dados sensiveis.
+
+## Atores Primarios
+
+- paciente
+- profissional de saude
+- operador clinico
+
+## Capacidades-Chave
+
+- perfil clinico
+- plano de cuidado
+- prescricao segura
 
 ## Dependencias
 
@@ -24,6 +38,43 @@ ID
 ## Integracoes
 
 FOOD, FITNESS, PHARMACY
+
+## Mapa De Dados
+
+### PostgreSQL
+
+- `health_profiles`
+- `health_care_plans`
+- `health_prescriptions`
+
+### MongoDB
+
+- `ai_memory`
+- `telemetry_logs`
+
+## Eventos Canonicos
+
+- `health.profile.updated`
+- `health.care_plan.activated`
+- `health.prescription.issued`
+
+## Compliance E Operacao
+
+- lgpd_sensitive_data
+- clinical_audit
+- consent_management
+
+## Superficies Admin
+
+- painel clinico
+- fila de consentimento
+- monitor de risco assistencial
+
+## Proxima Onda
+
+- amarrar consentimento granular
+- definir trilha de acesso clinico
+- ligar sinais de risco preditivo
 
 ## Trilha De Implantacao
 
@@ -39,3 +90,4 @@ FOOD, FITNESS, PHARMACY
 - Integracoes com `PAY`, `ID`, `DOCS`, `ORDERS` ou `TRANSACTIONS` documentadas quando existirem.
 - Teste ou validacao tecnica registrada.
 - Comentarios em portugues simples com termos tecnicos em ingles onde fizer sentido.
+- Blueprint operacional alinhado ao registry detalhado.

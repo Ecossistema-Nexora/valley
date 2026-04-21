@@ -12,10 +12,24 @@ Ele descreve o modulo em linguagem simples e serve como ponto inicial para desen
 - Tier: `foundation`
 - Data home: `postgres`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
+- Cobertura mapeada: PostgreSQL: 6 entidades mapeadas.
 
 ## Finalidade
 
 Contratos, mediacao por IA, fallback PIN e juridico.
+
+## Atores Primarios
+
+- juridico
+- assinante
+- mediador
+
+## Capacidades-Chave
+
+- contratos
+- assinaturas
+- disputas e trilha juridica
 
 ## Dependencias
 
@@ -24,6 +38,45 @@ ID
 ## Integracoes
 
 DOCS, SECURITY
+
+## Mapa De Dados
+
+### PostgreSQL
+
+- `legal_contracts`
+- `legal_contract_parties`
+- `legal_signatures`
+- `legal_disputes`
+- `legal_audit_events`
+- `legal_fallback_pin_credentials`
+
+### MongoDB
+
+- Nao aplicavel.
+
+## Eventos Canonicos
+
+- `legal.contract.created`
+- `legal.signature.recorded`
+- `legal.dispute.opened`
+
+## Compliance E Operacao
+
+- legal_audit
+- signature_traceability
+- fallback_pin_hashing
+
+## Superficies Admin
+
+- painel juridico
+- fila de assinaturas
+- monitor de disputas
+
+## Proxima Onda
+
+- fechar clausulas parametrizadas
+- definir mediacao assistida por IA
+- ligar prova documental do contrato
 
 ## Trilha De Implantacao
 
@@ -39,3 +92,4 @@ DOCS, SECURITY
 - Integracoes com `PAY`, `ID`, `DOCS`, `ORDERS` ou `TRANSACTIONS` documentadas quando existirem.
 - Teste ou validacao tecnica registrada.
 - Comentarios em portugues simples com termos tecnicos em ingles onde fizer sentido.
+- Blueprint operacional alinhado ao registry detalhado.

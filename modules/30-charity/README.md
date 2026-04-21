@@ -12,10 +12,24 @@ Ele descreve o modulo em linguagem simples e serve como ponto inicial para desen
 - Tier: `expansion`
 - Data home: `postgres`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
+- Cobertura mapeada: PostgreSQL: 3 entidades mapeadas.
 
 ## Finalidade
 
 Doacoes transparentes, auditoria e impacto social.
+
+## Atores Primarios
+
+- doador
+- gestor de causa
+- auditor social
+
+## Capacidades-Chave
+
+- causas
+- grants
+- ledger de fundos
 
 ## Dependencias
 
@@ -24,6 +38,42 @@ PAY
 ## Integracoes
 
 DOCS, SOCIAL
+
+## Mapa De Dados
+
+### PostgreSQL
+
+- `charity_causes`
+- `charity_grants`
+- `charity_fund_ledger`
+
+### MongoDB
+
+- Nao aplicavel.
+
+## Eventos Canonicos
+
+- `charity.cause.published`
+- `charity.grant.approved`
+- `charity.fund.posted`
+
+## Compliance E Operacao
+
+- donation_audit
+- impact_traceability
+- fund_immutability
+
+## Superficies Admin
+
+- painel de causas
+- fila de grants
+- monitor de ledger social
+
+## Proxima Onda
+
+- fechar prova de impacto
+- definir governanca de grants
+- ligar recibo social auditavel
 
 ## Trilha De Implantacao
 
@@ -39,3 +89,4 @@ DOCS, SOCIAL
 - Integracoes com `PAY`, `ID`, `DOCS`, `ORDERS` ou `TRANSACTIONS` documentadas quando existirem.
 - Teste ou validacao tecnica registrada.
 - Comentarios em portugues simples com termos tecnicos em ingles onde fizer sentido.
+- Blueprint operacional alinhado ao registry detalhado.

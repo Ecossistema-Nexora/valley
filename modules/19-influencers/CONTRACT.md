@@ -11,6 +11,7 @@ Ele define a fronteira inicial do modulo para guiar desenvolvimento, implantacao
 - Tier: `core`
 - Data home: `mongo`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `BUILD` (Build)
 
 ## Objetivo Simples
 
@@ -30,6 +31,45 @@ Persistencia principal em MongoDB, porque o modulo trabalha com IA, social, tele
 
 Dependencias minimas: CREATOR, UP. Integracoes previstas: SOCIAL, ADS.
 
+## Atores Primarios
+
+- creator
+- brand manager
+- operador de afiliacao
+
+## Capacidades-Chave
+
+- hub de criadores
+- metricas de audiencia
+- monetizacao afiliada
+
+## Entidades Relacionais
+
+- `creator_uploads`
+
+## Payloads Volumosos E Colecoes
+
+- `influencer_metrics`
+- `social_videos`
+
+## Eventos Canonicos
+
+- `influencer.profile.qualified`
+- `influencer.metric.ingested`
+- `influencer.commission.attributed`
+
+## Compliance, Risco E Guarda
+
+- creator_disclosure
+- commission_audit
+- brand_safety
+
+## Superficies Admin E Operacao
+
+- painel de creators
+- fila de brand safety
+- monitor de afiliacao
+
 ## Regras De Evolucao
 
 1. Nao criar tabela duplicada de usuario; usar sempre `public.users`.
@@ -42,8 +82,6 @@ Dependencias minimas: CREATOR, UP. Integracoes previstas: SOCIAL, ADS.
 
 ## Primeiro Backlog Tecnico
 
-- Confirmar se o modulo precisa de tabela propria ou se usa tabelas compartilhadas ja existentes.
-- Definir eventos de entrada e saida com nomes tecnicos estaveis.
-- Definir permissao Admin/RBAC/ABAC quando houver operacao sensivel.
-- Registrar regra de negocio em `business_rule_definitions` quando houver pricing, comissao, limite, risco ou compliance.
-- Validar se dados volumosos ficam fora do PostgreSQL.
+- fechar score de creator fit
+- definir politica de disclosure
+- ligar payout por campanha

@@ -12,10 +12,24 @@ Ele descreve o modulo em linguagem simples e serve como ponto inicial para desen
 - Tier: `core`
 - Data home: `postgres_mongo`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
+- Cobertura mapeada: Hibrido: 3 entidades PostgreSQL e 1 colecoes MongoDB.
 
 ## Finalidade
 
 Matching de trabalho, renda, vagas e freelas com IA.
+
+## Atores Primarios
+
+- candidato
+- recrutador
+- operador de matching
+
+## Capacidades-Chave
+
+- vagas
+- aplicacoes
+- engagement com IA
 
 ## Dependencias
 
@@ -24,6 +38,42 @@ ID, AI
 ## Integracoes
 
 EDU, SERVICES
+
+## Mapa De Dados
+
+### PostgreSQL
+
+- `job_postings`
+- `job_applications`
+- `job_engagements`
+
+### MongoDB
+
+- `ai_memory`
+
+## Eventos Canonicos
+
+- `jobs.posting.opened`
+- `jobs.application.submitted`
+- `jobs.match.scored`
+
+## Compliance E Operacao
+
+- candidate_privacy
+- matching_auditability
+- anti_bias_review
+
+## Superficies Admin
+
+- painel de vagas
+- fila de matching
+- monitor de funil
+
+## Proxima Onda
+
+- fechar score explicavel
+- definir sinais de aderencia
+- ligar consentimento para recomendacao
 
 ## Trilha De Implantacao
 
@@ -39,3 +89,4 @@ EDU, SERVICES
 - Integracoes com `PAY`, `ID`, `DOCS`, `ORDERS` ou `TRANSACTIONS` documentadas quando existirem.
 - Teste ou validacao tecnica registrada.
 - Comentarios em portugues simples com termos tecnicos em ingles onde fizer sentido.
+- Blueprint operacional alinhado ao registry detalhado.

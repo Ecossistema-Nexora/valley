@@ -11,6 +11,7 @@ Ele define a fronteira inicial do modulo para guiar desenvolvimento, implantacao
 - Tier: `foundation`
 - Data home: `postgres`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `DATA_CONTRACT` (Contrato de dados)
 
 ## Objetivo Simples
 
@@ -30,6 +31,47 @@ Persistencia principal em PostgreSQL, porque o modulo exige consistencia, `forei
 
 Dependencias minimas: PAY, LEGAL. Integracoes previstas: ORDERS, TRANSACTIONS.
 
+## Atores Primarios
+
+- operador documental
+- juridico
+- motor de recibos
+
+## Capacidades-Chave
+
+- documentos
+- recibos
+- checksums e prova
+
+## Entidades Relacionais
+
+- `legal_contracts`
+- `transactions`
+- `orders`
+- `event_ticket_ledger`
+
+## Payloads Volumosos E Colecoes
+
+- Nao aplicavel.
+
+## Eventos Canonicos
+
+- `docs.receipt.generated`
+- `docs.document.signed`
+- `docs.hash.registered`
+
+## Compliance, Risco E Guarda
+
+- document_immutability
+- signature_traceability
+- receipt_audit
+
+## Superficies Admin E Operacao
+
+- painel documental
+- fila de emissao
+- monitor de checksum
+
 ## Regras De Evolucao
 
 1. Nao criar tabela duplicada de usuario; usar sempre `public.users`.
@@ -42,8 +84,6 @@ Dependencias minimas: PAY, LEGAL. Integracoes previstas: ORDERS, TRANSACTIONS.
 
 ## Primeiro Backlog Tecnico
 
-- Confirmar se o modulo precisa de tabela propria ou se usa tabelas compartilhadas ja existentes.
-- Definir eventos de entrada e saida com nomes tecnicos estaveis.
-- Definir permissao Admin/RBAC/ABAC quando houver operacao sensivel.
-- Registrar regra de negocio em `business_rule_definitions` quando houver pricing, comissao, limite, risco ou compliance.
-- Validar se dados volumosos ficam fora do PostgreSQL.
+- criar contrato especifico de template
+- definir trilha de checksum
+- ligar versionamento de recibo

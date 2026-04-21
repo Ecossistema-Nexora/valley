@@ -8,6 +8,10 @@ O MongoDB guarda IA, social, influencer metrics e telemetria de alto volume.
 
 ## Scripts Atuais
 
+`database/postgres/014_v47_expansion_tourism_bio_energy.sql` fecha a fronteira relacional dos modulos hibridos ainda planejados.
+
+Esse script adiciona experiencias e bookings de turismo, programas e coletas reversas do modulo Bio e ativos, trades e ledger append-only do modulo Energy.
+
 `database/postgres/013_v47_expansion_assets_civic_impact.sql` cria a primeira camada expansion em PostgreSQL.
 
 Esse script adiciona ativos digitais, propriedades e deals, trilhas educacionais, prontuarios pet, catalogo/requests govtech, fundos de charity e produtos/polices/claims de insurance com ledgers append-only onde a trilha e prova financeira, civica ou securitaria.
@@ -40,11 +44,37 @@ Esse script adiciona shipments, eventos append-only de entrega, trips, checkpoin
 
 Esse script adiciona validators e indices para dispatch de entrega, cadastro de frota, eventos de manutencao, sinais de seguranca e itens de agenda da Helena.
 
+`database/mongodb/004_v47_expansion_media_wellness_frontier.mongo.js` fecha a camada NoSQL dos modulos que ainda estavam planejados.
+
+Esse script adiciona validators e indices para News & Podcast, Fitness, Gaming, Home e Space, alem dos payloads volumosos de Tourism, Bio e Energy.
+
 ## Manifesto
 
 `database/migrations.json` e a ordem oficial de implantacao.
 
 Ele existe para impedir execucao fora de ordem e para permitir que `scripts/valley_db_orchestrator.py` aplique ou valide migrations.
+
+`database/postgres/015_v47_module_blueprints_registry.sql` evolui `module_delivery_registry` com `module_blueprint_json`, preservando a tabela existente e sincronizando a fase real de cada modulo.
+
+`config/modules_v47_blueprints.json` e a fonte canonica da evolucao detalhada dos 47 modulos: atores, capacidades, entidades, eventos, compliance, superficies admin e backlog imediato.
+
+`database/postgres/016_v47_execution_backlog_seed.sql` evolui `module_evolution_backlog` com `backlog_key`, `backlog_group`, `execution_stage`, `depends_on_keys` e itens executaveis seedados a partir dos entregaveis imediatos de cada modulo.
+
+`database/postgres/017_v47_priority_domain_delivery_packages.sql` cria o registry fisico da primeira onda de dominios prioritarios, com tabelas para pacotes, artefatos por camada e contratos de evento.
+
+`database/postgres/018_v47_platform_developer_business_ddl.sql` abre o dominio `platform_developer` com DDL de negocio real para `DOCS` e `TECH`, saindo do nivel apenas de views/registry.
+
+Esse script adiciona contratos de template documental, versoes append-only de template, cadeia de checksum, versoes de recibo, limites por client, trilha de rotacao de credenciais e replay controlado de webhook.
+
+`database/postgres/019_v47_logistics_erp_operations_business_ddl.sql` aprofunda o dominio `logistics_erp_operations` com DDL de negocio real para `BUSINESS`, `REPLY`, `STOCK`, `LOG`, `FOOD`, `WMS`, `DELIVERY` e `FLEET`.
+
+Esse script adiciona unidades e fechamento fiscal, politicas e trilhas de aprovacao de compras, margem por canal, conciliacao com fornecedor, ruptura, contratos de loja/cardapio, enderecamento WMS, incidentes de temperatura, politicas e prova de entrega e custo operacional de frota.
+
+`database/seeds/postgres/002_v47_priority_domain_delivery_packages_seed.sql` popula esse registry com os dominios cuja prioridade minima do backlog e `<= 2`, sem perder idempotencia.
+
+`database/domain-delivery/priority-domains/` guarda os pacotes fisicos por dominio, com `ddl_complement.sql` e `operational_seed.sql` prontos para revisao e aplicacao controlada.
+
+`contracts/events/priority-domains/` exporta os contratos de evento por dominio em JSON, com schema pragmatico, superficies produtoras/consumidoras e evidencias operacionais.
 
 ## PostgreSQL
 
@@ -105,6 +135,38 @@ Aplicar migrations no Compose. O comando abaixo ja executa `compose-up` antes de
 
 ```bash
 python scripts/valley_db_orchestrator.py apply-compose
+```
+
+Aplicar os seeds minimos do bloco expansion que cobre Tourism, Bio, Energy, News, Fitness, Gaming, Home e Space:
+
+```bash
+python scripts/valley_db_orchestrator.py seed-compose
+```
+
+O comando acima agora tambem aplica o seed do registry fisico dos dominios prioritarios.
+
+Executar smoke check relacional e NoSQL do bloco expansion seedado:
+
+```bash
+python scripts/valley_db_orchestrator.py smoke-compose
+```
+
+Exportar snapshot operacional do banco local aplicado e seedado:
+
+```bash
+python scripts/valley_db_orchestrator.py snapshot-compose
+```
+
+Validar integridade do snapshot mais recente antes de restaurar:
+
+```bash
+python scripts/valley_db_orchestrator.py snapshot-verify
+```
+
+Restaurar o snapshot mais recente no Docker Compose local. Esse comando sobrescreve o estado atual de `valley` em PostgreSQL e MongoDB:
+
+```bash
+python scripts/valley_db_orchestrator.py restore-compose
 ```
 
 Executar o worker builder diretamente no Docker Compose:

@@ -11,11 +11,25 @@ Ele descreve o modulo em linguagem simples e serve como ponto inicial para desen
 - Dominio: `media_social_growth`
 - Tier: `expansion`
 - Data home: `mongo`
-- Status atual: `Planejado`
+- Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
+- Cobertura mapeada: MongoDB: 1 colecoes mapeadas.
 
 ## Finalidade
 
 Noticias, podcasts e conteudo editorial.
+
+## Atores Primarios
+
+- editor
+- criador de audio
+- consumidor
+
+## Capacidades-Chave
+
+- conteudo editorial
+- episodios e blocos
+- distribuicao midia
 
 ## Dependencias
 
@@ -24,6 +38,40 @@ MEDIA
 ## Integracoes
 
 CREATOR, ADS
+
+## Mapa De Dados
+
+### PostgreSQL
+
+- Nao aplicavel.
+
+### MongoDB
+
+- `news_content_items`
+
+## Eventos Canonicos
+
+- `news.story.published`
+- `podcast.episode.released`
+- `media.content.moderated`
+
+## Compliance E Operacao
+
+- editorial_governance
+- copyright_traceability
+- content_moderation
+
+## Superficies Admin
+
+- cms editorial
+- fila de revisao
+- monitor de distribuicao
+
+## Proxima Onda
+
+- fechar taxonomia editorial
+- ligar agenda de publicacao
+- amarrar politica de moderacao
 
 ## Trilha De Implantacao
 
@@ -39,3 +87,4 @@ CREATOR, ADS
 - Integracoes com `PAY`, `ID`, `DOCS`, `ORDERS` ou `TRANSACTIONS` documentadas quando existirem.
 - Teste ou validacao tecnica registrada.
 - Comentarios em portugues simples com termos tecnicos em ingles onde fizer sentido.
+- Blueprint operacional alinhado ao registry detalhado.

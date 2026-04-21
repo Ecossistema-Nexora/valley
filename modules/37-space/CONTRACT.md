@@ -10,7 +10,8 @@ Ele define a fronteira inicial do modulo para guiar desenvolvimento, implantacao
 - Dominio: `frontier_iot_energy`
 - Tier: `frontier`
 - Data home: `mongo`
-- Status atual: `Planejado`
+- Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
 
 ## Objetivo Simples
 
@@ -30,6 +31,45 @@ Persistencia principal em MongoDB, porque o modulo trabalha com IA, social, tele
 
 Dependencias minimas: CLOUD. Integracoes previstas: SOCIAL, TOURISM.
 
+## Atores Primarios
+
+- explorador
+- criador AR
+- operador de mapa
+
+## Capacidades-Chave
+
+- ancoras espaciais
+- camadas AR
+- experiencias geolocalizadas
+
+## Entidades Relacionais
+
+- Nao aplicavel.
+
+## Payloads Volumosos E Colecoes
+
+- `space_anchor_maps`
+- `social_videos`
+
+## Eventos Canonicos
+
+- `space.anchor.created`
+- `space.anchor.visited`
+- `space.layer.published`
+
+## Compliance, Risco E Guarda
+
+- location_privacy
+- content_safety
+- creator_traceability
+
+## Superficies Admin E Operacao
+
+- painel AR
+- monitor de ancoras
+- fila de curadoria espacial
+
 ## Regras De Evolucao
 
 1. Nao criar tabela duplicada de usuario; usar sempre `public.users`.
@@ -42,8 +82,6 @@ Dependencias minimas: CLOUD. Integracoes previstas: SOCIAL, TOURISM.
 
 ## Primeiro Backlog Tecnico
 
-- Confirmar se o modulo precisa de tabela propria ou se usa tabelas compartilhadas ja existentes.
-- Definir eventos de entrada e saida com nomes tecnicos estaveis.
-- Definir permissao Admin/RBAC/ABAC quando houver operacao sensivel.
-- Registrar regra de negocio em `business_rule_definitions` quando houver pricing, comissao, limite, risco ou compliance.
-- Validar se dados volumosos ficam fora do PostgreSQL.
+- fechar taxonomia de ancora
+- definir moderacao espacial
+- ligar analytics de visita

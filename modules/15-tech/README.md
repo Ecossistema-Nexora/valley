@@ -12,10 +12,24 @@ Ele descreve o modulo em linguagem simples e serve como ponto inicial para desen
 - Tier: `foundation`
 - Data home: `postgres`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
+- Cobertura mapeada: PostgreSQL: 4 entidades mapeadas.
 
 ## Finalidade
 
 Infra SaaS, API builder, integracoes e plataforma de desenvolvedor.
+
+## Atores Primarios
+
+- developer
+- integrador
+- operador de plataforma
+
+## Capacidades-Chave
+
+- api clients
+- credenciais seguras
+- webhooks e conectores
 
 ## Dependencias
 
@@ -24,6 +38,43 @@ API, CLOUD
 ## Integracoes
 
 CONNECT, COMMAND_CENTER
+
+## Mapa De Dados
+
+### PostgreSQL
+
+- `tech_api_clients`
+- `tech_api_credentials`
+- `tech_webhook_subscriptions`
+- `tech_webhook_delivery_attempts`
+
+### MongoDB
+
+- Nao aplicavel.
+
+## Eventos Canonicos
+
+- `tech.client.provisioned`
+- `tech.webhook.delivered`
+- `tech.connector.synced`
+
+## Compliance E Operacao
+
+- secret_hashing
+- api_audit
+- integration_traceability
+
+## Superficies Admin
+
+- painel de integracoes
+- gestao de credenciais
+- monitor de webhooks
+
+## Proxima Onda
+
+- fechar rotate de credenciais
+- ligar replay seguro de webhook
+- definir limites por client
 
 ## Trilha De Implantacao
 
@@ -39,3 +90,4 @@ CONNECT, COMMAND_CENTER
 - Integracoes com `PAY`, `ID`, `DOCS`, `ORDERS` ou `TRANSACTIONS` documentadas quando existirem.
 - Teste ou validacao tecnica registrada.
 - Comentarios em portugues simples com termos tecnicos em ingles onde fizer sentido.
+- Blueprint operacional alinhado ao registry detalhado.

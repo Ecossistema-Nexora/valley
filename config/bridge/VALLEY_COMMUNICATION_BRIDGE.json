@@ -1,0 +1,58 @@
+{
+  "version": "v47",
+  "name": "Valley Telegram WhatsApp Codex Bridge",
+  "status": "enabled_safe_mode",
+  "channels": {
+    "telegram": {
+      "enabled": true,
+      "order_queue": "ordem_telegram.md",
+      "env_token": "VALLEY_TELEGRAM_TOKEN",
+      "env_chat_id": "VALLEY_TELEGRAM_CHAT_ID"
+    },
+    "whatsapp": {
+      "enabled": true,
+      "mode": "web",
+      "login_method": "whatsapp_web_phone_or_qr",
+      "order_queue": "ordem_universal.md",
+      "env_mode": "VALLEY_WHATSAPP_MODE",
+      "env_to": "VALLEY_WHATSAPP_WEB_TO",
+      "env_profile_dir": "VALLEY_WHATSAPP_WEB_PROFILE_DIR",
+      "env_browser": "VALLEY_WHATSAPP_WEB_BROWSER",
+      "driver": "scripts/whatsapp_web_driver.js",
+      "login_script": "scripts/start_whatsapp_web_login.cmd",
+      "legacy_api": {
+        "enabled": false,
+        "env_api_url": "VALLEY_WHATSAPP_API_URL",
+        "env_token": "VALLEY_WHATSAPP_TOKEN",
+        "env_to": "VALLEY_WHATSAPP_TO"
+      }
+    }
+  },
+  "routing": {
+    "bidirectional_status_pulse": true,
+    "codex_order_intake": true,
+    "codex_auto_start_all_events": true,
+    "unrestricted_execution_auto_approval": false,
+    "status_file": "tmp/runtime/codex-live-status.json"
+  },
+  "approval_policy": {
+    "mode": "safe_only",
+    "refuse_unrestricted_auto_approval": true,
+    "safe_auto_approved_kinds": [
+      "status",
+      "report",
+      "read_only_check",
+      "documentation_update",
+      "queue_triage"
+    ],
+    "manual_review_required_for": [
+      "secrets",
+      "payments",
+      "database_write",
+      "deployment",
+      "shell_command",
+      "external_access",
+      "destructive_operation"
+    ]
+  }
+}

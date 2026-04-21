@@ -1,0 +1,784 @@
+{
+  "domain_key": "platform_developer",
+  "domain_label": "Platform Developer",
+  "modules": [
+    {
+      "current_phase": "DATA_CONTRACT",
+      "event_topics": [
+        {
+          "compliance_tags": [
+            "document_immutability",
+            "signature_traceability",
+            "receipt_audit"
+          ],
+          "consumer_surfaces": [
+            "ORDERS",
+            "TRANSACTIONS",
+            "painel documental",
+            "fila de emissao"
+          ],
+          "contract_key": "DOCS:docs.receipt.generated:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "docs.receipt.generated",
+          "evidence_entities": [
+            "legal_contracts",
+            "transactions",
+            "orders"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "document_immutability",
+                  "signature_traceability",
+                  "receipt_audit"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "DATA_CONTRACT"
+              },
+              "domain_key": {
+                "const": "platform_developer"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "docs.receipt.generated"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "legal_contracts",
+                    "transactions",
+                    "orders"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "DOCS"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "documentos",
+                      "recibos",
+                      "checksums e prova"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "operador documental",
+                      "juridico",
+                      "motor de recibos"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "DOCS::docs.receipt.generated",
+            "type": "object"
+          },
+          "producer_surface": "painel documental"
+        },
+        {
+          "compliance_tags": [
+            "document_immutability",
+            "signature_traceability",
+            "receipt_audit"
+          ],
+          "consumer_surfaces": [
+            "ORDERS",
+            "TRANSACTIONS",
+            "painel documental",
+            "fila de emissao"
+          ],
+          "contract_key": "DOCS:docs.document.signed:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "docs.document.signed",
+          "evidence_entities": [
+            "legal_contracts",
+            "transactions",
+            "orders"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "document_immutability",
+                  "signature_traceability",
+                  "receipt_audit"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "DATA_CONTRACT"
+              },
+              "domain_key": {
+                "const": "platform_developer"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "docs.document.signed"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "legal_contracts",
+                    "transactions",
+                    "orders"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "DOCS"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "documentos",
+                      "recibos",
+                      "checksums e prova"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "operador documental",
+                      "juridico",
+                      "motor de recibos"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "DOCS::docs.document.signed",
+            "type": "object"
+          },
+          "producer_surface": "painel documental"
+        },
+        {
+          "compliance_tags": [
+            "document_immutability",
+            "signature_traceability",
+            "receipt_audit"
+          ],
+          "consumer_surfaces": [
+            "ORDERS",
+            "TRANSACTIONS",
+            "painel documental",
+            "fila de emissao"
+          ],
+          "contract_key": "DOCS:docs.hash.registered:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "docs.hash.registered",
+          "evidence_entities": [
+            "legal_contracts",
+            "transactions",
+            "orders"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "document_immutability",
+                  "signature_traceability",
+                  "receipt_audit"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "DATA_CONTRACT"
+              },
+              "domain_key": {
+                "const": "platform_developer"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "docs.hash.registered"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "legal_contracts",
+                    "transactions",
+                    "orders"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "DOCS"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "documentos",
+                      "recibos",
+                      "checksums e prova"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "operador documental",
+                      "juridico",
+                      "motor de recibos"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "DOCS::docs.hash.registered",
+            "type": "object"
+          },
+          "producer_surface": "painel documental"
+        }
+      ],
+      "module_code": "DOCS",
+      "module_name": "Valley Docs"
+    },
+    {
+      "current_phase": "VALIDATE",
+      "event_topics": [
+        {
+          "compliance_tags": [
+            "secret_hashing",
+            "api_audit",
+            "integration_traceability"
+          ],
+          "consumer_surfaces": [
+            "CONNECT",
+            "COMMAND_CENTER",
+            "painel de integracoes",
+            "gestao de credenciais"
+          ],
+          "contract_key": "TECH:tech.client.provisioned:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "tech.client.provisioned",
+          "evidence_entities": [
+            "tech_api_clients",
+            "tech_api_credentials",
+            "tech_webhook_subscriptions"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "secret_hashing",
+                  "api_audit",
+                  "integration_traceability"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "platform_developer"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "tech.client.provisioned"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "tech_api_clients",
+                    "tech_api_credentials",
+                    "tech_webhook_subscriptions"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "TECH"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "api clients",
+                      "credenciais seguras",
+                      "webhooks e conectores"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "developer",
+                      "integrador",
+                      "operador de plataforma"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "TECH::tech.client.provisioned",
+            "type": "object"
+          },
+          "producer_surface": "painel de integracoes"
+        },
+        {
+          "compliance_tags": [
+            "secret_hashing",
+            "api_audit",
+            "integration_traceability"
+          ],
+          "consumer_surfaces": [
+            "CONNECT",
+            "COMMAND_CENTER",
+            "painel de integracoes",
+            "gestao de credenciais"
+          ],
+          "contract_key": "TECH:tech.webhook.delivered:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "tech.webhook.delivered",
+          "evidence_entities": [
+            "tech_api_clients",
+            "tech_api_credentials",
+            "tech_webhook_subscriptions"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "secret_hashing",
+                  "api_audit",
+                  "integration_traceability"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "platform_developer"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "tech.webhook.delivered"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "tech_api_clients",
+                    "tech_api_credentials",
+                    "tech_webhook_subscriptions"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "TECH"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "api clients",
+                      "credenciais seguras",
+                      "webhooks e conectores"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "developer",
+                      "integrador",
+                      "operador de plataforma"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "TECH::tech.webhook.delivered",
+            "type": "object"
+          },
+          "producer_surface": "painel de integracoes"
+        },
+        {
+          "compliance_tags": [
+            "secret_hashing",
+            "api_audit",
+            "integration_traceability"
+          ],
+          "consumer_surfaces": [
+            "CONNECT",
+            "COMMAND_CENTER",
+            "painel de integracoes",
+            "gestao de credenciais"
+          ],
+          "contract_key": "TECH:tech.connector.synced:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "tech.connector.synced",
+          "evidence_entities": [
+            "tech_api_clients",
+            "tech_api_credentials",
+            "tech_webhook_subscriptions"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "secret_hashing",
+                  "api_audit",
+                  "integration_traceability"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "platform_developer"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "tech.connector.synced"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "tech_api_clients",
+                    "tech_api_credentials",
+                    "tech_webhook_subscriptions"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "TECH"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "api clients",
+                      "credenciais seguras",
+                      "webhooks e conectores"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "developer",
+                      "integrador",
+                      "operador de plataforma"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "TECH::tech.connector.synced",
+            "type": "object"
+          },
+          "producer_surface": "painel de integracoes"
+        }
+      ],
+      "module_code": "TECH",
+      "module_name": "Valley Tech"
+    }
+  ],
+  "package_key": "platform_developer.priority.v1",
+  "priority_rank": 1
+}

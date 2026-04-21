@@ -1,0 +1,50 @@
+param(
+    [int]$LocalPort = 22
+)
+
+$ErrorActionPreference = 'Stop'
+
+$root = Resolve-Path (Join-Path $PSScriptRoot '..')
+$runtime = Join-Path $root 'tmp\runtime'
+$log = Join-Path $runtime 'termius-ngrok-tcp.log'
+$envFile = Join-Path $root '.env'
+
+if (Test-Path -LiteralPath $envFile) {
+    foreach ($line in Get-Content -LiteralPath $envFile) {
+        if ($line -match '^\s*#' -or $line -notmatch '=') {
+            continue
+        }
+        $index = $line.IndexOf('=')
+        $key = $line.Substring(0, $index).Trim()
+        $value = $line.Substring($index + 1).Trim().Trim('"').Trim("'")
+        if (-not [string]::IsNullOrWhiteSpace($key) -and [string]::IsNullOrWhiteSpace([Environment]::GetEnvironmentVariable($key, 'Process'))) {
+            [Environment]::SetEnvironmentVariable($key, $value, 'Process')
+        }
+    }
+}
+
+if (-not (Test-Path -LiteralPath $runtime)) {
+    New-Item -ItemType Directory -Path $runtime | Out-Null
+}
+
+$ngrok = Get-Command ngrok -ErrorAction Stop
+
+if (-not [string]::IsNullOrWhiteSpace($env:VALLEY_NGROK_AUTHTOKEN)) {
+    & $ngrok.Source config add-authtoken $env:VALLEY_NGROK_AUTHTOKEN | Out-Null
+}
+else {
+    $ngrokConfig = Join-Path $env:USERPROFILE 'AppData\Local\ngrok\ngrok.yml'
+    $legacyConfig = Join-Path $env:USERPROFILE '.ngrok2\ngrok.yml'
+    $hasSavedToken = (Test-Path -LiteralPath $ngrokConfig -PathType Leaf) -or (Test-Path -LiteralPath $legacyConfig -PathType Leaf)
+    if (-not $hasSavedToken) {
+        throw 'VALLEY_NGROK_AUTHTOKEN nao configurado e nenhum authtoken salvo do ngrok foi encontrado.'
+    }
+}
+
+Start-Process `
+    -FilePath $ngrok.Source `
+    -ArgumentList @('tcp', $LocalPort.ToString(), '--log', $log) `
+    -WorkingDirectory $root `
+    -WindowStyle Minimized
+
+Write-Host "ngrok TCP iniciado para localhost:$LocalPort. Consulte o endpoint no log/API local do ngrok."

@@ -10,7 +10,8 @@ Ele define a fronteira inicial do modulo para guiar desenvolvimento, implantacao
 - Dominio: `media_social_growth`
 - Tier: `expansion`
 - Data home: `mongo`
-- Status atual: `Planejado`
+- Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
 
 ## Objetivo Simples
 
@@ -30,6 +31,44 @@ Persistencia principal em MongoDB, porque o modulo trabalha com IA, social, tele
 
 Dependencias minimas: MEDIA. Integracoes previstas: CREATOR, ADS.
 
+## Atores Primarios
+
+- editor
+- criador de audio
+- consumidor
+
+## Capacidades-Chave
+
+- conteudo editorial
+- episodios e blocos
+- distribuicao midia
+
+## Entidades Relacionais
+
+- Nao aplicavel.
+
+## Payloads Volumosos E Colecoes
+
+- `news_content_items`
+
+## Eventos Canonicos
+
+- `news.story.published`
+- `podcast.episode.released`
+- `media.content.moderated`
+
+## Compliance, Risco E Guarda
+
+- editorial_governance
+- copyright_traceability
+- content_moderation
+
+## Superficies Admin E Operacao
+
+- cms editorial
+- fila de revisao
+- monitor de distribuicao
+
 ## Regras De Evolucao
 
 1. Nao criar tabela duplicada de usuario; usar sempre `public.users`.
@@ -42,8 +81,6 @@ Dependencias minimas: MEDIA. Integracoes previstas: CREATOR, ADS.
 
 ## Primeiro Backlog Tecnico
 
-- Confirmar se o modulo precisa de tabela propria ou se usa tabelas compartilhadas ja existentes.
-- Definir eventos de entrada e saida com nomes tecnicos estaveis.
-- Definir permissao Admin/RBAC/ABAC quando houver operacao sensivel.
-- Registrar regra de negocio em `business_rule_definitions` quando houver pricing, comissao, limite, risco ou compliance.
-- Validar se dados volumosos ficam fora do PostgreSQL.
+- fechar taxonomia editorial
+- ligar agenda de publicacao
+- amarrar politica de moderacao

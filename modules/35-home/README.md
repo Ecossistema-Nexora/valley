@@ -11,11 +11,25 @@ Ele descreve o modulo em linguagem simples e serve como ponto inicial para desen
 - Dominio: `frontier_iot_energy`
 - Tier: `expansion`
 - Data home: `mongo`
-- Status atual: `Planejado`
+- Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
+- Cobertura mapeada: MongoDB: 2 colecoes mapeadas.
 
 ## Finalidade
 
 Automacao residencial, dispositivos e seguranca domestica.
+
+## Atores Primarios
+
+- morador
+- instalador
+- operador smart home
+
+## Capacidades-Chave
+
+- automacao residencial
+- eventos domesticos
+- regras de cena
 
 ## Dependencias
 
@@ -24,6 +38,41 @@ IOT
 ## Integracoes
 
 SECURITY, ENERGY
+
+## Mapa De Dados
+
+### PostgreSQL
+
+- Nao aplicavel.
+
+### MongoDB
+
+- `home_automation_events`
+- `iot_device_registry`
+
+## Eventos Canonicos
+
+- `home.device.bound`
+- `home.scene.executed`
+- `home.alert.triggered`
+
+## Compliance E Operacao
+
+- household_access_control
+- event_retention
+- device_safety
+
+## Superficies Admin
+
+- painel de residencia
+- console de automacao
+- monitor de alertas
+
+## Proxima Onda
+
+- fechar modelo de household
+- definir automacao segura
+- ligar trilha de acesso domestico
 
 ## Trilha De Implantacao
 
@@ -39,3 +88,4 @@ SECURITY, ENERGY
 - Integracoes com `PAY`, `ID`, `DOCS`, `ORDERS` ou `TRANSACTIONS` documentadas quando existirem.
 - Teste ou validacao tecnica registrada.
 - Comentarios em portugues simples com termos tecnicos em ingles onde fizer sentido.
+- Blueprint operacional alinhado ao registry detalhado.

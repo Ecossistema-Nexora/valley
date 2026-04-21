@@ -11,6 +11,7 @@ Ele define a fronteira inicial do modulo para guiar desenvolvimento, implantacao
 - Tier: `foundation`
 - Data home: `mongo`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
 
 ## Objetivo Simples
 
@@ -30,6 +31,46 @@ Persistencia principal em MongoDB, porque o modulo trabalha com IA, social, tele
 
 Dependencias minimas: ID. Integracoes previstas: HOME, FLEET, SECURITY.
 
+## Atores Primarios
+
+- operador de dispositivos
+- tecnico de campo
+- motor de automacao
+
+## Capacidades-Chave
+
+- registry de device
+- eventos de sensor
+- hub conectado
+
+## Entidades Relacionais
+
+- Nao aplicavel.
+
+## Payloads Volumosos E Colecoes
+
+- `iot_device_registry`
+- `iot_sensor_events`
+- `telemetry_logs`
+
+## Eventos Canonicos
+
+- `iot.device.provisioned`
+- `iot.sensor.event_ingested`
+- `iot.device.offline_detected`
+
+## Compliance, Risco E Guarda
+
+- device_traceability
+- telemetry_retention
+- access_control
+
+## Superficies Admin E Operacao
+
+- painel de devices
+- fila de provisioning
+- monitor de sensores
+
 ## Regras De Evolucao
 
 1. Nao criar tabela duplicada de usuario; usar sempre `public.users`.
@@ -42,8 +83,6 @@ Dependencias minimas: ID. Integracoes previstas: HOME, FLEET, SECURITY.
 
 ## Primeiro Backlog Tecnico
 
-- Confirmar se o modulo precisa de tabela propria ou se usa tabelas compartilhadas ja existentes.
-- Definir eventos de entrada e saida com nomes tecnicos estaveis.
-- Definir permissao Admin/RBAC/ABAC quando houver operacao sensivel.
-- Registrar regra de negocio em `business_rule_definitions` quando houver pricing, comissao, limite, risco ou compliance.
-- Validar se dados volumosos ficam fora do PostgreSQL.
+- fechar inventario de device
+- definir heartbeat canonico
+- ligar playbook de device offline

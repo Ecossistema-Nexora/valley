@@ -10,7 +10,8 @@ Ele define a fronteira inicial do modulo para guiar desenvolvimento, implantacao
 - Dominio: `services_health_human`
 - Tier: `expansion`
 - Data home: `mongo`
-- Status atual: `Planejado`
+- Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
 
 ## Objetivo Simples
 
@@ -30,6 +31,44 @@ Persistencia principal em MongoDB, porque o modulo trabalha com IA, social, tele
 
 Dependencias minimas: HEALTH. Integracoes previstas: LOYALTY, WEARABLES.
 
+## Atores Primarios
+
+- usuario ativo
+- coach
+- operador wellness
+
+## Capacidades-Chave
+
+- sessao de atividade
+- move-to-earn
+- integracao com saude
+
+## Entidades Relacionais
+
+- `health_profiles`
+
+## Payloads Volumosos E Colecoes
+
+- `fitness_activity_sessions`
+
+## Eventos Canonicos
+
+- `fitness.session.logged`
+- `fitness.goal.hit`
+- `fitness.reward.qualified`
+
+## Compliance, Risco E Guarda
+
+- health_consent
+- activity_reward_audit
+- wearable_data_traceability
+
+## Superficies Admin E Operacao
+
+- painel wellness
+- monitor de metas
+- fila de recompensa
+
 ## Regras De Evolucao
 
 1. Nao criar tabela duplicada de usuario; usar sempre `public.users`.
@@ -42,8 +81,6 @@ Dependencias minimas: HEALTH. Integracoes previstas: LOYALTY, WEARABLES.
 
 ## Primeiro Backlog Tecnico
 
-- Confirmar se o modulo precisa de tabela propria ou se usa tabelas compartilhadas ja existentes.
-- Definir eventos de entrada e saida com nomes tecnicos estaveis.
-- Definir permissao Admin/RBAC/ABAC quando houver operacao sensivel.
-- Registrar regra de negocio em `business_rule_definitions` quando houver pricing, comissao, limite, risco ou compliance.
-- Validar se dados volumosos ficam fora do PostgreSQL.
+- fechar score de consistencia
+- definir fraude de atividade
+- ligar rewards por meta semanal

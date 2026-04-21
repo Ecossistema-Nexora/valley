@@ -12,10 +12,24 @@ Ele descreve o modulo em linguagem simples e serve como ponto inicial para desen
 - Tier: `expansion`
 - Data home: `postgres`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
+- Cobertura mapeada: PostgreSQL: 3 entidades mapeadas.
 
 ## Finalidade
 
 Educacao, trilhas, cursos e recompensas por aprendizado.
+
+## Atores Primarios
+
+- aluno
+- instrutor
+- operador academico
+
+## Capacidades-Chave
+
+- trilhas de aprendizado
+- unidades educacionais
+- enrollment e progresso
 
 ## Dependencias
 
@@ -24,6 +38,42 @@ ID
 ## Integracoes
 
 LOYALTY, JOBS
+
+## Mapa De Dados
+
+### PostgreSQL
+
+- `edu_learning_paths`
+- `edu_learning_units`
+- `edu_enrollments`
+
+### MongoDB
+
+- Nao aplicavel.
+
+## Eventos Canonicos
+
+- `edu.path.published`
+- `edu.enrollment.started`
+- `edu.unit.completed`
+
+## Compliance E Operacao
+
+- certificate_traceability
+- learning_reward_audit
+- content_governance
+
+## Superficies Admin
+
+- painel academico
+- catalogo de trilhas
+- monitor de progresso
+
+## Proxima Onda
+
+- fechar emissao de certificado
+- ligar rewards por conclusao
+- definir versionamento de conteudo
 
 ## Trilha De Implantacao
 
@@ -39,3 +89,4 @@ LOYALTY, JOBS
 - Integracoes com `PAY`, `ID`, `DOCS`, `ORDERS` ou `TRANSACTIONS` documentadas quando existirem.
 - Teste ou validacao tecnica registrada.
 - Comentarios em portugues simples com termos tecnicos em ingles onde fizer sentido.
+- Blueprint operacional alinhado ao registry detalhado.

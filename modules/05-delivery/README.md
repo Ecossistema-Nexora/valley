@@ -12,10 +12,24 @@ Ele descreve o modulo em linguagem simples e serve como ponto inicial para desen
 - Tier: `core`
 - Data home: `postgres_mongo`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
+- Cobertura mapeada: Hibrido: 3 entidades PostgreSQL e 2 colecoes MongoDB.
 
 ## Finalidade
 
 Entrega urbana, coleta local e operacao courier.
+
+## Atores Primarios
+
+- dispatcher
+- courier
+- loja emissora
+
+## Capacidades-Chave
+
+- coleta urbana
+- roteamento operacional
+- prova de entrega
 
 ## Dependencias
 
@@ -24,6 +38,43 @@ LOG, PAY
 ## Integracoes
 
 FOOD, MARKETPLACE, MOBILITY
+
+## Mapa De Dados
+
+### PostgreSQL
+
+- `delivery_shipments`
+- `delivery_shipment_events`
+- `orders`
+
+### MongoDB
+
+- `delivery_dispatch_runs`
+- `telemetry_logs`
+
+## Eventos Canonicos
+
+- `delivery.shipment.created`
+- `delivery.route.dispatched`
+- `delivery.proof_recorded`
+
+## Compliance E Operacao
+
+- chain_of_custody
+- proof_of_delivery
+- driver_accountability
+
+## Superficies Admin
+
+- torre de despacho
+- fila de ocorrencias
+- painel de courier
+
+## Proxima Onda
+
+- fechar reatribuicao automatica
+- definir KPI de janela prometida
+- ligar prova de entrega por media
 
 ## Trilha De Implantacao
 
@@ -39,3 +90,4 @@ FOOD, MARKETPLACE, MOBILITY
 - Integracoes com `PAY`, `ID`, `DOCS`, `ORDERS` ou `TRANSACTIONS` documentadas quando existirem.
 - Teste ou validacao tecnica registrada.
 - Comentarios em portugues simples com termos tecnicos em ingles onde fizer sentido.
+- Blueprint operacional alinhado ao registry detalhado.

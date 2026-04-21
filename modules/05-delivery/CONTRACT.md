@@ -11,6 +11,7 @@ Ele define a fronteira inicial do modulo para guiar desenvolvimento, implantacao
 - Tier: `core`
 - Data home: `postgres_mongo`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
 
 ## Objetivo Simples
 
@@ -30,6 +31,47 @@ Persistencia hibrida: PostgreSQL guarda o contrato operacional e MongoDB guarda 
 
 Dependencias minimas: LOG, PAY. Integracoes previstas: FOOD, MARKETPLACE, MOBILITY.
 
+## Atores Primarios
+
+- dispatcher
+- courier
+- loja emissora
+
+## Capacidades-Chave
+
+- coleta urbana
+- roteamento operacional
+- prova de entrega
+
+## Entidades Relacionais
+
+- `delivery_shipments`
+- `delivery_shipment_events`
+- `orders`
+
+## Payloads Volumosos E Colecoes
+
+- `delivery_dispatch_runs`
+- `telemetry_logs`
+
+## Eventos Canonicos
+
+- `delivery.shipment.created`
+- `delivery.route.dispatched`
+- `delivery.proof_recorded`
+
+## Compliance, Risco E Guarda
+
+- chain_of_custody
+- proof_of_delivery
+- driver_accountability
+
+## Superficies Admin E Operacao
+
+- torre de despacho
+- fila de ocorrencias
+- painel de courier
+
 ## Regras De Evolucao
 
 1. Nao criar tabela duplicada de usuario; usar sempre `public.users`.
@@ -42,8 +84,6 @@ Dependencias minimas: LOG, PAY. Integracoes previstas: FOOD, MARKETPLACE, MOBILI
 
 ## Primeiro Backlog Tecnico
 
-- Confirmar se o modulo precisa de tabela propria ou se usa tabelas compartilhadas ja existentes.
-- Definir eventos de entrada e saida com nomes tecnicos estaveis.
-- Definir permissao Admin/RBAC/ABAC quando houver operacao sensivel.
-- Registrar regra de negocio em `business_rule_definitions` quando houver pricing, comissao, limite, risco ou compliance.
-- Validar se dados volumosos ficam fora do PostgreSQL.
+- fechar reatribuicao automatica
+- definir KPI de janela prometida
+- ligar prova de entrega por media

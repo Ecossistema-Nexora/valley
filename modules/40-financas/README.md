@@ -12,10 +12,24 @@ Ele descreve o modulo em linguagem simples e serve como ponto inicial para desen
 - Tier: `core`
 - Data home: `postgres`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
+- Cobertura mapeada: PostgreSQL: 3 entidades mapeadas.
 
 ## Finalidade
 
 Financas pessoais, metas, micro-negocios e round-up.
+
+## Atores Primarios
+
+- usuario PF
+- microempreendedor
+- operador financeiro
+
+## Capacidades-Chave
+
+- metas financeiras
+- round-up
+- visao de caixa
 
 ## Dependencias
 
@@ -24,6 +38,42 @@ PAY
 ## Integracoes
 
 ADVISOR, BUSINESS
+
+## Mapa De Dados
+
+### PostgreSQL
+
+- `financial_goals`
+- `transactions`
+- `wallets`
+
+### MongoDB
+
+- Nao aplicavel.
+
+## Eventos Canonicos
+
+- `financas.goal.created`
+- `financas.roundup.booked`
+- `financas.cashflow.closed`
+
+## Compliance E Operacao
+
+- financial_privacy
+- goal_audit
+- ledger_traceability
+
+## Superficies Admin
+
+- painel financeiro pessoal
+- monitor de metas
+- fila de conciliacao
+
+## Proxima Onda
+
+- fechar agregacao por categoria
+- definir orcamento mensal
+- ligar alertas de caixa
 
 ## Trilha De Implantacao
 
@@ -39,3 +89,4 @@ ADVISOR, BUSINESS
 - Integracoes com `PAY`, `ID`, `DOCS`, `ORDERS` ou `TRANSACTIONS` documentadas quando existirem.
 - Teste ou validacao tecnica registrada.
 - Comentarios em portugues simples com termos tecnicos em ingles onde fizer sentido.
+- Blueprint operacional alinhado ao registry detalhado.

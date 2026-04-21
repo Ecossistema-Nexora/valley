@@ -10,7 +10,8 @@ Ele define a fronteira inicial do modulo para guiar desenvolvimento, implantacao
 - Dominio: `city_mobility_security`
 - Tier: `expansion`
 - Data home: `postgres_mongo`
-- Status atual: `Planejado`
+- Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
 
 ## Objetivo Simples
 
@@ -30,6 +31,47 @@ Persistencia hibrida: PostgreSQL guarda o contrato operacional e MongoDB guarda 
 
 Dependencias minimas: PAY. Integracoes previstas: EVENTS, MOBILITY.
 
+## Atores Primarios
+
+- turista
+- guia
+- operador local
+
+## Capacidades-Chave
+
+- experiencias locais
+- booking
+- feed exploratorio
+
+## Entidades Relacionais
+
+- `tourism_experiences`
+- `tourism_bookings`
+- `tourism_booking_events`
+
+## Payloads Volumosos E Colecoes
+
+- `tourism_experience_feeds`
+- `space_anchor_maps`
+
+## Eventos Canonicos
+
+- `tourism.experience.published`
+- `tourism.booking.confirmed`
+- `tourism.checkin.recorded`
+
+## Compliance, Risco E Guarda
+
+- booking_audit
+- guide_accountability
+- settlement_traceability
+
+## Superficies Admin E Operacao
+
+- painel de experiencias
+- fila de bookings
+- monitor de check-in
+
 ## Regras De Evolucao
 
 1. Nao criar tabela duplicada de usuario; usar sempre `public.users`.
@@ -42,8 +84,6 @@ Dependencias minimas: PAY. Integracoes previstas: EVENTS, MOBILITY.
 
 ## Primeiro Backlog Tecnico
 
-- Confirmar se o modulo precisa de tabela propria ou se usa tabelas compartilhadas ja existentes.
-- Definir eventos de entrada e saida com nomes tecnicos estaveis.
-- Definir permissao Admin/RBAC/ABAC quando houver operacao sensivel.
-- Registrar regra de negocio em `business_rule_definitions` quando houver pricing, comissao, limite, risco ou compliance.
-- Validar se dados volumosos ficam fora do PostgreSQL.
+- fechar politica de cancelamento
+- definir no-show do guia
+- ligar reputacao por experiencia

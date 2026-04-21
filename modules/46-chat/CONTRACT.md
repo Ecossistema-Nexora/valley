@@ -11,6 +11,7 @@ Ele define a fronteira inicial do modulo para guiar desenvolvimento, implantacao
 - Tier: `core`
 - Data home: `postgres_mongo`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
 
 ## Objetivo Simples
 
@@ -30,6 +31,46 @@ Persistencia hibrida: PostgreSQL guarda o contrato operacional e MongoDB guarda 
 
 Dependencias minimas: ID. Integracoes previstas: AGENDA, ADVISOR.
 
+## Atores Primarios
+
+- usuario pessoal
+- usuario profissional
+- motor de assistencia
+
+## Capacidades-Chave
+
+- conversa dual persona
+- retencao segura
+- ponte com agenda e advisor
+
+## Entidades Relacionais
+
+- `chat_conversations`
+- `users`
+
+## Payloads Volumosos E Colecoes
+
+- `ai_memory`
+- `agenda_items`
+
+## Eventos Canonicos
+
+- `chat.conversation.opened`
+- `chat.message.persisted`
+- `chat.context.promoted`
+
+## Compliance, Risco E Guarda
+
+- message_retention_policy
+- persona_separation
+- consent_audit
+
+## Superficies Admin E Operacao
+
+- painel de conversas
+- monitor de contexto
+- fila de retencao
+
 ## Regras De Evolucao
 
 1. Nao criar tabela duplicada de usuario; usar sempre `public.users`.
@@ -42,8 +83,6 @@ Dependencias minimas: ID. Integracoes previstas: AGENDA, ADVISOR.
 
 ## Primeiro Backlog Tecnico
 
-- Confirmar se o modulo precisa de tabela propria ou se usa tabelas compartilhadas ja existentes.
-- Definir eventos de entrada e saida com nomes tecnicos estaveis.
-- Definir permissao Admin/RBAC/ABAC quando houver operacao sensivel.
-- Registrar regra de negocio em `business_rule_definitions` quando houver pricing, comissao, limite, risco ou compliance.
-- Validar se dados volumosos ficam fora do PostgreSQL.
+- fechar politica de retention
+- definir separacao pessoal x profissional
+- ligar contexto com advisor

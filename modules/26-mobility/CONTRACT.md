@@ -11,6 +11,7 @@ Ele define a fronteira inicial do modulo para guiar desenvolvimento, implantacao
 - Tier: `core`
 - Data home: `postgres_mongo`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
 
 ## Objetivo Simples
 
@@ -30,6 +31,47 @@ Persistencia hibrida: PostgreSQL guarda o contrato operacional e MongoDB guarda 
 
 Dependencias minimas: PAY, RIDER. Integracoes previstas: LOG, FLEET.
 
+## Atores Primarios
+
+- passageiro
+- rider
+- dispatcher
+
+## Capacidades-Chave
+
+- corrida urbana
+- checkpoint operacional
+- precificacao de rota
+
+## Entidades Relacionais
+
+- `mobility_trips`
+- `mobility_trip_events`
+- `orders`
+
+## Payloads Volumosos E Colecoes
+
+- `fleet_vehicle_profiles`
+- `telemetry_logs`
+
+## Eventos Canonicos
+
+- `mobility.trip.requested`
+- `mobility.trip.started`
+- `mobility.trip.completed`
+
+## Compliance, Risco E Guarda
+
+- ride_audit
+- driver_accountability
+- fare_traceability
+
+## Superficies Admin E Operacao
+
+- torre de corridas
+- monitor de checkpoints
+- painel de rider
+
 ## Regras De Evolucao
 
 1. Nao criar tabela duplicada de usuario; usar sempre `public.users`.
@@ -42,8 +84,6 @@ Dependencias minimas: PAY, RIDER. Integracoes previstas: LOG, FLEET.
 
 ## Primeiro Backlog Tecnico
 
-- Confirmar se o modulo precisa de tabela propria ou se usa tabelas compartilhadas ja existentes.
-- Definir eventos de entrada e saida com nomes tecnicos estaveis.
-- Definir permissao Admin/RBAC/ABAC quando houver operacao sensivel.
-- Registrar regra de negocio em `business_rule_definitions` quando houver pricing, comissao, limite, risco ou compliance.
-- Validar se dados volumosos ficam fora do PostgreSQL.
+- fechar calculo de tarifa
+- definir score de seguranca da corrida
+- ligar suporte em tempo real

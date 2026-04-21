@@ -11,6 +11,7 @@ Ele define a fronteira inicial do modulo para guiar desenvolvimento, implantacao
 - Tier: `core`
 - Data home: `postgres`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
 
 ## Objetivo Simples
 
@@ -30,6 +31,47 @@ Persistencia principal em PostgreSQL, porque o modulo exige consistencia, `forei
 
 Dependencias minimas: HEALTH, PAY. Integracoes previstas: DELIVERY, DOCS.
 
+## Atores Primarios
+
+- farmaceutico
+- paciente
+- operador de fulfilment
+
+## Capacidades-Chave
+
+- catalogo farmaceutico
+- fulfillment
+- dispensacao auditavel
+
+## Entidades Relacionais
+
+- `pharmacy_catalog_items`
+- `pharmacy_fulfillments`
+- `pharmacy_fulfillment_items`
+- `pharmacy_dispense_events`
+
+## Payloads Volumosos E Colecoes
+
+- Nao aplicavel.
+
+## Eventos Canonicos
+
+- `pharmacy.order.received`
+- `pharmacy.item.dispensed`
+- `pharmacy.delivery.released`
+
+## Compliance, Risco E Guarda
+
+- prescription_compliance
+- dispense_audit
+- controlled_medication_traceability
+
+## Superficies Admin E Operacao
+
+- painel farmaceutico
+- fila de prescricao
+- monitor de dispensacao
+
 ## Regras De Evolucao
 
 1. Nao criar tabela duplicada de usuario; usar sempre `public.users`.
@@ -42,8 +84,6 @@ Dependencias minimas: HEALTH, PAY. Integracoes previstas: DELIVERY, DOCS.
 
 ## Primeiro Backlog Tecnico
 
-- Confirmar se o modulo precisa de tabela propria ou se usa tabelas compartilhadas ja existentes.
-- Definir eventos de entrada e saida com nomes tecnicos estaveis.
-- Definir permissao Admin/RBAC/ABAC quando houver operacao sensivel.
-- Registrar regra de negocio em `business_rule_definitions` quando houver pricing, comissao, limite, risco ou compliance.
-- Validar se dados volumosos ficam fora do PostgreSQL.
+- fechar checagem de receita
+- definir corte por medicamento controlado
+- ligar SLA de separacao

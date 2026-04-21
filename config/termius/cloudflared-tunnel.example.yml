@@ -1,0 +1,7 @@
+tunnel: valley-termius
+credentials-file: C:\secure\cloudflared\valley-termius.json
+
+ingress:
+  - hostname: ssh.valley.example.com
+    service: ssh://localhost:22
+  - service: http_status:404

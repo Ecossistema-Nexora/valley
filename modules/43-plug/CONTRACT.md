@@ -11,6 +11,7 @@ Ele define a fronteira inicial do modulo para guiar desenvolvimento, implantacao
 - Tier: `core`
 - Data home: `postgres`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `DATA_CONTRACT` (Contrato de dados)
 
 ## Objetivo Simples
 
@@ -30,6 +31,46 @@ Persistencia principal em PostgreSQL, porque o modulo exige consistencia, `forei
 
 Dependencias minimas: PAY. Integracoes previstas: WALLETS, BUSINESS.
 
+## Atores Primarios
+
+- lojista
+- operador de adquirencia
+- comprador presencial
+
+## Capacidades-Chave
+
+- tap-to-pay
+- maquininha
+- antecipacao de recebivel
+
+## Entidades Relacionais
+
+- `transactions`
+- `wallets`
+- `merchant_storefronts`
+
+## Payloads Volumosos E Colecoes
+
+- Nao aplicavel.
+
+## Eventos Canonicos
+
+- `plug.device.activated`
+- `plug.payment.authorized`
+- `plug.advance.requested`
+
+## Compliance, Risco E Guarda
+
+- pci_boundary
+- mdr_audit
+- settlement_traceability
+
+## Superficies Admin E Operacao
+
+- painel de adquirencia
+- monitor de terminais
+- fila de antecipacao
+
 ## Regras De Evolucao
 
 1. Nao criar tabela duplicada de usuario; usar sempre `public.users`.
@@ -42,8 +83,6 @@ Dependencias minimas: PAY. Integracoes previstas: WALLETS, BUSINESS.
 
 ## Primeiro Backlog Tecnico
 
-- Confirmar se o modulo precisa de tabela propria ou se usa tabelas compartilhadas ja existentes.
-- Definir eventos de entrada e saida com nomes tecnicos estaveis.
-- Definir permissao Admin/RBAC/ABAC quando houver operacao sensivel.
-- Registrar regra de negocio em `business_rule_definitions` quando houver pricing, comissao, limite, risco ou compliance.
-- Validar se dados volumosos ficam fora do PostgreSQL.
+- criar contrato especifico de terminal
+- definir MDR por faixa
+- ligar fluxo D0 de antecipacao

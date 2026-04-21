@@ -11,6 +11,7 @@ Ele define a fronteira inicial do modulo para guiar desenvolvimento, implantacao
 - Tier: `core`
 - Data home: `postgres_mongo`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `BUILD` (Build)
 
 ## Objetivo Simples
 
@@ -30,6 +31,46 @@ Persistencia hibrida: PostgreSQL guarda o contrato operacional e MongoDB guarda 
 
 Dependencias minimas: AI, PAY. Integracoes previstas: FINANCAS, HEALTH, MOBILITY.
 
+## Atores Primarios
+
+- usuario assistido
+- motor de IA
+- operador consultivo
+
+## Capacidades-Chave
+
+- insights
+- recomendacao com consentimento
+- orquestracao entre modulos
+
+## Entidades Relacionais
+
+- `advisor_insights`
+- `financial_goals`
+
+## Payloads Volumosos E Colecoes
+
+- `ai_memory`
+- `agenda_items`
+
+## Eventos Canonicos
+
+- `advisor.insight.generated`
+- `advisor.action.proposed`
+- `advisor.consent.recorded`
+
+## Compliance, Risco E Guarda
+
+- consent_management
+- ai_auditability
+- cross_module_traceability
+
+## Superficies Admin E Operacao
+
+- painel consultivo
+- fila de aprovacoes
+- monitor de recomendacoes
+
 ## Regras De Evolucao
 
 1. Nao criar tabela duplicada de usuario; usar sempre `public.users`.
@@ -42,8 +83,6 @@ Dependencias minimas: AI, PAY. Integracoes previstas: FINANCAS, HEALTH, MOBILITY
 
 ## Primeiro Backlog Tecnico
 
-- Confirmar se o modulo precisa de tabela propria ou se usa tabelas compartilhadas ja existentes.
-- Definir eventos de entrada e saida com nomes tecnicos estaveis.
-- Definir permissao Admin/RBAC/ABAC quando houver operacao sensivel.
-- Registrar regra de negocio em `business_rule_definitions` quando houver pricing, comissao, limite, risco ou compliance.
-- Validar se dados volumosos ficam fora do PostgreSQL.
+- fechar registro de consentimento
+- definir escopo de acao por modulo
+- ligar explainability do insight

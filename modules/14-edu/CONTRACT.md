@@ -11,6 +11,7 @@ Ele define a fronteira inicial do modulo para guiar desenvolvimento, implantacao
 - Tier: `expansion`
 - Data home: `postgres`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
 
 ## Objetivo Simples
 
@@ -30,6 +31,46 @@ Persistencia principal em PostgreSQL, porque o modulo exige consistencia, `forei
 
 Dependencias minimas: ID. Integracoes previstas: LOYALTY, JOBS.
 
+## Atores Primarios
+
+- aluno
+- instrutor
+- operador academico
+
+## Capacidades-Chave
+
+- trilhas de aprendizado
+- unidades educacionais
+- enrollment e progresso
+
+## Entidades Relacionais
+
+- `edu_learning_paths`
+- `edu_learning_units`
+- `edu_enrollments`
+
+## Payloads Volumosos E Colecoes
+
+- Nao aplicavel.
+
+## Eventos Canonicos
+
+- `edu.path.published`
+- `edu.enrollment.started`
+- `edu.unit.completed`
+
+## Compliance, Risco E Guarda
+
+- certificate_traceability
+- learning_reward_audit
+- content_governance
+
+## Superficies Admin E Operacao
+
+- painel academico
+- catalogo de trilhas
+- monitor de progresso
+
 ## Regras De Evolucao
 
 1. Nao criar tabela duplicada de usuario; usar sempre `public.users`.
@@ -42,8 +83,6 @@ Dependencias minimas: ID. Integracoes previstas: LOYALTY, JOBS.
 
 ## Primeiro Backlog Tecnico
 
-- Confirmar se o modulo precisa de tabela propria ou se usa tabelas compartilhadas ja existentes.
-- Definir eventos de entrada e saida com nomes tecnicos estaveis.
-- Definir permissao Admin/RBAC/ABAC quando houver operacao sensivel.
-- Registrar regra de negocio em `business_rule_definitions` quando houver pricing, comissao, limite, risco ou compliance.
-- Validar se dados volumosos ficam fora do PostgreSQL.
+- fechar emissao de certificado
+- ligar rewards por conclusao
+- definir versionamento de conteudo

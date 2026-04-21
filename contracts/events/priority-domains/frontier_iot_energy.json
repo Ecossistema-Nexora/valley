@@ -1,0 +1,1957 @@
+{
+  "domain_key": "frontier_iot_energy",
+  "domain_label": "Frontier IoT Energy",
+  "modules": [
+    {
+      "current_phase": "VALIDATE",
+      "event_topics": [
+        {
+          "compliance_tags": [
+            "device_traceability",
+            "telemetry_retention",
+            "access_control"
+          ],
+          "consumer_surfaces": [
+            "HOME",
+            "FLEET",
+            "SECURITY",
+            "painel de devices",
+            "fila de provisioning"
+          ],
+          "contract_key": "IOT:iot.device.provisioned:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "iot.device.provisioned",
+          "evidence_entities": [
+            "iot_device_registry",
+            "iot_sensor_events"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "device_traceability",
+                  "telemetry_retention",
+                  "access_control"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "frontier_iot_energy"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "iot.device.provisioned"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "iot_device_registry",
+                    "iot_sensor_events"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "IOT"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "registry de device",
+                      "eventos de sensor",
+                      "hub conectado"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "operador de dispositivos",
+                      "tecnico de campo",
+                      "motor de automacao"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "IOT::iot.device.provisioned",
+            "type": "object"
+          },
+          "producer_surface": "painel de devices"
+        },
+        {
+          "compliance_tags": [
+            "device_traceability",
+            "telemetry_retention",
+            "access_control"
+          ],
+          "consumer_surfaces": [
+            "HOME",
+            "FLEET",
+            "SECURITY",
+            "painel de devices",
+            "fila de provisioning"
+          ],
+          "contract_key": "IOT:iot.sensor.event_ingested:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "iot.sensor.event_ingested",
+          "evidence_entities": [
+            "iot_device_registry",
+            "iot_sensor_events"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "device_traceability",
+                  "telemetry_retention",
+                  "access_control"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "frontier_iot_energy"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "iot.sensor.event_ingested"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "iot_device_registry",
+                    "iot_sensor_events"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "IOT"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "registry de device",
+                      "eventos de sensor",
+                      "hub conectado"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "operador de dispositivos",
+                      "tecnico de campo",
+                      "motor de automacao"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "IOT::iot.sensor.event_ingested",
+            "type": "object"
+          },
+          "producer_surface": "painel de devices"
+        },
+        {
+          "compliance_tags": [
+            "device_traceability",
+            "telemetry_retention",
+            "access_control"
+          ],
+          "consumer_surfaces": [
+            "HOME",
+            "FLEET",
+            "SECURITY",
+            "painel de devices",
+            "fila de provisioning"
+          ],
+          "contract_key": "IOT:iot.device.offline_detected:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "iot.device.offline_detected",
+          "evidence_entities": [
+            "iot_device_registry",
+            "iot_sensor_events"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "device_traceability",
+                  "telemetry_retention",
+                  "access_control"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "frontier_iot_energy"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "iot.device.offline_detected"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "iot_device_registry",
+                    "iot_sensor_events"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "IOT"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "registry de device",
+                      "eventos de sensor",
+                      "hub conectado"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "operador de dispositivos",
+                      "tecnico de campo",
+                      "motor de automacao"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "IOT::iot.device.offline_detected",
+            "type": "object"
+          },
+          "producer_surface": "painel de devices"
+        }
+      ],
+      "module_code": "IOT",
+      "module_name": "Valley IoT"
+    },
+    {
+      "current_phase": "VALIDATE",
+      "event_topics": [
+        {
+          "compliance_tags": [
+            "reverse_logistics_traceability",
+            "impact_audit",
+            "chain_of_custody"
+          ],
+          "consumer_surfaces": [
+            "IOT",
+            "ENERGY",
+            "painel ambiental",
+            "fila de coleta"
+          ],
+          "contract_key": "BIO:bio.program.opened:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "bio.program.opened",
+          "evidence_entities": [
+            "bio_material_programs",
+            "bio_collection_orders",
+            "bio_collection_events",
+            "bio_impact_logs",
+            "iot_sensor_events"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "reverse_logistics_traceability",
+                  "impact_audit",
+                  "chain_of_custody"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "frontier_iot_energy"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "bio.program.opened"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "bio_material_programs",
+                    "bio_collection_orders",
+                    "bio_collection_events",
+                    "bio_impact_logs",
+                    "iot_sensor_events"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "BIO"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "programas de material",
+                      "ordem de coleta reversa",
+                      "log de impacto"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "operador de coleta",
+                      "parceiro ambiental",
+                      "auditor de impacto"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "BIO::bio.program.opened",
+            "type": "object"
+          },
+          "producer_surface": "painel ambiental"
+        },
+        {
+          "compliance_tags": [
+            "reverse_logistics_traceability",
+            "impact_audit",
+            "chain_of_custody"
+          ],
+          "consumer_surfaces": [
+            "IOT",
+            "ENERGY",
+            "painel ambiental",
+            "fila de coleta"
+          ],
+          "contract_key": "BIO:bio.collection.scheduled:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "bio.collection.scheduled",
+          "evidence_entities": [
+            "bio_material_programs",
+            "bio_collection_orders",
+            "bio_collection_events",
+            "bio_impact_logs",
+            "iot_sensor_events"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "reverse_logistics_traceability",
+                  "impact_audit",
+                  "chain_of_custody"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "frontier_iot_energy"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "bio.collection.scheduled"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "bio_material_programs",
+                    "bio_collection_orders",
+                    "bio_collection_events",
+                    "bio_impact_logs",
+                    "iot_sensor_events"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "BIO"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "programas de material",
+                      "ordem de coleta reversa",
+                      "log de impacto"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "operador de coleta",
+                      "parceiro ambiental",
+                      "auditor de impacto"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "BIO::bio.collection.scheduled",
+            "type": "object"
+          },
+          "producer_surface": "painel ambiental"
+        },
+        {
+          "compliance_tags": [
+            "reverse_logistics_traceability",
+            "impact_audit",
+            "chain_of_custody"
+          ],
+          "consumer_surfaces": [
+            "IOT",
+            "ENERGY",
+            "painel ambiental",
+            "fila de coleta"
+          ],
+          "contract_key": "BIO:bio.impact.measured:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "bio.impact.measured",
+          "evidence_entities": [
+            "bio_material_programs",
+            "bio_collection_orders",
+            "bio_collection_events",
+            "bio_impact_logs",
+            "iot_sensor_events"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "reverse_logistics_traceability",
+                  "impact_audit",
+                  "chain_of_custody"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "frontier_iot_energy"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "bio.impact.measured"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "bio_material_programs",
+                    "bio_collection_orders",
+                    "bio_collection_events",
+                    "bio_impact_logs",
+                    "iot_sensor_events"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "BIO"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "programas de material",
+                      "ordem de coleta reversa",
+                      "log de impacto"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "operador de coleta",
+                      "parceiro ambiental",
+                      "auditor de impacto"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "BIO::bio.impact.measured",
+            "type": "object"
+          },
+          "producer_surface": "painel ambiental"
+        }
+      ],
+      "module_code": "BIO",
+      "module_name": "Valley Bio"
+    },
+    {
+      "current_phase": "VALIDATE",
+      "event_topics": [
+        {
+          "compliance_tags": [
+            "household_access_control",
+            "event_retention",
+            "device_safety"
+          ],
+          "consumer_surfaces": [
+            "SECURITY",
+            "ENERGY",
+            "painel de residencia",
+            "console de automacao"
+          ],
+          "contract_key": "HOME:home.device.bound:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "home.device.bound",
+          "evidence_entities": [
+            "home_automation_events",
+            "iot_device_registry"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "household_access_control",
+                  "event_retention",
+                  "device_safety"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "frontier_iot_energy"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "home.device.bound"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "home_automation_events",
+                    "iot_device_registry"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "HOME"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "automacao residencial",
+                      "eventos domesticos",
+                      "regras de cena"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "morador",
+                      "instalador",
+                      "operador smart home"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "HOME::home.device.bound",
+            "type": "object"
+          },
+          "producer_surface": "painel de residencia"
+        },
+        {
+          "compliance_tags": [
+            "household_access_control",
+            "event_retention",
+            "device_safety"
+          ],
+          "consumer_surfaces": [
+            "SECURITY",
+            "ENERGY",
+            "painel de residencia",
+            "console de automacao"
+          ],
+          "contract_key": "HOME:home.scene.executed:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "home.scene.executed",
+          "evidence_entities": [
+            "home_automation_events",
+            "iot_device_registry"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "household_access_control",
+                  "event_retention",
+                  "device_safety"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "frontier_iot_energy"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "home.scene.executed"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "home_automation_events",
+                    "iot_device_registry"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "HOME"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "automacao residencial",
+                      "eventos domesticos",
+                      "regras de cena"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "morador",
+                      "instalador",
+                      "operador smart home"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "HOME::home.scene.executed",
+            "type": "object"
+          },
+          "producer_surface": "painel de residencia"
+        },
+        {
+          "compliance_tags": [
+            "household_access_control",
+            "event_retention",
+            "device_safety"
+          ],
+          "consumer_surfaces": [
+            "SECURITY",
+            "ENERGY",
+            "painel de residencia",
+            "console de automacao"
+          ],
+          "contract_key": "HOME:home.alert.triggered:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "home.alert.triggered",
+          "evidence_entities": [
+            "home_automation_events",
+            "iot_device_registry"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "household_access_control",
+                  "event_retention",
+                  "device_safety"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "frontier_iot_energy"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "home.alert.triggered"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "home_automation_events",
+                    "iot_device_registry"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "HOME"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "automacao residencial",
+                      "eventos domesticos",
+                      "regras de cena"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "morador",
+                      "instalador",
+                      "operador smart home"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "HOME::home.alert.triggered",
+            "type": "object"
+          },
+          "producer_surface": "painel de residencia"
+        }
+      ],
+      "module_code": "HOME",
+      "module_name": "Valley Home"
+    },
+    {
+      "current_phase": "VALIDATE",
+      "event_topics": [
+        {
+          "compliance_tags": [
+            "meter_traceability",
+            "financial_settlement_immutability",
+            "grid_compliance"
+          ],
+          "consumer_surfaces": [
+            "BIO",
+            "HOME",
+            "painel de ativos",
+            "monitor de trades"
+          ],
+          "contract_key": "ENERGY:energy.asset.registered:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "energy.asset.registered",
+          "evidence_entities": [
+            "energy_assets",
+            "energy_trade_orders",
+            "energy_settlement_ledger",
+            "energy_meter_streams",
+            "iot_sensor_events"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "meter_traceability",
+                  "financial_settlement_immutability",
+                  "grid_compliance"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "frontier_iot_energy"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "energy.asset.registered"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "energy_assets",
+                    "energy_trade_orders",
+                    "energy_settlement_ledger",
+                    "energy_meter_streams",
+                    "iot_sensor_events"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "ENERGY"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "ativos de energia",
+                      "trade P2P",
+                      "settlement auditavel"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "prosumidor",
+                      "operador de grid",
+                      "analista de settlement"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "ENERGY::energy.asset.registered",
+            "type": "object"
+          },
+          "producer_surface": "painel de ativos"
+        },
+        {
+          "compliance_tags": [
+            "meter_traceability",
+            "financial_settlement_immutability",
+            "grid_compliance"
+          ],
+          "consumer_surfaces": [
+            "BIO",
+            "HOME",
+            "painel de ativos",
+            "monitor de trades"
+          ],
+          "contract_key": "ENERGY:energy.trade.matched:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "energy.trade.matched",
+          "evidence_entities": [
+            "energy_assets",
+            "energy_trade_orders",
+            "energy_settlement_ledger",
+            "energy_meter_streams",
+            "iot_sensor_events"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "meter_traceability",
+                  "financial_settlement_immutability",
+                  "grid_compliance"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "frontier_iot_energy"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "energy.trade.matched"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "energy_assets",
+                    "energy_trade_orders",
+                    "energy_settlement_ledger",
+                    "energy_meter_streams",
+                    "iot_sensor_events"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "ENERGY"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "ativos de energia",
+                      "trade P2P",
+                      "settlement auditavel"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "prosumidor",
+                      "operador de grid",
+                      "analista de settlement"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "ENERGY::energy.trade.matched",
+            "type": "object"
+          },
+          "producer_surface": "painel de ativos"
+        },
+        {
+          "compliance_tags": [
+            "meter_traceability",
+            "financial_settlement_immutability",
+            "grid_compliance"
+          ],
+          "consumer_surfaces": [
+            "BIO",
+            "HOME",
+            "painel de ativos",
+            "monitor de trades"
+          ],
+          "contract_key": "ENERGY:energy.settlement.posted:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "energy.settlement.posted",
+          "evidence_entities": [
+            "energy_assets",
+            "energy_trade_orders",
+            "energy_settlement_ledger",
+            "energy_meter_streams",
+            "iot_sensor_events"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "meter_traceability",
+                  "financial_settlement_immutability",
+                  "grid_compliance"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "frontier_iot_energy"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "energy.settlement.posted"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "energy_assets",
+                    "energy_trade_orders",
+                    "energy_settlement_ledger",
+                    "energy_meter_streams",
+                    "iot_sensor_events"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "ENERGY"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "ativos de energia",
+                      "trade P2P",
+                      "settlement auditavel"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "prosumidor",
+                      "operador de grid",
+                      "analista de settlement"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "ENERGY::energy.settlement.posted",
+            "type": "object"
+          },
+          "producer_surface": "painel de ativos"
+        }
+      ],
+      "module_code": "ENERGY",
+      "module_name": "Valley Energy"
+    },
+    {
+      "current_phase": "VALIDATE",
+      "event_topics": [
+        {
+          "compliance_tags": [
+            "location_privacy",
+            "content_safety",
+            "creator_traceability"
+          ],
+          "consumer_surfaces": [
+            "SOCIAL",
+            "TOURISM",
+            "painel AR",
+            "monitor de ancoras"
+          ],
+          "contract_key": "SPACE:space.anchor.created:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "space.anchor.created",
+          "evidence_entities": [
+            "space_anchor_maps",
+            "social_videos"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "location_privacy",
+                  "content_safety",
+                  "creator_traceability"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "frontier_iot_energy"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "space.anchor.created"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "space_anchor_maps",
+                    "social_videos"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "SPACE"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "ancoras espaciais",
+                      "camadas AR",
+                      "experiencias geolocalizadas"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "explorador",
+                      "criador AR",
+                      "operador de mapa"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "SPACE::space.anchor.created",
+            "type": "object"
+          },
+          "producer_surface": "painel AR"
+        },
+        {
+          "compliance_tags": [
+            "location_privacy",
+            "content_safety",
+            "creator_traceability"
+          ],
+          "consumer_surfaces": [
+            "SOCIAL",
+            "TOURISM",
+            "painel AR",
+            "monitor de ancoras"
+          ],
+          "contract_key": "SPACE:space.anchor.visited:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "space.anchor.visited",
+          "evidence_entities": [
+            "space_anchor_maps",
+            "social_videos"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "location_privacy",
+                  "content_safety",
+                  "creator_traceability"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "frontier_iot_energy"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "space.anchor.visited"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "space_anchor_maps",
+                    "social_videos"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "SPACE"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "ancoras espaciais",
+                      "camadas AR",
+                      "experiencias geolocalizadas"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "explorador",
+                      "criador AR",
+                      "operador de mapa"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "SPACE::space.anchor.visited",
+            "type": "object"
+          },
+          "producer_surface": "painel AR"
+        },
+        {
+          "compliance_tags": [
+            "location_privacy",
+            "content_safety",
+            "creator_traceability"
+          ],
+          "consumer_surfaces": [
+            "SOCIAL",
+            "TOURISM",
+            "painel AR",
+            "monitor de ancoras"
+          ],
+          "contract_key": "SPACE:space.layer.published:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "space.layer.published",
+          "evidence_entities": [
+            "space_anchor_maps",
+            "social_videos"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "location_privacy",
+                  "content_safety",
+                  "creator_traceability"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "frontier_iot_energy"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "space.layer.published"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "space_anchor_maps",
+                    "social_videos"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "SPACE"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "ancoras espaciais",
+                      "camadas AR",
+                      "experiencias geolocalizadas"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "explorador",
+                      "criador AR",
+                      "operador de mapa"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "SPACE::space.layer.published",
+            "type": "object"
+          },
+          "producer_surface": "painel AR"
+        }
+      ],
+      "module_code": "SPACE",
+      "module_name": "Valley Space"
+    }
+  ],
+  "package_key": "frontier_iot_energy.priority.v1",
+  "priority_rank": 2
+}

@@ -11,6 +11,7 @@ Ele define a fronteira inicial do modulo para guiar desenvolvimento, implantacao
 - Tier: `expansion`
 - Data home: `postgres`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
 
 ## Objetivo Simples
 
@@ -30,6 +31,46 @@ Persistencia principal em PostgreSQL, porque o modulo exige consistencia, `forei
 
 Dependencias minimas: ID. Integracoes previstas: PHARMACY, SERVICES.
 
+## Atores Primarios
+
+- tutor
+- veterinario
+- operador pet
+
+## Capacidades-Chave
+
+- perfil pet
+- caso clinico
+- prescricao veterinaria
+
+## Entidades Relacionais
+
+- `vet_pet_profiles`
+- `vet_service_cases`
+- `vet_prescriptions`
+
+## Payloads Volumosos E Colecoes
+
+- Nao aplicavel.
+
+## Eventos Canonicos
+
+- `vet.pet.registered`
+- `vet.case.opened`
+- `vet.prescription.issued`
+
+## Compliance, Risco E Guarda
+
+- clinical_pet_traceability
+- controlled_medication_audit
+- owner_consent
+
+## Superficies Admin E Operacao
+
+- painel pet
+- fila de casos
+- monitor de prescricoes
+
 ## Regras De Evolucao
 
 1. Nao criar tabela duplicada de usuario; usar sempre `public.users`.
@@ -42,8 +83,6 @@ Dependencias minimas: ID. Integracoes previstas: PHARMACY, SERVICES.
 
 ## Primeiro Backlog Tecnico
 
-- Confirmar se o modulo precisa de tabela propria ou se usa tabelas compartilhadas ja existentes.
-- Definir eventos de entrada e saida com nomes tecnicos estaveis.
-- Definir permissao Admin/RBAC/ABAC quando houver operacao sensivel.
-- Registrar regra de negocio em `business_rule_definitions` quando houver pricing, comissao, limite, risco ou compliance.
-- Validar se dados volumosos ficam fora do PostgreSQL.
+- fechar historico vacinal
+- definir agenda de retorno
+- ligar integracao com farmacia

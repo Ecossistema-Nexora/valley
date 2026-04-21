@@ -29,12 +29,16 @@ PostgreSQL:
 - `009` tech e legal
 - `010` rule runtime, Pepitas, GOLD e growth
 - `011` delivery, mobility e security
+- `012` services, health, jobs, pharmacy e events
+- `013` digital, real estate, edu, vet, gov, charity e insurance
+- `014` tourism, bio e energy
 
 MongoDB:
 
 - `mongo-001` IA, social, influencer e telemetria
 - `mongo-002` log, IoT e snapshots WMS
 - `mongo-003` dispatch, frota, sinais de seguranca e agenda
+- `mongo-004` news, fitness, gaming, home, space e camadas volumosas de tourism, bio e energy
 
 ## Nucleo Absoluto
 
@@ -231,6 +235,32 @@ Append-only neste bloco:
 - `mobility_trip_events`
 - `security_incident_events`
 
+## Tourism, Bio e Energy
+
+Tabelas:
+
+- `tourism_experiences`
+- `tourism_bookings`
+- `tourism_booking_events`
+- `bio_material_programs`
+- `bio_collection_orders`
+- `bio_collection_events`
+- `energy_assets`
+- `energy_trade_orders`
+- `energy_settlement_ledger`
+
+Papel:
+
+- `tourism_*` modela experiencias, reservas, vouchers e acoplamento opcional com Events e Mobility.
+- `bio_*` modela programas de sustentabilidade, coleta reversa, verificacao e recompensa.
+- `energy_*` modela ativos energeticos, ordens de trade P2P e settlement financeiro/operacional.
+
+Append-only neste bloco:
+
+- `tourism_booking_events`
+- `bio_collection_events`
+- `energy_settlement_ledger`
+
 ## MongoDB - IA, Social e Operacao de Campo
 
 ### IA e agenda
@@ -257,6 +287,28 @@ Papel:
 - feed social
 - performance de campanha
 - atribuicao e monetizacao de creator
+
+### Expansion media, wellness e frontier
+
+Colecoes:
+
+- `news_content_items`
+- `fitness_activity_sessions`
+- `gaming_player_states`
+- `home_automation_events`
+- `space_anchor_maps`
+- `tourism_experience_feeds`
+- `bio_impact_logs`
+- `energy_meter_streams`
+
+Papel:
+
+- News & Podcast guarda publicacao editorial e distribuicao multicanal.
+- Fitness guarda sessoes de atividade, ponte com wearable e reward candidato.
+- Gaming guarda estado vivo do jogador, progressao e inventario resumido.
+- Home guarda automacao residencial, eventos de seguranca domestica e modos energeticos.
+- Space guarda ancoras AR e experiencias imersivas conectadas a turismo e social.
+- Tourism/Bio/Energy guardam a camada volumosa de feed, sensores, wayfinding e stream de medidor.
 
 ### Telemetria e IoT
 

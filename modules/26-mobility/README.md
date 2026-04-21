@@ -12,10 +12,24 @@ Ele descreve o modulo em linguagem simples e serve como ponto inicial para desen
 - Tier: `core`
 - Data home: `postgres_mongo`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
+- Cobertura mapeada: Hibrido: 3 entidades PostgreSQL e 2 colecoes MongoDB.
 
 ## Finalidade
 
 Corridas urbanas, carpool, riders e taxa de plataforma.
+
+## Atores Primarios
+
+- passageiro
+- rider
+- dispatcher
+
+## Capacidades-Chave
+
+- corrida urbana
+- checkpoint operacional
+- precificacao de rota
 
 ## Dependencias
 
@@ -24,6 +38,43 @@ PAY, RIDER
 ## Integracoes
 
 LOG, FLEET
+
+## Mapa De Dados
+
+### PostgreSQL
+
+- `mobility_trips`
+- `mobility_trip_events`
+- `orders`
+
+### MongoDB
+
+- `fleet_vehicle_profiles`
+- `telemetry_logs`
+
+## Eventos Canonicos
+
+- `mobility.trip.requested`
+- `mobility.trip.started`
+- `mobility.trip.completed`
+
+## Compliance E Operacao
+
+- ride_audit
+- driver_accountability
+- fare_traceability
+
+## Superficies Admin
+
+- torre de corridas
+- monitor de checkpoints
+- painel de rider
+
+## Proxima Onda
+
+- fechar calculo de tarifa
+- definir score de seguranca da corrida
+- ligar suporte em tempo real
 
 ## Trilha De Implantacao
 
@@ -39,3 +90,4 @@ LOG, FLEET
 - Integracoes com `PAY`, `ID`, `DOCS`, `ORDERS` ou `TRANSACTIONS` documentadas quando existirem.
 - Teste ou validacao tecnica registrada.
 - Comentarios em portugues simples com termos tecnicos em ingles onde fizer sentido.
+- Blueprint operacional alinhado ao registry detalhado.

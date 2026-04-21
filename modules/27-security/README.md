@@ -12,10 +12,24 @@ Ele descreve o modulo em linguagem simples e serve como ponto inicial para desen
 - Tier: `core`
 - Data home: `postgres_mongo`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
+- Cobertura mapeada: Hibrido: 4 entidades PostgreSQL e 2 colecoes MongoDB.
 
 ## Finalidade
 
 SOS, protecao pessoal, biometria e risco.
+
+## Atores Primarios
+
+- usuario protegido
+- analista de risco
+- operador SOS
+
+## Capacidades-Chave
+
+- contatos confiaveis
+- credencial biometrica por hash
+- trilha de incidente
 
 ## Dependencias
 
@@ -24,6 +38,44 @@ ID
 ## Integracoes
 
 IOT, LEGAL
+
+## Mapa De Dados
+
+### PostgreSQL
+
+- `security_trusted_contacts`
+- `security_biometric_credentials`
+- `security_incidents`
+- `security_incident_events`
+
+### MongoDB
+
+- `security_signal_logs`
+- `iot_sensor_events`
+
+## Eventos Canonicos
+
+- `security.sos.triggered`
+- `security.biometric.enrolled`
+- `security.incident.closed`
+
+## Compliance E Operacao
+
+- biometric_hashing
+- incident_chain_of_custody
+- access_control
+
+## Superficies Admin
+
+- torre de seguranca
+- fila de incidentes
+- painel de credenciais
+
+## Proxima Onda
+
+- fechar severidade de incidente
+- definir resposta por playbook
+- ligar trilha forense
 
 ## Trilha De Implantacao
 
@@ -39,3 +91,4 @@ IOT, LEGAL
 - Integracoes com `PAY`, `ID`, `DOCS`, `ORDERS` ou `TRANSACTIONS` documentadas quando existirem.
 - Teste ou validacao tecnica registrada.
 - Comentarios em portugues simples com termos tecnicos em ingles onde fizer sentido.
+- Blueprint operacional alinhado ao registry detalhado.

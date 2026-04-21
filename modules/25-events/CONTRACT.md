@@ -11,6 +11,7 @@ Ele define a fronteira inicial do modulo para guiar desenvolvimento, implantacao
 - Tier: `core`
 - Data home: `postgres`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
 
 ## Objetivo Simples
 
@@ -30,6 +31,46 @@ Persistencia principal em PostgreSQL, porque o modulo exige consistencia, `forei
 
 Dependencias minimas: PAY. Integracoes previstas: TICKETS, DOCS.
 
+## Atores Primarios
+
+- organizador
+- participante
+- operador de bilheteria
+
+## Capacidades-Chave
+
+- programacao de evento
+- tipos de ingresso
+- ledger de tickets
+
+## Entidades Relacionais
+
+- `event_programs`
+- `event_ticket_types`
+- `event_ticket_ledger`
+
+## Payloads Volumosos E Colecoes
+
+- Nao aplicavel.
+
+## Eventos Canonicos
+
+- `events.program.published`
+- `events.ticket.issued`
+- `events.ticket.transferred`
+
+## Compliance, Risco E Guarda
+
+- ticket_immutability
+- escrow_audit
+- fraud_prevention
+
+## Superficies Admin E Operacao
+
+- painel de eventos
+- monitor de bilheteria
+- fila de dispute
+
 ## Regras De Evolucao
 
 1. Nao criar tabela duplicada de usuario; usar sempre `public.users`.
@@ -42,8 +83,6 @@ Dependencias minimas: PAY. Integracoes previstas: TICKETS, DOCS.
 
 ## Primeiro Backlog Tecnico
 
-- Confirmar se o modulo precisa de tabela propria ou se usa tabelas compartilhadas ja existentes.
-- Definir eventos de entrada e saida com nomes tecnicos estaveis.
-- Definir permissao Admin/RBAC/ABAC quando houver operacao sensivel.
-- Registrar regra de negocio em `business_rule_definitions` quando houver pricing, comissao, limite, risco ou compliance.
-- Validar se dados volumosos ficam fora do PostgreSQL.
+- fechar anti-scalping
+- definir transferencia segura
+- ligar concilicao de evento

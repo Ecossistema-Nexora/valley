@@ -12,10 +12,24 @@ Ele descreve o modulo em linguagem simples e serve como ponto inicial para desen
 - Tier: `foundation`
 - Data home: `postgres`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
+- Cobertura mapeada: PostgreSQL: 3 entidades mapeadas.
 
 ## Finalidade
 
 Comercio local centralizado, carrinho, produtos e recomendacoes.
+
+## Atores Primarios
+
+- seller
+- comprador
+- curador comercial
+
+## Capacidades-Chave
+
+- listagem local
+- storefront por merchant
+- validacao de venda
 
 ## Dependencias
 
@@ -24,6 +38,42 @@ PAY, ID
 ## Integracoes
 
 STOCK, ADS, UP
+
+## Mapa De Dados
+
+### PostgreSQL
+
+- `marketplace_listings`
+- `merchant_storefronts`
+- `sale_validation_events`
+
+### MongoDB
+
+- Nao aplicavel.
+
+## Eventos Canonicos
+
+- `marketplace.listing.published`
+- `marketplace.cart.checked_out`
+- `marketplace.sale.validated`
+
+## Compliance E Operacao
+
+- merchant_kyb
+- pricing_audit
+- listing_governance
+
+## Superficies Admin
+
+- painel de seller
+- aprovacao de listing
+- monitor de conversao
+
+## Proxima Onda
+
+- fechar politica de seller score
+- definir moderacao de catalogo
+- amarrar regras anti-fraude de checkout
 
 ## Trilha De Implantacao
 
@@ -39,3 +89,4 @@ STOCK, ADS, UP
 - Integracoes com `PAY`, `ID`, `DOCS`, `ORDERS` ou `TRANSACTIONS` documentadas quando existirem.
 - Teste ou validacao tecnica registrada.
 - Comentarios em portugues simples com termos tecnicos em ingles onde fizer sentido.
+- Blueprint operacional alinhado ao registry detalhado.

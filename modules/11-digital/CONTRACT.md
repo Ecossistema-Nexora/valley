@@ -11,6 +11,7 @@ Ele define a fronteira inicial do modulo para guiar desenvolvimento, implantacao
 - Tier: `expansion`
 - Data home: `postgres`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
 
 ## Objetivo Simples
 
@@ -30,6 +31,46 @@ Persistencia principal em PostgreSQL, porque o modulo exige consistencia, `forei
 
 Dependencias minimas: PAY, ID. Integracoes previstas: CREATOR, DOCS.
 
+## Atores Primarios
+
+- criador
+- colecionador
+- operador de custodia
+
+## Capacidades-Chave
+
+- colecoes digitais
+- mint e transferencia
+- trilha de royalties
+
+## Entidades Relacionais
+
+- `digital_asset_collections`
+- `digital_assets`
+- `digital_asset_events`
+
+## Payloads Volumosos E Colecoes
+
+- Nao aplicavel.
+
+## Eventos Canonicos
+
+- `digital.asset.minted`
+- `digital.asset.transferred`
+- `digital.royalty.calculated`
+
+## Compliance, Risco E Guarda
+
+- ownership_traceability
+- royalty_audit
+- custody_controls
+
+## Superficies Admin E Operacao
+
+- painel de colecoes
+- fila de mint
+- monitor de royalties
+
 ## Regras De Evolucao
 
 1. Nao criar tabela duplicada de usuario; usar sempre `public.users`.
@@ -42,8 +83,6 @@ Dependencias minimas: PAY, ID. Integracoes previstas: CREATOR, DOCS.
 
 ## Primeiro Backlog Tecnico
 
-- Confirmar se o modulo precisa de tabela propria ou se usa tabelas compartilhadas ja existentes.
-- Definir eventos de entrada e saida com nomes tecnicos estaveis.
-- Definir permissao Admin/RBAC/ABAC quando houver operacao sensivel.
-- Registrar regra de negocio em `business_rule_definitions` quando houver pricing, comissao, limite, risco ou compliance.
-- Validar se dados volumosos ficam fora do PostgreSQL.
+- fechar politica de metadata
+- amarrar elegibilidade de mint
+- ligar trilha de royalty por creator

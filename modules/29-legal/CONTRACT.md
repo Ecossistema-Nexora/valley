@@ -11,6 +11,7 @@ Ele define a fronteira inicial do modulo para guiar desenvolvimento, implantacao
 - Tier: `foundation`
 - Data home: `postgres`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
 
 ## Objetivo Simples
 
@@ -30,6 +31,49 @@ Persistencia principal em PostgreSQL, porque o modulo exige consistencia, `forei
 
 Dependencias minimas: ID. Integracoes previstas: DOCS, SECURITY.
 
+## Atores Primarios
+
+- juridico
+- assinante
+- mediador
+
+## Capacidades-Chave
+
+- contratos
+- assinaturas
+- disputas e trilha juridica
+
+## Entidades Relacionais
+
+- `legal_contracts`
+- `legal_contract_parties`
+- `legal_signatures`
+- `legal_disputes`
+- `legal_audit_events`
+- `legal_fallback_pin_credentials`
+
+## Payloads Volumosos E Colecoes
+
+- Nao aplicavel.
+
+## Eventos Canonicos
+
+- `legal.contract.created`
+- `legal.signature.recorded`
+- `legal.dispute.opened`
+
+## Compliance, Risco E Guarda
+
+- legal_audit
+- signature_traceability
+- fallback_pin_hashing
+
+## Superficies Admin E Operacao
+
+- painel juridico
+- fila de assinaturas
+- monitor de disputas
+
 ## Regras De Evolucao
 
 1. Nao criar tabela duplicada de usuario; usar sempre `public.users`.
@@ -42,8 +86,6 @@ Dependencias minimas: ID. Integracoes previstas: DOCS, SECURITY.
 
 ## Primeiro Backlog Tecnico
 
-- Confirmar se o modulo precisa de tabela propria ou se usa tabelas compartilhadas ja existentes.
-- Definir eventos de entrada e saida com nomes tecnicos estaveis.
-- Definir permissao Admin/RBAC/ABAC quando houver operacao sensivel.
-- Registrar regra de negocio em `business_rule_definitions` quando houver pricing, comissao, limite, risco ou compliance.
-- Validar se dados volumosos ficam fora do PostgreSQL.
+- fechar clausulas parametrizadas
+- definir mediacao assistida por IA
+- ligar prova documental do contrato

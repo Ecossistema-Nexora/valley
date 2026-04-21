@@ -12,10 +12,24 @@ Ele descreve o modulo em linguagem simples e serve como ponto inicial para desen
 - Tier: `foundation`
 - Data home: `mongo`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
+- Cobertura mapeada: MongoDB: 3 colecoes mapeadas.
 
 ## Finalidade
 
 Dispositivos conectados, sensores e hub inteligente.
+
+## Atores Primarios
+
+- operador de dispositivos
+- tecnico de campo
+- motor de automacao
+
+## Capacidades-Chave
+
+- registry de device
+- eventos de sensor
+- hub conectado
 
 ## Dependencias
 
@@ -24,6 +38,42 @@ ID
 ## Integracoes
 
 HOME, FLEET, SECURITY
+
+## Mapa De Dados
+
+### PostgreSQL
+
+- Nao aplicavel.
+
+### MongoDB
+
+- `iot_device_registry`
+- `iot_sensor_events`
+- `telemetry_logs`
+
+## Eventos Canonicos
+
+- `iot.device.provisioned`
+- `iot.sensor.event_ingested`
+- `iot.device.offline_detected`
+
+## Compliance E Operacao
+
+- device_traceability
+- telemetry_retention
+- access_control
+
+## Superficies Admin
+
+- painel de devices
+- fila de provisioning
+- monitor de sensores
+
+## Proxima Onda
+
+- fechar inventario de device
+- definir heartbeat canonico
+- ligar playbook de device offline
 
 ## Trilha De Implantacao
 
@@ -39,3 +89,4 @@ HOME, FLEET, SECURITY
 - Integracoes com `PAY`, `ID`, `DOCS`, `ORDERS` ou `TRANSACTIONS` documentadas quando existirem.
 - Teste ou validacao tecnica registrada.
 - Comentarios em portugues simples com termos tecnicos em ingles onde fizer sentido.
+- Blueprint operacional alinhado ao registry detalhado.

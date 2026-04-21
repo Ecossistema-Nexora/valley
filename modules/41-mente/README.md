@@ -12,10 +12,24 @@ Ele descreve o modulo em linguagem simples e serve como ponto inicial para desen
 - Tier: `core`
 - Data home: `postgres`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
+- Cobertura mapeada: PostgreSQL: 2 entidades mapeadas.
 
 ## Finalidade
 
 Saude mental digital, teleterapia e notas cifradas.
+
+## Atores Primarios
+
+- paciente
+- terapeuta
+- operador de cuidado
+
+## Capacidades-Chave
+
+- teleterapia
+- notas seguras
+- sinais de acompanhamento
 
 ## Dependencias
 
@@ -24,6 +38,41 @@ HEALTH, ID
 ## Integracoes
 
 ADVISOR, DOCS
+
+## Mapa De Dados
+
+### PostgreSQL
+
+- `teletherapy_sessions`
+- `health_profiles`
+
+### MongoDB
+
+- Nao aplicavel.
+
+## Eventos Canonicos
+
+- `mente.session.scheduled`
+- `mente.session.completed`
+- `mente.followup.created`
+
+## Compliance E Operacao
+
+- lgpd_sensitive_data
+- therapy_confidentiality
+- clinical_access_audit
+
+## Superficies Admin
+
+- painel terapeutico
+- fila de sessoes
+- monitor de follow-up
+
+## Proxima Onda
+
+- fechar trilha de nota cifrada
+- definir protocolo de risco
+- ligar agenda terapeutica
 
 ## Trilha De Implantacao
 
@@ -39,3 +88,4 @@ ADVISOR, DOCS
 - Integracoes com `PAY`, `ID`, `DOCS`, `ORDERS` ou `TRANSACTIONS` documentadas quando existirem.
 - Teste ou validacao tecnica registrada.
 - Comentarios em portugues simples com termos tecnicos em ingles onde fizer sentido.
+- Blueprint operacional alinhado ao registry detalhado.

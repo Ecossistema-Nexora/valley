@@ -11,6 +11,7 @@ Ele define a fronteira inicial do modulo para guiar desenvolvimento, implantacao
 - Tier: `foundation`
 - Data home: `postgres`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `DATA_CONTRACT` (Contrato de dados)
 
 ## Objetivo Simples
 
@@ -30,6 +31,46 @@ Persistencia principal em PostgreSQL, porque o modulo exige consistencia, `forei
 
 Dependencias minimas: PAY, REPLY. Integracoes previstas: INVOICES, PAYROLLS.
 
+## Atores Primarios
+
+- dono do negocio
+- contador
+- operador backoffice
+
+## Capacidades-Chave
+
+- erp integrado
+- visao operacional
+- ponte com fiscal e folha
+
+## Entidades Relacionais
+
+- `module_catalog`
+- `procurement_orders`
+- `merchant_storefronts`
+
+## Payloads Volumosos E Colecoes
+
+- Nao aplicavel.
+
+## Eventos Canonicos
+
+- `business.company.onboarded`
+- `business.statement.closed`
+- `business.routine.executed`
+
+## Compliance, Risco E Guarda
+
+- tax_traceability
+- rbac_controls
+- financial_audit
+
+## Superficies Admin E Operacao
+
+- painel empresarial
+- monitor de rotina
+- fila de documentos
+
 ## Regras De Evolucao
 
 1. Nao criar tabela duplicada de usuario; usar sempre `public.users`.
@@ -42,8 +83,6 @@ Dependencias minimas: PAY, REPLY. Integracoes previstas: INVOICES, PAYROLLS.
 
 ## Primeiro Backlog Tecnico
 
-- Confirmar se o modulo precisa de tabela propria ou se usa tabelas compartilhadas ja existentes.
-- Definir eventos de entrada e saida com nomes tecnicos estaveis.
-- Definir permissao Admin/RBAC/ABAC quando houver operacao sensivel.
-- Registrar regra de negocio em `business_rule_definitions` quando houver pricing, comissao, limite, risco ou compliance.
-- Validar se dados volumosos ficam fora do PostgreSQL.
+- criar contrato especifico de empresa e unidade
+- definir visao fiscal consolidada
+- ligar fluxo de folha e invoices

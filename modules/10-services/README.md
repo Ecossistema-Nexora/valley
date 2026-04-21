@@ -12,10 +12,24 @@ Ele descreve o modulo em linguagem simples e serve como ponto inicial para desen
 - Tier: `core`
 - Data home: `postgres`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
+- Cobertura mapeada: PostgreSQL: 4 entidades mapeadas.
 
 ## Finalidade
 
 Servicos profissionais, gigs, contratacao e reputacao.
+
+## Atores Primarios
+
+- prestador
+- cliente
+- operador de marketplace
+
+## Capacidades-Chave
+
+- catalogo de servicos
+- booking
+- trilha de atendimento
 
 ## Dependencias
 
@@ -24,6 +38,43 @@ ID, PAY
 ## Integracoes
 
 MARKETPLACE, LEGAL
+
+## Mapa De Dados
+
+### PostgreSQL
+
+- `service_provider_profiles`
+- `service_catalog_services`
+- `service_bookings`
+- `service_booking_events`
+
+### MongoDB
+
+- Nao aplicavel.
+
+## Eventos Canonicos
+
+- `services.provider.approved`
+- `services.booking.confirmed`
+- `services.booking.closed`
+
+## Compliance E Operacao
+
+- provider_verification
+- service_auditability
+- payment_split_audit
+
+## Superficies Admin
+
+- painel de prestadores
+- agenda de bookings
+- fila de reputacao
+
+## Proxima Onda
+
+- fechar score de prestador
+- definir no-show policy
+- ligar disputa operacional
 
 ## Trilha De Implantacao
 
@@ -39,3 +90,4 @@ MARKETPLACE, LEGAL
 - Integracoes com `PAY`, `ID`, `DOCS`, `ORDERS` ou `TRANSACTIONS` documentadas quando existirem.
 - Teste ou validacao tecnica registrada.
 - Comentarios em portugues simples com termos tecnicos em ingles onde fizer sentido.
+- Blueprint operacional alinhado ao registry detalhado.

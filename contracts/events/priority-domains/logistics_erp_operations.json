@@ -1,0 +1,3142 @@
+{
+  "domain_key": "logistics_erp_operations",
+  "domain_label": "Logistics ERP Operations",
+  "modules": [
+    {
+      "current_phase": "DATA_CONTRACT",
+      "event_topics": [
+        {
+          "compliance_tags": [
+            "tax_traceability",
+            "rbac_controls",
+            "financial_audit"
+          ],
+          "consumer_surfaces": [
+            "INVOICES",
+            "PAYROLLS",
+            "painel empresarial",
+            "monitor de rotina"
+          ],
+          "contract_key": "BUSINESS:business.company.onboarded:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "business.company.onboarded",
+          "evidence_entities": [
+            "module_catalog",
+            "procurement_orders",
+            "merchant_storefronts"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "tax_traceability",
+                  "rbac_controls",
+                  "financial_audit"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "DATA_CONTRACT"
+              },
+              "domain_key": {
+                "const": "logistics_erp_operations"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "business.company.onboarded"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "module_catalog",
+                    "procurement_orders",
+                    "merchant_storefronts"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "BUSINESS"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "erp integrado",
+                      "visao operacional",
+                      "ponte com fiscal e folha"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "dono do negocio",
+                      "contador",
+                      "operador backoffice"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "BUSINESS::business.company.onboarded",
+            "type": "object"
+          },
+          "producer_surface": "painel empresarial"
+        },
+        {
+          "compliance_tags": [
+            "tax_traceability",
+            "rbac_controls",
+            "financial_audit"
+          ],
+          "consumer_surfaces": [
+            "INVOICES",
+            "PAYROLLS",
+            "painel empresarial",
+            "monitor de rotina"
+          ],
+          "contract_key": "BUSINESS:business.statement.closed:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "business.statement.closed",
+          "evidence_entities": [
+            "module_catalog",
+            "procurement_orders",
+            "merchant_storefronts"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "tax_traceability",
+                  "rbac_controls",
+                  "financial_audit"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "DATA_CONTRACT"
+              },
+              "domain_key": {
+                "const": "logistics_erp_operations"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "business.statement.closed"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "module_catalog",
+                    "procurement_orders",
+                    "merchant_storefronts"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "BUSINESS"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "erp integrado",
+                      "visao operacional",
+                      "ponte com fiscal e folha"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "dono do negocio",
+                      "contador",
+                      "operador backoffice"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "BUSINESS::business.statement.closed",
+            "type": "object"
+          },
+          "producer_surface": "painel empresarial"
+        },
+        {
+          "compliance_tags": [
+            "tax_traceability",
+            "rbac_controls",
+            "financial_audit"
+          ],
+          "consumer_surfaces": [
+            "INVOICES",
+            "PAYROLLS",
+            "painel empresarial",
+            "monitor de rotina"
+          ],
+          "contract_key": "BUSINESS:business.routine.executed:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "business.routine.executed",
+          "evidence_entities": [
+            "module_catalog",
+            "procurement_orders",
+            "merchant_storefronts"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "tax_traceability",
+                  "rbac_controls",
+                  "financial_audit"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "DATA_CONTRACT"
+              },
+              "domain_key": {
+                "const": "logistics_erp_operations"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "business.routine.executed"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "module_catalog",
+                    "procurement_orders",
+                    "merchant_storefronts"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "BUSINESS"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "erp integrado",
+                      "visao operacional",
+                      "ponte com fiscal e folha"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "dono do negocio",
+                      "contador",
+                      "operador backoffice"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "BUSINESS::business.routine.executed",
+            "type": "object"
+          },
+          "producer_surface": "painel empresarial"
+        }
+      ],
+      "module_code": "BUSINESS",
+      "module_name": "Valley Business"
+    },
+    {
+      "current_phase": "VALIDATE",
+      "event_topics": [
+        {
+          "compliance_tags": [
+            "financial_audit",
+            "tax_traceability",
+            "supplier_approval"
+          ],
+          "consumer_surfaces": [
+            "STOCK",
+            "MARKETPLACE",
+            "WMS",
+            "painel de compras",
+            "cadastro de fornecedores"
+          ],
+          "contract_key": "REPLY:reply.procurement_order.created:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "reply.procurement_order.created",
+          "evidence_entities": [
+            "suppliers",
+            "procurement_orders",
+            "service_work_orders"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "financial_audit",
+                  "tax_traceability",
+                  "supplier_approval"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "logistics_erp_operations"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "reply.procurement_order.created"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "suppliers",
+                    "procurement_orders",
+                    "service_work_orders"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "REPLY"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "compras e sourcing",
+                      "ordens de servico",
+                      "faturamento operacional"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "operador interno",
+                      "comprador",
+                      "gestor empresarial"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "REPLY::reply.procurement_order.created",
+            "type": "object"
+          },
+          "producer_surface": "painel de compras"
+        },
+        {
+          "compliance_tags": [
+            "financial_audit",
+            "tax_traceability",
+            "supplier_approval"
+          ],
+          "consumer_surfaces": [
+            "STOCK",
+            "MARKETPLACE",
+            "WMS",
+            "painel de compras",
+            "cadastro de fornecedores"
+          ],
+          "contract_key": "REPLY:reply.service_work_order.closed:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "reply.service_work_order.closed",
+          "evidence_entities": [
+            "suppliers",
+            "procurement_orders",
+            "service_work_orders"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "financial_audit",
+                  "tax_traceability",
+                  "supplier_approval"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "logistics_erp_operations"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "reply.service_work_order.closed"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "suppliers",
+                    "procurement_orders",
+                    "service_work_orders"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "REPLY"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "compras e sourcing",
+                      "ordens de servico",
+                      "faturamento operacional"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "operador interno",
+                      "comprador",
+                      "gestor empresarial"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "REPLY::reply.service_work_order.closed",
+            "type": "object"
+          },
+          "producer_surface": "painel de compras"
+        },
+        {
+          "compliance_tags": [
+            "financial_audit",
+            "tax_traceability",
+            "supplier_approval"
+          ],
+          "consumer_surfaces": [
+            "STOCK",
+            "MARKETPLACE",
+            "WMS",
+            "painel de compras",
+            "cadastro de fornecedores"
+          ],
+          "contract_key": "REPLY:reply.billing_cycle.closed:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "reply.billing_cycle.closed",
+          "evidence_entities": [
+            "suppliers",
+            "procurement_orders",
+            "service_work_orders"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "financial_audit",
+                  "tax_traceability",
+                  "supplier_approval"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "logistics_erp_operations"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "reply.billing_cycle.closed"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "suppliers",
+                    "procurement_orders",
+                    "service_work_orders"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "REPLY"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "compras e sourcing",
+                      "ordens de servico",
+                      "faturamento operacional"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "operador interno",
+                      "comprador",
+                      "gestor empresarial"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "REPLY::reply.billing_cycle.closed",
+            "type": "object"
+          },
+          "producer_surface": "painel de compras"
+        }
+      ],
+      "module_code": "REPLY",
+      "module_name": "Valley REPLY"
+    },
+    {
+      "current_phase": "VALIDATE",
+      "event_topics": [
+        {
+          "compliance_tags": [
+            "pricing_traceability",
+            "supplier_settlement",
+            "catalog_governance"
+          ],
+          "consumer_surfaces": [
+            "LOG",
+            "UP",
+            "DOCS",
+            "painel de catalogo",
+            "monitor de margem"
+          ],
+          "contract_key": "STOCK:stock.catalog.synced:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "stock.catalog.synced",
+          "evidence_entities": [
+            "marketplace_listings",
+            "procurement_orders",
+            "inventory_lots"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "pricing_traceability",
+                  "supplier_settlement",
+                  "catalog_governance"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "logistics_erp_operations"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "stock.catalog.synced"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "marketplace_listings",
+                    "procurement_orders",
+                    "inventory_lots"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "STOCK"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "dropshipping centralizado",
+                      "margem dinamica",
+                      "tracking de fornecedor"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "analista de catalogo",
+                      "operador de estoque",
+                      "fornecedor parceiro"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "STOCK::stock.catalog.synced",
+            "type": "object"
+          },
+          "producer_surface": "painel de catalogo"
+        },
+        {
+          "compliance_tags": [
+            "pricing_traceability",
+            "supplier_settlement",
+            "catalog_governance"
+          ],
+          "consumer_surfaces": [
+            "LOG",
+            "UP",
+            "DOCS",
+            "painel de catalogo",
+            "monitor de margem"
+          ],
+          "contract_key": "STOCK:stock.margin.repriced:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "stock.margin.repriced",
+          "evidence_entities": [
+            "marketplace_listings",
+            "procurement_orders",
+            "inventory_lots"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "pricing_traceability",
+                  "supplier_settlement",
+                  "catalog_governance"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "logistics_erp_operations"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "stock.margin.repriced"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "marketplace_listings",
+                    "procurement_orders",
+                    "inventory_lots"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "STOCK"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "dropshipping centralizado",
+                      "margem dinamica",
+                      "tracking de fornecedor"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "analista de catalogo",
+                      "operador de estoque",
+                      "fornecedor parceiro"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "STOCK::stock.margin.repriced",
+            "type": "object"
+          },
+          "producer_surface": "painel de catalogo"
+        },
+        {
+          "compliance_tags": [
+            "pricing_traceability",
+            "supplier_settlement",
+            "catalog_governance"
+          ],
+          "consumer_surfaces": [
+            "LOG",
+            "UP",
+            "DOCS",
+            "painel de catalogo",
+            "monitor de margem"
+          ],
+          "contract_key": "STOCK:stock.tracking.updated:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "stock.tracking.updated",
+          "evidence_entities": [
+            "marketplace_listings",
+            "procurement_orders",
+            "inventory_lots"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "pricing_traceability",
+                  "supplier_settlement",
+                  "catalog_governance"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "logistics_erp_operations"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "stock.tracking.updated"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "marketplace_listings",
+                    "procurement_orders",
+                    "inventory_lots"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "STOCK"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "dropshipping centralizado",
+                      "margem dinamica",
+                      "tracking de fornecedor"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "analista de catalogo",
+                      "operador de estoque",
+                      "fornecedor parceiro"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "STOCK::stock.tracking.updated",
+            "type": "object"
+          },
+          "producer_surface": "painel de catalogo"
+        }
+      ],
+      "module_code": "STOCK",
+      "module_name": "Valley Stock"
+    },
+    {
+      "current_phase": "VALIDATE",
+      "event_topics": [
+        {
+          "compliance_tags": [
+            "chain_of_custody",
+            "tracking_traceability",
+            "carrier_audit"
+          ],
+          "consumer_surfaces": [
+            "DELIVERY",
+            "FOOD",
+            "MOBILITY",
+            "painel de tracking",
+            "fila de excecoes"
+          ],
+          "contract_key": "LOG:log.tracking_event.ingested:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "log.tracking_event.ingested",
+          "evidence_entities": [
+            "log_tracking_events"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "chain_of_custody",
+                  "tracking_traceability",
+                  "carrier_audit"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "logistics_erp_operations"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "log.tracking_event.ingested"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "log_tracking_events"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "LOG"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "tracking unificado",
+                      "checkpoints canonicos",
+                      "alerta de anomalia"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "operador logistico",
+                      "cliente final",
+                      "transportadora"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "LOG::log.tracking_event.ingested",
+            "type": "object"
+          },
+          "producer_surface": "painel de tracking"
+        },
+        {
+          "compliance_tags": [
+            "chain_of_custody",
+            "tracking_traceability",
+            "carrier_audit"
+          ],
+          "consumer_surfaces": [
+            "DELIVERY",
+            "FOOD",
+            "MOBILITY",
+            "painel de tracking",
+            "fila de excecoes"
+          ],
+          "contract_key": "LOG:log.route.anomaly.detected:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "log.route.anomaly.detected",
+          "evidence_entities": [
+            "log_tracking_events"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "chain_of_custody",
+                  "tracking_traceability",
+                  "carrier_audit"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "logistics_erp_operations"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "log.route.anomaly.detected"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "log_tracking_events"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "LOG"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "tracking unificado",
+                      "checkpoints canonicos",
+                      "alerta de anomalia"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "operador logistico",
+                      "cliente final",
+                      "transportadora"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "LOG::log.route.anomaly.detected",
+            "type": "object"
+          },
+          "producer_surface": "painel de tracking"
+        },
+        {
+          "compliance_tags": [
+            "chain_of_custody",
+            "tracking_traceability",
+            "carrier_audit"
+          ],
+          "consumer_surfaces": [
+            "DELIVERY",
+            "FOOD",
+            "MOBILITY",
+            "painel de tracking",
+            "fila de excecoes"
+          ],
+          "contract_key": "LOG:log.delivery.status_changed:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "log.delivery.status_changed",
+          "evidence_entities": [
+            "log_tracking_events"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "chain_of_custody",
+                  "tracking_traceability",
+                  "carrier_audit"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "logistics_erp_operations"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "log.delivery.status_changed"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "log_tracking_events"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "LOG"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "tracking unificado",
+                      "checkpoints canonicos",
+                      "alerta de anomalia"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "operador logistico",
+                      "cliente final",
+                      "transportadora"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "LOG::log.delivery.status_changed",
+            "type": "object"
+          },
+          "producer_surface": "painel de tracking"
+        }
+      ],
+      "module_code": "LOG",
+      "module_name": "Valley Log"
+    },
+    {
+      "current_phase": "DATA_CONTRACT",
+      "event_topics": [
+        {
+          "compliance_tags": [
+            "food_safety_traceability",
+            "payment_split_audit",
+            "allergen_notice"
+          ],
+          "consumer_surfaces": [
+            "ORDERS",
+            "MOBILITY",
+            "DOCS",
+            "painel de pedidos",
+            "gestao de cardapio"
+          ],
+          "contract_key": "FOOD:food.order.placed:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "food.order.placed",
+          "evidence_entities": [
+            "orders",
+            "transactions",
+            "health_profiles"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "food_safety_traceability",
+                  "payment_split_audit",
+                  "allergen_notice"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "DATA_CONTRACT"
+              },
+              "domain_key": {
+                "const": "logistics_erp_operations"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "food.order.placed"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "orders",
+                    "transactions",
+                    "health_profiles"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "FOOD"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "pedido alimentar",
+                      "split operacional",
+                      "restricoes nutricionais"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "restaurante",
+                      "consumidor",
+                      "operador de atendimento"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "FOOD::food.order.placed",
+            "type": "object"
+          },
+          "producer_surface": "painel de pedidos"
+        },
+        {
+          "compliance_tags": [
+            "food_safety_traceability",
+            "payment_split_audit",
+            "allergen_notice"
+          ],
+          "consumer_surfaces": [
+            "ORDERS",
+            "MOBILITY",
+            "DOCS",
+            "painel de pedidos",
+            "gestao de cardapio"
+          ],
+          "contract_key": "FOOD:food.order.prepared:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "food.order.prepared",
+          "evidence_entities": [
+            "orders",
+            "transactions",
+            "health_profiles"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "food_safety_traceability",
+                  "payment_split_audit",
+                  "allergen_notice"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "DATA_CONTRACT"
+              },
+              "domain_key": {
+                "const": "logistics_erp_operations"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "food.order.prepared"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "orders",
+                    "transactions",
+                    "health_profiles"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "FOOD"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "pedido alimentar",
+                      "split operacional",
+                      "restricoes nutricionais"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "restaurante",
+                      "consumidor",
+                      "operador de atendimento"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "FOOD::food.order.prepared",
+            "type": "object"
+          },
+          "producer_surface": "painel de pedidos"
+        },
+        {
+          "compliance_tags": [
+            "food_safety_traceability",
+            "payment_split_audit",
+            "allergen_notice"
+          ],
+          "consumer_surfaces": [
+            "ORDERS",
+            "MOBILITY",
+            "DOCS",
+            "painel de pedidos",
+            "gestao de cardapio"
+          ],
+          "contract_key": "FOOD:food.order.delivered:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "food.order.delivered",
+          "evidence_entities": [
+            "orders",
+            "transactions",
+            "health_profiles"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "food_safety_traceability",
+                  "payment_split_audit",
+                  "allergen_notice"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "DATA_CONTRACT"
+              },
+              "domain_key": {
+                "const": "logistics_erp_operations"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "food.order.delivered"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "orders",
+                    "transactions",
+                    "health_profiles"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "FOOD"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "pedido alimentar",
+                      "split operacional",
+                      "restricoes nutricionais"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "restaurante",
+                      "consumidor",
+                      "operador de atendimento"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "FOOD::food.order.delivered",
+            "type": "object"
+          },
+          "producer_surface": "painel de pedidos"
+        }
+      ],
+      "module_code": "FOOD",
+      "module_name": "Valley Food"
+    },
+    {
+      "current_phase": "VALIDATE",
+      "event_topics": [
+        {
+          "compliance_tags": [
+            "inventory_audit",
+            "cold_chain_monitoring",
+            "warehouse_traceability"
+          ],
+          "consumer_surfaces": [
+            "STOCK",
+            "IOT",
+            "BUSINESS",
+            "painel de armazem",
+            "monitor de variancia"
+          ],
+          "contract_key": "WMS:wms.cycle_count.started:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "wms.cycle_count.started",
+          "evidence_entities": [
+            "warehouses",
+            "inventory_items",
+            "warehouse_cycle_counts",
+            "warehouse_sensor_snapshots",
+            "iot_sensor_events"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "inventory_audit",
+                  "cold_chain_monitoring",
+                  "warehouse_traceability"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "logistics_erp_operations"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "wms.cycle_count.started"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "warehouses",
+                    "inventory_items",
+                    "warehouse_cycle_counts",
+                    "warehouse_sensor_snapshots",
+                    "iot_sensor_events"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "WMS"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "enderecamento de estoque",
+                      "contagem ciclica",
+                      "sensoriamento de armazem"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "coordenador de armazem",
+                      "separador",
+                      "auditor operacional"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "WMS::wms.cycle_count.started",
+            "type": "object"
+          },
+          "producer_surface": "painel de armazem"
+        },
+        {
+          "compliance_tags": [
+            "inventory_audit",
+            "cold_chain_monitoring",
+            "warehouse_traceability"
+          ],
+          "consumer_surfaces": [
+            "STOCK",
+            "IOT",
+            "BUSINESS",
+            "painel de armazem",
+            "monitor de variancia"
+          ],
+          "contract_key": "WMS:wms.inventory.variance_detected:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "wms.inventory.variance_detected",
+          "evidence_entities": [
+            "warehouses",
+            "inventory_items",
+            "warehouse_cycle_counts",
+            "warehouse_sensor_snapshots",
+            "iot_sensor_events"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "inventory_audit",
+                  "cold_chain_monitoring",
+                  "warehouse_traceability"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "logistics_erp_operations"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "wms.inventory.variance_detected"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "warehouses",
+                    "inventory_items",
+                    "warehouse_cycle_counts",
+                    "warehouse_sensor_snapshots",
+                    "iot_sensor_events"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "WMS"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "enderecamento de estoque",
+                      "contagem ciclica",
+                      "sensoriamento de armazem"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "coordenador de armazem",
+                      "separador",
+                      "auditor operacional"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "WMS::wms.inventory.variance_detected",
+            "type": "object"
+          },
+          "producer_surface": "painel de armazem"
+        },
+        {
+          "compliance_tags": [
+            "inventory_audit",
+            "cold_chain_monitoring",
+            "warehouse_traceability"
+          ],
+          "consumer_surfaces": [
+            "STOCK",
+            "IOT",
+            "BUSINESS",
+            "painel de armazem",
+            "monitor de variancia"
+          ],
+          "contract_key": "WMS:wms.sensor.threshold_breached:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "wms.sensor.threshold_breached",
+          "evidence_entities": [
+            "warehouses",
+            "inventory_items",
+            "warehouse_cycle_counts",
+            "warehouse_sensor_snapshots",
+            "iot_sensor_events"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "inventory_audit",
+                  "cold_chain_monitoring",
+                  "warehouse_traceability"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "logistics_erp_operations"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "wms.sensor.threshold_breached"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "warehouses",
+                    "inventory_items",
+                    "warehouse_cycle_counts",
+                    "warehouse_sensor_snapshots",
+                    "iot_sensor_events"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "WMS"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "enderecamento de estoque",
+                      "contagem ciclica",
+                      "sensoriamento de armazem"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "coordenador de armazem",
+                      "separador",
+                      "auditor operacional"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "WMS::wms.sensor.threshold_breached",
+            "type": "object"
+          },
+          "producer_surface": "painel de armazem"
+        }
+      ],
+      "module_code": "WMS",
+      "module_name": "Valley WMS"
+    },
+    {
+      "current_phase": "VALIDATE",
+      "event_topics": [
+        {
+          "compliance_tags": [
+            "chain_of_custody",
+            "proof_of_delivery",
+            "driver_accountability"
+          ],
+          "consumer_surfaces": [
+            "FOOD",
+            "MARKETPLACE",
+            "MOBILITY",
+            "torre de despacho",
+            "fila de ocorrencias"
+          ],
+          "contract_key": "DELIVERY:delivery.shipment.created:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "delivery.shipment.created",
+          "evidence_entities": [
+            "delivery_shipments",
+            "delivery_shipment_events",
+            "orders",
+            "delivery_dispatch_runs",
+            "telemetry_logs"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "chain_of_custody",
+                  "proof_of_delivery",
+                  "driver_accountability"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "logistics_erp_operations"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "delivery.shipment.created"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "delivery_shipments",
+                    "delivery_shipment_events",
+                    "orders",
+                    "delivery_dispatch_runs",
+                    "telemetry_logs"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "DELIVERY"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "coleta urbana",
+                      "roteamento operacional",
+                      "prova de entrega"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "dispatcher",
+                      "courier",
+                      "loja emissora"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "DELIVERY::delivery.shipment.created",
+            "type": "object"
+          },
+          "producer_surface": "torre de despacho"
+        },
+        {
+          "compliance_tags": [
+            "chain_of_custody",
+            "proof_of_delivery",
+            "driver_accountability"
+          ],
+          "consumer_surfaces": [
+            "FOOD",
+            "MARKETPLACE",
+            "MOBILITY",
+            "torre de despacho",
+            "fila de ocorrencias"
+          ],
+          "contract_key": "DELIVERY:delivery.route.dispatched:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "delivery.route.dispatched",
+          "evidence_entities": [
+            "delivery_shipments",
+            "delivery_shipment_events",
+            "orders",
+            "delivery_dispatch_runs",
+            "telemetry_logs"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "chain_of_custody",
+                  "proof_of_delivery",
+                  "driver_accountability"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "logistics_erp_operations"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "delivery.route.dispatched"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "delivery_shipments",
+                    "delivery_shipment_events",
+                    "orders",
+                    "delivery_dispatch_runs",
+                    "telemetry_logs"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "DELIVERY"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "coleta urbana",
+                      "roteamento operacional",
+                      "prova de entrega"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "dispatcher",
+                      "courier",
+                      "loja emissora"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "DELIVERY::delivery.route.dispatched",
+            "type": "object"
+          },
+          "producer_surface": "torre de despacho"
+        },
+        {
+          "compliance_tags": [
+            "chain_of_custody",
+            "proof_of_delivery",
+            "driver_accountability"
+          ],
+          "consumer_surfaces": [
+            "FOOD",
+            "MARKETPLACE",
+            "MOBILITY",
+            "torre de despacho",
+            "fila de ocorrencias"
+          ],
+          "contract_key": "DELIVERY:delivery.proof_recorded:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "delivery.proof_recorded",
+          "evidence_entities": [
+            "delivery_shipments",
+            "delivery_shipment_events",
+            "orders",
+            "delivery_dispatch_runs",
+            "telemetry_logs"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "chain_of_custody",
+                  "proof_of_delivery",
+                  "driver_accountability"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "logistics_erp_operations"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "delivery.proof_recorded"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "delivery_shipments",
+                    "delivery_shipment_events",
+                    "orders",
+                    "delivery_dispatch_runs",
+                    "telemetry_logs"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "DELIVERY"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "coleta urbana",
+                      "roteamento operacional",
+                      "prova de entrega"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "dispatcher",
+                      "courier",
+                      "loja emissora"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "DELIVERY::delivery.proof_recorded",
+            "type": "object"
+          },
+          "producer_surface": "torre de despacho"
+        }
+      ],
+      "module_code": "DELIVERY",
+      "module_name": "Valley Delivery"
+    },
+    {
+      "current_phase": "VALIDATE",
+      "event_topics": [
+        {
+          "compliance_tags": [
+            "driver_accountability",
+            "maintenance_traceability",
+            "vehicle_compliance"
+          ],
+          "consumer_surfaces": [
+            "LOG",
+            "SECURITY",
+            "painel de frota",
+            "calendario de manutencao"
+          ],
+          "contract_key": "FLEET:fleet.vehicle.registered:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "fleet.vehicle.registered",
+          "evidence_entities": [
+            "mobility_trips",
+            "fleet_vehicle_profiles",
+            "fleet_maintenance_events"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "driver_accountability",
+                  "maintenance_traceability",
+                  "vehicle_compliance"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "logistics_erp_operations"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "fleet.vehicle.registered"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "mobility_trips",
+                    "fleet_vehicle_profiles",
+                    "fleet_maintenance_events"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "FLEET"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "perfil de veiculo",
+                      "telemetria de uso",
+                      "manutencao preventiva"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "gestor de frota",
+                      "motorista",
+                      "tecnico de manutencao"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "FLEET::fleet.vehicle.registered",
+            "type": "object"
+          },
+          "producer_surface": "painel de frota"
+        },
+        {
+          "compliance_tags": [
+            "driver_accountability",
+            "maintenance_traceability",
+            "vehicle_compliance"
+          ],
+          "consumer_surfaces": [
+            "LOG",
+            "SECURITY",
+            "painel de frota",
+            "calendario de manutencao"
+          ],
+          "contract_key": "FLEET:fleet.maintenance.logged:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "fleet.maintenance.logged",
+          "evidence_entities": [
+            "mobility_trips",
+            "fleet_vehicle_profiles",
+            "fleet_maintenance_events"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "driver_accountability",
+                  "maintenance_traceability",
+                  "vehicle_compliance"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "logistics_erp_operations"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "fleet.maintenance.logged"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "mobility_trips",
+                    "fleet_vehicle_profiles",
+                    "fleet_maintenance_events"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "FLEET"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "perfil de veiculo",
+                      "telemetria de uso",
+                      "manutencao preventiva"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "gestor de frota",
+                      "motorista",
+                      "tecnico de manutencao"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "FLEET::fleet.maintenance.logged",
+            "type": "object"
+          },
+          "producer_surface": "painel de frota"
+        },
+        {
+          "compliance_tags": [
+            "driver_accountability",
+            "maintenance_traceability",
+            "vehicle_compliance"
+          ],
+          "consumer_surfaces": [
+            "LOG",
+            "SECURITY",
+            "painel de frota",
+            "calendario de manutencao"
+          ],
+          "contract_key": "FLEET:fleet.telemetry.alerted:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "fleet.telemetry.alerted",
+          "evidence_entities": [
+            "mobility_trips",
+            "fleet_vehicle_profiles",
+            "fleet_maintenance_events"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "driver_accountability",
+                  "maintenance_traceability",
+                  "vehicle_compliance"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "logistics_erp_operations"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "fleet.telemetry.alerted"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "mobility_trips",
+                    "fleet_vehicle_profiles",
+                    "fleet_maintenance_events"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "FLEET"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "perfil de veiculo",
+                      "telemetria de uso",
+                      "manutencao preventiva"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "gestor de frota",
+                      "motorista",
+                      "tecnico de manutencao"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "FLEET::fleet.telemetry.alerted",
+            "type": "object"
+          },
+          "producer_surface": "painel de frota"
+        }
+      ],
+      "module_code": "FLEET",
+      "module_name": "Valley Fleet"
+    }
+  ],
+  "package_key": "logistics_erp_operations.priority.v1",
+  "priority_rank": 1
+}

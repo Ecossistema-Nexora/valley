@@ -11,6 +11,7 @@ Ele define a fronteira inicial do modulo para guiar desenvolvimento, implantacao
 - Tier: `foundation`
 - Data home: `postgres`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
 
 ## Objetivo Simples
 
@@ -30,6 +31,46 @@ Persistencia principal em PostgreSQL, porque o modulo exige consistencia, `forei
 
 Dependencias minimas: MARKETPLACE, PAY. Integracoes previstas: LOG, UP, DOCS.
 
+## Atores Primarios
+
+- analista de catalogo
+- operador de estoque
+- fornecedor parceiro
+
+## Capacidades-Chave
+
+- dropshipping centralizado
+- margem dinamica
+- tracking de fornecedor
+
+## Entidades Relacionais
+
+- `marketplace_listings`
+- `procurement_orders`
+- `inventory_lots`
+
+## Payloads Volumosos E Colecoes
+
+- Nao aplicavel.
+
+## Eventos Canonicos
+
+- `stock.catalog.synced`
+- `stock.margin.repriced`
+- `stock.tracking.updated`
+
+## Compliance, Risco E Guarda
+
+- pricing_traceability
+- supplier_settlement
+- catalog_governance
+
+## Superficies Admin E Operacao
+
+- painel de catalogo
+- monitor de margem
+- painel de tracking
+
 ## Regras De Evolucao
 
 1. Nao criar tabela duplicada de usuario; usar sempre `public.users`.
@@ -42,8 +83,6 @@ Dependencias minimas: MARKETPLACE, PAY. Integracoes previstas: LOG, UP, DOCS.
 
 ## Primeiro Backlog Tecnico
 
-- Confirmar se o modulo precisa de tabela propria ou se usa tabelas compartilhadas ja existentes.
-- Definir eventos de entrada e saida com nomes tecnicos estaveis.
-- Definir permissao Admin/RBAC/ABAC quando houver operacao sensivel.
-- Registrar regra de negocio em `business_rule_definitions` quando houver pricing, comissao, limite, risco ou compliance.
-- Validar se dados volumosos ficam fora do PostgreSQL.
+- definir politica de margem por canal
+- fechar conciliacao com fornecedor
+- amarrar excecao de ruptura

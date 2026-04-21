@@ -12,10 +12,24 @@ Ele descreve o modulo em linguagem simples e serve como ponto inicial para desen
 - Tier: `core`
 - Data home: `mongo`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `BUILD` (Build)
+- Cobertura mapeada: MongoDB: 2 colecoes mapeadas.
 
 ## Finalidade
 
 Rede social de bairro, reputacao, posts e moderacao.
+
+## Atores Primarios
+
+- morador
+- moderador
+- comerciante local
+
+## Capacidades-Chave
+
+- feed de bairro
+- reputacao social
+- moderacao contextual
 
 ## Dependencias
 
@@ -24,6 +38,41 @@ ID
 ## Integracoes
 
 EVENTS, ADS, CREATOR
+
+## Mapa De Dados
+
+### PostgreSQL
+
+- Nao aplicavel.
+
+### MongoDB
+
+- `social_videos`
+- `ai_memory`
+
+## Eventos Canonicos
+
+- `social.post.published`
+- `social.report.opened`
+- `social.reputation.updated`
+
+## Compliance E Operacao
+
+- content_moderation
+- community_safety
+- privacy_controls
+
+## Superficies Admin
+
+- painel de moderacao
+- fila de denuncias
+- monitor de reputacao
+
+## Proxima Onda
+
+- fechar score de reputacao
+- ligar anti-spam por bairro
+- definir politica de retencao
 
 ## Trilha De Implantacao
 
@@ -39,3 +88,4 @@ EVENTS, ADS, CREATOR
 - Integracoes com `PAY`, `ID`, `DOCS`, `ORDERS` ou `TRANSACTIONS` documentadas quando existirem.
 - Teste ou validacao tecnica registrada.
 - Comentarios em portugues simples com termos tecnicos em ingles onde fizer sentido.
+- Blueprint operacional alinhado ao registry detalhado.

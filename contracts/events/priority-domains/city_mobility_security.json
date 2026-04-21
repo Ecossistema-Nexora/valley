@@ -1,0 +1,2372 @@
+{
+  "domain_key": "city_mobility_security",
+  "domain_label": "City Mobility Security",
+  "modules": [
+    {
+      "current_phase": "VALIDATE",
+      "event_topics": [
+        {
+          "compliance_tags": [
+            "legal_audit",
+            "signature_traceability",
+            "fallback_pin_hashing"
+          ],
+          "consumer_surfaces": [
+            "DOCS",
+            "SECURITY",
+            "painel juridico",
+            "fila de assinaturas"
+          ],
+          "contract_key": "LEGAL:legal.contract.created:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "legal.contract.created",
+          "evidence_entities": [
+            "legal_contracts",
+            "legal_contract_parties",
+            "legal_signatures"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "legal_audit",
+                  "signature_traceability",
+                  "fallback_pin_hashing"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "city_mobility_security"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "legal.contract.created"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "legal_contracts",
+                    "legal_contract_parties",
+                    "legal_signatures"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "LEGAL"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "contratos",
+                      "assinaturas",
+                      "disputas e trilha juridica"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "juridico",
+                      "assinante",
+                      "mediador"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "LEGAL::legal.contract.created",
+            "type": "object"
+          },
+          "producer_surface": "painel juridico"
+        },
+        {
+          "compliance_tags": [
+            "legal_audit",
+            "signature_traceability",
+            "fallback_pin_hashing"
+          ],
+          "consumer_surfaces": [
+            "DOCS",
+            "SECURITY",
+            "painel juridico",
+            "fila de assinaturas"
+          ],
+          "contract_key": "LEGAL:legal.signature.recorded:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "legal.signature.recorded",
+          "evidence_entities": [
+            "legal_contracts",
+            "legal_contract_parties",
+            "legal_signatures"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "legal_audit",
+                  "signature_traceability",
+                  "fallback_pin_hashing"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "city_mobility_security"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "legal.signature.recorded"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "legal_contracts",
+                    "legal_contract_parties",
+                    "legal_signatures"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "LEGAL"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "contratos",
+                      "assinaturas",
+                      "disputas e trilha juridica"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "juridico",
+                      "assinante",
+                      "mediador"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "LEGAL::legal.signature.recorded",
+            "type": "object"
+          },
+          "producer_surface": "painel juridico"
+        },
+        {
+          "compliance_tags": [
+            "legal_audit",
+            "signature_traceability",
+            "fallback_pin_hashing"
+          ],
+          "consumer_surfaces": [
+            "DOCS",
+            "SECURITY",
+            "painel juridico",
+            "fila de assinaturas"
+          ],
+          "contract_key": "LEGAL:legal.dispute.opened:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "legal.dispute.opened",
+          "evidence_entities": [
+            "legal_contracts",
+            "legal_contract_parties",
+            "legal_signatures"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "legal_audit",
+                  "signature_traceability",
+                  "fallback_pin_hashing"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "city_mobility_security"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "legal.dispute.opened"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "legal_contracts",
+                    "legal_contract_parties",
+                    "legal_signatures"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "LEGAL"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "contratos",
+                      "assinaturas",
+                      "disputas e trilha juridica"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "juridico",
+                      "assinante",
+                      "mediador"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "LEGAL::legal.dispute.opened",
+            "type": "object"
+          },
+          "producer_surface": "painel juridico"
+        }
+      ],
+      "module_code": "LEGAL",
+      "module_name": "Valley Legal"
+    },
+    {
+      "current_phase": "VALIDATE",
+      "event_topics": [
+        {
+          "compliance_tags": [
+            "ticket_immutability",
+            "escrow_audit",
+            "fraud_prevention"
+          ],
+          "consumer_surfaces": [
+            "TICKETS",
+            "DOCS",
+            "painel de eventos",
+            "monitor de bilheteria"
+          ],
+          "contract_key": "EVENTS:events.program.published:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "events.program.published",
+          "evidence_entities": [
+            "event_programs",
+            "event_ticket_types",
+            "event_ticket_ledger"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "ticket_immutability",
+                  "escrow_audit",
+                  "fraud_prevention"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "city_mobility_security"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "events.program.published"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "event_programs",
+                    "event_ticket_types",
+                    "event_ticket_ledger"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "EVENTS"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "programacao de evento",
+                      "tipos de ingresso",
+                      "ledger de tickets"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "organizador",
+                      "participante",
+                      "operador de bilheteria"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "EVENTS::events.program.published",
+            "type": "object"
+          },
+          "producer_surface": "painel de eventos"
+        },
+        {
+          "compliance_tags": [
+            "ticket_immutability",
+            "escrow_audit",
+            "fraud_prevention"
+          ],
+          "consumer_surfaces": [
+            "TICKETS",
+            "DOCS",
+            "painel de eventos",
+            "monitor de bilheteria"
+          ],
+          "contract_key": "EVENTS:events.ticket.issued:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "events.ticket.issued",
+          "evidence_entities": [
+            "event_programs",
+            "event_ticket_types",
+            "event_ticket_ledger"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "ticket_immutability",
+                  "escrow_audit",
+                  "fraud_prevention"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "city_mobility_security"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "events.ticket.issued"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "event_programs",
+                    "event_ticket_types",
+                    "event_ticket_ledger"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "EVENTS"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "programacao de evento",
+                      "tipos de ingresso",
+                      "ledger de tickets"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "organizador",
+                      "participante",
+                      "operador de bilheteria"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "EVENTS::events.ticket.issued",
+            "type": "object"
+          },
+          "producer_surface": "painel de eventos"
+        },
+        {
+          "compliance_tags": [
+            "ticket_immutability",
+            "escrow_audit",
+            "fraud_prevention"
+          ],
+          "consumer_surfaces": [
+            "TICKETS",
+            "DOCS",
+            "painel de eventos",
+            "monitor de bilheteria"
+          ],
+          "contract_key": "EVENTS:events.ticket.transferred:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "events.ticket.transferred",
+          "evidence_entities": [
+            "event_programs",
+            "event_ticket_types",
+            "event_ticket_ledger"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "ticket_immutability",
+                  "escrow_audit",
+                  "fraud_prevention"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "city_mobility_security"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "events.ticket.transferred"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "event_programs",
+                    "event_ticket_types",
+                    "event_ticket_ledger"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "EVENTS"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "programacao de evento",
+                      "tipos de ingresso",
+                      "ledger de tickets"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "organizador",
+                      "participante",
+                      "operador de bilheteria"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "EVENTS::events.ticket.transferred",
+            "type": "object"
+          },
+          "producer_surface": "painel de eventos"
+        }
+      ],
+      "module_code": "EVENTS",
+      "module_name": "Valley Events"
+    },
+    {
+      "current_phase": "VALIDATE",
+      "event_topics": [
+        {
+          "compliance_tags": [
+            "ride_audit",
+            "driver_accountability",
+            "fare_traceability"
+          ],
+          "consumer_surfaces": [
+            "LOG",
+            "FLEET",
+            "torre de corridas",
+            "monitor de checkpoints"
+          ],
+          "contract_key": "MOBILITY:mobility.trip.requested:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "mobility.trip.requested",
+          "evidence_entities": [
+            "mobility_trips",
+            "mobility_trip_events",
+            "orders",
+            "fleet_vehicle_profiles",
+            "telemetry_logs"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "ride_audit",
+                  "driver_accountability",
+                  "fare_traceability"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "city_mobility_security"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "mobility.trip.requested"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "mobility_trips",
+                    "mobility_trip_events",
+                    "orders",
+                    "fleet_vehicle_profiles",
+                    "telemetry_logs"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "MOBILITY"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "corrida urbana",
+                      "checkpoint operacional",
+                      "precificacao de rota"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "passageiro",
+                      "rider",
+                      "dispatcher"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "MOBILITY::mobility.trip.requested",
+            "type": "object"
+          },
+          "producer_surface": "torre de corridas"
+        },
+        {
+          "compliance_tags": [
+            "ride_audit",
+            "driver_accountability",
+            "fare_traceability"
+          ],
+          "consumer_surfaces": [
+            "LOG",
+            "FLEET",
+            "torre de corridas",
+            "monitor de checkpoints"
+          ],
+          "contract_key": "MOBILITY:mobility.trip.started:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "mobility.trip.started",
+          "evidence_entities": [
+            "mobility_trips",
+            "mobility_trip_events",
+            "orders",
+            "fleet_vehicle_profiles",
+            "telemetry_logs"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "ride_audit",
+                  "driver_accountability",
+                  "fare_traceability"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "city_mobility_security"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "mobility.trip.started"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "mobility_trips",
+                    "mobility_trip_events",
+                    "orders",
+                    "fleet_vehicle_profiles",
+                    "telemetry_logs"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "MOBILITY"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "corrida urbana",
+                      "checkpoint operacional",
+                      "precificacao de rota"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "passageiro",
+                      "rider",
+                      "dispatcher"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "MOBILITY::mobility.trip.started",
+            "type": "object"
+          },
+          "producer_surface": "torre de corridas"
+        },
+        {
+          "compliance_tags": [
+            "ride_audit",
+            "driver_accountability",
+            "fare_traceability"
+          ],
+          "consumer_surfaces": [
+            "LOG",
+            "FLEET",
+            "torre de corridas",
+            "monitor de checkpoints"
+          ],
+          "contract_key": "MOBILITY:mobility.trip.completed:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "mobility.trip.completed",
+          "evidence_entities": [
+            "mobility_trips",
+            "mobility_trip_events",
+            "orders",
+            "fleet_vehicle_profiles",
+            "telemetry_logs"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "ride_audit",
+                  "driver_accountability",
+                  "fare_traceability"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "city_mobility_security"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "mobility.trip.completed"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "mobility_trips",
+                    "mobility_trip_events",
+                    "orders",
+                    "fleet_vehicle_profiles",
+                    "telemetry_logs"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "MOBILITY"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "corrida urbana",
+                      "checkpoint operacional",
+                      "precificacao de rota"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "passageiro",
+                      "rider",
+                      "dispatcher"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "MOBILITY::mobility.trip.completed",
+            "type": "object"
+          },
+          "producer_surface": "torre de corridas"
+        }
+      ],
+      "module_code": "MOBILITY",
+      "module_name": "Valley Mobility"
+    },
+    {
+      "current_phase": "VALIDATE",
+      "event_topics": [
+        {
+          "compliance_tags": [
+            "biometric_hashing",
+            "incident_chain_of_custody",
+            "access_control"
+          ],
+          "consumer_surfaces": [
+            "IOT",
+            "LEGAL",
+            "torre de seguranca",
+            "fila de incidentes"
+          ],
+          "contract_key": "SECURITY:security.sos.triggered:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "security.sos.triggered",
+          "evidence_entities": [
+            "security_trusted_contacts",
+            "security_biometric_credentials",
+            "security_incidents",
+            "security_signal_logs",
+            "iot_sensor_events"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "biometric_hashing",
+                  "incident_chain_of_custody",
+                  "access_control"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "city_mobility_security"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "security.sos.triggered"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "security_trusted_contacts",
+                    "security_biometric_credentials",
+                    "security_incidents",
+                    "security_signal_logs",
+                    "iot_sensor_events"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "SECURITY"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "contatos confiaveis",
+                      "credencial biometrica por hash",
+                      "trilha de incidente"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "usuario protegido",
+                      "analista de risco",
+                      "operador SOS"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "SECURITY::security.sos.triggered",
+            "type": "object"
+          },
+          "producer_surface": "torre de seguranca"
+        },
+        {
+          "compliance_tags": [
+            "biometric_hashing",
+            "incident_chain_of_custody",
+            "access_control"
+          ],
+          "consumer_surfaces": [
+            "IOT",
+            "LEGAL",
+            "torre de seguranca",
+            "fila de incidentes"
+          ],
+          "contract_key": "SECURITY:security.biometric.enrolled:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "security.biometric.enrolled",
+          "evidence_entities": [
+            "security_trusted_contacts",
+            "security_biometric_credentials",
+            "security_incidents",
+            "security_signal_logs",
+            "iot_sensor_events"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "biometric_hashing",
+                  "incident_chain_of_custody",
+                  "access_control"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "city_mobility_security"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "security.biometric.enrolled"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "security_trusted_contacts",
+                    "security_biometric_credentials",
+                    "security_incidents",
+                    "security_signal_logs",
+                    "iot_sensor_events"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "SECURITY"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "contatos confiaveis",
+                      "credencial biometrica por hash",
+                      "trilha de incidente"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "usuario protegido",
+                      "analista de risco",
+                      "operador SOS"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "SECURITY::security.biometric.enrolled",
+            "type": "object"
+          },
+          "producer_surface": "torre de seguranca"
+        },
+        {
+          "compliance_tags": [
+            "biometric_hashing",
+            "incident_chain_of_custody",
+            "access_control"
+          ],
+          "consumer_surfaces": [
+            "IOT",
+            "LEGAL",
+            "torre de seguranca",
+            "fila de incidentes"
+          ],
+          "contract_key": "SECURITY:security.incident.closed:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "security.incident.closed",
+          "evidence_entities": [
+            "security_trusted_contacts",
+            "security_biometric_credentials",
+            "security_incidents",
+            "security_signal_logs",
+            "iot_sensor_events"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "biometric_hashing",
+                  "incident_chain_of_custody",
+                  "access_control"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "city_mobility_security"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "security.incident.closed"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "security_trusted_contacts",
+                    "security_biometric_credentials",
+                    "security_incidents",
+                    "security_signal_logs",
+                    "iot_sensor_events"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "SECURITY"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "contatos confiaveis",
+                      "credencial biometrica por hash",
+                      "trilha de incidente"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "usuario protegido",
+                      "analista de risco",
+                      "operador SOS"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "SECURITY::security.incident.closed",
+            "type": "object"
+          },
+          "producer_surface": "torre de seguranca"
+        }
+      ],
+      "module_code": "SECURITY",
+      "module_name": "Valley Security"
+    },
+    {
+      "current_phase": "VALIDATE",
+      "event_topics": [
+        {
+          "compliance_tags": [
+            "booking_audit",
+            "guide_accountability",
+            "settlement_traceability"
+          ],
+          "consumer_surfaces": [
+            "EVENTS",
+            "MOBILITY",
+            "painel de experiencias",
+            "fila de bookings"
+          ],
+          "contract_key": "TOURISM:tourism.experience.published:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "tourism.experience.published",
+          "evidence_entities": [
+            "tourism_experiences",
+            "tourism_bookings",
+            "tourism_booking_events",
+            "tourism_experience_feeds",
+            "space_anchor_maps"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "booking_audit",
+                  "guide_accountability",
+                  "settlement_traceability"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "city_mobility_security"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "tourism.experience.published"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "tourism_experiences",
+                    "tourism_bookings",
+                    "tourism_booking_events",
+                    "tourism_experience_feeds",
+                    "space_anchor_maps"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "TOURISM"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "experiencias locais",
+                      "booking",
+                      "feed exploratorio"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "turista",
+                      "guia",
+                      "operador local"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "TOURISM::tourism.experience.published",
+            "type": "object"
+          },
+          "producer_surface": "painel de experiencias"
+        },
+        {
+          "compliance_tags": [
+            "booking_audit",
+            "guide_accountability",
+            "settlement_traceability"
+          ],
+          "consumer_surfaces": [
+            "EVENTS",
+            "MOBILITY",
+            "painel de experiencias",
+            "fila de bookings"
+          ],
+          "contract_key": "TOURISM:tourism.booking.confirmed:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "tourism.booking.confirmed",
+          "evidence_entities": [
+            "tourism_experiences",
+            "tourism_bookings",
+            "tourism_booking_events",
+            "tourism_experience_feeds",
+            "space_anchor_maps"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "booking_audit",
+                  "guide_accountability",
+                  "settlement_traceability"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "city_mobility_security"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "tourism.booking.confirmed"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "tourism_experiences",
+                    "tourism_bookings",
+                    "tourism_booking_events",
+                    "tourism_experience_feeds",
+                    "space_anchor_maps"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "TOURISM"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "experiencias locais",
+                      "booking",
+                      "feed exploratorio"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "turista",
+                      "guia",
+                      "operador local"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "TOURISM::tourism.booking.confirmed",
+            "type": "object"
+          },
+          "producer_surface": "painel de experiencias"
+        },
+        {
+          "compliance_tags": [
+            "booking_audit",
+            "guide_accountability",
+            "settlement_traceability"
+          ],
+          "consumer_surfaces": [
+            "EVENTS",
+            "MOBILITY",
+            "painel de experiencias",
+            "fila de bookings"
+          ],
+          "contract_key": "TOURISM:tourism.checkin.recorded:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "tourism.checkin.recorded",
+          "evidence_entities": [
+            "tourism_experiences",
+            "tourism_bookings",
+            "tourism_booking_events",
+            "tourism_experience_feeds",
+            "space_anchor_maps"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "booking_audit",
+                  "guide_accountability",
+                  "settlement_traceability"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "city_mobility_security"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "tourism.checkin.recorded"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "tourism_experiences",
+                    "tourism_bookings",
+                    "tourism_booking_events",
+                    "tourism_experience_feeds",
+                    "space_anchor_maps"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "TOURISM"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "experiencias locais",
+                      "booking",
+                      "feed exploratorio"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "turista",
+                      "guia",
+                      "operador local"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "TOURISM::tourism.checkin.recorded",
+            "type": "object"
+          },
+          "producer_surface": "painel de experiencias"
+        }
+      ],
+      "module_code": "TOURISM",
+      "module_name": "Valley Tourism"
+    },
+    {
+      "current_phase": "VALIDATE",
+      "event_topics": [
+        {
+          "compliance_tags": [
+            "public_auditability",
+            "citizen_identity",
+            "service_traceability"
+          ],
+          "consumer_surfaces": [
+            "LEGAL",
+            "DOCS",
+            "portal de requests",
+            "fila de atendimento"
+          ],
+          "contract_key": "GOV:gov.service.requested:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "gov.service.requested",
+          "evidence_entities": [
+            "gov_service_catalog",
+            "gov_service_requests",
+            "gov_request_events"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "public_auditability",
+                  "citizen_identity",
+                  "service_traceability"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "city_mobility_security"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "gov.service.requested"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "gov_service_catalog",
+                    "gov_service_requests",
+                    "gov_request_events"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "GOV"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "catalogo de servicos",
+                      "requests publicos",
+                      "eventos de atendimento"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "cidadao",
+                      "servidor",
+                      "operador govtech"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "GOV::gov.service.requested",
+            "type": "object"
+          },
+          "producer_surface": "portal de requests"
+        },
+        {
+          "compliance_tags": [
+            "public_auditability",
+            "citizen_identity",
+            "service_traceability"
+          ],
+          "consumer_surfaces": [
+            "LEGAL",
+            "DOCS",
+            "portal de requests",
+            "fila de atendimento"
+          ],
+          "contract_key": "GOV:gov.request.routed:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "gov.request.routed",
+          "evidence_entities": [
+            "gov_service_catalog",
+            "gov_service_requests",
+            "gov_request_events"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "public_auditability",
+                  "citizen_identity",
+                  "service_traceability"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "city_mobility_security"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "gov.request.routed"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "gov_service_catalog",
+                    "gov_service_requests",
+                    "gov_request_events"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "GOV"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "catalogo de servicos",
+                      "requests publicos",
+                      "eventos de atendimento"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "cidadao",
+                      "servidor",
+                      "operador govtech"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "GOV::gov.request.routed",
+            "type": "object"
+          },
+          "producer_surface": "portal de requests"
+        },
+        {
+          "compliance_tags": [
+            "public_auditability",
+            "citizen_identity",
+            "service_traceability"
+          ],
+          "consumer_surfaces": [
+            "LEGAL",
+            "DOCS",
+            "portal de requests",
+            "fila de atendimento"
+          ],
+          "contract_key": "GOV:gov.request.resolved:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "gov.request.resolved",
+          "evidence_entities": [
+            "gov_service_catalog",
+            "gov_service_requests",
+            "gov_request_events"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "public_auditability",
+                  "citizen_identity",
+                  "service_traceability"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "city_mobility_security"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "gov.request.resolved"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "gov_service_catalog",
+                    "gov_service_requests",
+                    "gov_request_events"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "GOV"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "catalogo de servicos",
+                      "requests publicos",
+                      "eventos de atendimento"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "cidadao",
+                      "servidor",
+                      "operador govtech"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "GOV::gov.request.resolved",
+            "type": "object"
+          },
+          "producer_surface": "portal de requests"
+        }
+      ],
+      "module_code": "GOV",
+      "module_name": "Valley Gov"
+    }
+  ],
+  "package_key": "city_mobility_security.priority.v1",
+  "priority_rank": 2
+}

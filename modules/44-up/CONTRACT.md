@@ -11,6 +11,7 @@ Ele define a fronteira inicial do modulo para guiar desenvolvimento, implantacao
 - Tier: `core`
 - Data home: `postgres_mongo`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `DATA_CONTRACT` (Contrato de dados)
 
 ## Objetivo Simples
 
@@ -30,6 +31,46 @@ Persistencia hibrida: PostgreSQL guarda o contrato operacional e MongoDB guarda 
 
 Dependencias minimas: PAY, MARKETPLACE. Integracoes previstas: INFLUENCERS, LOYALTY.
 
+## Atores Primarios
+
+- afiliado
+- merchant
+- operador de atribuicao
+
+## Capacidades-Chave
+
+- indicacao
+- link de atribuicao
+- comissao
+
+## Entidades Relacionais
+
+- `transactions`
+- `pepita_ledger`
+
+## Payloads Volumosos E Colecoes
+
+- `influencer_metrics`
+- `social_videos`
+
+## Eventos Canonicos
+
+- `up.link.generated`
+- `up.conversion.attributed`
+- `up.commission.booked`
+
+## Compliance, Risco E Guarda
+
+- attribution_audit
+- commission_traceability
+- anti_fraud
+
+## Superficies Admin E Operacao
+
+- painel de afiliados
+- monitor de conversao
+- fila de comissao
+
 ## Regras De Evolucao
 
 1. Nao criar tabela duplicada de usuario; usar sempre `public.users`.
@@ -42,8 +83,6 @@ Dependencias minimas: PAY, MARKETPLACE. Integracoes previstas: INFLUENCERS, LOYA
 
 ## Primeiro Backlog Tecnico
 
-- Confirmar se o modulo precisa de tabela propria ou se usa tabelas compartilhadas ja existentes.
-- Definir eventos de entrada e saida com nomes tecnicos estaveis.
-- Definir permissao Admin/RBAC/ABAC quando houver operacao sensivel.
-- Registrar regra de negocio em `business_rule_definitions` quando houver pricing, comissao, limite, risco ou compliance.
-- Validar se dados volumosos ficam fora do PostgreSQL.
+- criar contrato especifico de atribuicao
+- definir janela de comissao
+- ligar fraude por auto-indicacao

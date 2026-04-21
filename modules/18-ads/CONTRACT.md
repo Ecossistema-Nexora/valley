@@ -11,6 +11,7 @@ Ele define a fronteira inicial do modulo para guiar desenvolvimento, implantacao
 - Tier: `core`
 - Data home: `mongo`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
 
 ## Objetivo Simples
 
@@ -30,6 +31,47 @@ Persistencia principal em MongoDB, porque o modulo trabalha com IA, social, tele
 
 Dependencias minimas: SOCIAL. Integracoes previstas: MARKETPLACE, ADS_INTELLIGENCE.
 
+## Atores Primarios
+
+- anunciante
+- operador de growth
+- merchant
+
+## Capacidades-Chave
+
+- campanhas geolocalizadas
+- gold e pepitas
+- atribuicao comercial
+
+## Entidades Relacionais
+
+- `gold_campaigns`
+- `sale_validation_events`
+- `pepita_accounts`
+
+## Payloads Volumosos E Colecoes
+
+- `social_videos`
+- `influencer_metrics`
+
+## Eventos Canonicos
+
+- `ads.campaign.launched`
+- `ads.impression.attributed`
+- `ads.reward.booked`
+
+## Compliance, Risco E Guarda
+
+- ad_policy_traceability
+- financial_attribution
+- geo_targeting_consent
+
+## Superficies Admin E Operacao
+
+- painel de campanhas
+- monitor de atribuicao
+- console de crescimento
+
 ## Regras De Evolucao
 
 1. Nao criar tabela duplicada de usuario; usar sempre `public.users`.
@@ -42,8 +84,6 @@ Dependencias minimas: SOCIAL. Integracoes previstas: MARKETPLACE, ADS_INTELLIGEN
 
 ## Primeiro Backlog Tecnico
 
-- Confirmar se o modulo precisa de tabela propria ou se usa tabelas compartilhadas ja existentes.
-- Definir eventos de entrada e saida com nomes tecnicos estaveis.
-- Definir permissao Admin/RBAC/ABAC quando houver operacao sensivel.
-- Registrar regra de negocio em `business_rule_definitions` quando houver pricing, comissao, limite, risco ou compliance.
-- Validar se dados volumosos ficam fora do PostgreSQL.
+- fechar janela de atribuicao
+- definir cap de frequencia
+- ligar score de criativo

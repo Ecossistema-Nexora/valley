@@ -1,0 +1,2339 @@
+{
+  "domain_key": "media_social_growth",
+  "domain_label": "Media Social Growth",
+  "modules": [
+    {
+      "current_phase": "BUILD",
+      "event_topics": [
+        {
+          "compliance_tags": [
+            "creator_disclosure",
+            "commission_audit",
+            "brand_safety"
+          ],
+          "consumer_surfaces": [
+            "SOCIAL",
+            "ADS",
+            "painel de creators",
+            "fila de brand safety"
+          ],
+          "contract_key": "INFLUENCERS:influencer.profile.qualified:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "influencer.profile.qualified",
+          "evidence_entities": [
+            "creator_uploads",
+            "influencer_metrics",
+            "social_videos"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "creator_disclosure",
+                  "commission_audit",
+                  "brand_safety"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "BUILD"
+              },
+              "domain_key": {
+                "const": "media_social_growth"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "influencer.profile.qualified"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "creator_uploads",
+                    "influencer_metrics",
+                    "social_videos"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "INFLUENCERS"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "hub de criadores",
+                      "metricas de audiencia",
+                      "monetizacao afiliada"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "creator",
+                      "brand manager",
+                      "operador de afiliacao"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "INFLUENCERS::influencer.profile.qualified",
+            "type": "object"
+          },
+          "producer_surface": "painel de creators"
+        },
+        {
+          "compliance_tags": [
+            "creator_disclosure",
+            "commission_audit",
+            "brand_safety"
+          ],
+          "consumer_surfaces": [
+            "SOCIAL",
+            "ADS",
+            "painel de creators",
+            "fila de brand safety"
+          ],
+          "contract_key": "INFLUENCERS:influencer.metric.ingested:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "influencer.metric.ingested",
+          "evidence_entities": [
+            "creator_uploads",
+            "influencer_metrics",
+            "social_videos"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "creator_disclosure",
+                  "commission_audit",
+                  "brand_safety"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "BUILD"
+              },
+              "domain_key": {
+                "const": "media_social_growth"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "influencer.metric.ingested"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "creator_uploads",
+                    "influencer_metrics",
+                    "social_videos"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "INFLUENCERS"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "hub de criadores",
+                      "metricas de audiencia",
+                      "monetizacao afiliada"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "creator",
+                      "brand manager",
+                      "operador de afiliacao"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "INFLUENCERS::influencer.metric.ingested",
+            "type": "object"
+          },
+          "producer_surface": "painel de creators"
+        },
+        {
+          "compliance_tags": [
+            "creator_disclosure",
+            "commission_audit",
+            "brand_safety"
+          ],
+          "consumer_surfaces": [
+            "SOCIAL",
+            "ADS",
+            "painel de creators",
+            "fila de brand safety"
+          ],
+          "contract_key": "INFLUENCERS:influencer.commission.attributed:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "influencer.commission.attributed",
+          "evidence_entities": [
+            "creator_uploads",
+            "influencer_metrics",
+            "social_videos"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "creator_disclosure",
+                  "commission_audit",
+                  "brand_safety"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "BUILD"
+              },
+              "domain_key": {
+                "const": "media_social_growth"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "influencer.commission.attributed"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "creator_uploads",
+                    "influencer_metrics",
+                    "social_videos"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "INFLUENCERS"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "hub de criadores",
+                      "metricas de audiencia",
+                      "monetizacao afiliada"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "creator",
+                      "brand manager",
+                      "operador de afiliacao"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "INFLUENCERS::influencer.commission.attributed",
+            "type": "object"
+          },
+          "producer_surface": "painel de creators"
+        }
+      ],
+      "module_code": "INFLUENCERS",
+      "module_name": "Valley Influencers"
+    },
+    {
+      "current_phase": "BUILD",
+      "event_topics": [
+        {
+          "compliance_tags": [
+            "content_moderation",
+            "community_safety",
+            "privacy_controls"
+          ],
+          "consumer_surfaces": [
+            "EVENTS",
+            "ADS",
+            "CREATOR",
+            "painel de moderacao",
+            "fila de denuncias"
+          ],
+          "contract_key": "SOCIAL:social.post.published:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "social.post.published",
+          "evidence_entities": [
+            "social_videos",
+            "ai_memory"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "content_moderation",
+                  "community_safety",
+                  "privacy_controls"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "BUILD"
+              },
+              "domain_key": {
+                "const": "media_social_growth"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "social.post.published"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "social_videos",
+                    "ai_memory"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "SOCIAL"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "feed de bairro",
+                      "reputacao social",
+                      "moderacao contextual"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "morador",
+                      "moderador",
+                      "comerciante local"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "SOCIAL::social.post.published",
+            "type": "object"
+          },
+          "producer_surface": "painel de moderacao"
+        },
+        {
+          "compliance_tags": [
+            "content_moderation",
+            "community_safety",
+            "privacy_controls"
+          ],
+          "consumer_surfaces": [
+            "EVENTS",
+            "ADS",
+            "CREATOR",
+            "painel de moderacao",
+            "fila de denuncias"
+          ],
+          "contract_key": "SOCIAL:social.report.opened:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "social.report.opened",
+          "evidence_entities": [
+            "social_videos",
+            "ai_memory"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "content_moderation",
+                  "community_safety",
+                  "privacy_controls"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "BUILD"
+              },
+              "domain_key": {
+                "const": "media_social_growth"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "social.report.opened"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "social_videos",
+                    "ai_memory"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "SOCIAL"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "feed de bairro",
+                      "reputacao social",
+                      "moderacao contextual"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "morador",
+                      "moderador",
+                      "comerciante local"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "SOCIAL::social.report.opened",
+            "type": "object"
+          },
+          "producer_surface": "painel de moderacao"
+        },
+        {
+          "compliance_tags": [
+            "content_moderation",
+            "community_safety",
+            "privacy_controls"
+          ],
+          "consumer_surfaces": [
+            "EVENTS",
+            "ADS",
+            "CREATOR",
+            "painel de moderacao",
+            "fila de denuncias"
+          ],
+          "contract_key": "SOCIAL:social.reputation.updated:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "social.reputation.updated",
+          "evidence_entities": [
+            "social_videos",
+            "ai_memory"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "content_moderation",
+                  "community_safety",
+                  "privacy_controls"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "BUILD"
+              },
+              "domain_key": {
+                "const": "media_social_growth"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "social.reputation.updated"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "social_videos",
+                    "ai_memory"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "SOCIAL"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "feed de bairro",
+                      "reputacao social",
+                      "moderacao contextual"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "morador",
+                      "moderador",
+                      "comerciante local"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "SOCIAL::social.reputation.updated",
+            "type": "object"
+          },
+          "producer_surface": "painel de moderacao"
+        }
+      ],
+      "module_code": "SOCIAL",
+      "module_name": "Valley Social"
+    },
+    {
+      "current_phase": "BUILD",
+      "event_topics": [
+        {
+          "compliance_tags": [
+            "copyright_traceability",
+            "creator_payout_audit",
+            "brand_safety"
+          ],
+          "consumer_surfaces": [
+            "SOCIAL",
+            "ADS",
+            "studio de creator",
+            "fila de publicacao"
+          ],
+          "contract_key": "MEDIA:media.upload.received:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "media.upload.received",
+          "evidence_entities": [
+            "creator_uploads",
+            "transactions",
+            "social_videos",
+            "news_content_items"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "copyright_traceability",
+                  "creator_payout_audit",
+                  "brand_safety"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "BUILD"
+              },
+              "domain_key": {
+                "const": "media_social_growth"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "media.upload.received"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "creator_uploads",
+                    "transactions",
+                    "social_videos",
+                    "news_content_items"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "MEDIA"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "upload de creator",
+                      "monetizacao",
+                      "distribuicao de conteudo"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "criador",
+                      "operador de midia",
+                      "marca"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "MEDIA::media.upload.received",
+            "type": "object"
+          },
+          "producer_surface": "studio de creator"
+        },
+        {
+          "compliance_tags": [
+            "copyright_traceability",
+            "creator_payout_audit",
+            "brand_safety"
+          ],
+          "consumer_surfaces": [
+            "SOCIAL",
+            "ADS",
+            "studio de creator",
+            "fila de publicacao"
+          ],
+          "contract_key": "MEDIA:media.asset.published:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "media.asset.published",
+          "evidence_entities": [
+            "creator_uploads",
+            "transactions",
+            "social_videos",
+            "news_content_items"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "copyright_traceability",
+                  "creator_payout_audit",
+                  "brand_safety"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "BUILD"
+              },
+              "domain_key": {
+                "const": "media_social_growth"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "media.asset.published"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "creator_uploads",
+                    "transactions",
+                    "social_videos",
+                    "news_content_items"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "MEDIA"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "upload de creator",
+                      "monetizacao",
+                      "distribuicao de conteudo"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "criador",
+                      "operador de midia",
+                      "marca"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "MEDIA::media.asset.published",
+            "type": "object"
+          },
+          "producer_surface": "studio de creator"
+        },
+        {
+          "compliance_tags": [
+            "copyright_traceability",
+            "creator_payout_audit",
+            "brand_safety"
+          ],
+          "consumer_surfaces": [
+            "SOCIAL",
+            "ADS",
+            "studio de creator",
+            "fila de publicacao"
+          ],
+          "contract_key": "MEDIA:media.revenue.booked:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "media.revenue.booked",
+          "evidence_entities": [
+            "creator_uploads",
+            "transactions",
+            "social_videos",
+            "news_content_items"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "copyright_traceability",
+                  "creator_payout_audit",
+                  "brand_safety"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "BUILD"
+              },
+              "domain_key": {
+                "const": "media_social_growth"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "media.revenue.booked"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "creator_uploads",
+                    "transactions",
+                    "social_videos",
+                    "news_content_items"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "MEDIA"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "upload de creator",
+                      "monetizacao",
+                      "distribuicao de conteudo"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "criador",
+                      "operador de midia",
+                      "marca"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "MEDIA::media.revenue.booked",
+            "type": "object"
+          },
+          "producer_surface": "studio de creator"
+        }
+      ],
+      "module_code": "MEDIA",
+      "module_name": "Valley Media"
+    },
+    {
+      "current_phase": "VALIDATE",
+      "event_topics": [
+        {
+          "compliance_tags": [
+            "ad_policy_traceability",
+            "financial_attribution",
+            "geo_targeting_consent"
+          ],
+          "consumer_surfaces": [
+            "MARKETPLACE",
+            "ADS_INTELLIGENCE",
+            "painel de campanhas",
+            "monitor de atribuicao"
+          ],
+          "contract_key": "ADS:ads.campaign.launched:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "ads.campaign.launched",
+          "evidence_entities": [
+            "gold_campaigns",
+            "sale_validation_events",
+            "pepita_accounts",
+            "social_videos",
+            "influencer_metrics"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "ad_policy_traceability",
+                  "financial_attribution",
+                  "geo_targeting_consent"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "media_social_growth"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "ads.campaign.launched"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "gold_campaigns",
+                    "sale_validation_events",
+                    "pepita_accounts",
+                    "social_videos",
+                    "influencer_metrics"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "ADS"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "campanhas geolocalizadas",
+                      "gold e pepitas",
+                      "atribuicao comercial"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "anunciante",
+                      "operador de growth",
+                      "merchant"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "ADS::ads.campaign.launched",
+            "type": "object"
+          },
+          "producer_surface": "painel de campanhas"
+        },
+        {
+          "compliance_tags": [
+            "ad_policy_traceability",
+            "financial_attribution",
+            "geo_targeting_consent"
+          ],
+          "consumer_surfaces": [
+            "MARKETPLACE",
+            "ADS_INTELLIGENCE",
+            "painel de campanhas",
+            "monitor de atribuicao"
+          ],
+          "contract_key": "ADS:ads.impression.attributed:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "ads.impression.attributed",
+          "evidence_entities": [
+            "gold_campaigns",
+            "sale_validation_events",
+            "pepita_accounts",
+            "social_videos",
+            "influencer_metrics"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "ad_policy_traceability",
+                  "financial_attribution",
+                  "geo_targeting_consent"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "media_social_growth"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "ads.impression.attributed"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "gold_campaigns",
+                    "sale_validation_events",
+                    "pepita_accounts",
+                    "social_videos",
+                    "influencer_metrics"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "ADS"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "campanhas geolocalizadas",
+                      "gold e pepitas",
+                      "atribuicao comercial"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "anunciante",
+                      "operador de growth",
+                      "merchant"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "ADS::ads.impression.attributed",
+            "type": "object"
+          },
+          "producer_surface": "painel de campanhas"
+        },
+        {
+          "compliance_tags": [
+            "ad_policy_traceability",
+            "financial_attribution",
+            "geo_targeting_consent"
+          ],
+          "consumer_surfaces": [
+            "MARKETPLACE",
+            "ADS_INTELLIGENCE",
+            "painel de campanhas",
+            "monitor de atribuicao"
+          ],
+          "contract_key": "ADS:ads.reward.booked:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "ads.reward.booked",
+          "evidence_entities": [
+            "gold_campaigns",
+            "sale_validation_events",
+            "pepita_accounts",
+            "social_videos",
+            "influencer_metrics"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "ad_policy_traceability",
+                  "financial_attribution",
+                  "geo_targeting_consent"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "media_social_growth"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "ads.reward.booked"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "gold_campaigns",
+                    "sale_validation_events",
+                    "pepita_accounts",
+                    "social_videos",
+                    "influencer_metrics"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "ADS"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "campanhas geolocalizadas",
+                      "gold e pepitas",
+                      "atribuicao comercial"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "anunciante",
+                      "operador de growth",
+                      "merchant"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "ADS::ads.reward.booked",
+            "type": "object"
+          },
+          "producer_surface": "painel de campanhas"
+        }
+      ],
+      "module_code": "ADS",
+      "module_name": "Valley Ads"
+    },
+    {
+      "current_phase": "VALIDATE",
+      "event_topics": [
+        {
+          "compliance_tags": [
+            "editorial_governance",
+            "copyright_traceability",
+            "content_moderation"
+          ],
+          "consumer_surfaces": [
+            "CREATOR",
+            "ADS",
+            "cms editorial",
+            "fila de revisao"
+          ],
+          "contract_key": "NEWS_PODCAST:news.story.published:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "news.story.published",
+          "evidence_entities": [
+            "news_content_items"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "editorial_governance",
+                  "copyright_traceability",
+                  "content_moderation"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "media_social_growth"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "news.story.published"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "news_content_items"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "NEWS_PODCAST"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "conteudo editorial",
+                      "episodios e blocos",
+                      "distribuicao midia"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "editor",
+                      "criador de audio",
+                      "consumidor"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "NEWS_PODCAST::news.story.published",
+            "type": "object"
+          },
+          "producer_surface": "cms editorial"
+        },
+        {
+          "compliance_tags": [
+            "editorial_governance",
+            "copyright_traceability",
+            "content_moderation"
+          ],
+          "consumer_surfaces": [
+            "CREATOR",
+            "ADS",
+            "cms editorial",
+            "fila de revisao"
+          ],
+          "contract_key": "NEWS_PODCAST:podcast.episode.released:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "podcast.episode.released",
+          "evidence_entities": [
+            "news_content_items"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "editorial_governance",
+                  "copyright_traceability",
+                  "content_moderation"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "media_social_growth"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "podcast.episode.released"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "news_content_items"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "NEWS_PODCAST"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "conteudo editorial",
+                      "episodios e blocos",
+                      "distribuicao midia"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "editor",
+                      "criador de audio",
+                      "consumidor"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "NEWS_PODCAST::podcast.episode.released",
+            "type": "object"
+          },
+          "producer_surface": "cms editorial"
+        },
+        {
+          "compliance_tags": [
+            "editorial_governance",
+            "copyright_traceability",
+            "content_moderation"
+          ],
+          "consumer_surfaces": [
+            "CREATOR",
+            "ADS",
+            "cms editorial",
+            "fila de revisao"
+          ],
+          "contract_key": "NEWS_PODCAST:media.content.moderated:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "media.content.moderated",
+          "evidence_entities": [
+            "news_content_items"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "editorial_governance",
+                  "copyright_traceability",
+                  "content_moderation"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "media_social_growth"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "media.content.moderated"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "news_content_items"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "NEWS_PODCAST"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "conteudo editorial",
+                      "episodios e blocos",
+                      "distribuicao midia"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "editor",
+                      "criador de audio",
+                      "consumidor"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "NEWS_PODCAST::media.content.moderated",
+            "type": "object"
+          },
+          "producer_surface": "cms editorial"
+        }
+      ],
+      "module_code": "NEWS_PODCAST",
+      "module_name": "Valley News & Podcast"
+    },
+    {
+      "current_phase": "VALIDATE",
+      "event_topics": [
+        {
+          "compliance_tags": [
+            "reward_audit",
+            "age_safety",
+            "community_moderation"
+          ],
+          "consumer_surfaces": [
+            "SOCIAL",
+            "CREATOR",
+            "painel de quests",
+            "monitor de rewards"
+          ],
+          "contract_key": "GAMING:gaming.player.progressed:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "gaming.player.progressed",
+          "evidence_entities": [
+            "points_ledger",
+            "gaming_player_states",
+            "social_videos"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "reward_audit",
+                  "age_safety",
+                  "community_moderation"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "media_social_growth"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "gaming.player.progressed"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "points_ledger",
+                    "gaming_player_states",
+                    "social_videos"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "GAMING"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "estado do jogador",
+                      "gamificacao",
+                      "ponte com rewards"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "player",
+                      "community manager",
+                      "operador de reward"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "GAMING::gaming.player.progressed",
+            "type": "object"
+          },
+          "producer_surface": "painel de quests"
+        },
+        {
+          "compliance_tags": [
+            "reward_audit",
+            "age_safety",
+            "community_moderation"
+          ],
+          "consumer_surfaces": [
+            "SOCIAL",
+            "CREATOR",
+            "painel de quests",
+            "monitor de rewards"
+          ],
+          "contract_key": "GAMING:gaming.reward.unlocked:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "gaming.reward.unlocked",
+          "evidence_entities": [
+            "points_ledger",
+            "gaming_player_states",
+            "social_videos"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "reward_audit",
+                  "age_safety",
+                  "community_moderation"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "media_social_growth"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "gaming.reward.unlocked"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "points_ledger",
+                    "gaming_player_states",
+                    "social_videos"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "GAMING"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "estado do jogador",
+                      "gamificacao",
+                      "ponte com rewards"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "player",
+                      "community manager",
+                      "operador de reward"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "GAMING::gaming.reward.unlocked",
+            "type": "object"
+          },
+          "producer_surface": "painel de quests"
+        },
+        {
+          "compliance_tags": [
+            "reward_audit",
+            "age_safety",
+            "community_moderation"
+          ],
+          "consumer_surfaces": [
+            "SOCIAL",
+            "CREATOR",
+            "painel de quests",
+            "monitor de rewards"
+          ],
+          "contract_key": "GAMING:gaming.quest.completed:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "gaming.quest.completed",
+          "evidence_entities": [
+            "points_ledger",
+            "gaming_player_states",
+            "social_videos"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "reward_audit",
+                  "age_safety",
+                  "community_moderation"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "media_social_growth"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "gaming.quest.completed"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "points_ledger",
+                    "gaming_player_states",
+                    "social_videos"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "GAMING"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "estado do jogador",
+                      "gamificacao",
+                      "ponte com rewards"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "player",
+                      "community manager",
+                      "operador de reward"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "GAMING::gaming.quest.completed",
+            "type": "object"
+          },
+          "producer_surface": "painel de quests"
+        }
+      ],
+      "module_code": "GAMING",
+      "module_name": "Valley Gaming"
+    }
+  ],
+  "package_key": "media_social_growth.priority.v1",
+  "priority_rank": 2
+}

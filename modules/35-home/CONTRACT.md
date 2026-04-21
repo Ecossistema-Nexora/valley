@@ -10,7 +10,8 @@ Ele define a fronteira inicial do modulo para guiar desenvolvimento, implantacao
 - Dominio: `frontier_iot_energy`
 - Tier: `expansion`
 - Data home: `mongo`
-- Status atual: `Planejado`
+- Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
 
 ## Objetivo Simples
 
@@ -30,6 +31,45 @@ Persistencia principal em MongoDB, porque o modulo trabalha com IA, social, tele
 
 Dependencias minimas: IOT. Integracoes previstas: SECURITY, ENERGY.
 
+## Atores Primarios
+
+- morador
+- instalador
+- operador smart home
+
+## Capacidades-Chave
+
+- automacao residencial
+- eventos domesticos
+- regras de cena
+
+## Entidades Relacionais
+
+- Nao aplicavel.
+
+## Payloads Volumosos E Colecoes
+
+- `home_automation_events`
+- `iot_device_registry`
+
+## Eventos Canonicos
+
+- `home.device.bound`
+- `home.scene.executed`
+- `home.alert.triggered`
+
+## Compliance, Risco E Guarda
+
+- household_access_control
+- event_retention
+- device_safety
+
+## Superficies Admin E Operacao
+
+- painel de residencia
+- console de automacao
+- monitor de alertas
+
 ## Regras De Evolucao
 
 1. Nao criar tabela duplicada de usuario; usar sempre `public.users`.
@@ -42,8 +82,6 @@ Dependencias minimas: IOT. Integracoes previstas: SECURITY, ENERGY.
 
 ## Primeiro Backlog Tecnico
 
-- Confirmar se o modulo precisa de tabela propria ou se usa tabelas compartilhadas ja existentes.
-- Definir eventos de entrada e saida com nomes tecnicos estaveis.
-- Definir permissao Admin/RBAC/ABAC quando houver operacao sensivel.
-- Registrar regra de negocio em `business_rule_definitions` quando houver pricing, comissao, limite, risco ou compliance.
-- Validar se dados volumosos ficam fora do PostgreSQL.
+- fechar modelo de household
+- definir automacao segura
+- ligar trilha de acesso domestico

@@ -11,6 +11,7 @@ Ele define a fronteira inicial do modulo para guiar desenvolvimento, implantacao
 - Tier: `expansion`
 - Data home: `postgres`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
 
 ## Objetivo Simples
 
@@ -30,6 +31,46 @@ Persistencia principal em PostgreSQL, porque o modulo exige consistencia, `forei
 
 Dependencias minimas: PAY. Integracoes previstas: DOCS, SOCIAL.
 
+## Atores Primarios
+
+- doador
+- gestor de causa
+- auditor social
+
+## Capacidades-Chave
+
+- causas
+- grants
+- ledger de fundos
+
+## Entidades Relacionais
+
+- `charity_causes`
+- `charity_grants`
+- `charity_fund_ledger`
+
+## Payloads Volumosos E Colecoes
+
+- Nao aplicavel.
+
+## Eventos Canonicos
+
+- `charity.cause.published`
+- `charity.grant.approved`
+- `charity.fund.posted`
+
+## Compliance, Risco E Guarda
+
+- donation_audit
+- impact_traceability
+- fund_immutability
+
+## Superficies Admin E Operacao
+
+- painel de causas
+- fila de grants
+- monitor de ledger social
+
 ## Regras De Evolucao
 
 1. Nao criar tabela duplicada de usuario; usar sempre `public.users`.
@@ -42,8 +83,6 @@ Dependencias minimas: PAY. Integracoes previstas: DOCS, SOCIAL.
 
 ## Primeiro Backlog Tecnico
 
-- Confirmar se o modulo precisa de tabela propria ou se usa tabelas compartilhadas ja existentes.
-- Definir eventos de entrada e saida com nomes tecnicos estaveis.
-- Definir permissao Admin/RBAC/ABAC quando houver operacao sensivel.
-- Registrar regra de negocio em `business_rule_definitions` quando houver pricing, comissao, limite, risco ou compliance.
-- Validar se dados volumosos ficam fora do PostgreSQL.
+- fechar prova de impacto
+- definir governanca de grants
+- ligar recibo social auditavel

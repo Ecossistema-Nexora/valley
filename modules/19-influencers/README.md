@@ -12,10 +12,24 @@ Ele descreve o modulo em linguagem simples e serve como ponto inicial para desen
 - Tier: `core`
 - Data home: `mongo`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `BUILD` (Build)
+- Cobertura mapeada: MongoDB: 2 colecoes principais e 1 entidades relacionais de apoio.
 
 ## Finalidade
 
 Hub de criadores, metricas, afiliacao e monetizacao.
+
+## Atores Primarios
+
+- creator
+- brand manager
+- operador de afiliacao
+
+## Capacidades-Chave
+
+- hub de criadores
+- metricas de audiencia
+- monetizacao afiliada
 
 ## Dependencias
 
@@ -24,6 +38,41 @@ CREATOR, UP
 ## Integracoes
 
 SOCIAL, ADS
+
+## Mapa De Dados
+
+### PostgreSQL
+
+- `creator_uploads`
+
+### MongoDB
+
+- `influencer_metrics`
+- `social_videos`
+
+## Eventos Canonicos
+
+- `influencer.profile.qualified`
+- `influencer.metric.ingested`
+- `influencer.commission.attributed`
+
+## Compliance E Operacao
+
+- creator_disclosure
+- commission_audit
+- brand_safety
+
+## Superficies Admin
+
+- painel de creators
+- fila de brand safety
+- monitor de afiliacao
+
+## Proxima Onda
+
+- fechar score de creator fit
+- definir politica de disclosure
+- ligar payout por campanha
 
 ## Trilha De Implantacao
 
@@ -39,3 +88,4 @@ SOCIAL, ADS
 - Integracoes com `PAY`, `ID`, `DOCS`, `ORDERS` ou `TRANSACTIONS` documentadas quando existirem.
 - Teste ou validacao tecnica registrada.
 - Comentarios em portugues simples com termos tecnicos em ingles onde fizer sentido.
+- Blueprint operacional alinhado ao registry detalhado.

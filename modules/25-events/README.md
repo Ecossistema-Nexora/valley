@@ -12,10 +12,24 @@ Ele descreve o modulo em linguagem simples e serve como ponto inicial para desen
 - Tier: `core`
 - Data home: `postgres`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
+- Cobertura mapeada: PostgreSQL: 3 entidades mapeadas.
 
 ## Finalidade
 
 Ingressos, eventos, escrow e seguranca de venda.
+
+## Atores Primarios
+
+- organizador
+- participante
+- operador de bilheteria
+
+## Capacidades-Chave
+
+- programacao de evento
+- tipos de ingresso
+- ledger de tickets
 
 ## Dependencias
 
@@ -24,6 +38,42 @@ PAY
 ## Integracoes
 
 TICKETS, DOCS
+
+## Mapa De Dados
+
+### PostgreSQL
+
+- `event_programs`
+- `event_ticket_types`
+- `event_ticket_ledger`
+
+### MongoDB
+
+- Nao aplicavel.
+
+## Eventos Canonicos
+
+- `events.program.published`
+- `events.ticket.issued`
+- `events.ticket.transferred`
+
+## Compliance E Operacao
+
+- ticket_immutability
+- escrow_audit
+- fraud_prevention
+
+## Superficies Admin
+
+- painel de eventos
+- monitor de bilheteria
+- fila de dispute
+
+## Proxima Onda
+
+- fechar anti-scalping
+- definir transferencia segura
+- ligar concilicao de evento
 
 ## Trilha De Implantacao
 
@@ -39,3 +89,4 @@ TICKETS, DOCS
 - Integracoes com `PAY`, `ID`, `DOCS`, `ORDERS` ou `TRANSACTIONS` documentadas quando existirem.
 - Teste ou validacao tecnica registrada.
 - Comentarios em portugues simples com termos tecnicos em ingles onde fizer sentido.
+- Blueprint operacional alinhado ao registry detalhado.

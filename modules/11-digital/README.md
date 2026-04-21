@@ -12,10 +12,24 @@ Ele descreve o modulo em linguagem simples e serve como ponto inicial para desen
 - Tier: `expansion`
 - Data home: `postgres`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
+- Cobertura mapeada: PostgreSQL: 3 entidades mapeadas.
 
 ## Finalidade
 
 Ativos digitais, NFTs, royalties e custodia tokenizada.
+
+## Atores Primarios
+
+- criador
+- colecionador
+- operador de custodia
+
+## Capacidades-Chave
+
+- colecoes digitais
+- mint e transferencia
+- trilha de royalties
 
 ## Dependencias
 
@@ -24,6 +38,42 @@ PAY, ID
 ## Integracoes
 
 CREATOR, DOCS
+
+## Mapa De Dados
+
+### PostgreSQL
+
+- `digital_asset_collections`
+- `digital_assets`
+- `digital_asset_events`
+
+### MongoDB
+
+- Nao aplicavel.
+
+## Eventos Canonicos
+
+- `digital.asset.minted`
+- `digital.asset.transferred`
+- `digital.royalty.calculated`
+
+## Compliance E Operacao
+
+- ownership_traceability
+- royalty_audit
+- custody_controls
+
+## Superficies Admin
+
+- painel de colecoes
+- fila de mint
+- monitor de royalties
+
+## Proxima Onda
+
+- fechar politica de metadata
+- amarrar elegibilidade de mint
+- ligar trilha de royalty por creator
 
 ## Trilha De Implantacao
 
@@ -39,3 +89,4 @@ CREATOR, DOCS
 - Integracoes com `PAY`, `ID`, `DOCS`, `ORDERS` ou `TRANSACTIONS` documentadas quando existirem.
 - Teste ou validacao tecnica registrada.
 - Comentarios em portugues simples com termos tecnicos em ingles onde fizer sentido.
+- Blueprint operacional alinhado ao registry detalhado.

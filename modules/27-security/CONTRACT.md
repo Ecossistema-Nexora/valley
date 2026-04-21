@@ -11,6 +11,7 @@ Ele define a fronteira inicial do modulo para guiar desenvolvimento, implantacao
 - Tier: `core`
 - Data home: `postgres_mongo`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
 
 ## Objetivo Simples
 
@@ -30,6 +31,48 @@ Persistencia hibrida: PostgreSQL guarda o contrato operacional e MongoDB guarda 
 
 Dependencias minimas: ID. Integracoes previstas: IOT, LEGAL.
 
+## Atores Primarios
+
+- usuario protegido
+- analista de risco
+- operador SOS
+
+## Capacidades-Chave
+
+- contatos confiaveis
+- credencial biometrica por hash
+- trilha de incidente
+
+## Entidades Relacionais
+
+- `security_trusted_contacts`
+- `security_biometric_credentials`
+- `security_incidents`
+- `security_incident_events`
+
+## Payloads Volumosos E Colecoes
+
+- `security_signal_logs`
+- `iot_sensor_events`
+
+## Eventos Canonicos
+
+- `security.sos.triggered`
+- `security.biometric.enrolled`
+- `security.incident.closed`
+
+## Compliance, Risco E Guarda
+
+- biometric_hashing
+- incident_chain_of_custody
+- access_control
+
+## Superficies Admin E Operacao
+
+- torre de seguranca
+- fila de incidentes
+- painel de credenciais
+
 ## Regras De Evolucao
 
 1. Nao criar tabela duplicada de usuario; usar sempre `public.users`.
@@ -42,8 +85,6 @@ Dependencias minimas: ID. Integracoes previstas: IOT, LEGAL.
 
 ## Primeiro Backlog Tecnico
 
-- Confirmar se o modulo precisa de tabela propria ou se usa tabelas compartilhadas ja existentes.
-- Definir eventos de entrada e saida com nomes tecnicos estaveis.
-- Definir permissao Admin/RBAC/ABAC quando houver operacao sensivel.
-- Registrar regra de negocio em `business_rule_definitions` quando houver pricing, comissao, limite, risco ou compliance.
-- Validar se dados volumosos ficam fora do PostgreSQL.
+- fechar severidade de incidente
+- definir resposta por playbook
+- ligar trilha forense

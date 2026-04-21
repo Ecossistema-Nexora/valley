@@ -1,2 +1,7 @@
 .env
 tmp/runtime/
+tmp/db-deploy-runtime/
+tmp/pdfs/
+__pycache__/
+scripts/__pycache__/
+output/snapshots/

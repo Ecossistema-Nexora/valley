@@ -11,6 +11,7 @@ Ele define a fronteira inicial do modulo para guiar desenvolvimento, implantacao
 - Tier: `foundation`
 - Data home: `mongo`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
 
 ## Objetivo Simples
 
@@ -30,6 +31,44 @@ Persistencia principal em MongoDB, porque o modulo trabalha com IA, social, tele
 
 Dependencias minimas: ID. Integracoes previstas: DELIVERY, FOOD, MOBILITY.
 
+## Atores Primarios
+
+- operador logistico
+- cliente final
+- transportadora
+
+## Capacidades-Chave
+
+- tracking unificado
+- checkpoints canonicos
+- alerta de anomalia
+
+## Entidades Relacionais
+
+- Nao aplicavel.
+
+## Payloads Volumosos E Colecoes
+
+- `log_tracking_events`
+
+## Eventos Canonicos
+
+- `log.tracking_event.ingested`
+- `log.route.anomaly.detected`
+- `log.delivery.status_changed`
+
+## Compliance, Risco E Guarda
+
+- chain_of_custody
+- tracking_traceability
+- carrier_audit
+
+## Superficies Admin E Operacao
+
+- painel de tracking
+- fila de excecoes
+- monitor de transportadoras
+
 ## Regras De Evolucao
 
 1. Nao criar tabela duplicada de usuario; usar sempre `public.users`.
@@ -42,8 +81,6 @@ Dependencias minimas: ID. Integracoes previstas: DELIVERY, FOOD, MOBILITY.
 
 ## Primeiro Backlog Tecnico
 
-- Confirmar se o modulo precisa de tabela propria ou se usa tabelas compartilhadas ja existentes.
-- Definir eventos de entrada e saida com nomes tecnicos estaveis.
-- Definir permissao Admin/RBAC/ABAC quando houver operacao sensivel.
-- Registrar regra de negocio em `business_rule_definitions` quando houver pricing, comissao, limite, risco ou compliance.
-- Validar se dados volumosos ficam fora do PostgreSQL.
+- normalizar status canonicos
+- ligar alertas de atraso
+- fechar dedupe por evento

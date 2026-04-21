@@ -11,6 +11,7 @@ Ele define a fronteira inicial do modulo para guiar desenvolvimento, implantacao
 - Tier: `core`
 - Data home: `postgres`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
 
 ## Objetivo Simples
 
@@ -30,6 +31,47 @@ Persistencia principal em PostgreSQL, porque o modulo exige consistencia, `forei
 
 Dependencias minimas: ID, PAY. Integracoes previstas: MARKETPLACE, LEGAL.
 
+## Atores Primarios
+
+- prestador
+- cliente
+- operador de marketplace
+
+## Capacidades-Chave
+
+- catalogo de servicos
+- booking
+- trilha de atendimento
+
+## Entidades Relacionais
+
+- `service_provider_profiles`
+- `service_catalog_services`
+- `service_bookings`
+- `service_booking_events`
+
+## Payloads Volumosos E Colecoes
+
+- Nao aplicavel.
+
+## Eventos Canonicos
+
+- `services.provider.approved`
+- `services.booking.confirmed`
+- `services.booking.closed`
+
+## Compliance, Risco E Guarda
+
+- provider_verification
+- service_auditability
+- payment_split_audit
+
+## Superficies Admin E Operacao
+
+- painel de prestadores
+- agenda de bookings
+- fila de reputacao
+
 ## Regras De Evolucao
 
 1. Nao criar tabela duplicada de usuario; usar sempre `public.users`.
@@ -42,8 +84,6 @@ Dependencias minimas: ID, PAY. Integracoes previstas: MARKETPLACE, LEGAL.
 
 ## Primeiro Backlog Tecnico
 
-- Confirmar se o modulo precisa de tabela propria ou se usa tabelas compartilhadas ja existentes.
-- Definir eventos de entrada e saida com nomes tecnicos estaveis.
-- Definir permissao Admin/RBAC/ABAC quando houver operacao sensivel.
-- Registrar regra de negocio em `business_rule_definitions` quando houver pricing, comissao, limite, risco ou compliance.
-- Validar se dados volumosos ficam fora do PostgreSQL.
+- fechar score de prestador
+- definir no-show policy
+- ligar disputa operacional

@@ -12,10 +12,24 @@ Ele descreve o modulo em linguagem simples e serve como ponto inicial para desen
 - Tier: `core`
 - Data home: `postgres`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `DATA_CONTRACT` (Contrato de dados)
+- Cobertura mapeada: PostgreSQL: 3 entidades mapeadas.
 
 ## Finalidade
 
 Delivery alimentar com split Pay, informacoes nutricionais e taxa operacional.
+
+## Atores Primarios
+
+- restaurante
+- consumidor
+- operador de atendimento
+
+## Capacidades-Chave
+
+- pedido alimentar
+- split operacional
+- restricoes nutricionais
 
 ## Dependencias
 
@@ -24,6 +38,42 @@ PAY, LOG, HEALTH
 ## Integracoes
 
 ORDERS, MOBILITY, DOCS
+
+## Mapa De Dados
+
+### PostgreSQL
+
+- `orders`
+- `transactions`
+- `health_profiles`
+
+### MongoDB
+
+- Nao aplicavel.
+
+## Eventos Canonicos
+
+- `food.order.placed`
+- `food.order.prepared`
+- `food.order.delivered`
+
+## Compliance E Operacao
+
+- food_safety_traceability
+- payment_split_audit
+- allergen_notice
+
+## Superficies Admin
+
+- painel de pedidos
+- gestao de cardapio
+- monitor de cozinha
+
+## Proxima Onda
+
+- criar contrato especifico de cardapio e loja
+- definir SLA de preparo
+- amarrar taxonomia nutricional
 
 ## Trilha De Implantacao
 
@@ -39,3 +89,4 @@ ORDERS, MOBILITY, DOCS
 - Integracoes com `PAY`, `ID`, `DOCS`, `ORDERS` ou `TRANSACTIONS` documentadas quando existirem.
 - Teste ou validacao tecnica registrada.
 - Comentarios em portugues simples com termos tecnicos em ingles onde fizer sentido.
+- Blueprint operacional alinhado ao registry detalhado.

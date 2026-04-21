@@ -93,6 +93,48 @@
       "purpose_ptbr": "Cria a camada expansion em PostgreSQL para Digital, Real Estate, Edu, Vet, Gov, Charity e Insurance com contratos, auditoria e ledgers append-only.",
       "requires": ["001", "002", "004", "007", "009", "011", "012"],
       "provides": ["digital_asset_collections", "digital_assets", "digital_asset_events", "real_estate_properties", "real_estate_listings", "real_estate_deals", "edu_learning_paths", "edu_learning_units", "edu_enrollments", "vet_pet_profiles", "vet_service_cases", "vet_prescriptions", "gov_service_catalog", "gov_service_requests", "gov_request_events", "charity_causes", "charity_grants", "charity_fund_ledger", "insurance_products", "insurance_policies", "insurance_claims", "insurance_claim_events"]
+    },
+    {
+      "id": "014",
+      "path": "database/postgres/014_v47_expansion_tourism_bio_energy.sql",
+      "purpose_ptbr": "Fecha a fronteira relacional dos modulos hibridos ainda planejados com contratos para Tourism, Bio e Energy, incluindo trilhas append-only de booking, coleta reversa e settlement energetico.",
+      "requires": ["001", "002", "004", "007", "009", "011", "012", "013"],
+      "provides": ["tourism_experiences", "tourism_bookings", "tourism_booking_events", "bio_material_programs", "bio_collection_orders", "bio_collection_events", "energy_assets", "energy_trade_orders", "energy_settlement_ledger"]
+    },
+    {
+      "id": "015",
+      "path": "database/postgres/015_v47_module_blueprints_registry.sql",
+      "purpose_ptbr": "Evolui o module_delivery_registry com blueprint JSON, fase atual e backlog imediato dos 47 modulos sem recriar a tabela existente.",
+      "requires": ["007", "014"],
+      "provides": ["column:module_delivery_registry.module_blueprint_json"]
+    },
+    {
+      "id": "016",
+      "path": "database/postgres/016_v47_execution_backlog_seed.sql",
+      "purpose_ptbr": "Evolui o module_evolution_backlog para fila executavel por dominio, com chave deterministica, dependencias internas e seed acionavel dos proximos entregaveis dos 47 modulos.",
+      "requires": ["007", "015"],
+      "provides": ["column:module_evolution_backlog.backlog_key"]
+    },
+    {
+      "id": "017",
+      "path": "database/postgres/017_v47_priority_domain_delivery_packages.sql",
+      "purpose_ptbr": "Cria o registry fisico dos pacotes por dominio prioritario, com artefatos por camada e contratos de evento versionados para a primeira onda executavel.",
+      "requires": ["016"],
+      "provides": ["domain_delivery_packages", "domain_delivery_artifacts", "domain_event_contracts"]
+    },
+    {
+      "id": "018",
+      "path": "database/postgres/018_v47_platform_developer_business_ddl.sql",
+      "purpose_ptbr": "Aprofunda o dominio Platform Developer com DDL real para DOCS e TECH, cobrindo templates, cadeia de checksum, versoes de recibo, limites por client, rotacao de credenciais e replay seguro de webhook.",
+      "requires": ["005", "009", "017"],
+      "provides": ["docs_template_contracts", "docs_template_versions", "docs_document_checksum_events", "docs_receipt_versions", "tech_client_module_limits", "tech_credential_rotation_events", "tech_webhook_replay_requests"]
+    },
+    {
+      "id": "019",
+      "path": "database/postgres/019_v47_logistics_erp_operations_business_ddl.sql",
+      "purpose_ptbr": "Aprofunda o dominio Logistics ERP Operations com DDL real para unidade fiscal, aprovacao de compras, margem e reconciliacao, menu food, enderecamento WMS, politica de entrega e custo de frota.",
+      "requires": ["005", "008", "011", "017"],
+      "provides": ["business_units", "business_fiscal_closures", "procurement_approval_policies", "stock_channel_margin_policies", "food_store_contracts", "warehouse_locations", "delivery_operation_policies", "fleet_vehicle_operating_profiles"]
     }
   ],
   "mongodb": [
@@ -116,6 +158,13 @@
       "purpose_ptbr": "Cria validators e indices para dispatch, frota, sinais de seguranca e agenda inteligente.",
       "requires": ["mongo-001", "mongo-002"],
       "provides": ["delivery_dispatch_runs", "fleet_vehicle_profiles", "fleet_maintenance_events", "security_signal_logs", "agenda_items"]
+    },
+    {
+      "id": "mongo-004",
+      "path": "database/mongodb/004_v47_expansion_media_wellness_frontier.mongo.js",
+      "purpose_ptbr": "Fecha a fronteira NoSQL dos modulos planejados com colecoes para News & Podcast, Fitness, Gaming, Home, Space e a camada volumosa de Tourism, Bio e Energy.",
+      "requires": ["mongo-001", "mongo-002", "mongo-003"],
+      "provides": ["news_content_items", "fitness_activity_sessions", "gaming_player_states", "home_automation_events", "space_anchor_maps", "tourism_experience_feeds", "bio_impact_logs", "energy_meter_streams"]
     }
   ]
 }

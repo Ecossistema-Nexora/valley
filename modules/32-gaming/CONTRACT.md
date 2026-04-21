@@ -10,7 +10,8 @@ Ele define a fronteira inicial do modulo para guiar desenvolvimento, implantacao
 - Dominio: `media_social_growth`
 - Tier: `expansion`
 - Data home: `mongo`
-- Status atual: `Planejado`
+- Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
 
 ## Objetivo Simples
 
@@ -30,6 +31,45 @@ Persistencia principal em MongoDB, porque o modulo trabalha com IA, social, tele
 
 Dependencias minimas: LOYALTY. Integracoes previstas: SOCIAL, CREATOR.
 
+## Atores Primarios
+
+- player
+- community manager
+- operador de reward
+
+## Capacidades-Chave
+
+- estado do jogador
+- gamificacao
+- ponte com rewards
+
+## Entidades Relacionais
+
+- `points_ledger`
+
+## Payloads Volumosos E Colecoes
+
+- `gaming_player_states`
+- `social_videos`
+
+## Eventos Canonicos
+
+- `gaming.player.progressed`
+- `gaming.reward.unlocked`
+- `gaming.quest.completed`
+
+## Compliance, Risco E Guarda
+
+- reward_audit
+- age_safety
+- community_moderation
+
+## Superficies Admin E Operacao
+
+- painel de quests
+- monitor de rewards
+- console de comunidade
+
 ## Regras De Evolucao
 
 1. Nao criar tabela duplicada de usuario; usar sempre `public.users`.
@@ -42,8 +82,6 @@ Dependencias minimas: LOYALTY. Integracoes previstas: SOCIAL, CREATOR.
 
 ## Primeiro Backlog Tecnico
 
-- Confirmar se o modulo precisa de tabela propria ou se usa tabelas compartilhadas ja existentes.
-- Definir eventos de entrada e saida com nomes tecnicos estaveis.
-- Definir permissao Admin/RBAC/ABAC quando houver operacao sensivel.
-- Registrar regra de negocio em `business_rule_definitions` quando houver pricing, comissao, limite, risco ou compliance.
-- Validar se dados volumosos ficam fora do PostgreSQL.
+- fechar regra de quest
+- definir anti-abuso de reward
+- ligar ranking por bairro

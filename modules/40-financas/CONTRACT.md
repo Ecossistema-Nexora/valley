@@ -11,6 +11,7 @@ Ele define a fronteira inicial do modulo para guiar desenvolvimento, implantacao
 - Tier: `core`
 - Data home: `postgres`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
 
 ## Objetivo Simples
 
@@ -30,6 +31,46 @@ Persistencia principal em PostgreSQL, porque o modulo exige consistencia, `forei
 
 Dependencias minimas: PAY. Integracoes previstas: ADVISOR, BUSINESS.
 
+## Atores Primarios
+
+- usuario PF
+- microempreendedor
+- operador financeiro
+
+## Capacidades-Chave
+
+- metas financeiras
+- round-up
+- visao de caixa
+
+## Entidades Relacionais
+
+- `financial_goals`
+- `transactions`
+- `wallets`
+
+## Payloads Volumosos E Colecoes
+
+- Nao aplicavel.
+
+## Eventos Canonicos
+
+- `financas.goal.created`
+- `financas.roundup.booked`
+- `financas.cashflow.closed`
+
+## Compliance, Risco E Guarda
+
+- financial_privacy
+- goal_audit
+- ledger_traceability
+
+## Superficies Admin E Operacao
+
+- painel financeiro pessoal
+- monitor de metas
+- fila de conciliacao
+
 ## Regras De Evolucao
 
 1. Nao criar tabela duplicada de usuario; usar sempre `public.users`.
@@ -42,8 +83,6 @@ Dependencias minimas: PAY. Integracoes previstas: ADVISOR, BUSINESS.
 
 ## Primeiro Backlog Tecnico
 
-- Confirmar se o modulo precisa de tabela propria ou se usa tabelas compartilhadas ja existentes.
-- Definir eventos de entrada e saida com nomes tecnicos estaveis.
-- Definir permissao Admin/RBAC/ABAC quando houver operacao sensivel.
-- Registrar regra de negocio em `business_rule_definitions` quando houver pricing, comissao, limite, risco ou compliance.
-- Validar se dados volumosos ficam fora do PostgreSQL.
+- fechar agregacao por categoria
+- definir orcamento mensal
+- ligar alertas de caixa

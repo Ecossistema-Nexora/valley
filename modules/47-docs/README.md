@@ -12,10 +12,24 @@ Ele descreve o modulo em linguagem simples e serve como ponto inicial para desen
 - Tier: `foundation`
 - Data home: `postgres`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `DATA_CONTRACT` (Contrato de dados)
+- Cobertura mapeada: PostgreSQL: 4 entidades mapeadas.
 
 ## Finalidade
 
 Geracao de documentos, recibos, checksums e registros imutaveis.
+
+## Atores Primarios
+
+- operador documental
+- juridico
+- motor de recibos
+
+## Capacidades-Chave
+
+- documentos
+- recibos
+- checksums e prova
 
 ## Dependencias
 
@@ -24,6 +38,43 @@ PAY, LEGAL
 ## Integracoes
 
 ORDERS, TRANSACTIONS
+
+## Mapa De Dados
+
+### PostgreSQL
+
+- `legal_contracts`
+- `transactions`
+- `orders`
+- `event_ticket_ledger`
+
+### MongoDB
+
+- Nao aplicavel.
+
+## Eventos Canonicos
+
+- `docs.receipt.generated`
+- `docs.document.signed`
+- `docs.hash.registered`
+
+## Compliance E Operacao
+
+- document_immutability
+- signature_traceability
+- receipt_audit
+
+## Superficies Admin
+
+- painel documental
+- fila de emissao
+- monitor de checksum
+
+## Proxima Onda
+
+- criar contrato especifico de template
+- definir trilha de checksum
+- ligar versionamento de recibo
 
 ## Trilha De Implantacao
 
@@ -39,3 +90,4 @@ ORDERS, TRANSACTIONS
 - Integracoes com `PAY`, `ID`, `DOCS`, `ORDERS` ou `TRANSACTIONS` documentadas quando existirem.
 - Teste ou validacao tecnica registrada.
 - Comentarios em portugues simples com termos tecnicos em ingles onde fizer sentido.
+- Blueprint operacional alinhado ao registry detalhado.

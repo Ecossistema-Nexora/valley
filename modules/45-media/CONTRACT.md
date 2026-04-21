@@ -11,6 +11,7 @@ Ele define a fronteira inicial do modulo para guiar desenvolvimento, implantacao
 - Tier: `core`
 - Data home: `postgres_mongo`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `BUILD` (Build)
 
 ## Objetivo Simples
 
@@ -30,6 +31,46 @@ Persistencia hibrida: PostgreSQL guarda o contrato operacional e MongoDB guarda 
 
 Dependencias minimas: CREATOR. Integracoes previstas: SOCIAL, ADS.
 
+## Atores Primarios
+
+- criador
+- operador de midia
+- marca
+
+## Capacidades-Chave
+
+- upload de creator
+- monetizacao
+- distribuicao de conteudo
+
+## Entidades Relacionais
+
+- `creator_uploads`
+- `transactions`
+
+## Payloads Volumosos E Colecoes
+
+- `social_videos`
+- `news_content_items`
+
+## Eventos Canonicos
+
+- `media.upload.received`
+- `media.asset.published`
+- `media.revenue.booked`
+
+## Compliance, Risco E Guarda
+
+- copyright_traceability
+- creator_payout_audit
+- brand_safety
+
+## Superficies Admin E Operacao
+
+- studio de creator
+- fila de publicacao
+- monitor de receita
+
 ## Regras De Evolucao
 
 1. Nao criar tabela duplicada de usuario; usar sempre `public.users`.
@@ -42,8 +83,6 @@ Dependencias minimas: CREATOR. Integracoes previstas: SOCIAL, ADS.
 
 ## Primeiro Backlog Tecnico
 
-- Confirmar se o modulo precisa de tabela propria ou se usa tabelas compartilhadas ja existentes.
-- Definir eventos de entrada e saida com nomes tecnicos estaveis.
-- Definir permissao Admin/RBAC/ABAC quando houver operacao sensivel.
-- Registrar regra de negocio em `business_rule_definitions` quando houver pricing, comissao, limite, risco ou compliance.
-- Validar se dados volumosos ficam fora do PostgreSQL.
+- fechar pipeline de media
+- definir direitos por asset
+- ligar receita por creator

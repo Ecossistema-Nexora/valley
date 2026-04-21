@@ -1,0 +1,3124 @@
+{
+  "domain_key": "commerce_fintech_assets",
+  "domain_label": "Commerce Fintech Assets",
+  "modules": [
+    {
+      "current_phase": "VALIDATE",
+      "event_topics": [
+        {
+          "compliance_tags": [
+            "merchant_kyb",
+            "pricing_audit",
+            "listing_governance"
+          ],
+          "consumer_surfaces": [
+            "STOCK",
+            "ADS",
+            "UP",
+            "painel de seller",
+            "aprovacao de listing"
+          ],
+          "contract_key": "MARKETPLACE:marketplace.listing.published:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "marketplace.listing.published",
+          "evidence_entities": [
+            "marketplace_listings",
+            "merchant_storefronts",
+            "sale_validation_events"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "merchant_kyb",
+                  "pricing_audit",
+                  "listing_governance"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "commerce_fintech_assets"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "marketplace.listing.published"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "marketplace_listings",
+                    "merchant_storefronts",
+                    "sale_validation_events"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "MARKETPLACE"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "listagem local",
+                      "storefront por merchant",
+                      "validacao de venda"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "seller",
+                      "comprador",
+                      "curador comercial"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "MARKETPLACE::marketplace.listing.published",
+            "type": "object"
+          },
+          "producer_surface": "painel de seller"
+        },
+        {
+          "compliance_tags": [
+            "merchant_kyb",
+            "pricing_audit",
+            "listing_governance"
+          ],
+          "consumer_surfaces": [
+            "STOCK",
+            "ADS",
+            "UP",
+            "painel de seller",
+            "aprovacao de listing"
+          ],
+          "contract_key": "MARKETPLACE:marketplace.cart.checked_out:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "marketplace.cart.checked_out",
+          "evidence_entities": [
+            "marketplace_listings",
+            "merchant_storefronts",
+            "sale_validation_events"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "merchant_kyb",
+                  "pricing_audit",
+                  "listing_governance"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "commerce_fintech_assets"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "marketplace.cart.checked_out"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "marketplace_listings",
+                    "merchant_storefronts",
+                    "sale_validation_events"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "MARKETPLACE"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "listagem local",
+                      "storefront por merchant",
+                      "validacao de venda"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "seller",
+                      "comprador",
+                      "curador comercial"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "MARKETPLACE::marketplace.cart.checked_out",
+            "type": "object"
+          },
+          "producer_surface": "painel de seller"
+        },
+        {
+          "compliance_tags": [
+            "merchant_kyb",
+            "pricing_audit",
+            "listing_governance"
+          ],
+          "consumer_surfaces": [
+            "STOCK",
+            "ADS",
+            "UP",
+            "painel de seller",
+            "aprovacao de listing"
+          ],
+          "contract_key": "MARKETPLACE:marketplace.sale.validated:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "marketplace.sale.validated",
+          "evidence_entities": [
+            "marketplace_listings",
+            "merchant_storefronts",
+            "sale_validation_events"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "merchant_kyb",
+                  "pricing_audit",
+                  "listing_governance"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "commerce_fintech_assets"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "marketplace.sale.validated"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "marketplace_listings",
+                    "merchant_storefronts",
+                    "sale_validation_events"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "MARKETPLACE"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "listagem local",
+                      "storefront por merchant",
+                      "validacao de venda"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "seller",
+                      "comprador",
+                      "curador comercial"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "MARKETPLACE::marketplace.sale.validated",
+            "type": "object"
+          },
+          "producer_surface": "painel de seller"
+        }
+      ],
+      "module_code": "MARKETPLACE",
+      "module_name": "Valley Marketplace"
+    },
+    {
+      "current_phase": "VALIDATE",
+      "event_topics": [
+        {
+          "compliance_tags": [
+            "kyc",
+            "aml_monitoring",
+            "financial_ledger_immutability"
+          ],
+          "consumer_surfaces": [
+            "WALLETS",
+            "TRANSACTIONS",
+            "EQUITY",
+            "painel financeiro",
+            "monitor de conciliacao"
+          ],
+          "contract_key": "PAY:pay.wallet.opened:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "pay.wallet.opened",
+          "evidence_entities": [
+            "wallets",
+            "transactions",
+            "equity_ledger"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "kyc",
+                  "aml_monitoring",
+                  "financial_ledger_immutability"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "commerce_fintech_assets"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "pay.wallet.opened"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "wallets",
+                    "transactions",
+                    "equity_ledger"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "PAY"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "wallet e saldo",
+                      "ledger atomico",
+                      "splits e conciliacao"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "titular da wallet",
+                      "operador financeiro",
+                      "motor de conciliacao"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "PAY::pay.wallet.opened",
+            "type": "object"
+          },
+          "producer_surface": "painel financeiro"
+        },
+        {
+          "compliance_tags": [
+            "kyc",
+            "aml_monitoring",
+            "financial_ledger_immutability"
+          ],
+          "consumer_surfaces": [
+            "WALLETS",
+            "TRANSACTIONS",
+            "EQUITY",
+            "painel financeiro",
+            "monitor de conciliacao"
+          ],
+          "contract_key": "PAY:pay.transaction.posted:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "pay.transaction.posted",
+          "evidence_entities": [
+            "wallets",
+            "transactions",
+            "equity_ledger"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "kyc",
+                  "aml_monitoring",
+                  "financial_ledger_immutability"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "commerce_fintech_assets"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "pay.transaction.posted"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "wallets",
+                    "transactions",
+                    "equity_ledger"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "PAY"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "wallet e saldo",
+                      "ledger atomico",
+                      "splits e conciliacao"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "titular da wallet",
+                      "operador financeiro",
+                      "motor de conciliacao"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "PAY::pay.transaction.posted",
+            "type": "object"
+          },
+          "producer_surface": "painel financeiro"
+        },
+        {
+          "compliance_tags": [
+            "kyc",
+            "aml_monitoring",
+            "financial_ledger_immutability"
+          ],
+          "consumer_surfaces": [
+            "WALLETS",
+            "TRANSACTIONS",
+            "EQUITY",
+            "painel financeiro",
+            "monitor de conciliacao"
+          ],
+          "contract_key": "PAY:pay.settlement.reconciled:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "pay.settlement.reconciled",
+          "evidence_entities": [
+            "wallets",
+            "transactions",
+            "equity_ledger"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "kyc",
+                  "aml_monitoring",
+                  "financial_ledger_immutability"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "commerce_fintech_assets"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "pay.settlement.reconciled"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "wallets",
+                    "transactions",
+                    "equity_ledger"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "PAY"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "wallet e saldo",
+                      "ledger atomico",
+                      "splits e conciliacao"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "titular da wallet",
+                      "operador financeiro",
+                      "motor de conciliacao"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "PAY::pay.settlement.reconciled",
+            "type": "object"
+          },
+          "producer_surface": "painel financeiro"
+        }
+      ],
+      "module_code": "PAY",
+      "module_name": "Valley Pay"
+    },
+    {
+      "current_phase": "DATA_CONTRACT",
+      "event_topics": [
+        {
+          "compliance_tags": [
+            "pci_boundary",
+            "mdr_audit",
+            "settlement_traceability"
+          ],
+          "consumer_surfaces": [
+            "WALLETS",
+            "BUSINESS",
+            "painel de adquirencia",
+            "monitor de terminais"
+          ],
+          "contract_key": "PLUG:plug.device.activated:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "plug.device.activated",
+          "evidence_entities": [
+            "transactions",
+            "wallets",
+            "merchant_storefronts"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "pci_boundary",
+                  "mdr_audit",
+                  "settlement_traceability"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "DATA_CONTRACT"
+              },
+              "domain_key": {
+                "const": "commerce_fintech_assets"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "plug.device.activated"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "transactions",
+                    "wallets",
+                    "merchant_storefronts"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "PLUG"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "tap-to-pay",
+                      "maquininha",
+                      "antecipacao de recebivel"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "lojista",
+                      "operador de adquirencia",
+                      "comprador presencial"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "PLUG::plug.device.activated",
+            "type": "object"
+          },
+          "producer_surface": "painel de adquirencia"
+        },
+        {
+          "compliance_tags": [
+            "pci_boundary",
+            "mdr_audit",
+            "settlement_traceability"
+          ],
+          "consumer_surfaces": [
+            "WALLETS",
+            "BUSINESS",
+            "painel de adquirencia",
+            "monitor de terminais"
+          ],
+          "contract_key": "PLUG:plug.payment.authorized:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "plug.payment.authorized",
+          "evidence_entities": [
+            "transactions",
+            "wallets",
+            "merchant_storefronts"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "pci_boundary",
+                  "mdr_audit",
+                  "settlement_traceability"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "DATA_CONTRACT"
+              },
+              "domain_key": {
+                "const": "commerce_fintech_assets"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "plug.payment.authorized"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "transactions",
+                    "wallets",
+                    "merchant_storefronts"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "PLUG"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "tap-to-pay",
+                      "maquininha",
+                      "antecipacao de recebivel"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "lojista",
+                      "operador de adquirencia",
+                      "comprador presencial"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "PLUG::plug.payment.authorized",
+            "type": "object"
+          },
+          "producer_surface": "painel de adquirencia"
+        },
+        {
+          "compliance_tags": [
+            "pci_boundary",
+            "mdr_audit",
+            "settlement_traceability"
+          ],
+          "consumer_surfaces": [
+            "WALLETS",
+            "BUSINESS",
+            "painel de adquirencia",
+            "monitor de terminais"
+          ],
+          "contract_key": "PLUG:plug.advance.requested:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "plug.advance.requested",
+          "evidence_entities": [
+            "transactions",
+            "wallets",
+            "merchant_storefronts"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "pci_boundary",
+                  "mdr_audit",
+                  "settlement_traceability"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "DATA_CONTRACT"
+              },
+              "domain_key": {
+                "const": "commerce_fintech_assets"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "plug.advance.requested"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "transactions",
+                    "wallets",
+                    "merchant_storefronts"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "PLUG"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "tap-to-pay",
+                      "maquininha",
+                      "antecipacao de recebivel"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "lojista",
+                      "operador de adquirencia",
+                      "comprador presencial"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "PLUG::plug.advance.requested",
+            "type": "object"
+          },
+          "producer_surface": "painel de adquirencia"
+        }
+      ],
+      "module_code": "PLUG",
+      "module_name": "Valley Plug"
+    },
+    {
+      "current_phase": "DATA_CONTRACT",
+      "event_topics": [
+        {
+          "compliance_tags": [
+            "attribution_audit",
+            "commission_traceability",
+            "anti_fraud"
+          ],
+          "consumer_surfaces": [
+            "INFLUENCERS",
+            "LOYALTY",
+            "painel de afiliados",
+            "monitor de conversao"
+          ],
+          "contract_key": "UP:up.link.generated:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "up.link.generated",
+          "evidence_entities": [
+            "transactions",
+            "pepita_ledger",
+            "influencer_metrics",
+            "social_videos"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "attribution_audit",
+                  "commission_traceability",
+                  "anti_fraud"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "DATA_CONTRACT"
+              },
+              "domain_key": {
+                "const": "commerce_fintech_assets"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "up.link.generated"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "transactions",
+                    "pepita_ledger",
+                    "influencer_metrics",
+                    "social_videos"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "UP"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "indicacao",
+                      "link de atribuicao",
+                      "comissao"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "afiliado",
+                      "merchant",
+                      "operador de atribuicao"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "UP::up.link.generated",
+            "type": "object"
+          },
+          "producer_surface": "painel de afiliados"
+        },
+        {
+          "compliance_tags": [
+            "attribution_audit",
+            "commission_traceability",
+            "anti_fraud"
+          ],
+          "consumer_surfaces": [
+            "INFLUENCERS",
+            "LOYALTY",
+            "painel de afiliados",
+            "monitor de conversao"
+          ],
+          "contract_key": "UP:up.conversion.attributed:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "up.conversion.attributed",
+          "evidence_entities": [
+            "transactions",
+            "pepita_ledger",
+            "influencer_metrics",
+            "social_videos"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "attribution_audit",
+                  "commission_traceability",
+                  "anti_fraud"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "DATA_CONTRACT"
+              },
+              "domain_key": {
+                "const": "commerce_fintech_assets"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "up.conversion.attributed"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "transactions",
+                    "pepita_ledger",
+                    "influencer_metrics",
+                    "social_videos"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "UP"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "indicacao",
+                      "link de atribuicao",
+                      "comissao"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "afiliado",
+                      "merchant",
+                      "operador de atribuicao"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "UP::up.conversion.attributed",
+            "type": "object"
+          },
+          "producer_surface": "painel de afiliados"
+        },
+        {
+          "compliance_tags": [
+            "attribution_audit",
+            "commission_traceability",
+            "anti_fraud"
+          ],
+          "consumer_surfaces": [
+            "INFLUENCERS",
+            "LOYALTY",
+            "painel de afiliados",
+            "monitor de conversao"
+          ],
+          "contract_key": "UP:up.commission.booked:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "up.commission.booked",
+          "evidence_entities": [
+            "transactions",
+            "pepita_ledger",
+            "influencer_metrics",
+            "social_videos"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "attribution_audit",
+                  "commission_traceability",
+                  "anti_fraud"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "DATA_CONTRACT"
+              },
+              "domain_key": {
+                "const": "commerce_fintech_assets"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "up.commission.booked"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "transactions",
+                    "pepita_ledger",
+                    "influencer_metrics",
+                    "social_videos"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "UP"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "indicacao",
+                      "link de atribuicao",
+                      "comissao"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "afiliado",
+                      "merchant",
+                      "operador de atribuicao"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "UP::up.commission.booked",
+            "type": "object"
+          },
+          "producer_surface": "painel de afiliados"
+        }
+      ],
+      "module_code": "UP",
+      "module_name": "Valley Up"
+    },
+    {
+      "current_phase": "VALIDATE",
+      "event_topics": [
+        {
+          "compliance_tags": [
+            "financial_privacy",
+            "goal_audit",
+            "ledger_traceability"
+          ],
+          "consumer_surfaces": [
+            "ADVISOR",
+            "BUSINESS",
+            "painel financeiro pessoal",
+            "monitor de metas"
+          ],
+          "contract_key": "FINANCAS:financas.goal.created:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "financas.goal.created",
+          "evidence_entities": [
+            "financial_goals",
+            "transactions",
+            "wallets"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "financial_privacy",
+                  "goal_audit",
+                  "ledger_traceability"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "commerce_fintech_assets"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "financas.goal.created"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "financial_goals",
+                    "transactions",
+                    "wallets"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "FINANCAS"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "metas financeiras",
+                      "round-up",
+                      "visao de caixa"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "usuario PF",
+                      "microempreendedor",
+                      "operador financeiro"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "FINANCAS::financas.goal.created",
+            "type": "object"
+          },
+          "producer_surface": "painel financeiro pessoal"
+        },
+        {
+          "compliance_tags": [
+            "financial_privacy",
+            "goal_audit",
+            "ledger_traceability"
+          ],
+          "consumer_surfaces": [
+            "ADVISOR",
+            "BUSINESS",
+            "painel financeiro pessoal",
+            "monitor de metas"
+          ],
+          "contract_key": "FINANCAS:financas.roundup.booked:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "financas.roundup.booked",
+          "evidence_entities": [
+            "financial_goals",
+            "transactions",
+            "wallets"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "financial_privacy",
+                  "goal_audit",
+                  "ledger_traceability"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "commerce_fintech_assets"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "financas.roundup.booked"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "financial_goals",
+                    "transactions",
+                    "wallets"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "FINANCAS"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "metas financeiras",
+                      "round-up",
+                      "visao de caixa"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "usuario PF",
+                      "microempreendedor",
+                      "operador financeiro"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "FINANCAS::financas.roundup.booked",
+            "type": "object"
+          },
+          "producer_surface": "painel financeiro pessoal"
+        },
+        {
+          "compliance_tags": [
+            "financial_privacy",
+            "goal_audit",
+            "ledger_traceability"
+          ],
+          "consumer_surfaces": [
+            "ADVISOR",
+            "BUSINESS",
+            "painel financeiro pessoal",
+            "monitor de metas"
+          ],
+          "contract_key": "FINANCAS:financas.cashflow.closed:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "financas.cashflow.closed",
+          "evidence_entities": [
+            "financial_goals",
+            "transactions",
+            "wallets"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "financial_privacy",
+                  "goal_audit",
+                  "ledger_traceability"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "commerce_fintech_assets"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "financas.cashflow.closed"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "financial_goals",
+                    "transactions",
+                    "wallets"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "FINANCAS"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "metas financeiras",
+                      "round-up",
+                      "visao de caixa"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "usuario PF",
+                      "microempreendedor",
+                      "operador financeiro"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "FINANCAS::financas.cashflow.closed",
+            "type": "object"
+          },
+          "producer_surface": "painel financeiro pessoal"
+        }
+      ],
+      "module_code": "FINANCAS",
+      "module_name": "Valley Financas"
+    },
+    {
+      "current_phase": "VALIDATE",
+      "event_topics": [
+        {
+          "compliance_tags": [
+            "ownership_traceability",
+            "royalty_audit",
+            "custody_controls"
+          ],
+          "consumer_surfaces": [
+            "CREATOR",
+            "DOCS",
+            "painel de colecoes",
+            "fila de mint"
+          ],
+          "contract_key": "DIGITAL:digital.asset.minted:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "digital.asset.minted",
+          "evidence_entities": [
+            "digital_asset_collections",
+            "digital_assets",
+            "digital_asset_events"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "ownership_traceability",
+                  "royalty_audit",
+                  "custody_controls"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "commerce_fintech_assets"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "digital.asset.minted"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "digital_asset_collections",
+                    "digital_assets",
+                    "digital_asset_events"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "DIGITAL"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "colecoes digitais",
+                      "mint e transferencia",
+                      "trilha de royalties"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "criador",
+                      "colecionador",
+                      "operador de custodia"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "DIGITAL::digital.asset.minted",
+            "type": "object"
+          },
+          "producer_surface": "painel de colecoes"
+        },
+        {
+          "compliance_tags": [
+            "ownership_traceability",
+            "royalty_audit",
+            "custody_controls"
+          ],
+          "consumer_surfaces": [
+            "CREATOR",
+            "DOCS",
+            "painel de colecoes",
+            "fila de mint"
+          ],
+          "contract_key": "DIGITAL:digital.asset.transferred:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "digital.asset.transferred",
+          "evidence_entities": [
+            "digital_asset_collections",
+            "digital_assets",
+            "digital_asset_events"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "ownership_traceability",
+                  "royalty_audit",
+                  "custody_controls"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "commerce_fintech_assets"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "digital.asset.transferred"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "digital_asset_collections",
+                    "digital_assets",
+                    "digital_asset_events"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "DIGITAL"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "colecoes digitais",
+                      "mint e transferencia",
+                      "trilha de royalties"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "criador",
+                      "colecionador",
+                      "operador de custodia"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "DIGITAL::digital.asset.transferred",
+            "type": "object"
+          },
+          "producer_surface": "painel de colecoes"
+        },
+        {
+          "compliance_tags": [
+            "ownership_traceability",
+            "royalty_audit",
+            "custody_controls"
+          ],
+          "consumer_surfaces": [
+            "CREATOR",
+            "DOCS",
+            "painel de colecoes",
+            "fila de mint"
+          ],
+          "contract_key": "DIGITAL:digital.royalty.calculated:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "digital.royalty.calculated",
+          "evidence_entities": [
+            "digital_asset_collections",
+            "digital_assets",
+            "digital_asset_events"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "ownership_traceability",
+                  "royalty_audit",
+                  "custody_controls"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "commerce_fintech_assets"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "digital.royalty.calculated"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "digital_asset_collections",
+                    "digital_assets",
+                    "digital_asset_events"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "DIGITAL"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "colecoes digitais",
+                      "mint e transferencia",
+                      "trilha de royalties"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "criador",
+                      "colecionador",
+                      "operador de custodia"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "DIGITAL::digital.royalty.calculated",
+            "type": "object"
+          },
+          "producer_surface": "painel de colecoes"
+        }
+      ],
+      "module_code": "DIGITAL",
+      "module_name": "Valley Digital"
+    },
+    {
+      "current_phase": "VALIDATE",
+      "event_topics": [
+        {
+          "compliance_tags": [
+            "property_traceability",
+            "contract_audit",
+            "investor_suitability"
+          ],
+          "consumer_surfaces": [
+            "DIGITAL",
+            "DOCS",
+            "painel de propriedades",
+            "fila de due diligence"
+          ],
+          "contract_key": "REAL_ESTATE:real_estate.property.registered:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "real_estate.property.registered",
+          "evidence_entities": [
+            "real_estate_properties",
+            "real_estate_listings",
+            "real_estate_deals"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "property_traceability",
+                  "contract_audit",
+                  "investor_suitability"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "commerce_fintech_assets"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "real_estate.property.registered"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "real_estate_properties",
+                    "real_estate_listings",
+                    "real_estate_deals"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "REAL_ESTATE"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "cadastro de imovel",
+                      "listagem e proposta",
+                      "deal tokenizado"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "corretor",
+                      "investidor",
+                      "operador juridico"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "REAL_ESTATE::real_estate.property.registered",
+            "type": "object"
+          },
+          "producer_surface": "painel de propriedades"
+        },
+        {
+          "compliance_tags": [
+            "property_traceability",
+            "contract_audit",
+            "investor_suitability"
+          ],
+          "consumer_surfaces": [
+            "DIGITAL",
+            "DOCS",
+            "painel de propriedades",
+            "fila de due diligence"
+          ],
+          "contract_key": "REAL_ESTATE:real_estate.listing.published:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "real_estate.listing.published",
+          "evidence_entities": [
+            "real_estate_properties",
+            "real_estate_listings",
+            "real_estate_deals"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "property_traceability",
+                  "contract_audit",
+                  "investor_suitability"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "commerce_fintech_assets"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "real_estate.listing.published"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "real_estate_properties",
+                    "real_estate_listings",
+                    "real_estate_deals"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "REAL_ESTATE"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "cadastro de imovel",
+                      "listagem e proposta",
+                      "deal tokenizado"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "corretor",
+                      "investidor",
+                      "operador juridico"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "REAL_ESTATE::real_estate.listing.published",
+            "type": "object"
+          },
+          "producer_surface": "painel de propriedades"
+        },
+        {
+          "compliance_tags": [
+            "property_traceability",
+            "contract_audit",
+            "investor_suitability"
+          ],
+          "consumer_surfaces": [
+            "DIGITAL",
+            "DOCS",
+            "painel de propriedades",
+            "fila de due diligence"
+          ],
+          "contract_key": "REAL_ESTATE:real_estate.deal.executed:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "real_estate.deal.executed",
+          "evidence_entities": [
+            "real_estate_properties",
+            "real_estate_listings",
+            "real_estate_deals"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "property_traceability",
+                  "contract_audit",
+                  "investor_suitability"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "commerce_fintech_assets"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "real_estate.deal.executed"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "real_estate_properties",
+                    "real_estate_listings",
+                    "real_estate_deals"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "REAL_ESTATE"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "cadastro de imovel",
+                      "listagem e proposta",
+                      "deal tokenizado"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "corretor",
+                      "investidor",
+                      "operador juridico"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "REAL_ESTATE::real_estate.deal.executed",
+            "type": "object"
+          },
+          "producer_surface": "painel de propriedades"
+        }
+      ],
+      "module_code": "REAL_ESTATE",
+      "module_name": "Valley Real Estate"
+    },
+    {
+      "current_phase": "VALIDATE",
+      "event_topics": [
+        {
+          "compliance_tags": [
+            "policy_audit",
+            "claim_traceability",
+            "risk_underwriting"
+          ],
+          "consumer_surfaces": [
+            "SECURITY",
+            "DOCS",
+            "painel de apolices",
+            "fila de claim"
+          ],
+          "contract_key": "INSURANCE:insurance.policy.issued:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "insurance.policy.issued",
+          "evidence_entities": [
+            "insurance_products",
+            "insurance_policies",
+            "insurance_claims"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "policy_audit",
+                  "claim_traceability",
+                  "risk_underwriting"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "commerce_fintech_assets"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "insurance.policy.issued"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "insurance_products",
+                    "insurance_policies",
+                    "insurance_claims"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "INSURANCE"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "produtos e apolices",
+                      "claims",
+                      "eventos de claim"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "segurado",
+                      "underwriter",
+                      "analista de sinistro"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "INSURANCE::insurance.policy.issued",
+            "type": "object"
+          },
+          "producer_surface": "painel de apolices"
+        },
+        {
+          "compliance_tags": [
+            "policy_audit",
+            "claim_traceability",
+            "risk_underwriting"
+          ],
+          "consumer_surfaces": [
+            "SECURITY",
+            "DOCS",
+            "painel de apolices",
+            "fila de claim"
+          ],
+          "contract_key": "INSURANCE:insurance.claim.opened:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "insurance.claim.opened",
+          "evidence_entities": [
+            "insurance_products",
+            "insurance_policies",
+            "insurance_claims"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "policy_audit",
+                  "claim_traceability",
+                  "risk_underwriting"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "commerce_fintech_assets"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "insurance.claim.opened"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "insurance_products",
+                    "insurance_policies",
+                    "insurance_claims"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "INSURANCE"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "produtos e apolices",
+                      "claims",
+                      "eventos de claim"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "segurado",
+                      "underwriter",
+                      "analista de sinistro"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "INSURANCE::insurance.claim.opened",
+            "type": "object"
+          },
+          "producer_surface": "painel de apolices"
+        },
+        {
+          "compliance_tags": [
+            "policy_audit",
+            "claim_traceability",
+            "risk_underwriting"
+          ],
+          "consumer_surfaces": [
+            "SECURITY",
+            "DOCS",
+            "painel de apolices",
+            "fila de claim"
+          ],
+          "contract_key": "INSURANCE:insurance.claim.settled:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "insurance.claim.settled",
+          "evidence_entities": [
+            "insurance_products",
+            "insurance_policies",
+            "insurance_claims"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "policy_audit",
+                  "claim_traceability",
+                  "risk_underwriting"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "commerce_fintech_assets"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "insurance.claim.settled"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "insurance_products",
+                    "insurance_policies",
+                    "insurance_claims"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "INSURANCE"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "produtos e apolices",
+                      "claims",
+                      "eventos de claim"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "segurado",
+                      "underwriter",
+                      "analista de sinistro"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "INSURANCE::insurance.claim.settled",
+            "type": "object"
+          },
+          "producer_surface": "painel de apolices"
+        }
+      ],
+      "module_code": "INSURANCE",
+      "module_name": "Valley Insurance"
+    }
+  ],
+  "package_key": "commerce_fintech_assets.priority.v1",
+  "priority_rank": 2
+}

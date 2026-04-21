@@ -11,6 +11,7 @@ Ele define a fronteira inicial do modulo para guiar desenvolvimento, implantacao
 - Tier: `expansion`
 - Data home: `postgres`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
 
 ## Objetivo Simples
 
@@ -30,6 +31,46 @@ Persistencia principal em PostgreSQL, porque o modulo exige consistencia, `forei
 
 Dependencias minimas: PAY, LEGAL. Integracoes previstas: DIGITAL, DOCS.
 
+## Atores Primarios
+
+- corretor
+- investidor
+- operador juridico
+
+## Capacidades-Chave
+
+- cadastro de imovel
+- listagem e proposta
+- deal tokenizado
+
+## Entidades Relacionais
+
+- `real_estate_properties`
+- `real_estate_listings`
+- `real_estate_deals`
+
+## Payloads Volumosos E Colecoes
+
+- Nao aplicavel.
+
+## Eventos Canonicos
+
+- `real_estate.property.registered`
+- `real_estate.listing.published`
+- `real_estate.deal.executed`
+
+## Compliance, Risco E Guarda
+
+- property_traceability
+- contract_audit
+- investor_suitability
+
+## Superficies Admin E Operacao
+
+- painel de propriedades
+- fila de due diligence
+- monitor de deals
+
 ## Regras De Evolucao
 
 1. Nao criar tabela duplicada de usuario; usar sempre `public.users`.
@@ -42,8 +83,6 @@ Dependencias minimas: PAY, LEGAL. Integracoes previstas: DIGITAL, DOCS.
 
 ## Primeiro Backlog Tecnico
 
-- Confirmar se o modulo precisa de tabela propria ou se usa tabelas compartilhadas ja existentes.
-- Definir eventos de entrada e saida com nomes tecnicos estaveis.
-- Definir permissao Admin/RBAC/ABAC quando houver operacao sensivel.
-- Registrar regra de negocio em `business_rule_definitions` quando houver pricing, comissao, limite, risco ou compliance.
-- Validar se dados volumosos ficam fora do PostgreSQL.
+- fechar onboarding documental
+- definir escrow de proposta
+- amarrar tokenizacao por fracao

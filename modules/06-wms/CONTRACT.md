@@ -11,6 +11,7 @@ Ele define a fronteira inicial do modulo para guiar desenvolvimento, implantacao
 - Tier: `foundation`
 - Data home: `postgres_mongo`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
 
 ## Objetivo Simples
 
@@ -30,6 +31,48 @@ Persistencia hibrida: PostgreSQL guarda o contrato operacional e MongoDB guarda 
 
 Dependencias minimas: REPLY. Integracoes previstas: STOCK, IOT, BUSINESS.
 
+## Atores Primarios
+
+- coordenador de armazem
+- separador
+- auditor operacional
+
+## Capacidades-Chave
+
+- enderecamento de estoque
+- contagem ciclica
+- sensoriamento de armazem
+
+## Entidades Relacionais
+
+- `warehouses`
+- `inventory_items`
+- `warehouse_cycle_counts`
+- `inventory_movements`
+
+## Payloads Volumosos E Colecoes
+
+- `warehouse_sensor_snapshots`
+- `iot_sensor_events`
+
+## Eventos Canonicos
+
+- `wms.cycle_count.started`
+- `wms.inventory.variance_detected`
+- `wms.sensor.threshold_breached`
+
+## Compliance, Risco E Guarda
+
+- inventory_audit
+- cold_chain_monitoring
+- warehouse_traceability
+
+## Superficies Admin E Operacao
+
+- painel de armazem
+- monitor de variancia
+- console de sensores
+
 ## Regras De Evolucao
 
 1. Nao criar tabela duplicada de usuario; usar sempre `public.users`.
@@ -42,8 +85,6 @@ Dependencias minimas: REPLY. Integracoes previstas: STOCK, IOT, BUSINESS.
 
 ## Primeiro Backlog Tecnico
 
-- Confirmar se o modulo precisa de tabela propria ou se usa tabelas compartilhadas ja existentes.
-- Definir eventos de entrada e saida com nomes tecnicos estaveis.
-- Definir permissao Admin/RBAC/ABAC quando houver operacao sensivel.
-- Registrar regra de negocio em `business_rule_definitions` quando houver pricing, comissao, limite, risco ou compliance.
-- Validar se dados volumosos ficam fora do PostgreSQL.
+- fechar mapa de enderecamento
+- amarrar ajuste de variancia
+- ligar alarmes por temperatura

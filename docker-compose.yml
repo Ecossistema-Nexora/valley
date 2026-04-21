@@ -56,6 +56,25 @@ services:
       - .:/workspace
     restart: "no"
 
+  tailscale:
+    profiles: ["tailscale", "mcp"]
+    image: tailscale/tailscale:stable
+    container_name: valley-tailscale-mcp
+    hostname: ${VALLEY_TAILSCALE_DOCKER_HOSTNAME:-valley-mcp-docker}
+    environment:
+      TS_AUTHKEY: ${TS_AUTHKEY:-${TAILSCALE_AUTHKEY:-}}
+      TS_STATE_DIR: /var/lib/tailscale
+      TS_USERSPACE: ${VALLEY_TAILSCALE_USERSPACE:-false}
+      TS_EXTRA_ARGS: ${VALLEY_TAILSCALE_DOCKER_EXTRA_ARGS:---accept-routes}
+    volumes:
+      - valley-tailscale-state:/var/lib/tailscale
+      - /dev/net/tun:/dev/net/tun
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    restart: unless-stopped
+
 volumes:
   valley-postgres-data:
   valley-mongodb-data:
+  valley-tailscale-state:

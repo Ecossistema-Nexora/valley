@@ -11,6 +11,7 @@ Ele define a fronteira inicial do modulo para guiar desenvolvimento, implantacao
 - Tier: `expansion`
 - Data home: `postgres`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
 
 ## Objetivo Simples
 
@@ -30,6 +31,46 @@ Persistencia principal em PostgreSQL, porque o modulo exige consistencia, `forei
 
 Dependencias minimas: ID. Integracoes previstas: LEGAL, DOCS.
 
+## Atores Primarios
+
+- cidadao
+- servidor
+- operador govtech
+
+## Capacidades-Chave
+
+- catalogo de servicos
+- requests publicos
+- eventos de atendimento
+
+## Entidades Relacionais
+
+- `gov_service_catalog`
+- `gov_service_requests`
+- `gov_request_events`
+
+## Payloads Volumosos E Colecoes
+
+- Nao aplicavel.
+
+## Eventos Canonicos
+
+- `gov.service.requested`
+- `gov.request.routed`
+- `gov.request.resolved`
+
+## Compliance, Risco E Guarda
+
+- public_auditability
+- citizen_identity
+- service_traceability
+
+## Superficies Admin E Operacao
+
+- portal de requests
+- fila de atendimento
+- monitor de SLA publico
+
 ## Regras De Evolucao
 
 1. Nao criar tabela duplicada de usuario; usar sempre `public.users`.
@@ -42,8 +83,6 @@ Dependencias minimas: ID. Integracoes previstas: LEGAL, DOCS.
 
 ## Primeiro Backlog Tecnico
 
-- Confirmar se o modulo precisa de tabela propria ou se usa tabelas compartilhadas ja existentes.
-- Definir eventos de entrada e saida com nomes tecnicos estaveis.
-- Definir permissao Admin/RBAC/ABAC quando houver operacao sensivel.
-- Registrar regra de negocio em `business_rule_definitions` quando houver pricing, comissao, limite, risco ou compliance.
-- Validar se dados volumosos ficam fora do PostgreSQL.
+- fechar taxonomia de servico publico
+- definir SLA por categoria
+- ligar trilha documental

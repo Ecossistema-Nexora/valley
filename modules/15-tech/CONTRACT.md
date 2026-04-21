@@ -11,6 +11,7 @@ Ele define a fronteira inicial do modulo para guiar desenvolvimento, implantacao
 - Tier: `foundation`
 - Data home: `postgres`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
 
 ## Objetivo Simples
 
@@ -30,6 +31,47 @@ Persistencia principal em PostgreSQL, porque o modulo exige consistencia, `forei
 
 Dependencias minimas: API, CLOUD. Integracoes previstas: CONNECT, COMMAND_CENTER.
 
+## Atores Primarios
+
+- developer
+- integrador
+- operador de plataforma
+
+## Capacidades-Chave
+
+- api clients
+- credenciais seguras
+- webhooks e conectores
+
+## Entidades Relacionais
+
+- `tech_api_clients`
+- `tech_api_credentials`
+- `tech_webhook_subscriptions`
+- `tech_webhook_delivery_attempts`
+
+## Payloads Volumosos E Colecoes
+
+- Nao aplicavel.
+
+## Eventos Canonicos
+
+- `tech.client.provisioned`
+- `tech.webhook.delivered`
+- `tech.connector.synced`
+
+## Compliance, Risco E Guarda
+
+- secret_hashing
+- api_audit
+- integration_traceability
+
+## Superficies Admin E Operacao
+
+- painel de integracoes
+- gestao de credenciais
+- monitor de webhooks
+
 ## Regras De Evolucao
 
 1. Nao criar tabela duplicada de usuario; usar sempre `public.users`.
@@ -42,8 +84,6 @@ Dependencias minimas: API, CLOUD. Integracoes previstas: CONNECT, COMMAND_CENTER
 
 ## Primeiro Backlog Tecnico
 
-- Confirmar se o modulo precisa de tabela propria ou se usa tabelas compartilhadas ja existentes.
-- Definir eventos de entrada e saida com nomes tecnicos estaveis.
-- Definir permissao Admin/RBAC/ABAC quando houver operacao sensivel.
-- Registrar regra de negocio em `business_rule_definitions` quando houver pricing, comissao, limite, risco ou compliance.
-- Validar se dados volumosos ficam fora do PostgreSQL.
+- fechar rotate de credenciais
+- ligar replay seguro de webhook
+- definir limites por client

@@ -1,0 +1,1181 @@
+{
+  "domain_key": "ai_memory_operations",
+  "domain_label": "AI Memory Operations",
+  "modules": [
+    {
+      "current_phase": "BUILD",
+      "event_topics": [
+        {
+          "compliance_tags": [
+            "consent_management",
+            "ai_auditability",
+            "cross_module_traceability"
+          ],
+          "consumer_surfaces": [
+            "FINANCAS",
+            "HEALTH",
+            "MOBILITY",
+            "painel consultivo",
+            "fila de aprovacoes"
+          ],
+          "contract_key": "ADVISOR:advisor.insight.generated:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "advisor.insight.generated",
+          "evidence_entities": [
+            "advisor_insights",
+            "financial_goals",
+            "ai_memory",
+            "agenda_items"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "consent_management",
+                  "ai_auditability",
+                  "cross_module_traceability"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "BUILD"
+              },
+              "domain_key": {
+                "const": "ai_memory_operations"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "advisor.insight.generated"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "advisor_insights",
+                    "financial_goals",
+                    "ai_memory",
+                    "agenda_items"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "ADVISOR"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "insights",
+                      "recomendacao com consentimento",
+                      "orquestracao entre modulos"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "usuario assistido",
+                      "motor de IA",
+                      "operador consultivo"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "ADVISOR::advisor.insight.generated",
+            "type": "object"
+          },
+          "producer_surface": "painel consultivo"
+        },
+        {
+          "compliance_tags": [
+            "consent_management",
+            "ai_auditability",
+            "cross_module_traceability"
+          ],
+          "consumer_surfaces": [
+            "FINANCAS",
+            "HEALTH",
+            "MOBILITY",
+            "painel consultivo",
+            "fila de aprovacoes"
+          ],
+          "contract_key": "ADVISOR:advisor.action.proposed:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "advisor.action.proposed",
+          "evidence_entities": [
+            "advisor_insights",
+            "financial_goals",
+            "ai_memory",
+            "agenda_items"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "consent_management",
+                  "ai_auditability",
+                  "cross_module_traceability"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "BUILD"
+              },
+              "domain_key": {
+                "const": "ai_memory_operations"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "advisor.action.proposed"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "advisor_insights",
+                    "financial_goals",
+                    "ai_memory",
+                    "agenda_items"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "ADVISOR"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "insights",
+                      "recomendacao com consentimento",
+                      "orquestracao entre modulos"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "usuario assistido",
+                      "motor de IA",
+                      "operador consultivo"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "ADVISOR::advisor.action.proposed",
+            "type": "object"
+          },
+          "producer_surface": "painel consultivo"
+        },
+        {
+          "compliance_tags": [
+            "consent_management",
+            "ai_auditability",
+            "cross_module_traceability"
+          ],
+          "consumer_surfaces": [
+            "FINANCAS",
+            "HEALTH",
+            "MOBILITY",
+            "painel consultivo",
+            "fila de aprovacoes"
+          ],
+          "contract_key": "ADVISOR:advisor.consent.recorded:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "advisor.consent.recorded",
+          "evidence_entities": [
+            "advisor_insights",
+            "financial_goals",
+            "ai_memory",
+            "agenda_items"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "consent_management",
+                  "ai_auditability",
+                  "cross_module_traceability"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "BUILD"
+              },
+              "domain_key": {
+                "const": "ai_memory_operations"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "advisor.consent.recorded"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "advisor_insights",
+                    "financial_goals",
+                    "ai_memory",
+                    "agenda_items"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "ADVISOR"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "insights",
+                      "recomendacao com consentimento",
+                      "orquestracao entre modulos"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "usuario assistido",
+                      "motor de IA",
+                      "operador consultivo"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "ADVISOR::advisor.consent.recorded",
+            "type": "object"
+          },
+          "producer_surface": "painel consultivo"
+        }
+      ],
+      "module_code": "ADVISOR",
+      "module_name": "Valley Advisor"
+    },
+    {
+      "current_phase": "VALIDATE",
+      "event_topics": [
+        {
+          "compliance_tags": [
+            "personal_data_retention",
+            "consent_management",
+            "assistant_audit"
+          ],
+          "consumer_surfaces": [
+            "ADVISOR",
+            "CHAT",
+            "painel de agenda",
+            "fila de lembretes"
+          ],
+          "contract_key": "AGENDA:agenda.item.created:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "agenda.item.created",
+          "evidence_entities": [
+            "agenda_items",
+            "ai_memory"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "personal_data_retention",
+                  "consent_management",
+                  "assistant_audit"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "ai_memory_operations"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "agenda.item.created"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "agenda_items",
+                    "ai_memory"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "AGENDA"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "agenda inteligente",
+                      "listas",
+                      "memoria operacional"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "usuario final",
+                      "helena persona",
+                      "operador de produtividade"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "AGENDA::agenda.item.created",
+            "type": "object"
+          },
+          "producer_surface": "painel de agenda"
+        },
+        {
+          "compliance_tags": [
+            "personal_data_retention",
+            "consent_management",
+            "assistant_audit"
+          ],
+          "consumer_surfaces": [
+            "ADVISOR",
+            "CHAT",
+            "painel de agenda",
+            "fila de lembretes"
+          ],
+          "contract_key": "AGENDA:agenda.reminder.triggered:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "agenda.reminder.triggered",
+          "evidence_entities": [
+            "agenda_items",
+            "ai_memory"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "personal_data_retention",
+                  "consent_management",
+                  "assistant_audit"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "ai_memory_operations"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "agenda.reminder.triggered"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "agenda_items",
+                    "ai_memory"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "AGENDA"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "agenda inteligente",
+                      "listas",
+                      "memoria operacional"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "usuario final",
+                      "helena persona",
+                      "operador de produtividade"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "AGENDA::agenda.reminder.triggered",
+            "type": "object"
+          },
+          "producer_surface": "painel de agenda"
+        },
+        {
+          "compliance_tags": [
+            "personal_data_retention",
+            "consent_management",
+            "assistant_audit"
+          ],
+          "consumer_surfaces": [
+            "ADVISOR",
+            "CHAT",
+            "painel de agenda",
+            "fila de lembretes"
+          ],
+          "contract_key": "AGENDA:agenda.memory.linked:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "agenda.memory.linked",
+          "evidence_entities": [
+            "agenda_items",
+            "ai_memory"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "personal_data_retention",
+                  "consent_management",
+                  "assistant_audit"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "ai_memory_operations"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "agenda.memory.linked"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "agenda_items",
+                    "ai_memory"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "AGENDA"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "agenda inteligente",
+                      "listas",
+                      "memoria operacional"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "usuario final",
+                      "helena persona",
+                      "operador de produtividade"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "AGENDA::agenda.memory.linked",
+            "type": "object"
+          },
+          "producer_surface": "painel de agenda"
+        }
+      ],
+      "module_code": "AGENDA",
+      "module_name": "Valley Agenda"
+    },
+    {
+      "current_phase": "VALIDATE",
+      "event_topics": [
+        {
+          "compliance_tags": [
+            "message_retention_policy",
+            "persona_separation",
+            "consent_audit"
+          ],
+          "consumer_surfaces": [
+            "AGENDA",
+            "ADVISOR",
+            "painel de conversas",
+            "monitor de contexto"
+          ],
+          "contract_key": "CHAT:chat.conversation.opened:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "chat.conversation.opened",
+          "evidence_entities": [
+            "chat_conversations",
+            "users",
+            "ai_memory",
+            "agenda_items"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "message_retention_policy",
+                  "persona_separation",
+                  "consent_audit"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "ai_memory_operations"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "chat.conversation.opened"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "chat_conversations",
+                    "users",
+                    "ai_memory",
+                    "agenda_items"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "CHAT"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "conversa dual persona",
+                      "retencao segura",
+                      "ponte com agenda e advisor"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "usuario pessoal",
+                      "usuario profissional",
+                      "motor de assistencia"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "CHAT::chat.conversation.opened",
+            "type": "object"
+          },
+          "producer_surface": "painel de conversas"
+        },
+        {
+          "compliance_tags": [
+            "message_retention_policy",
+            "persona_separation",
+            "consent_audit"
+          ],
+          "consumer_surfaces": [
+            "AGENDA",
+            "ADVISOR",
+            "painel de conversas",
+            "monitor de contexto"
+          ],
+          "contract_key": "CHAT:chat.message.persisted:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "chat.message.persisted",
+          "evidence_entities": [
+            "chat_conversations",
+            "users",
+            "ai_memory",
+            "agenda_items"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "message_retention_policy",
+                  "persona_separation",
+                  "consent_audit"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "ai_memory_operations"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "chat.message.persisted"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "chat_conversations",
+                    "users",
+                    "ai_memory",
+                    "agenda_items"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "CHAT"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "conversa dual persona",
+                      "retencao segura",
+                      "ponte com agenda e advisor"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "usuario pessoal",
+                      "usuario profissional",
+                      "motor de assistencia"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "CHAT::chat.message.persisted",
+            "type": "object"
+          },
+          "producer_surface": "painel de conversas"
+        },
+        {
+          "compliance_tags": [
+            "message_retention_policy",
+            "persona_separation",
+            "consent_audit"
+          ],
+          "consumer_surfaces": [
+            "AGENDA",
+            "ADVISOR",
+            "painel de conversas",
+            "monitor de contexto"
+          ],
+          "contract_key": "CHAT:chat.context.promoted:v1",
+          "contract_version": "1.0.0",
+          "event_topic": "chat.context.promoted",
+          "evidence_entities": [
+            "chat_conversations",
+            "users",
+            "ai_memory",
+            "agenda_items"
+          ],
+          "payload_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "aggregate_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "aggregate_type": {
+                "type": "string"
+              },
+              "compliance_tags": {
+                "default": [
+                  "message_retention_policy",
+                  "persona_separation",
+                  "consent_audit"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "delivery_phase": {
+                "const": "VALIDATE"
+              },
+              "domain_key": {
+                "const": "ai_memory_operations"
+              },
+              "event_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "event_topic": {
+                "const": "chat.context.promoted"
+              },
+              "evidence_refs": {
+                "items": {
+                  "enum": [
+                    "chat_conversations",
+                    "users",
+                    "ai_memory",
+                    "agenda_items"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "module_code": {
+                "const": "CHAT"
+              },
+              "occurred_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "payload": {
+                "additionalProperties": true,
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "conversa dual persona",
+                      "retencao segura",
+                      "ponte com agenda e advisor"
+                    ],
+                    "type": "string"
+                  },
+                  "details": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "primary_actor": {
+                    "enum": [
+                      "usuario pessoal",
+                      "usuario profissional",
+                      "motor de assistencia"
+                    ],
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "trace_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "user_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "event_topic",
+              "module_code",
+              "domain_key",
+              "user_id",
+              "occurred_at",
+              "payload",
+              "evidence_refs"
+            ],
+            "title": "CHAT::chat.context.promoted",
+            "type": "object"
+          },
+          "producer_surface": "painel de conversas"
+        }
+      ],
+      "module_code": "CHAT",
+      "module_name": "Valley Chat"
+    }
+  ],
+  "package_key": "ai_memory_operations.priority.v1",
+  "priority_rank": 2
+}

@@ -12,10 +12,24 @@ Ele descreve o modulo em linguagem simples e serve como ponto inicial para desen
 - Tier: `core`
 - Data home: `mongo`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `VALIDATE` (Validacao)
+- Cobertura mapeada: MongoDB: 2 colecoes mapeadas.
 
 ## Finalidade
 
 Agenda, listas inteligentes, memoria Helena e lembretes.
+
+## Atores Primarios
+
+- usuario final
+- helena persona
+- operador de produtividade
+
+## Capacidades-Chave
+
+- agenda inteligente
+- listas
+- memoria operacional
 
 ## Dependencias
 
@@ -24,6 +38,41 @@ AI
 ## Integracoes
 
 ADVISOR, CHAT
+
+## Mapa De Dados
+
+### PostgreSQL
+
+- Nao aplicavel.
+
+### MongoDB
+
+- `agenda_items`
+- `ai_memory`
+
+## Eventos Canonicos
+
+- `agenda.item.created`
+- `agenda.reminder.triggered`
+- `agenda.memory.linked`
+
+## Compliance E Operacao
+
+- personal_data_retention
+- consent_management
+- assistant_audit
+
+## Superficies Admin
+
+- painel de agenda
+- fila de lembretes
+- console de memoria
+
+## Proxima Onda
+
+- fechar recorrencia canonica
+- definir hierarquia de listas
+- ligar memoria de contexto
 
 ## Trilha De Implantacao
 
@@ -39,3 +88,4 @@ ADVISOR, CHAT
 - Integracoes com `PAY`, `ID`, `DOCS`, `ORDERS` ou `TRANSACTIONS` documentadas quando existirem.
 - Teste ou validacao tecnica registrada.
 - Comentarios em portugues simples com termos tecnicos em ingles onde fizer sentido.
+- Blueprint operacional alinhado ao registry detalhado.

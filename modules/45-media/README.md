@@ -12,10 +12,24 @@ Ele descreve o modulo em linguagem simples e serve como ponto inicial para desen
 - Tier: `core`
 - Data home: `postgres_mongo`
 - Status atual: `Parcialmente implantado`
+- Fase atual: `BUILD` (Build)
+- Cobertura mapeada: Hibrido: 2 entidades PostgreSQL e 2 colecoes MongoDB.
 
 ## Finalidade
 
 Painel de criadores, uploads, monetizacao e distribuicao de conteudo.
+
+## Atores Primarios
+
+- criador
+- operador de midia
+- marca
+
+## Capacidades-Chave
+
+- upload de creator
+- monetizacao
+- distribuicao de conteudo
 
 ## Dependencias
 
@@ -24,6 +38,42 @@ CREATOR
 ## Integracoes
 
 SOCIAL, ADS
+
+## Mapa De Dados
+
+### PostgreSQL
+
+- `creator_uploads`
+- `transactions`
+
+### MongoDB
+
+- `social_videos`
+- `news_content_items`
+
+## Eventos Canonicos
+
+- `media.upload.received`
+- `media.asset.published`
+- `media.revenue.booked`
+
+## Compliance E Operacao
+
+- copyright_traceability
+- creator_payout_audit
+- brand_safety
+
+## Superficies Admin
+
+- studio de creator
+- fila de publicacao
+- monitor de receita
+
+## Proxima Onda
+
+- fechar pipeline de media
+- definir direitos por asset
+- ligar receita por creator
 
 ## Trilha De Implantacao
 
@@ -39,3 +89,4 @@ SOCIAL, ADS
 - Integracoes com `PAY`, `ID`, `DOCS`, `ORDERS` ou `TRANSACTIONS` documentadas quando existirem.
 - Teste ou validacao tecnica registrada.
 - Comentarios em portugues simples com termos tecnicos em ingles onde fizer sentido.
+- Blueprint operacional alinhado ao registry detalhado.
