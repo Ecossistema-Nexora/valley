@@ -48,6 +48,12 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
 
+dependency_overrides:
+  # Local patched copy keeps Android Gradle sync stable instead of depending on
+  # a Pub cache plugin package with incomplete standalone plugin resolution.
+  shared_preferences_android:
+    path: ../../packages/shared_preferences_android
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
