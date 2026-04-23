@@ -5,6 +5,8 @@
     "send_status": true,
     "send_logs": false,
     "send_apk": true,
+    "auto_send_new_apk_on_build": true,
+    "apk_delivery_mode": "mandatory",
     "allowed_delivery_kinds": [
       "status",
       "apk"

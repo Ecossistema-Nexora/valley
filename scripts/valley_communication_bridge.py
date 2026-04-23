@@ -28,6 +28,8 @@ STATUS_PATH = RUNTIME_DIR / "codex-live-status.json"
 CODEX_INBOX_PATH = RUNTIME_DIR / "codex-inbox.jsonl"
 WORK_STATUS_PATH = RUNTIME_DIR / "bridge-work-status.json"
 WHATSAPP_LINK_STATE_PATH = RUNTIME_DIR / "whatsapp-link-state.json"
+APK_WATCH_STATE_PATH = RUNTIME_DIR / "apk-watch-state.json"
+DEFAULT_APK_PATH = ROOT / "frontend" / "flutter" / "build" / "app" / "outputs" / "flutter-apk" / "app-release.apk"
 
 SAFE_KINDS = {"status", "report", "read_only_check", "documentation_update", "queue_triage"}
 MANUAL_KINDS = {
@@ -372,6 +374,7 @@ def is_valid_pairing_code(raw: str) -> bool:
 
 
 def send_telegram(message: str) -> bool:
+    load_local_env()
     token = os.environ.get("VALLEY_TELEGRAM_TOKEN")
     chat_id = os.environ.get("VALLEY_TELEGRAM_CHAT_ID")
     if not token or not chat_id:
@@ -382,6 +385,7 @@ def send_telegram(message: str) -> bool:
 
 
 def send_telegram_document(file_path: Path, caption: str = "") -> bool:
+    load_local_env()
     token = os.environ.get("VALLEY_TELEGRAM_TOKEN")
     chat_id = os.environ.get("VALLEY_TELEGRAM_CHAT_ID")
     if not token or not chat_id or not file_path.exists():
@@ -395,6 +399,71 @@ def send_telegram_document(file_path: Path, caption: str = "") -> bool:
         mime_type="application/vnd.android.package-archive",
     )
     return True
+
+
+def file_sha256(file_path: Path) -> str:
+    digest = hashlib.sha256()
+    with file_path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def load_apk_watch_state() -> dict[str, Any]:
+    ensure_runtime()
+    return load_json_file(APK_WATCH_STATE_PATH, {})
+
+
+def save_apk_watch_state(payload: dict[str, Any]) -> dict[str, Any]:
+    ensure_runtime()
+    APK_WATCH_STATE_PATH.write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
+    return payload
+
+
+def detect_and_send_new_apk(apk_path: Path = DEFAULT_APK_PATH) -> dict[str, Any]:
+    load_local_env()
+    state = load_apk_watch_state()
+    result: dict[str, Any] = {
+        "path": str(apk_path),
+        "exists": apk_path.exists(),
+        "sent": False,
+        "reason": "missing",
+    }
+    if not apk_path.exists():
+        return result
+
+    stat = apk_path.stat()
+    fingerprint = {
+        "sha256": file_sha256(apk_path),
+        "size_bytes": stat.st_size,
+        "modified_at_epoch": int(stat.st_mtime),
+    }
+    previous = state.get("apk") or {}
+    unchanged = (
+        previous.get("sha256") == fingerprint["sha256"]
+        and previous.get("size_bytes") == fingerprint["size_bytes"]
+        and previous.get("modified_at_epoch") == fingerprint["modified_at_epoch"]
+    )
+    if unchanged:
+        result["reason"] = "unchanged"
+        result["apk"] = fingerprint
+        return result
+
+    save_apk_watch_state({"apk": fingerprint, "updated_at_utc": utc_now()})
+    result["reason"] = "changed"
+    result["apk"] = fingerprint
+
+    if not telegram_delivery_allowed("apk"):
+        result["reason"] = "changed_but_blocked_by_policy"
+        return result
+
+    caption = "Valley APK release atualizado automaticamente"
+    result["sent"] = send_telegram_document(apk_path, caption)
+    result["reason"] = "sent" if result["sent"] else "send_failed"
+    return result
 
 
 def telegram_delivery_allowed(kind: str) -> bool:
@@ -628,6 +697,7 @@ def watch(interval_seconds: int) -> None:
             poll_telegram_once()
             poll_whatsapp_web_once()
             pulse()
+            detect_and_send_new_apk()
         except Exception as exc:  # noqa: BLE001 - bridge must keep running and report the fault.
             ensure_runtime()
             error_path = RUNTIME_DIR / "communication-bridge-error.json"
