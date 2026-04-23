@@ -19,6 +19,7 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 CONFIG_PATH = ROOT / "config" / "bridge" / "VALLEY_COMMUNICATION_BRIDGE.json"
+NOTIFICATION_POLICY_PATH = ROOT / "config" / "bridge" / "VALLEY_NOTIFICATION_POLICY.json"
 ENV_PATH = ROOT / ".env"
 TELEGRAM_QUEUE = ROOT / "ordem_telegram.md"
 UNIVERSAL_QUEUE = ROOT / "ordem_universal.md"
@@ -70,6 +71,28 @@ def load_config() -> dict[str, Any]:
     return json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
 
 
+def load_notification_policy() -> dict[str, Any]:
+    default_policy = {
+        "telegram": {
+            "status_interval_seconds": 300,
+            "send_status": True,
+            "send_logs": False,
+            "send_apk": True,
+            "allowed_delivery_kinds": ["status", "apk"],
+        }
+    }
+    if not NOTIFICATION_POLICY_PATH.exists():
+        return default_policy
+    try:
+        payload = json.loads(NOTIFICATION_POLICY_PATH.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return default_policy
+
+    telegram = payload.get("telegram") or {}
+    merged = default_policy["telegram"] | telegram
+    return {"telegram": merged}
+
+
 def ensure_runtime() -> None:
     RUNTIME_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -95,6 +118,7 @@ def load_local_env() -> None:
 def bridge_status() -> dict[str, Any]:
     load_local_env()
     config = load_config()
+    notification_policy = load_notification_policy()
     telegram_ready = bool(os.environ.get("VALLEY_TELEGRAM_TOKEN") and os.environ.get("VALLEY_TELEGRAM_CHAT_ID"))
     whatsapp_mode = os.environ.get("VALLEY_WHATSAPP_MODE", "web").strip().lower()
     whatsapp_web_to = os.environ.get("VALLEY_WHATSAPP_WEB_TO") or os.environ.get("VALLEY_WHATSAPP_TO")
@@ -108,6 +132,7 @@ def bridge_status() -> dict[str, Any]:
         "generated_at_utc": utc_now(),
         "bridge": config["name"],
         "mode": config["approval_policy"]["mode"],
+        "notification_policy": notification_policy,
         "telegram_ready": telegram_ready,
         "whatsapp_ready": whatsapp_ready,
         "whatsapp_mode": whatsapp_mode,
@@ -372,6 +397,18 @@ def send_telegram_document(file_path: Path, caption: str = "") -> bool:
     return True
 
 
+def telegram_delivery_allowed(kind: str) -> bool:
+    policy = load_notification_policy().get("telegram", {})
+    allowed = set(policy.get("allowed_delivery_kinds", []))
+    if kind == "status":
+        return bool(policy.get("send_status", True)) and kind in allowed
+    if kind == "apk":
+        return bool(policy.get("send_apk", True)) and kind in allowed
+    if kind == "log":
+        return bool(policy.get("send_logs", False)) and kind in allowed
+    return kind in allowed
+
+
 def send_channel_message(source: str, message: str) -> bool:
     if source == "telegram":
         return send_telegram(message)
@@ -571,10 +608,14 @@ def pulse() -> dict[str, Any]:
     delivered = {
         "telegram": False,
     }
-    try:
-        delivered["telegram"] = send_telegram(message)
-    except (urllib.error.URLError, TimeoutError, OSError) as exc:
-        delivered["telegram_error"] = str(exc)
+    if telegram_delivery_allowed("status"):
+        try:
+            delivered["telegram"] = send_telegram(message)
+        except (urllib.error.URLError, TimeoutError, OSError) as exc:
+            delivered["telegram_error"] = str(exc)
+    else:
+        delivered["telegram"] = False
+        delivered["telegram_skipped"] = "status_disabled_by_policy"
     status["delivered"] = delivered
     status["work_status"] = work_status
     STATUS_PATH.write_text(json.dumps(status, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -630,7 +671,13 @@ def main() -> None:
     elif args.command == "poll-once":
         print(json.dumps({"telegram_orders": poll_telegram_once(), "at": utc_now()}, indent=2))
     elif args.command == "watch":
-        watch(max(300, args.interval))
+        policy_interval = int(
+            load_notification_policy().get("telegram", {}).get(
+                "status_interval_seconds",
+                300,
+            )
+        )
+        watch(max(300, args.interval, policy_interval))
     elif args.command == "whatsapp-login":
         command = [
             "npx.cmd" if os.name == "nt" else "npx",
@@ -664,12 +711,17 @@ def main() -> None:
         )
         print(json.dumps(payload, ensure_ascii=False, indent=2))
     elif args.command == "send-telegram-message":
-        print(json.dumps({"ok": send_telegram(args.message)}, ensure_ascii=False, indent=2))
+        ok = telegram_delivery_allowed("status") and send_telegram(args.message)
+        print(json.dumps({"ok": ok}, ensure_ascii=False, indent=2))
     elif args.command == "send-telegram-document":
         file_path = Path(args.file)
+        ok = telegram_delivery_allowed("apk") and send_telegram_document(
+            file_path,
+            args.caption,
+        )
         print(
             json.dumps(
-                {"ok": send_telegram_document(file_path, args.caption), "file": str(file_path)},
+                {"ok": ok, "file": str(file_path)},
                 ensure_ascii=False,
                 indent=2,
             )

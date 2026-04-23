@@ -1,0 +1,13 @@
+{
+  "version": "v1",
+  "telegram": {
+    "status_interval_seconds": 300,
+    "send_status": true,
+    "send_logs": false,
+    "send_apk": true,
+    "allowed_delivery_kinds": [
+      "status",
+      "apk"
+    ]
+  }
+}

@@ -14,7 +14,7 @@ from http import HTTPStatus
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any
-from urllib.parse import urlsplit
+from urllib.parse import parse_qs, urlsplit
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -24,6 +24,8 @@ RUNTIME_DIR = ROOT / "tmp" / "runtime"
 BRIDGE_STATUS_PATH = RUNTIME_DIR / "codex-live-status.json"
 WORK_STATUS_PATH = RUNTIME_DIR / "bridge-work-status.json"
 PUBLIC_RUNTIME_PATH = RUNTIME_DIR / "valley-admin-public-runtime.json"
+PRODUCT_CATALOG_PATH = ROOT / "frontend" / "flutter" / "assets" / "data" / "valley_product_catalog.json"
+PRODUCT_INTERACTIONS_PATH = RUNTIME_DIR / "valley-product-interactions.jsonl"
 
 
 def utc_now_iso() -> str:
@@ -92,7 +94,8 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
         self.end_headers()
 
     def do_GET(self) -> None:  # noqa: N802
-        route = urlsplit(self.path).path
+        parsed = urlsplit(self.path)
+        route = parsed.path
 
         if route in ("/health", "/healthz", "/readyz", "/meta/runtime", "/api/runtime"):
             self._write_json(HTTPStatus.OK, self._runtime_payload())
@@ -133,7 +136,9 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
         super().do_GET()
 
     def do_POST(self) -> None:  # noqa: N802
-        route = urlsplit(self.path).path
+        parsed = urlsplit(self.path)
+        route = parsed.path
+        query = parse_qs(parsed.query)
 
         if route == "/api/actions/pulse-telegram":
             self._write_json(
@@ -153,6 +158,20 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             self._write_json(
                 HTTPStatus.OK,
                 self._run_bridge_command("whatsapp-status", action="whatsapp-status"),
+            )
+            return
+
+        if route == "/api/actions/product-interest":
+            self._write_json(
+                HTTPStatus.OK,
+                self._product_interest_payload(query),
+            )
+            return
+
+        if route == "/api/actions/open-media":
+            self._write_json(
+                HTTPStatus.OK,
+                self._open_media_payload(query),
             )
             return
 
@@ -200,44 +219,78 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
         return load_json_file(PUBLIC_RUNTIME_PATH) or {}
 
     def _product_shell_payload(self) -> dict[str, Any]:
-        bridge_status = self._bridge_status_payload()
-        work_status = self._work_status_payload()
-        runtime_payload = self._runtime_payload()
-        public_runtime = self._public_runtime_payload()
-
-        actions = [
-            {
-                "id": "pulse-telegram",
-                "label": "Telegram",
-                "method": "POST",
-                "path": "/api/actions/pulse-telegram",
-                "active": bool(bridge_status.get("telegram_ready")),
-            },
-            {
-                "id": "poll-bridge",
-                "label": "Atualizar",
-                "method": "POST",
-                "path": "/api/actions/poll-bridge",
-                "active": True,
-            },
-            {
-                "id": "whatsapp-status",
-                "label": "WhatsApp",
-                "method": "POST",
-                "path": "/api/actions/whatsapp-status",
-                "active": True,
-            },
-        ]
-
+        catalog = load_json_file(PRODUCT_CATALOG_PATH) or {}
+        hero = (catalog.get("hero") or {}) if isinstance(catalog, dict) else {}
         return {
             "status": "ok",
             "service": "valley-product",
             "generated_at_utc": utc_now_iso(),
-            "runtime": runtime_payload,
-            "bridge_status": bridge_status,
-            "work_status": work_status,
-            "public_runtime": public_runtime,
-            "actions": [action for action in actions if action["active"]],
+            "title": hero.get("title", "Valley"),
+            "subtitle": hero.get(
+                "subtitle",
+                "Compra, explore e acesse seus modulos em uma unica experiencia.",
+            ),
+            "public_runtime": self._public_runtime_payload(),
+            "modules": catalog.get("modules", []),
+            "summary": catalog.get("summary", {}),
+            "items": catalog.get("items", []),
+        }
+
+    def _product_interest_payload(self, query: dict[str, list[str]]) -> dict[str, Any]:
+        item_id = (query.get("item_id") or [""])[0]
+        catalog = load_json_file(PRODUCT_CATALOG_PATH) or {}
+        items = catalog.get("items", []) if isinstance(catalog, dict) else []
+        item = next(
+            (candidate for candidate in items if candidate.get("id") == item_id),
+            None,
+        )
+        if item is None:
+            return {
+                "status": "failed",
+                "action": "product-interest",
+                "payload": {"message": "Item indisponivel."},
+            }
+
+        event = {
+            "event": "product_interest",
+            "item_id": item_id,
+            "title": item.get("title"),
+            "created_at_utc": utc_now_iso(),
+        }
+        PRODUCT_INTERACTIONS_PATH.parent.mkdir(parents=True, exist_ok=True)
+        with PRODUCT_INTERACTIONS_PATH.open("a", encoding="utf-8") as handle:
+            handle.write(json.dumps(event, ensure_ascii=False) + "\n")
+
+        return {
+            "status": "ok",
+            "action": "product-interest",
+            "payload": {
+                "message": f"{item.get('title', 'Item')} reservado no servidor.",
+            },
+        }
+
+    def _open_media_payload(self, query: dict[str, list[str]]) -> dict[str, Any]:
+        item_id = (query.get("item_id") or [""])[0]
+        catalog = load_json_file(PRODUCT_CATALOG_PATH) or {}
+        items = catalog.get("items", []) if isinstance(catalog, dict) else []
+        item = next(
+            (candidate for candidate in items if candidate.get("id") == item_id),
+            None,
+        )
+        if item is None or not item.get("video_url"):
+            return {
+                "status": "failed",
+                "action": "open-media",
+                "payload": {"message": "Midia indisponivel."},
+            }
+
+        return {
+            "status": "ok",
+            "action": "open-media",
+            "payload": {
+                "message": "Abrindo demonstracao.",
+                "url": item.get("video_url"),
+            },
         }
 
     def _run_bridge_command(self, command: str, *, action: str) -> dict[str, Any]:

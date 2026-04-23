@@ -19,6 +19,16 @@ subprojects {
     project.evaluationDependsOn(":app")
 }
 
+subprojects {
+    tasks.configureEach {
+        if (name.startsWith("generate") && name.endsWith("LintModel")) {
+            doNotTrackState(
+                "Gradle lint model generation in plugin subprojects is unstable on this Windows toolchain.",
+            )
+        }
+    }
+}
+
 tasks.register<Delete>("clean") {
     delete(rootProject.layout.buildDirectory)
 }

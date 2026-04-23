@@ -32,19 +32,14 @@ class ProductApiRepository {
     throw StateError('Servidor Valley indisponivel: $lastError');
   }
 
-  Future<ProductActionResult> invoke({
+  Future<ProductActionResult> invokePath({
     required String baseUrl,
-    required ProductAction action,
+    required String path,
   }) async {
-    final Uri uri = Uri.parse('$baseUrl${action.path}');
-    late final http.Response response;
-    if (action.method.toUpperCase() == 'POST') {
-      response = await http
-          .post(uri, headers: <String, String>{'Content-Type': 'application/json'})
-          .timeout(const Duration(seconds: 20));
-    } else {
-      response = await http.get(uri).timeout(const Duration(seconds: 20));
-    }
+    final Uri uri = Uri.parse('$baseUrl$path');
+    final http.Response response = await http
+        .post(uri, headers: <String, String>{'Content-Type': 'application/json'})
+        .timeout(const Duration(seconds: 20));
 
     final Map<String, dynamic> json =
         (jsonDecode(utf8.decode(response.bodyBytes)) as Map<dynamic, dynamic>)
@@ -55,47 +50,43 @@ class ProductApiRepository {
             .cast<String, dynamic>();
 
     return ProductActionResult(
-      ok: response.statusCode >= 200 &&
-          response.statusCode < 300 &&
-          status == 'ok',
+      ok: response.statusCode >= 200 && response.statusCode < 300 && status == 'ok',
       status: status,
-      action: json['action'] as String? ?? action.id,
-      message: _extractMessage(action, json, payload),
+      action: json['action'] as String? ?? '',
+      message: payload['message'] as String? ?? status,
+      url: payload['url'] as String? ?? '',
     );
   }
 
   ProductShellData _parseShell(String baseUrl, Map<String, dynamic> json) {
-    final Map<String, dynamic> runtime =
-        (json['runtime'] as Map<dynamic, dynamic>? ?? <dynamic, dynamic>{})
-            .cast<String, dynamic>();
-    final Map<String, dynamic> bridgeStatus =
-        (json['bridge_status'] as Map<dynamic, dynamic>? ?? <dynamic, dynamic>{})
-            .cast<String, dynamic>();
-    final Map<String, dynamic> workStatus =
-        (json['work_status'] as Map<dynamic, dynamic>? ?? <dynamic, dynamic>{})
-            .cast<String, dynamic>();
     final Map<String, dynamic> publicRuntime =
         (json['public_runtime'] as Map<dynamic, dynamic>? ?? <dynamic, dynamic>{})
             .cast<String, dynamic>();
 
     return ProductShellData(
       baseUrl: baseUrl,
-      service: json['service'] as String? ?? 'valley-product',
+      title: json['title'] as String? ?? 'Valley',
+      subtitle: json['subtitle'] as String? ?? '',
       generatedAtUtc: json['generated_at_utc'] as String? ?? '',
-      serverOk: runtime['status'] == 'ok',
-      telegramReady: bridgeStatus['telegram_ready'] as bool? ?? false,
-      whatsappReady: bridgeStatus['whatsapp_ready'] as bool? ?? false,
-      publicUrl: publicRuntime['public_url'] as String? ?? '',
-      activityName: workStatus['activity_name'] as String? ?? 'Valley',
-      progressPercent: (workStatus['progress_percent'] as num?)?.toInt() ?? 0,
-      actions: (json['actions'] as List<dynamic>? ?? <dynamic>[])
+      modules: (json['modules'] as List<dynamic>? ?? <dynamic>[])
           .map(
-            (dynamic item) => ProductAction.fromJson(
+            (dynamic item) => ProductModule.fromJson(
               (item as Map<dynamic, dynamic>).cast<String, dynamic>(),
             ),
           )
-          .where((ProductAction action) => action.active)
           .toList(),
+      summary: ProductSummary.fromJson(
+        (json['summary'] as Map<dynamic, dynamic>? ?? <dynamic, dynamic>{})
+            .cast<String, dynamic>(),
+      ),
+      items: (json['items'] as List<dynamic>? ?? <dynamic>[])
+          .map(
+            (dynamic item) => ProductItem.fromJson(
+              (item as Map<dynamic, dynamic>).cast<String, dynamic>(),
+            ),
+          )
+          .toList(),
+      publicUrl: publicRuntime['public_url'] as String? ?? '',
     );
   }
 
@@ -109,27 +100,4 @@ class ProductApiRepository {
   }
 
   String _normalizeBaseUrl(String value) => value.trim().replaceAll(RegExp(r'/$'), '');
-
-  String _extractMessage(
-    ProductAction action,
-    Map<String, dynamic> json,
-    Map<String, dynamic> payload,
-  ) {
-    final Object? stdout = payload['stdout'];
-    if (stdout is String && stdout.trim().isNotEmpty) {
-      return stdout.trim();
-    }
-
-    final String? actionName = payload['action'] as String?;
-    if (actionName != null && actionName.isNotEmpty) {
-      return actionName;
-    }
-
-    final String? routeStatus = json['status'] as String?;
-    if (routeStatus != null && routeStatus.isNotEmpty) {
-      return '${action.label} $routeStatus';
-    }
-
-    return action.label;
-  }
 }

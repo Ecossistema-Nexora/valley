@@ -99,6 +99,7 @@ TOOLS_BIN_DIR = ROOT / 'tools' / 'bin'
 POSTGRES_SEED_PATHS = [
     ROOT / 'database' / 'seeds' / 'postgres' / '001_v47_expansion_tourism_bio_energy_seed.sql',
     ROOT / 'database' / 'seeds' / 'postgres' / '002_v47_priority_domain_delivery_packages_seed.sql',
+    ROOT / 'database' / 'seeds' / 'postgres' / '003_v47_product_mode_demo_seed.sql',
     PRIORITY_DOMAIN_SQL_DIR / 'platform_developer' / 'operational_seed.sql',
     PRIORITY_DOMAIN_SQL_DIR / 'logistics_erp_operations' / 'operational_seed.sql',
     PRIORITY_DOMAIN_SQL_DIR / 'ai_memory_operations' / 'operational_seed.sql',
@@ -111,6 +112,7 @@ POSTGRES_SEED_PATHS = [
 # MONGODB_SEED_PATHS guarda seeds operacionais MongoDB fora da esteira de migrations.
 MONGODB_SEED_PATHS = [
     ROOT / 'database' / 'seeds' / 'mongodb' / '001_v47_expansion_media_wellness_frontier_seed.mongo.js',
+    ROOT / 'database' / 'seeds' / 'mongodb' / '002_v47_product_mode_demo_seed.mongo.js',
 ]
 
 # SEED_IDS centraliza UUIDs deterministicas usadas pelos seeds e smoke checks.
