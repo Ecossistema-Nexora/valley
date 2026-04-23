@@ -1,14 +1,13 @@
 import 'dart:async';
+import 'dart:math' as math;
 import 'dart:ui';
 
-import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:valley_super_app/src/data/valley_models.dart';
 import 'package:valley_super_app/src/ui/ui_components.dart';
 import 'package:valley_super_app/valley_brand_theme.dart';
 
-const String _valleyServerBaseUrl = 'https://valley-alpha.vercel.app';
 const String _homeModulePrefsKey = 'valley.home.visible_modules.v1';
 
 int _destinationIndexForModule(String code) {
@@ -122,12 +121,12 @@ class _ValleyHomeShellState extends State<ValleyHomeShell> {
 
   static const List<_Destination> _destinations = <_Destination>[
     _Destination(
-      label: 'Overview',
-      title: 'Command Center',
+      label: 'Inicio',
+      title: 'Valley Premium',
       icon: Icons.dashboard_customize_rounded,
     ),
     _Destination(
-      label: 'Wallet',
+      label: 'Carteira',
       title: 'Pay + Plug + Docs',
       icon: Icons.account_balance_wallet_rounded,
     ),
@@ -137,12 +136,12 @@ class _ValleyHomeShellState extends State<ValleyHomeShell> {
       icon: Icons.storefront_rounded,
     ),
     _Destination(
-      label: 'Business',
+      label: 'Negocios',
       title: 'Business + Reply',
       icon: Icons.apartment_rounded,
     ),
     _Destination(
-      label: 'Identity',
+      label: 'Identidade',
       title: 'Face ID + Voice ID + Score',
       icon: Icons.verified_user_rounded,
     ),
@@ -399,7 +398,7 @@ class _DesktopSidebar extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Release shell unico para Web e Android, ancorado no manifesto do MVP e no registro V47.',
+                  'Pagamentos, comercio, identidade e Helena no mesmo ecossistema premium.',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
@@ -410,12 +409,11 @@ class _DesktopSidebar extends StatelessWidget {
                   runSpacing: 8,
                   children: <Widget>[
                     SignalChip(
-                      label: '${data.release.modulesTotal} modulos',
+                      label: '${data.modules.length} modulos',
                       color: ValleyBrandColors.cyan,
                     ),
                     SignalChip(
-                      label:
-                          '${data.release.checklistCompletionPercentage.toStringAsFixed(1)}% pronto',
+                      label: 'modo premium',
                       color: ValleyBrandColors.violet,
                     ),
                   ],
@@ -453,13 +451,13 @@ class _DesktopSidebar extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          'Entrega atual',
+                          'Experiencia ativa',
                           style: Theme.of(context).textTheme.titleMedium
                               ?.copyWith(fontWeight: FontWeight.w700),
                         ),
                         const SizedBox(height: 10),
                         Text(
-                          'Web release e APK release saem do mesmo codigo-fonte Flutter.',
+                          'A mesma experiencia final em Android e Web.',
                           style: Theme.of(context).textTheme.bodySmall
                               ?.copyWith(
                                 color: Theme.of(
@@ -582,7 +580,7 @@ class _MobileTopBar extends StatelessWidget {
                 children: <Widget>[
                   Text(title, style: Theme.of(context).textTheme.titleLarge),
                   Text(
-                    '${data.release.modulesTotal} modulos | ${data.release.checklistCompletionPercentage.toStringAsFixed(1)}% pronto',
+                    '${data.modules.length} modulos conectados',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
@@ -591,7 +589,7 @@ class _MobileTopBar extends StatelessWidget {
               ),
             ),
             const SignalChip(
-              label: 'release',
+              label: 'premium',
               color: ValleyBrandColors.success,
             ),
           ],
@@ -620,8 +618,6 @@ class _OverviewPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final PhaseRecord commercePhase =
-        data.phaseByKey('phase_2_commerce') ?? data.manifest.phases[1];
     final List<ModuleRecord> homeModules =
         data.modules
             .where(
@@ -636,185 +632,20 @@ class _OverviewPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            ValleyPanel(
-              glowColor: ValleyBrandColors.violet,
-              background: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: <Color>[
-                  ValleyBrandColors.violet.withValues(alpha: 0.24),
-                  ValleyBrandColors.cosmic.withValues(alpha: 0.96),
-                  ValleyBrandColors.night,
-                ],
-              ),
-              child: LayoutBuilder(
-                builder: (BuildContext context, BoxConstraints constraints) {
-                  final bool stacked = constraints.maxWidth < 860;
-                  return _ResponsiveSplit(
-                    stacked: stacked,
-                    leadingFlex: 7,
-                    trailingFlex: 4,
-                    gap: 24,
-                    leading: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Wrap(
-                          spacing: 8,
-                          runSpacing: 8,
-                          children: <Widget>[
-                            const SignalChip(
-                              label: 'mvp release shell',
-                              color: ValleyBrandColors.success,
-                            ),
-                            SignalChip(
-                              label:
-                                  '${data.manifest.includedModules.length} modulos no corte',
-                              color: ValleyBrandColors.cyan,
-                              outlined: true,
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 20),
-                        Text(
-                          'Transacao, identidade e estoque em uma unica superficie operacional.',
-                          style: Theme.of(context).textTheme.displaySmall
-                              ?.copyWith(color: ValleyBrandColors.snow),
-                        ),
-                        const SizedBox(height: 14),
-                        ConstrainedBox(
-                          constraints: const BoxConstraints(maxWidth: 720),
-                          child: Text(
-                            data.manifest.summary,
-                            style: Theme.of(context).textTheme.bodyLarge
-                                ?.copyWith(
-                                  color: ValleyBrandColors.snow.withValues(
-                                    alpha: 0.80,
-                                  ),
-                                ),
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        Wrap(
-                          spacing: 12,
-                          runSpacing: 12,
-                          children: <Widget>[
-                            FilledButton(
-                              onPressed: () => onNavigate(2),
-                              child: const Text('Abrir comercio'),
-                            ),
-                            OutlinedButton(
-                              onPressed: () => onNavigate(5),
-                              child: const Text('Abrir Helena'),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    trailing: ValleyPanel(
-                      padding: const EdgeInsets.all(18),
-                      glowColor: ValleyBrandColors.cyan,
-                      background: LinearGradient(
-                        colors: <Color>[
-                          ValleyBrandColors.cyan.withValues(alpha: 0.10),
-                          ValleyBrandColors.night.withValues(alpha: 0.82),
-                        ],
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            'Principio central',
-                            style: Theme.of(context).textTheme.titleMedium
-                                ?.copyWith(fontWeight: FontWeight.w700),
-                          ),
-                          const SizedBox(height: 10),
-                          Text(
-                            data.manifest.centralPrinciple,
-                            style: Theme.of(context).textTheme.bodyLarge
-                                ?.copyWith(
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onSurfaceVariant,
-                                ),
-                          ),
-                          const SizedBox(height: 20),
-                          Text(
-                            'Foco agora',
-                            style: Theme.of(context).textTheme.titleMedium
-                                ?.copyWith(fontWeight: FontWeight.w700),
-                          ),
-                          const SizedBox(height: 10),
-                          Text(
-                            commercePhase.goal,
-                            style: Theme.of(context).textTheme.bodyMedium
-                                ?.copyWith(
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onSurfaceVariant,
-                                ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
+            _OrbitalCommandHero(
+              data: data,
+              homeModules: homeModules,
+              onNavigate: onNavigate,
+              onOpenModule: onOpenModule,
             ),
-            const SizedBox(height: 24),
-            Wrap(
-              spacing: 16,
-              runSpacing: 16,
-              children: <Widget>[
-                SizedBox(
-                  width: 220,
-                  child: MetricTile(
-                    label: 'Checklist',
-                    value:
-                        '${data.release.checklistCompletionPercentage.toStringAsFixed(1)}%',
-                    caption:
-                        '${data.release.checklistItemsDone}/${data.release.checklistItemsTotal} itens validados.',
-                    accent: ValleyBrandColors.violet,
-                  ),
-                ),
-                SizedBox(
-                  width: 220,
-                  child: MetricTile(
-                    label: 'Readiness medio',
-                    value:
-                        '${data.release.averageModuleReadinessPercentage.toStringAsFixed(1)}%',
-                    caption:
-                        'Media operacional dos modulos parcialmente implantados.',
-                    accent: ValleyBrandColors.cyan,
-                  ),
-                ),
-                SizedBox(
-                  width: 220,
-                  child: MetricTile(
-                    label: 'Modules com pendencia',
-                    value: '${data.release.modulesWithPending}',
-                    caption:
-                        'Fila ativa de hardening e entrega visual/funcional.',
-                    accent: ValleyBrandColors.warning,
-                  ),
-                ),
-                SizedBox(
-                  width: 220,
-                  child: MetricTile(
-                    label: 'Build target',
-                    value: 'Web + APK',
-                    caption:
-                        'Uma base Flutter responsiva para browser e Android.',
-                    accent: ValleyBrandColors.success,
-                  ),
-                ),
-              ],
-            ),
+            const SizedBox(height: 20),
+            _PremiumSignalRibbon(data: data),
             const SizedBox(height: 32),
             SectionHeader(
               kicker: 'Home Modular',
               title: 'Escolha quais modulos aparecem na tela inicial',
               caption:
-                  'A selecao fica salva localmente e o dock inferior continua dando acesso rapido aos 47 modulos.',
+                  'A selecao fica salva no aparelho e o dock inferior mantem acesso rapido a todo o ecossistema.',
               trailing: SignalChip(
                 label: '${homeModules.length}/${data.modules.length} visiveis',
                 color: preferencesReady
@@ -833,10 +664,10 @@ class _OverviewPage extends StatelessWidget {
             ),
             const SizedBox(height: 32),
             SectionHeader(
-              kicker: 'Roadmap',
-              title: 'Fases que governam o corte atual',
+              kicker: 'Jornadas',
+              title: 'Servicos conectados por objetivo',
               caption:
-                  'Cada fase foi traduzida para uma superficie direta, sem separar produto e operacao.',
+                  'Cada jornada concentra modulos, acoes e regras de confianca em uma superficie direta.',
             ),
             const SizedBox(height: 18),
             Column(
@@ -858,7 +689,7 @@ class _OverviewPage extends StatelessWidget {
                             ),
                             const Spacer(),
                             Text(
-                              '${phase.successGates.length} gates',
+                              '${phase.successGates.length} etapas',
                               style: Theme.of(context).textTheme.labelLarge,
                             ),
                           ],
@@ -915,10 +746,10 @@ class _OverviewPage extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             SectionHeader(
-              kicker: 'MVP',
-              title: 'Corte comercial navegavel',
+              kicker: 'Essenciais',
+              title: 'Atalhos comerciais',
               caption:
-                  'Os modulos abaixo continuam como corte prioritario, enquanto a home modular permite personalizar o primeiro viewport.',
+                  'Modulos centrais para pagamentos, documentos, operacao empresarial, comercio e Helena.',
             ),
             const SizedBox(height: 18),
             Wrap(
@@ -965,12 +796,12 @@ class _WalletPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             SectionHeader(
-              kicker: 'Financial heart',
+              kicker: 'Carteira',
               title: 'Wallet, Plug e prova documental no mesmo fluxo',
               caption:
-                  'A frente financeira do MVP prioriza ledger append-only, captura, comprovante e rastreabilidade juridica.',
+                  'Controle saldo, pagamentos, comprovantes e identidade financeira em uma jornada unica.',
               trailing: const SignalChip(
-                label: 'append-only',
+                label: 'seguro',
                 color: ValleyBrandColors.success,
               ),
             ),
@@ -996,7 +827,7 @@ class _WalletPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          'Ledger sandbox',
+                          'Saldo Valley',
                           style: Theme.of(context).textTheme.labelLarge
                               ?.copyWith(color: ValleyBrandColors.cyan),
                         ),
@@ -1008,7 +839,7 @@ class _WalletPage extends StatelessWidget {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'Saldo demonstrativo para o release shell. A superficie e real; os valores ainda sao sandbox.',
+                          'Carteira premium com trilha de pagamento, comprovante e conciliacao no mesmo fluxo.',
                           style: Theme.of(context).textTheme.bodyMedium
                               ?.copyWith(
                                 color: ValleyBrandColors.snow.withValues(
@@ -1022,7 +853,7 @@ class _WalletPage extends StatelessWidget {
                           runSpacing: 10,
                           children: const <Widget>[
                             SignalChip(
-                              label: 'brl ready',
+                              label: 'brl',
                               color: ValleyBrandColors.success,
                             ),
                             SignalChip(
@@ -1044,20 +875,20 @@ class _WalletPage extends StatelessWidget {
                       children: <Widget>[
                         for (final Map<String, String> item
                             in const <Map<String, String>>[
-                              <String, String>{
-                                'label': 'Atomic transactions',
+                             <String, String>{
+                                'label': 'Transacoes',
                                 'value':
                                     'P2P, purchase, fee, refund, split, escrow',
                               },
                               <String, String>{
-                                'label': 'Proof layer',
+                                'label': 'Comprovantes',
                                 'value':
                                     'Docs com checksum e recibo versionado',
                               },
                               <String, String>{
-                                'label': 'Release build',
+                                'label': 'Experiencia unica',
                                 'value':
-                                    'APK e Web consomem a mesma shell de produto',
+                                    'Android e Web com a mesma navegacao premium',
                               },
                             ]) ...<Widget>[
                           Text(
@@ -1123,10 +954,10 @@ class _WalletPage extends StatelessWidget {
             ),
             const SizedBox(height: 30),
             SectionHeader(
-              kicker: 'Runtime',
-              title: 'Fluxos que o MVP financeiro precisa suportar',
+              kicker: 'Fluxos',
+              title: 'Pagamentos com prova ponta a ponta',
               caption:
-                  'A shell mostra a sequencia operacional do pagamento, nao apenas um saldo solto.',
+                  'A interface mostra captura, saldo, comprovante e fechamento sem separar a jornada.',
             ),
             const SizedBox(height: 18),
             Wrap(
@@ -1155,10 +986,10 @@ class _WalletPage extends StatelessWidget {
             ),
             const SizedBox(height: 30),
             SectionHeader(
-              kicker: 'Signals',
-              title: 'Eventos de ledger exibidos no release shell',
+              kicker: 'Historico',
+              title: 'Movimentacoes recentes',
               caption:
-                  'Eventos demonstrativos para orientar a primeira implementacao conectada ao backend.',
+                  'Resumo claro das operacoes financeiras mais importantes.',
             ),
             const SizedBox(height: 18),
             ...const <Widget>[
@@ -1209,12 +1040,12 @@ class _MarketplacePage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             SectionHeader(
-              kicker: 'Commerce engine',
+              kicker: 'Marketplace',
               title: 'Marketplace Valley com STOCK, WMS e pricing controlado',
               caption:
-                  'A superficie comercial nasce API-first, com cache, fallback controlado e pausa automatica sem margem.',
+                  'Busca, ofertas, checkout e reputacao de seller em uma vitrine direta para compra.',
               trailing: const SignalChip(
-                label: 'api-first',
+                label: 'commerce',
                 color: ValleyBrandColors.success,
               ),
             ),
@@ -1272,16 +1103,16 @@ class _MarketplacePage extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            'Regras de producao',
+                            'Regras da compra',
                             style: Theme.of(context).textTheme.titleMedium
                                 ?.copyWith(fontWeight: FontWeight.w700),
                           ),
                           const SizedBox(height: 12),
                           ...<String>[
                             'Sem prejuizo',
-                            'Sem IA externa para consulta',
-                            'Scraping apenas fallback',
-                            'Pricing e snapshot append-only',
+                            'Seller score visivel',
+                            'Estoque e custo conferidos',
+                            'Comprovante Valley Docs',
                           ].map(
                             (String item) => Padding(
                               padding: const EdgeInsets.only(bottom: 10),
@@ -1305,10 +1136,10 @@ class _MarketplacePage extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             SectionHeader(
-              kicker: 'Offer layer',
-              title: 'Vitrine de ofertas do shell',
+              kicker: 'Ofertas',
+              title: 'Vitrine de ofertas',
               caption:
-                  'Nao sao SKUs reais ainda; sao superficies de conversao preparadas para receber o catalogo conectado.',
+                  'Produtos, fornecedores e checkout aparecem com linguagem clara para o usuario final.',
             ),
             const SizedBox(height: 18),
             Wrap(
@@ -1329,7 +1160,7 @@ class _MarketplacePage extends StatelessWidget {
                       title: 'Central de Dropshipping',
                       subtitle: 'Fornecedor, custo, estoque e tracking',
                       caption:
-                          'Surface ativa com snapshot remoto do Valley Alpha para validar custo, tracking e integracoes.',
+                          'Centraliza custo, estoque, fornecedor e rastreio em uma unica experiencia.',
                     ),
                   ),
                 ),
@@ -1340,14 +1171,14 @@ class _MarketplacePage extends StatelessWidget {
                     title: 'Endereco e variancia',
                     subtitle: 'Disponibilidade logica e prova operacional',
                     caption:
-                        'Preparado para estoque proprio e oferta sem CAPEX no mesmo shell.',
+                        'Preparado para estoque proprio e oferta sem CAPEX na mesma experiencia.',
                     onTap: () => _showModuleActionSheet(
                       context,
                       code: 'WMS',
                       title: 'Endereco e variancia',
                       subtitle: 'Disponibilidade logica e prova operacional',
                       caption:
-                          'Surface ativa com sync remoto do servidor publicado para disponibilidade e prova operacional.',
+                          'Organiza disponibilidade, endereco e variancia para uma operacao mais confiavel.',
                     ),
                   ),
                 ),
@@ -1365,7 +1196,7 @@ class _MarketplacePage extends StatelessWidget {
                       title: 'Checkout Valley',
                       subtitle: 'Seller score + Plug + Docs',
                       caption:
-                          'Surface ativa com snapshot remoto do marketplace e fluxo fechado de prova documental.',
+                          'Fecha compra com seller score, pagamento Valley e comprovante documental.',
                     ),
                   ),
                 ),
@@ -1373,10 +1204,10 @@ class _MarketplacePage extends StatelessWidget {
             ),
             const SizedBox(height: 30),
             SectionHeader(
-              kicker: 'Integrations',
-              title: 'Provedores e fontes de preco monitoradas',
+              kicker: 'Fontes',
+              title: 'Provedores e referencias de preco',
               caption:
-                  'A matriz abaixo segue o manifesto do MVP e o blueprint de dropshipping em producao.',
+                  'Referencias comerciais ajudam a manter oferta, margem e disponibilidade mais consistentes.',
             ),
             const SizedBox(height: 18),
             Wrap(
@@ -1429,10 +1260,10 @@ class _MarketplacePage extends StatelessWidget {
             ),
             const SizedBox(height: 30),
             SectionHeader(
-              kicker: 'Pricing loop',
+              kicker: 'Preco',
               title: 'Ciclo de decisao do pricing engine',
               caption:
-                  'Cada decisao do motor de margem precisa deixar evidencia tecnica para operacao e auditoria.',
+                  'Cada ajuste protege margem, estoque e experiencia de compra.',
             ),
             const SizedBox(height: 18),
             Column(
@@ -1508,11 +1339,11 @@ class _BusinessPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             SectionHeader(
-              kicker: 'Business core',
+              kicker: 'Negocios',
               title:
                   'ERP leve, compras, comprovacao e captura no mesmo backoffice',
               caption:
-                  'O shell empresarial prioriza recorrencia SaaS e fechamento operacional antes de escala logistica.',
+                  'Compras, estoque, documentos e pagamento aparecem em uma rotina empresarial simples.',
             ),
             const SizedBox(height: 18),
             Wrap(
@@ -1574,10 +1405,10 @@ class _BusinessPage extends StatelessWidget {
             ),
             const SizedBox(height: 30),
             SectionHeader(
-              kicker: 'Loops',
+              kicker: 'Rotinas',
               title: 'Fluxos empresariais que a interface prioriza',
               caption:
-                  'Menos storytelling e mais superficie de operacao: compras, fiscal, servico e comprovante.',
+                  'Compras, fiscal, servicos e comprovantes ficam agrupados para decisao rapida.',
             ),
             const SizedBox(height: 18),
             const Wrap(
@@ -1613,64 +1444,6 @@ class _BusinessPage extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 30),
-            SectionHeader(
-              kicker: 'Backlog pressure',
-              title: 'Modulos com maior tensao de entrega',
-              caption:
-                  'Leitura direta do release summary para orientar o proximo hardening funcional.',
-            ),
-            const SizedBox(height: 18),
-            ...data.release.topModulesWithPending
-                .take(5)
-                .map(
-                  (PendingModule module) => Padding(
-                    padding: const EdgeInsets.only(bottom: 12),
-                    child: ValleyPanel(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Row(
-                            children: <Widget>[
-                              SignalChip(
-                                label: module.code,
-                                color: ValleyBrandColors.warning,
-                              ),
-                              const SizedBox(width: 10),
-                              Expanded(
-                                child: Text(
-                                  module.name,
-                                  style: Theme.of(context).textTheme.titleMedium
-                                      ?.copyWith(fontWeight: FontWeight.w700),
-                                ),
-                              ),
-                              Text(
-                                '${module.moduleReadinessPercentage.toStringAsFixed(1)}%',
-                                style: Theme.of(context).textTheme.titleMedium,
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 12),
-                          AnimatedReadinessBar(
-                            value: module.moduleReadinessPercentage,
-                            color: ValleyBrandColors.warning,
-                          ),
-                          const SizedBox(height: 10),
-                          Text(
-                            '${module.checklistDone}/${module.checklistTotal} itens fechados • ${module.statusLabel}',
-                            style: Theme.of(context).textTheme.bodyMedium
-                                ?.copyWith(
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onSurfaceVariant,
-                                ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
           ],
         ),
       ),
@@ -1727,7 +1500,7 @@ class _IdentityPage extends StatelessWidget {
                         ),
                         const SizedBox(height: 12),
                         Text(
-                          'Score demonstrativo para seller onboarding, pagamentos sensiveis e antifraude em marketplace.',
+                          'Score para onboarding de seller, pagamentos sensiveis e protecao antifraude.',
                           style: Theme.of(context).textTheme.bodyMedium
                               ?.copyWith(
                                 color: Theme.of(
@@ -1765,10 +1538,10 @@ class _IdentityPage extends StatelessWidget {
             ),
             const SizedBox(height: 30),
             SectionHeader(
-              kicker: 'Capabilities',
-              title: 'Frentes identitarias do manifesto',
+              kicker: 'Protecao',
+              title: 'Identidade forte em cada jornada',
               caption:
-                  'Cada frente puxa owners, evidencias e eventos reais do ecossistema.',
+                  'Biometria, reputacao e comprovacao ajudam a proteger pagamentos, vendedores e acessos.',
             ),
             const SizedBox(height: 18),
             Column(
@@ -1787,18 +1560,10 @@ class _IdentityPage extends StatelessWidget {
                                   color: ValleyBrandColors.violet,
                                 ),
                                 const SizedBox(width: 10),
-                                Expanded(
-                                  child: Text(
-                                    component.deliveryMode,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium
-                                        ?.copyWith(
-                                          color: Theme.of(
-                                            context,
-                                          ).colorScheme.onSurfaceVariant,
-                                        ),
-                                  ),
+                                const SignalChip(
+                                  label: 'protegido',
+                                  color: ValleyBrandColors.success,
+                                  outlined: true,
                                 ),
                               ],
                             ),
@@ -1809,22 +1574,8 @@ class _IdentityPage extends StatelessWidget {
                                   ?.copyWith(fontWeight: FontWeight.w700),
                             ),
                             const SizedBox(height: 12),
-                            Wrap(
-                              spacing: 8,
-                              runSpacing: 8,
-                              children: component.owners
-                                  .map(
-                                    (String owner) => SignalChip(
-                                      label: owner,
-                                      color: ValleyBrandColors.cyan,
-                                      outlined: true,
-                                    ),
-                                  )
-                                  .toList(),
-                            ),
-                            const SizedBox(height: 16),
                             Text(
-                              'Evidencias: ${component.evidenceEntities.join(' • ')}',
+                              'Usado em pagamentos, marketplace, documentos e acessos sensiveis.',
                               style: Theme.of(context).textTheme.bodyMedium
                                   ?.copyWith(
                                     color: Theme.of(
@@ -1832,18 +1583,6 @@ class _IdentityPage extends StatelessWidget {
                                     ).colorScheme.onSurfaceVariant,
                                   ),
                             ),
-                            if (component.eventTopics.isNotEmpty) ...<Widget>[
-                              const SizedBox(height: 8),
-                              Text(
-                                'Eventos: ${component.eventTopics.join(' • ')}',
-                                style: Theme.of(context).textTheme.bodySmall
-                                    ?.copyWith(
-                                      color: Theme.of(
-                                        context,
-                                      ).colorScheme.onSurfaceVariant,
-                                    ),
-                              ),
-                            ],
                           ],
                         ),
                       ),
@@ -1883,9 +1622,9 @@ class _HelenaPage extends StatelessWidget {
               title:
                   'IA utilitaria, limitada por plano e orientada a produtividade',
               caption:
-                  'A camada de IA do MVP nao busca volume vazio; ela entrega contexto, agenda e recomendacao acionavel.',
+                  'Helena organiza contexto, agenda e recomendacoes para facilitar decisoes do dia a dia.',
               trailing: const SignalChip(
-                label: 'light ai',
+                label: 'assistente',
                 color: ValleyBrandColors.success,
               ),
             ),
@@ -1932,7 +1671,7 @@ class _HelenaPage extends StatelessWidget {
                         ),
                         const SizedBox(height: 12),
                         Text(
-                          '“Sua carteira empresarial ja tem trilha para PIX P2P, comprovante Docs e seller score. A proxima acao recomendada e ativar o marketplace com os providers API-first e deixar o pricing em modo protegido.”',
+                          '“Sua carteira empresarial ja tem PIX P2P, comprovante Docs e seller score. A proxima acao recomendada e ativar o marketplace com fornecedores confiaveis e preco protegido.”',
                           style: Theme.of(context).textTheme.bodyLarge
                               ?.copyWith(
                                 color: Theme.of(
@@ -1955,7 +1694,7 @@ class _HelenaPage extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            'Runtime rules',
+                            'Preferencias',
                             style: Theme.of(context).textTheme.titleMedium
                                 ?.copyWith(fontWeight: FontWeight.w700),
                           ),
@@ -1986,7 +1725,7 @@ class _HelenaPage extends StatelessWidget {
               kicker: 'Agenda',
               title: 'Memoria util e recorrencia acionavel',
               caption:
-                  'As listas abaixo sao placeholders de release para a primeira conexao com a camada de memoria.',
+                  'Compromissos, lembretes e acoes aparecem de forma simples para acompanhar a rotina.',
             ),
             const SizedBox(height: 18),
             const Wrap(
@@ -1996,25 +1735,25 @@ class _HelenaPage extends StatelessWidget {
                 SizedBox(
                   width: 320,
                   child: _AgendaTile(
-                    title: '09:00 • Revisar providers',
+                    title: '09:00 • Conferir fornecedores',
                     body:
-                        'Validar AliExpress, Alibaba e CJ com cache TTL e credenciais referenciadas.',
+                        'Revisar fornecedores principais e confirmar disponibilidade para ofertas ativas.',
                   ),
                 ),
                 SizedBox(
                   width: 320,
                   child: _AgendaTile(
-                    title: '11:30 • Apertar score',
+                    title: '11:30 • Verificar score',
                     body:
-                        'Revisar Identity Score para onboarding de seller e operacoes Plug.',
+                        'Acompanhar identidade e reputacao para operacoes de seller e pagamentos.',
                   ),
                 ),
                 SizedBox(
                   width: 320,
                   child: _AgendaTile(
-                    title: '14:00 • Cutover commerce',
+                    title: '14:00 • Abrir commerce',
                     body:
-                        'Liberar surfaces de STOCK, WMS e MARKETPLACE com pricing protegido.',
+                        'Organizar STOCK, WMS e MARKETPLACE para vendas com preco protegido.',
                   ),
                 ),
               ],
@@ -2023,6 +1762,545 @@ class _HelenaPage extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class _OrbitalCommandHero extends StatelessWidget {
+  const _OrbitalCommandHero({
+    required this.data,
+    required this.homeModules,
+    required this.onNavigate,
+    required this.onOpenModule,
+  });
+
+  final ValleyAppData data;
+  final List<ModuleRecord> homeModules;
+  final ValueChanged<int> onNavigate;
+  final ValueChanged<ModuleRecord> onOpenModule;
+
+  @override
+  Widget build(BuildContext context) {
+    return ValleyPanel(
+      padding: EdgeInsets.zero,
+      radius: 34,
+      glowColor: ValleyBrandColors.cyan,
+      background: const LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: <Color>[
+          Color(0xFF050414),
+          Color(0xFF111044),
+          Color(0xFF061B2A),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(34),
+        child: Stack(
+          children: <Widget>[
+            Positioned.fill(child: CustomPaint(painter: _HeroOrbitPainter())),
+            Positioned(
+              right: -120,
+              top: -120,
+              child: _SoftOrb(
+                color: ValleyBrandColors.cyan.withValues(alpha: 0.24),
+                size: 320,
+              ),
+            ),
+            Positioned(
+              left: -140,
+              bottom: -130,
+              child: _SoftOrb(
+                color: ValleyBrandColors.violet.withValues(alpha: 0.28),
+                size: 360,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(26),
+              child: LayoutBuilder(
+                builder: (BuildContext context, BoxConstraints constraints) {
+                  final bool stacked = constraints.maxWidth < 900;
+                  return _ResponsiveSplit(
+                    stacked: stacked,
+                    leadingFlex: 6,
+                    trailingFlex: 5,
+                    gap: 28,
+                    leading: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: <Widget>[
+                            const SignalChip(
+                              label: 'modo premium',
+                              color: ValleyBrandColors.cyan,
+                            ),
+                            SignalChip(
+                              label: '${homeModules.length} modulos na home',
+                              color: ValleyBrandColors.success,
+                              outlined: true,
+                            ),
+                            SignalChip(
+                              label: '${data.modules.length} no dock',
+                              color: ValleyBrandColors.lilac,
+                              outlined: true,
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 28),
+                        ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 700),
+                          child: Text(
+                            'Valley Orbit centraliza pagamentos, comercio e IA em uma experiencia premium.',
+                            style: Theme.of(context).textTheme.displaySmall
+                                ?.copyWith(
+                                  color: ValleyBrandColors.snow,
+                                  fontSize: stacked ? 36 : 48,
+                                  height: 0.98,
+                                  letterSpacing: -1.6,
+                                ),
+                          ),
+                        ),
+                        const SizedBox(height: 18),
+                        ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 620),
+                          child: Text(
+                            'Acesse carteira, marketplace, identidade e Helena com navegacao fluida no Android e na Web.',
+                            style: Theme.of(context).textTheme.bodyLarge
+                                ?.copyWith(
+                                  color: ValleyBrandColors.snow.withValues(
+                                    alpha: 0.76,
+                                  ),
+                                ),
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                        Wrap(
+                          spacing: 12,
+                          runSpacing: 12,
+                          children: <Widget>[
+                            FilledButton.icon(
+                              onPressed: () => onNavigate(2),
+                              icon: const Icon(Icons.storefront_rounded),
+                              label: const Text('Abrir comercio'),
+                            ),
+                            OutlinedButton.icon(
+                              onPressed: () => onNavigate(5),
+                              icon: const Icon(Icons.auto_awesome_rounded),
+                              label: const Text('Abrir Helena'),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 24),
+                        _HeroBriefingStrip(
+                          principle:
+                              'Seu ecossistema fica organizado em modulos claros, com acesso rapido e superficie unica.',
+                          focus:
+                              'Commerce, Pay, Docs, Business e Helena trabalham juntos para simplificar rotina, compra e operacao.',
+                        ),
+                      ],
+                    ),
+                    trailing: _OrbitModuleVisual(
+                      modules: homeModules.isEmpty
+                          ? data.includedModuleRecords
+                          : homeModules,
+                      onOpenModule: onOpenModule,
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _HeroBriefingStrip extends StatelessWidget {
+  const _HeroBriefingStrip({required this.principle, required this.focus});
+
+  final String principle;
+  final String focus;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.06),
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            'Experiencia integrada',
+            style: Theme.of(context).textTheme.labelLarge?.copyWith(
+              color: ValleyBrandColors.cyan,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 0.8,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            principle,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: ValleyBrandColors.snow.withValues(alpha: 0.82),
+            ),
+          ),
+          const SizedBox(height: 14),
+          Text(
+            focus,
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: ValleyBrandColors.snow.withValues(alpha: 0.64),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _OrbitModuleVisual extends StatelessWidget {
+  const _OrbitModuleVisual({required this.modules, required this.onOpenModule});
+
+  final List<ModuleRecord> modules;
+  final ValueChanged<ModuleRecord> onOpenModule;
+
+  @override
+  Widget build(BuildContext context) {
+    final List<ModuleRecord> visibleModules = modules.take(8).toList();
+    return AspectRatio(
+      aspectRatio: 1.05,
+      child: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          final double size = math.min(
+            constraints.maxWidth,
+            constraints.maxHeight,
+          );
+          final double radius = size * 0.34;
+          return Stack(
+            alignment: Alignment.center,
+            children: <Widget>[
+              Positioned.fill(
+                child: CustomPaint(
+                  painter: _OrbitDialPainter(count: visibleModules.length),
+                ),
+              ),
+              Container(
+                width: size * 0.42,
+                height: size * 0.42,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: RadialGradient(
+                    colors: <Color>[
+                      ValleyBrandColors.cyan.withValues(alpha: 0.36),
+                      ValleyBrandColors.violet.withValues(alpha: 0.18),
+                      Colors.white.withValues(alpha: 0.04),
+                    ],
+                  ),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.18),
+                  ),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    const ValleyLogoMark(size: 64, borderRadius: 20),
+                    const SizedBox(height: 10),
+                    Text(
+                      'ORBIT',
+                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                        color: ValleyBrandColors.snow,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 2,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              for (int index = 0; index < visibleModules.length; index++)
+                _OrbitModuleNode(
+                  module: visibleModules[index],
+                  angle:
+                      (-math.pi / 2) +
+                      (index * 2 * math.pi / visibleModules.length),
+                  radius: radius,
+                  onOpenModule: onOpenModule,
+                ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _OrbitModuleNode extends StatelessWidget {
+  const _OrbitModuleNode({
+    required this.module,
+    required this.angle,
+    required this.radius,
+    required this.onOpenModule,
+  });
+
+  final ModuleRecord module;
+  final double angle;
+  final double radius;
+  final ValueChanged<ModuleRecord> onOpenModule;
+
+  @override
+  Widget build(BuildContext context) {
+    final Color accent = _moduleAccentFor(module);
+    final Offset offset = Offset(
+      math.cos(angle) * radius,
+      math.sin(angle) * radius,
+    );
+    return Transform.translate(
+      offset: offset,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(999),
+          onTap: () => onOpenModule(module),
+          child: Container(
+            width: 78,
+            height: 78,
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: ValleyBrandColors.night.withValues(alpha: 0.78),
+              border: Border.all(color: accent.withValues(alpha: 0.72)),
+              boxShadow: <BoxShadow>[
+                BoxShadow(
+                  color: accent.withValues(alpha: 0.20),
+                  blurRadius: 24,
+                  offset: const Offset(0, 12),
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Icon(_moduleIconFor(module), color: accent, size: 22),
+                const SizedBox(height: 5),
+                Text(
+                  module.code,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                    color: ValleyBrandColors.snow,
+                    fontWeight: FontWeight.w900,
+                    fontSize: 10,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _PremiumSignalRibbon extends StatelessWidget {
+  const _PremiumSignalRibbon({required this.data});
+
+  final ValleyAppData data;
+
+  @override
+  Widget build(BuildContext context) {
+    return ValleyPanel(
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+      radius: 28,
+      glowColor: ValleyBrandColors.violet,
+      background: LinearGradient(
+        begin: Alignment.centerLeft,
+        end: Alignment.centerRight,
+        colors: <Color>[
+          ValleyBrandColors.panelDarkStrong.withValues(alpha: 0.90),
+          ValleyBrandColors.cosmic.withValues(alpha: 0.76),
+          ValleyBrandColors.night.withValues(alpha: 0.92),
+        ],
+      ),
+      child: Wrap(
+        spacing: 12,
+        runSpacing: 12,
+        children: <Widget>[
+          _RibbonMetric(
+            label: 'Modulos',
+            value: '${data.modules.length}',
+            accent: ValleyBrandColors.violet,
+          ),
+          const _RibbonMetric(
+            label: 'Carteira',
+            value: 'Pay',
+            accent: ValleyBrandColors.cyan,
+          ),
+          const _RibbonMetric(
+            label: 'Helena',
+            value: 'IA',
+            accent: ValleyBrandColors.lilac,
+          ),
+          const _RibbonMetric(
+            label: 'Plataforma',
+            value: 'Web + APK',
+            accent: ValleyBrandColors.success,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _RibbonMetric extends StatelessWidget {
+  const _RibbonMetric({
+    required this.label,
+    required this.value,
+    required this.accent,
+  });
+
+  final String label;
+  final String value;
+  final Color accent;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 190,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.055),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: accent.withValues(alpha: 0.30)),
+      ),
+      child: Row(
+        children: <Widget>[
+          Container(
+            width: 9,
+            height: 42,
+            decoration: BoxDecoration(
+              color: accent,
+              borderRadius: BorderRadius.circular(999),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  label.toUpperCase(),
+                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                    color: accent,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 0.9,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  value,
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    color: ValleyBrandColors.snow,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SoftOrb extends StatelessWidget {
+  const _SoftOrb({required this.color, required this.size});
+
+  final Color color;
+  final double size;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        gradient: RadialGradient(
+          colors: <Color>[color, color.withValues(alpha: 0)],
+        ),
+      ),
+    );
+  }
+}
+
+class _HeroOrbitPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final Paint linePaint = Paint()
+      ..color = Colors.white.withValues(alpha: 0.055)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1;
+
+    for (double y = size.height * 0.12; y < size.height; y += 42) {
+      canvas.drawLine(Offset(0, y), Offset(size.width, y - 36), linePaint);
+    }
+
+    final Paint arcPaint = Paint()
+      ..color = ValleyBrandColors.cyan.withValues(alpha: 0.12)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.2;
+    final Rect rect = Rect.fromCircle(
+      center: Offset(size.width * 0.78, size.height * 0.46),
+      radius: size.shortestSide * 0.44,
+    );
+    canvas.drawArc(rect, -0.9, 4.8, false, arcPaint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+class _OrbitDialPainter extends CustomPainter {
+  const _OrbitDialPainter({required this.count});
+
+  final int count;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final Offset center = Offset(size.width / 2, size.height / 2);
+    final double outerRadius = size.shortestSide * 0.38;
+    final Paint ringPaint = Paint()
+      ..color = Colors.white.withValues(alpha: 0.12)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.2;
+    final Paint activePaint = Paint()
+      ..color = ValleyBrandColors.cyan.withValues(alpha: 0.28)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2;
+
+    canvas.drawCircle(center, outerRadius, ringPaint);
+    canvas.drawCircle(center, outerRadius * 0.62, ringPaint);
+
+    final int safeCount = math.max(count, 1);
+    for (int i = 0; i < safeCount; i++) {
+      final double angle = -math.pi / 2 + (i * 2 * math.pi / safeCount);
+      final Offset end = Offset(
+        center.dx + math.cos(angle) * outerRadius,
+        center.dy + math.sin(angle) * outerRadius,
+      );
+      canvas.drawLine(center, end, i.isEven ? activePaint : ringPaint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _OrbitDialPainter oldDelegate) {
+    return oldDelegate.count != count;
   }
 }
 
@@ -2069,8 +2347,8 @@ class _HomeModuleComposer extends StatelessWidget {
               children: <Widget>[
                 Row(
                   children: <Widget>[
-                    Text(
-                      'Na inicial agora',
+                  Text(
+                    'Na tela inicial',
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.w800,
                       ),
@@ -2098,13 +2376,10 @@ class _HomeModuleComposer extends StatelessWidget {
                   children: homeModules
                       .map(
                         (ModuleRecord module) => SizedBox(
-                          width: stacked ? double.infinity : 276,
-                          child: HoverModuleTile(
-                            code: module.code,
-                            title: module.name,
-                            subtitle: '${module.subtitle} • ${module.tier}',
-                            caption: module.description,
-                            onTap: () => onOpenModule(module),
+                          width: stacked ? double.infinity : 290,
+                          child: _LaunchModuleTile(
+                            module: module,
+                            onOpenModule: onOpenModule,
                           ),
                         ),
                       )
@@ -2128,14 +2403,14 @@ class _HomeModuleComposer extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    'Controlador de exibicao',
+                    'Personalizar home',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.w800,
                     ),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Todos os 47 modulos ficam acessiveis no dock; estes chips controlam apenas o que aparece no corpo da home.',
+                    'Todos os modulos continuam no dock; estes chips controlam apenas o que aparece no corpo da home.',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
@@ -2181,6 +2456,121 @@ class _HomeModuleComposer extends StatelessWidget {
             ),
           );
         },
+      ),
+    );
+  }
+}
+
+class _LaunchModuleTile extends StatefulWidget {
+  const _LaunchModuleTile({required this.module, required this.onOpenModule});
+
+  final ModuleRecord module;
+  final ValueChanged<ModuleRecord> onOpenModule;
+
+  @override
+  State<_LaunchModuleTile> createState() => _LaunchModuleTileState();
+}
+
+class _LaunchModuleTileState extends State<_LaunchModuleTile> {
+  bool _hovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final Color accent = _moduleAccentFor(widget.module);
+    return MouseRegion(
+      onEnter: (_) => setState(() => _hovered = true),
+      onExit: (_) => setState(() => _hovered = false),
+      child: AnimatedScale(
+        scale: _hovered ? 1.012 : 1,
+        duration: const Duration(milliseconds: 180),
+        curve: Curves.easeOutCubic,
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(26),
+            onTap: () => widget.onOpenModule(widget.module),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 180),
+              curve: Curves.easeOutCubic,
+              padding: const EdgeInsets.all(18),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(26),
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: <Color>[
+                    accent.withValues(alpha: _hovered ? 0.20 : 0.12),
+                    Colors.white.withValues(alpha: 0.045),
+                    ValleyBrandColors.night.withValues(alpha: 0.54),
+                  ],
+                ),
+                border: Border.all(
+                  color: accent.withValues(alpha: _hovered ? 0.66 : 0.26),
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Container(
+                        width: 46,
+                        height: 46,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: accent.withValues(alpha: 0.16),
+                          border: Border.all(
+                            color: accent.withValues(alpha: 0.44),
+                          ),
+                        ),
+                        child: Icon(
+                          _moduleIconFor(widget.module),
+                          color: accent,
+                        ),
+                      ),
+                      const Spacer(),
+                      Text(
+                        widget.module.code,
+                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                          color: accent,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 1.1,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    widget.module.name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    widget.module.subtitle,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                  const SizedBox(height: 14),
+                  Text(
+                    widget.module.description,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -2415,7 +2805,6 @@ Future<void> _showModuleActionSheet(
   required String subtitle,
   required String caption,
 }) async {
-  final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
   await showModalBottomSheet<void>(
     context: context,
     showDragHandle: true,
@@ -2434,7 +2823,7 @@ Future<void> _showModuleActionSheet(
                     SignalChip(label: code, color: ValleyBrandColors.cyan),
                     const SizedBox(width: 10),
                     const SignalChip(
-                      label: 'server sync ativo',
+                      label: 'disponivel',
                       color: ValleyBrandColors.success,
                     ),
                   ],
@@ -2460,7 +2849,7 @@ Future<void> _showModuleActionSheet(
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  'Servidor vinculado: $_valleyServerBaseUrl',
+                  'Este modulo faz parte da experiencia Valley Premium para Android e Web.',
                   style: Theme.of(modalContext).textTheme.bodyMedium?.copyWith(
                     color: Theme.of(modalContext).colorScheme.onSurfaceVariant,
                   ),
@@ -2471,20 +2860,8 @@ Future<void> _showModuleActionSheet(
                   runSpacing: 12,
                   children: <Widget>[
                     FilledButton(
-                      onPressed: () async {
-                        await Clipboard.setData(
-                          const ClipboardData(text: _valleyServerBaseUrl),
-                        );
-                        if (modalContext.mounted) {
-                          Navigator.of(modalContext).pop();
-                        }
-                        messenger.showSnackBar(
-                          const SnackBar(
-                            content: Text('Endpoint do servidor copiado.'),
-                          ),
-                        );
-                      },
-                      child: const Text('Copiar endpoint'),
+                      onPressed: () => Navigator.of(modalContext).pop(),
+                      child: const Text('Continuar'),
                     ),
                     OutlinedButton(
                       onPressed: () => Navigator.of(modalContext).pop(),
