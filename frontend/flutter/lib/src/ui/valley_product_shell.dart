@@ -311,24 +311,29 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
       return _ServicesModuleScreen(
         items: items,
         onOpenItem: _openItemDetail,
+        onOpenChat: () => _openSurface('chat'),
       );
     }
     if ((module?.id ?? '') == 'LOG') {
       return _LogisticsModuleScreen(
         items: items,
         onOpenItem: _openItemDetail,
+        onOpenStatement: () => _openSurface('statement'),
       );
     }
     if ((module?.id ?? '') == 'PAY') {
       return _PayModuleScreen(
         items: items,
         entries: _rawList('statement_entries'),
+        onOpenStatement: () => _openSurface('statement'),
+        onOpenItem: _openItemDetail,
       );
     }
     if ((module?.id ?? '') == 'ENERGY') {
       return _EnergyModuleScreen(
         items: items,
         entries: _rawList('statement_entries'),
+        onOpenItem: _openItemDetail,
       );
     }
     if ((module?.id ?? '') == 'INSURANCE') {
@@ -1369,7 +1374,7 @@ class _StockSection extends StatelessWidget {
             ),
             const SizedBox(width: 12),
             OutlinedButton.icon(
-              onPressed: () {},
+              onPressed: items.isEmpty ? null : () => onTap(items.first),
               icon: const Icon(Icons.filter_list_rounded),
               label: const Text('Filtros'),
             ),
@@ -2946,10 +2951,12 @@ class _ServicesModuleScreen extends StatelessWidget {
   const _ServicesModuleScreen({
     required this.items,
     required this.onOpenItem,
+    required this.onOpenChat,
   });
 
   final List<ProductItem> items;
   final ValueChanged<ProductItem> onOpenItem;
+  final VoidCallback onOpenChat;
 
   @override
   Widget build(BuildContext context) {
@@ -3001,7 +3008,7 @@ class _ServicesModuleScreen extends StatelessWidget {
                 ),
               ),
               FilledButton.icon(
-                onPressed: () {},
+                onPressed: items.isEmpty ? onOpenChat : () => onOpenItem(items.first),
                 icon: const Icon(Icons.bolt_rounded),
                 label: const Text('Ação rápida'),
               ),
@@ -3023,7 +3030,7 @@ class _ServicesModuleScreen extends StatelessWidget {
               ),
               const SizedBox(width: 12),
               FilledButton(
-                onPressed: () {},
+                onPressed: items.isEmpty ? onOpenChat : () => onOpenItem(items.first),
                 child: const Text('Agendar agora'),
               ),
             ],
@@ -3171,10 +3178,12 @@ class _LogisticsModuleScreen extends StatelessWidget {
   const _LogisticsModuleScreen({
     required this.items,
     required this.onOpenItem,
+    required this.onOpenStatement,
   });
 
   final List<ProductItem> items;
   final ValueChanged<ProductItem> onOpenItem;
+  final VoidCallback onOpenStatement;
 
   @override
   Widget build(BuildContext context) {
@@ -3332,7 +3341,10 @@ class _LogisticsModuleScreen extends StatelessWidget {
                     style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
                   ),
                   const Spacer(),
-                  TextButton(onPressed: () {}, child: const Text('Ver relatório completo')),
+                  TextButton(
+                    onPressed: tableRows.isEmpty ? onOpenStatement : () => onOpenItem(tableRows.first),
+                    child: const Text('Ver relatório completo'),
+                  ),
                 ],
               ),
               const SizedBox(height: 10),
@@ -3375,10 +3387,14 @@ class _PayModuleScreen extends StatelessWidget {
   const _PayModuleScreen({
     required this.items,
     required this.entries,
+    required this.onOpenStatement,
+    required this.onOpenItem,
   });
 
   final List<ProductItem> items;
   final List<Map<String, dynamic>> entries;
+  final VoidCallback onOpenStatement;
+  final ValueChanged<ProductItem> onOpenItem;
 
   @override
   Widget build(BuildContext context) {
@@ -3420,14 +3436,38 @@ class _PayModuleScreen extends StatelessWidget {
         ),
         const SizedBox(height: 18),
         Row(
-          children: const <Widget>[
-            Expanded(child: _ActionCard(icon: Icons.qr_code_2_rounded, label: 'Pix')),
+          children: <Widget>[
+            Expanded(
+              child: _ActionCard(
+                icon: Icons.qr_code_2_rounded,
+                label: 'Pix',
+                onTap: onOpenStatement,
+              ),
+            ),
             SizedBox(width: 14),
-            Expanded(child: _ActionCard(icon: Icons.send_to_mobile_rounded, label: 'Transferir')),
+            Expanded(
+              child: _ActionCard(
+                icon: Icons.send_to_mobile_rounded,
+                label: 'Transferir',
+                onTap: onOpenStatement,
+              ),
+            ),
             SizedBox(width: 14),
-            Expanded(child: _ActionCard(icon: Icons.receipt_long_rounded, label: 'Pagar')),
+            Expanded(
+              child: _ActionCard(
+                icon: Icons.receipt_long_rounded,
+                label: 'Pagar',
+                onTap: items.isEmpty ? onOpenStatement : () => onOpenItem(items.first),
+              ),
+            ),
             SizedBox(width: 14),
-            Expanded(child: _ActionCard(icon: Icons.request_quote_rounded, label: 'Receber')),
+            Expanded(
+              child: _ActionCard(
+                icon: Icons.request_quote_rounded,
+                label: 'Receber',
+                onTap: onOpenStatement,
+              ),
+            ),
           ],
         ),
         const SizedBox(height: 18),
@@ -3496,10 +3536,12 @@ class _EnergyModuleScreen extends StatelessWidget {
   const _EnergyModuleScreen({
     required this.items,
     required this.entries,
+    required this.onOpenItem,
   });
 
   final List<ProductItem> items;
   final List<Map<String, dynamic>> entries;
+  final ValueChanged<ProductItem> onOpenItem;
 
   @override
   Widget build(BuildContext context) {
@@ -3580,7 +3622,7 @@ class _EnergyModuleScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 16),
                       FilledButton(
-                        onPressed: () {},
+                        onPressed: items.isEmpty ? null : () => onOpenItem(items.first),
                         child: const Text('Converter em Gaming'),
                       ),
                     ],
@@ -3888,30 +3930,39 @@ class _GamingModuleScreen extends StatelessWidget {
 }
 
 class _ActionCard extends StatelessWidget {
-  const _ActionCard({required this.icon, required this.label});
+  const _ActionCard({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
 
   final IconData icon;
   final String label;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    return ValleyPanel(
-      radius: 22,
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 16),
-      child: Column(
-        children: <Widget>[
-          Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              color: ValleyBrandColors.cyan.withValues(alpha: 0.10),
-              shape: BoxShape.circle,
+    return InkWell(
+      borderRadius: BorderRadius.circular(22),
+      onTap: onTap,
+      child: ValleyPanel(
+        radius: 22,
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 16),
+        child: Column(
+          children: <Widget>[
+            Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: ValleyBrandColors.cyan.withValues(alpha: 0.10),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, color: ValleyBrandColors.cyan),
             ),
-            child: Icon(icon, color: ValleyBrandColors.cyan),
-          ),
-          const SizedBox(height: 10),
-          Text(label, textAlign: TextAlign.center),
-        ],
+            const SizedBox(height: 10),
+            Text(label, textAlign: TextAlign.center),
+          ],
+        ),
       ),
     );
   }
