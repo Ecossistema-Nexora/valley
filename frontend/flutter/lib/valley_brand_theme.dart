@@ -138,7 +138,7 @@ class ValleyBrandTheme {
         displaySmall: baseText.displaySmall?.copyWith(
           fontWeight: FontWeight.w800,
           height: 1.02,
-          letterSpacing: -1.1,
+          letterSpacing: 0,
         ),
         headlineSmall: baseText.headlineSmall?.copyWith(
           fontWeight: FontWeight.w800,

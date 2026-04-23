@@ -875,7 +875,7 @@ class _WalletPage extends StatelessWidget {
                       children: <Widget>[
                         for (final Map<String, String> item
                             in const <Map<String, String>>[
-                             <String, String>{
+                              <String, String>{
                                 'label': 'Transacoes',
                                 'value':
                                     'P2P, purchase, fee, refund, split, escrow',
@@ -1798,22 +1798,6 @@ class _OrbitalCommandHero extends StatelessWidget {
         child: Stack(
           children: <Widget>[
             Positioned.fill(child: CustomPaint(painter: _HeroOrbitPainter())),
-            Positioned(
-              right: -120,
-              top: -120,
-              child: _SoftOrb(
-                color: ValleyBrandColors.cyan.withValues(alpha: 0.24),
-                size: 320,
-              ),
-            ),
-            Positioned(
-              left: -140,
-              bottom: -130,
-              child: _SoftOrb(
-                color: ValleyBrandColors.violet.withValues(alpha: 0.28),
-                size: 360,
-              ),
-            ),
             Padding(
               padding: const EdgeInsets.all(26),
               child: LayoutBuilder(
@@ -1857,7 +1841,7 @@ class _OrbitalCommandHero extends StatelessWidget {
                                   color: ValleyBrandColors.snow,
                                   fontSize: stacked ? 36 : 48,
                                   height: 0.98,
-                                  letterSpacing: -1.6,
+                                  letterSpacing: 0,
                                 ),
                           ),
                         ),
@@ -2218,27 +2202,6 @@ class _RibbonMetric extends StatelessWidget {
   }
 }
 
-class _SoftOrb extends StatelessWidget {
-  const _SoftOrb({required this.color, required this.size});
-
-  final Color color;
-  final double size;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: size,
-      height: size,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        gradient: RadialGradient(
-          colors: <Color>[color, color.withValues(alpha: 0)],
-        ),
-      ),
-    );
-  }
-}
-
 class _HeroOrbitPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
@@ -2347,8 +2310,8 @@ class _HomeModuleComposer extends StatelessWidget {
               children: <Widget>[
                 Row(
                   children: <Widget>[
-                  Text(
-                    'Na tela inicial',
+                    Text(
+                      'Na tela inicial',
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.w800,
                       ),
@@ -2861,7 +2824,7 @@ Future<void> _showModuleActionSheet(
                   children: <Widget>[
                     FilledButton(
                       onPressed: () => Navigator.of(modalContext).pop(),
-                      child: const Text('Continuar'),
+                      child: const Text('Entendi'),
                     ),
                     OutlinedButton(
                       onPressed: () => Navigator.of(modalContext).pop(),

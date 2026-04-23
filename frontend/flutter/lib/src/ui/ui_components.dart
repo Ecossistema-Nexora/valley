@@ -386,53 +386,8 @@ class ValleyBackdrop extends StatelessWidget {
     return IgnorePointer(
       child: Stack(
         children: <Widget>[
-          Positioned(
-            left: -120,
-            top: -80,
-            child: _GlowOrb(
-              color: ValleyBrandColors.violet.withValues(alpha: 0.18),
-              size: 340,
-            ),
-          ),
-          Positioned(
-            right: -90,
-            top: 120,
-            child: _GlowOrb(
-              color: ValleyBrandColors.cyan.withValues(alpha: 0.12),
-              size: 280,
-            ),
-          ),
-          Positioned(
-            right: 120,
-            bottom: -140,
-            child: _GlowOrb(
-              color: ValleyBrandColors.lilac.withValues(alpha: 0.10),
-              size: 360,
-            ),
-          ),
           Positioned.fill(child: CustomPaint(painter: _MountainPulsePainter())),
         ],
-      ),
-    );
-  }
-}
-
-class _GlowOrb extends StatelessWidget {
-  const _GlowOrb({required this.color, required this.size});
-
-  final Color color;
-  final double size;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: size,
-      height: size,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        gradient: RadialGradient(
-          colors: <Color>[color, color.withValues(alpha: 0)],
-        ),
       ),
     );
   }
