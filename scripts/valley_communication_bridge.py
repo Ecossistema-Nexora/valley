@@ -4,12 +4,14 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import subprocess
 import time
 import urllib.error
 import urllib.request
+import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -23,6 +25,8 @@ UNIVERSAL_QUEUE = ROOT / "ordem_universal.md"
 RUNTIME_DIR = ROOT / "tmp" / "runtime"
 STATUS_PATH = RUNTIME_DIR / "codex-live-status.json"
 CODEX_INBOX_PATH = RUNTIME_DIR / "codex-inbox.jsonl"
+WORK_STATUS_PATH = RUNTIME_DIR / "bridge-work-status.json"
+WHATSAPP_LINK_STATE_PATH = RUNTIME_DIR / "whatsapp-link-state.json"
 
 SAFE_KINDS = {"status", "report", "read_only_check", "documentation_update", "queue_triage"}
 MANUAL_KINDS = {
@@ -183,6 +187,165 @@ def http_json(url: str, payload: dict[str, Any] | None = None, token: str | None
     return json.loads(raw) if raw else {}
 
 
+def http_multipart(
+    url: str,
+    fields: dict[str, str],
+    file_field: str,
+    file_path: Path,
+    mime_type: str = "application/octet-stream",
+) -> dict[str, Any]:
+    boundary = f"----ValleyBoundary{uuid.uuid4().hex}"
+    payload = bytearray()
+
+    for key, value in fields.items():
+        payload.extend(f"--{boundary}\r\n".encode("utf-8"))
+        payload.extend(f'Content-Disposition: form-data; name="{key}"\r\n\r\n'.encode("utf-8"))
+        payload.extend(str(value).encode("utf-8"))
+        payload.extend(b"\r\n")
+
+    payload.extend(f"--{boundary}\r\n".encode("utf-8"))
+    payload.extend(
+        (
+            f'Content-Disposition: form-data; name="{file_field}"; '
+            f'filename="{file_path.name}"\r\n'
+        ).encode("utf-8")
+    )
+    payload.extend(f"Content-Type: {mime_type}\r\n\r\n".encode("utf-8"))
+    payload.extend(file_path.read_bytes())
+    payload.extend(b"\r\n")
+    payload.extend(f"--{boundary}--\r\n".encode("utf-8"))
+
+    request = urllib.request.Request(
+        url,
+        data=bytes(payload),
+        headers={"Content-Type": f"multipart/form-data; boundary={boundary}"},
+        method="POST",
+    )
+    with urllib.request.urlopen(request, timeout=120) as response:
+        raw = response.read().decode("utf-8")
+    return json.loads(raw) if raw else {}
+
+
+def load_json_file(path: Path, default: dict[str, Any] | None = None) -> dict[str, Any]:
+    if not path.exists():
+        return {} if default is None else dict(default)
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return {} if default is None else dict(default)
+
+
+def default_work_status() -> dict[str, Any]:
+    return {
+        "activity_name": "Operacao Valley",
+        "activity_description": "Monitorando a esteira e mantendo o produto pronto para entrega.",
+        "complexity": 2,
+        "eta": "00:05:00",
+        "progress_percent": 0,
+        "next_steps": "Aguardar nova execucao ou atualizar o foco atual.",
+        "updated_at_utc": utc_now(),
+    }
+
+
+def load_work_status() -> dict[str, Any]:
+    ensure_runtime()
+    payload = load_json_file(WORK_STATUS_PATH, default_work_status())
+    merged = default_work_status()
+    merged.update(payload)
+    return merged
+
+
+def save_work_status(
+    *,
+    activity_name: str,
+    activity_description: str,
+    complexity: int,
+    eta: str,
+    progress_percent: int,
+    next_steps: str,
+) -> dict[str, Any]:
+    ensure_runtime()
+    payload = {
+        "activity_name": activity_name.strip(),
+        "activity_description": activity_description.strip(),
+        "complexity": max(1, min(5, complexity)),
+        "eta": eta.strip(),
+        "progress_percent": max(0, min(100, progress_percent)),
+        "next_steps": next_steps.strip(),
+        "updated_at_utc": utc_now(),
+    }
+    WORK_STATUS_PATH.write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
+    return payload
+
+
+def build_status_message(status: dict[str, Any], work_status: dict[str, Any]) -> str:
+    return (
+        "Valley Status 5/5\n"
+        f"Nome da atividade: {work_status['activity_name']}\n"
+        f"Descricao da atividade: {work_status['activity_description']}\n"
+        f"Grau de complexidade: {work_status['complexity']}/5\n"
+        f"Tempo previsto para termino: {work_status['eta']}\n"
+        f"Percentual concluido: {work_status['progress_percent']}%\n"
+        f"Proximos passos naturais: {work_status['next_steps']}\n"
+        f"Atualizado em UTC: {work_status['updated_at_utc']}\n"
+        f"Telegram pronto: {status['telegram_ready']}\n"
+        f"WhatsApp pronto: {status['whatsapp_ready']}"
+    )
+
+
+def upsert_env_value(key: str, value: str) -> None:
+    lines: list[str] = []
+    replaced = False
+    if ENV_PATH.exists():
+      lines = ENV_PATH.read_text(encoding="utf-8").splitlines()
+
+    updated: list[str] = []
+    for raw_line in lines:
+        line = raw_line.rstrip("\n")
+        if line.strip().startswith(f"{key}="):
+            updated.append(f"{key}={value}")
+            replaced = True
+        else:
+            updated.append(line)
+
+    if not replaced:
+        updated.append(f"{key}={value}")
+
+    ENV_PATH.write_text("\n".join(updated).strip() + "\n", encoding="utf-8")
+    os.environ[key] = value
+
+
+def load_whatsapp_link_state() -> dict[str, Any]:
+    ensure_runtime()
+    return load_json_file(WHATSAPP_LINK_STATE_PATH, {})
+
+
+def save_whatsapp_link_state(payload: dict[str, Any]) -> dict[str, Any]:
+    ensure_runtime()
+    WHATSAPP_LINK_STATE_PATH.write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
+    return payload
+
+
+def clear_whatsapp_link_state() -> None:
+    if WHATSAPP_LINK_STATE_PATH.exists():
+        WHATSAPP_LINK_STATE_PATH.unlink()
+
+
+def normalize_phone(raw: str) -> str:
+    return "".join(ch for ch in str(raw or "") if ch.isdigit())
+
+
+def is_valid_pairing_code(raw: str) -> bool:
+    candidate = raw.strip().replace(" ", "").replace("-", "")
+    return len(candidate) == 8 and candidate.isalnum()
+
+
 def send_telegram(message: str) -> bool:
     token = os.environ.get("VALLEY_TELEGRAM_TOKEN")
     chat_id = os.environ.get("VALLEY_TELEGRAM_CHAT_ID")
@@ -191,6 +354,125 @@ def send_telegram(message: str) -> bool:
     url = f"https://api.telegram.org/bot{token}/sendMessage"
     http_json(url, {"chat_id": chat_id, "text": message})
     return True
+
+
+def send_telegram_document(file_path: Path, caption: str = "") -> bool:
+    token = os.environ.get("VALLEY_TELEGRAM_TOKEN")
+    chat_id = os.environ.get("VALLEY_TELEGRAM_CHAT_ID")
+    if not token or not chat_id or not file_path.exists():
+        return False
+    url = f"https://api.telegram.org/bot{token}/sendDocument"
+    http_multipart(
+        url,
+        {"chat_id": chat_id, "caption": caption},
+        "document",
+        file_path,
+        mime_type="application/vnd.android.package-archive",
+    )
+    return True
+
+
+def send_channel_message(source: str, message: str) -> bool:
+    if source == "telegram":
+        return send_telegram(message)
+    if source == "whatsapp_web":
+        return send_whatsapp(message)
+    return False
+
+
+def whatsapp_link_summary(phone: str) -> str:
+    status_payload = load_json_file(RUNTIME_DIR / "whatsapp-web-status.json", {})
+    logged_in = bool(status_payload.get("logged_in"))
+    return (
+        f"Conexao WhatsApp registrada para {phone}.\n"
+        f"Sessao web autenticada: {'sim' if logged_in else 'nao'}.\n"
+        "Envie /whatsapp_status para consultar o estado atual."
+    )
+
+
+def handle_control_message(source: str, text: str) -> bool:
+    normalized = text.strip()
+    lowered = normalized.lower()
+    state = load_whatsapp_link_state()
+
+    if lowered in {"/whatsapp", "/ativar_whatsapp", "/connect_whatsapp", "/conectar_whatsapp"}:
+        save_whatsapp_link_state(
+            {
+                "source": source,
+                "step": "awaiting_phone",
+                "started_at_utc": utc_now(),
+            }
+        )
+        send_channel_message(
+            source,
+            "Ativacao do WhatsApp iniciada.\nInforme o numero para conexao remota no formato com DDI e DDD.",
+        )
+        return True
+
+    if lowered == "/whatsapp_status":
+        target = os.environ.get("VALLEY_WHATSAPP_WEB_TO") or os.environ.get("VALLEY_WHATSAPP_TO") or "nao configurado"
+        send_channel_message(source, whatsapp_link_summary(target))
+        return True
+
+    if state.get("source") != source:
+        return False
+
+    if state.get("step") == "awaiting_phone":
+        phone = normalize_phone(normalized)
+        if len(phone) < 10:
+            send_channel_message(
+                source,
+                "Numero invalido. Envie novamente com DDI e DDD, apenas numeros ou formato internacional.",
+            )
+            return True
+        save_whatsapp_link_state(
+            {
+                **state,
+                "step": "awaiting_code",
+                "phone": phone,
+                "phone_masked": f"+{phone[:2]} {phone[-4:]}",
+                "updated_at_utc": utc_now(),
+            }
+        )
+        send_channel_message(
+            source,
+            "Numero recebido. Agora informe o codigo de 8 caracteres para concluir a conexao.",
+        )
+        return True
+
+    if state.get("step") == "awaiting_code":
+        if not is_valid_pairing_code(normalized):
+            send_channel_message(
+                source,
+                "Codigo invalido. Envie exatamente 8 caracteres alfanumericos.",
+            )
+            return True
+        phone = str(state.get("phone", "")).strip()
+        if not phone:
+            clear_whatsapp_link_state()
+            send_channel_message(
+                source,
+                "O fluxo perdeu o numero informado. Envie /whatsapp para reiniciar a conexao.",
+            )
+            return True
+
+        upsert_env_value("VALLEY_WHATSAPP_WEB_TO", phone)
+        code_fingerprint = hashlib.sha256(
+            normalized.strip().encode("utf-8")
+        ).hexdigest()
+        save_whatsapp_link_state(
+            {
+                "source": source,
+                "step": "connected",
+                "phone": phone,
+                "code_sha256": code_fingerprint,
+                "connected_at_utc": utc_now(),
+            }
+        )
+        send_channel_message(source, whatsapp_link_summary(phone))
+        return True
+
+    return False
 
 
 def poll_telegram_once() -> int:
@@ -211,7 +493,8 @@ def poll_telegram_once() -> int:
         message = update.get("message") or update.get("edited_message") or {}
         text = message.get("text")
         if text:
-            append_order(TELEGRAM_QUEUE, "telegram", text)
+            if not handle_control_message("telegram", text):
+                append_order(TELEGRAM_QUEUE, "telegram", text)
             count += 1
     ensure_runtime()
     state_path.write_text(json.dumps({"offset": max_update_id}, indent=2), encoding="utf-8")
@@ -242,7 +525,9 @@ def poll_whatsapp_web_once() -> int:
     payload = json.loads(result.stdout or "{}")
     messages = payload.get("messages", [])
     for message in messages:
-        append_order(UNIVERSAL_QUEUE, "whatsapp_web", str(message))
+        text = str(message)
+        if not handle_control_message("whatsapp_web", text):
+            append_order(UNIVERSAL_QUEUE, "whatsapp_web", text)
     return len(messages)
 
 
@@ -281,27 +566,17 @@ def send_whatsapp(message: str) -> bool:
 
 def pulse() -> dict[str, Any]:
     status = write_status()
-    message = (
-        "Valley Codex status\n"
-        f"UTC: {status['generated_at_utc']}\n"
-        f"Mode: {status['mode']}\n"
-        f"Telegram ready: {status['telegram_ready']}\n"
-        f"WhatsApp ready: {status['whatsapp_ready']}\n"
-        "Auto approval: safe_only"
-    )
+    work_status = load_work_status()
+    message = build_status_message(status, work_status)
     delivered = {
         "telegram": False,
-        "whatsapp": False,
     }
     try:
         delivered["telegram"] = send_telegram(message)
     except (urllib.error.URLError, TimeoutError, OSError) as exc:
         delivered["telegram_error"] = str(exc)
-    try:
-        delivered["whatsapp"] = send_whatsapp(message)
-    except (urllib.error.URLError, TimeoutError, OSError) as exc:
-        delivered["whatsapp_error"] = str(exc)
     status["delivered"] = delivered
+    status["work_status"] = work_status
     STATUS_PATH.write_text(json.dumps(status, ensure_ascii=False, indent=2), encoding="utf-8")
     return status
 
@@ -322,8 +597,30 @@ def watch(interval_seconds: int) -> None:
 def main() -> None:
     load_local_env()
     parser = argparse.ArgumentParser(description="Valley Telegram/WhatsApp bridge seguro.")
-    parser.add_argument("command", choices=["status", "pulse", "poll-once", "watch", "whatsapp-login", "whatsapp-status"])
+    parser.add_argument(
+        "command",
+        choices=[
+            "status",
+            "pulse",
+            "poll-once",
+            "watch",
+            "whatsapp-login",
+            "whatsapp-status",
+            "set-work-status",
+            "send-telegram-message",
+            "send-telegram-document",
+        ],
+    )
     parser.add_argument("--interval", type=int, default=300)
+    parser.add_argument("--message", default="")
+    parser.add_argument("--file", default="")
+    parser.add_argument("--caption", default="")
+    parser.add_argument("--activity-name", default="Operacao Valley")
+    parser.add_argument("--activity-description", default="Monitorando a esteira e mantendo o produto pronto para entrega.")
+    parser.add_argument("--complexity", type=int, default=2)
+    parser.add_argument("--eta", default="00:05:00")
+    parser.add_argument("--progress", type=int, default=0)
+    parser.add_argument("--next-steps", default="Aguardar nova execucao ou atualizar o foco atual.")
     args = parser.parse_args()
 
     if args.command == "status":
@@ -333,7 +630,7 @@ def main() -> None:
     elif args.command == "poll-once":
         print(json.dumps({"telegram_orders": poll_telegram_once(), "at": utc_now()}, indent=2))
     elif args.command == "watch":
-        watch(max(30, args.interval))
+        watch(max(300, args.interval))
     elif args.command == "whatsapp-login":
         command = [
             "npx.cmd" if os.name == "nt" else "npx",
@@ -356,6 +653,27 @@ def main() -> None:
             "status",
         ]
         raise SystemExit(subprocess.call(command, cwd=ROOT, env=os.environ.copy()))
+    elif args.command == "set-work-status":
+        payload = save_work_status(
+            activity_name=args.activity_name,
+            activity_description=args.activity_description,
+            complexity=args.complexity,
+            eta=args.eta,
+            progress_percent=args.progress,
+            next_steps=args.next_steps,
+        )
+        print(json.dumps(payload, ensure_ascii=False, indent=2))
+    elif args.command == "send-telegram-message":
+        print(json.dumps({"ok": send_telegram(args.message)}, ensure_ascii=False, indent=2))
+    elif args.command == "send-telegram-document":
+        file_path = Path(args.file)
+        print(
+            json.dumps(
+                {"ok": send_telegram_document(file_path, args.caption), "file": str(file_path)},
+                ensure_ascii=False,
+                indent=2,
+            )
+        )
 
 
 if __name__ == "__main__":

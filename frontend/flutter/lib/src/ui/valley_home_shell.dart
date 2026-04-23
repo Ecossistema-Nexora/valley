@@ -608,41 +608,294 @@ class _SidebarButton extends StatelessWidget {
   }
 }
 
-class _MobileTopBar extends StatelessWidget {
-  const _MobileTopBar({required this.title, required this.data});
+class _CommandTopBar extends StatelessWidget {
+  const _CommandTopBar({
+    required this.title,
+    required this.searchController,
+    required this.searchQuery,
+    required this.resultCount,
+    required this.totalCount,
+    required this.onSearchChanged,
+    required this.onClearSearch,
+    required this.onNavigate,
+  });
 
   final String title;
-  final ValleyAppData data;
+  final TextEditingController searchController;
+  final String searchQuery;
+  final int resultCount;
+  final int totalCount;
+  final ValueChanged<String> onSearchChanged;
+  final VoidCallback onClearSearch;
+  final ValueChanged<int> onNavigate;
 
   @override
   Widget build(BuildContext context) {
+    final bool compact = MediaQuery.sizeOf(context).width < 920;
+    final bool searchActive = searchQuery.isNotEmpty;
+
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 14, 16, 10),
+      padding: EdgeInsets.fromLTRB(compact ? 16 : 28, 18, compact ? 16 : 28, 8),
       child: ValleyPanel(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        child: Row(
+        padding: const EdgeInsets.all(18),
+        radius: 32,
+        glowColor: ValleyBrandColors.cyan,
+        background: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: <Color>[
+            Colors.white.withValues(alpha: 0.08),
+            ValleyBrandColors.panelDarkStrong.withValues(alpha: 0.90),
+            ValleyBrandColors.night.withValues(alpha: 0.86),
+          ],
+        ),
+        child: Column(
           children: <Widget>[
-            const ValleyLogoMark(size: 44, borderRadius: 14),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            _ResponsiveSplit(
+              stacked: compact,
+              gap: 16,
+              leadingFlex: 6,
+              trailingFlex: 7,
+              leading: Row(
                 children: <Widget>[
-                  Text(title, style: Theme.of(context).textTheme.titleLarge),
-                  Text(
-                    '${data.modules.length} modulos conectados',
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  const ValleyLogoMark(size: 52, borderRadius: 16),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          title,
+                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          searchActive
+                              ? '$resultCount resultados prontos para abrir'
+                              : 'Experiencia premium, modular e pronta para uso.',
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
+              trailing: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: TextField(
+                      controller: searchController,
+                      onChanged: onSearchChanged,
+                      textInputAction: TextInputAction.search,
+                      decoration: InputDecoration(
+                        hintText: 'Buscar modulos, jornadas e recursos',
+                        prefixIcon: const Icon(Icons.search_rounded),
+                        suffixIcon: searchActive
+                            ? IconButton(
+                                onPressed: onClearSearch,
+                                icon: const Icon(Icons.close_rounded),
+                              )
+                            : null,
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 18,
+                          vertical: 16,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  _TopBarIconButton(
+                    icon: Icons.notifications_none_rounded,
+                    label: 'Alertas',
+                  ),
+                  const SizedBox(width: 8),
+                  _TopBarIconButton(
+                    icon: Icons.tune_rounded,
+                    label: 'Atalhos',
+                  ),
+                  const SizedBox(width: 8),
+                  const _ProfileBadge(),
+                ],
+              ),
             ),
-            const SignalChip(
-              label: 'premium',
-              color: ValleyBrandColors.success,
+            const SizedBox(height: 14),
+            Wrap(
+              spacing: 10,
+              runSpacing: 10,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              children: <Widget>[
+                SignalChip(
+                  label: searchActive
+                      ? '$resultCount de $totalCount visiveis'
+                      : '$totalCount modulos conectados',
+                  color: searchActive
+                      ? ValleyBrandColors.cyan
+                      : ValleyBrandColors.success,
+                ),
+                const SignalChip(
+                  label: 'modo usuario',
+                  color: ValleyBrandColors.violet,
+                ),
+                const SignalChip(
+                  label: 'sem superficies tecnicas',
+                  color: ValleyBrandColors.warning,
+                ),
+                _QuickActionPill(
+                  icon: Icons.account_balance_wallet_rounded,
+                  label: 'Carteira',
+                  onTap: () => onNavigate(1),
+                ),
+                _QuickActionPill(
+                  icon: Icons.storefront_rounded,
+                  label: 'Marketplace',
+                  onTap: () => onNavigate(2),
+                ),
+                _QuickActionPill(
+                  icon: Icons.auto_awesome_rounded,
+                  label: 'Helena',
+                  onTap: () => onNavigate(5),
+                ),
+              ],
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _TopBarIconButton extends StatelessWidget {
+  const _TopBarIconButton({required this.icon, required this.label});
+
+  final IconData icon;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Tooltip(
+      message: label,
+      child: Container(
+        width: 52,
+        height: 52,
+        decoration: BoxDecoration(
+          color: Colors.white.withValues(alpha: 0.06),
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+        ),
+        child: Icon(icon, color: ValleyBrandColors.snow),
+      ),
+    );
+  }
+}
+
+class _ProfileBadge extends StatelessWidget {
+  const _ProfileBadge();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: ValleyBrandColors.violet.withValues(alpha: 0.16),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: ValleyBrandColors.violet.withValues(alpha: 0.34),
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Container(
+            width: 34,
+            height: 34,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: <Color>[
+                  ValleyBrandColors.cyan.withValues(alpha: 0.92),
+                  ValleyBrandColors.violet.withValues(alpha: 0.92),
+                ],
+              ),
+            ),
+            alignment: Alignment.center,
+            child: Text(
+              'AN',
+              style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                color: ValleyBrandColors.snow,
+                fontWeight: FontWeight.w900,
+              ),
+            ),
+          ),
+          const SizedBox(width: 10),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text(
+                'Anderson',
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+              Text(
+                'Produto ativo',
+                style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _QuickActionPill extends StatelessWidget {
+  const _QuickActionPill({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(999),
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+          decoration: BoxDecoration(
+            color: Colors.white.withValues(alpha: 0.05),
+            borderRadius: BorderRadius.circular(999),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Icon(icon, size: 16, color: ValleyBrandColors.cyan),
+              const SizedBox(width: 8),
+              Text(
+                label,
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  color: ValleyBrandColors.snow,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -652,6 +905,8 @@ class _MobileTopBar extends StatelessWidget {
 class _OverviewPage extends StatelessWidget {
   const _OverviewPage({
     required this.data,
+    required this.catalogModules,
+    required this.searchQuery,
     required this.homeModuleCodes,
     required this.preferencesReady,
     required this.onNavigate,
@@ -660,6 +915,8 @@ class _OverviewPage extends StatelessWidget {
   });
 
   final ValleyAppData data;
+  final List<ModuleRecord> catalogModules;
+  final String searchQuery;
   final Set<String> homeModuleCodes;
   final bool preferencesReady;
   final ValueChanged<int> onNavigate;
@@ -668,8 +925,9 @@ class _OverviewPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool searchActive = searchQuery.isNotEmpty;
     final List<ModuleRecord> homeModules =
-        data.modules
+        catalogModules
             .where(
               (ModuleRecord module) => homeModuleCodes.contains(module.code),
             )
@@ -693,11 +951,15 @@ class _OverviewPage extends StatelessWidget {
             const SizedBox(height: 32),
             SectionHeader(
               kicker: 'Home Modular',
-              title: 'Escolha quais modulos aparecem na tela inicial',
+              title: searchActive
+                  ? 'Resultados para "$searchQuery"'
+                  : 'Escolha quais modulos aparecem na tela inicial',
               caption:
-                  'A selecao fica salva no aparelho e o dock inferior mantem acesso rapido a todo o ecossistema.',
+                  searchActive
+                      ? 'A busca reduz ruido visual e destaca os modulos mais relevantes para a sua proxima acao.'
+                      : 'A selecao fica salva no aparelho e o dock inferior mantem acesso rapido a todo o ecossistema.',
               trailing: SignalChip(
-                label: '${homeModules.length}/${data.modules.length} visiveis',
+                label: '${homeModules.length}/${catalogModules.length} visiveis',
                 color: preferencesReady
                     ? ValleyBrandColors.success
                     : ValleyBrandColors.warning,
@@ -705,10 +967,11 @@ class _OverviewPage extends StatelessWidget {
             ),
             const SizedBox(height: 18),
             _HomeModuleComposer(
-              allModules: data.modules,
+              allModules: catalogModules,
               homeModules: homeModules,
               visibleCodes: homeModuleCodes,
               preferencesReady: preferencesReady,
+              searchQuery: searchQuery,
               onOpenModule: onOpenModule,
               onToggleHomeModule: onToggleHomeModule,
             ),
@@ -2323,6 +2586,7 @@ class _HomeModuleComposer extends StatelessWidget {
     required this.homeModules,
     required this.visibleCodes,
     required this.preferencesReady,
+    required this.searchQuery,
     required this.onOpenModule,
     required this.onToggleHomeModule,
   });
@@ -2331,6 +2595,7 @@ class _HomeModuleComposer extends StatelessWidget {
   final List<ModuleRecord> homeModules;
   final Set<String> visibleCodes;
   final bool preferencesReady;
+  final String searchQuery;
   final ValueChanged<ModuleRecord> onOpenModule;
   final void Function(ModuleRecord module, bool selected) onToggleHomeModule;
 
@@ -2377,27 +2642,69 @@ class _HomeModuleComposer extends StatelessWidget {
                 ),
                 const SizedBox(height: 14),
                 Text(
-                  'Toque em um modulo para abrir a area operacional. Use o seletor ao lado para compor uma home mais enxuta ou mais completa.',
+                  searchQuery.isNotEmpty
+                      ? 'A busca ativa organiza a home em torno do que voce quer resolver agora, sem esconder o restante do ecossistema.'
+                      : 'Toque em um modulo para abrir a area operacional. Use o seletor ao lado para compor uma home mais enxuta ou mais completa.',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
                 ),
                 const SizedBox(height: 18),
-                Wrap(
-                  spacing: 14,
-                  runSpacing: 14,
-                  children: homeModules
-                      .map(
-                        (ModuleRecord module) => SizedBox(
-                          width: stacked ? double.infinity : 290,
-                          child: _LaunchModuleTile(
-                            module: module,
-                            onOpenModule: onOpenModule,
-                          ),
+                if (homeModules.isEmpty)
+                  ValleyPanel(
+                    padding: const EdgeInsets.all(20),
+                    radius: 24,
+                    glowColor: ValleyBrandColors.warning,
+                    background: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: <Color>[
+                        ValleyBrandColors.warning.withValues(alpha: 0.10),
+                        ValleyBrandColors.panelDark.withValues(alpha: 0.88),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        const SignalChip(
+                          label: 'ajuste rapido',
+                          color: ValleyBrandColors.warning,
                         ),
-                      )
-                      .toList(),
-                ),
+                        const SizedBox(height: 14),
+                        Text(
+                          'Nenhum modulo selecionado corresponde a esta busca.',
+                          style: Theme.of(context).textTheme.titleLarge
+                              ?.copyWith(fontWeight: FontWeight.w800),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          'Refine o termo, abra um modulo pelo dock ou marque novos modulos no seletor ao lado para trazer esse fluxo para a home.',
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurfaceVariant,
+                              ),
+                        ),
+                      ],
+                    ),
+                  )
+                else
+                  Wrap(
+                    spacing: 14,
+                    runSpacing: 14,
+                    children: homeModules
+                        .map(
+                          (ModuleRecord module) => SizedBox(
+                            width: stacked ? double.infinity : 290,
+                            child: _LaunchModuleTile(
+                              module: module,
+                              onOpenModule: onOpenModule,
+                            ),
+                          ),
+                        )
+                        .toList(),
+                  ),
               ],
             ),
             trailing: ValleyPanel(
@@ -2415,18 +2722,20 @@ class _HomeModuleComposer extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(
-                    'Personalizar home',
+                Text(
+                  'Personalizar home',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.w800,
                     ),
                   ),
                   const SizedBox(height: 8),
-                  Text(
-                    'Todos os modulos continuam no dock; estes chips controlam apenas o que aparece no corpo da home.',
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
+                Text(
+                  searchQuery.isNotEmpty
+                      ? 'O seletor acompanha a busca atual para voce editar apenas os modulos mais relevantes neste momento.'
+                      : 'Todos os modulos continuam no dock; estes chips controlam apenas o que aparece no corpo da home.',
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
                   ),
                   const SizedBox(height: 16),
                   Wrap(

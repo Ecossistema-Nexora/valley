@@ -6,6 +6,8 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import subprocess
+import sys
 from datetime import datetime, timezone
 from functools import partial
 from http import HTTPStatus
@@ -18,6 +20,10 @@ from urllib.parse import urlsplit
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_ROOT = ROOT / "admin"
 DEFAULT_DATA_PATH = DEFAULT_ROOT / "valley_admin_data.json"
+RUNTIME_DIR = ROOT / "tmp" / "runtime"
+BRIDGE_STATUS_PATH = RUNTIME_DIR / "codex-live-status.json"
+WORK_STATUS_PATH = RUNTIME_DIR / "bridge-work-status.json"
+PUBLIC_RUNTIME_PATH = RUNTIME_DIR / "valley-admin-public-runtime.json"
 
 
 def utc_now_iso() -> str:
@@ -77,13 +83,31 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
         self.send_header("Pragma", "no-cache")
         self.send_header("X-Content-Type-Options", "nosniff")
         self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type")
         super().end_headers()
+
+    def do_OPTIONS(self) -> None:  # noqa: N802
+        self.send_response(HTTPStatus.NO_CONTENT)
+        self.end_headers()
 
     def do_GET(self) -> None:  # noqa: N802
         route = urlsplit(self.path).path
 
         if route in ("/health", "/healthz", "/readyz", "/meta/runtime", "/api/runtime"):
             self._write_json(HTTPStatus.OK, self._runtime_payload())
+            return
+
+        if route == "/api/product-shell":
+            self._write_json(HTTPStatus.OK, self._product_shell_payload())
+            return
+
+        if route == "/api/bridge/status":
+            self._write_json(HTTPStatus.OK, self._bridge_status_payload())
+            return
+
+        if route == "/api/work-status":
+            self._write_json(HTTPStatus.OK, self._work_status_payload())
             return
 
         if route in ("/api/admin-data", "/api/admin-data.json"):
@@ -108,6 +132,35 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
 
         super().do_GET()
 
+    def do_POST(self) -> None:  # noqa: N802
+        route = urlsplit(self.path).path
+
+        if route == "/api/actions/pulse-telegram":
+            self._write_json(
+                HTTPStatus.OK,
+                self._run_bridge_command("pulse", action="pulse-telegram"),
+            )
+            return
+
+        if route == "/api/actions/poll-bridge":
+            self._write_json(
+                HTTPStatus.OK,
+                self._run_bridge_command("poll-once", action="poll-bridge"),
+            )
+            return
+
+        if route == "/api/actions/whatsapp-status":
+            self._write_json(
+                HTTPStatus.OK,
+                self._run_bridge_command("whatsapp-status", action="whatsapp-status"),
+            )
+            return
+
+        self._write_json(
+            HTTPStatus.NOT_FOUND,
+            {"status": "not_found", "route": route, "service": "valley-admin"},
+        )
+
     def log_message(self, format: str, *args) -> None:  # noqa: A003
         message = format % args
         print(f"[valley-admin] {self.address_string()} {message}")
@@ -128,6 +181,97 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             "startup_file": str(self.startup_file) if self.startup_file else None,
             "startup_file_exists": bool(self.startup_file and self.startup_file.exists()),
             "startup_manifest": startup_manifest,
+        }
+
+    def _bridge_status_payload(self) -> dict[str, Any]:
+        return load_json_file(BRIDGE_STATUS_PATH) or {
+            "status": "missing",
+            "service": "valley-bridge",
+        }
+
+    def _work_status_payload(self) -> dict[str, Any]:
+        return load_json_file(WORK_STATUS_PATH) or {
+            "activity_name": "Valley",
+            "progress_percent": 0,
+            "status": "missing",
+        }
+
+    def _public_runtime_payload(self) -> dict[str, Any]:
+        return load_json_file(PUBLIC_RUNTIME_PATH) or {}
+
+    def _product_shell_payload(self) -> dict[str, Any]:
+        bridge_status = self._bridge_status_payload()
+        work_status = self._work_status_payload()
+        runtime_payload = self._runtime_payload()
+        public_runtime = self._public_runtime_payload()
+
+        actions = [
+            {
+                "id": "pulse-telegram",
+                "label": "Telegram",
+                "method": "POST",
+                "path": "/api/actions/pulse-telegram",
+                "active": bool(bridge_status.get("telegram_ready")),
+            },
+            {
+                "id": "poll-bridge",
+                "label": "Atualizar",
+                "method": "POST",
+                "path": "/api/actions/poll-bridge",
+                "active": True,
+            },
+            {
+                "id": "whatsapp-status",
+                "label": "WhatsApp",
+                "method": "POST",
+                "path": "/api/actions/whatsapp-status",
+                "active": True,
+            },
+        ]
+
+        return {
+            "status": "ok",
+            "service": "valley-product",
+            "generated_at_utc": utc_now_iso(),
+            "runtime": runtime_payload,
+            "bridge_status": bridge_status,
+            "work_status": work_status,
+            "public_runtime": public_runtime,
+            "actions": [action for action in actions if action["active"]],
+        }
+
+    def _run_bridge_command(self, command: str, *, action: str) -> dict[str, Any]:
+        script_path = ROOT / "scripts" / "valley_communication_bridge.py"
+        try:
+            result = subprocess.run(
+                [sys.executable, str(script_path), command],
+                cwd=ROOT,
+                capture_output=True,
+                text=True,
+                timeout=120,
+                check=False,
+            )
+        except subprocess.TimeoutExpired:
+            return {
+                "status": "timeout",
+                "action": action,
+                "service": "valley-product",
+            }
+
+        payload: dict[str, Any] | None = None
+        stdout = (result.stdout or "").strip()
+        if stdout:
+            try:
+                payload = json.loads(stdout)
+            except json.JSONDecodeError:
+                payload = {"stdout": stdout}
+
+        return {
+            "status": "ok" if result.returncode == 0 else "failed",
+            "action": action,
+            "returncode": result.returncode,
+            "payload": payload or {},
+            "stderr": (result.stderr or "").strip(),
         }
 
     def _write_json(self, status: HTTPStatus, payload: dict[str, Any]) -> None:

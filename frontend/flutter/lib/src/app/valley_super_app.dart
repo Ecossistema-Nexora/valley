@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:valley_super_app/src/data/valley_models.dart';
-import 'package:valley_super_app/src/data/valley_repository.dart';
-import 'package:valley_super_app/src/ui/valley_home_shell.dart';
+import 'package:flutter/services.dart';
+import 'package:valley_super_app/src/data/product_api_models.dart';
+import 'package:valley_super_app/src/data/product_api_repository.dart';
+import 'package:valley_super_app/src/ui/valley_product_shell.dart';
 import 'package:valley_super_app/valley_brand_theme.dart';
 
 class ValleySuperApp extends StatefulWidget {
@@ -12,42 +13,54 @@ class ValleySuperApp extends StatefulWidget {
 }
 
 class _ValleySuperAppState extends State<ValleySuperApp> {
-  late final Future<ValleyAppData> _future;
+  final ProductApiRepository _repository = const ProductApiRepository();
+  late Future<ProductShellData> _future;
 
   @override
   void initState() {
     super.initState();
-    _future = const ValleyRepository().load();
+    _reload();
+  }
+
+  void _reload() {
+    _future = _repository.load();
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Valley Super App',
+      title: 'Valley',
       debugShowCheckedModeBanner: false,
       theme: ValleyBrandTheme.light(),
       darkTheme: ValleyBrandTheme.dark(),
       themeMode: ThemeMode.dark,
-      home: FutureBuilder<ValleyAppData>(
+      home: FutureBuilder<ProductShellData>(
         future: _future,
-        builder: (context, snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<ProductShellData> snapshot) {
           if (snapshot.connectionState != ConnectionState.done) {
-            return const _ValleyLoadingScreen();
+            return const _LoadingScreen();
           }
 
           if (snapshot.hasError || !snapshot.hasData) {
-            return const _ValleyFailureScreen();
+            return _FailureScreen(
+              onRetry: () {
+                setState(_reload);
+              },
+            );
           }
 
-          return ValleyHomeShell(data: snapshot.data!);
+          return ValleyProductShell(
+            initialData: snapshot.data!,
+            repository: _repository,
+          );
         },
       ),
     );
   }
 }
 
-class _ValleyLoadingScreen extends StatelessWidget {
-  const _ValleyLoadingScreen();
+class _LoadingScreen extends StatelessWidget {
+  const _LoadingScreen();
 
   @override
   Widget build(BuildContext context) {
@@ -64,51 +77,9 @@ class _ValleyLoadingScreen extends StatelessWidget {
             ],
           ),
         ),
-        child: Center(
-          child: TweenAnimationBuilder<double>(
-            tween: Tween<double>(begin: 0.6, end: 1),
-            duration: const Duration(milliseconds: 1200),
-            curve: Curves.easeOutCubic,
-            builder: (context, value, child) {
-              return Opacity(
-                opacity: value,
-                child: Transform.scale(scale: value, child: child),
-              );
-            },
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                const ValleyLogoMark(size: 96, borderRadius: 28),
-                const SizedBox(height: 24),
-                Text(
-                  'Valley Super App',
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    color: ValleyBrandColors.snow,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'Preparando sua experiencia premium.',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: ValleyBrandColors.snow.withValues(alpha: 0.76),
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 24),
-                const SizedBox(
-                  width: 220,
-                  child: LinearProgressIndicator(
-                    minHeight: 6,
-                    borderRadius: BorderRadius.all(Radius.circular(999)),
-                    backgroundColor: Color(0x3320C8F3),
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                      ValleyBrandColors.cyan,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+        child: const Center(
+          child: CircularProgressIndicator(
+            color: ValleyBrandColors.cyan,
           ),
         ),
       ),
@@ -116,35 +87,45 @@ class _ValleyLoadingScreen extends StatelessWidget {
   }
 }
 
-class _ValleyFailureScreen extends StatelessWidget {
-  const _ValleyFailureScreen();
+class _FailureScreen extends StatelessWidget {
+  const _FailureScreen({required this.onRetry});
+
+  final VoidCallback onRetry;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ValleyBrandColors.night,
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(24),
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 540),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                const ValleyLogoMark(size: 72, borderRadius: 22),
-                const SizedBox(height: 24),
-                Text(
-                  'Nao foi possivel iniciar o Valley.',
-                  style: Theme.of(context).textTheme.headlineSmall,
-                  textAlign: TextAlign.center,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              const ValleyLogoMark(size: 72, borderRadius: 22),
+              const SizedBox(height: 18),
+              Text(
+                'Servidor indisponivel',
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.w900,
                 ),
-                const SizedBox(height: 12),
-                Text(
-                  'Tente novamente em alguns instantes. A experiencia sera carregada automaticamente quando os dados estiverem disponiveis.',
-                  style: Theme.of(context).textTheme.bodyLarge,
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
+              ),
+              const SizedBox(height: 14),
+              Wrap(
+                spacing: 12,
+                runSpacing: 12,
+                children: <Widget>[
+                  FilledButton(
+                    onPressed: onRetry,
+                    child: const Text('Atualizar'),
+                  ),
+                  OutlinedButton(
+                    onPressed: SystemNavigator.pop,
+                    child: const Text('Fechar'),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ),
