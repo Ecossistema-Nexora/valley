@@ -1,6 +1,9 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:speech_to_text/speech_to_text.dart';
+import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:valley_super_app/src/data/product_api_models.dart';
@@ -33,10 +36,17 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
   int _navIndex = 0;
   ProductItem? _selectedItem;
   Map<String, dynamic>? _selectedConversation;
+  final List<_NavigationSnapshot> _navigationHistory = <_NavigationSnapshot>[];
   final FlutterTts _tts = FlutterTts();
+  final SpeechToText _speech = SpeechToText();
+  DateTime? _lastBackPressAt;
   bool _helenaMinimized = false;
+  bool _helenaListening = false;
+  bool _helenaVoiceReady = false;
+  Offset _helenaAlignment = const Offset(-0.86, 0.72);
   String _helenaMood = 'calm';
   String _helenaMessage = 'Helena pronta para guiar a experiencia Valley.';
+  String _helenaTranscript = 'Toque no microfone para falar com Helena.';
 
   @override
   void initState() {
@@ -54,6 +64,31 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
     await _tts.setLanguage('pt-BR');
     await _tts.setPitch(1.05);
     await _tts.setSpeechRate(0.46);
+    _helenaVoiceReady = await _speech.initialize(
+      onStatus: (String status) {
+        if (!mounted) {
+          return;
+        }
+        final bool listening = status.toLowerCase().contains('listening');
+        setState(() {
+          _helenaListening = listening;
+          if (!listening && _helenaTranscript.trim().isEmpty) {
+            _helenaTranscript = 'Helena pronta para ouvir você.';
+          }
+        });
+      },
+      onError: (dynamic error) {
+        if (!mounted) {
+          return;
+        }
+        setState(() {
+          _helenaListening = false;
+          _helenaMood = 'alert';
+          _helenaMessage = 'Não consegui abrir o microfone agora.';
+          _helenaTranscript = 'Áudio de entrada indisponível no dispositivo.';
+        });
+      },
+    );
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _speakHelena('Helena ativa. Experiencia de produto pronta para voce.');
     });
@@ -76,8 +111,187 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
     _speakHelena(message);
   }
 
+  _NavigationSnapshot _currentSnapshot() {
+    return _NavigationSnapshot(
+      moduleId: _selectedModuleId,
+      surface: _surface,
+      navIndex: _navIndex,
+      selectedItem: _selectedItem,
+      selectedConversation: _selectedConversation,
+    );
+  }
+
+  void _rememberNavigationState() {
+    final _NavigationSnapshot snapshot = _currentSnapshot();
+    if (_navigationHistory.isNotEmpty &&
+        _navigationHistory.last.isSameState(snapshot)) {
+      return;
+    }
+    _navigationHistory.add(snapshot);
+  }
+
+  bool _restorePreviousNavigationState() {
+    if (_navigationHistory.isEmpty) {
+      return false;
+    }
+    final _NavigationSnapshot snapshot = _navigationHistory.removeLast();
+    setState(() {
+      _selectedModuleId = snapshot.moduleId;
+      _surface = snapshot.surface;
+      _navIndex = snapshot.navIndex;
+      _selectedItem = snapshot.selectedItem;
+      _selectedConversation = snapshot.selectedConversation;
+    });
+    return true;
+  }
+
+  Future<bool> _handleBackPressed() async {
+    final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
+    messenger.hideCurrentSnackBar();
+
+    if (_restorePreviousNavigationState()) {
+      _lastBackPressAt = null;
+      return false;
+    }
+
+    final DateTime now = DateTime.now();
+    final bool shouldMinimize = _lastBackPressAt != null &&
+        now.difference(_lastBackPressAt!) <= const Duration(seconds: 2);
+
+    if (shouldMinimize) {
+      await SystemNavigator.pop();
+      return false;
+    }
+
+    _lastBackPressAt = now;
+    messenger.showSnackBar(
+      const SnackBar(
+        behavior: SnackBarBehavior.floating,
+        content: Text('Toque voltar novamente para minimizar o app.'),
+      ),
+    );
+    return false;
+  }
+
+  void _handleVoiceCommand(String transcript) {
+    final String spoken = transcript.trim();
+    if (spoken.isEmpty) {
+      return;
+    }
+    final String normalized = spoken.toLowerCase();
+    ProductModule? matchedModule;
+    for (final ProductModule module in _data.modules) {
+      final List<String> candidates = <String>[
+        module.id,
+        module.label,
+        module.subtitle,
+      ];
+      final bool matched = candidates.any(
+        (String value) => value.isNotEmpty && normalized.contains(value.toLowerCase()),
+      );
+      if (matched) {
+        matchedModule = module;
+        break;
+      }
+    }
+
+    if (matchedModule != null) {
+      _showModule(matchedModule.id);
+      _setHelenaMood(
+        'focus',
+        'Comando de voz recebido. Abrindo ${matchedModule.label}.',
+      );
+      return;
+    }
+
+    if (normalized.contains('chat') || normalized.contains('mensagem')) {
+      _openSurface('chat');
+      _setHelenaMood('focus', 'Comando de voz recebido. Abrindo o chat.');
+      return;
+    }
+
+    if (normalized.contains('pag') || normalized.contains('carteira')) {
+      _showModule('PAY');
+      return;
+    }
+
+    if (normalized.contains('estoque')) {
+      _showModule('STOCK');
+      return;
+    }
+
+    if (normalized.contains('market') || normalized.contains('mercado')) {
+      _showModule('MARKETPLACE');
+      return;
+    }
+
+    setState(() {
+      _query = spoken;
+      _surface = 'home';
+      _helenaMood = 'happy';
+      _helenaMessage = 'Busca por voz aplicada ao ecossistema.';
+    });
+    _speakHelena('Busca por voz aplicada para $spoken.');
+  }
+
+  Future<void> _toggleHelenaListening() async {
+    if (_helenaListening) {
+      await _speech.stop();
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _helenaListening = false;
+      });
+      return;
+    }
+
+    if (!_helenaVoiceReady) {
+      _helenaVoiceReady = await _speech.initialize();
+    }
+
+    if (!_helenaVoiceReady) {
+      _setHelenaMood('alert', 'Microfone indisponível para Helena.');
+      setState(() {
+        _helenaTranscript = 'Ative a permissão de microfone para usar áudio de entrada.';
+      });
+      return;
+    }
+
+    setState(() {
+      _helenaListening = true;
+      _helenaMood = 'focus';
+      _helenaMessage = 'Helena ouvindo. Diga um módulo, ação ou busca.';
+      _helenaTranscript = 'Ouvindo...';
+    });
+    await _speech.listen(
+      localeId: 'pt_BR',
+      listenOptions: SpeechListenOptions(
+        listenMode: ListenMode.confirmation,
+        partialResults: true,
+      ),
+      onResult: (SpeechRecognitionResult result) {
+        if (!mounted) {
+          return;
+        }
+        setState(() {
+          _helenaTranscript = result.recognizedWords.trim().isEmpty
+              ? 'Ouvindo...'
+              : result.recognizedWords.trim();
+        });
+        if (result.finalResult) {
+          setState(() {
+            _helenaListening = false;
+          });
+          _handleVoiceCommand(result.recognizedWords);
+        }
+      },
+    );
+  }
+
   @override
   void dispose() {
+    _speech.stop();
     _tts.stop();
     super.dispose();
   }
@@ -159,54 +373,114 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
     return null;
   }
 
-  void _openSurface(String surface) {
-    setState(() {
-      _surface = surface;
-    });
-    _setHelenaMood(
-      surface == 'feed'
-          ? 'happy'
-          : surface == 'chat'
-              ? 'focus'
-              : surface == 'statement'
-                  ? 'calm'
-                  : 'focus',
-      'Abrindo ${surface == 'home' ? 'a tela principal' : surface}.',
+  Widget _buildConfiguredModuleExperience({
+    required ProductModule? module,
+    required Map<String, dynamic>? moduleScreen,
+    required List<ProductItem> items,
+    required _ModuleExperienceSpec spec,
+    required VoidCallback onPrimaryAction,
+    required VoidCallback onSecondaryAction,
+    required VoidCallback onTertiaryAction,
+  }) {
+    return _ConfiguredExperienceModuleScreen(
+      module: module,
+      moduleScreen: moduleScreen,
+      items: items,
+      spec: spec,
+      onOpenItem: _openItemDetail,
+      onPrimaryAction: onPrimaryAction,
+      onSecondaryAction: onSecondaryAction,
+      onTertiaryAction: onTertiaryAction,
     );
   }
 
+  void _openSurface(
+    String surface, {
+    bool announce = false,
+    String? message,
+    String mood = 'focus',
+  }) {
+    if (_surface == surface &&
+        _selectedItem == null &&
+        _selectedConversation == null) {
+      return;
+    }
+    _rememberNavigationState();
+    setState(() {
+      _surface = surface;
+      _selectedItem = null;
+      _selectedConversation = null;
+    });
+    if (announce) {
+      _setHelenaMood(
+        mood,
+        message ?? 'Abrindo ${surface == 'home' ? 'a tela principal' : surface}.',
+      );
+    }
+  }
+
   void _openItemDetail(ProductItem item) {
+    if (_surface == 'detail' && _selectedItem?.id == item.id) {
+      return;
+    }
+    _rememberNavigationState();
     setState(() {
       _selectedItem = item;
+      _selectedConversation = null;
       _surface = 'detail';
     });
     _setHelenaMood('focus', 'Abrindo ${item.title} com video e descricao completa.');
   }
 
   void _openCheckout(ProductItem item) {
+    if (_surface == 'checkout' && _selectedItem?.id == item.id) {
+      return;
+    }
+    _rememberNavigationState();
     setState(() {
       _selectedItem = item;
+      _selectedConversation = null;
       _surface = 'checkout';
     });
     _setHelenaMood('happy', 'Checkout pronto para ${item.title}.');
   }
 
   void _openConversation(Map<String, dynamic> conversation) {
+    if (_surface == 'conversation' &&
+        _selectedConversation?['id'] == conversation['id']) {
+      return;
+    }
+    _rememberNavigationState();
     setState(() {
       _selectedConversation = conversation;
+      _selectedItem = null;
       _surface = 'conversation';
     });
     _setHelenaMood('focus', 'Abrindo a conversa com ${conversation['title']}.');
   }
 
-  void _showModule(String moduleId) {
+  void _showModule(
+    String moduleId, {
+    bool announce = false,
+    String? message,
+    String mood = 'calm',
+  }) {
+    if (_selectedModuleId == moduleId &&
+        _surface == 'home' &&
+        _selectedItem == null &&
+        _selectedConversation == null) {
+      return;
+    }
+    _rememberNavigationState();
     setState(() {
       _selectedModuleId = moduleId;
       _surface = 'home';
       _selectedItem = null;
       _selectedConversation = null;
     });
-    _setHelenaMood('calm', 'Modulo $moduleId ativo.');
+    if (announce) {
+      _setHelenaMood(mood, message ?? 'Módulo $moduleId ativo.');
+    }
   }
 
   List<ProductItem> get _filteredItems {
@@ -360,6 +634,226 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
         onOpenItem: _openItemDetail,
       );
     }
+    if ((module?.id ?? '') == 'CHAT') {
+      return _buildConfiguredModuleExperience(
+        module: module,
+        moduleScreen: moduleScreen,
+        items: items,
+        spec: const _ModuleExperienceSpec(
+          badge: 'Inbox premium',
+          primaryLabel: 'Abrir inbox',
+          primaryIcon: Icons.forum_rounded,
+          secondaryLabel: 'Feed contextual',
+          secondaryIcon: Icons.dynamic_feed_rounded,
+          tertiaryLabel: 'Extrato',
+          tertiaryIcon: Icons.receipt_long_rounded,
+          insightTitle: 'Dupla persona ativa',
+          insightBody:
+              'Inbox, conversa premium e transições suaves para mídia, produto e histórico financeiro.',
+        ),
+        onPrimaryAction: () => _openSurface('chat'),
+        onSecondaryAction: () => _openSurface('feed'),
+        onTertiaryAction: () => _openSurface('statement'),
+      );
+    }
+    if ((module?.id ?? '') == 'DOCS') {
+      return _buildConfiguredModuleExperience(
+        module: module,
+        moduleScreen: moduleScreen,
+        items: items,
+        spec: const _ModuleExperienceSpec(
+          badge: 'Document flow',
+          primaryLabel: 'Abrir preview',
+          primaryIcon: Icons.description_rounded,
+          secondaryLabel: 'Assinatura',
+          secondaryIcon: Icons.draw_rounded,
+          tertiaryLabel: 'Comprovantes',
+          tertiaryIcon: Icons.inventory_2_rounded,
+          insightTitle: 'Recibos e assinatura',
+          insightBody:
+              'Fluxo pronto para pré-visualização, assinatura final e retomada de comprovantes sem sair do shell.',
+        ),
+        onPrimaryAction: items.isNotEmpty ? () => _openItemDetail(items.first) : () => _openSurface('feed'),
+        onSecondaryAction: items.isNotEmpty ? () => _openCheckout(items.first) : () => _openSurface('chat'),
+        onTertiaryAction: () => _openSurface('statement'),
+      );
+    }
+    if ((module?.id ?? '') == 'BUSINESS') {
+      return _buildConfiguredModuleExperience(
+        module: module,
+        moduleScreen: moduleScreen,
+        items: items,
+        spec: const _ModuleExperienceSpec(
+          badge: 'ERP ativo',
+          primaryLabel: 'Aprovações',
+          primaryIcon: Icons.fact_check_rounded,
+          secondaryLabel: 'Fluxo fiscal',
+          secondaryIcon: Icons.account_balance_rounded,
+          tertiaryLabel: 'Atendimento',
+          tertiaryIcon: Icons.support_agent_rounded,
+          insightTitle: 'Backoffice integrado',
+          insightBody:
+              'Painéis de aprovação, fiscal e atendimento ligados aos mesmos registros operacionais do catálogo.',
+        ),
+        onPrimaryAction: items.isNotEmpty ? () => _openItemDetail(items.first) : () => _openSurface('feed'),
+        onSecondaryAction: () => _openSurface('statement'),
+        onTertiaryAction: () => _openSurface('chat'),
+      );
+    }
+    if ((module?.id ?? '') == 'HEALTH') {
+      return _buildConfiguredModuleExperience(
+        module: module,
+        moduleScreen: moduleScreen,
+        items: items,
+        spec: const _ModuleExperienceSpec(
+          badge: 'Predictive care',
+          primaryLabel: 'Agenda clínica',
+          primaryIcon: Icons.calendar_month_rounded,
+          secondaryLabel: 'Histórico',
+          secondaryIcon: Icons.monitor_heart_rounded,
+          tertiaryLabel: 'Falar agora',
+          tertiaryIcon: Icons.mic_rounded,
+          insightTitle: 'Cuidado com contexto',
+          insightBody:
+              'A experiência une jornada clínica, histórico recente e acionamento rápido da Helena para triagem.',
+        ),
+        onPrimaryAction: items.isNotEmpty ? () => _openItemDetail(items.first) : () => _openSurface('feed'),
+        onSecondaryAction: () => _openSurface('statement'),
+        onTertiaryAction: _toggleHelenaListening,
+      );
+    }
+    if ((module?.id ?? '') == 'SECURITY') {
+      return _buildConfiguredModuleExperience(
+        module: module,
+        moduleScreen: moduleScreen,
+        items: items,
+        spec: const _ModuleExperienceSpec(
+          badge: 'Guard active',
+          primaryLabel: 'Alerta ativo',
+          primaryIcon: Icons.warning_amber_rounded,
+          secondaryLabel: 'Proteção',
+          secondaryIcon: Icons.shield_rounded,
+          tertiaryLabel: 'Registros',
+          tertiaryIcon: Icons.policy_rounded,
+          insightTitle: 'Camada de proteção',
+          insightBody:
+              'CTA direto para alerta, proteção pessoal e trilha de registros do ecossistema em uma única vista.',
+        ),
+        onPrimaryAction: items.isNotEmpty ? () => _openItemDetail(items.first) : () => _openSurface('chat'),
+        onSecondaryAction: () => _openSurface('chat'),
+        onTertiaryAction: () => _openSurface('statement'),
+      );
+    }
+    if ((module?.id ?? '') == 'IOT') {
+      return _buildConfiguredModuleExperience(
+        module: module,
+        moduleScreen: moduleScreen,
+        items: items,
+        spec: const _ModuleExperienceSpec(
+          badge: 'Smart hub',
+          primaryLabel: 'Dispositivos',
+          primaryIcon: Icons.devices_rounded,
+          secondaryLabel: 'Automação',
+          secondaryIcon: Icons.auto_mode_rounded,
+          tertiaryLabel: 'Helena Hub',
+          tertiaryIcon: Icons.psychology_alt_rounded,
+          insightTitle: 'Ambientes conectados',
+          insightBody:
+              'Dispositivos, automações e contexto conversacional da Helena reunidos para controle contínuo.',
+        ),
+        onPrimaryAction: items.isNotEmpty ? () => _openItemDetail(items.first) : () => _openSurface('feed'),
+        onSecondaryAction: () => _openSurface('feed'),
+        onTertiaryAction: () => _openSurface('chat'),
+      );
+    }
+    if ((module?.id ?? '') == 'AGENDA') {
+      return _buildConfiguredModuleExperience(
+        module: module,
+        moduleScreen: moduleScreen,
+        items: items,
+        spec: const _ModuleExperienceSpec(
+          badge: 'Helena memory',
+          primaryLabel: 'Criar tarefa',
+          primaryIcon: Icons.add_task_rounded,
+          secondaryLabel: 'Memória e listas',
+          secondaryIcon: Icons.checklist_rounded,
+          tertiaryLabel: 'Conversar',
+          tertiaryIcon: Icons.chat_bubble_rounded,
+          insightTitle: 'Memória viva',
+          insightBody:
+              'As telas de tarefa, memória e listas passam a ficar conectadas ao mesmo fluxo do shell principal.',
+        ),
+        onPrimaryAction: items.isNotEmpty ? () => _openItemDetail(items.first) : () => _openSurface('feed'),
+        onSecondaryAction: () => _openSurface('feed'),
+        onTertiaryAction: () => _openSurface('chat'),
+      );
+    }
+    if ((module?.id ?? '') == 'ADVISOR') {
+      return _buildConfiguredModuleExperience(
+        module: module,
+        moduleScreen: moduleScreen,
+        items: items,
+        spec: const _ModuleExperienceSpec(
+          badge: 'Consultoria IA',
+          primaryLabel: 'Recomendação',
+          primaryIcon: Icons.tips_and_updates_rounded,
+          secondaryLabel: 'Detalhes',
+          secondaryIcon: Icons.insights_rounded,
+          tertiaryLabel: 'Extrato',
+          tertiaryIcon: Icons.stacked_line_chart_rounded,
+          insightTitle: 'Recomendação acionável',
+          insightBody:
+              'Advisor agora abre sugestões, detalhes e desdobramentos financeiros sem cair no fallback genérico.',
+        ),
+        onPrimaryAction: items.isNotEmpty ? () => _openItemDetail(items.first) : () => _openSurface('feed'),
+        onSecondaryAction: () => _openSurface('feed'),
+        onTertiaryAction: () => _openSurface('statement'),
+      );
+    }
+    if ((module?.id ?? '') == 'UP') {
+      return _buildConfiguredModuleExperience(
+        module: module,
+        moduleScreen: moduleScreen,
+        items: items,
+        spec: const _ModuleExperienceSpec(
+          badge: 'CAC zero',
+          primaryLabel: 'Afiliados',
+          primaryIcon: Icons.campaign_rounded,
+          secondaryLabel: 'Payout',
+          secondaryIcon: Icons.payments_rounded,
+          tertiaryLabel: 'Contato',
+          tertiaryIcon: Icons.group_rounded,
+          insightTitle: 'Motor de afiliados',
+          insightBody:
+              'As jornadas de afiliados, comissão e payout já entram ligadas aos mesmos itens e extratos do shell.',
+        ),
+        onPrimaryAction: items.isNotEmpty ? () => _openItemDetail(items.first) : () => _openSurface('feed'),
+        onSecondaryAction: () => _openSurface('statement'),
+        onTertiaryAction: () => _openSurface('chat'),
+      );
+    }
+    if ((module?.id ?? '') == 'MEDIA') {
+      return _buildConfiguredModuleExperience(
+        module: module,
+        moduleScreen: moduleScreen,
+        items: items,
+        spec: const _ModuleExperienceSpec(
+          badge: 'Creator panel',
+          primaryLabel: 'Criadores',
+          primaryIcon: Icons.video_camera_front_rounded,
+          secondaryLabel: 'Campanhas',
+          secondaryIcon: Icons.rocket_launch_rounded,
+          tertiaryLabel: 'Payout',
+          tertiaryIcon: Icons.account_balance_wallet_rounded,
+          insightTitle: 'Operação creator',
+          insightBody:
+              'Media passa a abrir campanha, payout e narrativa visual sem depender só do card genérico do módulo.',
+        ),
+        onPrimaryAction: () => _openSurface('feed'),
+        onSecondaryAction: items.isNotEmpty ? () => _openItemDetail(items.first) : () => _openSurface('feed'),
+        onTertiaryAction: () => _openSurface('statement'),
+      );
+    }
     return _GenericModuleScreen(
       module: module,
       moduleScreen: moduleScreen,
@@ -489,9 +983,16 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
         : items.first;
     final List<ProductItem> recentItems = items.take(2).toList();
 
-    return Scaffold(
-      backgroundColor: const Color(0xFF0B1020),
-      body: Container(
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (bool didPop, Object? result) {
+        if (!didPop) {
+          _handleBackPressed();
+        }
+      },
+      child: Scaffold(
+        backgroundColor: const Color(0xFF0B1020),
+        body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
@@ -597,41 +1098,84 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
                   setState(() => _dockExpanded = false);
                 },
               ),
-              Positioned(
-                left: 18,
-                bottom: 108,
-                child: _HelenaAssistant(
-                  minimized: _helenaMinimized,
-                  mood: _helenaMood,
-                  message: _helenaMessage,
-                  onToggle: () => setState(() => _helenaMinimized = !_helenaMinimized),
-                  onSpeak: () => _speakHelena(_helenaMessage),
+              Align(
+                alignment: Alignment(_helenaAlignment.dx, _helenaAlignment.dy),
+                child: GestureDetector(
+                  onPanUpdate: (DragUpdateDetails details) {
+                    final Size size = MediaQuery.sizeOf(context);
+                    setState(() {
+                      _helenaAlignment = Offset(
+                        (_helenaAlignment.dx +
+                                (details.delta.dx / math.max(size.width, 1)) * 2)
+                            .clamp(-0.92, 0.92),
+                        (_helenaAlignment.dy +
+                                (details.delta.dy / math.max(size.height, 1)) * 2)
+                            .clamp(-0.82, 0.88),
+                      );
+                    });
+                  },
+                  child: _HelenaAssistant(
+                    minimized: _helenaMinimized,
+                    mood: _helenaMood,
+                    message: _helenaMessage,
+                    transcript: _helenaTranscript,
+                    voiceReady: _helenaVoiceReady,
+                    listening: _helenaListening,
+                    onToggle: () => setState(() => _helenaMinimized = !_helenaMinimized),
+                    onSpeak: () => _speakHelena(_helenaMessage),
+                    onListen: _toggleHelenaListening,
+                  ),
                 ),
               ),
             ],
           ),
         ),
-      ),
-      bottomNavigationBar: _BottomGlassNav(
-        index: _navIndex,
-        onChanged: (int value) {
-          setState(() {
-            _navIndex = value;
-          });
-          if (value == 0) {
-            _openSurface('home');
-          } else if (value == 1) {
-            _showModule('MARKETPLACE');
-          } else if (value == 2) {
-            _showModule('STOCK');
-          } else if (value == 3) {
-            _showModule('PAY');
-          } else if (value == 4) {
-            _openSurface('chat');
-          }
-        },
+        ),
+        bottomNavigationBar: _BottomGlassNav(
+          index: _navIndex,
+          onChanged: (int value) {
+            setState(() {
+              _navIndex = value;
+            });
+            if (value == 0) {
+              _openSurface('home');
+            } else if (value == 1) {
+              _showModule('MARKETPLACE');
+            } else if (value == 2) {
+              _showModule('STOCK');
+            } else if (value == 3) {
+              _showModule('PAY');
+            } else if (value == 4) {
+              _openSurface('chat');
+            }
+          },
+        ),
       ),
     );
+  }
+}
+
+class _NavigationSnapshot {
+  const _NavigationSnapshot({
+    required this.moduleId,
+    required this.surface,
+    required this.navIndex,
+    required this.selectedItem,
+    required this.selectedConversation,
+  });
+
+  final String moduleId;
+  final String surface;
+  final int navIndex;
+  final ProductItem? selectedItem;
+  final Map<String, dynamic>? selectedConversation;
+
+  bool isSameState(_NavigationSnapshot other) {
+    return moduleId == other.moduleId &&
+        surface == other.surface &&
+        navIndex == other.navIndex &&
+        selectedItem?.id == other.selectedItem?.id &&
+        selectedConversation?['id'] == other.selectedConversation?['id'];
   }
 }
 
@@ -2612,6 +3156,349 @@ class _GenericModuleScreen extends StatelessWidget {
   }
 }
 
+class _ModuleExperienceSpec {
+  const _ModuleExperienceSpec({
+    required this.badge,
+    required this.primaryLabel,
+    required this.primaryIcon,
+    required this.secondaryLabel,
+    required this.secondaryIcon,
+    required this.tertiaryLabel,
+    required this.tertiaryIcon,
+    required this.insightTitle,
+    required this.insightBody,
+  });
+
+  final String badge;
+  final String primaryLabel;
+  final IconData primaryIcon;
+  final String secondaryLabel;
+  final IconData secondaryIcon;
+  final String tertiaryLabel;
+  final IconData tertiaryIcon;
+  final String insightTitle;
+  final String insightBody;
+}
+
+class _ConfiguredExperienceModuleScreen extends StatelessWidget {
+  const _ConfiguredExperienceModuleScreen({
+    required this.module,
+    required this.moduleScreen,
+    required this.items,
+    required this.spec,
+    required this.onOpenItem,
+    required this.onPrimaryAction,
+    required this.onSecondaryAction,
+    required this.onTertiaryAction,
+  });
+
+  final ProductModule? module;
+  final Map<String, dynamic>? moduleScreen;
+  final List<ProductItem> items;
+  final _ModuleExperienceSpec spec;
+  final ValueChanged<ProductItem> onOpenItem;
+  final VoidCallback onPrimaryAction;
+  final VoidCallback onSecondaryAction;
+  final VoidCallback onTertiaryAction;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final ProductItem? hero = items.isNotEmpty ? items.first : null;
+    final List<ProductItem> spotlightItems = items.take(3).toList();
+    final List<dynamic> statCards =
+        moduleScreen?['stat_cards'] as List<dynamic>? ?? const <dynamic>[];
+    final Set<String> chips = <String>{};
+    for (final ProductItem item in spotlightItems) {
+      if (item.category.isNotEmpty) {
+        chips.add(item.category);
+      }
+      if (item.brand.isNotEmpty) {
+        chips.add(item.brand);
+      }
+      for (final String tag in item.tags.take(2)) {
+        if (tag.isNotEmpty) {
+          chips.add(tag);
+        }
+      }
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        ValleyPanel(
+          radius: 30,
+          padding: EdgeInsets.zero,
+          glowColor: ValleyBrandColors.cyan,
+          child: Stack(
+            children: <Widget>[
+              ClipRRect(
+                borderRadius: BorderRadius.circular(30),
+                child: AspectRatio(
+                  aspectRatio: 16 / 7,
+                  child: hero == null
+                      ? const ColoredBox(color: Color(0xFF121A2F))
+                      : Image.network(
+                          hero.imageUrl,
+                          fit: BoxFit.cover,
+                          errorBuilder:
+                              (BuildContext context, Object error, StackTrace? stackTrace) {
+                            return const ColoredBox(color: Color(0xFF121A2F));
+                          },
+                        ),
+                ),
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30),
+                  gradient: const LinearGradient(
+                    begin: Alignment.bottomCenter,
+                    end: Alignment.topCenter,
+                    colors: <Color>[Color(0xEE0B1020), Color(0x330B1020)],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(26),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: ValleyBrandColors.cyan.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(999),
+                      ),
+                      child: Text(
+                        spec.badge,
+                        style: const TextStyle(
+                          color: ValleyBrandColors.cyan,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      moduleScreen?['hero_title']?.toString() ?? module?.label ?? 'Módulo Valley',
+                      style: theme.textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.w800),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      moduleScreen?['hero_subtitle']?.toString() ?? module?.subtitle ?? '',
+                      style: theme.textTheme.bodyLarge?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                    const SizedBox(height: 18),
+                    Wrap(
+                      spacing: 12,
+                      runSpacing: 12,
+                      children: <Widget>[
+                        FilledButton.icon(
+                          onPressed: onPrimaryAction,
+                          icon: Icon(spec.primaryIcon),
+                          label: Text(spec.primaryLabel),
+                        ),
+                        OutlinedButton.icon(
+                          onPressed: onSecondaryAction,
+                          icon: Icon(spec.secondaryIcon),
+                          label: Text(spec.secondaryLabel),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 18),
+        Wrap(
+          spacing: 14,
+          runSpacing: 14,
+          children: <Widget>[
+            _ActionCard(
+              icon: spec.primaryIcon,
+              label: spec.primaryLabel,
+              onTap: onPrimaryAction,
+            ),
+            _ActionCard(
+              icon: spec.secondaryIcon,
+              label: spec.secondaryLabel,
+              onTap: onSecondaryAction,
+            ),
+            _ActionCard(
+              icon: spec.tertiaryIcon,
+              label: spec.tertiaryLabel,
+              onTap: onTertiaryAction,
+            ),
+          ],
+        ),
+        const SizedBox(height: 18),
+        Wrap(
+          spacing: 14,
+          runSpacing: 14,
+          children: statCards
+              .whereType<Map<dynamic, dynamic>>()
+              .map(
+                (Map<dynamic, dynamic> stat) => ValleyPanel(
+                  radius: 22,
+                  padding: const EdgeInsets.all(18),
+                  child: SizedBox(
+                    width: 180,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(stat['label'].toString()),
+                        const SizedBox(height: 8),
+                        Text(
+                          stat['value'].toString(),
+                          style: theme.textTheme.headlineSmall?.copyWith(
+                            fontWeight: FontWeight.w800,
+                            color: ValleyBrandColors.cyan,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(stat['trend'].toString()),
+                      ],
+                    ),
+                  ),
+                ),
+              )
+              .toList(),
+        ),
+        const SizedBox(height: 18),
+        Wrap(
+          spacing: 16,
+          runSpacing: 16,
+          children: <Widget>[
+            SizedBox(
+              width: 420,
+              child: ValleyPanel(
+                radius: 24,
+                padding: const EdgeInsets.all(18),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      spec.insightTitle,
+                      style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      spec.insightBody,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                    const SizedBox(height: 14),
+                    ...spotlightItems.map(
+                      (ProductItem item) => Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(18),
+                          onTap: () => onOpenItem(item),
+                          child: Row(
+                            children: <Widget>[
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(16),
+                                child: Image.network(
+                                  item.imageUrl,
+                                  width: 64,
+                                  height: 64,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (
+                                    BuildContext context,
+                                    Object error,
+                                    StackTrace? stackTrace,
+                                  ) {
+                                    return const ColoredBox(
+                                      color: Color(0xFF121A2F),
+                                      child: SizedBox(width: 64, height: 64),
+                                    );
+                                  },
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      item.title,
+                                      style: theme.textTheme.titleMedium?.copyWith(
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      item.description,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: theme.textTheme.bodySmall?.copyWith(
+                                        color: theme.colorScheme.onSurfaceVariant,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              const Icon(
+                                Icons.chevron_right_rounded,
+                                color: ValleyBrandColors.cyan,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(
+              width: 320,
+              child: ValleyPanel(
+                radius: 24,
+                padding: const EdgeInsets.all(18),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      'Contexto ativo',
+                      style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
+                    ),
+                    const SizedBox(height: 12),
+                    ...chips.take(6).map(
+                      (String chip) => Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: _FieldChip(
+                          icon: Icons.auto_awesome_rounded,
+                          label: chip,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        _MiniStat(label: 'Itens', value: '${items.length}'),
+                        _MiniStat(label: 'Hero', value: hero?.brand ?? '--'),
+                        _MiniStat(label: 'Fluxo', value: module?.id ?? '--'),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
 class _MobilityModuleScreen extends StatelessWidget {
   const _MobilityModuleScreen({
     required this.items,
@@ -4102,143 +4989,204 @@ class _HelenaAssistant extends StatelessWidget {
     required this.minimized,
     required this.mood,
     required this.message,
+    required this.transcript,
+    required this.voiceReady,
+    required this.listening,
     required this.onToggle,
     required this.onSpeak,
+    required this.onListen,
   });
 
   final bool minimized;
   final String mood;
   final String message;
+  final String transcript;
+  final bool voiceReady;
+  final bool listening;
   final VoidCallback onToggle;
   final VoidCallback onSpeak;
+  final VoidCallback onListen;
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final Color haloColor = switch (mood) {
+      'happy' => ValleyBrandColors.success,
+      'alert' => ValleyBrandColors.danger,
+      'focus' => ValleyBrandColors.cyan,
+      _ => ValleyBrandColors.cyan,
+    };
+
     return AnimatedContainer(
       duration: const Duration(milliseconds: 240),
       curve: Curves.easeOutCubic,
-      width: minimized ? 78 : 292,
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: const Color(0xCC121A2F),
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-            color: ValleyBrandColors.cyan.withValues(alpha: 0.16),
-            blurRadius: 24,
-            offset: const Offset(0, 14),
+      width: minimized ? 84 : 328,
+      height: minimized ? 84 : 192,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: <Widget>[
+          if (!minimized)
+            Positioned(
+              left: 0,
+              right: 18,
+              bottom: 94,
+              child: ValleyPanel(
+                radius: 24,
+                padding: const EdgeInsets.fromLTRB(18, 16, 18, 14),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        const Text(
+                          'Helena',
+                          style: TextStyle(
+                            color: ValleyBrandColors.cyan,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                        const Spacer(),
+                        IconButton(
+                          visualDensity: VisualDensity.compact,
+                          onPressed: onListen,
+                          icon: Icon(
+                            listening
+                                ? Icons.mic_rounded
+                                : voiceReady
+                                    ? Icons.mic_none_rounded
+                                    : Icons.mic_off_rounded,
+                            size: 20,
+                          ),
+                          color: listening
+                              ? ValleyBrandColors.success
+                              : voiceReady
+                                  ? ValleyBrandColors.cyan
+                                  : theme.colorScheme.onSurfaceVariant,
+                        ),
+                        IconButton(
+                          visualDensity: VisualDensity.compact,
+                          onPressed: onSpeak,
+                          icon: const Icon(Icons.graphic_eq_rounded, size: 20),
+                          color: ValleyBrandColors.cyan,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      message,
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.bodySmall,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      transcript,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.labelSmall?.copyWith(
+                        color: listening
+                            ? ValleyBrandColors.cyan
+                            : theme.colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          Positioned(
+            right: 0,
+            bottom: 0,
+            child: GestureDetector(
+              onTap: onToggle,
+              onDoubleTap: onSpeak,
+              child: Container(
+                width: 84,
+                height: 84,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: const LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: <Color>[Color(0xFF141C34), Color(0xCC0B1020)],
+                  ),
+                  border: Border.all(
+                    color: haloColor.withValues(alpha: listening ? 0.9 : 0.55),
+                    width: listening ? 2.8 : 2.2,
+                  ),
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                      color: haloColor.withValues(alpha: listening ? 0.35 : 0.22),
+                      blurRadius: listening ? 28 : 20,
+                      offset: const Offset(0, 12),
+                    ),
+                  ],
+                ),
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  children: <Widget>[
+                    const Center(child: _HelenaStarBadge(size: 34)),
+                    Positioned(
+                      top: 10,
+                      right: 10,
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 180),
+                        width: 12,
+                        height: 12,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: listening
+                              ? ValleyBrandColors.success
+                              : voiceReady
+                                  ? ValleyBrandColors.cyan
+                                  : theme.colorScheme.onSurfaceVariant,
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                              color: (listening
+                                      ? ValleyBrandColors.success
+                                      : ValleyBrandColors.cyan)
+                                  .withValues(alpha: 0.35),
+                              blurRadius: 10,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: -2,
+                      left: -2,
+                      child: Container(
+                        width: 28,
+                        height: 28,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF10182C),
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: Colors.white.withValues(alpha: 0.08),
+                          ),
+                        ),
+                        child: Icon(
+                          listening
+                              ? Icons.mic_rounded
+                              : voiceReady
+                                  ? Icons.open_with_rounded
+                                  : Icons.mic_off_rounded,
+                          size: 14,
+                          color: listening
+                              ? ValleyBrandColors.success
+                              : ValleyBrandColors.cyan,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ),
         ],
       ),
-      child: minimized
-          ? Center(
-              child: IconButton(
-                onPressed: onToggle,
-                icon: const _HelenaStarBadge(),
-              ),
-            )
-          : Row(
-              children: <Widget>[
-                GestureDetector(
-                  onTap: onSpeak,
-                  child: _HelenaFace(mood: mood),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      const Text(
-                        'Helena',
-                        style: TextStyle(
-                          color: ValleyBrandColors.cyan,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        message,
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                    ],
-                  ),
-                ),
-                IconButton(
-                  onPressed: onSpeak,
-                  icon: const Icon(Icons.graphic_eq_rounded),
-                  color: ValleyBrandColors.cyan,
-                ),
-                IconButton(
-                  onPressed: onToggle,
-                  icon: const _HelenaStarBadge(size: 18),
-                ),
-              ],
-            ),
     );
   }
-}
-
-class _HelenaFace extends StatelessWidget {
-  const _HelenaFace({required this.mood});
-
-  final String mood;
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomPaint(
-      size: const Size(58, 58),
-      painter: _HelenaFacePainter(mood: mood),
-    );
-  }
-}
-
-class _HelenaFacePainter extends CustomPainter {
-  const _HelenaFacePainter({required this.mood});
-
-  final String mood;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final Offset center = Offset(size.width / 2, size.height / 2);
-    final Paint orb = Paint()
-      ..shader = const LinearGradient(
-        colors: <Color>[Color(0xFF6EE7F9), Color(0xFFD0BCFF)],
-      ).createShader(Offset.zero & size);
-    canvas.drawCircle(center, size.width / 2, orb);
-
-    final Paint feature = Paint()
-      ..color = const Color(0xFF001F24)
-      ..strokeWidth = 3
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round;
-
-    canvas.drawCircle(const Offset(20, 24), 3, Paint()..color = const Color(0xFF001F24));
-    canvas.drawCircle(const Offset(38, 24), 3, Paint()..color = const Color(0xFF001F24));
-
-    final Path mouth = Path();
-    if (mood == 'happy') {
-      mouth.moveTo(18, 36);
-      mouth.quadraticBezierTo(29, 46, 40, 36);
-    } else if (mood == 'alert') {
-      mouth.moveTo(18, 39);
-      mouth.quadraticBezierTo(29, 33, 40, 39);
-    } else if (mood == 'focus') {
-      mouth.moveTo(18, 39);
-      mouth.lineTo(40, 39);
-    } else {
-      mouth.moveTo(18, 37);
-      mouth.quadraticBezierTo(29, 41, 40, 37);
-    }
-    canvas.drawPath(mouth, feature);
-  }
-
-  @override
-  bool shouldRepaint(covariant _HelenaFacePainter oldDelegate) =>
-      oldDelegate.mood != mood;
 }
 
 class _HelenaStarBadge extends StatelessWidget {

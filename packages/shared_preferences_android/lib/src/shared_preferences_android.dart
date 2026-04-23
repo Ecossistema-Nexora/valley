@@ -5,7 +5,6 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
 import 'package:shared_preferences_platform_interface/shared_preferences_platform_interface.dart';
 import 'package:shared_preferences_platform_interface/types.dart';
 
@@ -56,10 +55,10 @@ class SharedPreferencesAndroid extends SharedPreferencesStorePlatform {
           '$jsonListPrefix${jsonEncode(value)}',
         );
     }
-    // TODO(tarrinneal): change to ArgumentError across all platforms.
-    throw PlatformException(
-      code: 'InvalidOperation',
-      message: '"$valueType" is not a supported type.',
+    throw ArgumentError.value(
+      valueType,
+      'valueType',
+      '"$valueType" is not a supported type.',
     );
   }
 
