@@ -1,0 +1,151 @@
+{
+  "title": "Valley Product Mode - Front-end final para usuário",
+  "description": "Criar a direção visual e estrutural final do front-end Valley em modo produto, sem elementos de desenvolvedor, sem logs, sem painéis técnicos e sem aparência de protótipo. O resultado deve parecer um aplicativo maduro, premium, sofisticado, funcional e pronto para produção, com foco em clareza, fluidez, confiança, velocidade percebida e valor premium.",
+  "productContext": {
+    "brand": "Valley",
+    "platforms": [
+      "Web responsivo",
+      "Android APK"
+    ],
+    "experienceMode": "Produto final para usuário",
+    "visualDirection": [
+      "premium",
+      "futurista",
+      "minimalista",
+      "elegante",
+      "muito usável"
+    ],
+    "hardRules": [
+      "Nenhum comentário técnico visível na interface",
+      "Nenhuma ferramenta developer visível",
+      "Nenhuma ferramenta de log visível",
+      "Nenhum placeholder técnico",
+      "Nenhum painel interno com aparência administrativa exposta ao usuário final",
+      "Somente botões e ações com cara de produto final"
+    ]
+  },
+  "objectives": [
+    "Definir o front-end final do Valley em modo produto",
+    "Criar home premium com forte hierarquia visual e percepção de produto maduro",
+    "Desenhar navegação clara e modular",
+    "Representar Marketplace e Stock com demonstrações visuais de produtos com fotos e vídeos",
+    "Definir comportamento de dock flutuante recolhível e arrastável",
+    "Preparar a base visual para implementação direta"
+  ],
+  "requiredFeatures": {
+    "dock": {
+      "type": "floating overlay dock",
+      "behavior": [
+        "Flutua sobre a interface apenas enquanto o app estiver aberto",
+        "Pode ser arrastado horizontalmente de um lado ao outro da tela",
+        "Estado recolhido em um único botão premium",
+        "Ao tocar, expande a lista de módulos",
+        "Ao selecionar um módulo, recolhe novamente",
+        "Precisa parecer nativo do produto, não um menu improvisado"
+      ]
+    },
+    "home": {
+      "sections": [
+        "Topbar premium com busca, atalhos contextuais, status e perfil",
+        "Área principal com cards fortes e ações rápidas",
+        "Vitrine de produtos do Marketplace",
+        "Vitrine de produtos do Stock",
+        "Continuidade do usuário",
+        "Histórico recente",
+        "Blocos de destaque e recomendações"
+      ]
+    },
+    "productCatalog": {
+      "dataExpectation": "Considerar 100 dados fictícios por tabela como base de demonstração",
+      "marketplace": [
+        "Produtos com foto",
+        "Produtos com vídeo",
+        "Preço",
+        "Marca",
+        "Categoria",
+        "Status de disponibilidade",
+        "Ação principal de compra"
+      ],
+      "stock": [
+        "Produtos com foto",
+        "Produtos com vídeo",
+        "Indicador de estoque",
+        "Origem do hub ou armazém",
+        "Sinalização visual de operação ativa"
+      ]
+    }
+  },
+  "screens": [
+    {
+      "name": "Home principal",
+      "goal": "Transmitir sofisticação imediata e acesso rápido aos módulos e à vitrine de produto",
+      "content": [
+        "Hero premium enxuto",
+        "Busca principal",
+        "Cards de resumo",
+        "Grid de produtos premium",
+        "Blocos de continuidade"
+      ]
+    },
+    {
+      "name": "Marketplace",
+      "goal": "Apresentar catálogo premium com forte apelo visual e compra rápida",
+      "content": [
+        "Grid de cards grandes",
+        "Foto dominante",
+        "CTA principal",
+        "Acesso a vídeo do produto",
+        "Filtros elegantes"
+      ]
+    },
+    {
+      "name": "Stock",
+      "goal": "Mostrar produtos, estoque e operação visualmente refinados",
+      "content": [
+        "Cards operacionais premium",
+        "Indicadores de quantidade",
+        "Status de disponibilidade",
+        "Acesso a mídia do item",
+        "Leitura rápida de hubs"
+      ]
+    }
+  ],
+  "componentSystem": {
+    "buttons": [
+      "primary",
+      "secondary",
+      "ghost"
+    ],
+    "cards": [
+      "product card premium",
+      "summary card",
+      "action card",
+      "history card"
+    ],
+    "states": [
+      "normal",
+      "hover",
+      "focus",
+      "pressed",
+      "loading",
+      "success",
+      "error"
+    ]
+  },
+  "responsiveness": {
+    "desktop": "Visão analítica ampla com forte composição editorial",
+    "tablet": "Reflow modular preservando prioridade visual",
+    "mobile": "Stack fluido, navegação simplificada e dock preservado"
+  },
+  "theme": {
+    "palette": [
+      "#0B1020",
+      "#121A2F",
+      "#6EE7F9",
+      "#8B5CF6",
+      "#E5E7EB"
+    ],
+    "paletteDescription": "Base escura premium com ciano luminoso e violeta tecnológico, usando gradientes sutis e profundidade controlada."
+  },
+  "userIntent": "Gerar no Stitch a direção visual final do Valley em modo produto para usuário final, com interface sofisticada, catálogo rico em mídia, Marketplace e Stock demonstráveis, e dock flutuante arrastável e recolhível."
+}
