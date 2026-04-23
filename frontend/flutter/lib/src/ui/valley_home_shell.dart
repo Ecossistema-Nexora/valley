@@ -118,6 +118,8 @@ class _ValleyHomeShellState extends State<ValleyHomeShell> {
   Set<String> _homeModuleCodes = <String>{};
   bool _modulePreferencesReady = false;
   String? _selectedDockModuleCode;
+  late final TextEditingController _searchController;
+  String _searchQuery = '';
 
   static const List<_Destination> _destinations = <_Destination>[
     _Destination(
@@ -155,8 +157,15 @@ class _ValleyHomeShellState extends State<ValleyHomeShell> {
   @override
   void initState() {
     super.initState();
+    _searchController = TextEditingController();
     _homeModuleCodes = _defaultHomeModuleCodes();
     unawaited(_loadHomeModulePreferences());
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 
   Set<String> _defaultHomeModuleCodes() {
@@ -243,9 +252,38 @@ class _ValleyHomeShellState extends State<ValleyHomeShell> {
     }
   }
 
+  void _handleSearchChanged(String value) {
+    setState(() {
+      _searchQuery = value.trim();
+    });
+  }
+
+  List<ModuleRecord> _filteredModules() {
+    final String normalizedQuery = _searchQuery.toLowerCase().trim();
+    final List<ModuleRecord> sortedModules = List<ModuleRecord>.from(
+      widget.data.modules,
+    )..sort((ModuleRecord a, ModuleRecord b) => a.number.compareTo(b.number));
+
+    if (normalizedQuery.isEmpty) {
+      return sortedModules;
+    }
+
+    return sortedModules.where((ModuleRecord module) {
+      final String haystack = <String>[
+        module.code,
+        module.name,
+        module.subtitle,
+        module.domain,
+        module.description,
+      ].join(' ').toLowerCase();
+      return haystack.contains(normalizedQuery);
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     final bool wide = MediaQuery.sizeOf(context).width >= 1040;
+    final List<ModuleRecord> filteredModules = _filteredModules();
     final Widget currentPage = _buildPage();
 
     return Scaffold(
@@ -292,11 +330,19 @@ class _ValleyHomeShellState extends State<ValleyHomeShell> {
                   Expanded(
                     child: Column(
                       children: <Widget>[
-                        if (!wide)
-                          _MobileTopBar(
-                            title: _destinations[_index].title,
-                            data: widget.data,
-                          ),
+                        _CommandTopBar(
+                          title: _destinations[_index].title,
+                          searchController: _searchController,
+                          searchQuery: _searchQuery,
+                          resultCount: filteredModules.length,
+                          totalCount: widget.data.modules.length,
+                          onSearchChanged: _handleSearchChanged,
+                          onClearSearch: () {
+                            _searchController.clear();
+                            _handleSearchChanged('');
+                          },
+                          onNavigate: _navigate,
+                        ),
                         Expanded(
                           child: AnimatedSwitcher(
                             duration: const Duration(milliseconds: 320),
@@ -318,7 +364,7 @@ class _ValleyHomeShellState extends State<ValleyHomeShell> {
                 right: 14,
                 bottom: wide ? 18 : 88,
                 child: _ModuleAccessDock(
-                  modules: widget.data.modules,
+                  modules: filteredModules,
                   selectedCode: _selectedDockModuleCode,
                   onOpenModule: _openModule,
                 ),
@@ -335,6 +381,8 @@ class _ValleyHomeShellState extends State<ValleyHomeShell> {
       case 0:
         return _OverviewPage(
           data: widget.data,
+          catalogModules: _filteredModules(),
+          searchQuery: _searchQuery,
           homeModuleCodes: _homeModuleCodes,
           preferencesReady: _modulePreferencesReady,
           onNavigate: _navigate,
@@ -354,6 +402,8 @@ class _ValleyHomeShellState extends State<ValleyHomeShell> {
       default:
         return _OverviewPage(
           data: widget.data,
+          catalogModules: _filteredModules(),
+          searchQuery: _searchQuery,
           homeModuleCodes: _homeModuleCodes,
           preferencesReady: _modulePreferencesReady,
           onNavigate: _navigate,

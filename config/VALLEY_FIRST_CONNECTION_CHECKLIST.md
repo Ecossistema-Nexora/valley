@@ -2,6 +2,13 @@
 
 Checklist curto para subir MCP e acesso externo sem ambiguidade.
 
+## 0. Extensoes obrigatorias do workspace
+
+- Rode `powershell -ExecutionPolicy Bypass -File scripts/bootstrap_valley_tooling.ps1` para instalar ou atualizar as extensoes obrigatorias em `code` e `antigravity`.
+- O workspace trata `Dart-Code.dart-code`, `Dart-Code.flutter`, `redhat.java`, `figma.figma-vscode-extension`, Docker, Python, YAML, MongoDB, PostgreSQL e GitHub como extensoes obrigatorias.
+- A extensao `oracle.oracle-java` fica explicitamente bloqueada para este workspace por conflitar com a politica Java do Valley.
+- A extensao `vscjava.vscode-gradle` tambem fica bloqueada neste workspace para evitar importacao automatica de subprojetos Android/Gradle aninhados, como plugins Flutter nativos.
+
 ## 1. MCP: primeira conexao
 
 - Abra o workspace Valley no cliente MCP.

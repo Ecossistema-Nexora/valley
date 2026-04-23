@@ -33,5 +33,9 @@
   "java.import.gradle.enabled": false,
   "java.import.maven.enabled": false,
   "java.autobuild.enabled": false,
+  "gradle.autoDetect": "off",
+  "gradle.nestedProjects": false,
+  "java.gradle.buildServer.enabled": "off",
+  "java.gradle.buildServer.openBuildOutput": "neverOpen",
   "typescript.tsdk": "C:\\Users\\ereta\\AppData\\Local\\Programs\\Microsoft VS Code\\resources\\app\\extensions\\node_modules\\typescript\\lib"
 }

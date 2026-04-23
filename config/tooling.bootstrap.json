@@ -1,18 +1,32 @@
 {
   "version": "v47",
+  "editor_clis": [
+    "code",
+    "antigravity"
+  ],
   "workspace_extensions": [
+    "Dart-Code.dart-code",
+    "Dart-Code.flutter",
     "GitHub.vscode-pull-request-github",
+    "figma.figma-vscode-extension",
     "github.vscode-github-actions",
     "Google.geminicodeassist",
+    "ms-ossdata.vscode-pgsql",
     "ms-python.python",
     "ms-python.vscode-pylance",
+    "ms-vscode.powershell",
     "ms-azuretools.vscode-docker",
     "ms-kubernetes-tools.vscode-kubernetes-tools",
     "mongodb.mongodb-vscode",
+    "redhat.java",
     "redhat.vscode-yaml",
     "esbenp.prettier-vscode",
     "dbaeumer.vscode-eslint",
     "ms-vscode-remote.remote-containers"
+  ],
+  "workspace_unwanted_extensions": [
+    "oracle.oracle-java",
+    "vscjava.vscode-gradle"
   ],
   "host_tools": [
     {
@@ -34,6 +48,11 @@
       "name": "docker",
       "type": "command",
       "required": true
+    },
+    {
+      "name": "antigravity",
+      "type": "command",
+      "required": false
     },
     {
       "name": "git",

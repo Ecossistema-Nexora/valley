@@ -1,100 +1,359 @@
-﻿[
-    {
-        "name":  "code",
-        "kind":  "command",
-        "status":  "ok",
-        "detail":  "C:\\Users\\ereta\\AppData\\Local\\Programs\\Microsoft VS Code\\bin\\code.cmd",
-        "timestamp":  "2026-04-20T05:12:38.9046864Z"
-    },
-    {
-        "name":  "python",
-        "kind":  "command",
-        "status":  "ok",
-        "detail":  "C:\\Users\\ereta\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
-        "timestamp":  "2026-04-20T05:12:38.9222387Z"
-    },
-    {
-        "name":  "node",
-        "kind":  "command",
-        "status":  "ok",
-        "detail":  "C:\\Users\\ereta\\AppData\\Local\\Microsoft\\WinGet\\Packages\\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\\node-v24.14.1-win-x64\\node.exe",
-        "timestamp":  "2026-04-20T05:12:39.0076313Z"
-    },
-    {
-        "name":  "docker",
-        "kind":  "command",
-        "status":  "ok",
-        "detail":  "C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.exe",
-        "timestamp":  "2026-04-20T05:12:39.0126760Z"
-    },
-    {
-        "name":  "Google.geminicodeassist",
-        "kind":  "extension",
-        "status":  "ok",
-        "detail":  "instalada ou atualizada",
-        "timestamp":  "2026-04-20T05:12:40.4880840Z"
-    },
-    {
-        "name":  "ms-python.python",
-        "kind":  "extension",
-        "status":  "ok",
-        "detail":  "instalada ou atualizada",
-        "timestamp":  "2026-04-20T05:12:42.2359228Z"
-    },
-    {
-        "name":  "ms-python.vscode-pylance",
-        "kind":  "extension",
-        "status":  "ok",
-        "detail":  "instalada ou atualizada",
-        "timestamp":  "2026-04-20T05:12:44.1390442Z"
-    },
-    {
-        "name":  "ms-azuretools.vscode-docker",
-        "kind":  "extension",
-        "status":  "ok",
-        "detail":  "instalada ou atualizada",
-        "timestamp":  "2026-04-20T05:12:46.1891550Z"
-    },
-    {
-        "name":  "ms-kubernetes-tools.vscode-kubernetes-tools",
-        "kind":  "extension",
-        "status":  "ok",
-        "detail":  "instalada ou atualizada",
-        "timestamp":  "2026-04-20T05:12:48.2589221Z"
-    },
-    {
-        "name":  "mongodb.mongodb-vscode",
-        "kind":  "extension",
-        "status":  "ok",
-        "detail":  "instalada ou atualizada",
-        "timestamp":  "2026-04-20T05:12:50.9088259Z"
-    },
-    {
-        "name":  "redhat.vscode-yaml",
-        "kind":  "extension",
-        "status":  "ok",
-        "detail":  "instalada ou atualizada",
-        "timestamp":  "2026-04-20T05:12:52.4831880Z"
-    },
-    {
-        "name":  "esbenp.prettier-vscode",
-        "kind":  "extension",
-        "status":  "ok",
-        "detail":  "instalada ou atualizada",
-        "timestamp":  "2026-04-20T05:12:54.4638160Z"
-    },
-    {
-        "name":  "dbaeumer.vscode-eslint",
-        "kind":  "extension",
-        "status":  "ok",
-        "detail":  "instalada ou atualizada",
-        "timestamp":  "2026-04-20T05:12:56.3668414Z"
-    },
-    {
-        "name":  "ms-vscode-remote.remote-containers",
-        "kind":  "extension",
-        "status":  "ok",
-        "detail":  "instalada ou atualizada",
-        "timestamp":  "2026-04-20T05:12:58.1575574Z"
-    }
+[
+  {
+    "name": "code",
+    "kind": "command",
+    "status": "ok",
+    "detail": "C:\\Users\\ereta\\AppData\\Local\\Programs\\Microsoft VS Code\\bin\\code.cmd",
+    "timestamp": "2026-04-23T07:05:51.5142227Z"
+  },
+  {
+    "name": "python",
+    "kind": "command",
+    "status": "ok",
+    "detail": "C:\\Users\\ereta\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+    "timestamp": "2026-04-23T07:05:51.5917819Z"
+  },
+  {
+    "name": "node",
+    "kind": "command",
+    "status": "ok",
+    "detail": "C:\\Users\\ereta\\AppData\\Local\\Microsoft\\WinGet\\Packages\\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\\node-v24.14.1-win-x64\\node.exe",
+    "timestamp": "2026-04-23T07:05:51.6141314Z"
+  },
+  {
+    "name": "docker",
+    "kind": "command",
+    "status": "ok",
+    "detail": "C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.exe",
+    "timestamp": "2026-04-23T07:05:51.6694054Z"
+  },
+  {
+    "name": "antigravity",
+    "kind": "command",
+    "status": "ok",
+    "detail": "C:\\Users\\ereta\\AppData\\Local\\Programs\\Antigravity\\bin\\antigravity.cmd",
+    "timestamp": "2026-04-23T07:05:51.6981157Z"
+  },
+  {
+    "name": "git",
+    "kind": "command",
+    "status": "ok",
+    "detail": "C:\\Program Files\\Git\\cmd\\git.exe",
+    "timestamp": "2026-04-23T07:05:51.7244861Z"
+  },
+  {
+    "name": "github-repository-binding",
+    "kind": "git",
+    "status": "ok",
+    "detail": "origin -> https://github.com/Ecossistema-Nexora/valley.git",
+    "timestamp": "2026-04-23T07:05:52.1447795Z"
+  },
+  {
+    "name": "code",
+    "kind": "editor-cli",
+    "status": "ok",
+    "detail": "C:\\Users\\ereta\\AppData\\Local\\Programs\\Microsoft VS Code\\bin\\code.cmd | extensions -> C:\\Users\\ereta\\.vscode\\extensions",
+    "timestamp": "2026-04-23T07:05:52.2855471Z"
+  },
+  {
+    "name": "antigravity",
+    "kind": "editor-cli",
+    "status": "ok",
+    "detail": "C:\\Users\\ereta\\AppData\\Local\\Programs\\Antigravity\\bin\\antigravity.cmd | extensions -> C:\\Users\\ereta\\.antigravity\\extensions",
+    "timestamp": "2026-04-23T07:05:52.3169479Z"
+  },
+  {
+    "name": "code:Dart-Code.dart-code",
+    "kind": "extension",
+    "status": "ok",
+    "detail": "instalada ou atualizada",
+    "timestamp": "2026-04-23T07:05:56.7509553Z"
+  },
+  {
+    "name": "code:Dart-Code.flutter",
+    "kind": "extension",
+    "status": "ok",
+    "detail": "instalada ou atualizada",
+    "timestamp": "2026-04-23T07:05:59.6566770Z"
+  },
+  {
+    "name": "code:GitHub.vscode-pull-request-github",
+    "kind": "extension",
+    "status": "ok",
+    "detail": "instalada ou atualizada",
+    "timestamp": "2026-04-23T07:06:02.0149528Z"
+  },
+  {
+    "name": "code:figma.figma-vscode-extension",
+    "kind": "extension",
+    "status": "ok",
+    "detail": "instalada ou atualizada",
+    "timestamp": "2026-04-23T07:06:04.5449490Z"
+  },
+  {
+    "name": "code:github.vscode-github-actions",
+    "kind": "extension",
+    "status": "ok",
+    "detail": "instalada ou atualizada",
+    "timestamp": "2026-04-23T07:06:07.1619174Z"
+  },
+  {
+    "name": "code:Google.geminicodeassist",
+    "kind": "extension",
+    "status": "ok",
+    "detail": "instalada ou atualizada",
+    "timestamp": "2026-04-23T07:06:09.6727078Z"
+  },
+  {
+    "name": "code:ms-ossdata.vscode-pgsql",
+    "kind": "extension",
+    "status": "ok",
+    "detail": "instalada ou atualizada",
+    "timestamp": "2026-04-23T07:06:12.5388546Z"
+  },
+  {
+    "name": "code:ms-python.python",
+    "kind": "extension",
+    "status": "ok",
+    "detail": "instalada ou atualizada",
+    "timestamp": "2026-04-23T07:06:15.0938590Z"
+  },
+  {
+    "name": "code:ms-python.vscode-pylance",
+    "kind": "extension",
+    "status": "ok",
+    "detail": "instalada ou atualizada",
+    "timestamp": "2026-04-23T07:06:18.0585806Z"
+  },
+  {
+    "name": "code:ms-vscode.powershell",
+    "kind": "extension",
+    "status": "ok",
+    "detail": "instalada ou atualizada",
+    "timestamp": "2026-04-23T07:06:20.4334854Z"
+  },
+  {
+    "name": "code:ms-azuretools.vscode-docker",
+    "kind": "extension",
+    "status": "ok",
+    "detail": "instalada ou atualizada",
+    "timestamp": "2026-04-23T07:06:23.0716209Z"
+  },
+  {
+    "name": "code:ms-kubernetes-tools.vscode-kubernetes-tools",
+    "kind": "extension",
+    "status": "ok",
+    "detail": "instalada ou atualizada",
+    "timestamp": "2026-04-23T07:06:25.9058290Z"
+  },
+  {
+    "name": "code:mongodb.mongodb-vscode",
+    "kind": "extension",
+    "status": "ok",
+    "detail": "instalada ou atualizada",
+    "timestamp": "2026-04-23T07:06:28.6658748Z"
+  },
+  {
+    "name": "code:redhat.java",
+    "kind": "extension",
+    "status": "ok",
+    "detail": "instalada ou atualizada",
+    "timestamp": "2026-04-23T07:06:31.3758421Z"
+  },
+  {
+    "name": "code:redhat.vscode-yaml",
+    "kind": "extension",
+    "status": "ok",
+    "detail": "instalada ou atualizada",
+    "timestamp": "2026-04-23T07:06:33.9147981Z"
+  },
+  {
+    "name": "code:esbenp.prettier-vscode",
+    "kind": "extension",
+    "status": "ok",
+    "detail": "instalada ou atualizada",
+    "timestamp": "2026-04-23T07:06:37.1737497Z"
+  },
+  {
+    "name": "code:dbaeumer.vscode-eslint",
+    "kind": "extension",
+    "status": "ok",
+    "detail": "instalada ou atualizada",
+    "timestamp": "2026-04-23T07:06:39.8817197Z"
+  },
+  {
+    "name": "code:ms-vscode-remote.remote-containers",
+    "kind": "extension",
+    "status": "ok",
+    "detail": "instalada ou atualizada",
+    "timestamp": "2026-04-23T07:06:44.0829725Z"
+  },
+  {
+    "name": "code:oracle.oracle-java",
+    "kind": "extension",
+    "status": "skipped",
+    "detail": "nao instalada e pasta residual removida",
+    "timestamp": "2026-04-23T07:07:09.6751149Z"
+  },
+  {
+    "name": "code:vscjava.vscode-gradle",
+    "kind": "extension",
+    "status": "skipped",
+    "detail": "nao instalada e pasta residual removida",
+    "timestamp": "2026-04-23T07:07:12.8152418Z"
+  },
+  {
+    "name": "antigravity:Dart-Code.dart-code",
+    "kind": "extension",
+    "status": "ok",
+    "detail": "instalada ou atualizada",
+    "timestamp": "2026-04-23T07:07:15.7276674Z"
+  },
+  {
+    "name": "antigravity:Dart-Code.flutter",
+    "kind": "extension",
+    "status": "ok",
+    "detail": "instalada ou atualizada",
+    "timestamp": "2026-04-23T07:07:20.1157134Z"
+  },
+  {
+    "name": "antigravity:GitHub.vscode-pull-request-github",
+    "kind": "extension",
+    "status": "ok",
+    "detail": "instalada ou atualizada",
+    "timestamp": "2026-04-23T07:07:22.7195964Z"
+  },
+  {
+    "name": "antigravity:figma.figma-vscode-extension",
+    "kind": "extension",
+    "status": "ok",
+    "detail": "instalada ou atualizada",
+    "timestamp": "2026-04-23T07:07:25.7664250Z"
+  },
+  {
+    "name": "antigravity:github.vscode-github-actions",
+    "kind": "extension",
+    "status": "ok",
+    "detail": "instalada ou atualizada",
+    "timestamp": "2026-04-23T07:07:28.2657233Z"
+  },
+  {
+    "name": "antigravity:Google.geminicodeassist",
+    "kind": "extension",
+    "status": "ok",
+    "detail": "instalada ou atualizada",
+    "timestamp": "2026-04-23T07:07:30.4553438Z"
+  },
+  {
+    "name": "antigravity:ms-ossdata.vscode-pgsql",
+    "kind": "extension",
+    "status": "ok",
+    "detail": "instalada ou atualizada",
+    "timestamp": "2026-04-23T07:07:33.5806923Z"
+  },
+  {
+    "name": "antigravity:ms-python.python",
+    "kind": "extension",
+    "status": "ok",
+    "detail": "instalada ou atualizada",
+    "timestamp": "2026-04-23T07:07:35.9336325Z"
+  },
+  {
+    "name": "antigravity:ms-python.vscode-pylance",
+    "kind": "extension",
+    "status": "ok",
+    "detail": "instalada ou atualizada",
+    "timestamp": "2026-04-23T07:07:38.8660867Z"
+  },
+  {
+    "name": "antigravity:ms-vscode.powershell",
+    "kind": "extension",
+    "status": "ok",
+    "detail": "instalada ou atualizada",
+    "timestamp": "2026-04-23T07:07:41.3230441Z"
+  },
+  {
+    "name": "antigravity:ms-azuretools.vscode-docker",
+    "kind": "extension",
+    "status": "ok",
+    "detail": "instalada ou atualizada",
+    "timestamp": "2026-04-23T07:07:43.7582405Z"
+  },
+  {
+    "name": "antigravity:ms-kubernetes-tools.vscode-kubernetes-tools",
+    "kind": "extension",
+    "status": "ok",
+    "detail": "instalada ou atualizada",
+    "timestamp": "2026-04-23T07:07:46.9275407Z"
+  },
+  {
+    "name": "antigravity:mongodb.mongodb-vscode",
+    "kind": "extension",
+    "status": "ok",
+    "detail": "instalada ou atualizada",
+    "timestamp": "2026-04-23T07:07:48.9768382Z"
+  },
+  {
+    "name": "antigravity:redhat.java",
+    "kind": "extension",
+    "status": "ok",
+    "detail": "instalada ou atualizada",
+    "timestamp": "2026-04-23T07:07:51.3424869Z"
+  },
+  {
+    "name": "antigravity:redhat.vscode-yaml",
+    "kind": "extension",
+    "status": "ok",
+    "detail": "instalada ou atualizada",
+    "timestamp": "2026-04-23T07:07:53.5314437Z"
+  },
+  {
+    "name": "antigravity:esbenp.prettier-vscode",
+    "kind": "extension",
+    "status": "ok",
+    "detail": "instalada ou atualizada",
+    "timestamp": "2026-04-23T07:07:55.8587958Z"
+  },
+  {
+    "name": "antigravity:dbaeumer.vscode-eslint",
+    "kind": "extension",
+    "status": "ok",
+    "detail": "instalada ou atualizada",
+    "timestamp": "2026-04-23T07:07:58.2774795Z"
+  },
+  {
+    "name": "antigravity:ms-vscode-remote.remote-containers",
+    "kind": "extension",
+    "status": "ok",
+    "detail": "instalada ou atualizada",
+    "timestamp": "2026-04-23T07:08:00.7680921Z"
+  },
+  {
+    "name": "antigravity:oracle.oracle-java",
+    "kind": "extension-cleanup",
+    "status": "failed",
+    "detail": "falha ao remover pasta residual: C:\\Users\\ereta\\.antigravity\\extensions\\oracle.oracle-java-25.1.0-universal",
+    "timestamp": "2026-04-23T07:08:03.5953247Z"
+  },
+  {
+    "name": "antigravity:oracle.oracle-java",
+    "kind": "extension",
+    "status": "skipped",
+    "detail": "nao instalada",
+    "timestamp": "2026-04-23T07:08:03.5956739Z"
+  },
+  {
+    "name": "antigravity:vscjava.vscode-gradle",
+    "kind": "extension-cleanup",
+    "status": "failed",
+    "detail": "falha ao remover pasta residual: C:\\Users\\ereta\\.antigravity\\extensions\\vscjava.vscode-gradle-3.17.3-universal",
+    "timestamp": "2026-04-23T07:08:05.2644472Z"
+  },
+  {
+    "name": "antigravity:vscjava.vscode-gradle",
+    "kind": "extension",
+    "status": "skipped",
+    "detail": "nao instalada",
+    "timestamp": "2026-04-23T07:08:05.2646069Z"
+  }
 ]

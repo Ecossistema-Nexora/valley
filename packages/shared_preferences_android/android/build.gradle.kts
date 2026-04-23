@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.gradle.api.Project
 
 group = "io.flutter.plugins.sharedpreferences"
 version = "1.0-SNAPSHOT"
@@ -34,6 +35,24 @@ plugins {
     id("org.jetbrains.kotlin.android")
 }
 
+fun resolveFlutterCompileSdkVersion(project: Project): Int {
+    val standaloneFallback = 35
+    val flutterExtension = project.extensions.findByName("flutter") ?: return standaloneFallback
+    val rawValue =
+        runCatching {
+            flutterExtension.javaClass.methods
+                .firstOrNull { it.name == "getCompileSdkVersion" }
+                ?.invoke(flutterExtension)
+        }.getOrNull() ?: return standaloneFallback
+
+    return when (rawValue) {
+        is Int -> rawValue
+        is Number -> rawValue.toInt()
+        is String -> rawValue.toIntOrNull() ?: standaloneFallback
+        else -> standaloneFallback
+    }
+}
+
 kotlin {
     compilerOptions {
         jvmTarget = JvmTarget.fromTarget(JavaVersion.VERSION_17.toString())
@@ -42,7 +61,11 @@ kotlin {
 
 android {
     namespace = "io.flutter.plugins.sharedpreferences"
-    compileSdk = flutter.compileSdkVersion
+    // When this plugin is loaded by the Flutter app, the Flutter Gradle plugin
+    // injects the "flutter" extension. When IDE tooling opens the plugin as an
+    // isolated Gradle project, that extension does not exist, so we fall back
+    // to a standalone compileSdk to keep sync/import stable.
+    compileSdk = resolveFlutterCompileSdkVersion(project)
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
