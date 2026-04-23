@@ -1,0 +1,57 @@
+image:
+  repository: 123456789012.dkr.ecr.us-east-1.amazonaws.com/valley-prod/valley
+  tag: latest
+  pullPolicy: IfNotPresent
+
+replicaCount: 3
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8080
+
+ingress:
+  enabled: true
+  className: alb
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80},{"HTTPS":443}]'
+    alb.ingress.kubernetes.io/ssl-redirect: '443'
+    external-dns.alpha.kubernetes.io/hostname: valley.example.com
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  hosts:
+    - host: valley.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: valley-tls
+      hosts:
+        - valley.example.com
+
+env:
+  NODE_ENV: production
+  PORT: "8080"
+  MULTI_TENANT_MODE: "true"
+  STRIPE_BILLING_ENABLED: "false"
+  APP_BASE_URL: "https://valley.example.com"
+
+secrets:
+  DATABASE_URL: ""
+  MONGODB_URI: ""
+  REDIS_URL: ""
+  RABBITMQ_URL: ""
+  JWT_SECRET: ""
+  STRIPE_SECRET_KEY: ""
+  STRIPE_WEBHOOK_SECRET: ""
+
+worker:
+  enabled: false
+  replicaCount: 2
+  command: ["python", "-c", "import time; time.sleep(3600)"]
+
+cron:
+  enabled: false
+  schedule: "*/10 * * * *"
+  command: ["python", "-c", "print('Enable a real pricing command before activating the Helm cron job.')"]

@@ -1,0 +1,71 @@
+name: deploy-prod
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+  ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+  EKS_CLUSTER_NAME: ${{ secrets.EKS_CLUSTER_NAME }}
+  K8S_NAMESPACE: ${{ secrets.K8S_NAMESPACE }}
+  HELM_RELEASE_NAME: ${{ secrets.HELM_RELEASE_NAME }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and push image
+        run: |
+          IMAGE_TAG=${GITHUB_SHA}
+          docker build -t $ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REPOSITORY:$IMAGE_TAG
+          echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
+
+      - name: Update kubeconfig
+        run: aws eks update-kubeconfig --region "$AWS_REGION" --name "$EKS_CLUSTER_NAME"
+
+      - name: Create or update app secret
+        run: |
+          kubectl create namespace "$K8S_NAMESPACE" --dry-run=client -o yaml | kubectl apply -f -
+          kubectl -n "$K8S_NAMESPACE" create secret generic valley-secrets \
+            --from-literal=DATABASE_URL='${{ secrets.DATABASE_URL }}' \
+            --from-literal=MONGODB_URI='${{ secrets.MONGODB_URI }}' \
+            --from-literal=REDIS_URL='${{ secrets.REDIS_URL }}' \
+            --from-literal=RABBITMQ_URL='${{ secrets.RABBITMQ_URL }}' \
+            --from-literal=JWT_SECRET='${{ secrets.JWT_SECRET }}' \
+            --from-literal=STRIPE_SECRET_KEY='${{ secrets.STRIPE_SECRET_KEY }}' \
+            --from-literal=STRIPE_WEBHOOK_SECRET='${{ secrets.STRIPE_WEBHOOK_SECRET }}' \
+            --dry-run=client -o yaml | kubectl apply -f -
+
+      - name: Deploy Helm chart
+        run: |
+          helm upgrade --install "$HELM_RELEASE_NAME" ./helm/valley \
+            --namespace "$K8S_NAMESPACE" \
+            --create-namespace \
+            --set image.repository="$ECR_REPOSITORY" \
+            --set image.tag="$IMAGE_TAG" \
+            --set ingress.hosts[0].host='${{ secrets.VALLEY_DOMAIN }}' \
+            --set ingress.tls[0].hosts[0]='${{ secrets.VALLEY_DOMAIN }}' \
+            --set ingress.annotations.external-dns\.alpha\.kubernetes\.io/hostname='${{ secrets.VALLEY_DOMAIN }}'
+
+      - name: Wait rollout
+        run: |
+          kubectl -n "$K8S_NAMESPACE" rollout status deploy/"$HELM_RELEASE_NAME" --timeout=300s
+          if kubectl -n "$K8S_NAMESPACE" get deploy "${HELM_RELEASE_NAME}-worker" >/dev/null 2>&1; then
+            kubectl -n "$K8S_NAMESPACE" rollout status deploy/"${HELM_RELEASE_NAME}-worker" --timeout=300s
+          fi

@@ -1,0 +1,374 @@
+{
+  "front": "valley-helena-master-spec",
+  "version": "1.0.0",
+  "domain_key": "ai_memory_operations",
+  "generated_on": "2026-04-21",
+  "source_artifacts": [
+    "database/postgres/005_v47_domain_tables_core_first.sql",
+    "database/mongodb/001_ai_social_telemetry.mongo.js",
+    "database/mongodb/003_v47_field_ops_security_agenda.mongo.js",
+    "database/postgres/015_v47_module_blueprints_registry.sql",
+    "database/postgres/016_v47_execution_backlog_seed.sql",
+    "database/domain-delivery/priority-domains/ai_memory_operations/operational_seed.sql",
+    "contracts/events/priority-domains/ai_memory_operations.json",
+    "modules/38-agenda/CONTRACT.md",
+    "modules/39-advisor/CONTRACT.md",
+    "modules/46-chat/CONTRACT.md"
+  ],
+  "module_snapshot": {
+    "AGENDA": {
+      "current_phase": "VALIDATE",
+      "data_home": "mongo",
+      "primary_actors": [
+        "usuario final",
+        "helena persona",
+        "operador de produtividade"
+      ],
+      "postgres_entities": [],
+      "mongo_collections": [
+        "agenda_items",
+        "ai_memory"
+      ],
+      "event_topics": [
+        "agenda.item.created",
+        "agenda.reminder.triggered",
+        "agenda.memory.linked"
+      ],
+      "backlog_keys": [
+        "AGENDA.exec.01",
+        "AGENDA.exec.02",
+        "AGENDA.exec.03"
+      ]
+    },
+    "ADVISOR": {
+      "current_phase": "BUILD",
+      "data_home": "postgres_mongo",
+      "primary_actors": [
+        "usuario assistido",
+        "motor de IA",
+        "operador consultivo"
+      ],
+      "postgres_entities": [
+        "advisor_insights",
+        "financial_goals"
+      ],
+      "mongo_collections": [
+        "ai_memory",
+        "agenda_items"
+      ],
+      "event_topics": [
+        "advisor.insight.generated",
+        "advisor.action.proposed",
+        "advisor.consent.recorded"
+      ],
+      "backlog_keys": [
+        "ADVISOR.exec.01",
+        "ADVISOR.exec.02",
+        "ADVISOR.exec.03"
+      ]
+    },
+    "CHAT": {
+      "current_phase": "VALIDATE",
+      "data_home": "postgres_mongo",
+      "primary_actors": [
+        "usuario pessoal",
+        "usuario profissional",
+        "motor de assistencia"
+      ],
+      "postgres_entities": [
+        "chat_conversations",
+        "chat_messages",
+        "users"
+      ],
+      "mongo_collections": [
+        "ai_memory",
+        "agenda_items"
+      ],
+      "event_topics": [
+        "chat.conversation.opened",
+        "chat.message.persisted",
+        "chat.context.promoted"
+      ],
+      "backlog_keys": [
+        "CHAT.exec.01",
+        "CHAT.exec.02",
+        "CHAT.exec.03"
+      ]
+    }
+  },
+  "canonical_entities": {
+    "postgres": {
+      "advisor_insights": {
+        "owner_key": "user_id",
+        "purpose": "registro operacional do insight",
+        "gaps": [
+          "nao possui explainability minima dedicada",
+          "nao possui risco, confianca ou evidence refs estruturados"
+        ]
+      },
+      "financial_goals": {
+        "owner_key": "user_id",
+        "purpose": "contexto financeiro estruturado usado pelo Advisor"
+      },
+      "chat_conversations": {
+        "owner_key": "participant1_id/participant2_id",
+        "purpose": "envelope relacional da conversa",
+        "gaps": [
+          "nao explicita retention class",
+          "nao explicita boundary de contexto"
+        ]
+      },
+      "chat_messages": {
+        "owner_key": "sender_id",
+        "purpose": "mensagens persistidas por conversa",
+        "gaps": [
+          "nao classifica sensibilidade",
+          "nao classifica destino de retention"
+        ]
+      }
+    },
+    "mongo": {
+      "ai_memory": {
+        "owner_key": "user_id",
+        "purpose": "memoria operacional, preferencia e contexto promovido",
+        "known_fields": [
+          "memory_id",
+          "memory_scope",
+          "persona_mode",
+          "source_module",
+          "content_summary",
+          "consent_scope",
+          "expires_at"
+        ],
+        "gaps": [
+          "nao possui retention_class",
+          "nao possui promotion_reason",
+          "nao possui explainability packet padronizado"
+        ]
+      },
+      "agenda_items": {
+        "owner_key": "user_id",
+        "purpose": "fila inteligente de execucao",
+        "known_fields": [
+          "agenda_item_id",
+          "owner_persona",
+          "agenda_kind",
+          "agenda_status",
+          "source_module",
+          "scheduled_for",
+          "recurrence",
+          "related_entities",
+          "ai_context"
+        ],
+        "gaps": [
+          "recurrence ainda livre",
+          "hierarquia de listas ainda nao canonica"
+        ]
+      }
+    }
+  },
+  "consent_matrix": [
+    {
+      "capability": "chat_response",
+      "event_topic": "chat.message.persisted",
+      "minimum_consent_scope": "SESSION",
+      "cross_module_allowed": false,
+      "cross_persona_allowed": false,
+      "explicit_user_confirmation_required": false,
+      "notes": "resposta contextual de curta duracao sem memoria persistente cross-session"
+    },
+    {
+      "capability": "chat_context_promotion",
+      "event_topic": "chat.context.promoted",
+      "minimum_consent_scope": "PROFILE",
+      "cross_module_allowed": false,
+      "cross_persona_allowed": false,
+      "explicit_user_confirmation_required": false,
+      "notes": "promocao de contexto para memoria resumida dentro da mesma persona"
+    },
+    {
+      "capability": "agenda_memory_link",
+      "event_topic": "agenda.memory.linked",
+      "minimum_consent_scope": "PROFILE",
+      "cross_module_allowed": true,
+      "cross_persona_allowed": false,
+      "explicit_user_confirmation_required": false,
+      "notes": "elevar para CROSS_MODULE quando a evidencia vier de outro modulo"
+    },
+    {
+      "capability": "advisor_insight_generation",
+      "event_topic": "advisor.insight.generated",
+      "minimum_consent_scope": "PROFILE",
+      "cross_module_allowed": true,
+      "cross_persona_allowed": false,
+      "explicit_user_confirmation_required": false,
+      "notes": "para evidencia cross-module, exigir no minimo CROSS_MODULE"
+    },
+    {
+      "capability": "advisor_action_proposal",
+      "event_topic": "advisor.action.proposed",
+      "minimum_consent_scope": "CROSS_MODULE",
+      "cross_module_allowed": true,
+      "cross_persona_allowed": false,
+      "explicit_user_confirmation_required": false,
+      "notes": "acao proposta que afeta financas, health ou mobility exige escopo elevado"
+    },
+    {
+      "capability": "advisor_action_execution",
+      "event_topic": "advisor.consent.recorded",
+      "minimum_consent_scope": "CROSS_MODULE",
+      "cross_module_allowed": true,
+      "cross_persona_allowed": false,
+      "explicit_user_confirmation_required": true,
+      "notes": "execucao real depende de consentimento explicito, timestamp e trace_id"
+    }
+  ],
+  "retention_matrix": [
+    {
+      "artifact": "chat_messages",
+      "retention_class": "conversation_raw",
+      "default_ttl_days": 180,
+      "legal_hold_supported": true
+    },
+    {
+      "artifact": "ai_memory.short_term",
+      "retention_class": "short_term_context",
+      "default_ttl_days": 30,
+      "legal_hold_supported": true
+    },
+    {
+      "artifact": "ai_memory.long_term",
+      "retention_class": "operational_memory",
+      "default_ttl_days": 365,
+      "legal_hold_supported": true
+    },
+    {
+      "artifact": "ai_memory.preference",
+      "retention_class": "preference_memory",
+      "default_ttl_days": 730,
+      "legal_hold_supported": true
+    },
+    {
+      "artifact": "agenda_items.completed",
+      "retention_class": "agenda_history",
+      "default_ttl_days": 365,
+      "legal_hold_supported": true
+    },
+    {
+      "artifact": "advisor_insights.non_executed",
+      "retention_class": "advisor_non_executed",
+      "default_ttl_days": 365,
+      "legal_hold_supported": true
+    },
+    {
+      "artifact": "advisor_insights.executed_or_consented",
+      "retention_class": "advisor_audit",
+      "default_ttl_days": 1825,
+      "legal_hold_supported": true
+    }
+  ],
+  "explainability_packet": {
+    "required_fields": [
+      "reason_summary",
+      "evidence_refs",
+      "source_modules",
+      "confidence_band",
+      "risk_level",
+      "expected_outcome",
+      "consent_required",
+      "human_review_required",
+      "generated_at",
+      "trace_id"
+    ],
+    "applies_to": [
+      "advisor.insight.generated",
+      "advisor.action.proposed",
+      "chat.context.promoted",
+      "agenda.memory.linked"
+    ]
+  },
+  "agenda_contract": {
+    "required_behavior": [
+      "agenda_items e a fila canonica de follow-up e execucao",
+      "source_module deve ser preservado",
+      "recurrence deve seguir shape canonico unico",
+      "workspace e list_key devem ser explicitados mesmo antes de collection dedicada"
+    ],
+    "canonical_recurrence_fields": [
+      "frequency",
+      "interval",
+      "by_weekday",
+      "by_monthday",
+      "timezone",
+      "ends_at",
+      "occurrence_limit",
+      "exceptions"
+    ]
+  },
+  "admin_flows": [
+    {
+      "flow": "memory_console",
+      "capabilities": [
+        "buscar por user_id",
+        "visualizar promotion_reason",
+        "aplicar hold",
+        "marcar memoria obsoleta"
+      ]
+    },
+    {
+      "flow": "advisor_approval_queue",
+      "capabilities": [
+        "revisar insight",
+        "ver explainability packet",
+        "confirmar consentimento",
+        "registrar override humano"
+      ]
+    },
+    {
+      "flow": "chat_context_review",
+      "capabilities": [
+        "auditar promocao de contexto",
+        "separar persona pessoal e profissional",
+        "avaliar retention"
+      ]
+    },
+    {
+      "flow": "agenda_operations",
+      "capabilities": [
+        "reconciliar itens auto-criados",
+        "corrigir recorrencia",
+        "revisar backlog vencido"
+      ]
+    }
+  ],
+  "next_physical_deliverables": [
+    {
+      "priority": "P0",
+      "item": "criar contrato formal de helena_consent_decision"
+    },
+    {
+      "priority": "P0",
+      "item": "evoluir advisor_insights ou artefato auxiliar para explainability minima"
+    },
+    {
+      "priority": "P0",
+      "item": "fechar shape canonico de agenda_items.recurrence"
+    },
+    {
+      "priority": "P0",
+      "item": "definir retention class operacional para chat_messages, ai_memory e agenda_items"
+    },
+    {
+      "priority": "P1",
+      "item": "evoluir chat_conversations com classificacao de contexto e retention"
+    },
+    {
+      "priority": "P1",
+      "item": "reservar contrato de hierarquia de listas da Agenda"
+    },
+    {
+      "priority": "P1",
+      "item": "criar contrato de promocao de contexto para chat.context.promoted"
+    }
+  ]
+}

@@ -1,0 +1,448 @@
+{
+  "vision_version": "2026-04-21.v1",
+  "track": "valley_vision",
+  "scope": "institutional_parallel_definition",
+  "sources": [
+    "config/modules_v47.json",
+    "config/modules_v47_blueprints.json",
+    "database/postgres/001_core_identity_wallets.sql",
+    "database/postgres/002_financial_ledger_equity_orders.sql",
+    "database/postgres/004_v47_control_plane_modules_rules.sql",
+    "database/postgres/005_v47_domain_tables_core_first.sql",
+    "database/postgres/007_v47_module_delivery_automation.sql",
+    "database/postgres/012_v47_core_services_health_jobs_pharmacy_events.sql",
+    "database/postgres/015_v47_module_blueprints_registry.sql",
+    "database/postgres/016_v47_execution_backlog_seed.sql",
+    "database/postgres/017_v47_priority_domain_delivery_packages.sql",
+    "database/seeds/postgres/002_v47_priority_domain_delivery_packages_seed.sql",
+    "contracts/events/priority-domains/*.json"
+  ],
+  "snapshot": {
+    "modules_total": 47,
+    "domains_total": 9,
+    "tiers": {
+      "foundation": 11,
+      "core": 21,
+      "expansion": 14,
+      "frontier": 1
+    },
+    "data_homes": {
+      "postgres": 22,
+      "postgres_mongo": 13,
+      "mongo": 12
+    },
+    "phases": {
+      "VALIDATE": 38,
+      "DATA_CONTRACT": 5,
+      "BUILD": 4
+    },
+    "execution_units": {
+      "event_topics_total": 141,
+      "backlog_items_total": 141,
+      "priority_contracts_total": 114,
+      "priority_artifacts_total": 21
+    },
+    "packaging": {
+      "packaged_domains": 7,
+      "unpackaged_domains": 2,
+      "covered_modules": 38,
+      "uncovered_modules": 9
+    }
+  },
+  "critical_dependencies": {
+    "top_inbound_hubs": [
+      {
+        "module_code": "PAY",
+        "inbound_dependencies": 21,
+        "institutional_role": "economic_spine"
+      },
+      {
+        "module_code": "ID",
+        "inbound_dependencies": 17,
+        "institutional_role": "identity_spine"
+      },
+      {
+        "module_code": "HEALTH",
+        "inbound_dependencies": 4,
+        "institutional_role": "sensitive_care_bridge"
+      },
+      {
+        "module_code": "LOG",
+        "inbound_dependencies": 3,
+        "institutional_role": "tracking_bridge"
+      },
+      {
+        "module_code": "IOT",
+        "inbound_dependencies": 3,
+        "institutional_role": "telemetry_bridge"
+      },
+      {
+        "module_code": "LEGAL",
+        "inbound_dependencies": 3,
+        "institutional_role": "proof_and_dispute_bridge"
+      },
+      {
+        "module_code": "AI",
+        "inbound_dependencies": 3,
+        "institutional_role": "advisory_bridge"
+      }
+    ],
+    "shared_surfaces": [
+      "users",
+      "wallets",
+      "orders",
+      "transactions",
+      "equity_ledger",
+      "document_records",
+      "legal_contracts",
+      "module_delivery_registry",
+      "module_evolution_backlog",
+      "domain_delivery_packages",
+      "domain_event_contracts"
+    ],
+    "append_only_mandatory_surfaces": [
+      "transactions",
+      "equity_ledger",
+      "business_rule_audit",
+      "points_ledger",
+      "document_records",
+      "admin_action_audit",
+      "inventory_movements",
+      "warehouse_cycle_counts",
+      "tech_webhook_delivery_attempts",
+      "legal_signatures",
+      "legal_audit_events",
+      "delivery_shipment_events",
+      "mobility_trip_events",
+      "service_booking_events",
+      "pharmacy_dispense_events",
+      "event_ticket_ledger"
+    ]
+  },
+  "waves": [
+    {
+      "wave_id": "wave_0_core_spine",
+      "status": "established",
+      "objective": "operate on top of the institutional spine instead of redesigning it",
+      "domains": [],
+      "artifacts": [
+        "database/postgres/001_core_identity_wallets.sql",
+        "database/postgres/002_financial_ledger_equity_orders.sql",
+        "database/postgres/004_v47_control_plane_modules_rules.sql",
+        "database/postgres/007_v47_module_delivery_automation.sql",
+        "database/postgres/015_v47_module_blueprints_registry.sql",
+        "database/postgres/016_v47_execution_backlog_seed.sql",
+        "database/postgres/017_v47_priority_domain_delivery_packages.sql"
+      ],
+      "exit_gates": [
+        "identity_anchor",
+        "wallet_anchor",
+        "order_transaction_anchor",
+        "registry_backlog_anchor",
+        "package_registry_anchor"
+      ]
+    },
+    {
+      "wave_id": "wave_1_priority_rank_1",
+      "status": "next_execution_focus",
+      "priority_rank": 1,
+      "domains": [
+        "platform_developer",
+        "logistics_erp_operations"
+      ],
+      "module_count": 10,
+      "backlog_items": 30,
+      "contract_count": 30,
+      "objective": "freeze contracts and close the highest leverage operational packages",
+      "focus_modules": [
+        "DOCS",
+        "TECH",
+        "BUSINESS",
+        "REPLY",
+        "STOCK",
+        "LOG",
+        "FOOD",
+        "WMS",
+        "DELIVERY",
+        "FLEET"
+      ]
+    },
+    {
+      "wave_id": "wave_2_priority_rank_2",
+      "status": "ready_after_wave_1",
+      "priority_rank": 2,
+      "domains": [
+        "commerce_fintech_assets",
+        "ai_memory_operations",
+        "media_social_growth",
+        "city_mobility_security",
+        "frontier_iot_energy"
+      ],
+      "module_count": 28,
+      "backlog_items": 84,
+      "contract_count": 84,
+      "objective": "bring hybrid and high-variance domains under the same contract discipline"
+    },
+    {
+      "wave_id": "wave_3_packaging_gap",
+      "status": "not_started",
+      "domains": [
+        "services_health_human",
+        "education_work_social"
+      ],
+      "module_count": 9,
+      "backlog_items": 27,
+      "contract_count": 27,
+      "objective": "create missing domain packages and remove institutional blind spots",
+      "required_artifacts_per_domain": [
+        "ddl_complement.sql",
+        "operational_seed.sql",
+        "event_contract.json"
+      ]
+    },
+    {
+      "wave_id": "wave_4_release_governance",
+      "status": "blocked_by_evidence",
+      "domains": [
+        "all"
+      ],
+      "objective": "promote READY packages into MATERIALIZED packages backed by evidence, observability and acceptance",
+      "exit_gates": [
+        "package_materialized",
+        "consumers_connected",
+        "evidence_validated",
+        "runbook_defined",
+        "release_phase_approved"
+      ]
+    }
+  ],
+  "domains": [
+    {
+      "domain_key": "platform_developer",
+      "package_key": "platform_developer.priority.v1",
+      "priority_rank": 1,
+      "packaged": true,
+      "package_status": "READY",
+      "modules": [
+        "DOCS",
+        "TECH"
+      ],
+      "backlog_items": 6,
+      "contracts": 6,
+      "phases": {
+        "DATA_CONTRACT": 1,
+        "VALIDATE": 1
+      },
+      "institutional_role": "api_docs_receipts_and_external_connectivity"
+    },
+    {
+      "domain_key": "logistics_erp_operations",
+      "package_key": "logistics_erp_operations.priority.v1",
+      "priority_rank": 1,
+      "packaged": true,
+      "package_status": "READY",
+      "modules": [
+        "BUSINESS",
+        "REPLY",
+        "STOCK",
+        "LOG",
+        "FOOD",
+        "WMS",
+        "DELIVERY",
+        "FLEET"
+      ],
+      "backlog_items": 24,
+      "contracts": 24,
+      "phases": {
+        "DATA_CONTRACT": 2,
+        "VALIDATE": 6
+      },
+      "institutional_role": "erp_fulfillment_tracking_dispatch_and_operational_backbone"
+    },
+    {
+      "domain_key": "commerce_fintech_assets",
+      "package_key": "commerce_fintech_assets.priority.v1",
+      "priority_rank": 2,
+      "packaged": true,
+      "package_status": "READY",
+      "modules": [
+        "MARKETPLACE",
+        "PAY",
+        "PLUG",
+        "UP",
+        "FINANCAS",
+        "DIGITAL",
+        "REAL_ESTATE",
+        "INSURANCE"
+      ],
+      "backlog_items": 24,
+      "contracts": 24,
+      "phases": {
+        "DATA_CONTRACT": 2,
+        "VALIDATE": 6
+      },
+      "institutional_role": "monetization_wallets_marketplace_assets_and_commercial_settlement"
+    },
+    {
+      "domain_key": "ai_memory_operations",
+      "package_key": "ai_memory_operations.priority.v1",
+      "priority_rank": 2,
+      "packaged": true,
+      "package_status": "READY",
+      "modules": [
+        "ADVISOR",
+        "AGENDA",
+        "CHAT"
+      ],
+      "backlog_items": 9,
+      "contracts": 9,
+      "phases": {
+        "BUILD": 1,
+        "VALIDATE": 2
+      },
+      "institutional_role": "memory_consent_assistance_and_cross_module_orchestration"
+    },
+    {
+      "domain_key": "media_social_growth",
+      "package_key": "media_social_growth.priority.v1",
+      "priority_rank": 2,
+      "packaged": true,
+      "package_status": "READY",
+      "modules": [
+        "INFLUENCERS",
+        "SOCIAL",
+        "MEDIA",
+        "ADS",
+        "NEWS_PODCAST",
+        "GAMING"
+      ],
+      "backlog_items": 18,
+      "contracts": 18,
+      "phases": {
+        "BUILD": 3,
+        "VALIDATE": 3
+      },
+      "institutional_role": "creator_social_growth_and_media_monetization"
+    },
+    {
+      "domain_key": "city_mobility_security",
+      "package_key": "city_mobility_security.priority.v1",
+      "priority_rank": 2,
+      "packaged": true,
+      "package_status": "READY",
+      "modules": [
+        "LEGAL",
+        "EVENTS",
+        "MOBILITY",
+        "SECURITY",
+        "TOURISM",
+        "GOV"
+      ],
+      "backlog_items": 18,
+      "contracts": 18,
+      "phases": {
+        "VALIDATE": 6
+      },
+      "institutional_role": "city_ops_rights_safety_tickets_and_public_services"
+    },
+    {
+      "domain_key": "frontier_iot_energy",
+      "package_key": "frontier_iot_energy.priority.v1",
+      "priority_rank": 2,
+      "packaged": true,
+      "package_status": "READY",
+      "modules": [
+        "IOT",
+        "BIO",
+        "HOME",
+        "ENERGY",
+        "SPACE"
+      ],
+      "backlog_items": 15,
+      "contracts": 15,
+      "phases": {
+        "VALIDATE": 5
+      },
+      "institutional_role": "telemetry_devices_home_energy_and_frontier_spatial_layers"
+    },
+    {
+      "domain_key": "services_health_human",
+      "package_key": null,
+      "priority_rank": null,
+      "packaged": false,
+      "package_status": "MISSING",
+      "modules": [
+        "SERVICES",
+        "HEALTH",
+        "FITNESS",
+        "PHARMACY",
+        "VET",
+        "MENTE"
+      ],
+      "backlog_items": 18,
+      "contracts": 18,
+      "phases": {
+        "VALIDATE": 6
+      },
+      "institutional_role": "care_services_clinical_operations_and_sensitive_human_flows"
+    },
+    {
+      "domain_key": "education_work_social",
+      "package_key": null,
+      "priority_rank": null,
+      "packaged": false,
+      "package_status": "MISSING",
+      "modules": [
+        "EDU",
+        "JOBS",
+        "CHARITY"
+      ],
+      "backlog_items": 9,
+      "contracts": 9,
+      "phases": {
+        "VALIDATE": 3
+      },
+      "institutional_role": "learning_work_matching_and_social_impact"
+    }
+  ],
+  "readiness_model": {
+    "states": [
+      {
+        "key": "MAPPED",
+        "definition": "registry, blueprint and backlog exist"
+      },
+      {
+        "key": "CONTRACT_READY",
+        "definition": "event topics, evidence entities, producer/consumer surfaces and compliance tags exist"
+      },
+      {
+        "key": "PACKAGE_READY",
+        "definition": "ddl, seed and contract artifacts are generated and registered"
+      },
+      {
+        "key": "VALIDATED",
+        "definition": "ownership, coherence triggers, append-only trails and evidence hints are provable"
+      },
+      {
+        "key": "RELEASE_READY",
+        "definition": "package is materialized, consumers are connected and acceptance evidence is approved"
+      }
+    ],
+    "mandatory_gates": [
+      "ownership",
+      "monetary_path",
+      "event_contract",
+      "operations_surface",
+      "audit_trail",
+      "package_artifacts",
+      "release_evidence"
+    ]
+  },
+  "recommended_next_moves": [
+    "create package artifacts for services_health_human",
+    "create package artifacts for education_work_social",
+    "close DATA_CONTRACT modules DOCS, BUSINESS, FOOD, PLUG and UP against their event contracts",
+    "promote priority rank 1 packages from READY to MATERIALIZED only after evidence-backed validation",
+    "establish an institutional Mongo package lane so AI, social and telemetry collections reach the same readiness model as Postgres"
+  ]
+}

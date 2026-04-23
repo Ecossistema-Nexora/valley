@@ -1,0 +1,11 @@
+provider: aws
+policy: sync
+registry: txt
+txtOwnerId: valley-prod
+domainFilters:
+  - example.com
+serviceAccount:
+  create: true
+  name: external-dns
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::<ACCOUNT_ID>:role/valley-prod-external-dns

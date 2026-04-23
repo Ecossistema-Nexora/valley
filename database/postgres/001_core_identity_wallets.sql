@@ -27,6 +27,8 @@ CREATE TABLE users (
     email TEXT,
     phone_e164 TEXT,
     birth_date DATE,
+    birth_city TEXT,
+    birth_state CHAR(2),
     document_country CHAR(2) NOT NULL DEFAULT 'BR',
     document_type TEXT NOT NULL,
     document_number TEXT NOT NULL,
@@ -46,6 +48,12 @@ CREATE TABLE users (
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     CONSTRAINT chk_users_full_name_not_blank CHECK (btrim(full_name) <> ''),
+    CONSTRAINT chk_users_birth_city_not_blank CHECK (
+        birth_city IS NULL OR btrim(birth_city) <> ''
+    ),
+    CONSTRAINT chk_users_birth_state_format CHECK (
+        birth_state IS NULL OR birth_state ~ '^[A-Z]{2}$'
+    ),
     CONSTRAINT chk_users_document_country_format CHECK (document_country ~ '^[A-Z]{2}$'),
     CONSTRAINT chk_users_document_type_not_blank CHECK (btrim(document_type) <> ''),
     CONSTRAINT chk_users_document_number_not_blank CHECK (btrim(document_number) <> ''),

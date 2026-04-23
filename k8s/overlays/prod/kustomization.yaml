@@ -1,0 +1,21 @@
+namespace: valley
+resources:
+  - ../../base
+images:
+  - name: 123456789012.dkr.ecr.us-east-1.amazonaws.com/valley-prod/valley
+    newName: 123456789012.dkr.ecr.us-east-1.amazonaws.com/valley-prod/valley
+    newTag: latest
+patches:
+  - target:
+      kind: Ingress
+      name: valley-app
+    patch: |-
+      - op: replace
+        path: /metadata/annotations/external-dns.alpha.kubernetes.io~1hostname
+        value: valley.example.com
+      - op: replace
+        path: /spec/rules/0/host
+        value: valley.example.com
+      - op: replace
+        path: /spec/tls/0/hosts/0
+        value: valley.example.com

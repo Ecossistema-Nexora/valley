@@ -39,6 +39,17 @@
     blocked: 0.08,
   };
 
+  const MARKETPLACE_API_STORAGE_KEY = "valley.marketplaceApiIntegrations.v1";
+  const MARKETPLACE_API_PROVIDERS = [
+    { key: "mercado_livre", label: "Mercado Livre", baseUrl: "https://api.mercadolibre.com", siteCode: "MLB" },
+    { key: "amazon", label: "Amazon", baseUrl: "https://sellingpartnerapi-na.amazon.com", siteCode: "BR" },
+    { key: "aliexpress", label: "AliExpress", baseUrl: "https://api-sg.aliexpress.com", siteCode: "GLOBAL" },
+    { key: "alibaba", label: "Alibaba", baseUrl: "https://openapi.alibaba.com", siteCode: "GLOBAL" },
+    { key: "magalu", label: "Magalu", baseUrl: "https://api.magalu.com", siteCode: "BR" },
+    { key: "cjdropshipping", label: "CJDropshipping", baseUrl: "https://developers.cjdropshipping.com", siteCode: "GLOBAL" },
+    { key: "shopee", label: "Shopee", baseUrl: "https://partner.shopeemobile.com", siteCode: "BR" },
+  ];
+
   const allModules = data.modules.slice().sort((left, right) => left.number - right.number);
 
   const state = {
@@ -82,6 +93,9 @@
     domainFilter: document.getElementById("domainFilter"),
     resetFilters: document.getElementById("resetFilters"),
     copyCommands: document.getElementById("copyCommands"),
+    marketplaceApiIntegrations: document.getElementById("marketplaceApiIntegrations"),
+    saveMarketplaceApis: document.getElementById("saveMarketplaceApis"),
+    copyMarketplaceApis: document.getElementById("copyMarketplaceApis"),
     liveRegion: document.getElementById("liveRegion"),
   };
 
@@ -686,6 +700,212 @@
     announce(`Modulo selecionado: ${modules[nextIndex].code}.`);
   }
 
+  function defaultMarketplaceApiConfig() {
+    return MARKETPLACE_API_PROVIDERS.map((provider) => ({
+      ...provider,
+      enabled: false,
+      environment: "sandbox",
+      siteCode: provider.siteCode,
+      authMode: "oauth2",
+      clientId: "",
+      secretRef: "",
+      accessTokenRef: "",
+      refreshTokenRef: "",
+      sellerId: "",
+      webhookUrl: "/webhooks/marketplaces/" + provider.key,
+      webhookSecretRef: "",
+      scopes: "catalog,orders,pricing,inventory,settlement",
+      syncCadenceMinutes: 30,
+      cacheTtlMinutes: 20,
+      marginFloorPct: 12,
+      importCatalog: true,
+      syncOrders: true,
+      syncInventory: true,
+      syncPricing: true,
+      allowScrapingFallback: false,
+      blockExternalAiLookup: true,
+      notes: "",
+    }));
+  }
+
+  function readMarketplaceApiConfig() {
+    try {
+      const saved = JSON.parse(window.localStorage.getItem(MARKETPLACE_API_STORAGE_KEY) || "[]");
+      const byKey = Object.fromEntries(Array.isArray(saved) ? saved.map((item) => [item.key, item]) : []);
+      return defaultMarketplaceApiConfig().map((provider) => ({ ...provider, ...(byKey[provider.key] || {}) }));
+    } catch (error) {
+      return defaultMarketplaceApiConfig();
+    }
+  }
+
+  function collectMarketplaceApiConfig() {
+    if (!elements.marketplaceApiIntegrations) {
+      return [];
+    }
+
+    return MARKETPLACE_API_PROVIDERS.map((provider) => {
+      const read = (field) => elements.marketplaceApiIntegrations.querySelector(`[data-provider="${provider.key}"][data-field="${field}"]`);
+      return {
+        key: provider.key,
+        label: provider.label,
+        enabled: Boolean(read("enabled")?.checked),
+        environment: read("environment")?.value || "sandbox",
+        siteCode: read("siteCode")?.value.trim() || provider.siteCode,
+        authMode: read("authMode")?.value || "oauth2",
+        baseUrl: read("baseUrl")?.value.trim() || provider.baseUrl,
+        clientId: read("clientId")?.value.trim() || "",
+        secretRef: read("secretRef")?.value.trim() || "",
+        accessTokenRef: read("accessTokenRef")?.value.trim() || "",
+        refreshTokenRef: read("refreshTokenRef")?.value.trim() || "",
+        sellerId: read("sellerId")?.value.trim() || "",
+        webhookUrl: read("webhookUrl")?.value.trim() || "",
+        webhookSecretRef: read("webhookSecretRef")?.value.trim() || "",
+        scopes: read("scopes")?.value.trim() || "",
+        syncCadenceMinutes: Number(read("syncCadenceMinutes")?.value) || 30,
+        cacheTtlMinutes: Number(read("cacheTtlMinutes")?.value) || 20,
+        marginFloorPct: Number(read("marginFloorPct")?.value) || 12,
+        importCatalog: Boolean(read("importCatalog")?.checked),
+        syncOrders: Boolean(read("syncOrders")?.checked),
+        syncInventory: Boolean(read("syncInventory")?.checked),
+        syncPricing: Boolean(read("syncPricing")?.checked),
+        allowScrapingFallback: Boolean(read("allowScrapingFallback")?.checked),
+        blockExternalAiLookup: Boolean(read("blockExternalAiLookup")?.checked),
+        notes: read("notes")?.value.trim() || "",
+      };
+    });
+  }
+
+  function saveMarketplaceApiConfig() {
+    const payload = collectMarketplaceApiConfig();
+    window.localStorage.setItem(MARKETPLACE_API_STORAGE_KEY, JSON.stringify(payload, null, 2));
+    announce("Rascunho de integracoes salvo localmente.");
+  }
+
+  function renderMarketplaceIntegrations() {
+    if (!elements.marketplaceApiIntegrations) {
+      return;
+    }
+
+    const config = readMarketplaceApiConfig();
+    elements.marketplaceApiIntegrations.innerHTML = config
+      .map(
+        (provider) => `
+          <section class="integration-card" data-integration-card="${escapeHtml(provider.key)}">
+            <div class="integration-card-head">
+              <div>
+                <h3>${escapeHtml(provider.label)}</h3>
+                <p class="integration-provider-code">${escapeHtml(provider.key)}</p>
+              </div>
+              <label class="field toggle-field">
+                <span>Ativo</span>
+                <input data-provider="${escapeHtml(provider.key)}" data-field="enabled" type="checkbox" ${provider.enabled ? "checked" : ""} />
+              </label>
+            </div>
+            <div class="integration-form-grid">
+              <label class="field">
+                <span>Ambiente</span>
+                <select data-provider="${escapeHtml(provider.key)}" data-field="environment">
+                  <option value="sandbox" ${provider.environment === "sandbox" ? "selected" : ""}>Sandbox</option>
+                  <option value="production" ${provider.environment === "production" ? "selected" : ""}>Producao</option>
+                </select>
+              </label>
+              <label class="field">
+                <span>Regiao / Site</span>
+                <input data-provider="${escapeHtml(provider.key)}" data-field="siteCode" type="text" value="${escapeHtml(provider.siteCode)}" placeholder="BR, MLB, GLOBAL" />
+              </label>
+              <label class="field">
+                <span>Autenticacao</span>
+                <select data-provider="${escapeHtml(provider.key)}" data-field="authMode">
+                  <option value="oauth2" ${provider.authMode === "oauth2" ? "selected" : ""}>OAuth2</option>
+                  <option value="app_key_secret" ${provider.authMode === "app_key_secret" ? "selected" : ""}>App Key + Secret</option>
+                  <option value="token" ${provider.authMode === "token" ? "selected" : ""}>Token gerenciado</option>
+                </select>
+              </label>
+              <label class="field">
+                <span>Base URL</span>
+                <input data-provider="${escapeHtml(provider.key)}" data-field="baseUrl" type="url" value="${escapeHtml(provider.baseUrl)}" />
+              </label>
+              <label class="field">
+                <span>Client ID / App Key</span>
+                <input data-provider="${escapeHtml(provider.key)}" data-field="clientId" type="text" value="${escapeHtml(provider.clientId)}" autocomplete="off" />
+              </label>
+              <label class="field">
+                <span>Secret Ref</span>
+                <input data-provider="${escapeHtml(provider.key)}" data-field="secretRef" type="text" value="${escapeHtml(provider.secretRef)}" placeholder="vault/marketplaces/${escapeHtml(provider.key)}" autocomplete="off" />
+              </label>
+              <label class="field">
+                <span>Access Token Ref</span>
+                <input data-provider="${escapeHtml(provider.key)}" data-field="accessTokenRef" type="text" value="${escapeHtml(provider.accessTokenRef)}" placeholder="vault/marketplaces/${escapeHtml(provider.key)}/access-token" autocomplete="off" />
+              </label>
+              <label class="field">
+                <span>Refresh Token Ref</span>
+                <input data-provider="${escapeHtml(provider.key)}" data-field="refreshTokenRef" type="text" value="${escapeHtml(provider.refreshTokenRef)}" placeholder="vault/marketplaces/${escapeHtml(provider.key)}/refresh-token" autocomplete="off" />
+              </label>
+              <label class="field">
+                <span>Seller / Store ID</span>
+                <input data-provider="${escapeHtml(provider.key)}" data-field="sellerId" type="text" value="${escapeHtml(provider.sellerId)}" autocomplete="off" />
+              </label>
+              <label class="field">
+                <span>Webhook URL</span>
+                <input data-provider="${escapeHtml(provider.key)}" data-field="webhookUrl" type="text" value="${escapeHtml(provider.webhookUrl)}" />
+              </label>
+              <label class="field">
+                <span>Webhook Secret Ref</span>
+                <input data-provider="${escapeHtml(provider.key)}" data-field="webhookSecretRef" type="text" value="${escapeHtml(provider.webhookSecretRef)}" autocomplete="off" />
+              </label>
+              <label class="field">
+                <span>Scopes</span>
+                <input data-provider="${escapeHtml(provider.key)}" data-field="scopes" type="text" value="${escapeHtml(provider.scopes)}" />
+              </label>
+              <label class="field">
+                <span>Sync a cada min.</span>
+                <input data-provider="${escapeHtml(provider.key)}" data-field="syncCadenceMinutes" type="number" min="5" step="5" value="${escapeHtml(provider.syncCadenceMinutes)}" />
+              </label>
+              <label class="field">
+                <span>Cache TTL min.</span>
+                <input data-provider="${escapeHtml(provider.key)}" data-field="cacheTtlMinutes" type="number" min="1" step="1" value="${escapeHtml(provider.cacheTtlMinutes)}" />
+              </label>
+              <label class="field">
+                <span>Margem minima %</span>
+                <input data-provider="${escapeHtml(provider.key)}" data-field="marginFloorPct" type="number" min="0" step="0.5" value="${escapeHtml(provider.marginFloorPct)}" />
+              </label>
+              <div class="integration-toggle-group" aria-label="Sincronizacoes ${escapeHtml(provider.label)}">
+                <label class="field toggle-field">
+                  <span>Catalogo</span>
+                  <input data-provider="${escapeHtml(provider.key)}" data-field="importCatalog" type="checkbox" ${provider.importCatalog ? "checked" : ""} />
+                </label>
+                <label class="field toggle-field">
+                  <span>Pedidos</span>
+                  <input data-provider="${escapeHtml(provider.key)}" data-field="syncOrders" type="checkbox" ${provider.syncOrders ? "checked" : ""} />
+                </label>
+                <label class="field toggle-field">
+                  <span>Estoque</span>
+                  <input data-provider="${escapeHtml(provider.key)}" data-field="syncInventory" type="checkbox" ${provider.syncInventory ? "checked" : ""} />
+                </label>
+                <label class="field toggle-field">
+                  <span>Preco</span>
+                  <input data-provider="${escapeHtml(provider.key)}" data-field="syncPricing" type="checkbox" ${provider.syncPricing ? "checked" : ""} />
+                </label>
+                <label class="field toggle-field">
+                  <span>Fallback scraping</span>
+                  <input data-provider="${escapeHtml(provider.key)}" data-field="allowScrapingFallback" type="checkbox" ${provider.allowScrapingFallback ? "checked" : ""} />
+                </label>
+                <label class="field toggle-field">
+                  <span>Bloquear IA externa</span>
+                  <input data-provider="${escapeHtml(provider.key)}" data-field="blockExternalAiLookup" type="checkbox" ${provider.blockExternalAiLookup ? "checked" : ""} />
+                </label>
+              </div>
+              <label class="field">
+                <span>Notas</span>
+                <input data-provider="${escapeHtml(provider.key)}" data-field="notes" type="text" value="${escapeHtml(provider.notes)}" />
+              </label>
+            </div>
+          </section>
+        `,
+      )
+      .join("");
+  }
+
   function bindEvents() {
     elements.searchInput.addEventListener("input", (event) => {
       state.search = event.target.value.trim().toLowerCase();
@@ -718,6 +938,14 @@
 
     elements.copyCommands.addEventListener("click", () => {
       copyText(data.admin_commands.join("\n"), "Comandos");
+    });
+
+    elements.saveMarketplaceApis?.addEventListener("click", () => {
+      saveMarketplaceApiConfig();
+    });
+
+    elements.copyMarketplaceApis?.addEventListener("click", () => {
+      copyText(JSON.stringify(collectMarketplaceApiConfig(), null, 2), "JSON de integracoes");
     });
 
     elements.criticalModules.addEventListener("click", (event) => {
@@ -1571,6 +1799,7 @@
     renderFilterMeta(modules);
     renderCommands();
     renderExternalAccess();
+    renderMarketplaceIntegrations();
     renderModuleList(modules);
     renderDetail(modules);
     syncHash();

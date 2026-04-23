@@ -1,0 +1,25 @@
+{{- if .Values.worker.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "valley.fullname" . }}-worker
+spec:
+  replicas: {{ .Values.worker.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "valley.fullname" . }}-worker
+  template:
+    metadata:
+      labels:
+        app: {{ include "valley.fullname" . }}-worker
+    spec:
+      containers:
+        - name: worker
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          command: {{ toJson .Values.worker.command }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "valley.fullname" . }}-config
+            - secretRef:
+                name: {{ include "valley.fullname" . }}-secrets
+{{- end }}

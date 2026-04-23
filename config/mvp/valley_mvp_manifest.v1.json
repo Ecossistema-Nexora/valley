@@ -1,0 +1,264 @@
+{
+  "manifest_name": "VALLEY MVP Execution Manifest",
+  "version": "1.0.0",
+  "source_spec": "docs/specs/valley-mvp-execution-plan.md",
+  "execution_mode": "controlled_artifacts_only",
+  "objective": {
+    "summary": "Construir um MVP viavel focado em geracao de receita imediata, baixo custo operacional e validacao de fluxo financeiro e operacional.",
+    "central_principle": "O MVP nao e um produto completo. E uma maquina de transacao, identidade e estoque."
+  },
+  "included_modules": [
+    "PAY",
+    "PLUG",
+    "DOCS",
+    "BUSINESS",
+    "REPLY",
+    "STOCK",
+    "WMS",
+    "MARKETPLACE",
+    "ADVISOR",
+    "CHAT",
+    "AGENDA"
+  ],
+  "excluded_modules": [
+    "DELIVERY",
+    "FOOD",
+    "MOBILITY",
+    "SOCIAL",
+    "GAMING",
+    "IOT"
+  ],
+  "cross_cutting_capabilities": {
+    "unique_identity": {
+      "summary": "Frente transversal do MVP. Nao cria um novo modulo; usa o nucleo de identidade, seguranca e risco ja existentes.",
+      "components": [
+        {
+          "key": "face_id",
+          "label": "Face ID",
+          "delivery_mode": "schema_and_event_reuse",
+          "owners": [
+            "core_identity_wallets",
+            "SECURITY"
+          ],
+          "evidence_entities": [
+            "users",
+            "led_cards",
+            "security_biometric_credentials"
+          ],
+          "event_topics": [
+            "security.biometric.enrolled"
+          ],
+          "objective": "Biometria facial para reduzir fraude e habilitar trilhas sensiveis."
+        },
+        {
+          "key": "voice_id",
+          "label": "Voice ID",
+          "delivery_mode": "spec_first",
+          "owners": [
+            "core_identity_wallets",
+            "SECURITY",
+            "LEGAL"
+          ],
+          "evidence_entities": [
+            "users",
+            "led_cards"
+          ],
+          "event_topics": [],
+          "objective": "Validacao vocal para reforco de autenticacao e prova de aceite em operacoes sensiveis."
+        },
+        {
+          "key": "identity_score",
+          "label": "Identity Score",
+          "delivery_mode": "aggregated_risk_profile",
+          "owners": [
+            "core_identity_wallets",
+            "PAY",
+            "SECURITY",
+            "MARKETPLACE"
+          ],
+          "evidence_entities": [
+            "users.risk_level",
+            "security_signal_logs",
+            "sale_validation_events",
+            "transactions",
+            "merchant_storefronts"
+          ],
+          "event_topics": [
+            "pay.transaction.posted",
+            "marketplace.sale.validated",
+            "security.incident.closed"
+          ],
+          "objective": "Score de reputacao e antifraude para operacoes de pagamento, seller onboarding e aprovacoes de risco."
+        }
+      ]
+    }
+  },
+  "phases": [
+    {
+      "key": "phase_1_core_activation",
+      "label": "Fase 1 - Ativacao do Core",
+      "goal": "Fechar o nucleo financeiro e empresarial que gera monetizacao e trilha documental desde a primeira operacao.",
+      "modules": [
+        "PAY",
+        "PLUG",
+        "DOCS",
+        "BUSINESS",
+        "REPLY"
+      ],
+      "success_gates": [
+        "wallet, ledger e conciliacao validados",
+        "captura de pagamento e MDR modelados",
+        "documento e recibo com checksum rastreavel",
+        "empresa onboardada com rotina empresarial minima",
+        "ordem de servico e compras com fechamento fiscal ponta a ponta"
+      ]
+    },
+    {
+      "key": "phase_2_commerce",
+      "label": "Fase 2 - Comercio",
+      "goal": "Abrir a camada de catalogo, estoque e venda para gerar fluxo comercial sem CAPEX pesado.",
+      "modules": [
+        "STOCK",
+        "WMS",
+        "MARKETPLACE"
+      ],
+      "stock_marketplace_model": {
+        "reference_behavior": [
+          "Mercado Livre",
+          "AliExpress",
+          "Shopee"
+        ],
+        "valley_identity_rule": "Usar profundidade de catalogo, busca, ofertas, variacoes e seller score sem copiar identidade visual dos concorrentes.",
+        "visual_direction": "Night/Cosmic como base, Violet para compra, Cyan para confianca operacional e cards claros para produto.",
+        "must_have_surfaces": [
+          "busca principal",
+          "categorias",
+          "vitrine de ofertas",
+          "card de produto com selo Valley",
+          "seller score",
+          "variacoes de produto",
+          "checkout conectado a PAY e PLUG",
+          "comprovante e documento por DOCS"
+        ],
+        "admin_api_integrations": [
+          "Mercado Livre",
+          "Amazon",
+          "AliExpress",
+          "Alibaba",
+          "Magalu",
+          "CJDropshipping",
+          "Shopee"
+        ],
+        "admin_api_fields": [
+          "ambiente",
+          "regiao/site",
+          "modo de autenticacao",
+          "base URL",
+          "client/app key",
+          "referencia de segredo",
+          "access token ref",
+          "refresh token ref",
+          "seller/store ID",
+          "webhook URL",
+          "webhook secret ref",
+          "escopos",
+          "cadencia de sincronizacao",
+          "cache TTL",
+          "margem minima",
+          "rotinas ativas de catalogo, pedidos, estoque e precos",
+          "fallback scraping",
+          "bloqueio de IA externa"
+        ],
+        "dropshipping_production_blueprint": {
+          "spec_path": "docs/specs/valley-dropshipping-production-blueprint.md",
+          "supplier_apis": [
+            "AliExpress",
+            "Alibaba",
+            "CJDropshipping"
+          ],
+          "market_price_sources": [
+            "Mercado Livre",
+            "Amazon",
+            "Shopee",
+            "Magalu"
+          ],
+          "required_capabilities": [
+            "importacao de produtos",
+            "sincronizacao de estoque e custo",
+            "pedido automatico ao fornecedor",
+            "tracking persistido",
+            "consulta competitiva de preco",
+            "cache TTL de cotacoes",
+            "fallback scraping controlado",
+            "bloqueio de IA externa para consultas",
+            "reprecificacao automatica",
+            "pausa automatica sem margem ou estoque",
+            "decisao de pricing append-only"
+          ],
+          "database_migration": "database/postgres/033_v47_stock_dropshipping_production_blueprint.sql"
+        }
+      },
+      "success_gates": [
+        "catalogo sincronizado com margem controlada",
+        "estoque simplificado com enderecamento e variancia minima",
+        "checkout do marketplace alimentando PAY e PLUG",
+        "experiencia STOCK reconhecivel como Valley, mesmo com comportamento de grande marketplace"
+      ]
+    },
+    {
+      "key": "phase_3_identity",
+      "label": "Fase 3 - Identidade",
+      "goal": "Fechar autenticacao forte e perfil de risco operacional sem criar um modulo artificial novo.",
+      "modules": [],
+      "cross_cutting_capabilities": [
+        "face_id",
+        "voice_id",
+        "identity_score"
+      ],
+      "success_gates": [
+        "Face ID ancorado em SECURITY e core identity",
+        "Voice ID formalizado como frente spec-first",
+        "Identity Score agregado para antifraude e reputacao"
+      ]
+    },
+    {
+      "key": "phase_4_light_ai",
+      "label": "Fase 4 - IA Leve",
+      "goal": "Ativar Helena em modo utilitario, controlado por plano e com custo previsivel.",
+      "modules": [
+        "CHAT",
+        "ADVISOR",
+        "AGENDA"
+      ],
+      "success_gates": [
+        "chat com retention segura",
+        "advisor com consentimento e explainability minima",
+        "agenda com recorrencia e memoria util"
+      ],
+      "runtime_rules": [
+        "uso limitado por plano",
+        "processamento assincrono",
+        "foco em produtividade, nao volume"
+      ]
+    }
+  ],
+  "metrics": [
+    "volume transacional (TPV)",
+    "numero de empresas ativas",
+    "taxa de conversao marketplace",
+    "custo por transacao",
+    "fraude / chargeback"
+  ],
+  "golden_rules": [
+    "nao escalar logistica cedo",
+    "nao subsidiar operacao",
+    "separar taxa, processamento e logistica",
+    "limitar custo de IA",
+    "monetizar desde o primeiro usuario"
+  ],
+  "expected_result": [
+    "break-even antes de 100k usuarios",
+    "base solida para expansao modular",
+    "validacao real de modelo economico"
+  ]
+}

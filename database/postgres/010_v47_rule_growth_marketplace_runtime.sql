@@ -682,6 +682,14 @@ BEGIN
         END IF;
     END IF;
 
+    PERFORM assert_listing_competitiveness_10pct(
+        NEW.listing_id,
+        NEW.pricing_status,
+        NEW.minimum_price_brl,
+        NEW.last_market_reference_brl,
+        NEW.last_competitor_name
+    );
+
     RETURN NEW;
 END;
 $$;
@@ -705,7 +713,92 @@ BEGIN
 END;
 $$;
 
--- assert_listing_control_coherence garante que o controle de pricing pertence ao dono do listing.
+-- assert_listing_competitiveness_10pct impoe o filtro Helena/Stock:
+-- listing ativo ou competitivo precisa ficar ao menos 10% abaixo de Mercado Livre,
+-- Amazon ou Magalu, usando snapshots append-only ou a ultima referencia validada.
+CREATE OR REPLACE FUNCTION assert_listing_competitiveness_10pct(
+    control_listing_id UUID,
+    control_pricing_status listing_pricing_status_enum,
+    control_minimum_price_brl DECIMAL,
+    control_last_market_reference_brl DECIMAL,
+    control_last_competitor_name TEXT
+)
+RETURNS VOID
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    listing_status marketplace_listing_status_enum;
+    listing_price_brl DECIMAL(18,4);
+    benchmark_reference_brl DECIMAL(18,4);
+    benchmark_competitor_name TEXT;
+    normalized_last_competitor TEXT;
+    effective_valley_price_brl DECIMAL(18,4);
+    max_allowed_price_brl DECIMAL(18,4);
+BEGIN
+    SELECT
+        marketplace_listings.listing_status,
+        marketplace_listings.price_brl
+    INTO
+        listing_status,
+        listing_price_brl
+    FROM marketplace_listings
+    WHERE marketplace_listings.listing_id = control_listing_id;
+
+    IF listing_status <> 'ACTIVE'::marketplace_listing_status_enum
+       AND control_pricing_status <> 'COMPETITIVE'::listing_pricing_status_enum THEN
+        RETURN;
+    END IF;
+
+    SELECT
+        snapshot.competitor_name,
+        (snapshot.competitor_price_brl + snapshot.shipping_price_brl)::DECIMAL(18,4)
+    INTO
+        benchmark_competitor_name,
+        benchmark_reference_brl
+    FROM marketplace_competitor_snapshots AS snapshot
+    WHERE snapshot.listing_id = control_listing_id
+      AND upper(regexp_replace(snapshot.competitor_name, '[^A-Za-z0-9]+', '', 'g'))
+            IN ('MERCADOLIVRE', 'AMAZON', 'MAGALU')
+    ORDER BY
+        (snapshot.competitor_price_brl + snapshot.shipping_price_brl) ASC,
+        snapshot.captured_at DESC
+    LIMIT 1;
+
+    normalized_last_competitor := upper(
+        regexp_replace(COALESCE(control_last_competitor_name, ''), '[^A-Za-z0-9]+', '', 'g')
+    );
+
+    IF benchmark_reference_brl IS NULL
+       AND control_last_market_reference_brl IS NOT NULL
+       AND normalized_last_competitor IN ('MERCADOLIVRE', 'AMAZON', 'MAGALU') THEN
+        benchmark_reference_brl := control_last_market_reference_brl;
+        benchmark_competitor_name := control_last_competitor_name;
+    END IF;
+
+    IF benchmark_reference_brl IS NULL OR benchmark_reference_brl <= 0 THEN
+        RAISE EXCEPTION
+            'listing_id % precisa de referencia valida de Mercado Livre, Amazon ou Magalu para ficar ativo/competitivo',
+            control_listing_id;
+    END IF;
+
+    effective_valley_price_brl := GREATEST(
+        listing_price_brl,
+        COALESCE(control_minimum_price_brl, 0.0000)
+    );
+    max_allowed_price_brl := ROUND((benchmark_reference_brl * 0.9000)::NUMERIC, 4)::DECIMAL(18,4);
+
+    IF effective_valley_price_brl > max_allowed_price_brl THEN
+        RAISE EXCEPTION
+            'listing_id % precisa estar 10%% abaixo de %. Preco efetivo %, limite %',
+            control_listing_id,
+            benchmark_competitor_name,
+            effective_valley_price_brl,
+            max_allowed_price_brl;
+    END IF;
+END;
+$$;
+
+-- assert_listing_control_coherence garante dono, binding e competitividade do controle.
 CREATE OR REPLACE FUNCTION assert_listing_control_coherence()
 RETURNS TRIGGER
 LANGUAGE plpgsql
@@ -786,7 +879,7 @@ DECLARE
     zone_storefront_id UUID;
     zone_merchant_id UUID;
     wallet_owner_id UUID;
-    reward_type reward_type_enum;
+    campaign_reward_type reward_type_enum;
 BEGIN
     SELECT user_id
     INTO wallet_owner_id
@@ -834,12 +927,12 @@ BEGIN
     END IF;
 
     IF NEW.campaign_id IS NOT NULL THEN
-        SELECT reward_type
-        INTO reward_type
+        SELECT gamification_campaigns.reward_type
+        INTO campaign_reward_type
         FROM gamification_campaigns
         WHERE campaign_id = NEW.campaign_id;
 
-        IF reward_type <> 'PEPITA' THEN
+        IF campaign_reward_type <> 'PEPITA' THEN
             RAISE EXCEPTION 'campaign_id % precisa ser uma gamification_campaign com reward_type PEPITA', NEW.campaign_id;
         END IF;
     END IF;
@@ -993,7 +1086,7 @@ LANGUAGE plpgsql
 AS $$
 DECLARE
     account_user_id UUID;
-    account_status pepita_account_status_enum;
+    pepita_status pepita_account_status_enum;
     current_balance DECIMAL(18,4);
     new_balance DECIMAL(18,4);
     event_candidate_id UUID;
@@ -1003,11 +1096,11 @@ DECLARE
 BEGIN
     SELECT
         user_id,
-        account_status,
+        pepita_accounts.account_status,
         current_balance_brl
     INTO
         account_user_id,
-        account_status,
+        pepita_status,
         current_balance
     FROM pepita_accounts
     WHERE pepita_account_id = NEW.pepita_account_id
@@ -1021,7 +1114,7 @@ BEGIN
         RAISE EXCEPTION 'pepita_account_id % nao pertence ao user_id %', NEW.pepita_account_id, NEW.user_id;
     END IF;
 
-    IF account_status <> 'ACTIVE' THEN
+    IF pepita_status <> 'ACTIVE' THEN
         RAISE EXCEPTION 'pepita_account_id % nao esta ACTIVE para novos lancamentos', NEW.pepita_account_id;
     END IF;
 
@@ -1313,7 +1406,7 @@ INSERT INTO business_rule_definitions (
     rule_status,
     constraints_json
 ) VALUES
-    ('BR-MKT-COMP-002', 'MARKETPLACE', 'Competitividade do listing', 'Listing de isca so pode ficar ativo quando estiver abaixo do preco de mercado e ainda mantiver margem positiva.', 'HIGH', 'ACTIVE', '{"must_beat_market":true,"require_positive_margin":true,"auto_pause_when_not_competitive":true}'::JSONB),
+    ('BR-MKT-COMP-002', 'MARKETPLACE', 'Competitividade do listing', 'Listing de isca so pode ficar ativo quando estiver pelo menos 10 por cento abaixo de Mercado Livre, Amazon ou Magalu e ainda mantiver margem positiva.', 'HIGH', 'ACTIVE', '{"must_beat_market":true,"required_discount_rate":0.10,"benchmark_competitors":["Mercado Livre","Amazon","Magalu"],"require_positive_margin":true,"auto_pause_when_not_competitive":true}'::JSONB),
     ('BR-MKT-PEP-002', 'MARKETPLACE', 'Cap de Pepita por lucro liquido', 'Pepita concedida em venda validada nao pode ultrapassar 50 por cento do lucro liquido de referencia.', 'CRITICAL', 'ACTIVE', '{"max_profit_share":0.50,"applies_to":["pepita_grant","gold_conversion"]}'::JSONB),
     ('BR-ADS-GOLD-002', 'ADS', 'GOLD so liquida em venda validada', 'Campanha GOLD so pode virar receita Valley e Pepita quando a venda do marketplace ou do PDV fisico for validada.', 'CRITICAL', 'ACTIVE', '{"requires_validated_sale":true,"accepted_sources":["MARKETPLACE_ORDER","PHYSICAL_POS","GPS_CHECKIN","MANUAL_REVIEW"]}'::JSONB)
 ON CONFLICT (rule_code) DO UPDATE SET
@@ -1367,6 +1460,8 @@ COMMENT ON TYPE service_zone_shape_enum IS 'Formato da zona de atendimento: raio
 COMMENT ON TYPE sale_validation_source_enum IS 'Origem da prova de venda usada por GOLD e Pepitas.';
 COMMENT ON TYPE sale_validation_status_enum IS 'Resultado da validacao comercial ou fisica da venda.';
 COMMENT ON TYPE listing_pricing_status_enum IS 'Status de competitividade do listing perante o mercado.';
+COMMENT ON FUNCTION assert_listing_competitiveness_10pct(UUID, listing_pricing_status_enum, DECIMAL, DECIMAL, TEXT) IS
+    'Valida que listing ativo ou competitivo esta ao menos 10 por cento abaixo de Mercado Livre, Amazon ou Magalu.';
 
 COMMENT ON TABLE rule_runtime_bindings IS 'Bindings do Rule Engine que acoplam uma versao de regra ao runtime do modulo.';
 COMMENT ON TABLE rule_execution_events IS 'Trilha append-only das avaliacoes do Rule Engine.';

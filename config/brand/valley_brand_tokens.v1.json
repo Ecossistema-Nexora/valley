@@ -1,0 +1,65 @@
+{
+  "brand": "Valley",
+  "version": "1.0.0",
+  "source_logo": "assets/brand/logo-valley-official.png",
+  "visual_identity": {
+    "positioning": "Super app modular, financeiro, operacional e inteligente.",
+    "tone": [
+      "premium",
+      "tecnologico",
+      "noturno",
+      "confiavel",
+      "modular"
+    ],
+    "avoid": [
+      "interface monocromatica roxa",
+      "gradiente generico sem produto",
+      "cards aninhados sem funcao",
+      "texto pequeno sobre imagem sem contraste",
+      "visual infantil para operacoes financeiras"
+    ]
+  },
+  "colors": {
+    "night": "#07051F",
+    "cosmic": "#151047",
+    "violet": "#6F2CFF",
+    "lilac": "#BB8CFF",
+    "cyan": "#20C8F3",
+    "snow": "#FFFFFF",
+    "ink": "#121827",
+    "muted": "#5A657A",
+    "success": "#22B86B",
+    "warning": "#F2A93B",
+    "danger": "#E45B6A"
+  },
+  "radii": {
+    "app_icon": 22,
+    "card": 8,
+    "panel": 18,
+    "control": 12
+  },
+  "typography": {
+    "primary_stack": [
+      "Aptos",
+      "Inter",
+      "SF Pro Display",
+      "Roboto"
+    ],
+    "letter_spacing": 0,
+    "headline_weight": 800,
+    "body_weight": 400
+  },
+  "flutter": {
+    "theme_file": "frontend/flutter/lib/valley_brand_theme.dart",
+    "asset_declaration": "assets/brand/logo-valley-official.png",
+    "app_surfaces": [
+      "splash",
+      "login",
+      "wallet",
+      "marketplace",
+      "business",
+      "helena",
+      "identity"
+    ]
+  }
+}

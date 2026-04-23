@@ -1,0 +1,22 @@
+{{- if .Values.cron.enabled }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "valley.fullname" . }}-pricing
+spec:
+  schedule: {{ .Values.cron.schedule | quote }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: pricing
+              image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+              command: {{ toJson .Values.cron.command }}
+              envFrom:
+                - configMapRef:
+                    name: {{ include "valley.fullname" . }}-config
+                - secretRef:
+                    name: {{ include "valley.fullname" . }}-secrets
+{{- end }}

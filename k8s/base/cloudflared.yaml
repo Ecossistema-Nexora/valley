@@ -1,0 +1,20 @@
+# Mantido apenas como referência legada. Nesta topologia o acesso público principal é via ALB.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloudflared-reference
+  namespace: valley
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      app: cloudflared-reference
+  template:
+    metadata:
+      labels:
+        app: cloudflared-reference
+    spec:
+      containers:
+        - name: cloudflared
+          image: cloudflare/cloudflared:latest
+          args: ["tunnel", "--help"]

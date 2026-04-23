@@ -1,0 +1,10 @@
+aws_region       = "us-east-1"
+project_name     = "valley"
+environment      = "prod"
+vpc_cidr         = "10.40.0.0/16"
+public_subnets   = ["10.40.0.0/20", "10.40.16.0/20"]
+private_subnets  = ["10.40.32.0/20", "10.40.48.0/20"]
+database_subnets = ["10.40.64.0/24", "10.40.65.0/24"]
+db_username      = "valley"
+db_password      = "change-me"
+route53_zone_name = "example.com"

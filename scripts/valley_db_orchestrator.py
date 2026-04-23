@@ -99,6 +99,13 @@ TOOLS_BIN_DIR = ROOT / 'tools' / 'bin'
 POSTGRES_SEED_PATHS = [
     ROOT / 'database' / 'seeds' / 'postgres' / '001_v47_expansion_tourism_bio_energy_seed.sql',
     ROOT / 'database' / 'seeds' / 'postgres' / '002_v47_priority_domain_delivery_packages_seed.sql',
+    PRIORITY_DOMAIN_SQL_DIR / 'platform_developer' / 'operational_seed.sql',
+    PRIORITY_DOMAIN_SQL_DIR / 'logistics_erp_operations' / 'operational_seed.sql',
+    PRIORITY_DOMAIN_SQL_DIR / 'ai_memory_operations' / 'operational_seed.sql',
+    PRIORITY_DOMAIN_SQL_DIR / 'media_social_growth' / 'operational_seed.sql',
+    PRIORITY_DOMAIN_SQL_DIR / 'frontier_iot_energy' / 'operational_seed.sql',
+    PRIORITY_DOMAIN_SQL_DIR / 'city_mobility_security' / 'operational_seed.sql',
+    PRIORITY_DOMAIN_SQL_DIR / 'commerce_fintech_assets' / 'operational_seed.sql',
 ]
 
 # MONGODB_SEED_PATHS guarda seeds operacionais MongoDB fora da esteira de migrations.
@@ -139,6 +146,180 @@ SEED_IDS = {
     'bio_impact_log_id': '40000000-0000-4000-8000-000000000007',
     'energy_meter_stream_id': '40000000-0000-4000-8000-000000000008',
     'home_household_id': '50000000-0000-4000-8000-000000000001',
+    'platform_owner_user_id': '10000000-0000-4000-8000-000000000101',
+    'platform_counterparty_user_id': '10000000-0000-4000-8000-000000000102',
+    'platform_integrator_user_id': '10000000-0000-4000-8000-000000000103',
+    'logistics_business_user_id': '10000000-0000-4000-8000-000000000201',
+    'logistics_buyer_user_id': '10000000-0000-4000-8000-000000000202',
+    'logistics_supplier_user_id': '10000000-0000-4000-8000-000000000203',
+    'logistics_customer_user_id': '10000000-0000-4000-8000-000000000204',
+    'logistics_rider_user_id': '10000000-0000-4000-8000-000000000205',
+    'platform_owner_wallet_id': '20000000-0000-4000-8000-000000000101',
+    'platform_counterparty_wallet_id': '20000000-0000-4000-8000-000000000102',
+    'logistics_business_wallet_id': '20000000-0000-4000-8000-000000000201',
+    'logistics_supplier_wallet_id': '20000000-0000-4000-8000-000000000202',
+    'logistics_customer_wallet_id': '20000000-0000-4000-8000-000000000203',
+    'logistics_rider_wallet_id': '20000000-0000-4000-8000-000000000204',
+    'platform_transaction_id': '30000000-0000-4000-8000-000000000301',
+    'platform_document_id': '30000000-0000-4000-8000-000000000302',
+    'platform_legal_contract_id': '30000000-0000-4000-8000-000000000303',
+    'platform_receipt_id': '30000000-0000-4000-8000-000000000304',
+    'platform_template_contract_id': '30000000-0000-4000-8000-000000000305',
+    'platform_template_version_id': '30000000-0000-4000-8000-000000000306',
+    'platform_checksum_event_id': '30000000-0000-4000-8000-000000000307',
+    'platform_receipt_version_id': '30000000-0000-4000-8000-000000000308',
+    'platform_api_client_id': '30000000-0000-4000-8000-000000000309',
+    'platform_old_credential_id': '30000000-0000-4000-8000-000000000310',
+    'platform_new_credential_id': '30000000-0000-4000-8000-000000000311',
+    'platform_api_client_limit_id': '30000000-0000-4000-8000-000000000312',
+    'platform_webhook_subscription_id': '30000000-0000-4000-8000-000000000313',
+    'platform_original_delivery_attempt_id': '30000000-0000-4000-8000-000000000314',
+    'platform_replay_delivery_attempt_id': '30000000-0000-4000-8000-000000000315',
+    'platform_rotation_event_id': '30000000-0000-4000-8000-000000000316',
+    'platform_webhook_replay_request_id': '30000000-0000-4000-8000-000000000317',
+    'logistics_business_unit_id': '30000000-0000-4000-8000-000000000401',
+    'logistics_fiscal_closure_id': '30000000-0000-4000-8000-000000000402',
+    'logistics_approval_policy_id': '30000000-0000-4000-8000-000000000403',
+    'logistics_supplier_id': '30000000-0000-4000-8000-000000000404',
+    'logistics_warehouse_id': '30000000-0000-4000-8000-000000000405',
+    'logistics_inventory_item_id': '30000000-0000-4000-8000-000000000406',
+    'logistics_inventory_lot_id': '30000000-0000-4000-8000-000000000407',
+    'logistics_procurement_order_id': '30000000-0000-4000-8000-000000000408',
+    'logistics_procurement_approval_event_id': '30000000-0000-4000-8000-000000000409',
+    'logistics_margin_policy_id': '30000000-0000-4000-8000-000000000410',
+    'logistics_order_payment_transaction_id': '30000000-0000-4000-8000-000000000411',
+    'logistics_supplier_settlement_transaction_id': '30000000-0000-4000-8000-000000000412',
+    'logistics_supplier_reconciliation_id': '30000000-0000-4000-8000-000000000413',
+    'logistics_stockout_case_id': '30000000-0000-4000-8000-000000000414',
+    'logistics_food_store_contract_id': '30000000-0000-4000-8000-000000000415',
+    'logistics_food_menu_item_id': '30000000-0000-4000-8000-000000000416',
+    'logistics_warehouse_location_id': '30000000-0000-4000-8000-000000000417',
+    'logistics_status_mapping_id': '30000000-0000-4000-8000-000000000418',
+    'logistics_proof_document_id': '30000000-0000-4000-8000-000000000419',
+    'logistics_food_order_id': '30000000-0000-4000-8000-000000000420',
+    'logistics_cycle_count_id': '30000000-0000-4000-8000-000000000421',
+    'logistics_inventory_movement_id': '30000000-0000-4000-8000-000000000422',
+    'logistics_variance_adjustment_id': '30000000-0000-4000-8000-000000000423',
+    'logistics_temperature_incident_id': '30000000-0000-4000-8000-000000000424',
+    'logistics_delivery_policy_id': '30000000-0000-4000-8000-000000000425',
+    'logistics_shipment_id': '30000000-0000-4000-8000-000000000426',
+    'logistics_shipment_event_id': '30000000-0000-4000-8000-000000000427',
+    'logistics_delivery_proof_media_id': '30000000-0000-4000-8000-000000000428',
+    'logistics_business_invoice_id': '30000000-0000-4000-8000-000000000429',
+    'logistics_business_payroll_id': '30000000-0000-4000-8000-000000000430',
+    'logistics_vehicle_profile_id': '30000000-0000-4000-8000-000000000431',
+    'logistics_move_order_id': '30000000-0000-4000-8000-000000000432',
+    'logistics_mobility_trip_id': '30000000-0000-4000-8000-000000000433',
+    'logistics_fleet_cost_entry_id': '30000000-0000-4000-8000-000000000434',
+    'city_owner_user_id': '10000000-0000-4000-8000-000000000301',
+    'city_citizen_user_id': '10000000-0000-4000-8000-000000000302',
+    'city_operator_user_id': '10000000-0000-4000-8000-000000000303',
+    'city_guide_user_id': '10000000-0000-4000-8000-000000000304',
+    'city_owner_wallet_id': '20000000-0000-4000-8000-000000000301',
+    'city_citizen_wallet_id': '20000000-0000-4000-8000-000000000302',
+    'city_contract_document_id': '30000000-0000-4000-8000-000000000501',
+    'city_incident_document_id': '30000000-0000-4000-8000-000000000502',
+    'city_gov_document_id': '30000000-0000-4000-8000-000000000503',
+    'city_legal_contract_id': '30000000-0000-4000-8000-000000000504',
+    'city_contract_owner_party_id': '30000000-0000-4000-8000-000000000505',
+    'city_contract_counterparty_party_id': '30000000-0000-4000-8000-000000000506',
+    'city_signature_id': '30000000-0000-4000-8000-000000000507',
+    'city_fallback_pin_id': '30000000-0000-4000-8000-000000000508',
+    'city_dispute_id': '30000000-0000-4000-8000-000000000509',
+    'city_contract_audit_event_id': '30000000-0000-4000-8000-000000000510',
+    'city_dispute_audit_event_id': '30000000-0000-4000-8000-000000000511',
+    'city_event_program_id': '30000000-0000-4000-8000-000000000512',
+    'city_ticket_type_id': '30000000-0000-4000-8000-000000000513',
+    'city_ticket_transaction_id': '30000000-0000-4000-8000-000000000514',
+    'city_ticket_instance_id': '30000000-0000-4000-8000-000000000515',
+    'city_ticket_ledger_id': '30000000-0000-4000-8000-000000000516',
+    'city_tourism_experience_id': '30000000-0000-4000-8000-000000000517',
+    'city_tourism_booking_id': '30000000-0000-4000-8000-000000000518',
+    'city_tourism_booking_event_id': '30000000-0000-4000-8000-000000000519',
+    'city_security_contact_id': '30000000-0000-4000-8000-000000000520',
+    'city_biometric_credential_id': '30000000-0000-4000-8000-000000000521',
+    'city_security_incident_id': '30000000-0000-4000-8000-000000000522',
+    'city_security_incident_event_id': '30000000-0000-4000-8000-000000000523',
+    'city_gov_service_id': '30000000-0000-4000-8000-000000000524',
+    'city_gov_fee_transaction_id': '30000000-0000-4000-8000-000000000525',
+    'city_gov_request_id': '30000000-0000-4000-8000-000000000526',
+    'city_gov_request_submitted_event_id': '30000000-0000-4000-8000-000000000527',
+    'city_gov_request_fulfilled_event_id': '30000000-0000-4000-8000-000000000528',
+    'city_mobility_benchmark_id': '30000000-0000-4000-8000-000000000529',
+    'city_mobility_route_id': '30000000-0000-4000-8000-000000000530',
+    'city_mobility_buffer_id': '30000000-0000-4000-8000-000000000531',
+    'ai_helena_user_id': '10000000-0000-4000-8000-000000000501',
+    'ai_customer_user_id': '10000000-0000-4000-8000-000000000502',
+    'ai_professional_user_id': '10000000-0000-4000-8000-000000000503',
+    'ai_customer_wallet_id': '20000000-0000-4000-8000-000000000501',
+    'ai_professional_wallet_id': '20000000-0000-4000-8000-000000000502',
+    'ai_financial_goal_id': '30000000-0000-4000-8000-000000000701',
+    'ai_consented_insight_id': '30000000-0000-4000-8000-000000000702',
+    'ai_pending_insight_id': '30000000-0000-4000-8000-000000000703',
+    'ai_conversation_id': '30000000-0000-4000-8000-000000000704',
+    'ai_message_1_id': '30000000-0000-4000-8000-000000000705',
+    'ai_message_2_id': '30000000-0000-4000-8000-000000000706',
+    'ai_message_3_id': '30000000-0000-4000-8000-000000000707',
+    'media_merchant_user_id': '10000000-0000-4000-8000-000000000601',
+    'media_creator_user_id': '10000000-0000-4000-8000-000000000602',
+    'media_buyer_user_id': '10000000-0000-4000-8000-000000000603',
+    'media_player_user_id': '10000000-0000-4000-8000-000000000604',
+    'media_merchant_wallet_id': '20000000-0000-4000-8000-000000000601',
+    'media_creator_wallet_id': '20000000-0000-4000-8000-000000000602',
+    'media_buyer_wallet_id': '20000000-0000-4000-8000-000000000603',
+    'media_player_wallet_id': '20000000-0000-4000-8000-000000000604',
+    'media_creator_upload_id': '30000000-0000-4000-8000-000000000801',
+    'media_order_id': '30000000-0000-4000-8000-000000000802',
+    'media_purchase_transaction_id': '30000000-0000-4000-8000-000000000803',
+    'media_creator_payout_transaction_id': '30000000-0000-4000-8000-000000000804',
+    'media_referral_id': '30000000-0000-4000-8000-000000000805',
+    'media_ads_campaign_id': '30000000-0000-4000-8000-000000000806',
+    'media_gold_campaign_id': '30000000-0000-4000-8000-000000000807',
+    'media_gold_campaign_event_id': '30000000-0000-4000-8000-000000000808',
+    'media_pepita_account_id': '30000000-0000-4000-8000-000000000809',
+    'media_pepita_ledger_id': '30000000-0000-4000-8000-000000000810',
+    'media_gaming_campaign_id': '30000000-0000-4000-8000-000000000811',
+    'media_points_ledger_id': '30000000-0000-4000-8000-000000000812',
+    'commerce_merchant_user_id': '10000000-0000-4000-8000-000000000401',
+    'commerce_customer_user_id': '10000000-0000-4000-8000-000000000402',
+    'commerce_affiliate_user_id': '10000000-0000-4000-8000-000000000403',
+    'commerce_merchant_wallet_id': '20000000-0000-4000-8000-000000000401',
+    'commerce_customer_wallet_id': '20000000-0000-4000-8000-000000000402',
+    'commerce_inventory_item_id': '30000000-0000-4000-8000-000000000601',
+    'commerce_storefront_id': '30000000-0000-4000-8000-000000000602',
+    'commerce_listing_id': '30000000-0000-4000-8000-000000000603',
+    'commerce_order_id': '30000000-0000-4000-8000-000000000604',
+    'commerce_purchase_transaction_id': '30000000-0000-4000-8000-000000000605',
+    'commerce_sale_validation_id': '30000000-0000-4000-8000-000000000606',
+    'commerce_plug_transaction_id': '30000000-0000-4000-8000-000000000607',
+    'commerce_plug_ledger_transaction_id': '30000000-0000-4000-8000-000000000608',
+    'commerce_referral_id': '30000000-0000-4000-8000-000000000609',
+    'commerce_financial_goal_id': '30000000-0000-4000-8000-000000000610',
+    'commerce_collection_document_id': '30000000-0000-4000-8000-000000000611',
+    'commerce_collection_id': '30000000-0000-4000-8000-000000000612',
+    'commerce_digital_asset_id': '30000000-0000-4000-8000-000000000613',
+    'commerce_digital_event_id': '30000000-0000-4000-8000-000000000614',
+    'commerce_property_document_id': '30000000-0000-4000-8000-000000000615',
+    'commerce_property_contract_id': '30000000-0000-4000-8000-000000000616',
+    'commerce_property_id': '30000000-0000-4000-8000-000000000617',
+    'commerce_real_estate_listing_id': '30000000-0000-4000-8000-000000000618',
+    'commerce_real_estate_transaction_id': '30000000-0000-4000-8000-000000000619',
+    'commerce_real_estate_deal_id': '30000000-0000-4000-8000-000000000620',
+    'commerce_insurance_terms_document_id': '30000000-0000-4000-8000-000000000621',
+    'commerce_insurance_contract_id': '30000000-0000-4000-8000-000000000622',
+    'commerce_insurance_product_id': '30000000-0000-4000-8000-000000000623',
+    'commerce_insurance_premium_transaction_id': '30000000-0000-4000-8000-000000000624',
+    'commerce_insurance_policy_id': '30000000-0000-4000-8000-000000000625',
+    'commerce_insurance_payout_transaction_id': '30000000-0000-4000-8000-000000000626',
+    'commerce_insurance_claim_id': '30000000-0000-4000-8000-000000000627',
+    'commerce_insurance_claim_event_id': '30000000-0000-4000-8000-000000000628',
+    'commerce_insurance_claim_document_id': '30000000-0000-4000-8000-000000000629',
+    'dropshipping_mercado_livre_provider_id': '30000000-0000-4000-8000-000000000901',
+    'dropshipping_aliexpress_provider_id': '30000000-0000-4000-8000-000000000903',
+    'dropshipping_product_source_id': '30000000-0000-4000-8000-000000000908',
+    'dropshipping_market_price_snapshot_id': '30000000-0000-4000-8000-000000000909',
+    'dropshipping_pricing_decision_id': '30000000-0000-4000-8000-000000000910',
+    'dropshipping_reprice_job_id': '30000000-0000-4000-8000-000000000911',
 }
 
 
@@ -424,7 +605,7 @@ def validate_javascript_file(path: Path) -> list[CheckResult]:
         return [CheckResult(f'{relative}.node_check', False, 'node nao encontrado para validar sintaxe JS.')]
 
     # Executa node --check para validar sintaxe sem rodar contra banco.
-    result = run_command([node_path, '--check', str(path)], timeout_seconds=20)
+    result = run_command([node_path, '--check', str(path)], timeout_seconds=120)
 
     # ok depende do exit code zero.
     ok = result.returncode == 0
@@ -1142,6 +1323,15 @@ def postgres_provides_exist(item: dict, use_compose: bool) -> bool:
         # provide_text normaliza o item do manifesto para parse simples.
         provide_text = str(value)
 
+        # relation:schema.name valida tabelas ou views fora do schema public.
+        if provide_text.startswith('relation:'):
+            relation_name = provide_text.split(':', 1)[1]
+            if '.' not in relation_name:
+                relation_name = 'public.' + relation_name
+
+            checks.append(f'to_regclass({sql_literal(relation_name)}) IS NOT NULL')
+            continue
+
         # column:public.table.column ou column:table.column valida evolucao por coluna.
         if provide_text.startswith('column:'):
             # path remove o prefixo tecnico.
@@ -1163,6 +1353,17 @@ def postgres_provides_exist(item: dict, use_compose: bool) -> bool:
                 f'WHERE table_schema = {sql_literal(schema_name)} '
                 f'AND table_name = {sql_literal(table_name)} '
                 f'AND column_name = {sql_literal(column_name)}'
+                ')'
+            )
+            continue
+
+        # module_catalog:CODE valida linhas sem exigir uma migration ledger separada.
+        if provide_text.startswith('module_catalog:'):
+            module_code = provide_text.split(':', 1)[1]
+            checks.append(
+                'EXISTS ('
+                'SELECT 1 FROM module_catalog '
+                f'WHERE module_code = {sql_literal(module_code)}'
                 ')'
             )
             continue
@@ -1498,6 +1699,51 @@ def apply_seed_mongo(use_compose: bool = False) -> int:
     return 0
 
 
+def run_postgres_smoke_checks(check_group: str, checks: dict[str, str], use_compose: bool = False) -> int:
+    """Executa um conjunto nomeado de smoke checks booleanos em PostgreSQL."""
+
+    # query concatena checks em uma grade simples nome|true/false.
+    query = ' UNION ALL '.join(
+        f"SELECT {sql_literal(name)} AS name, CASE WHEN {expression} THEN 'true' ELSE 'false' END AS ok"
+        for name, expression in checks.items()
+    ) + ';'
+
+    # command monta psql local ou compose.
+    command = psql_query_command(use_compose, query)
+
+    # Sem comando nao ha como consultar.
+    if command is None:
+        print(f'psql nao disponivel para smoke-postgres:{check_group}.')
+        return 2
+
+    # Executa consulta de smoke.
+    result = run_command(command, timeout_seconds=30)
+
+    # Em falha, imprime saida bruta.
+    if result.returncode != 0:
+        print(result.stderr or result.stdout)
+        return result.returncode
+
+    # all_ok acumula o resultado geral.
+    all_ok = True
+
+    # Percorre linhas nome|true ou nome|false.
+    for raw_line in result.stdout.splitlines():
+        # Ignora linhas vazias.
+        if not raw_line.strip() or '|' not in raw_line:
+            continue
+
+        # name e ok_text representam o status do check.
+        name, ok_text = raw_line.split('|', 1)
+        ok = ok_text.strip() == 'true'
+        all_ok = all_ok and ok
+        status = 'OK' if ok else 'PENDENTE'
+        print(f'{status} smoke.postgres.{check_group}.{name}: {ok_text.strip()}')
+
+    # Retorna sucesso apenas quando tudo passou.
+    return 0 if all_ok else 1
+
+
 def smoke_postgres_expansion(use_compose: bool = False) -> int:
     """Executa smoke checks nos seeds e FKs do bloco expansion em PostgreSQL."""
 
@@ -1559,46 +1805,335 @@ def smoke_postgres_expansion(use_compose: bool = False) -> int:
         ),
     }
 
-    # query concatena checks em uma grade simples nome|true/false.
-    query = ' UNION ALL '.join(
-        f"SELECT {sql_literal(name)} AS name, CASE WHEN {expression} THEN 'true' ELSE 'false' END AS ok"
-        for name, expression in checks.items()
-    ) + ';'
+    # Executa a grade expansion em um helper comum.
+    return run_postgres_smoke_checks('expansion', checks, use_compose)
 
-    # command monta psql local ou compose.
-    command = psql_query_command(use_compose, query)
 
-    # Sem comando nao ha como consultar.
-    if command is None:
-        print('psql nao disponivel para smoke-postgres.')
-        return 2
+def smoke_postgres_platform_developer(use_compose: bool = False) -> int:
+    """Executa smoke checks do seed operacional do dominio platform_developer."""
 
-    # Executa consulta de smoke.
-    result = run_command(command, timeout_seconds=30)
+    # ids deixa a montagem das consultas mais legivel.
+    ids = SEED_IDS
 
-    # Em falha, imprime saida bruta.
-    if result.returncode != 0:
-        print(result.stderr or result.stdout)
-        return result.returncode
+    # checks valida encadeamentos reais de docs e tech.
+    checks = {
+        'docs_template_chain': (
+            f"EXISTS (SELECT 1 FROM docs_template_contracts contract "
+            f"JOIN docs_template_versions version_row "
+            f"  ON version_row.template_contract_id = contract.template_contract_id "
+            f"JOIN docs_document_checksum_events checksum_row "
+            f"  ON checksum_row.template_version_id = version_row.template_version_id "
+            f"JOIN docs_receipt_versions receipt_version "
+            f"  ON receipt_version.checksum_event_id = checksum_row.checksum_event_id "
+            f"WHERE contract.template_contract_id = {sql_literal(ids['platform_template_contract_id'])} "
+            f"  AND version_row.template_version_id = {sql_literal(ids['platform_template_version_id'])} "
+            f"  AND checksum_row.checksum_event_id = {sql_literal(ids['platform_checksum_event_id'])} "
+            f"  AND receipt_version.receipt_version_id = {sql_literal(ids['platform_receipt_version_id'])})"
+        ),
+        'docs_templates_view': (
+            f"EXISTS (SELECT 1 FROM v_platform_developer_docs_templates "
+            f"WHERE template_contract_id = {sql_literal(ids['platform_template_contract_id'])} "
+            f"AND published_versions = 1)"
+        ),
+        'tech_rotation_chain': (
+            f"EXISTS (SELECT 1 FROM tech_credential_rotation_events rotation_row "
+            f"JOIN tech_api_credentials previous_row "
+            f"  ON previous_row.api_credential_id = rotation_row.previous_credential_id "
+            f"JOIN tech_api_credentials new_row "
+            f"  ON new_row.api_credential_id = rotation_row.new_credential_id "
+            f"JOIN tech_client_module_limits limit_row "
+            f"  ON limit_row.api_client_id = rotation_row.api_client_id "
+            f"WHERE rotation_row.credential_rotation_event_id = {sql_literal(ids['platform_rotation_event_id'])} "
+            f"  AND previous_row.api_credential_id = {sql_literal(ids['platform_old_credential_id'])} "
+            f"  AND new_row.api_credential_id = {sql_literal(ids['platform_new_credential_id'])} "
+            f"  AND limit_row.api_client_limit_id = {sql_literal(ids['platform_api_client_limit_id'])})"
+        ),
+        'tech_webhook_replay_queue_view': (
+            f"EXISTS (SELECT 1 FROM v_platform_developer_webhook_replay_queue "
+            f"WHERE webhook_replay_request_id = {sql_literal(ids['platform_webhook_replay_request_id'])} "
+            f"AND original_delivery_status = 'FAILED'::webhook_delivery_status_enum "
+            f"AND replay_status = 'REPLAYED'::tech_webhook_replay_status_enum)"
+        ),
+    }
 
-    # all_ok acumula o resultado geral.
-    all_ok = True
+    # Executa a grade do dominio.
+    return run_postgres_smoke_checks('platform_developer', checks, use_compose)
 
-    # Percorre linhas nome|true ou nome|false.
-    for raw_line in result.stdout.splitlines():
-        # Ignora linhas vazias.
-        if not raw_line.strip() or '|' not in raw_line:
-            continue
 
-        # name e ok_text representam o status do check.
-        name, ok_text = raw_line.split('|', 1)
-        ok = ok_text.strip() == 'true'
-        all_ok = all_ok and ok
-        status = 'OK' if ok else 'PENDENTE'
-        print(f'{status} smoke.postgres.{name}: {ok_text.strip()}')
+def smoke_postgres_logistics_erp_operations(use_compose: bool = False) -> int:
+    """Executa smoke checks do seed operacional do dominio logistics_erp_operations."""
 
-    # Retorna sucesso apenas quando tudo passou.
-    return 0 if all_ok else 1
+    # ids deixa a montagem das consultas mais legivel.
+    ids = SEED_IDS
+
+    # checks valida procurement, business, fulfillment, WMS e frota.
+    checks = {
+        'business_finance_chain': (
+            f"EXISTS (SELECT 1 FROM business_invoices invoice_row "
+            f"JOIN business_payrolls payroll_row "
+            f"  ON payroll_row.business_unit_id = invoice_row.business_unit_id "
+            f"JOIN business_fiscal_closures closure_row "
+            f"  ON closure_row.business_unit_id = invoice_row.business_unit_id "
+            f"WHERE invoice_row.invoice_id = {sql_literal(ids['logistics_business_invoice_id'])} "
+            f"  AND payroll_row.payroll_id = {sql_literal(ids['logistics_business_payroll_id'])} "
+            f"  AND closure_row.fiscal_closure_id = {sql_literal(ids['logistics_fiscal_closure_id'])})"
+        ),
+        'business_units_view': (
+            f"EXISTS (SELECT 1 FROM v_logistics_erp_business_units "
+            f"WHERE business_unit_id = {sql_literal(ids['logistics_business_unit_id'])} "
+            f"AND unit_status = 'ACTIVE'::business_unit_status_enum)"
+        ),
+        'procurement_controls_view': (
+            f"EXISTS (SELECT 1 FROM v_logistics_erp_procurement_controls "
+            f"WHERE procurement_order_id = {sql_literal(ids['logistics_procurement_order_id'])} "
+            f"AND approval_events >= 1 "
+            f"AND approval_policy_id = {sql_literal(ids['logistics_approval_policy_id'])})"
+        ),
+        'stock_wms_chain': (
+            f"EXISTS (SELECT 1 FROM inventory_lots lot_row "
+            f"JOIN warehouse_locations location_row "
+            f"  ON location_row.warehouse_location_id = lot_row.warehouse_location_id "
+            f"JOIN warehouse_cycle_counts cycle_row "
+            f"  ON cycle_row.item_id = lot_row.item_id "
+            f"JOIN warehouse_variance_adjustments adjustment_row "
+            f"  ON adjustment_row.cycle_count_id = cycle_row.cycle_count_id "
+            f"JOIN warehouse_temperature_incidents temp_row "
+            f"  ON temp_row.warehouse_location_id = location_row.warehouse_location_id "
+            f"JOIN inventory_stockout_cases stockout_row "
+            f"  ON stockout_row.item_id = lot_row.item_id "
+            f"WHERE lot_row.inventory_lot_id = {sql_literal(ids['logistics_inventory_lot_id'])} "
+            f"  AND location_row.warehouse_location_id = {sql_literal(ids['logistics_warehouse_location_id'])} "
+            f"  AND adjustment_row.variance_adjustment_id = {sql_literal(ids['logistics_variance_adjustment_id'])} "
+            f"  AND temp_row.temperature_incident_id = {sql_literal(ids['logistics_temperature_incident_id'])} "
+            f"  AND stockout_row.stockout_case_id = {sql_literal(ids['logistics_stockout_case_id'])})"
+        ),
+        'fulfillment_ops_view': (
+            f"EXISTS (SELECT 1 FROM v_logistics_erp_fulfillment_ops "
+            f"WHERE shipment_id = {sql_literal(ids['logistics_shipment_id'])} "
+            f"AND delivery_policy_id = {sql_literal(ids['logistics_delivery_policy_id'])} "
+            f"AND food_store_name = 'Valley Kitchen Paulista')"
+        ),
+        'status_mapping_seed': (
+            f"EXISTS (SELECT 1 FROM logistics_status_mappings "
+            f"WHERE status_mapping_id = {sql_literal(ids['logistics_status_mapping_id'])} "
+            f"AND canonical_status = 'IN_TRANSIT'::logistics_canonical_status_enum)"
+        ),
+        'fleet_trip_chain': (
+            f"EXISTS (SELECT 1 FROM mobility_trips trip_row "
+            f"JOIN fleet_vehicle_operating_profiles profile_row "
+            f"  ON profile_row.vehicle_operating_profile_id = trip_row.vehicle_operating_profile_id "
+            f"JOIN fleet_cost_entries cost_row "
+            f"  ON cost_row.vehicle_operating_profile_id = profile_row.vehicle_operating_profile_id "
+            f"WHERE trip_row.trip_id = {sql_literal(ids['logistics_mobility_trip_id'])} "
+            f"  AND profile_row.vehicle_operating_profile_id = {sql_literal(ids['logistics_vehicle_profile_id'])} "
+            f"  AND cost_row.fleet_cost_entry_id = {sql_literal(ids['logistics_fleet_cost_entry_id'])})"
+        ),
+    }
+
+    # Executa a grade do dominio.
+    return run_postgres_smoke_checks('logistics_erp_operations', checks, use_compose)
+
+
+def smoke_postgres_city_mobility_security(use_compose: bool = False) -> int:
+    """Executa smoke checks do seed operacional do dominio city_mobility_security."""
+
+    # ids deixa a montagem das consultas mais legivel.
+    ids = SEED_IDS
+
+    # checks valida juridico, experiencia, seguranca e govtech.
+    checks = {
+        'legal_chain': (
+            f"EXISTS (SELECT 1 FROM legal_contracts contract "
+            f"JOIN legal_signatures signature_row "
+            f"  ON signature_row.legal_contract_id = contract.legal_contract_id "
+            f"JOIN legal_disputes dispute_row "
+            f"  ON dispute_row.legal_contract_id = contract.legal_contract_id "
+            f"WHERE contract.legal_contract_id = {sql_literal(ids['city_legal_contract_id'])} "
+            f"  AND signature_row.legal_signature_id = {sql_literal(ids['city_signature_id'])} "
+            f"  AND dispute_row.legal_dispute_id = {sql_literal(ids['city_dispute_id'])} "
+            f"  AND EXISTS (SELECT 1 FROM legal_contract_parties party_row "
+            f"      WHERE party_row.legal_contract_id = contract.legal_contract_id "
+            f"        AND party_row.legal_contract_party_id IN ("
+            f"            {sql_literal(ids['city_contract_owner_party_id'])}, "
+            f"            {sql_literal(ids['city_contract_counterparty_party_id'])})) "
+            f"  AND EXISTS (SELECT 1 FROM legal_audit_events audit_row "
+            f"      WHERE audit_row.legal_audit_event_id = {sql_literal(ids['city_dispute_audit_event_id'])} "
+            f"        AND audit_row.legal_dispute_id = dispute_row.legal_dispute_id))"
+        ),
+        'legal_ops_view': (
+            f"EXISTS (SELECT 1 FROM v_city_mobility_security_legal_ops "
+            f"WHERE legal_contract_id = {sql_literal(ids['city_legal_contract_id'])} "
+            f"AND party_count = 2 "
+            f"AND signed_signatures = 1 "
+            f"AND open_disputes = 1)"
+        ),
+        'experience_chain': (
+            f"EXISTS (SELECT 1 FROM tourism_bookings booking_row "
+            f"JOIN tourism_experiences experience_row "
+            f"  ON experience_row.experience_id = booking_row.experience_id "
+            f"JOIN event_ticket_types ticket_type_row "
+            f"  ON ticket_type_row.event_ticket_type_id = booking_row.event_ticket_type_id "
+            f"JOIN event_programs program_row "
+            f"  ON program_row.event_program_id = experience_row.event_program_id "
+            f"JOIN event_ticket_ledger ledger_row "
+            f"  ON ledger_row.event_ticket_type_id = ticket_type_row.event_ticket_type_id "
+            f"WHERE booking_row.booking_id = {sql_literal(ids['city_tourism_booking_id'])} "
+            f"  AND experience_row.experience_id = {sql_literal(ids['city_tourism_experience_id'])} "
+            f"  AND ticket_type_row.event_ticket_type_id = {sql_literal(ids['city_ticket_type_id'])} "
+            f"  AND program_row.event_program_id = {sql_literal(ids['city_event_program_id'])} "
+            f"  AND ledger_row.event_ticket_ledger_id = {sql_literal(ids['city_ticket_ledger_id'])})"
+        ),
+        'experience_ops_view': (
+            f"EXISTS (SELECT 1 FROM v_city_mobility_security_experience_ops "
+            f"WHERE experience_id = {sql_literal(ids['city_tourism_experience_id'])} "
+            f"AND event_ticket_type_id = {sql_literal(ids['city_ticket_type_id'])} "
+            f"AND booking_count = 1 "
+            f"AND issued_tickets = 1 "
+            f"AND booked_gmv_brl = 180.0000)"
+        ),
+        'incident_ops_view': (
+            f"EXISTS (SELECT 1 FROM v_city_mobility_security_incident_ops "
+            f"WHERE security_incident_id = {sql_literal(ids['city_security_incident_id'])} "
+            f"AND active_contacts = 1 "
+            f"AND active_biometrics = 1 "
+            f"AND contact_notified = TRUE)"
+        ),
+        'gov_requests_view': (
+            f"EXISTS (SELECT 1 FROM v_city_mobility_security_gov_requests "
+            f"WHERE gov_request_id = {sql_literal(ids['city_gov_request_id'])} "
+            f"AND request_status = 'FULFILLED'::gov_request_status_enum "
+            f"AND event_count = 2 "
+            f"AND service_code = 'URBAN_PASS_01')"
+        ),
+        'mobility_production_route_chain': (
+            f"EXISTS (SELECT 1 FROM mobility.user_routes route_row "
+            f"JOIN mobility.cost_benchmarks benchmark_row "
+            f"  ON benchmark_row.benchmark_id = route_row.benchmark_id "
+            f"JOIN mobility.realtime_buffer buffer_row "
+            f"  ON buffer_row.route_id = route_row.route_id "
+            f"WHERE route_row.route_id = {sql_literal(ids['city_mobility_route_id'])} "
+            f"  AND benchmark_row.benchmark_id = {sql_literal(ids['city_mobility_benchmark_id'])} "
+            f"  AND buffer_row.buffer_id = {sql_literal(ids['city_mobility_buffer_id'])} "
+            f"  AND route_row.user_id = {sql_literal(ids['city_citizen_user_id'])} "
+            f"  AND benchmark_row.user_id = route_row.user_id "
+            f"  AND buffer_row.user_id = route_row.user_id "
+            f"  AND route_row.route_fingerprint = benchmark_row.route_fingerprint)"
+        ),
+        'mobility_production_ops_view': (
+            f"EXISTS (SELECT 1 FROM mobility.v_production_route_ops "
+            f"WHERE route_id = {sql_literal(ids['city_mobility_route_id'])} "
+            f"AND benchmark_id = {sql_literal(ids['city_mobility_benchmark_id'])} "
+            f"AND latest_buffer_id = {sql_literal(ids['city_mobility_buffer_id'])} "
+            f"AND latest_buffer_status = 'ACTIVE'::mobility.realtime_buffer_status_enum "
+            f"AND competitor_lowest_brl = 24.9000)"
+        ),
+    }
+
+    # Executa a grade do dominio.
+    return run_postgres_smoke_checks('city_mobility_security', checks, use_compose)
+
+
+def smoke_postgres_commerce_fintech_assets(use_compose: bool = False) -> int:
+    """Executa smoke checks do seed operacional do dominio commerce_fintech_assets."""
+
+    # ids deixa a montagem das consultas mais legivel.
+    ids = SEED_IDS
+
+    # checks valida commerce, treasury, ativos, real estate e insurance.
+    checks = {
+        'market_chain': (
+            f"EXISTS (SELECT 1 FROM merchant_storefronts storefront_row "
+            f"JOIN marketplace_listings listing_row "
+            f"  ON listing_row.merchant_user_id = storefront_row.merchant_user_id "
+            f"JOIN sale_validation_events validation_row "
+            f"  ON validation_row.storefront_id = storefront_row.storefront_id "
+            f"JOIN orders order_row "
+            f"  ON order_row.order_id = validation_row.order_id "
+            f"JOIN transactions tx_row "
+            f"  ON tx_row.transaction_id = validation_row.transaction_id "
+            f"JOIN affiliate_referrals referral_row "
+            f"  ON referral_row.order_id = order_row.order_id "
+            f"WHERE storefront_row.storefront_id = {sql_literal(ids['commerce_storefront_id'])} "
+            f"  AND listing_row.listing_id = {sql_literal(ids['commerce_listing_id'])} "
+            f"  AND order_row.order_id = {sql_literal(ids['commerce_order_id'])} "
+            f"  AND tx_row.transaction_id = {sql_literal(ids['commerce_purchase_transaction_id'])} "
+            f"  AND referral_row.referral_id = {sql_literal(ids['commerce_referral_id'])})"
+        ),
+        'market_ops_view': (
+            f"EXISTS (SELECT 1 FROM v_commerce_fintech_assets_market_ops "
+            f"WHERE listing_id = {sql_literal(ids['commerce_listing_id'])} "
+            f"AND validation_events = 1 "
+            f"AND validated_gmv_brl = 199.9000 "
+            f"AND affiliate_commission_brl = 7.0000)"
+        ),
+        'dropshipping_provider_configs': (
+            f"(SELECT COUNT(*) FROM dropshipping_provider_configs "
+            f"WHERE owner_user_id = {sql_literal(ids['commerce_merchant_user_id'])} "
+            f"AND block_external_ai_lookup IS TRUE) = 7"
+        ),
+        'dropshipping_product_chain': (
+            f"EXISTS (SELECT 1 FROM v_stock_dropshipping_production_ops ops "
+            f"WHERE ops.product_source_id = {sql_literal(ids['dropshipping_product_source_id'])} "
+            f"AND ops.item_id = {sql_literal(ids['commerce_inventory_item_id'])} "
+            f"AND ops.listing_id = {sql_literal(ids['commerce_listing_id'])} "
+            f"AND ops.provider_code = 'ALIEXPRESS'::dropshipping_provider_code_enum "
+            f"AND ops.current_supplier_stock = 250.0000)"
+        ),
+        'dropshipping_pricing_append_only_seed': (
+            f"EXISTS (SELECT 1 FROM dropshipping_pricing_decisions decision_row "
+            f"JOIN dropshipping_market_price_snapshots snapshot_row "
+            f"  ON snapshot_row.market_price_snapshot_id = decision_row.evidence_snapshot_id "
+            f"WHERE decision_row.pricing_decision_id = {sql_literal(ids['dropshipping_pricing_decision_id'])} "
+            f"AND snapshot_row.market_price_snapshot_id = {sql_literal(ids['dropshipping_market_price_snapshot_id'])} "
+            f"AND decision_row.decision_action = 'UPDATE_PRICE'::dropshipping_decision_action_enum "
+            f"AND decision_row.decided_price_brl = 169.9000 "
+            f"AND snapshot_row.source_type = 'API'::dropshipping_source_type_enum)"
+        ),
+        'dropshipping_provider_health_view': (
+            f"EXISTS (SELECT 1 FROM v_stock_dropshipping_provider_health "
+            f"WHERE provider_config_id = {sql_literal(ids['dropshipping_mercado_livre_provider_id'])} "
+            f"AND provider_code = 'MERCADO_LIVRE'::dropshipping_provider_code_enum "
+            f"AND cache_ttl_minutes = 20 "
+            f"AND block_external_ai_lookup IS TRUE "
+            f"AND open_jobs = 0 "
+            f"AND failed_jobs = 0)"
+        ),
+        'treasury_ops_view': (
+            f"EXISTS (SELECT 1 FROM v_commerce_fintech_assets_treasury_ops "
+            f"WHERE goal_id = {sql_literal(ids['commerce_financial_goal_id'])} "
+            f"AND plug_transaction_id = {sql_literal(ids['commerce_plug_transaction_id'])} "
+            f"AND treasury_transaction_id = {sql_literal(ids['commerce_plug_ledger_transaction_id'])} "
+            f"AND goal_status = 'ACTIVE'::financial_goal_status_enum "
+            f"AND origin_module = 'PLUG')"
+        ),
+        'digital_assets_view': (
+            f"EXISTS (SELECT 1 FROM v_commerce_fintech_assets_digital_assets "
+            f"WHERE digital_asset_id = {sql_literal(ids['commerce_digital_asset_id'])} "
+            f"AND event_count = 1 "
+            f"AND royalty_amount_brl = 12.5000 "
+            f"AND collection_code = 'DIGI_SMART_HOME_01')"
+        ),
+        'real_estate_chain': (
+            f"EXISTS (SELECT 1 FROM real_estate_properties property_row "
+            f"JOIN real_estate_deals deal_row "
+            f"  ON deal_row.property_id = property_row.property_id "
+            f"JOIN digital_assets asset_row "
+            f"  ON asset_row.digital_asset_id = property_row.tokenized_asset_id "
+            f"WHERE property_row.property_id = {sql_literal(ids['commerce_property_id'])} "
+            f"  AND deal_row.deal_id = {sql_literal(ids['commerce_real_estate_deal_id'])} "
+            f"  AND asset_row.digital_asset_id = {sql_literal(ids['commerce_digital_asset_id'])})"
+        ),
+        'insurance_ops_view': (
+            f"EXISTS (SELECT 1 FROM v_commerce_fintech_assets_insurance_ops "
+            f"WHERE claim_id = {sql_literal(ids['commerce_insurance_claim_id'])} "
+            f"AND claim_status = 'PAID'::insurance_claim_status_enum "
+            f"AND claim_event_count = 1 "
+            f"AND policy_number = 'POL-SMART-0001')"
+        ),
+    }
+
+    # Executa a grade do dominio.
+    return run_postgres_smoke_checks('commerce_fintech_assets', checks, use_compose)
 
 
 def smoke_mongo_expansion(use_compose: bool = False) -> int:
@@ -1701,7 +2236,7 @@ def seed_compose() -> int:
 
 
 def smoke_compose() -> int:
-    """Sobe o Compose se preciso e executa smoke checks do bloco expansion."""
+    """Sobe o Compose se preciso e executa smoke checks relacionais e MongoDB."""
 
     # Garante banco e mongo ativos antes do smoke.
     compose_code = compose_up()
@@ -1712,6 +2247,26 @@ def smoke_compose() -> int:
     postgres_code = smoke_postgres_expansion(use_compose=True)
     if postgres_code != 0:
         return postgres_code
+
+    # Valida o dominio platform_developer.
+    platform_code = smoke_postgres_platform_developer(use_compose=True)
+    if platform_code != 0:
+        return platform_code
+
+    # Valida o dominio logistics_erp_operations.
+    logistics_code = smoke_postgres_logistics_erp_operations(use_compose=True)
+    if logistics_code != 0:
+        return logistics_code
+
+    # Valida o dominio city_mobility_security.
+    city_code = smoke_postgres_city_mobility_security(use_compose=True)
+    if city_code != 0:
+        return city_code
+
+    # Valida o dominio commerce_fintech_assets.
+    commerce_code = smoke_postgres_commerce_fintech_assets(use_compose=True)
+    if commerce_code != 0:
+        return commerce_code
 
     # Executa smoke MongoDB em seguida.
     return smoke_mongo_expansion(use_compose=True)

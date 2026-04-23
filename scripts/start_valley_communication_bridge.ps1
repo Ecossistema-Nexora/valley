@@ -1,12 +1,13 @@
 param(
-  [int]$IntervalSeconds = 300
+  [int]$IntervalSeconds = 30
 )
 
 $ErrorActionPreference = 'Stop'
 
 $root = Split-Path -Parent $PSScriptRoot
 $runtimeDir = Join-Path $root 'tmp/runtime'
-$logPath = Join-Path $runtimeDir 'communication-bridge.log'
+$stdoutLogPath = Join-Path $runtimeDir 'communication-bridge.out.log'
+$stderrLogPath = Join-Path $runtimeDir 'communication-bridge.err.log'
 $pidPath = Join-Path $runtimeDir 'communication-bridge.pid'
 
 New-Item -ItemType Directory -Force -Path $runtimeDir | Out-Null
@@ -18,10 +19,10 @@ $process = Start-Process `
   -FilePath $python.Source `
   -ArgumentList @($script, 'watch', '--interval', [string]$IntervalSeconds) `
   -WorkingDirectory $root `
-  -RedirectStandardOutput $logPath `
-  -RedirectStandardError $logPath `
+  -RedirectStandardOutput $stdoutLogPath `
+  -RedirectStandardError $stderrLogPath `
   -PassThru `
   -WindowStyle Hidden
 
 $process.Id | Set-Content -Path $pidPath -Encoding ASCII
-Write-Output "Bridge iniciado. PID=$($process.Id); log=$logPath"
+Write-Output "Bridge iniciado. PID=$($process.Id); stdout=$stdoutLogPath; stderr=$stderrLogPath"

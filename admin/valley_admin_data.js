@@ -1,5 +1,5 @@
 window.VALLEY_ADMIN_DATA = {
-  "generated_at_utc": "2026-04-21T13:04:39.682939+00:00",
+  "generated_at_utc": "2026-04-21T20:21:46.861926+00:00",
   "registry_name": "Valley Omniverse V47 - Registro Canonico de Modulos",
   "source": "Esquema Consolidado do Valley Omniverse v47.pdf",
   "language_policy": "pt-BR simples com termos tecnicos em ingles quando forem padroes",
@@ -474,7 +474,7 @@ window.VALLEY_ADMIN_DATA = {
     }
   },
   "database_summary": {
-    "postgres_migrations": 19,
+    "postgres_migrations": 33,
     "mongodb_scripts": 4,
     "postgres_items": [
       {
@@ -847,6 +847,256 @@ window.VALLEY_ADMIN_DATA = {
           "delivery_operation_policies",
           "fleet_vehicle_operating_profiles"
         ]
+      },
+      {
+        "id": "020",
+        "path": "database/postgres/020_v47_fix_tech_owner_coherence_trigger.sql",
+        "purpose_ptbr": "Corrige a trigger assert_tech_owner_coherence para nao referenciar connector_id fora de tech_webhook_subscriptions, destravando seeds e updates de TECH com owner coherence.",
+        "requires": [
+          "009"
+        ],
+        "provides": [
+          "function:assert_tech_owner_coherence"
+        ]
+      },
+      {
+        "id": "021",
+        "path": "database/postgres/021_v47_fix_city_ops_trigger_ambiguity.sql",
+        "purpose_ptbr": "Corrige ambiguidades de variavel versus coluna nas triggers de delivery_shipments e mobility_trips, destravando seeds operacionais de DELIVERY e MOBILITY.",
+        "requires": [
+          "011"
+        ],
+        "provides": [
+          "function:assert_delivery_shipment_coherence",
+          "function:assert_mobility_trip_coherence"
+        ]
+      },
+      {
+        "id": "022",
+        "path": "database/postgres/022_v47_city_mobility_security_business_ddl.sql",
+        "purpose_ptbr": "Materializa o DDL complementar do dominio City Mobility Security com views operacionais de juridico, experiencias, seguranca e govtech.",
+        "requires": [
+          "009",
+          "011",
+          "012",
+          "013",
+          "014",
+          "017"
+        ],
+        "provides": [
+          "v_city_mobility_security_legal_ops",
+          "v_city_mobility_security_experience_ops",
+          "v_city_mobility_security_incident_ops",
+          "v_city_mobility_security_gov_requests"
+        ]
+      },
+      {
+        "id": "023",
+        "path": "database/postgres/023_v47_commerce_fintech_assets_business_ddl.sql",
+        "purpose_ptbr": "Materializa o DDL complementar do dominio Commerce Fintech Assets com views operacionais de marketplace, treasury, ativos digitais, real estate e insurance.",
+        "requires": [
+          "005",
+          "008",
+          "009",
+          "010",
+          "013",
+          "017"
+        ],
+        "provides": [
+          "v_commerce_fintech_assets_market_ops",
+          "v_commerce_fintech_assets_treasury_ops",
+          "v_commerce_fintech_assets_digital_assets",
+          "v_commerce_fintech_assets_real_estate_pipeline",
+          "v_commerce_fintech_assets_insurance_ops"
+        ]
+      },
+      {
+        "id": "024",
+        "path": "database/postgres/024_v47_ai_memory_operations_business_ddl.sql",
+        "purpose_ptbr": "Materializa o DDL complementar do dominio AI Memory Operations com views de backlog, artefatos, contratos, advisor, chat, consentimento e contexto do usuario.",
+        "requires": [
+          "005",
+          "015",
+          "016",
+          "017"
+        ],
+        "provides": [
+          "v_ai_memory_operations_priority_backlog",
+          "v_ai_memory_operations_delivery_artifacts",
+          "v_ai_memory_operations_event_contracts",
+          "v_ai_memory_operations_advisor_ops",
+          "v_ai_memory_operations_chat_ops",
+          "v_ai_memory_operations_consent_queue",
+          "v_ai_memory_operations_user_context_ops"
+        ]
+      },
+      {
+        "id": "025",
+        "path": "database/postgres/025_v47_media_social_growth_business_ddl.sql",
+        "purpose_ptbr": "Materializa o DDL complementar do dominio Media Social Growth com views de backlog, artefatos, contratos, creators, rewards, referrals e gaming.",
+        "requires": [
+          "002",
+          "005",
+          "010",
+          "015",
+          "016",
+          "017"
+        ],
+        "provides": [
+          "v_media_social_growth_priority_backlog",
+          "v_media_social_growth_delivery_artifacts",
+          "v_media_social_growth_event_contracts",
+          "v_media_social_growth_creator_ops",
+          "v_media_social_growth_ads_reward_ops",
+          "v_media_social_growth_referral_ops",
+          "v_media_social_growth_gaming_ops"
+        ]
+      },
+      {
+        "id": "026",
+        "path": "database/postgres/026_v47_frontier_iot_energy_business_ddl.sql",
+        "purpose_ptbr": "Materializa o DDL complementar do dominio Frontier IoT Energy com views de backlog, artefatos e contratos para IOT, BIO, HOME, ENERGY e SPACE.",
+        "requires": [
+          "015",
+          "016",
+          "017"
+        ],
+        "provides": [
+          "v_frontier_iot_energy_priority_backlog",
+          "v_frontier_iot_energy_delivery_artifacts",
+          "v_frontier_iot_energy_event_contracts"
+        ]
+      },
+      {
+        "id": "027",
+        "path": "database/postgres/027_v47_helena_identity_pricing_guardrails.sql",
+        "purpose_ptbr": "Fecha lacunas do spec da Helena com origem natal em users e filtro de competitividade 10 por cento abaixo de Mercado Livre, Amazon ou Magalu para listings ativos ou competitivos.",
+        "requires": [
+          "001",
+          "010"
+        ],
+        "provides": [
+          "column:users.birth_city",
+          "column:users.birth_state",
+          "function:assert_listing_competitiveness_10pct",
+          "function:assert_listing_control_coherence"
+        ]
+      },
+      {
+        "id": "028",
+        "path": "database/postgres/028_v47_module_catalog_42_47_seed.sql",
+        "purpose_ptbr": "Sincroniza module_catalog com os modulos 42-47 ja existentes no module_delivery_registry: BUSINESS, PLUG, UP, MEDIA, CHAT e DOCS.",
+        "requires": [
+          "004"
+        ],
+        "provides": [
+          "module_catalog:BUSINESS",
+          "module_catalog:PLUG",
+          "module_catalog:UP",
+          "module_catalog:MEDIA",
+          "module_catalog:CHAT",
+          "module_catalog:DOCS"
+        ]
+      },
+      {
+        "id": "029",
+        "path": "database/postgres/029_v47_module_catalog_registry_aliases.sql",
+        "purpose_ptbr": "Reconcilia module_catalog com todos os module_code operacionais do module_delivery_registry sem apagar aliases legados.",
+        "requires": [
+          "007",
+          "028"
+        ],
+        "provides": [
+          "module_catalog:ADVISOR",
+          "module_catalog:BIO",
+          "module_catalog:CHARITY",
+          "module_catalog:DELIVERY",
+          "module_catalog:DIGITAL",
+          "module_catalog:EDU",
+          "module_catalog:EVENTS",
+          "module_catalog:FINANCAS",
+          "module_catalog:FITNESS",
+          "module_catalog:FLEET",
+          "module_catalog:GAMING",
+          "module_catalog:INFLUENCERS",
+          "module_catalog:INSURANCE",
+          "module_catalog:IOT",
+          "module_catalog:LEGAL",
+          "module_catalog:LOG",
+          "module_catalog:MENTE",
+          "module_catalog:NEWS_PODCAST",
+          "module_catalog:REPLY",
+          "module_catalog:SERVICES",
+          "module_catalog:SPACE",
+          "module_catalog:STOCK",
+          "module_catalog:TECH",
+          "module_catalog:TOURISM",
+          "module_catalog:VET",
+          "module_catalog:WMS"
+        ]
+      },
+      {
+        "id": "030",
+        "path": "database/postgres/030_v47_fix_gold_campaign_reward_type_ambiguity.sql",
+        "purpose_ptbr": "Corrige ambiguidade de reward_type no trigger assert_gold_campaign_coherence usado por GOLD/Pepita.",
+        "requires": [
+          "010",
+          "029"
+        ],
+        "provides": [
+          "function_patch:assert_gold_campaign_coherence:v2"
+        ]
+      },
+      {
+        "id": "031",
+        "path": "database/postgres/031_v47_fix_pepita_account_status_ambiguity.sql",
+        "purpose_ptbr": "Corrige ambiguidade de account_status no trigger append-only apply_pepita_ledger_entry.",
+        "requires": [
+          "010",
+          "030"
+        ],
+        "provides": [
+          "function_patch:apply_pepita_ledger_entry:v2"
+        ]
+      },
+      {
+        "id": "032",
+        "path": "database/postgres/032_v47_mobility_production_schema.sql",
+        "purpose_ptbr": "Cria o schema relacional de producao Mobility para benchmark de custo, rotas de usuario e buffer realtime sem misturar planejamento com mobility_trips.",
+        "requires": [
+          "011",
+          "021",
+          "029",
+          "031"
+        ],
+        "provides": [
+          "relation:mobility.cost_benchmarks",
+          "relation:mobility.user_routes",
+          "relation:mobility.realtime_buffer",
+          "relation:mobility.v_production_route_ops"
+        ]
+      },
+      {
+        "id": "033",
+        "path": "database/postgres/033_v47_stock_dropshipping_production_blueprint.sql",
+        "purpose_ptbr": "Materializa o blueprint de producao do Dropshipping Inteligente no MVP: providers, fontes de produto, snapshots de preco, decisoes append-only, pedidos ao fornecedor e fila operacional.",
+        "requires": [
+          "008",
+          "010",
+          "019",
+          "029",
+          "031"
+        ],
+        "provides": [
+          "dropshipping_provider_configs",
+          "dropshipping_product_sources",
+          "dropshipping_market_price_snapshots",
+          "dropshipping_pricing_decisions",
+          "dropshipping_supplier_orders",
+          "dropshipping_jobs",
+          "v_stock_dropshipping_production_ops",
+          "v_stock_dropshipping_provider_health"
+        ]
       }
     ],
     "mongodb_items": [
@@ -916,8 +1166,8 @@ window.VALLEY_ADMIN_DATA = {
   },
   "deployment_summary": {
     "available": true,
-    "generated_at_utc": "2026-04-21T13:04:39.193240+00:00",
-    "total_checks": 181,
+    "generated_at_utc": "2026-04-21T20:19:12.506324+00:00",
+    "total_checks": 321,
     "failed_checks": 0,
     "top_failures": []
   },

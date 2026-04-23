@@ -1,0 +1,25 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Validate Python syntax
+        run: python -m compileall scripts
+      - name: Validate JavaScript syntax
+        run: |
+          find scripts database -type f -name '*.js' -print0 | xargs -0 -n1 node --check
+      - name: Validate Docker image build
+        run: docker build -t valley-admin-ci .

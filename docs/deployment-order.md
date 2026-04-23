@@ -1,0 +1,16 @@
+# Ordem de Deploy
+
+1. Provisionar base AWS com Terraform.
+2. Atualizar kubeconfig do cluster EKS.
+3. Instalar addons do cluster:
+   - metrics-server
+   - aws-load-balancer-controller
+   - external-dns
+   - cert-manager
+4. Criar namespaces e secrets.
+5. Publicar o chart Helm do Valley.
+6. Aplicar migrations do banco hibrido:
+   - `python scripts/valley_db_orchestrator.py apply-postgres`
+   - `python scripts/valley_db_orchestrator.py apply-mongo`
+7. Configurar Stripe webhooks.
+8. Validar `/healthz`, `/readyz`, jobs e admin.

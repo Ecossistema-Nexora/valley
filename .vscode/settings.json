@@ -3,6 +3,8 @@
   "editor.formatOnSave": true,
   "editor.tabSize": 2,
   "files.eol": "\n",
+  "git.autofetch": true,
+  "git.pruneOnFetch": true,
   "files.associations": {
     "*.mongo.js": "javascript",
     "*.sql": "sql"

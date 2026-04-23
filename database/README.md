@@ -70,6 +70,28 @@ Esse script adiciona contratos de template documental, versoes append-only de te
 
 Esse script adiciona unidades e fechamento fiscal, politicas e trilhas de aprovacao de compras, margem por canal, conciliacao com fornecedor, ruptura, contratos de loja/cardapio, enderecamento WMS, incidentes de temperatura, politicas e prova de entrega e custo operacional de frota.
 
+`database/postgres/022_v47_city_mobility_security_business_ddl.sql` materializa o dominio `city_mobility_security` com views operacionais de juridico, experiencias, seguranca e govtech.
+
+`database/postgres/023_v47_commerce_fintech_assets_business_ddl.sql` materializa o dominio `commerce_fintech_assets` com views operacionais de marketplace, treasury, ativos digitais, real estate e insurance.
+
+`database/postgres/024_v47_ai_memory_operations_business_ddl.sql` materializa o dominio `ai_memory_operations` com views de backlog, artefatos, contratos, advisor, chat, consentimento e contexto do usuario.
+
+`database/postgres/025_v47_media_social_growth_business_ddl.sql` materializa o dominio `media_social_growth` com views de backlog, artefatos, contratos, creators, rewards, referrals e gaming.
+
+`database/postgres/026_v47_frontier_iot_energy_business_ddl.sql` fecha a primeira onda dos dominios prioritarios com views de backlog, artefatos e contratos para IOT, BIO, HOME, ENERGY e SPACE.
+
+`database/postgres/027_v47_helena_identity_pricing_guardrails.sql` fecha lacunas do spec da Helena com origem natal em `users` e filtro de competitividade para listings ativos ou competitivos.
+
+`database/postgres/028_v47_module_catalog_42_47_seed.sql` sincroniza `module_catalog` com os modulos 42-47 ja existentes no registry de entrega.
+
+`database/postgres/029_v47_module_catalog_registry_aliases.sql` reconcilia `module_catalog` com todos os `module_code` operacionais de `module_delivery_registry` sem apagar aliases legados.
+
+`database/postgres/030_v47_fix_gold_campaign_reward_type_ambiguity.sql` corrige a funcao de coerencia GOLD/Pepita para evitar ambiguidade entre variavel local e coluna `reward_type`.
+
+`database/postgres/031_v47_fix_pepita_account_status_ambiguity.sql` corrige a funcao append-only de Pepita para evitar ambiguidade entre variavel local e coluna `account_status`.
+
+`database/postgres/032_v47_mobility_production_schema.sql` cria o schema `mobility` de modo producao para benchmark de custo, rotas de usuario e buffer realtime, mantendo `mobility_trips` como execucao consolidada de corrida.
+
 `database/seeds/postgres/002_v47_priority_domain_delivery_packages_seed.sql` popula esse registry com os dominios cuja prioridade minima do backlog e `<= 2`, sem perder idempotencia.
 
 `database/domain-delivery/priority-domains/` guarda os pacotes fisicos por dominio, com `ddl_complement.sql` e `operational_seed.sql` prontos para revisao e aplicacao controlada.
@@ -91,6 +113,8 @@ Tentativas de webhook, assinaturas juridicas e eventos juridicos tambem sao `app
 Execucoes de regra, snapshots de concorrencia, eventos GOLD e ledger de Pepitas tambem sao `append-only`, porque representam decisao, evidencia comercial ou saldo gamificado.
 
 Eventos de entrega, checkpoints de corrida e eventos de seguranca tambem usam `append-only`, porque representam trilha de campo, prova operacional e possivel evidencia juridica.
+
+O schema `mobility` separa planejamento e tempo real de Mobility (`cost_benchmarks`, `user_routes`, `realtime_buffer`) da execucao financeira/operacional em `public.mobility_trips`.
 
 Eventos de ativos digitais, requests govtech, fundos de charity e trilhas de claim de insurance tambem usam `append-only`, porque representam propriedade, decisao publica, dinheiro social ou disputa securitaria.
 
@@ -143,7 +167,7 @@ Aplicar os seeds minimos do bloco expansion que cobre Tourism, Bio, Energy, News
 python scripts/valley_db_orchestrator.py seed-compose
 ```
 
-O comando acima agora tambem aplica o seed do registry fisico dos dominios prioritarios.
+O comando acima agora tambem aplica os `operational_seed.sql` fisicos de `platform_developer`, `logistics_erp_operations`, `ai_memory_operations`, `media_social_growth`, `frontier_iot_energy`, `city_mobility_security` e `commerce_fintech_assets`, com dados operacionais reais e contratos de evento dos dominios prioritarios.
 
 Executar smoke check relacional e NoSQL do bloco expansion seedado:
 

@@ -30,3 +30,27 @@ received_at_utc: 2026-04-20T12:48:37Z
 auto_approval: safe_only
 ---
 Implemente todas as regras para a Helena
+
+---
+source: telegram
+kind: queue_triage
+status: accepted
+priority: normal
+codex_route: auto_start
+execution_gate: safe_only
+received_at_utc: 2026-04-22T20:25:49Z
+auto_approval: safe_only
+---
+Como faço para publicar o site em versão bundle
+
+---
+source: telegram
+kind: queue_triage
+status: accepted
+priority: normal
+codex_route: auto_start
+execution_gate: safe_only
+received_at_utc: 2026-04-22T20:25:49Z
+auto_approval: safe_only
+---
+Quero a versão web final pronta para uso

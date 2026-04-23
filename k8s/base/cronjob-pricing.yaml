@@ -1,0 +1,23 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: valley-pricing-recalc
+  namespace: valley
+spec:
+  schedule: "*/10 * * * *"
+  suspend: true
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          serviceAccountName: valley-app
+          containers:
+            - name: pricing
+              image: 123456789012.dkr.ecr.us-east-1.amazonaws.com/valley-prod/valley:latest
+              command: ["python", "-c", "print('Enable a real pricing command before unsuspending this CronJob.')"]
+              envFrom:
+                - configMapRef:
+                    name: valley-config
+                - secretRef:
+                    name: valley-secrets

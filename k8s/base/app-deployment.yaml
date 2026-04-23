@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: valley-app
+  namespace: valley
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: valley-app
+  template:
+    metadata:
+      labels:
+        app: valley-app
+    spec:
+      serviceAccountName: valley-app
+      containers:
+        - name: app
+          image: 123456789012.dkr.ecr.us-east-1.amazonaws.com/valley-prod/valley:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: valley-config
+            - secretRef:
+                name: valley-secrets
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            initialDelaySeconds: 20
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 250m
+              memory: 256Mi
+            limits:
+              cpu: 1000m
+              memory: 1Gi

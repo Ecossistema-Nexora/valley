@@ -1,0 +1,6 @@
+clusterName: valley-prod
+serviceAccount:
+  create: true
+  name: aws-load-balancer-controller
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::<ACCOUNT_ID>:role/valley-prod-aws-lbc

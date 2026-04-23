@@ -82,7 +82,7 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
     def do_GET(self) -> None:  # noqa: N802
         route = urlsplit(self.path).path
 
-        if route in ("/health", "/healthz", "/meta/runtime", "/api/runtime"):
+        if route in ("/health", "/healthz", "/readyz", "/meta/runtime", "/api/runtime"):
             self._write_json(HTTPStatus.OK, self._runtime_payload())
             return
 
