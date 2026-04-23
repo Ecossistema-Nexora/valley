@@ -5,6 +5,15 @@
       "url": "https://mcp.figma.com/mcp",
       "note": "Official remote Figma MCP server. Requires OAuth on first connection."
     },
+    "stitch": {
+      "type": "http",
+      "url": "https://stitch.googleapis.com/mcp",
+      "headers": {
+        "Accept": "application/json",
+        "X-Goog-Api-Key": "${STITCH_API_KEY}"
+      },
+      "note": "Official Stitch MCP server. Set STITCH_API_KEY locally or use the OAuth flow documented in config/VALLEY_FIRST_CONNECTION_CHECKLIST.md."
+    },
     "linear": {
       "type": "http",
       "url": "https://mcp.linear.app/mcp",

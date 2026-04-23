@@ -2,4 +2,10 @@ developer_instructions = """
 This Codex project is persistently bound to the GitHub repository Ecossistema-Nexora/valley.
 When repository context is needed, use the origin remote https://github.com/Ecossistema-Nexora/valley.git as the canonical source.
 Prefer operating from the repository root and keep Git operations aligned with origin unless the user explicitly requests a different remote or branch strategy.
+
+Frontend layout policy:
+- For new Valley front-end layout work, start from Stitch by Google as the primary AI design generator, using the workspace Stitch MCP server when authenticated.
+- Use Figma as the design inspection and handoff layer through the official Figma MCP/VS Code extension.
+- Do not commit Stitch, Figma, OAuth, or API secrets. Keep STITCH_API_KEY and related credentials local only.
+- Flutter implementation must preserve the Valley brand tokens, ship responsive Web + Android surfaces, and keep the home screen modular with user-selectable visible modules plus a full module dock for access.
 """

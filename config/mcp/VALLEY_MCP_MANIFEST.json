@@ -51,6 +51,18 @@
         ".vscode/mcp.json"
       ]
     },
+    "stitch": {
+      "mode": "workspace-declared",
+      "transport": "http",
+      "url": "https://stitch.googleapis.com/mcp",
+      "auth": "api_key_or_oauth",
+      "declared_in": [
+        ".mcp.json",
+        ".vscode/mcp.json"
+      ],
+      "secret_policy": "local_env_or_client_prompt_only",
+      "frontend_policy": "primary_ai_layout_generator"
+    },
     "linear": {
       "mode": "workspace-declared",
       "transport": "http",

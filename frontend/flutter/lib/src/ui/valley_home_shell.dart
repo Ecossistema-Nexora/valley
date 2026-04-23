@@ -1,10 +1,109 @@
+import 'dart:async';
+import 'dart:ui';
+
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:valley_super_app/src/data/valley_models.dart';
 import 'package:valley_super_app/src/ui/ui_components.dart';
 import 'package:valley_super_app/valley_brand_theme.dart';
 
 const String _valleyServerBaseUrl = 'https://valley-alpha.vercel.app';
+const String _homeModulePrefsKey = 'valley.home.visible_modules.v1';
+
+int _destinationIndexForModule(String code) {
+  if (<String>{
+    'PAY',
+    'PLUG',
+    'DOCS',
+    'FINANCAS',
+    'UP',
+    'DIGITAL',
+  }.contains(code)) {
+    return 1;
+  }
+  if (<String>{
+    'STOCK',
+    'WMS',
+    'MARKETPLACE',
+    'FOOD',
+    'DELIVERY',
+    'LOG',
+  }.contains(code)) {
+    return 2;
+  }
+  if (<String>{
+    'BUSINESS',
+    'REPLY',
+    'SERVICES',
+    'JOBS',
+    'TECH',
+  }.contains(code)) {
+    return 3;
+  }
+  if (<String>{'SECURITY', 'LEGAL', 'GOV', 'HEALTH', 'MENTE'}.contains(code)) {
+    return 4;
+  }
+  if (<String>{'CHAT', 'ADVISOR', 'AGENDA', 'SOCIAL', 'MEDIA'}.contains(code)) {
+    return 5;
+  }
+  return 0;
+}
+
+IconData _moduleIconFor(ModuleRecord module) {
+  switch (module.code) {
+    case 'PAY':
+    case 'PLUG':
+    case 'FINANCAS':
+      return Icons.account_balance_wallet_rounded;
+    case 'MARKETPLACE':
+    case 'STOCK':
+      return Icons.storefront_rounded;
+    case 'WMS':
+    case 'LOG':
+    case 'DELIVERY':
+      return Icons.local_shipping_rounded;
+    case 'BUSINESS':
+    case 'REPLY':
+      return Icons.apartment_rounded;
+    case 'CHAT':
+    case 'ADVISOR':
+    case 'AGENDA':
+      return Icons.auto_awesome_rounded;
+    case 'SOCIAL':
+    case 'INFLUENCERS':
+    case 'MEDIA':
+      return Icons.groups_2_rounded;
+    case 'SECURITY':
+    case 'LEGAL':
+    case 'GOV':
+      return Icons.verified_user_rounded;
+    case 'HEALTH':
+    case 'MENTE':
+    case 'FITNESS':
+    case 'PHARMACY':
+      return Icons.health_and_safety_rounded;
+    case 'IOT':
+    case 'HOME':
+    case 'ENERGY':
+      return Icons.sensors_rounded;
+    default:
+      return Icons.hexagon_rounded;
+  }
+}
+
+Color _moduleAccentFor(ModuleRecord module) {
+  switch (module.tier) {
+    case 'foundation':
+      return ValleyBrandColors.cyan;
+    case 'core':
+      return ValleyBrandColors.violet;
+    case 'frontier':
+      return ValleyBrandColors.lilac;
+    default:
+      return ValleyBrandColors.success;
+  }
+}
 
 class ValleyHomeShell extends StatefulWidget {
   const ValleyHomeShell({super.key, required this.data});
@@ -17,6 +116,9 @@ class ValleyHomeShell extends StatefulWidget {
 
 class _ValleyHomeShellState extends State<ValleyHomeShell> {
   int _index = 0;
+  Set<String> _homeModuleCodes = <String>{};
+  bool _modulePreferencesReady = false;
+  String? _selectedDockModuleCode;
 
   static const List<_Destination> _destinations = <_Destination>[
     _Destination(
@@ -51,8 +153,95 @@ class _ValleyHomeShellState extends State<ValleyHomeShell> {
     ),
   ];
 
+  @override
+  void initState() {
+    super.initState();
+    _homeModuleCodes = _defaultHomeModuleCodes();
+    unawaited(_loadHomeModulePreferences());
+  }
+
+  Set<String> _defaultHomeModuleCodes() {
+    final Set<String> included = widget.data.includedModuleRecords
+        .map((ModuleRecord module) => module.code)
+        .toSet();
+    if (included.isNotEmpty) {
+      return included;
+    }
+
+    return widget.data.modules
+        .take(12)
+        .map((ModuleRecord module) => module.code)
+        .toSet();
+  }
+
+  Future<void> _loadHomeModulePreferences() async {
+    final SharedPreferences preferences = await SharedPreferences.getInstance();
+    final List<String>? storedCodes = preferences.getStringList(
+      _homeModulePrefsKey,
+    );
+    final Set<String> validCodes = widget.data.modules
+        .map((ModuleRecord module) => module.code)
+        .toSet();
+
+    if (!mounted) {
+      return;
+    }
+
+    setState(() {
+      if (storedCodes != null && storedCodes.isNotEmpty) {
+        _homeModuleCodes = storedCodes
+            .where((String code) => validCodes.contains(code))
+            .toSet();
+        if (_homeModuleCodes.isEmpty) {
+          _homeModuleCodes = _defaultHomeModuleCodes();
+        }
+      }
+      _modulePreferencesReady = true;
+    });
+  }
+
+  Future<void> _saveHomeModulePreferences() async {
+    final SharedPreferences preferences = await SharedPreferences.getInstance();
+    final List<String> sortedCodes = _homeModuleCodes.toList()..sort();
+    await preferences.setStringList(_homeModulePrefsKey, sortedCodes);
+  }
+
+  void _toggleHomeModule(ModuleRecord module, bool selected) {
+    setState(() {
+      if (selected) {
+        _homeModuleCodes.add(module.code);
+      } else if (_homeModuleCodes.length > 1) {
+        _homeModuleCodes.remove(module.code);
+      }
+    });
+    unawaited(_saveHomeModulePreferences());
+  }
+
   void _navigate(int index) {
-    setState(() => _index = index);
+    setState(() {
+      _index = index;
+      _selectedDockModuleCode = null;
+    });
+  }
+
+  void _openModule(ModuleRecord module) {
+    final int destinationIndex = _destinationIndexForModule(module.code);
+    setState(() {
+      _index = destinationIndex;
+      _selectedDockModuleCode = module.code;
+    });
+
+    if (destinationIndex == 0) {
+      unawaited(
+        _showModuleActionSheet(
+          context,
+          code: module.code,
+          title: module.name,
+          subtitle: module.subtitle,
+          caption: module.description,
+        ),
+      );
+    }
   }
 
   @override
@@ -125,6 +314,16 @@ class _ValleyHomeShellState extends State<ValleyHomeShell> {
                   ),
                 ],
               ),
+              Positioned(
+                left: wide ? 316 : 14,
+                right: 14,
+                bottom: wide ? 18 : 88,
+                child: _ModuleAccessDock(
+                  modules: widget.data.modules,
+                  selectedCode: _selectedDockModuleCode,
+                  onOpenModule: _openModule,
+                ),
+              ),
             ],
           ),
         ),
@@ -135,7 +334,14 @@ class _ValleyHomeShellState extends State<ValleyHomeShell> {
   Widget _buildPage() {
     switch (_index) {
       case 0:
-        return _OverviewPage(data: widget.data, onNavigate: _navigate);
+        return _OverviewPage(
+          data: widget.data,
+          homeModuleCodes: _homeModuleCodes,
+          preferencesReady: _modulePreferencesReady,
+          onNavigate: _navigate,
+          onOpenModule: _openModule,
+          onToggleHomeModule: _toggleHomeModule,
+        );
       case 1:
         return _WalletPage(data: widget.data);
       case 2:
@@ -147,7 +353,14 @@ class _ValleyHomeShellState extends State<ValleyHomeShell> {
       case 5:
         return _HelenaPage(data: widget.data);
       default:
-        return _OverviewPage(data: widget.data, onNavigate: _navigate);
+        return _OverviewPage(
+          data: widget.data,
+          homeModuleCodes: _homeModuleCodes,
+          preferencesReady: _modulePreferencesReady,
+          onNavigate: _navigate,
+          onOpenModule: _openModule,
+          onToggleHomeModule: _toggleHomeModule,
+        );
     }
   }
 }
@@ -389,15 +602,35 @@ class _MobileTopBar extends StatelessWidget {
 }
 
 class _OverviewPage extends StatelessWidget {
-  const _OverviewPage({required this.data, required this.onNavigate});
+  const _OverviewPage({
+    required this.data,
+    required this.homeModuleCodes,
+    required this.preferencesReady,
+    required this.onNavigate,
+    required this.onOpenModule,
+    required this.onToggleHomeModule,
+  });
 
   final ValleyAppData data;
+  final Set<String> homeModuleCodes;
+  final bool preferencesReady;
   final ValueChanged<int> onNavigate;
+  final ValueChanged<ModuleRecord> onOpenModule;
+  final void Function(ModuleRecord module, bool selected) onToggleHomeModule;
 
   @override
   Widget build(BuildContext context) {
     final PhaseRecord commercePhase =
         data.phaseByKey('phase_2_commerce') ?? data.manifest.phases[1];
+    final List<ModuleRecord> homeModules =
+        data.modules
+            .where(
+              (ModuleRecord module) => homeModuleCodes.contains(module.code),
+            )
+            .toList()
+          ..sort(
+            (ModuleRecord a, ModuleRecord b) => a.number.compareTo(b.number),
+          );
     return _PageFrame(
       child: FadeSlideIn(
         child: Column(
@@ -578,6 +811,28 @@ class _OverviewPage extends StatelessWidget {
             ),
             const SizedBox(height: 32),
             SectionHeader(
+              kicker: 'Home Modular',
+              title: 'Escolha quais modulos aparecem na tela inicial',
+              caption:
+                  'A selecao fica salva localmente e o dock inferior continua dando acesso rapido aos 47 modulos.',
+              trailing: SignalChip(
+                label: '${homeModules.length}/${data.modules.length} visiveis',
+                color: preferencesReady
+                    ? ValleyBrandColors.success
+                    : ValleyBrandColors.warning,
+              ),
+            ),
+            const SizedBox(height: 18),
+            _HomeModuleComposer(
+              allModules: data.modules,
+              homeModules: homeModules,
+              visibleCodes: homeModuleCodes,
+              preferencesReady: preferencesReady,
+              onOpenModule: onOpenModule,
+              onToggleHomeModule: onToggleHomeModule,
+            ),
+            const SizedBox(height: 32),
+            SectionHeader(
               kicker: 'Roadmap',
               title: 'Fases que governam o corte atual',
               caption:
@@ -660,10 +915,10 @@ class _OverviewPage extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             SectionHeader(
-              kicker: 'Modules',
-              title: 'Corte MVP navegavel',
+              kicker: 'MVP',
+              title: 'Corte comercial navegavel',
               caption:
-                  'Os modulos abaixo sao o corte comercial e de IA leve realmente priorizado para o MVP.',
+                  'Os modulos abaixo continuam como corte prioritario, enquanto a home modular permite personalizar o primeiro viewport.',
             ),
             const SizedBox(height: 18),
             Wrap(
@@ -678,34 +933,7 @@ class _OverviewPage extends StatelessWidget {
                         title: module.name,
                         subtitle: '${module.subtitle} • ${module.tier}',
                         caption: module.description,
-                        onTap: () {
-                          if (<String>{
-                            'PAY',
-                            'PLUG',
-                            'DOCS',
-                          }.contains(module.code)) {
-                            onNavigate(1);
-                          } else if (<String>{
-                            'STOCK',
-                            'WMS',
-                            'MARKETPLACE',
-                          }.contains(module.code)) {
-                            onNavigate(2);
-                          } else if (<String>{
-                            'BUSINESS',
-                            'REPLY',
-                          }.contains(module.code)) {
-                            onNavigate(3);
-                          } else if (<String>{
-                            'CHAT',
-                            'ADVISOR',
-                            'AGENDA',
-                          }.contains(module.code)) {
-                            onNavigate(5);
-                          } else {
-                            onNavigate(4);
-                          }
-                        },
+                        onTap: () => onOpenModule(module),
                       ),
                     ),
                   )
@@ -1798,6 +2026,321 @@ class _HelenaPage extends StatelessWidget {
   }
 }
 
+class _HomeModuleComposer extends StatelessWidget {
+  const _HomeModuleComposer({
+    required this.allModules,
+    required this.homeModules,
+    required this.visibleCodes,
+    required this.preferencesReady,
+    required this.onOpenModule,
+    required this.onToggleHomeModule,
+  });
+
+  final List<ModuleRecord> allModules;
+  final List<ModuleRecord> homeModules;
+  final Set<String> visibleCodes;
+  final bool preferencesReady;
+  final ValueChanged<ModuleRecord> onOpenModule;
+  final void Function(ModuleRecord module, bool selected) onToggleHomeModule;
+
+  @override
+  Widget build(BuildContext context) {
+    return ValleyPanel(
+      glowColor: ValleyBrandColors.cyan,
+      background: LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: <Color>[
+          ValleyBrandColors.cyan.withValues(alpha: 0.12),
+          ValleyBrandColors.panelDarkStrong.withValues(alpha: 0.90),
+          ValleyBrandColors.night.withValues(alpha: 0.96),
+        ],
+      ),
+      child: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          final bool stacked = constraints.maxWidth < 900;
+          return _ResponsiveSplit(
+            stacked: stacked,
+            leadingFlex: 7,
+            trailingFlex: 5,
+            gap: 22,
+            leading: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Text(
+                      'Na inicial agora',
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                    const Spacer(),
+                    SignalChip(
+                      label: preferencesReady ? 'salvo' : 'sincronizando',
+                      color: preferencesReady
+                          ? ValleyBrandColors.success
+                          : ValleyBrandColors.warning,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 14),
+                Text(
+                  'Toque em um modulo para abrir a area operacional. Use o seletor ao lado para compor uma home mais enxuta ou mais completa.',
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                ),
+                const SizedBox(height: 18),
+                Wrap(
+                  spacing: 14,
+                  runSpacing: 14,
+                  children: homeModules
+                      .map(
+                        (ModuleRecord module) => SizedBox(
+                          width: stacked ? double.infinity : 276,
+                          child: HoverModuleTile(
+                            code: module.code,
+                            title: module.name,
+                            subtitle: '${module.subtitle} • ${module.tier}',
+                            caption: module.description,
+                            onTap: () => onOpenModule(module),
+                          ),
+                        ),
+                      )
+                      .toList(),
+                ),
+              ],
+            ),
+            trailing: ValleyPanel(
+              padding: const EdgeInsets.all(18),
+              radius: 22,
+              glowColor: ValleyBrandColors.violet,
+              background: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: <Color>[
+                  ValleyBrandColors.violet.withValues(alpha: 0.14),
+                  ValleyBrandColors.panelDark.withValues(alpha: 0.86),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    'Controlador de exibicao',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Todos os 47 modulos ficam acessiveis no dock; estes chips controlam apenas o que aparece no corpo da home.',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: allModules.map((ModuleRecord module) {
+                      final bool selected = visibleCodes.contains(module.code);
+                      final Color accent = _moduleAccentFor(module);
+                      return FilterChip(
+                        selected: selected,
+                        showCheckmark: true,
+                        avatar: Icon(_moduleIconFor(module), size: 18),
+                        label: Text(module.code),
+                        onSelected: (bool value) =>
+                            onToggleHomeModule(module, value),
+                        selectedColor: accent.withValues(alpha: 0.24),
+                        backgroundColor: ValleyBrandColors.night.withValues(
+                          alpha: 0.42,
+                        ),
+                        checkmarkColor: ValleyBrandColors.snow,
+                        side: BorderSide(
+                          color: selected
+                              ? accent.withValues(alpha: 0.66)
+                              : Colors.white.withValues(alpha: 0.12),
+                        ),
+                        labelStyle: Theme.of(context).textTheme.labelMedium
+                            ?.copyWith(
+                              color: selected
+                                  ? ValleyBrandColors.snow
+                                  : Theme.of(
+                                      context,
+                                    ).colorScheme.onSurfaceVariant,
+                              fontWeight: FontWeight.w800,
+                            ),
+                      );
+                    }).toList(),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _ModuleAccessDock extends StatelessWidget {
+  const _ModuleAccessDock({
+    required this.modules,
+    required this.selectedCode,
+    required this.onOpenModule,
+  });
+
+  final List<ModuleRecord> modules;
+  final String? selectedCode;
+  final ValueChanged<ModuleRecord> onOpenModule;
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(34),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: <Color>[
+                Colors.white.withValues(alpha: 0.10),
+                ValleyBrandColors.panelDarkStrong.withValues(alpha: 0.82),
+                ValleyBrandColors.night.withValues(alpha: 0.76),
+              ],
+            ),
+            borderRadius: BorderRadius.circular(34),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.14)),
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                color: ValleyBrandColors.cyan.withValues(alpha: 0.13),
+                blurRadius: 38,
+                offset: const Offset(0, 18),
+              ),
+            ],
+          ),
+          child: Row(
+            children: <Widget>[
+              const Icon(
+                Icons.grid_view_rounded,
+                color: ValleyBrandColors.cyan,
+                size: 22,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                'Dock',
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  color: ValleyBrandColors.snow,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 0.8,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Container(
+                width: 1,
+                height: 28,
+                color: Colors.white.withValues(alpha: 0.16),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: modules
+                        .map(
+                          (ModuleRecord module) => Padding(
+                            padding: const EdgeInsets.only(right: 8),
+                            child: _ModuleDockPill(
+                              module: module,
+                              selected: selectedCode == module.code,
+                              onOpenModule: onOpenModule,
+                            ),
+                          ),
+                        )
+                        .toList(),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ModuleDockPill extends StatelessWidget {
+  const _ModuleDockPill({
+    required this.module,
+    required this.selected,
+    required this.onOpenModule,
+  });
+
+  final ModuleRecord module;
+  final bool selected;
+  final ValueChanged<ModuleRecord> onOpenModule;
+
+  @override
+  Widget build(BuildContext context) {
+    final Color accent = _moduleAccentFor(module);
+    return Tooltip(
+      message: '${module.name}\n${module.description}',
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(999),
+          onTap: () => onOpenModule(module),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 180),
+            curve: Curves.easeOutCubic,
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
+            decoration: BoxDecoration(
+              color: selected
+                  ? accent.withValues(alpha: 0.24)
+                  : Colors.white.withValues(alpha: 0.06),
+              borderRadius: BorderRadius.circular(999),
+              border: Border.all(
+                color: selected
+                    ? accent.withValues(alpha: 0.72)
+                    : Colors.white.withValues(alpha: 0.12),
+              ),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Icon(
+                  _moduleIconFor(module),
+                  color: selected
+                      ? ValleyBrandColors.snow
+                      : accent.withValues(alpha: 0.92),
+                  size: 16,
+                ),
+                const SizedBox(width: 7),
+                Text(
+                  module.code,
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                    color: selected
+                        ? ValleyBrandColors.snow
+                        : Theme.of(context).colorScheme.onSurfaceVariant,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 0.3,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _PageFrame extends StatelessWidget {
   const _PageFrame({required this.child});
 
@@ -1811,7 +2354,7 @@ class _PageFrame extends StatelessWidget {
         compact ? 16 : 28,
         12,
         compact ? 16 : 28,
-        32,
+        compact ? 164 : 124,
       ),
       child: Align(
         alignment: Alignment.topCenter,

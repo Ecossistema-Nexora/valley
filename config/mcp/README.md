@@ -8,6 +8,7 @@ O workspace agora carrega uma malha MCP em duas camadas:
 ## Servidores declarados no workspace
 
 - `figma`: endpoint oficial remoto `https://mcp.figma.com/mcp`
+- `stitch`: endpoint oficial remoto `https://stitch.googleapis.com/mcp`
 - `linear`: endpoint oficial remoto `https://mcp.linear.app/mcp`
 - `cloudflare-api`: endpoint oficial remoto `https://mcp.cloudflare.com/mcp`
 
@@ -27,7 +28,14 @@ Essa separacao evita autenticacao duplicada e reduz colisao entre configuracao r
 ## Onboarding rapido
 
 - Use `config/VALLEY_FIRST_CONNECTION_CHECKLIST.md` como checklist operacional de primeira conexao.
-- Ele cobre OAuth inicial de `figma`, `linear` e `cloudflare-api`, alem da diferenca entre `workspace-declared` e `platform-managed`.
+- Ele cobre OAuth/API key inicial de `figma`, `stitch`, `linear` e `cloudflare-api`, alem da diferenca entre `workspace-declared` e `platform-managed`.
+
+## Politica front-end Stitch + Figma
+
+- Stitch e a origem primaria para ideacao e geracao de layouts front-end do Valley.
+- Figma e a camada de inspecao, handoff e ajuste fino quando houver design file ou componente mapeado.
+- O segredo `STITCH_API_KEY` nunca deve ser versionado; use `.env` local, prompt do VS Code MCP ou OAuth conforme o cliente.
+- A implementacao de runtime continua em Flutter, preservando tokens e responsividade Web + Android.
 
 ## Arquivo de referencia
 
@@ -36,5 +44,6 @@ Essa separacao evita autenticacao duplicada e reduz colisao entre configuracao r
 ## Fontes operacionais
 
 - Figma Developer Docs: endpoint remoto oficial `https://mcp.figma.com/mcp`
+- Stitch Docs: endpoint MCP oficial `https://stitch.googleapis.com/mcp`
 - Linear Changelog / MCP docs: endpoint oficial atualizado `https://mcp.linear.app/mcp`
 - Cloudflare MCP server: endpoint oficial `https://mcp.cloudflare.com/mcp`

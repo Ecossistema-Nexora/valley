@@ -1,0 +1,29 @@
+{
+  "version": "v1",
+  "primary_layout_generator": {
+    "name": "Stitch by Google",
+    "app_url": "https://stitch.withgoogle.com/",
+    "mcp_url": "https://stitch.googleapis.com/mcp",
+    "auth": "STITCH_API_KEY local or OAuth in MCP client"
+  },
+  "handoff_layer": {
+    "name": "Figma",
+    "mcp_url": "https://mcp.figma.com/mcp",
+    "vscode_extension": "figma.figma-vscode-extension"
+  },
+  "implementation_target": {
+    "framework": "Flutter",
+    "theme_file": "frontend/flutter/lib/valley_brand_theme.dart",
+    "surfaces": [
+      "web",
+      "android"
+    ]
+  },
+  "persistent_rules": [
+    "Start every new front-end layout from Stitch before coding.",
+    "Use Figma for design inspection and handoff when a design file exists.",
+    "Never commit Stitch or Figma secrets.",
+    "Keep the Valley home screen modular and user-selectable.",
+    "Expose a universal module dock for all Valley modules."
+  ]
+}
