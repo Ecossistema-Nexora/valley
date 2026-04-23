@@ -63,6 +63,10 @@ class ProductItem {
     required this.ctaLabel,
     required this.ctaPath,
     required this.mediaPath,
+    required this.description,
+    required this.galleryUrls,
+    required this.profileId,
+    required this.raw,
   });
 
   factory ProductItem.fromJson(Map<String, dynamic> json) {
@@ -84,6 +88,11 @@ class ProductItem {
       ctaLabel: json['cta_label'] as String? ?? 'Abrir',
       ctaPath: json['cta_path'] as String? ?? '',
       mediaPath: json['media_path'] as String? ?? '',
+      description: json['description'] as String? ?? '',
+      galleryUrls: (json['gallery_urls'] as List<dynamic>? ?? <dynamic>[])
+          .cast<String>(),
+      profileId: json['profile_id'] as String? ?? '',
+      raw: Map<String, dynamic>.from(json),
     );
   }
 
@@ -104,6 +113,10 @@ class ProductItem {
   final String ctaLabel;
   final String ctaPath;
   final String mediaPath;
+  final String description;
+  final List<String> galleryUrls;
+  final String profileId;
+  final Map<String, dynamic> raw;
 }
 
 class ProductShellData {
@@ -116,6 +129,7 @@ class ProductShellData {
     required this.summary,
     required this.items,
     required this.publicUrl,
+    required this.rawData,
   });
 
   final String baseUrl;
@@ -126,6 +140,7 @@ class ProductShellData {
   final ProductSummary summary;
   final List<ProductItem> items;
   final String publicUrl;
+  final Map<String, dynamic> rawData;
 }
 
 class ProductActionResult {

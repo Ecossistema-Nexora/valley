@@ -16,6 +16,14 @@ Checklist curto para subir MCP e acesso externo sem ambiguidade.
 - Inicie `figma`, `stitch`, `linear` e `cloudflare-api`.
 - Na primeira execucao, conclua o OAuth de cada um no navegador e aceite `Allow access`.
 - Para `stitch`, prefira API key persistente: gere na pagina Settings do Stitch, salve como `STITCH_API_KEY` no `.env` local ou informe no prompt seguro do VS Code MCP.
+- O workspace VS Code agora le `STITCH_API_KEY` diretamente do ambiente via `.vscode/mcp.json`.
+- Valide localmente com:
+
+```powershell
+python scripts/check_stitch_env.py
+```
+
+- Se a chave estiver apenas no `.env`, carregue-a na sessao antes de abrir o cliente MCP.
 - Confirme no cliente que os quatro servidores ficaram `Connected` antes de pedir automacao ao agente.
 
 ## 2. Workspace-declared vs platform-managed

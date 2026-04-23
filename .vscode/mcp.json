@@ -1,12 +1,4 @@
 {
-  "inputs": [
-    {
-      "id": "stitch-api-key",
-      "type": "promptString",
-      "description": "Stitch API key from the Stitch Settings page",
-      "password": true
-    }
-  ],
   "servers": {
     "figma": {
       "type": "http",
@@ -17,7 +9,7 @@
       "url": "https://stitch.googleapis.com/mcp",
       "headers": {
         "Accept": "application/json",
-        "X-Goog-Api-Key": "${input:stitch-api-key}"
+        "X-Goog-Api-Key": "${env:STITCH_API_KEY}"
       }
     },
     "linear": {

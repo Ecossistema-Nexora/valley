@@ -16,6 +16,7 @@ Todo layout front-end novo do Valley deve partir do Stitch by Google como gerado
 - Nunca committe `STITCH_API_KEY`, tokens OAuth ou credenciais Figma.
 - Use `.env` local para `STITCH_API_KEY` ou o prompt seguro em `.vscode/mcp.json`.
 - Antes de alterar layout Flutter, gere ou revise a direcao visual no Stitch.
+- Todas as telas desta versao produto devem nascer no Stitch: uma tela dedicada para cada um dos 47 modulos, mais home, detalhe, feed, chat, conversa, checkout, extrato, Food e Mobility.
 - Quando houver arquivo Figma, use Figma para inspecionar espacamento, hierarquia, assets e componentes.
 - Implementacoes Flutter devem respeitar `frontend/flutter/lib/valley_brand_theme.dart`.
 
@@ -24,6 +25,8 @@ Todo layout front-end novo do Valley deve partir do Stitch by Google como gerado
 Visual thesis: cockpit modular premium, escuro e luminoso, com textura de vidro, energia fintech e navegacao de super app.
 
 Content plan: primeiro viewport com command center, metricas operacionais, selecao de modulos da home e dock universal de acesso aos 47 modulos.
+
+Mandatory expansion: gerar Helena como assistente overlay com voz, expressao facial e modo minimizado em forma de estrela da marca Valley.
 
 Interaction thesis: entrada fade/slide, dock horizontal com destaque do modulo ativo e toggles persistentes para compor a tela inicial sem reabrir configuracoes.
 

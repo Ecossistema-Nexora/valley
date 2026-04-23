@@ -221,7 +221,7 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
     def _product_shell_payload(self) -> dict[str, Any]:
         catalog = load_json_file(PRODUCT_CATALOG_PATH) or {}
         hero = (catalog.get("hero") or {}) if isinstance(catalog, dict) else {}
-        return {
+        payload = {
             "status": "ok",
             "service": "valley-product",
             "generated_at_utc": utc_now_iso(),
@@ -231,10 +231,13 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 "Compra, explore e acesse seus modulos em uma unica experiencia.",
             ),
             "public_runtime": self._public_runtime_payload(),
-            "modules": catalog.get("modules", []),
-            "summary": catalog.get("summary", {}),
-            "items": catalog.get("items", []),
         }
+        if isinstance(catalog, dict):
+            payload.update(catalog)
+            payload["public_runtime"] = self._public_runtime_payload()
+            payload["status"] = "ok"
+            payload["service"] = "valley-product"
+        return payload
 
     def _product_interest_payload(self, query: dict[str, list[str]]) -> dict[str, Any]:
         item_id = (query.get("item_id") or [""])[0]

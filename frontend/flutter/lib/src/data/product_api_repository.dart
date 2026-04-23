@@ -87,6 +87,7 @@ class ProductApiRepository {
           )
           .toList(),
       publicUrl: publicRuntime['public_url'] as String? ?? '',
+      rawData: Map<String, dynamic>.from(json),
     );
   }
 

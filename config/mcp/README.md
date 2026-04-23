@@ -35,6 +35,8 @@ Essa separacao evita autenticacao duplicada e reduz colisao entre configuracao r
 - Stitch e a origem primaria para ideacao e geracao de layouts front-end do Valley.
 - Figma e a camada de inspecao, handoff e ajuste fino quando houver design file ou componente mapeado.
 - O segredo `STITCH_API_KEY` nunca deve ser versionado; use `.env` local, prompt do VS Code MCP ou OAuth conforme o cliente.
+- No VS Code do workspace, `.vscode/mcp.json` foi preparado para ler `STITCH_API_KEY` do ambiente com `${env:STITCH_API_KEY}`.
+- Use `python scripts/check_stitch_env.py` para validar se a chave esta carregada sem expor o valor completo.
 - A implementacao de runtime continua em Flutter, preservando tokens e responsividade Web + Android.
 
 ## Arquivo de referencia

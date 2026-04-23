@@ -28,6 +28,15 @@ IMAGE_POOL = [
     "https://images.unsplash.com/photo-1546868871-7041f2a55e12?auto=format&fit=crop&w=1200&q=80",
 ]
 
+AVATAR_POOL = [
+    "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1504593811423-6dd665756598?auto=format&fit=crop&w=600&q=80",
+]
+
 VIDEO_POOL = [
     "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
     "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
@@ -57,6 +66,9 @@ CATEGORIES = [
     "Smart Living",
 ]
 
+CITIES = ["Sao Paulo", "Campinas", "Santos", "Ribeirao Preto", "Sorocaba"]
+PRESENCE = ["online", "em entrega", "em reuniao", "respondendo", "ativo agora"]
+
 
 def stable_uuid(name: str) -> str:
     return str(uuid5(NAMESPACE_URL, f"valley-demo::{name}"))
@@ -85,26 +97,41 @@ def load_modules() -> list[dict[str, object]]:
     return payload["modules"]
 
 
+def _module_screen(module: dict[str, object], index: int) -> dict[str, object]:
+    code = str(module["code"])
+    return {
+        "module_id": code,
+        "hero_title": f"{module['name']} em modo produto",
+        "hero_subtitle": f"{module['subtitle']} com jornada pronta para usuario final, acoes vivas, feed contextual e continuidade elegante.",
+        "accent_label": "Experiencia ativa",
+        "stat_cards": [
+            {"label": "Sessoes", "value": f"{1400 + index * 17}", "trend": "+12%"},
+            {"label": "Conversoes", "value": f"{84 + index}", "trend": "+8%"},
+            {"label": "Retorno", "value": f"R$ {4200 + index * 95}", "trend": "+15%"},
+        ],
+        "quick_actions": [
+            {"label": "Abrir painel", "target": "module"},
+            {"label": "Ver feed", "target": "feed"},
+            {"label": "Conversar", "target": "chat"},
+            {"label": "Extrato", "target": "statement"},
+        ],
+        "highlights": [
+            f"Jornada premium pronta para {code.lower()}",
+            "Transicoes discretas e leitura imediata",
+            "Acesso rapido por dock flutuante",
+        ],
+    }
+
+
 def build_demo_records() -> dict[str, object]:
     modules = load_modules()
-    active_codes = [
-        "MARKETPLACE",
-        "STOCK",
-        "WMS",
-        "DELIVERY",
-        "SERVICES",
-        "MOBILITY",
-        "PAY",
-        "UP",
-    ]
-    active_modules = [module for module in modules if module["code"] in active_codes]
 
     users: list[dict[str, object]] = []
     wallets: list[dict[str, object]] = []
     suppliers: list[dict[str, object]] = []
     warehouses: list[dict[str, object]] = []
     storefronts: list[dict[str, object]] = []
-    items: list[dict[str, object]] = []
+    inventory_items: list[dict[str, object]] = []
     lots: list[dict[str, object]] = []
     listings: list[dict[str, object]] = []
     controls: list[dict[str, object]] = []
@@ -113,210 +140,354 @@ def build_demo_records() -> dict[str, object]:
     ai_memory: list[dict[str, object]] = []
     influencer_metrics: list[dict[str, object]] = []
     telemetry_logs: list[dict[str, object]] = []
+    profiles: list[dict[str, object]] = []
+    feed_entries: list[dict[str, object]] = []
+    statement_entries: list[dict[str, object]] = []
 
-    for index in range(100):
-        number = index + 1
-        merchant_id = stable_uuid(f"user-{number}")
-        wallet_id = stable_uuid(f"wallet-{number}")
-        supplier_id = stable_uuid(f"supplier-{number}")
-        warehouse_id = stable_uuid(f"warehouse-{number}")
-        storefront_id = stable_uuid(f"storefront-{number}")
-        item_id = stable_uuid(f"item-{number}")
-        lot_id = stable_uuid(f"lot-{number}")
-        listing_id = stable_uuid(f"listing-{number}")
-        control_id = stable_uuid(f"listing-control-{number}")
-        competitor_id = stable_uuid(f"competitor-{number}")
-        video_id = stable_uuid(f"video-{number}")
-        memory_id = stable_uuid(f"memory-{number}")
-        metric_id = stable_uuid(f"metric-{number}")
-        telemetry_id = stable_uuid(f"telemetry-{number}")
+    for module_index, module in enumerate(modules):
+        for local_index in range(100):
+            index = (module_index * 100) + local_index
+            number = index + 1
+            module_serial = local_index + 1
+            module_code = str(module["code"])
+            merchant_id = stable_uuid(f"user-{number}")
+            wallet_id = stable_uuid(f"wallet-{number}")
+            supplier_id = stable_uuid(f"supplier-{number}")
+            warehouse_id = stable_uuid(f"warehouse-{number}")
+            storefront_id = stable_uuid(f"storefront-{number}")
+            item_id = stable_uuid(f"item-{number}")
+            lot_id = stable_uuid(f"lot-{number}")
+            listing_id = stable_uuid(f"listing-{number}")
+            control_id = stable_uuid(f"listing-control-{number}")
+            competitor_id = stable_uuid(f"competitor-{number}")
+            video_id = stable_uuid(f"video-{number}")
+            memory_id = stable_uuid(f"memory-{number}")
+            metric_id = stable_uuid(f"metric-{number}")
+            telemetry_id = stable_uuid(f"telemetry-{number}")
+            profile_id = stable_uuid(f"profile-{number}")
+            feed_id = stable_uuid(f"feed-{number}")
 
-        brand = BRANDS[index % len(BRANDS)]
-        category = CATEGORIES[index % len(CATEGORIES)]
-        image_url = IMAGE_POOL[index % len(IMAGE_POOL)]
-        video_url = VIDEO_POOL[index % len(VIDEO_POOL)]
-        title = f"{brand} {category} {number:03d}"
-        price = round(299 + (index * 17.45), 2)
-        compare_price = round(price * 1.14, 2)
-        stock = 12 + (index % 37)
-        created_at = iso_at(index)
+            brand = BRANDS[index % len(BRANDS)]
+            category = CATEGORIES[index % len(CATEGORIES)]
+            image_url = IMAGE_POOL[index % len(IMAGE_POOL)]
+            video_url = VIDEO_POOL[index % len(VIDEO_POOL)]
+            avatar_url = AVATAR_POOL[index % len(AVATAR_POOL)]
+            title = f"{brand} {category} {module_code} {module_serial:03d}"
+            price = round(299 + (index * 17.45), 2)
+            compare_price = round(price * 1.14, 2)
+            stock = 12 + (index % 37)
+            created_at = iso_at(index)
+            city = CITIES[index % len(CITIES)]
 
-        user = {
-            "user_id": merchant_id,
-            "user_kind": "PJ",
-            "account_status": "ACTIVE",
-            "kyc_status": "APPROVED",
-            "full_name": f"{brand} Comercio {number:03d}",
-            "display_name": brand,
-            "email": f"merchant{number:03d}@valley.demo",
-            "phone": f"+551199900{number:04d}",
-            "document_number": f"{number:014d}",
-            "created_at": created_at,
-        }
-        wallet = {
-            "wallet_id": wallet_id,
-            "user_id": merchant_id,
-            "created_at": created_at,
-        }
-        supplier = {
-            "supplier_id": supplier_id,
-            "user_id": merchant_id,
-            "legal_name": f"{brand} Supply {number:03d}",
-            "created_at": created_at,
-        }
-        warehouse = {
-            "warehouse_id": warehouse_id,
-            "owner_user_id": merchant_id,
-            "warehouse_code": f"WH-{number:03d}",
-            "warehouse_name": f"Hub {category} {number:03d}",
-            "created_at": created_at,
-        }
-        storefront = {
-            "storefront_id": storefront_id,
-            "merchant_user_id": merchant_id,
-            "wallet_id": wallet_id,
-            "storefront_code": f"STORE-{number:03d}",
-            "storefront_name": f"{brand} Store {number:03d}",
-            "created_at": created_at,
-        }
-        item = {
-            "item_id": item_id,
-            "merchant_user_id": merchant_id,
-            "sku": f"SKU-{number:03d}",
-            "title": title,
-            "category": category,
-            "brand": brand,
-            "description": f"{title} com pronta entrega, acabamento premium e demonstracao ativa.",
-            "price_brl": price,
-            "compare_at_brl": compare_price,
-            "stock": stock,
-            "image_url": image_url,
-            "video_url": video_url,
-            "created_at": created_at,
-        }
-        lot = {
-            "inventory_lot_id": lot_id,
-            "owner_user_id": merchant_id,
-            "item_id": item_id,
-            "warehouse_id": warehouse_id,
-            "supplier_id": supplier_id,
-            "lot_code": f"LOT-{number:03d}",
-            "created_at": created_at,
-        }
-        listing = {
-            "listing_id": listing_id,
-            "merchant_user_id": merchant_id,
-            "wallet_id": wallet_id,
-            "item_id": item_id,
-            "title": title,
-            "price_brl": price,
-            "stock": stock,
-            "image_url": image_url,
-            "video_url": video_url,
-            "created_at": created_at,
-        }
-        control = {
-            "listing_control_id": control_id,
-            "listing_id": listing_id,
-            "merchant_user_id": merchant_id,
-            "price_brl": price,
-            "created_at": created_at,
-        }
-        competitor = {
-            "competitor_snapshot_id": competitor_id,
-            "listing_id": listing_id,
-            "item_id": item_id,
-            "merchant_user_id": merchant_id,
-            "price_brl": round(price * 1.08, 2),
-            "created_at": created_at,
-        }
+            users.append(
+                {
+                    "user_id": merchant_id,
+                    "user_kind": "PJ",
+                    "account_status": "ACTIVE",
+                    "kyc_status": "APPROVED",
+                    "full_name": f"{brand} Comercio {number:03d}",
+                    "display_name": brand,
+                    "email": f"merchant{number:03d}@valley.demo",
+                    "phone": f"+551199900{number:04d}",
+                    "document_number": f"{number:014d}",
+                    "created_at": created_at,
+                }
+            )
+            wallets.append({"wallet_id": wallet_id, "user_id": merchant_id, "created_at": created_at})
+            suppliers.append(
+                {
+                    "supplier_id": supplier_id,
+                    "user_id": merchant_id,
+                    "legal_name": f"{brand} Supply {number:03d}",
+                    "created_at": created_at,
+                }
+            )
+            warehouses.append(
+                {
+                    "warehouse_id": warehouse_id,
+                    "owner_user_id": merchant_id,
+                    "warehouse_code": f"WH-{number:03d}",
+                    "warehouse_name": f"Hub {module_code} {module_serial:03d}",
+                    "created_at": created_at,
+                }
+            )
+            storefronts.append(
+                {
+                    "storefront_id": storefront_id,
+                    "merchant_user_id": merchant_id,
+                    "wallet_id": wallet_id,
+                    "storefront_code": f"STORE-{number:03d}",
+                    "storefront_name": f"{brand} Store {number:03d}",
+                    "created_at": created_at,
+                }
+            )
+            inventory_items.append(
+                {
+                    "item_id": item_id,
+                    "merchant_user_id": merchant_id,
+                    "sku": f"{module_code}-SKU-{module_serial:03d}",
+                    "title": title,
+                    "category": category,
+                    "brand": brand,
+                    "description": f"{title} com pronta entrega, demonstracao em video e fluxo de compra direto para o usuario final.",
+                    "price_brl": price,
+                    "compare_at_brl": compare_price,
+                    "stock": stock,
+                    "image_url": image_url,
+                    "video_url": video_url,
+                    "created_at": created_at,
+                }
+            )
+            lots.append(
+                {
+                    "inventory_lot_id": lot_id,
+                    "owner_user_id": merchant_id,
+                    "item_id": item_id,
+                    "warehouse_id": warehouse_id,
+                    "supplier_id": supplier_id,
+                    "lot_code": f"{module_code}-LOT-{module_serial:03d}",
+                    "created_at": created_at,
+                }
+            )
+            listings.append(
+                {
+                    "listing_id": listing_id,
+                    "merchant_user_id": merchant_id,
+                    "wallet_id": wallet_id,
+                    "item_id": item_id,
+                    "title": title,
+                    "price_brl": price,
+                    "stock": stock,
+                    "image_url": image_url,
+                    "video_url": video_url,
+                    "created_at": created_at,
+                }
+            )
+            controls.append(
+                {
+                    "listing_control_id": control_id,
+                    "listing_id": listing_id,
+                    "merchant_user_id": merchant_id,
+                    "price_brl": price,
+                    "created_at": created_at,
+                }
+            )
+            competitors.append(
+                {
+                    "competitor_snapshot_id": competitor_id,
+                    "listing_id": listing_id,
+                    "item_id": item_id,
+                    "merchant_user_id": merchant_id,
+                    "price_brl": round(price * 1.08, 2),
+                    "created_at": created_at,
+                }
+            )
+            profiles.append(
+                {
+                    "id": profile_id,
+                    "user_id": merchant_id,
+                    "name": f"{brand} {number:03d}",
+                    "headline": f"{category} • {module_code} • experiencia premium",
+                    "avatar_url": avatar_url,
+                    "cover_url": image_url,
+                    "city": city,
+                    "presence": PRESENCE[index % len(PRESENCE)],
+                    "followers": 1200 + index * 19,
+                    "rating": round(4.3 + ((index % 6) * 0.1), 1),
+                }
+            )
+            feed_entries.append(
+                {
+                    "id": feed_id,
+                    "profile_id": profile_id,
+                    "module_id": module_code,
+                    "author_name": f"{brand} {number:03d}",
+                    "author_avatar": avatar_url,
+                    "headline": f"{title} entrou em destaque",
+                    "text": "Lancamento com video ativo, conversa direta, checkout simplificado e entrega no ecossistema Valley.",
+                    "media_url": image_url,
+                    "video_url": video_url,
+                    "item_id": listing_id,
+                    "likes": 140 + index * 4,
+                    "comments": 18 + (index % 13),
+                    "shares": 9 + (index % 7),
+                    "time_label": f"{(index % 12) + 1}h",
+                }
+            )
+            statement_entries.append(
+                {
+                    "id": stable_uuid(f"statement-{number}"),
+                    "title": "Recebimento de venda" if index % 2 == 0 else "Pagamento de servico",
+                    "subtitle": f"{module_code} • {brand}",
+                    "amount_brl": round(price if index % 2 == 0 else price * -0.42, 2),
+                    "direction": "credit" if index % 2 == 0 else "debit",
+                    "status": "processado" if index % 5 else "pendente",
+                    "created_at": created_at,
+                }
+            )
+            social_videos.append(
+                {
+                    "_id": {"$uuid": video_id},
+                    "video_id": video_id,
+                    "creator_user_id": merchant_id,
+                    "owner_user_id": merchant_id,
+                    "caption": f"{title} em demonstracao ativa.",
+                    "hashtags": ["valley", "produto", module_code.lower()],
+                    "media_url": video_url,
+                    "thumbnail_url": image_url,
+                    "visibility": "PUBLIC",
+                    "commission_link": f"https://valley.demo/item/{listing_id}",
+                    "product_refs": [{"item_id": item_id, "listing_id": listing_id, "module_code": module_code}],
+                    "view_count": 1500 + index * 31,
+                    "like_count": 180 + index * 7,
+                    "share_count": 32 + index,
+                    "comment_count": 14 + (index % 23),
+                    "status": "ACTIVE",
+                    "created_at": {"$date": created_at},
+                    "updated_at": {"$date": created_at},
+                }
+            )
+            ai_memory.append(
+                {
+                    "_id": {"$uuid": memory_id},
+                    "memory_id": memory_id,
+                    "user_id": merchant_id,
+                    "memory_scope": "BUSINESS",
+                    "persona_mode": "MERCHANT",
+                    "source_module": module_code,
+                    "content_summary": f"Preferencia por vitrine premium e recompra rapida para {title}.",
+                    "content_vector_ref": f"vector://valley/{memory_id}",
+                    "importance_score": 0.82,
+                    "consent_scope": "PROFILE",
+                    "expires_at": None,
+                    "created_at": {"$date": created_at},
+                    "updated_at": {"$date": created_at},
+                }
+            )
+            influencer_metrics.append(
+                {
+                    "_id": {"$uuid": metric_id},
+                    "metric_id": metric_id,
+                    "influencer_user_id": merchant_id,
+                    "campaign_id": f"{module_code}-CAMP-{module_serial:03d}",
+                    "period_start": {"$date": created_at},
+                    "period_end": {"$date": iso_at(index, minutes=23)},
+                    "impressions": 12000 + index * 55,
+                    "views": 4200 + index * 29,
+                    "clicks": 640 + index * 5,
+                    "ctr": 0.054,
+                    "conversions": 48 + (index % 17),
+                    "gross_sales_brl": round(price * 14, 2),
+                    "commission_brl": round(price * 1.4, 2),
+                    "engagement_rate": 0.127,
+                    "source_breakdown": {"social": 0.54, "direct": 0.21, "ads": 0.25},
+                    "created_at": {"$date": created_at},
+                }
+            )
+            telemetry_logs.append(
+                {
+                    "_id": {"$uuid": telemetry_id},
+                    "telemetry_id": telemetry_id,
+                    "user_id": merchant_id,
+                    "rider_user_id": None,
+                    "device_id": f"{module_code.lower()}-device-{module_serial:03d}",
+                    "event_type": "GPS_PING",
+                    "event_source": "MOBILE_APP",
+                    "geo": {"type": "Point", "coordinates": [-46.63 + (index * 0.001), -23.55 + (index * 0.001)]},
+                    "speed_kph": 18 + (index % 7),
+                    "battery_level": 88 - (index % 11),
+                    "sensor_payload": {"screen": "product_mode", "listing_id": listing_id},
+                    "correlation_id": listing_id,
+                    "event_time": {"$date": created_at},
+                    "ingested_at": {"$date": created_at},
+                }
+            )
 
-        users.append(user)
-        wallets.append(wallet)
-        suppliers.append(supplier)
-        warehouses.append(warehouse)
-        storefronts.append(storefront)
-        items.append(item)
-        lots.append(lot)
-        listings.append(listing)
-        controls.append(control)
-        competitors.append(competitor)
-
-        social_videos.append(
+    conversations: list[dict[str, object]] = []
+    for index, profile in enumerate(profiles):
+        conversation_id = stable_uuid(f"conversation-{index + 1}")
+        messages = []
+        for message_index in range(4):
+            sent_by_me = message_index % 2 == 0
+            messages.append(
+                {
+                    "id": stable_uuid(f"conversation-{index + 1}-message-{message_index + 1}"),
+                    "sender": "me" if sent_by_me else "contact",
+                    "text": (
+                        "Consegue entregar hoje ainda?"
+                        if sent_by_me
+                        else "Sim. Ja deixei a proposta pronta com o fluxo premium e o pagamento direto no app."
+                    ),
+                    "created_at": iso_at(index + message_index, minutes=7),
+                }
+            )
+        conversations.append(
             {
-                "_id": {"$uuid": video_id},
-                "video_id": video_id,
-                "creator_user_id": merchant_id,
-                "owner_user_id": merchant_id,
-                "caption": f"{title} em demonstracao ativa.",
-                "hashtags": ["valley", "marketplace", category.lower().replace(" ", "-")],
-                "media_url": video_url,
-                "thumbnail_url": image_url,
-                "visibility": "PUBLIC",
-                "commission_link": f"https://valley.demo/item/{listing_id}",
-                "product_refs": [{"item_id": item_id, "listing_id": listing_id, "module_code": "MARKETPLACE"}],
-                "view_count": 1500 + index * 31,
-                "like_count": 180 + index * 7,
-                "share_count": 32 + index,
-                "comment_count": 14 + (index % 23),
-                "status": "ACTIVE",
-                "created_at": {"$date": created_at},
-                "updated_at": {"$date": created_at},
+                "id": conversation_id,
+                "profile_id": profile["id"],
+                "title": profile["name"],
+                "subtitle": profile["headline"],
+                "avatar_url": profile["avatar_url"],
+                "unread_count": index % 4,
+                "last_message_at": iso_at(index, minutes=7),
+                "messages": messages,
             }
         )
-        ai_memory.append(
+
+    module_screens = [_module_screen(module, index) for index, module in enumerate(modules)]
+
+    catalog_items = []
+    for index, listing in enumerate(listings):
+        item = inventory_items[index]
+        module = modules[index % len(modules)]
+        profile = profiles[index]
+        catalog_items.append(
             {
-                "_id": {"$uuid": memory_id},
-                "memory_id": memory_id,
-                "user_id": merchant_id,
-                "memory_scope": "BUSINESS",
-                "persona_mode": "MERCHANT",
-                "source_module": "MARKETPLACE",
-                "content_summary": f"Preferencia por vitrine premium e recompra rapida para {title}.",
-                "content_vector_ref": f"vector://valley/{memory_id}",
-                "importance_score": 0.82,
-                "consent_scope": "PROFILE",
-                "expires_at": None,
-                "created_at": {"$date": created_at},
-                "updated_at": {"$date": created_at},
-            }
-        )
-        influencer_metrics.append(
-            {
-                "_id": {"$uuid": metric_id},
-                "metric_id": metric_id,
-                "influencer_user_id": merchant_id,
-                "campaign_id": f"CAMP-{number:03d}",
-                "period_start": {"$date": created_at},
-                "period_end": {"$date": iso_at(index, minutes=23)},
-                "impressions": 12000 + index * 55,
-                "views": 4200 + index * 29,
-                "clicks": 640 + index * 5,
-                "ctr": 0.054,
-                "conversions": 48 + (index % 17),
-                "gross_sales_brl": round(price * 14, 2),
-                "commission_brl": round(price * 1.4, 2),
-                "engagement_rate": 0.127,
-                "source_breakdown": {"social": 0.54, "direct": 0.21, "ads": 0.25},
-                "created_at": {"$date": created_at},
-            }
-        )
-        telemetry_logs.append(
-            {
-                "_id": {"$uuid": telemetry_id},
-                "telemetry_id": telemetry_id,
-                "user_id": merchant_id,
-                "rider_user_id": None,
-                "device_id": f"market-device-{number:03d}",
-                "event_type": "GPS_PING",
-                "event_source": "MOBILE_APP",
-                "geo": {"type": "Point", "coordinates": [-46.63 + (index * 0.001), -23.55 + (index * 0.001)]},
-                "speed_kph": 18 + (index % 7),
-                "battery_level": 88 - (index % 11),
-                "sensor_payload": {"screen": "product_mode", "listing_id": listing_id},
-                "correlation_id": listing_id,
-                "event_time": {"$date": created_at},
-                "ingested_at": {"$date": created_at},
+                "id": listing["listing_id"],
+                "module_id": module["code"],
+                "title": listing["title"],
+                "brand": item["brand"],
+                "category": item["category"],
+                "price_brl": listing["price_brl"],
+                "compare_at_brl": item["compare_at_brl"],
+                "stock": listing["stock"],
+                "merchant_name": users[index]["display_name"],
+                "image_url": listing["image_url"],
+                "video_url": listing["video_url"],
+                "video_count": 1,
+                "status": "disponivel" if index % 5 != 0 else "quase esgotado",
+                "tags": [item["category"], str(module["code"]), "Premium"],
+                "cta_label": "Abrir",
+                "cta_path": f"/api/actions/product-interest?item_id={listing['listing_id']}",
+                "media_path": f"/api/actions/open-media?item_id={listing['listing_id']}",
+                "description": item["description"],
+                "gallery_urls": [
+                    listing["image_url"],
+                    *[
+                        IMAGE_POOL[(index + offset) % len(IMAGE_POOL)]
+                        for offset in range(1, 3)
+                    ],
+                ][:3],
+                "profile_id": profile["id"],
+                "features": [
+                    "Video demonstrativo pronto",
+                    "Compra com checkout direto",
+                    "Suporte via chat integrado",
+                ],
+                "seller": {
+                    "name": profile["name"],
+                    "avatar_url": profile["avatar_url"],
+                    "rating": profile["rating"],
+                    "city": profile["city"],
+                },
+                "checkout": {
+                    "headline": "Resumo de compra",
+                    "shipping_brl": 19.9 + (index % 4) * 6,
+                    "service_brl": 4.9,
+                    "installments": 12,
+                    "eta": f"{2 + (index % 3)} dias",
+                },
+                "raw_badge": str(module["subtitle"]),
             }
         )
 
@@ -333,36 +504,20 @@ def build_demo_records() -> dict[str, object]:
                 "subtitle": module["subtitle"],
                 "badge": "ativo",
             }
-            for module in active_modules
+            for module in modules
         ],
         "summary": {
-            "products": len(items),
+            "products": len(catalog_items),
             "videos": len(social_videos),
             "merchants": len(users),
             "warehouses": len(warehouses),
         },
-        "items": [
-            {
-                "id": listing["listing_id"],
-                "module_id": "MARKETPLACE" if idx % 2 == 0 else "STOCK",
-                "title": listing["title"],
-                "brand": items[idx]["brand"],
-                "category": items[idx]["category"],
-                "price_brl": listing["price_brl"],
-                "compare_at_brl": items[idx]["compare_at_brl"],
-                "stock": listing["stock"],
-                "merchant_name": users[idx]["display_name"],
-                "image_url": listing["image_url"],
-                "video_url": listing["video_url"],
-                "video_count": 1,
-                "status": "disponivel" if idx % 5 != 0 else "quase esgotado",
-                "tags": [items[idx]["category"], "Entrega rapida", "Premium"],
-                "cta_label": "Comprar",
-                "cta_path": f"/api/actions/product-interest?item_id={listing['listing_id']}",
-                "media_path": f"/api/actions/open-media?item_id={listing['listing_id']}",
-            }
-            for idx, listing in enumerate(listings)
-        ],
+        "module_screens": module_screens,
+        "profiles": profiles,
+        "feed_entries": feed_entries,
+        "conversations": conversations,
+        "statement_entries": statement_entries,
+        "items": catalog_items,
     }
 
     return {
@@ -373,7 +528,7 @@ def build_demo_records() -> dict[str, object]:
             "suppliers": suppliers,
             "warehouses": warehouses,
             "merchant_storefronts": storefronts,
-            "inventory_items": items,
+            "inventory_items": inventory_items,
             "inventory_lots": lots,
             "marketplace_listings": listings,
             "marketplace_listing_controls": controls,
@@ -427,13 +582,11 @@ def build_postgres_seed(payload: dict[str, object]) -> str:
         )
 
     for row in suppliers:
-        contact_email = f"contato@{row['legal_name'].lower().replace(' ', '-')}.demo"
-        contact_json = {"email": contact_email}
-        compliance_json = {"kyb": "approved"}
+        contact_email = f"contato@{str(row['legal_name']).lower().replace(' ', '-')}.demo"
         lines.extend(
             [
                 "INSERT INTO suppliers (supplier_id, supplier_user_id, module_code, supplier_status, legal_name, trade_name, default_margin_rate, lead_time_days, rating_score, contact_json, compliance_json, created_at, updated_at)",
-                f"VALUES ({sql_literal(row['supplier_id'])}, {sql_literal(row['user_id'])}, 'STOCK', 'ACTIVE', {sql_literal(row['legal_name'])}, {sql_literal(row['legal_name'])}, 0.2800, 3, 94.00, {sql_literal(contact_json)}::jsonb, {sql_literal(compliance_json)}::jsonb, {sql_literal(row['created_at'])}, {sql_literal(row['created_at'])})",
+                f"VALUES ({sql_literal(row['supplier_id'])}, {sql_literal(row['user_id'])}, 'STOCK', 'ACTIVE', {sql_literal(row['legal_name'])}, {sql_literal(row['legal_name'])}, 0.2800, 3, 94.00, {sql_literal({'email': contact_email})}::jsonb, {sql_literal({'kyb': 'approved'})}::jsonb, {sql_literal(row['created_at'])}, {sql_literal(row['created_at'])})",
                 "ON CONFLICT (supplier_id) DO NOTHING;",
             ]
         )
@@ -521,7 +674,7 @@ def build_mongo_seed(payload: dict[str, object]) -> str:
     ]
     lines.extend(
         [
-            f"  {{ replaceOne: {{ filter: {{ memory_id: '{doc['memory_id']}' }}, replacement: deserialize({json.dumps(doc, ensure_ascii=False)}), upsert: true }} }},{''}"
+            f"  {{ replaceOne: {{ filter: {{ memory_id: '{doc['memory_id']}' }}, replacement: deserialize({json.dumps(doc, ensure_ascii=False)}), upsert: true }} }},"
             for doc in mongo["ai_memory"]
         ]
     )
@@ -529,7 +682,7 @@ def build_mongo_seed(payload: dict[str, object]) -> str:
     lines.append("db.social_videos.bulkWrite([")
     lines.extend(
         [
-            f"  {{ replaceOne: {{ filter: {{ video_id: '{doc['video_id']}' }}, replacement: deserialize({json.dumps(doc, ensure_ascii=False)}), upsert: true }} }},{''}"
+            f"  {{ replaceOne: {{ filter: {{ video_id: '{doc['video_id']}' }}, replacement: deserialize({json.dumps(doc, ensure_ascii=False)}), upsert: true }} }},"
             for doc in mongo["social_videos"]
         ]
     )
@@ -537,7 +690,7 @@ def build_mongo_seed(payload: dict[str, object]) -> str:
     lines.append("db.influencer_metrics.bulkWrite([")
     lines.extend(
         [
-            f"  {{ replaceOne: {{ filter: {{ metric_id: '{doc['metric_id']}' }}, replacement: deserialize({json.dumps(doc, ensure_ascii=False)}), upsert: true }} }},{''}"
+            f"  {{ replaceOne: {{ filter: {{ metric_id: '{doc['metric_id']}' }}, replacement: deserialize({json.dumps(doc, ensure_ascii=False)}), upsert: true }} }},"
             for doc in mongo["influencer_metrics"]
         ]
     )
@@ -545,7 +698,7 @@ def build_mongo_seed(payload: dict[str, object]) -> str:
     lines.append("db.telemetry_logs.bulkWrite([")
     lines.extend(
         [
-            f"  {{ replaceOne: {{ filter: {{ telemetry_id: '{doc['telemetry_id']}' }}, replacement: deserialize({json.dumps(doc, ensure_ascii=False)}), upsert: true }} }},{''}"
+            f"  {{ replaceOne: {{ filter: {{ telemetry_id: '{doc['telemetry_id']}' }}, replacement: deserialize({json.dumps(doc, ensure_ascii=False)}), upsert: true }} }},"
             for doc in mongo["telemetry_logs"]
         ]
     )

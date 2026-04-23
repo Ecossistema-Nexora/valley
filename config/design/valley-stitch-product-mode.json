@@ -28,7 +28,12 @@
     "Definir o front-end final do Valley em modo produto",
     "Criar home premium com forte hierarquia visual e percepção de produto maduro",
     "Desenhar navegação clara e modular",
+    "Gerar no Stitch uma tela dedicada para cada um dos 47 módulos antes da implementação Flutter",
     "Representar Marketplace e Stock com demonstrações visuais de produtos com fotos e vídeos",
+    "Representar Food com ofertas, cards de restaurantes, combos e tempo de entrega",
+    "Representar Mobility com chamada de veículo, mapa, rota e ETA",
+    "Representar Helena como assistente overlay com modo minimizado em estrela, voz e expressão facial",
+    "Representar chat, conversa, feed, checkout e extrato com linguagem de produto final",
     "Definir comportamento de dock flutuante recolhível e arrastável",
     "Preparar a base visual para implementação direta"
   ],
@@ -47,9 +52,12 @@
     "home": {
       "sections": [
         "Topbar premium com busca, atalhos contextuais, status e perfil",
+        "Helena overlay sempre ativa com voz e expressão facial",
         "Área principal com cards fortes e ações rápidas",
         "Vitrine de produtos do Marketplace",
         "Vitrine de produtos do Stock",
+        "Atalho para Food com ofertas e ETA",
+        "Atalho para Mobility com mapa e rota",
         "Continuidade do usuário",
         "Histórico recente",
         "Blocos de destaque e recomendações"
@@ -72,6 +80,20 @@
         "Indicador de estoque",
         "Origem do hub ou armazém",
         "Sinalização visual de operação ativa"
+      ],
+      "food": [
+        "Várias ofertas simultâneas",
+        "Cards de refeições e combos",
+        "Tempo de entrega",
+        "Botões reais de pedido",
+        "Variações premium e destaque visual"
+      ],
+      "mobility": [
+        "Mapa visível",
+        "Origem e destino",
+        "Rota destacada",
+        "Tempo estimado de chegada",
+        "Botões reais de chamada de veículo"
       ]
     }
   },
@@ -107,6 +129,50 @@
         "Status de disponibilidade",
         "Acesso a mídia do item",
         "Leitura rápida de hubs"
+      ]
+    },
+    {
+      "name": "Food",
+      "goal": "Apresentar comida em modo produto final com forte apelo visual e pedido imediato",
+      "content": [
+        "Ofertas simultâneas",
+        "Combos premium",
+        "Tempo de entrega",
+        "Restaurantes e marcas",
+        "Botões de pedido reais"
+      ]
+    },
+    {
+      "name": "Mobility",
+      "goal": "Apresentar chamada de veículo com mapa, rota e percepção de movimento real",
+      "content": [
+        "Mapa principal",
+        "Origem e destino",
+        "Linha de rota",
+        "ETA",
+        "Ação de chamada imediata"
+      ]
+    },
+    {
+      "name": "Chat e conversa",
+      "goal": "Permitir conversa clara, premium e viva com continuidade do contexto",
+      "content": [
+        "Lista de conversas",
+        "Tela de conversa",
+        "Mensagens com estados",
+        "Presença visual",
+        "Composição fluida para mobile"
+      ]
+    },
+    {
+      "name": "Checkout e extrato",
+      "goal": "Fechar a jornada de compra e financeiro com confiança e clareza",
+      "content": [
+        "Resumo do pedido",
+        "Parcelamento",
+        "Entrega",
+        "Extrato bancário visual",
+        "Estados de confirmação"
       ]
     }
   ],
@@ -147,5 +213,5 @@
     ],
     "paletteDescription": "Base escura premium com ciano luminoso e violeta tecnológico, usando gradientes sutis e profundidade controlada."
   },
-  "userIntent": "Gerar no Stitch a direção visual final do Valley em modo produto para usuário final, com interface sofisticada, catálogo rico em mídia, Marketplace e Stock demonstráveis, e dock flutuante arrastável e recolhível."
+  "userIntent": "Gerar no Stitch a direção visual final do Valley em modo produto para usuário final, com uma tela dedicada para cada um dos 47 módulos, catálogo rico em mídia, Food com ofertas e ETA, Mobility com mapa e rota, chat, conversa, checkout, extrato, Helena overlay com estrela da marca e dock flutuante arrastável e recolhível."
 }
