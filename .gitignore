@@ -1,4 +1,5 @@
 .env
+.codex/environments/
 tmp/runtime/
 tmp/db-deploy-runtime/
 tmp/pdfs/

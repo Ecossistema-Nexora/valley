@@ -1,0 +1,5 @@
+developer_instructions = """
+This Codex project is persistently bound to the GitHub repository Ecossistema-Nexora/valley.
+When repository context is needed, use the origin remote https://github.com/Ecossistema-Nexora/valley.git as the canonical source.
+Prefer operating from the repository root and keep Git operations aligned with origin unless the user explicitly requests a different remote or branch strategy.
+"""
