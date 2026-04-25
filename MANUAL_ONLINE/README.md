@@ -288,6 +288,26 @@ A ordem recomendada de aplicacao em PostgreSQL limpo e:
 011_v47_city_ops_delivery_mobility_security.sql
 012_v47_core_services_health_jobs_pharmacy_events.sql
 013_v47_expansion_assets_civic_impact.sql
+014_v47_expansion_tourism_bio_energy.sql
+015_v47_module_blueprints_registry.sql
+016_v47_execution_backlog_seed.sql
+017_v47_priority_domain_delivery_packages.sql
+018_v47_platform_developer_business_ddl.sql
+019_v47_logistics_erp_operations_business_ddl.sql
+020_v47_fix_tech_owner_coherence_trigger.sql
+021_v47_fix_city_ops_trigger_ambiguity.sql
+022_v47_city_mobility_security_business_ddl.sql
+023_v47_commerce_fintech_assets_business_ddl.sql
+024_v47_ai_memory_operations_business_ddl.sql
+025_v47_media_social_growth_business_ddl.sql
+026_v47_frontier_iot_energy_business_ddl.sql
+027_v47_helena_identity_pricing_guardrails.sql
+028_v47_module_catalog_42_47_seed.sql
+029_v47_module_catalog_registry_aliases.sql
+030_v47_fix_gold_campaign_reward_type_ambiguity.sql
+031_v47_fix_pepita_account_status_ambiguity.sql
+032_v47_mobility_production_schema.sql
+033_v47_stock_dropshipping_production_blueprint.sql
 ```
 
 O script `003` documenta objetos dos passos iniciais.
@@ -308,7 +328,7 @@ O script `012` depende de `011`, porque reforca ownership de wallet, expande `or
 
 O script `013` depende de `012`, porque reutiliza `orders`, `document_records`, `wallets`, `transactions` e contratos juridicos/operacionais do tier core.
 
-O MongoDB deve aplicar `001_ai_social_telemetry.mongo.js`, depois `002_v47_log_iot_foundation.mongo.js` e por fim `003_v47_field_ops_security_agenda.mongo.js`.
+O MongoDB deve aplicar `001_ai_social_telemetry.mongo.js`, depois `002_v47_log_iot_foundation.mongo.js`, depois `003_v47_field_ops_security_agenda.mongo.js` e por fim `004_v47_expansion_media_wellness_frontier.mongo.js`.
 
 ## Automacao Dos 47 Modulos
 
@@ -391,6 +411,20 @@ Nao houve execucao real em PostgreSQL porque `psql` nao esta instalado neste amb
 O script MongoDB foi escrito para `mongosh`, com `createCollection`, `collMod`, `JSON Schema Validation` e indices.
 
 O PDF sera validado por leitura textual basica com `pypdf` depois da geracao.
+
+## Sincronizacao Segura Mais Recente
+
+Em `2026-04-24`, a esteira segura rodou `validate`, `sync`, `contracts`, `sql`, `check` e `report`.
+
+Essa rodada confirmou `47` modulos validos, `33` migrations PostgreSQL e `4` scripts MongoDB no manifesto oficial.
+
+Os arquivos sincronizados nessa rodada foram `admin/valley_admin_data.json`, `admin/valley_admin_data.js` e os pacotes `ddl_complement.sql` + `operational_seed.sql` dos dominios `platform_developer`, `logistics_erp_operations`, `ai_memory_operations`, `media_social_growth`, `city_mobility_security` e `commerce_fintech_assets`.
+
+Os `ddl_complement.sql` desses dominios passaram a expor views operacionais ligadas ao registry tecnico: backlog prioritario, artefatos fisicos de delivery e contratos de evento.
+
+Os `operational_seed.sql` dos mesmos dominios foram reduzidos ao seed canonico gerado pela automacao, evitando drift entre backlog, contratos e SQL manual.
+
+O relatorio mais recente marcou `329` checagens e `4` pendencias reais de ambiente: `psql` ausente no `PATH`, `mongosh` ausente no `PATH`, `docker info` sem resposta em `30s` e `docker compose` interrompido por timeout.
 
 ## Evolucao Foundation Mais Recente
 

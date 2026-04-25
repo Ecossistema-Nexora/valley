@@ -69,6 +69,220 @@ CATEGORIES = [
 CITIES = ["Sao Paulo", "Campinas", "Santos", "Ribeirao Preto", "Sorocaba"]
 PRESENCE = ["online", "em entrega", "em reuniao", "respondendo", "ativo agora"]
 
+DATA_HOME_LABELS = {
+    "postgres": "Postgres relacional",
+    "postgres_mongo": "Postgres + Mongo",
+    "mongo": "Mongo documental",
+}
+
+DATA_HOME_NOTES = {
+    "postgres": "A trilha critica fica em consistencia relacional para saldo, contrato e prova operacional.",
+    "postgres_mongo": "Pedidos, dinheiro e contexto operacional seguem juntos na camada hibrida com continuidade entre eventos e consistencia.",
+    "mongo": "Memoria, eventos e leitura viva ficam na camada documental para preservar contexto e volume sem travar a experiencia.",
+}
+
+TIER_LABELS = {
+    "foundation": "Foundation",
+    "core": "Core",
+    "expansion": "Expansion",
+    "frontier": "Frontier",
+}
+
+FAMILY_PROFILES = {
+    "ops_logistics": {
+        "accent": "Operacao em compasso real",
+        "stat_cards": [
+            {"label": "Ordens ativas", "base": 118, "step": 3, "trend": "SLA 97%", "format": "int"},
+            {"label": "Fluxos em campo", "base": 26, "step": 1, "trend": "+9%", "format": "int"},
+            {"label": "Receita em curso", "base": 8400, "step": 145, "trend": "+11%", "format": "brl"},
+        ],
+        "quick_actions": [
+            {"label": "Painel operacional", "target": "detail"},
+            {"label": "Fluxo ao vivo", "target": "feed"},
+            {"label": "Coordenacao", "target": "chat"},
+            {"label": "Extrato", "target": "statement"},
+        ],
+    },
+    "commerce_store": {
+        "accent": "Comercio em rotacao",
+        "stat_cards": [
+            {"label": "Vitrines ativas", "base": 84, "step": 2, "trend": "+8%", "format": "int"},
+            {"label": "Conversoes", "base": 46, "step": 1, "trend": "+6%", "format": "int"},
+            {"label": "GMV protegido", "base": 12600, "step": 210, "trend": "+14%", "format": "brl"},
+        ],
+        "quick_actions": [
+            {"label": "Painel comercial", "target": "detail"},
+            {"label": "Vitrine viva", "target": "feed"},
+            {"label": "Negociacao", "target": "chat"},
+            {"label": "Extrato", "target": "statement"},
+        ],
+    },
+    "finance_core": {
+        "accent": "Ledger em pulso",
+        "stat_cards": [
+            {"label": "Saldo orquestrado", "base": 148000, "step": 3200, "trend": "+12%", "format": "brl"},
+            {"label": "Liquidacoes", "base": 128, "step": 2, "trend": "D+0 92%", "format": "int"},
+            {"label": "Limites ativos", "base": 84, "step": 1, "trend": "+5%", "format": "int"},
+        ],
+        "quick_actions": [
+            {"label": "Painel financeiro", "target": "detail"},
+            {"label": "Movimento vivo", "target": "feed"},
+            {"label": "Suporte", "target": "chat"},
+            {"label": "Extrato", "target": "statement"},
+        ],
+    },
+    "asset_ops": {
+        "accent": "Ativo com lastro",
+        "stat_cards": [
+            {"label": "Carteiras em foco", "base": 62, "step": 1, "trend": "+7%", "format": "int"},
+            {"label": "Contratos vivos", "base": 34, "step": 1, "trend": "+4%", "format": "int"},
+            {"label": "Volume protegido", "base": 21400, "step": 280, "trend": "+10%", "format": "brl"},
+        ],
+        "quick_actions": [
+            {"label": "Painel patrimonial", "target": "detail"},
+            {"label": "Mercado ativo", "target": "feed"},
+            {"label": "Negociacao", "target": "chat"},
+            {"label": "Extrato", "target": "statement"},
+        ],
+    },
+    "care_services": {
+        "accent": "Cuidado com contexto",
+        "stat_cards": [
+            {"label": "Jornadas ativas", "base": 92, "step": 2, "trend": "+8%", "format": "int"},
+            {"label": "Retencao", "base": 87, "step": 1, "trend": "+3 pts", "format": "percent"},
+            {"label": "SLA humano", "base": 14, "step": 0, "trend": "min", "format": "minutes"},
+        ],
+        "quick_actions": [
+            {"label": "Painel de cuidado", "target": "detail"},
+            {"label": "Contexto ativo", "target": "feed"},
+            {"label": "Atendimento", "target": "chat"},
+            {"label": "Historico", "target": "statement"},
+        ],
+    },
+    "people_journey": {
+        "accent": "Jornada que evolui",
+        "stat_cards": [
+            {"label": "Trilhas ativas", "base": 108, "step": 2, "trend": "+9%", "format": "int"},
+            {"label": "Conclusoes", "base": 38, "step": 1, "trend": "+6%", "format": "int"},
+            {"label": "Retencao", "base": 79, "step": 1, "trend": "+4 pts", "format": "percent"},
+        ],
+        "quick_actions": [
+            {"label": "Painel de jornada", "target": "detail"},
+            {"label": "Rede ativa", "target": "feed"},
+            {"label": "Conversa", "target": "chat"},
+            {"label": "Historico", "target": "statement"},
+        ],
+    },
+    "growth_media": {
+        "accent": "Audiencia em movimento",
+        "stat_cards": [
+            {"label": "Alcance", "base": 18200, "step": 320, "trend": "+16%", "format": "int"},
+            {"label": "Engajamento", "base": 1240, "step": 18, "trend": "+9%", "format": "int"},
+            {"label": "Receita criativa", "base": 9800, "step": 165, "trend": "+13%", "format": "brl"},
+        ],
+        "quick_actions": [
+            {"label": "Painel creator", "target": "detail"},
+            {"label": "Feed ao vivo", "target": "feed"},
+            {"label": "Campanhas", "target": "chat"},
+            {"label": "Payout", "target": "statement"},
+        ],
+    },
+    "civic_city": {
+        "accent": "Cidade em resposta",
+        "stat_cards": [
+            {"label": "Chamados ativos", "base": 72, "step": 1, "trend": "+5%", "format": "int"},
+            {"label": "Cobertura", "base": 91, "step": 0, "trend": "bairros", "format": "percent"},
+            {"label": "Tempo de resposta", "base": 9, "step": 0, "trend": "min", "format": "minutes"},
+        ],
+        "quick_actions": [
+            {"label": "Painel urbano", "target": "detail"},
+            {"label": "Mapa vivo", "target": "feed"},
+            {"label": "Atendimento", "target": "chat"},
+            {"label": "Historico", "target": "statement"},
+        ],
+    },
+    "legal_safe": {
+        "accent": "Camada juridica",
+        "stat_cards": [
+            {"label": "Casos ativos", "base": 44, "step": 1, "trend": "+4%", "format": "int"},
+            {"label": "Prazos vivos", "base": 21, "step": 1, "trend": "sem atraso", "format": "int"},
+            {"label": "Registros", "base": 860, "step": 14, "trend": "+7%", "format": "int"},
+        ],
+        "quick_actions": [
+            {"label": "Painel juridico", "target": "detail"},
+            {"label": "Fluxo seguro", "target": "feed"},
+            {"label": "Consulta", "target": "chat"},
+            {"label": "Registros", "target": "statement"},
+        ],
+    },
+    "connected_frontier": {
+        "accent": "Camada conectada",
+        "stat_cards": [
+            {"label": "Eventos vivos", "base": 1240, "step": 20, "trend": "+11%", "format": "int"},
+            {"label": "Ativos conectados", "base": 128, "step": 2, "trend": "+7%", "format": "int"},
+            {"label": "Eficiencia", "base": 82, "step": 1, "trend": "+3 pts", "format": "percent"},
+        ],
+        "quick_actions": [
+            {"label": "Painel conectado", "target": "detail"},
+            {"label": "Telemetria", "target": "feed"},
+            {"label": "Automacao", "target": "chat"},
+            {"label": "Historico", "target": "statement"},
+        ],
+    },
+    "helena_core": {
+        "accent": "Helena em contexto",
+        "stat_cards": [
+            {"label": "Memorias uteis", "base": 164, "step": 3, "trend": "+10%", "format": "int"},
+            {"label": "Acoes sugeridas", "base": 58, "step": 1, "trend": "+6%", "format": "int"},
+            {"label": "Consentimentos", "base": 93, "step": 0, "trend": "validos", "format": "percent"},
+        ],
+        "quick_actions": [
+            {"label": "Painel Helena", "target": "detail"},
+            {"label": "Contexto vivo", "target": "feed"},
+            {"label": "Conversar", "target": "chat"},
+            {"label": "Historico", "target": "statement"},
+        ],
+    },
+    "platform_flow": {
+        "accent": "Fluxo versionado",
+        "stat_cards": [
+            {"label": "Fluxos ativos", "base": 76, "step": 2, "trend": "+8%", "format": "int"},
+            {"label": "Regras publicadas", "base": 32, "step": 1, "trend": "+5%", "format": "int"},
+            {"label": "Logs uteis", "base": 940, "step": 16, "trend": "+9%", "format": "int"},
+        ],
+        "quick_actions": [
+            {"label": "Painel de fluxo", "target": "detail"},
+            {"label": "Regras ativas", "target": "feed"},
+            {"label": "Suporte", "target": "chat"},
+            {"label": "Logs", "target": "statement"},
+        ],
+    },
+}
+
+DOMAIN_FAMILY_MAP = {
+    "logistics_erp_operations": "ops_logistics",
+    "commerce_fintech_assets": "commerce_store",
+    "services_health_human": "care_services",
+    "education_work_social": "people_journey",
+    "media_social_growth": "growth_media",
+    "city_mobility_security": "civic_city",
+    "frontier_iot_energy": "connected_frontier",
+    "ai_memory_operations": "helena_core",
+    "platform_developer": "platform_flow",
+}
+
+MODULE_FAMILY_OVERRIDES = {
+    "MARKETPLACE": "commerce_store",
+    "PAY": "finance_core",
+    "DIGITAL": "asset_ops",
+    "REAL_ESTATE": "asset_ops",
+    "INSURANCE": "asset_ops",
+    "FINANCAS": "finance_core",
+    "PLUG": "finance_core",
+    "UP": "finance_core",
+    "LEGAL": "legal_safe",
+}
+
 
 def stable_uuid(name: str) -> str:
     return str(uuid5(NAMESPACE_URL, f"valley-demo::{name}"))
@@ -97,29 +311,126 @@ def load_modules() -> list[dict[str, object]]:
     return payload["modules"]
 
 
+def _module_family(module: dict[str, object]) -> str:
+    code = str(module["code"])
+    if code in MODULE_FAMILY_OVERRIDES:
+        return MODULE_FAMILY_OVERRIDES[code]
+    domain = str(module["domain"])
+    if domain in DOMAIN_FAMILY_MAP:
+        return DOMAIN_FAMILY_MAP[domain]
+    return "commerce_store"
+
+
+def _join_codes(values: list[str]) -> str:
+    if not values:
+        return "sem vinculos declarados"
+    if len(values) == 1:
+        return values[0]
+    if len(values) == 2:
+        return f"{values[0]} e {values[1]}"
+    return f"{values[0]}, {values[1]} e {values[2]}"
+
+
+def _format_metric_value(metric: dict[str, object], index: int) -> str:
+    base = int(metric["base"])
+    step = int(metric.get("step", 0))
+    value = base + (index * step)
+    fmt = str(metric.get("format", "int"))
+    if fmt == "brl":
+        return f"R$ {value:,.0f}".replace(",", ".")
+    if fmt == "percent":
+        return f"{value}%"
+    if fmt == "minutes":
+        return f"{value} min"
+    return str(value)
+
+
+def _data_home_label(value: str) -> str:
+    return DATA_HOME_LABELS.get(value, value)
+
+
+def _tier_label(value: str) -> str:
+    return TIER_LABELS.get(value, value.title())
+
+
+def _module_context_copy(module: dict[str, object]) -> dict[str, object]:
+    code = str(module["code"])
+    family = _module_family(module)
+    profile = FAMILY_PROFILES[family]
+    description = str(module["description_ptbr"]).rstrip(".")
+    data_home = str(module["data_home"])
+    depends_on = [str(item) for item in module.get("depends_on", [])]
+    integrates_with = [str(item) for item in module.get("integrates_with", [])]
+    tier = str(module["tier"])
+
+    stat_cards = [
+        {
+            "label": str(metric["label"]),
+            "value": _format_metric_value(metric, index=0),
+            "trend": str(metric["trend"]),
+        }
+        for metric in profile["stat_cards"]
+    ]
+
+    return {
+        "code": code,
+        "family": family,
+        "accent_label": str(profile["accent"]),
+        "stat_card_templates": profile["stat_cards"],
+        "quick_actions": profile["quick_actions"],
+        "description": description,
+        "depends_on": depends_on,
+        "integrates_with": integrates_with,
+        "hero_subtitle": (
+            f"{description}. Depende de {_join_codes(depends_on)} e conversa com "
+            f"{_join_codes(integrates_with)}. {DATA_HOME_NOTES.get(data_home, '')}".strip()
+        ),
+        "highlights": [
+            description,
+            f"Integra {_join_codes(integrates_with)} para continuidade sem quebrar a mesma trilha de uso.",
+            f"Camada {_tier_label(tier).lower()} ancorada em {_data_home_label(data_home).lower()}.",
+        ],
+        "helena_hint": (
+            f"Helena observa {str(module['subtitle']).lower()} e so assume navegacao quando voce pedir "
+            f"para abrir uma proxima etapa ou conectar {code} a {_join_codes(integrates_with[:2])}."
+        ),
+        "operator_note": (
+            f"{str(module['name'])} fica na camada {_tier_label(tier)} e usa {_data_home_label(data_home)} "
+            f"como base para manter contexto, prova e continuidade."
+        ),
+        "stat_cards": stat_cards,
+    }
+
+
 def _module_screen(module: dict[str, object], index: int) -> dict[str, object]:
     code = str(module["code"])
+    context = _module_context_copy(module)
+    stat_cards = []
+    for metric in context["stat_card_templates"]:
+        metric = dict(metric)
+        stat_cards.append(
+            {
+                "label": str(metric["label"]),
+                "value": _format_metric_value(metric, index),
+                "trend": str(metric["trend"]),
+            }
+        )
     return {
         "module_id": code,
-        "hero_title": f"{module['name']} em modo produto",
-        "hero_subtitle": f"{module['subtitle']} com jornada pronta para usuario final, acoes vivas, feed contextual e continuidade elegante.",
-        "accent_label": "Experiencia ativa",
-        "stat_cards": [
-            {"label": "Sessoes", "value": f"{1400 + index * 17}", "trend": "+12%"},
-            {"label": "Conversoes", "value": f"{84 + index}", "trend": "+8%"},
-            {"label": "Retorno", "value": f"R$ {4200 + index * 95}", "trend": "+15%"},
-        ],
-        "quick_actions": [
-            {"label": "Abrir painel", "target": "module"},
-            {"label": "Ver feed", "target": "feed"},
-            {"label": "Conversar", "target": "chat"},
-            {"label": "Extrato", "target": "statement"},
-        ],
-        "highlights": [
-            f"Jornada premium pronta para {code.lower()}",
-            "Transicoes discretas e leitura imediata",
-            "Acesso rapido por dock flutuante",
-        ],
+        "hero_title": str(module["name"]),
+        "hero_subtitle": str(context["hero_subtitle"]),
+        "accent_label": str(context["accent_label"]),
+        "stat_cards": stat_cards,
+        "quick_actions": context["quick_actions"],
+        "highlights": context["highlights"],
+        "description": context["description"],
+        "domain": str(module["domain"]),
+        "tier": str(module["tier"]),
+        "data_home": str(module["data_home"]),
+        "depends_on": context["depends_on"],
+        "integrates_with": context["integrates_with"],
+        "operator_note": str(context["operator_note"]),
+        "helena_hint": str(context["helena_hint"]),
     }
 
 
@@ -172,6 +483,7 @@ def build_demo_records() -> dict[str, object]:
             image_url = IMAGE_POOL[index % len(IMAGE_POOL)]
             video_url = VIDEO_POOL[index % len(VIDEO_POOL)]
             avatar_url = AVATAR_POOL[index % len(AVATAR_POOL)]
+            module_copy = _module_context_copy(module)
             title = f"{brand} {category} {module_code} {module_serial:03d}"
             price = round(299 + (index * 17.45), 2)
             compare_price = round(price * 1.14, 2)
@@ -287,7 +599,7 @@ def build_demo_records() -> dict[str, object]:
                     "id": profile_id,
                     "user_id": merchant_id,
                     "name": f"{brand} {number:03d}",
-                    "headline": f"{category} • {module_code} • experiencia premium",
+                    "headline": f"{module['subtitle']} • {module_code} • contexto ativo",
                     "avatar_url": avatar_url,
                     "cover_url": image_url,
                     "city": city,
@@ -303,8 +615,11 @@ def build_demo_records() -> dict[str, object]:
                     "module_id": module_code,
                     "author_name": f"{brand} {number:03d}",
                     "author_avatar": avatar_url,
-                    "headline": f"{title} entrou em destaque",
-                    "text": "Lancamento com video ativo, conversa direta, checkout simplificado e entrega no ecossistema Valley.",
+                    "headline": f"{module['name']} colocou {title} em destaque",
+                    "text": (
+                        f"{module_copy['description']} agora aparece com video ativo, conversa direta "
+                        "e continuidade sem perder o contexto do modulo."
+                    ),
                     "media_url": image_url,
                     "video_url": video_url,
                     "item_id": listing_id,
@@ -355,7 +670,10 @@ def build_demo_records() -> dict[str, object]:
                     "memory_scope": "BUSINESS",
                     "persona_mode": "MERCHANT",
                     "source_module": module_code,
-                    "content_summary": f"Preferencia por vitrine premium e recompra rapida para {title}.",
+                    "content_summary": (
+                        f"Preferencia por jornadas ligadas a {module_copy['description'].lower()} "
+                        "com retomada simples e fechamento sem ruptura."
+                    ),
                     "content_vector_ref": f"vector://valley/{memory_id}",
                     "importance_score": 0.82,
                     "consent_scope": "PROFILE",
@@ -439,17 +757,17 @@ def build_demo_records() -> dict[str, object]:
     catalog_items = []
     for index, listing in enumerate(listings):
         item = inventory_items[index]
-        module = modules[index % len(modules)]
+        module = modules[index // 100]
         profile = profiles[index]
         catalog_items.append(
             {
                 "id": listing["listing_id"],
                 "module_id": module["code"],
-                "title": listing["title"],
-                "brand": item["brand"],
-                "category": item["category"],
-                "price_brl": listing["price_brl"],
-                "compare_at_brl": item["compare_at_brl"],
+                    "title": listing["title"],
+                    "brand": item["brand"],
+                    "category": item["category"],
+                    "price_brl": listing["price_brl"],
+                    "compare_at_brl": item["compare_at_brl"],
                 "stock": listing["stock"],
                 "merchant_name": users[index]["display_name"],
                 "image_url": listing["image_url"],
@@ -460,7 +778,10 @@ def build_demo_records() -> dict[str, object]:
                 "cta_label": "Abrir",
                 "cta_path": f"/api/actions/product-interest?item_id={listing['listing_id']}",
                 "media_path": f"/api/actions/open-media?item_id={listing['listing_id']}",
-                "description": item["description"],
+                "description": (
+                    f"{item['title']} dentro de {module['name']}: {module['description_ptbr']} "
+                    "Fluxo pronto para detalhe, conversa e continuidade no shell."
+                ),
                 "gallery_urls": [
                     listing["image_url"],
                     *[

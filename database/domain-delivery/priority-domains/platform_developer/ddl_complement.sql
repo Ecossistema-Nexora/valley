@@ -1,72 +1,76 @@
 BEGIN;
 
--- Pacote complementar do dominio Platform Developer.
--- DDL real materializado em:
---   - database/postgres/018_v47_platform_developer_business_ddl.sql
---   - database/postgres/017_v47_priority_domain_delivery_packages.sql
+-- Pacote gerado automaticamente para Platform Developer.
+-- Artefato: platform_developer.priority.v1
+-- Dependencias: migrations 016 e 017 aplicadas.
 
-CREATE OR REPLACE VIEW v_platform_developer_docs_templates AS
+CREATE OR REPLACE VIEW v_platform_developer_priority_backlog AS
 SELECT
-    contract.template_contract_id,
-    contract.template_name,
-    contract.template_scope,
-    contract.template_status,
-    contract.published_version_number,
-    contract.render_engine,
-    versions.version_count,
-    versions.published_versions,
-    contract.updated_at
-FROM docs_template_contracts AS contract
-LEFT JOIN (
-    SELECT
-        template_contract_id,
-        COUNT(*) AS version_count,
-        COUNT(*) FILTER (WHERE version_status = 'PUBLISHED') AS published_versions
-    FROM docs_template_versions
-    GROUP BY template_contract_id
-) AS versions
-    ON versions.template_contract_id = contract.template_contract_id;
+    backlog.backlog_key,
+    backlog.module_code,
+    registry.module_name,
+    registry.module_number,
+    registry.current_phase,
+    backlog.execution_stage,
+    backlog.priority,
+    backlog.target_data_home,
+    backlog.depends_on_keys,
+    backlog.evidence_hint,
+    registry.module_blueprint_json -> 'postgres_entities' AS postgres_entities,
+    registry.module_blueprint_json -> 'mongo_collections' AS mongo_collections,
+    registry.module_blueprint_json -> 'event_topics' AS event_topics,
+    registry.module_blueprint_json -> 'next_deliverables' AS next_deliverables
+FROM module_evolution_backlog AS backlog
+JOIN module_delivery_registry AS registry
+  ON registry.module_code = backlog.module_code
+WHERE backlog.backlog_group = 'platform_developer'
+  AND backlog.origin_source = 'blueprint_execution_v1';
 
-CREATE OR REPLACE VIEW v_platform_developer_checksum_chain AS
+CREATE OR REPLACE VIEW v_platform_developer_delivery_artifacts AS
 SELECT
-    checksum_event_id,
-    document_id,
-    receipt_id,
-    template_version_id,
-    checksum_event_type,
-    checksum_sha256,
-    previous_checksum_event_id,
-    reference_event_topic,
-    occurred_at
-FROM docs_document_checksum_events
-ORDER BY occurred_at DESC;
+    artifact_key,
+    package_key,
+    domain_key,
+    layer_type,
+    target_engine,
+    artifact_path,
+    module_codes,
+    backlog_keys,
+    depends_on_keys,
+    artifact_status,
+    artifact_payload_json,
+    created_at,
+    updated_at
+FROM domain_delivery_artifacts
+WHERE domain_key = 'platform_developer';
 
-CREATE OR REPLACE VIEW v_platform_developer_webhook_replay_queue AS
+CREATE OR REPLACE VIEW v_platform_developer_event_contracts AS
 SELECT
-    replay.webhook_replay_request_id,
-    replay.replay_status,
-    replay.idempotency_key,
-    replay.replay_reason,
-    replay.requested_at,
-    replay.approved_at,
-    replay.replayed_at,
-    replay.failed_at,
-    subscription.module_code,
-    subscription.target_url,
-    original_attempt.event_type AS original_event_type,
-    original_attempt.delivery_status AS original_delivery_status
-FROM tech_webhook_replay_requests AS replay
-JOIN tech_webhook_subscriptions AS subscription
-  ON subscription.webhook_subscription_id = replay.webhook_subscription_id
-JOIN tech_webhook_delivery_attempts AS original_attempt
-  ON original_attempt.webhook_delivery_attempt_id = replay.original_delivery_attempt_id
-ORDER BY replay.requested_at DESC;
+    contract_key,
+    package_key,
+    domain_key,
+    module_code,
+    event_topic,
+    contract_version,
+    producer_surface,
+    consumer_surfaces,
+    evidence_entities,
+    compliance_tags,
+    artifact_path,
+    contract_status,
+    payload_schema_json,
+    created_at,
+    updated_at
+FROM domain_event_contracts
+WHERE domain_key = 'platform_developer';
 
-COMMENT ON VIEW v_platform_developer_docs_templates IS
-    'Resumo operacional dos contratos e versoes de template do dominio Platform Developer.';
-COMMENT ON VIEW v_platform_developer_checksum_chain IS
-    'Consulta rapida da trilha de checksum de DOCS.';
-COMMENT ON VIEW v_platform_developer_webhook_replay_queue IS
-    'Fila operacional de replay seguro de webhook do modulo TECH.';
+COMMENT ON VIEW v_platform_developer_priority_backlog IS
+    'Visao operacional do backlog prioritario do dominio platform_developer.';
+
+COMMENT ON VIEW v_platform_developer_delivery_artifacts IS
+    'Visao dos artefatos fisicos por camada do dominio platform_developer.';
+
+COMMENT ON VIEW v_platform_developer_event_contracts IS
+    'Visao dos contratos de evento exportados do dominio platform_developer.';
 
 COMMIT;

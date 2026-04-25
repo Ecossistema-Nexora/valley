@@ -1,5 +1,5 @@
 window.VALLEY_ADMIN_DATA = {
-  "generated_at_utc": "2026-04-21T20:21:46.861926+00:00",
+  "generated_at_utc": "2026-04-24T00:22:28.941533+00:00",
   "registry_name": "Valley Omniverse V47 - Registro Canonico de Modulos",
   "source": "Esquema Consolidado do Valley Omniverse v47.pdf",
   "language_policy": "pt-BR simples com termos tecnicos em ingles quando forem padroes",
@@ -465,12 +465,12 @@ window.VALLEY_ADMIN_DATA = {
   "public_runtime": {
     "available": true,
     "path": "../tmp/runtime/valley-admin-public-runtime.json",
-    "status": "booting",
-    "public_url": "https://grilled-uncurrently-shaunta.ngrok-free.dev",
-    "permanence": "ephemeral",
+    "status": "ok",
+    "public_url": null,
+    "permanence": null,
     "smoke_endpoints": {
-      "healthz": "https://grilled-uncurrently-shaunta.ngrok-free.dev/healthz",
-      "admin_data": "https://grilled-uncurrently-shaunta.ngrok-free.dev/api/admin-data"
+      "healthz": null,
+      "admin_data": null
     }
   },
   "database_summary": {
@@ -1166,10 +1166,15 @@ window.VALLEY_ADMIN_DATA = {
   },
   "deployment_summary": {
     "available": true,
-    "generated_at_utc": "2026-04-21T20:19:12.506324+00:00",
-    "total_checks": 321,
-    "failed_checks": 0,
-    "top_failures": []
+    "generated_at_utc": "2026-04-24T00:22:25.250361+00:00",
+    "total_checks": 329,
+    "failed_checks": 4,
+    "top_failures": [
+      "`tool.psql`: nao encontrado no PATH",
+      "`tool.mongosh`: nao encontrado no PATH",
+      "`tool.docker_daemon`: docker info nao respondeu em 30s; iniciar Docker Desktop ou verificar o engine.",
+      "`tool.docker_compose`: comando excedeu 10s e foi interrompido"
+    ]
   },
   "public_access": {
     "path": "../output/deployment/VALLEY_EXTERNAL_ACCESS.md",

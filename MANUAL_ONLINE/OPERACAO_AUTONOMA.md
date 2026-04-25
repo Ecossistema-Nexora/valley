@@ -140,6 +140,10 @@ Ideias inviaveis devem ser descartadas quando:
 
 ## Estado Atual
 
+Em `2026-04-24`, a esteira segura confirmou `329` checagens com `4` pendencias reais de ambiente.
+
+As pendencias comprovadas nessa leitura foram: `psql` ausente no `PATH`, `mongosh` ausente no `PATH`, `docker info` sem resposta em `30s` e `docker compose` interrompido por timeout.
+
 O ambiente local tem Docker Compose, mas nao tem `psql`, `mongosh` nem `make` no PATH.
 
 Por isso, a validacao principal agora e estatica e documental quando o Docker daemon nao responde.
@@ -149,3 +153,9 @@ Quando Docker daemon e imagens estiverem prontos, `apply-compose` passa a ser o 
 O ultimo relatorio gerado deve ser lido em `output/deployment/VALLEY_DEPLOYMENT_STATUS.md`, porque o total muda quando novas migrations entram no manifesto.
 
 O painel admin fica em `admin/index.html` e consome `admin/valley_admin_data.js`, gerado automaticamente pela esteira de modulos e pelo report do banco.
+
+Na sincronizacao de `2026-04-24`, `admin/valley_admin_data.js` e `admin/valley_admin_data.json` passaram a refletir essas pendencias reais no bloco `deployment_summary`.
+
+Na mesma rodada, os pacotes `database/domain-delivery/priority-domains/<dominio>/ddl_complement.sql` e `operational_seed.sql` dos dominios prioritarios ativos foram regenerados para ficar coerentes com `module_evolution_backlog`, `domain_delivery_artifacts` e `domain_event_contracts`.
+
+Essa troca e deliberada: a esteira agora prefere views e seeds gerados pelo registry canonico a SQL operacional manual que envelhece fora do backlog.

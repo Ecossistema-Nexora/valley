@@ -120,6 +120,10 @@ Biometria foi adaptada para persistencia somente por hash e metadados, descartan
 
 Os incidentes de seguranca foram adaptados para modelo hibrido: contrato relacional no PostgreSQL e sinais volumosos no MongoDB.
 
+Os pacotes `database/domain-delivery/priority-domains/<dominio>/ddl_complement.sql` foram adaptados para views geradas pelo registry e pelo backlog executavel, em vez de manter consultas manuais por dominio sem lastro no `module_evolution_backlog`.
+
+Os `operational_seed.sql` desses dominios tambem foram reduzidos ao seed canonico emitido pela automacao, descartando o modelo inviavel de seed artesanal grande demais e propenso a drift entre contratos, registry e SQL.
+
 ## Descartado
 
 Nao foi implantado multi-schema legado, porque conflita com a diretriz desta worktree.

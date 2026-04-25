@@ -32,7 +32,6 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
   String _selectedModuleId = 'MARKETPLACE';
   String _surface = 'home';
   bool _dockExpanded = false;
-  double _dockX = 0.84;
   int _navIndex = 0;
   ProductItem? _selectedItem;
   Map<String, dynamic>? _selectedConversation;
@@ -45,14 +44,17 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
   bool _helenaVoiceReady = false;
   Offset _helenaAlignment = const Offset(-0.86, 0.72);
   String _helenaMood = 'calm';
-  String _helenaMessage = 'Helena pronta para guiar a experiencia Valley.';
-  String _helenaTranscript = 'Toque no microfone para falar com Helena.';
+  String _helenaMessage =
+      'Helena pronta para acompanhar sua jornada com calma.';
+  String _helenaTranscript = 'Toque no microfone se quiser falar comigo.';
 
   @override
   void initState() {
     super.initState();
     _data = widget.initialData;
-    if (_data.modules.any((ProductModule module) => module.id == 'MARKETPLACE')) {
+    if (_data.modules.any(
+      (ProductModule module) => module.id == 'MARKETPLACE',
+    )) {
       _selectedModuleId = 'MARKETPLACE';
     } else if (_data.modules.isNotEmpty) {
       _selectedModuleId = _data.modules.first.id;
@@ -62,8 +64,10 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
 
   Future<void> _setupHelena() async {
     await _tts.setLanguage('pt-BR');
-    await _tts.setPitch(1.05);
-    await _tts.setSpeechRate(0.46);
+    await _tts.setPitch(1.12);
+    await _tts.setSpeechRate(0.40);
+    await _tts.setVolume(0.92);
+    await _configureHelenaVoice();
     _helenaVoiceReady = await _speech.initialize(
       onStatus: (String status) {
         if (!mounted) {
@@ -73,7 +77,7 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
         setState(() {
           _helenaListening = listening;
           if (!listening && _helenaTranscript.trim().isEmpty) {
-            _helenaTranscript = 'Helena pronta para ouvir você.';
+            _helenaTranscript = 'Helena pronta para te ouvir com calma.';
           }
         });
       },
@@ -84,14 +88,90 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
         setState(() {
           _helenaListening = false;
           _helenaMood = 'alert';
-          _helenaMessage = 'Não consegui abrir o microfone agora.';
-          _helenaTranscript = 'Áudio de entrada indisponível no dispositivo.';
+          _helenaMessage = 'Nao consegui abrir o microfone agora, viu.';
+          _helenaTranscript = 'Audio de entrada indisponivel no dispositivo.';
         });
       },
     );
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _speakHelena('Helena ativa. Experiencia de produto pronta para voce.');
+      _speakHelena('Oi. Eu sou a Helena e vou ficar por aqui com voce, viu.');
     });
+  }
+
+  Future<void> _configureHelenaVoice() async {
+    try {
+      final dynamic availableVoices = await _tts.getVoices;
+      final Map<String, String>? preferredVoice = _selectPreferredHelenaVoice(
+        availableVoices,
+      );
+      if (preferredVoice != null) {
+        await _tts.setVoice(preferredVoice);
+      }
+    } catch (_) {
+      // O motor de TTS varia por plataforma; se a selecao falhar, mantemos pt-BR.
+    }
+  }
+
+  Map<String, String>? _selectPreferredHelenaVoice(dynamic availableVoices) {
+    if (availableVoices is! List<dynamic>) {
+      return null;
+    }
+
+    final List<Map<String, String>> ptBrVoices = <Map<String, String>>[];
+    for (final dynamic voice in availableVoices) {
+      if (voice is! Map<dynamic, dynamic>) {
+        continue;
+      }
+      final Map<String, String> entry = voice.map(
+        (dynamic key, dynamic value) =>
+            MapEntry(key.toString(), value.toString()),
+      );
+      final String locale = (entry['locale'] ?? entry['language'] ?? '')
+          .toLowerCase();
+      if (locale.contains('pt-br') || locale.contains('pt_br')) {
+        ptBrVoices.add(entry);
+      }
+    }
+
+    if (ptBrVoices.isEmpty) {
+      return null;
+    }
+
+    ptBrVoices.sort(
+      (Map<String, String> left, Map<String, String> right) =>
+          _scoreHelenaVoice(right).compareTo(_scoreHelenaVoice(left)),
+    );
+
+    final Map<String, String> preferred = ptBrVoices.first;
+    final String? name = preferred['name'];
+    final String? locale = preferred['locale'] ?? preferred['language'];
+    if (name == null || locale == null) {
+      return null;
+    }
+    return <String, String>{'name': name, 'locale': locale};
+  }
+
+  int _scoreHelenaVoice(Map<String, String> voice) {
+    final String fingerprint =
+        '${voice['name'] ?? ''} ${voice['identifier'] ?? ''}'.toLowerCase();
+    int score = 0;
+    if (fingerprint.contains('female') ||
+        fingerprint.contains('feminina') ||
+        fingerprint.contains('woman')) {
+      score += 4;
+    }
+    if (fingerprint.contains('brasil') ||
+        fingerprint.contains('local') ||
+        fingerprint.contains('pt-br')) {
+      score += 2;
+    }
+    if (fingerprint.contains('maria') ||
+        fingerprint.contains('luciana') ||
+        fingerprint.contains('beatriz') ||
+        fingerprint.contains('ana')) {
+      score += 1;
+    }
+    return score;
   }
 
   Future<void> _speakHelena(String text) async {
@@ -155,7 +235,8 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
     }
 
     final DateTime now = DateTime.now();
-    final bool shouldMinimize = _lastBackPressAt != null &&
+    final bool shouldMinimize =
+        _lastBackPressAt != null &&
         now.difference(_lastBackPressAt!) <= const Duration(seconds: 2);
 
     if (shouldMinimize) {
@@ -173,6 +254,22 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
     return false;
   }
 
+  void _openModuleFromHelenaRequest(String moduleId, {String? spokenLabel}) {
+    ProductModule? matchedModule;
+    for (final ProductModule module in _data.modules) {
+      if (module.id == moduleId) {
+        matchedModule = module;
+        break;
+      }
+    }
+
+    _showModule(moduleId);
+    _setHelenaMood(
+      'focus',
+      'Ta certo, vou abrir ${spokenLabel ?? matchedModule?.label ?? moduleId} pra voce, viu.',
+    );
+  }
+
   void _handleVoiceCommand(String transcript) {
     final String spoken = transcript.trim();
     if (spoken.isEmpty) {
@@ -187,7 +284,8 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
         module.subtitle,
       ];
       final bool matched = candidates.any(
-        (String value) => value.isNotEmpty && normalized.contains(value.toLowerCase()),
+        (String value) =>
+            value.isNotEmpty && normalized.contains(value.toLowerCase()),
       );
       if (matched) {
         matchedModule = module;
@@ -196,32 +294,34 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
     }
 
     if (matchedModule != null) {
-      _showModule(matchedModule.id);
-      _setHelenaMood(
-        'focus',
-        'Comando de voz recebido. Abrindo ${matchedModule.label}.',
+      _openModuleFromHelenaRequest(
+        matchedModule.id,
+        spokenLabel: matchedModule.label,
       );
       return;
     }
 
     if (normalized.contains('chat') || normalized.contains('mensagem')) {
       _openSurface('chat');
-      _setHelenaMood('focus', 'Comando de voz recebido. Abrindo o chat.');
+      _setHelenaMood('focus', 'Ta certo, vou abrir o chat pra voce.');
       return;
     }
 
     if (normalized.contains('pag') || normalized.contains('carteira')) {
-      _showModule('PAY');
+      _openModuleFromHelenaRequest('PAY', spokenLabel: 'Valley Pay');
       return;
     }
 
     if (normalized.contains('estoque')) {
-      _showModule('STOCK');
+      _openModuleFromHelenaRequest('STOCK', spokenLabel: 'Valley Stock');
       return;
     }
 
     if (normalized.contains('market') || normalized.contains('mercado')) {
-      _showModule('MARKETPLACE');
+      _openModuleFromHelenaRequest(
+        'MARKETPLACE',
+        spokenLabel: 'Valley Marketplace',
+      );
       return;
     }
 
@@ -229,9 +329,10 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
       _query = spoken;
       _surface = 'home';
       _helenaMood = 'happy';
-      _helenaMessage = 'Busca por voz aplicada ao ecossistema.';
+      _helenaMessage =
+          'Prontinho. A busca por voz foi aplicada ao ecossistema.';
     });
-    _speakHelena('Busca por voz aplicada para $spoken.');
+    _speakHelena('Prontinho. Apliquei a busca por voz para $spoken.');
   }
 
   Future<void> _toggleHelenaListening() async {
@@ -251,9 +352,10 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
     }
 
     if (!_helenaVoiceReady) {
-      _setHelenaMood('alert', 'Microfone indisponível para Helena.');
+      _setHelenaMood('alert', 'Microfone indisponivel para Helena.');
       setState(() {
-        _helenaTranscript = 'Ative a permissão de microfone para usar áudio de entrada.';
+        _helenaTranscript =
+            'Ative a permissao de microfone para usar audio de entrada.';
       });
       return;
     }
@@ -261,7 +363,8 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
     setState(() {
       _helenaListening = true;
       _helenaMood = 'focus';
-      _helenaMessage = 'Helena ouvindo. Diga um módulo, ação ou busca.';
+      _helenaMessage =
+          'Helena ouvindo com carinho. Pode me dizer um modulo, uma acao ou uma busca.';
       _helenaTranscript = 'Ouvindo...';
     });
     await _speech.listen(
@@ -323,20 +426,21 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
         return;
       }
       if (result.url.isNotEmpty) {
-        await launchUrl(Uri.parse(result.url), mode: LaunchMode.platformDefault);
+        await launchUrl(
+          Uri.parse(result.url),
+          mode: LaunchMode.platformDefault,
+        );
       }
       messenger.showSnackBar(
         SnackBar(
           behavior: SnackBarBehavior.floating,
           content: Text(result.message),
-          backgroundColor:
-              result.ok ? ValleyBrandColors.success : ValleyBrandColors.danger,
+          backgroundColor: result.ok
+              ? ValleyBrandColors.success
+              : ValleyBrandColors.danger,
         ),
       );
-      _setHelenaMood(
-        result.ok ? 'happy' : 'alert',
-        result.message,
-      );
+      _setHelenaMood(result.ok ? 'happy' : 'alert', result.message);
     } finally {
       if (mounted) {
         setState(() => _busy = false);
@@ -414,7 +518,8 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
     if (announce) {
       _setHelenaMood(
         mood,
-        message ?? 'Abrindo ${surface == 'home' ? 'a tela principal' : surface}.',
+        message ??
+            'Abrindo ${surface == 'home' ? 'a tela principal' : surface}.',
       );
     }
   }
@@ -429,7 +534,10 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
       _selectedConversation = null;
       _surface = 'detail';
     });
-    _setHelenaMood('focus', 'Abrindo ${item.title} com video e descricao completa.');
+    _setHelenaMood(
+      'focus',
+      'Abrindo ${item.title} com video e descricao completa.',
+    );
   }
 
   void _openCheckout(ProductItem item) {
@@ -568,18 +676,14 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
       return _StatementScreen(entries: _rawList('statement_entries'));
     }
 
-    final Map<String, dynamic>? moduleScreen = _moduleScreenById(module?.id ?? '');
+    final Map<String, dynamic>? moduleScreen = _moduleScreenById(
+      module?.id ?? '',
+    );
     if ((module?.id ?? '') == 'STOCK') {
-      return _StockSection(
-        items: items,
-        onTap: _openItemDetail,
-      );
+      return _StockSection(items: items, onTap: _openItemDetail);
     }
     if ((module?.id ?? '') == 'FOOD') {
-      return _FoodModuleScreen(
-        items: items,
-        onOpenItem: _openItemDetail,
-      );
+      return _FoodModuleScreen(items: items, onOpenItem: _openItemDetail);
     }
     if ((module?.id ?? '') == 'SERVICES') {
       return _ServicesModuleScreen(
@@ -611,22 +715,13 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
       );
     }
     if ((module?.id ?? '') == 'INSURANCE') {
-      return _PolicyModuleScreen(
-        items: items,
-        onOpenItem: _openItemDetail,
-      );
+      return _PolicyModuleScreen(items: items, onOpenItem: _openItemDetail);
     }
     if ((module?.id ?? '') == 'GAMING') {
-      return _GamingModuleScreen(
-        items: items,
-        onOpenItem: _openItemDetail,
-      );
+      return _GamingModuleScreen(items: items, onOpenItem: _openItemDetail);
     }
     if ((module?.id ?? '') == 'MOBILITY') {
-      return _MobilityModuleScreen(
-        items: items,
-        onOpenItem: _openItemDetail,
-      );
+      return _MobilityModuleScreen(items: items, onOpenItem: _openItemDetail);
     }
     if ((module?.id ?? '') == 'MARKETPLACE') {
       return _MarketplaceModuleScreen(
@@ -673,8 +768,12 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
           insightBody:
               'Fluxo pronto para pré-visualização, assinatura final e retomada de comprovantes sem sair do shell.',
         ),
-        onPrimaryAction: items.isNotEmpty ? () => _openItemDetail(items.first) : () => _openSurface('feed'),
-        onSecondaryAction: items.isNotEmpty ? () => _openCheckout(items.first) : () => _openSurface('chat'),
+        onPrimaryAction: items.isNotEmpty
+            ? () => _openItemDetail(items.first)
+            : () => _openSurface('feed'),
+        onSecondaryAction: items.isNotEmpty
+            ? () => _openCheckout(items.first)
+            : () => _openSurface('chat'),
         onTertiaryAction: () => _openSurface('statement'),
       );
     }
@@ -695,7 +794,9 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
           insightBody:
               'Painéis de aprovação, fiscal e atendimento ligados aos mesmos registros operacionais do catálogo.',
         ),
-        onPrimaryAction: items.isNotEmpty ? () => _openItemDetail(items.first) : () => _openSurface('feed'),
+        onPrimaryAction: items.isNotEmpty
+            ? () => _openItemDetail(items.first)
+            : () => _openSurface('feed'),
         onSecondaryAction: () => _openSurface('statement'),
         onTertiaryAction: () => _openSurface('chat'),
       );
@@ -717,7 +818,9 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
           insightBody:
               'A experiência une jornada clínica, histórico recente e acionamento rápido da Helena para triagem.',
         ),
-        onPrimaryAction: items.isNotEmpty ? () => _openItemDetail(items.first) : () => _openSurface('feed'),
+        onPrimaryAction: items.isNotEmpty
+            ? () => _openItemDetail(items.first)
+            : () => _openSurface('feed'),
         onSecondaryAction: () => _openSurface('statement'),
         onTertiaryAction: _toggleHelenaListening,
       );
@@ -739,7 +842,9 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
           insightBody:
               'CTA direto para alerta, proteção pessoal e trilha de registros do ecossistema em uma única vista.',
         ),
-        onPrimaryAction: items.isNotEmpty ? () => _openItemDetail(items.first) : () => _openSurface('chat'),
+        onPrimaryAction: items.isNotEmpty
+            ? () => _openItemDetail(items.first)
+            : () => _openSurface('chat'),
         onSecondaryAction: () => _openSurface('chat'),
         onTertiaryAction: () => _openSurface('statement'),
       );
@@ -761,7 +866,9 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
           insightBody:
               'Dispositivos, automações e contexto conversacional da Helena reunidos para controle contínuo.',
         ),
-        onPrimaryAction: items.isNotEmpty ? () => _openItemDetail(items.first) : () => _openSurface('feed'),
+        onPrimaryAction: items.isNotEmpty
+            ? () => _openItemDetail(items.first)
+            : () => _openSurface('feed'),
         onSecondaryAction: () => _openSurface('feed'),
         onTertiaryAction: () => _openSurface('chat'),
       );
@@ -783,7 +890,9 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
           insightBody:
               'As telas de tarefa, memória e listas passam a ficar conectadas ao mesmo fluxo do shell principal.',
         ),
-        onPrimaryAction: items.isNotEmpty ? () => _openItemDetail(items.first) : () => _openSurface('feed'),
+        onPrimaryAction: items.isNotEmpty
+            ? () => _openItemDetail(items.first)
+            : () => _openSurface('feed'),
         onSecondaryAction: () => _openSurface('feed'),
         onTertiaryAction: () => _openSurface('chat'),
       );
@@ -805,7 +914,9 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
           insightBody:
               'Advisor agora abre sugestões, detalhes e desdobramentos financeiros sem cair no fallback genérico.',
         ),
-        onPrimaryAction: items.isNotEmpty ? () => _openItemDetail(items.first) : () => _openSurface('feed'),
+        onPrimaryAction: items.isNotEmpty
+            ? () => _openItemDetail(items.first)
+            : () => _openSurface('feed'),
         onSecondaryAction: () => _openSurface('feed'),
         onTertiaryAction: () => _openSurface('statement'),
       );
@@ -827,7 +938,9 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
           insightBody:
               'As jornadas de afiliados, comissão e payout já entram ligadas aos mesmos itens e extratos do shell.',
         ),
-        onPrimaryAction: items.isNotEmpty ? () => _openItemDetail(items.first) : () => _openSurface('feed'),
+        onPrimaryAction: items.isNotEmpty
+            ? () => _openItemDetail(items.first)
+            : () => _openSurface('feed'),
         onSecondaryAction: () => _openSurface('statement'),
         onTertiaryAction: () => _openSurface('chat'),
       );
@@ -850,7 +963,9 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
               'Media passa a abrir campanha, payout e narrativa visual sem depender só do card genérico do módulo.',
         ),
         onPrimaryAction: () => _openSurface('feed'),
-        onSecondaryAction: items.isNotEmpty ? () => _openItemDetail(items.first) : () => _openSurface('feed'),
+        onSecondaryAction: items.isNotEmpty
+            ? () => _openItemDetail(items.first)
+            : () => _openSurface('feed'),
         onTertiaryAction: () => _openSurface('statement'),
       );
     }
@@ -874,10 +989,7 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
   ) {
     final String moduleId = module?.id ?? '';
     if (moduleId == 'STOCK') {
-      return _StockSection(
-        items: items,
-        onTap: _openItemDetail,
-      );
+      return _StockSection(items: items, onTap: _openItemDetail);
     }
 
     return Column(
@@ -965,10 +1077,7 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
           },
         ),
         const SizedBox(height: 28),
-        _RecentActivityPanel(
-          items: recentItems,
-          onTap: _openItemDetail,
-        ),
+        _RecentActivityPanel(items: recentItems, onTap: _openItemDetail),
       ],
     );
   }
@@ -993,143 +1102,140 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
       child: Scaffold(
         backgroundColor: const Color(0xFF0B1020),
         body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: <Color>[
-              Color(0xFF0B1020),
-              Color(0xFF121A2F),
-              Color(0xFF0E1323),
-            ],
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: <Color>[
+                Color(0xFF0B1020),
+                Color(0xFF121A2F),
+                Color(0xFF0E1323),
+              ],
+            ),
           ),
-        ),
-        child: SafeArea(
-          child: Stack(
-            children: <Widget>[
-              const ValleyBackdrop(),
-              RefreshIndicator(
-                onRefresh: _refresh,
-                child: CustomScrollView(
-                  slivers: <Widget>[
-                    SliverToBoxAdapter(
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 12, 20, 120),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            _TopBar(
-                              busy: _busy,
-                              onSearchChanged: (String value) =>
-                                  setState(() => _query = value),
-                            ),
-                            const SizedBox(height: 24),
-                            if (heroItem != null && _surface == 'home')
-                              _HeroSection(
-                                item: heroItem,
-                                subtitle: _data.subtitle,
-                                onPrimary: _busy
-                                    ? null
-                                    : () => _openItemDetail(heroItem),
+          child: SafeArea(
+            child: Stack(
+              children: <Widget>[
+                const ValleyBackdrop(),
+                RefreshIndicator(
+                  onRefresh: _refresh,
+                  child: CustomScrollView(
+                    slivers: <Widget>[
+                      SliverToBoxAdapter(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(20, 12, 20, 120),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              _TopBar(
+                                busy: _busy,
+                                onSearchChanged: (String value) =>
+                                    setState(() => _query = value),
                               ),
-                            if (_surface == 'home') const SizedBox(height: 18),
-                            if (_surface == 'home')
-                              _IndicatorGrid(
-                                summary: _data.summary,
-                                selectedModule: module,
-                                itemCount: items.length,
-                              ),
-                            const SizedBox(height: 28),
-                            _buildSurface(
-                              theme,
-                              items,
-                              module,
-                              recentItems,
-                            ),
-                            if (_data.publicUrl.isNotEmpty) ...<Widget>[
-                              const SizedBox(height: 18),
-                              ValleyPanel(
-                                radius: 28,
-                                padding: const EdgeInsets.all(18),
-                                glowColor: ValleyBrandColors.cyan,
-                                child: Row(
-                                  children: <Widget>[
-                                    const Icon(
-                                      Icons.public_rounded,
-                                      color: ValleyBrandColors.cyan,
-                                    ),
-                                    const SizedBox(width: 12),
-                                    Expanded(
-                                      child: Text(
-                                        _data.publicUrl,
-                                        style: theme.textTheme.bodyMedium
-                                            ?.copyWith(
-                                          color: theme
-                                              .colorScheme.onSurfaceVariant,
+                              const SizedBox(height: 24),
+                              if (heroItem != null && _surface == 'home')
+                                _HeroSection(
+                                  item: heroItem,
+                                  subtitle: _data.subtitle,
+                                  onPrimary: _busy
+                                      ? null
+                                      : () => _openItemDetail(heroItem),
+                                ),
+                              if (_surface == 'home')
+                                const SizedBox(height: 18),
+                              if (_surface == 'home')
+                                _IndicatorGrid(
+                                  summary: _data.summary,
+                                  selectedModule: module,
+                                  itemCount: items.length,
+                                ),
+                              const SizedBox(height: 28),
+                              _buildSurface(theme, items, module, recentItems),
+                              if (_data.publicUrl.isNotEmpty) ...<Widget>[
+                                const SizedBox(height: 18),
+                                ValleyPanel(
+                                  radius: 28,
+                                  padding: const EdgeInsets.all(18),
+                                  glowColor: ValleyBrandColors.cyan,
+                                  child: Row(
+                                    children: <Widget>[
+                                      const Icon(
+                                        Icons.public_rounded,
+                                        color: ValleyBrandColors.cyan,
+                                      ),
+                                      const SizedBox(width: 12),
+                                      Expanded(
+                                        child: Text(
+                                          _data.publicUrl,
+                                          style: theme.textTheme.bodyMedium
+                                              ?.copyWith(
+                                                color: theme
+                                                    .colorScheme
+                                                    .onSurfaceVariant,
+                                              ),
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
+                              ],
                             ],
-                          ],
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              _FloatingDock(
-                modules: _data.modules,
-                expanded: _dockExpanded,
-                selectedModuleId: _selectedModuleId,
-                alignmentX: _dockX,
-                onToggle: () => setState(() => _dockExpanded = !_dockExpanded),
-                onPanUpdate: (DragUpdateDetails details) {
-                  final double width = MediaQuery.sizeOf(context).width;
-                  setState(() {
-                    _dockX = (_dockX + (details.delta.dx / math.max(width, 1)) * 2)
-                        .clamp(-0.84, 0.84);
-                  });
-                },
-                onSelect: (ProductModule module) {
-                  _showModule(module.id);
-                  setState(() => _dockExpanded = false);
-                },
-              ),
-              Align(
-                alignment: Alignment(_helenaAlignment.dx, _helenaAlignment.dy),
-                child: GestureDetector(
-                  onPanUpdate: (DragUpdateDetails details) {
-                    final Size size = MediaQuery.sizeOf(context);
-                    setState(() {
-                      _helenaAlignment = Offset(
-                        (_helenaAlignment.dx +
-                                (details.delta.dx / math.max(size.width, 1)) * 2)
-                            .clamp(-0.92, 0.92),
-                        (_helenaAlignment.dy +
-                                (details.delta.dy / math.max(size.height, 1)) * 2)
-                            .clamp(-0.82, 0.88),
-                      );
-                    });
-                  },
-                  child: _HelenaAssistant(
-                    minimized: _helenaMinimized,
-                    mood: _helenaMood,
-                    message: _helenaMessage,
-                    transcript: _helenaTranscript,
-                    voiceReady: _helenaVoiceReady,
-                    listening: _helenaListening,
-                    onToggle: () => setState(() => _helenaMinimized = !_helenaMinimized),
-                    onSpeak: () => _speakHelena(_helenaMessage),
-                    onListen: _toggleHelenaListening,
+                    ],
                   ),
                 ),
-              ),
-            ],
+                _FloatingDock(
+                  modules: _data.modules,
+                  expanded: _dockExpanded,
+                  selectedModuleId: _selectedModuleId,
+                  onToggle: () =>
+                      setState(() => _dockExpanded = !_dockExpanded),
+                  onSelect: (ProductModule module) {
+                    _showModule(module.id);
+                    setState(() => _dockExpanded = false);
+                  },
+                ),
+                Align(
+                  alignment: Alignment(
+                    _helenaAlignment.dx,
+                    _helenaAlignment.dy,
+                  ),
+                  child: GestureDetector(
+                    onPanUpdate: (DragUpdateDetails details) {
+                      final Size size = MediaQuery.sizeOf(context);
+                      setState(() {
+                        _helenaAlignment = Offset(
+                          (_helenaAlignment.dx +
+                                  (details.delta.dx / math.max(size.width, 1)) *
+                                      2)
+                              .clamp(-0.96, 0.96),
+                          (_helenaAlignment.dy +
+                                  (details.delta.dy /
+                                          math.max(size.height, 1)) *
+                                      2)
+                              .clamp(-0.90, 0.90),
+                        );
+                      });
+                    },
+                    child: _HelenaAssistant(
+                      minimized: _helenaMinimized,
+                      mood: _helenaMood,
+                      message: _helenaMessage,
+                      transcript: _helenaTranscript,
+                      voiceReady: _helenaVoiceReady,
+                      listening: _helenaListening,
+                      onToggle: () =>
+                          setState(() => _helenaMinimized = !_helenaMinimized),
+                      onSpeak: () => _speakHelena(_helenaMessage),
+                      onListen: _toggleHelenaListening,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
         ),
         bottomNavigationBar: _BottomGlassNav(
           index: _navIndex,
@@ -1180,10 +1286,7 @@ class _NavigationSnapshot {
 }
 
 class _TopBar extends StatelessWidget {
-  const _TopBar({
-    required this.busy,
-    required this.onSearchChanged,
-  });
+  const _TopBar({required this.busy, required this.onSearchChanged});
 
   final bool busy;
   final ValueChanged<String> onSearchChanged;
@@ -1197,15 +1300,18 @@ class _TopBar extends StatelessWidget {
           height: 44,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            border: Border.all(color: ValleyBrandColors.cyan.withValues(alpha: 0.28)),
+            border: Border.all(
+              color: ValleyBrandColors.cyan.withValues(alpha: 0.28),
+            ),
           ),
           clipBehavior: Clip.antiAlias,
           child: Image.network(
             'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80',
             fit: BoxFit.cover,
-            errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
-              return const ColoredBox(color: Color(0xFF1A1F30));
-            },
+            errorBuilder:
+                (BuildContext context, Object error, StackTrace? stackTrace) {
+                  return const ColoredBox(color: Color(0xFF1A1F30));
+                },
           ),
         ),
         const SizedBox(width: 14),
@@ -1276,9 +1382,10 @@ class _HeroSection extends StatelessWidget {
             Image.network(
               item.imageUrl,
               fit: BoxFit.cover,
-              errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
-                return const ColoredBox(color: Color(0xFF121A2F));
-              },
+              errorBuilder:
+                  (BuildContext context, Object error, StackTrace? stackTrace) {
+                    return const ColoredBox(color: Color(0xFF121A2F));
+                  },
             ),
             DecoratedBox(
               decoration: BoxDecoration(
@@ -1326,16 +1433,14 @@ class _HeroSection extends StatelessWidget {
                   RichText(
                     text: TextSpan(
                       style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                            fontWeight: FontWeight.w800,
-                            height: 1.02,
-                          ),
+                        fontWeight: FontWeight.w800,
+                        height: 1.02,
+                      ),
                       children: <InlineSpan>[
                         const TextSpan(text: 'Bem-vindo ao\n'),
                         TextSpan(
                           text: 'Futuro, Arthur.',
-                          style: const TextStyle(
-                            color: Color(0xFF6EE7F9),
-                          ),
+                          style: const TextStyle(color: Color(0xFF6EE7F9)),
                         ),
                       ],
                     ),
@@ -1346,10 +1451,8 @@ class _HeroSection extends StatelessWidget {
                     child: Text(
                       subtitle,
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onSurfaceVariant,
-                          ),
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 18),
@@ -1400,7 +1503,12 @@ class _IndicatorGrid extends StatelessWidget {
               const SizedBox(height: 14),
               Row(
                 children: <Widget>[
-                  Expanded(child: _smallCard('Ativos Em Carteira', '${summary.products}')),
+                  Expanded(
+                    child: _smallCard(
+                      'Ativos Em Carteira',
+                      '${summary.products}',
+                    ),
+                  ),
                   const SizedBox(width: 14),
                   Expanded(child: _energyCard()),
                 ],
@@ -1413,7 +1521,9 @@ class _IndicatorGrid extends StatelessWidget {
           children: <Widget>[
             Expanded(flex: 2, child: _wideCard()),
             const SizedBox(width: 14),
-            Expanded(child: _smallCard('Ativos Em Carteira', '${summary.products}')),
+            Expanded(
+              child: _smallCard('Ativos Em Carteira', '${summary.products}'),
+            ),
             const SizedBox(width: 14),
             Expanded(child: _energyCard()),
           ],
@@ -1432,7 +1542,11 @@ class _IndicatorGrid extends StatelessWidget {
         children: <Widget>[
           Row(
             children: <Widget>[
-              const Icon(Icons.query_stats_rounded, color: ValleyBrandColors.cyan, size: 32),
+              const Icon(
+                Icons.query_stats_rounded,
+                color: ValleyBrandColors.cyan,
+                size: 32,
+              ),
               const Spacer(),
               Text(
                 '+12.4%',
@@ -1478,8 +1592,9 @@ class _IndicatorGrid extends StatelessWidget {
                             borderRadius: const BorderRadius.vertical(
                               top: Radius.circular(4),
                             ),
-                            color: const Color(0xFF6EE7F9)
-                                .withValues(alpha: 0.28 + (factor * 0.44)),
+                            color: const Color(
+                              0xFF6EE7F9,
+                            ).withValues(alpha: 0.28 + (factor * 0.44)),
                           ),
                         ),
                       ),
@@ -1620,9 +1735,13 @@ class _MarketplaceCard extends StatelessWidget {
                     item.imageUrl,
                     fit: BoxFit.cover,
                     errorBuilder:
-                        (BuildContext context, Object error, StackTrace? stackTrace) {
-                      return const ColoredBox(color: Color(0xFF1A1F30));
-                    },
+                        (
+                          BuildContext context,
+                          Object error,
+                          StackTrace? stackTrace,
+                        ) {
+                          return const ColoredBox(color: Color(0xFF1A1F30));
+                        },
                   ),
                   Positioned(
                     top: 16,
@@ -1674,8 +1793,8 @@ class _MarketplaceCard extends StatelessWidget {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.w800,
-                        ),
+                      fontWeight: FontWeight.w800,
+                    ),
                   ),
                   const SizedBox(height: 8),
                   Row(
@@ -1696,13 +1815,11 @@ class _MarketplaceCard extends StatelessWidget {
                             const SizedBox(height: 4),
                             Text(
                               item.category,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
+                              style: Theme.of(context).textTheme.bodyMedium
                                   ?.copyWith(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurfaceVariant,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurfaceVariant,
                                   ),
                             ),
                           ],
@@ -1719,7 +1836,8 @@ class _MarketplaceCard extends StatelessWidget {
                       else
                         Text(
                           'R\$ ${item.priceBrl.toStringAsFixed(0)}',
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
                                 color: Theme.of(context).colorScheme.onSurface,
                                 fontWeight: FontWeight.w800,
                               ),
@@ -1822,19 +1940,23 @@ class _MarketplaceCard extends StatelessWidget {
 }
 
 class _StockSection extends StatelessWidget {
-  const _StockSection({
-    required this.items,
-    required this.onTap,
-  });
+  const _StockSection({required this.items, required this.onTap});
 
   final List<ProductItem> items;
   final ValueChanged<ProductItem> onTap;
 
   @override
   Widget build(BuildContext context) {
-    final int lowStock = items.where((ProductItem item) => item.stock <= 5).length;
-    final int inTransfer = items.where((ProductItem item) => item.stock > 5 && item.stock <= 18).length;
-    final int totalUnits = items.fold<int>(0, (int sum, ProductItem item) => sum + item.stock);
+    final int lowStock = items
+        .where((ProductItem item) => item.stock <= 5)
+        .length;
+    final int inTransfer = items
+        .where((ProductItem item) => item.stock > 5 && item.stock <= 18)
+        .length;
+    final int totalUnits = items.fold<int>(
+      0,
+      (int sum, ProductItem item) => sum + item.stock,
+    );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -1842,16 +1964,16 @@ class _StockSection extends StatelessWidget {
         Text(
           'Gestão de Estoque',
           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                color: ValleyBrandColors.cyan,
-                fontWeight: FontWeight.w800,
-              ),
+            color: ValleyBrandColors.cyan,
+            fontWeight: FontWeight.w800,
+          ),
         ),
         const SizedBox(height: 8),
         Text(
           'Monitoramento em tempo real de ativos, suprimentos e logística do hub central.',
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
         ),
         const SizedBox(height: 24),
         LayoutBuilder(
@@ -1880,10 +2002,12 @@ class _StockSection extends StatelessWidget {
             if (compact) {
               return Column(
                 children: cards
-                    .map((Widget card) => Padding(
-                          padding: const EdgeInsets.only(bottom: 14),
-                          child: card,
-                        ))
+                    .map(
+                      (Widget card) => Padding(
+                        padding: const EdgeInsets.only(bottom: 14),
+                        child: card,
+                      ),
+                    )
                     .toList(),
               );
             }
@@ -1945,10 +2069,7 @@ class _StockSection extends StatelessWidget {
               ),
               itemBuilder: (BuildContext context, int index) {
                 final ProductItem item = items[index];
-                return _StockCard(
-                  item: item,
-                  onTap: () => onTap(item),
-                );
+                return _StockCard(item: item, onTap: () => onTap(item));
               },
             );
           },
@@ -2014,10 +2135,7 @@ class _StockStatCard extends StatelessWidget {
 }
 
 class _StockCard extends StatelessWidget {
-  const _StockCard({
-    required this.item,
-    required this.onTap,
-  });
+  const _StockCard({required this.item, required this.onTap});
 
   final ProductItem item;
   final VoidCallback onTap;
@@ -2029,18 +2147,18 @@ class _StockCard extends StatelessWidget {
     final Color accent = lowStock
         ? ValleyBrandColors.danger
         : inTransfer
-            ? const Color(0xFFD0BCFF)
-            : ValleyBrandColors.cyan;
+        ? const Color(0xFFD0BCFF)
+        : ValleyBrandColors.cyan;
     final String status = lowStock
         ? 'Estoque Baixo'
         : inTransfer
-            ? 'Em Transferência'
-            : 'Disponível';
+        ? 'Em Transferência'
+        : 'Disponível';
     final String location = inTransfer
         ? 'Pátio de Montagem Leste'
         : lowStock
-            ? 'Armazém Logístico Sul'
-            : 'Hub Metropolitano A-1';
+        ? 'Armazém Logístico Sul'
+        : 'Hub Metropolitano A-1';
 
     return ValleyPanel(
       radius: 24,
@@ -2060,9 +2178,13 @@ class _StockCard extends StatelessWidget {
                     item.imageUrl,
                     fit: BoxFit.cover,
                     errorBuilder:
-                        (BuildContext context, Object error, StackTrace? stackTrace) {
-                      return const ColoredBox(color: Color(0xFF1A1F30));
-                    },
+                        (
+                          BuildContext context,
+                          Object error,
+                          StackTrace? stackTrace,
+                        ) {
+                          return const ColoredBox(color: Color(0xFF1A1F30));
+                        },
                   ),
                   Positioned(
                     top: 16,
@@ -2109,9 +2231,7 @@ class _StockCard extends StatelessWidget {
                               item.title,
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleLarge
+                              style: Theme.of(context).textTheme.titleLarge
                                   ?.copyWith(fontWeight: FontWeight.w700),
                             ),
                             const SizedBox(height: 4),
@@ -2154,15 +2274,20 @@ class _StockCard extends StatelessWidget {
                   const SizedBox(height: 16),
                   Row(
                     children: <Widget>[
-                      const Icon(Icons.hub_rounded, size: 18, color: Color(0xFF869395)),
+                      const Icon(
+                        Icons.hub_rounded,
+                        size: 18,
+                        color: Color(0xFF869395),
+                      ),
                       const SizedBox(width: 10),
                       Expanded(
                         child: Text(
                           location,
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSurfaceVariant,
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurfaceVariant,
                               ),
                         ),
                       ),
@@ -2175,8 +2300,8 @@ class _StockCard extends StatelessWidget {
                         lowStock
                             ? Icons.warning_rounded
                             : inTransfer
-                                ? Icons.sync_alt_rounded
-                                : Icons.check_circle_rounded,
+                            ? Icons.sync_alt_rounded
+                            : Icons.check_circle_rounded,
                         size: 18,
                         color: accent,
                       ),
@@ -2197,7 +2322,9 @@ class _StockCard extends StatelessWidget {
                       height: 6,
                       child: Stack(
                         children: <Widget>[
-                          Container(color: Colors.white.withValues(alpha: 0.06)),
+                          Container(
+                            color: Colors.white.withValues(alpha: 0.06),
+                          ),
                           FractionallySizedBox(
                             widthFactor: (item.stock.clamp(1, 100) / 100),
                             child: Container(color: accent),
@@ -2222,8 +2349,8 @@ class _StockCard extends StatelessWidget {
                             lowStock
                                 ? 'REABASTECER'
                                 : inTransfer
-                                    ? 'RASTREAR'
-                                    : 'MOVIMENTAR',
+                                ? 'RASTREAR'
+                                : 'MOVIMENTAR',
                           ),
                         ),
                       ),
@@ -2255,10 +2382,7 @@ class _StockCard extends StatelessWidget {
 }
 
 class _FilterChip extends StatelessWidget {
-  const _FilterChip({
-    required this.label,
-    required this.active,
-  });
+  const _FilterChip({required this.label, required this.active});
 
   final String label;
   final bool active;
@@ -2299,10 +2423,7 @@ class _FilterChip extends StatelessWidget {
 }
 
 class _RecentActivityPanel extends StatelessWidget {
-  const _RecentActivityPanel({
-    required this.items,
-    required this.onTap,
-  });
+  const _RecentActivityPanel({required this.items, required this.onTap});
 
   final List<ProductItem> items;
   final ValueChanged<ProductItem> onTap;
@@ -2317,15 +2438,17 @@ class _RecentActivityPanel extends StatelessWidget {
         children: <Widget>[
           Text(
             'Atividade Recente',
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.w800,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800),
           ),
           const SizedBox(height: 20),
           for (int i = 0; i < items.length; i++) ...<Widget>[
             _RecentRow(
               item: items[i],
-              primaryIcon: i == 0 ? Icons.account_balance_wallet_rounded : Icons.shopping_bag_rounded,
+              primaryIcon: i == 0
+                  ? Icons.account_balance_wallet_rounded
+                  : Icons.shopping_bag_rounded,
               highlight: i == 0,
               onTap: () => onTap(items[i]),
             ),
@@ -2367,10 +2490,11 @@ class _RecentRow extends StatelessWidget {
               width: 48,
               height: 48,
               decoration: BoxDecoration(
-                color: (highlight
-                        ? ValleyBrandColors.cyan
-                        : const Color(0xFFD0BCFF))
-                    .withValues(alpha: 0.16),
+                color:
+                    (highlight
+                            ? ValleyBrandColors.cyan
+                            : const Color(0xFFD0BCFF))
+                        .withValues(alpha: 0.16),
                 borderRadius: BorderRadius.circular(14),
               ),
               child: Icon(
@@ -2386,10 +2510,12 @@ class _RecentRow extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    highlight ? 'Transferência Recebida' : 'Aquisição ${item.brand}',
+                    highlight
+                        ? 'Transferência Recebida'
+                        : 'Aquisição ${item.brand}',
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          fontWeight: FontWeight.w600,
-                        ),
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                   const SizedBox(height: 4),
                   Text(
@@ -2397,10 +2523,8 @@ class _RecentRow extends StatelessWidget {
                         ? 'Hoje, 14:22 • Wallet A7'
                         : 'Ontem, 09:15 • Marketplace',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onSurfaceVariant,
-                        ),
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
                   ),
                 ],
               ),
@@ -2410,11 +2534,11 @@ class _RecentRow extends StatelessWidget {
                   ? '+R\$ ${(item.priceBrl / 10).toStringAsFixed(2)}'
                   : '-R\$ ${item.priceBrl.toStringAsFixed(2)}',
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: highlight
-                        ? ValleyBrandColors.cyan
-                        : Theme.of(context).colorScheme.onSurface,
-                    fontWeight: FontWeight.w800,
-                  ),
+                color: highlight
+                    ? ValleyBrandColors.cyan
+                    : Theme.of(context).colorScheme.onSurface,
+                fontWeight: FontWeight.w800,
+              ),
             ),
           ],
         ),
@@ -2439,7 +2563,8 @@ class _ProductDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final List<dynamic> features = item.raw['features'] as List<dynamic>? ?? const <dynamic>[];
+    final List<dynamic> features =
+        item.raw['features'] as List<dynamic>? ?? const <dynamic>[];
     final Map<String, dynamic> seller =
         (item.raw['seller'] as Map<dynamic, dynamic>? ?? <dynamic, dynamic>{})
             .cast<String, dynamic>();
@@ -2457,9 +2582,14 @@ class _ProductDetailScreen extends StatelessWidget {
                 Image.network(
                   item.imageUrl,
                   fit: BoxFit.cover,
-                  errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
-                    return const ColoredBox(color: Color(0xFF121A2F));
-                  },
+                  errorBuilder:
+                      (
+                        BuildContext context,
+                        Object error,
+                        StackTrace? stackTrace,
+                      ) {
+                        return const ColoredBox(color: Color(0xFF121A2F));
+                      },
                 ),
                 DecoratedBox(
                   decoration: BoxDecoration(
@@ -2538,7 +2668,9 @@ class _ProductDetailScreen extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       'Descricao',
-                      style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
+                      style: theme.textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.w800,
+                      ),
                     ),
                     const SizedBox(height: 12),
                     Text(
@@ -2554,7 +2686,10 @@ class _ProductDetailScreen extends StatelessWidget {
                       children: features
                           .map(
                             (dynamic feature) => Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 14,
+                                vertical: 10,
+                              ),
                               decoration: BoxDecoration(
                                 color: Colors.white.withValues(alpha: 0.05),
                                 borderRadius: BorderRadius.circular(999),
@@ -2581,7 +2716,9 @@ class _ProductDetailScreen extends StatelessWidget {
                         CircleAvatar(
                           radius: 24,
                           backgroundImage: NetworkImage(
-                            (profile?['avatar_url'] ?? seller['avatar_url'] ?? item.imageUrl)
+                            (profile?['avatar_url'] ??
+                                    seller['avatar_url'] ??
+                                    item.imageUrl)
                                 .toString(),
                           ),
                         ),
@@ -2591,14 +2728,18 @@ class _ProductDetailScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Text(
-                                (profile?['name'] ?? seller['name'] ?? item.merchantName).toString(),
+                                (profile?['name'] ??
+                                        seller['name'] ??
+                                        item.merchantName)
+                                    .toString(),
                                 style: theme.textTheme.titleMedium?.copyWith(
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                (profile?['headline'] ?? item.category).toString(),
+                                (profile?['headline'] ?? item.category)
+                                    .toString(),
                                 style: theme.textTheme.bodySmall?.copyWith(
                                   color: theme.colorScheme.onSurfaceVariant,
                                 ),
@@ -2640,10 +2781,7 @@ class _ProductDetailScreen extends StatelessWidget {
 }
 
 class _CheckoutScreen extends StatelessWidget {
-  const _CheckoutScreen({
-    required this.item,
-    required this.onConfirm,
-  });
+  const _CheckoutScreen({required this.item, required this.onConfirm});
 
   final ProductItem item;
   final VoidCallback onConfirm;
@@ -2654,7 +2792,8 @@ class _CheckoutScreen extends StatelessWidget {
     final Map<String, dynamic> checkout =
         (item.raw['checkout'] as Map<dynamic, dynamic>? ?? <dynamic, dynamic>{})
             .cast<String, dynamic>();
-    final double shipping = (checkout['shipping_brl'] as num?)?.toDouble() ?? 19.9;
+    final double shipping =
+        (checkout['shipping_brl'] as num?)?.toDouble() ?? 19.9;
     final double service = (checkout['service_brl'] as num?)?.toDouble() ?? 4.9;
     final double total = item.priceBrl + shipping + service;
 
@@ -2667,7 +2806,9 @@ class _CheckoutScreen extends StatelessWidget {
         children: <Widget>[
           Text(
             checkout['headline']?.toString() ?? 'Checkout',
-            style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800),
+            style: theme.textTheme.headlineSmall?.copyWith(
+              fontWeight: FontWeight.w800,
+            ),
           ),
           const SizedBox(height: 18),
           Row(
@@ -2677,9 +2818,18 @@ class _CheckoutScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    _CheckoutRow(label: item.title, value: 'R\$ ${item.priceBrl.toStringAsFixed(2)}'),
-                    _CheckoutRow(label: 'Entrega', value: 'R\$ ${shipping.toStringAsFixed(2)}'),
-                    _CheckoutRow(label: 'Servico', value: 'R\$ ${service.toStringAsFixed(2)}'),
+                    _CheckoutRow(
+                      label: item.title,
+                      value: 'R\$ ${item.priceBrl.toStringAsFixed(2)}',
+                    ),
+                    _CheckoutRow(
+                      label: 'Entrega',
+                      value: 'R\$ ${shipping.toStringAsFixed(2)}',
+                    ),
+                    _CheckoutRow(
+                      label: 'Servico',
+                      value: 'R\$ ${service.toStringAsFixed(2)}',
+                    ),
                     const Divider(height: 28),
                     _CheckoutRow(
                       label: 'Total',
@@ -2699,12 +2849,16 @@ class _CheckoutScreen extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         'Entrega prevista',
-                        style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                       const SizedBox(height: 8),
                       Text(checkout['eta']?.toString() ?? '2 dias'),
                       const SizedBox(height: 14),
-                      Text('Parcelamento em ate ${checkout['installments'] ?? 12}x sem juros'),
+                      Text(
+                        'Parcelamento em ate ${checkout['installments'] ?? 12}x sem juros',
+                      ),
                       const SizedBox(height: 18),
                       FilledButton.icon(
                         onPressed: onConfirm,
@@ -2755,10 +2909,7 @@ class _CheckoutRow extends StatelessWidget {
 }
 
 class _FeedScreen extends StatelessWidget {
-  const _FeedScreen({
-    required this.entries,
-    required this.onOpenItem,
-  });
+  const _FeedScreen({required this.entries, required this.onOpenItem});
 
   final List<Map<String, dynamic>> entries;
   final ValueChanged<String> onOpenItem;
@@ -2770,7 +2921,9 @@ class _FeedScreen extends StatelessWidget {
       children: <Widget>[
         Text(
           'Feed ativo',
-          style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800),
+          style: Theme.of(
+            context,
+          ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800),
         ),
         const SizedBox(height: 16),
         for (final Map<String, dynamic> entry in entries.take(12))
@@ -2784,7 +2937,11 @@ class _FeedScreen extends StatelessWidget {
                 children: <Widget>[
                   Row(
                     children: <Widget>[
-                      CircleAvatar(backgroundImage: NetworkImage(entry['author_avatar'].toString())),
+                      CircleAvatar(
+                        backgroundImage: NetworkImage(
+                          entry['author_avatar'].toString(),
+                        ),
+                      ),
                       const SizedBox(width: 12),
                       Expanded(
                         child: Column(
@@ -2793,8 +2950,11 @@ class _FeedScreen extends StatelessWidget {
                             Text(entry['author_name'].toString()),
                             Text(
                               entry['time_label'].toString(),
-                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                              style: Theme.of(context).textTheme.bodySmall
+                                  ?.copyWith(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurfaceVariant,
                                   ),
                             ),
                           ],
@@ -2804,8 +2964,12 @@ class _FeedScreen extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 16),
-                  Text(entry['headline'].toString(),
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700)),
+                  Text(
+                    entry['headline'].toString(),
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
                   const SizedBox(height: 8),
                   Text(entry['text'].toString()),
                   const SizedBox(height: 14),
@@ -2829,7 +2993,8 @@ class _FeedScreen extends StatelessWidget {
                       Text('↗ ${entry['shares']}'),
                       const Spacer(),
                       TextButton(
-                        onPressed: () => onOpenItem(entry['item_id'].toString()),
+                        onPressed: () =>
+                            onOpenItem(entry['item_id'].toString()),
                         child: const Text('Abrir item'),
                       ),
                     ],
@@ -2859,7 +3024,9 @@ class _ChatScreen extends StatelessWidget {
       children: <Widget>[
         Text(
           'Chat',
-          style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800),
+          style: Theme.of(
+            context,
+          ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800),
         ),
         const SizedBox(height: 16),
         for (final Map<String, dynamic> conversation in conversations)
@@ -2873,7 +3040,11 @@ class _ChatScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(16),
                 child: Row(
                   children: <Widget>[
-                    CircleAvatar(backgroundImage: NetworkImage(conversation['avatar_url'].toString())),
+                    CircleAvatar(
+                      backgroundImage: NetworkImage(
+                        conversation['avatar_url'].toString(),
+                      ),
+                    ),
                     const SizedBox(width: 12),
                     Expanded(
                       child: Column(
@@ -2885,16 +3056,23 @@ class _ChatScreen extends StatelessWidget {
                             conversation['subtitle'].toString(),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurfaceVariant,
                                 ),
                           ),
                         ],
                       ),
                     ),
-                    if ((conversation['unread_count'] as num?)?.toInt() case final int count when count > 0)
+                    if ((conversation['unread_count'] as num?)?.toInt()
+                        case final int count when count > 0)
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 6,
+                        ),
                         decoration: BoxDecoration(
                           color: ValleyBrandColors.cyan,
                           borderRadius: BorderRadius.circular(999),
@@ -2924,7 +3102,8 @@ class _ConversationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<dynamic> messages = conversation['messages'] as List<dynamic>? ?? const <dynamic>[];
+    final List<dynamic> messages =
+        conversation['messages'] as List<dynamic>? ?? const <dynamic>[];
     return ValleyPanel(
       radius: 28,
       padding: const EdgeInsets.all(20),
@@ -2933,7 +3112,9 @@ class _ConversationScreen extends StatelessWidget {
         children: <Widget>[
           Text(
             conversation['title'].toString(),
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800),
+            style: Theme.of(
+              context,
+            ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800),
           ),
           const SizedBox(height: 16),
           for (final dynamic entry in messages)
@@ -2976,7 +3157,9 @@ class _StatementScreen extends StatelessWidget {
         children: <Widget>[
           Text(
             'Extrato',
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800),
+            style: Theme.of(
+              context,
+            ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800),
           ),
           const SizedBox(height: 16),
           for (final Map<String, dynamic> entry in entries.take(18))
@@ -2992,8 +3175,11 @@ class _StatementScreen extends StatelessWidget {
                         const SizedBox(height: 4),
                         Text(
                           entry['subtitle'].toString(),
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurfaceVariant,
                               ),
                         ),
                       ],
@@ -3039,24 +3225,113 @@ class _GenericModuleScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final List<dynamic> statCards = moduleScreen?['stat_cards'] as List<dynamic>? ?? const <dynamic>[];
+    final List<dynamic> statCards =
+        moduleScreen?['stat_cards'] as List<dynamic>? ?? const <dynamic>[];
+    final List<Map<String, dynamic>> quickActions =
+        (moduleScreen?['quick_actions'] as List<dynamic>? ?? const <dynamic>[])
+            .whereType<Map<dynamic, dynamic>>()
+            .map(
+              (Map<dynamic, dynamic> action) => action.cast<String, dynamic>(),
+            )
+            .toList();
+    final List<String> highlights =
+        (moduleScreen?['highlights'] as List<dynamic>? ?? const <dynamic>[])
+            .map((dynamic item) => item.toString())
+            .where((String item) => item.trim().isNotEmpty)
+            .toList();
+    final List<String> dependsOn =
+        (moduleScreen?['depends_on'] as List<dynamic>? ?? const <dynamic>[])
+            .map((dynamic item) => item.toString())
+            .where((String item) => item.trim().isNotEmpty)
+            .toList();
+    final List<String> integratesWith =
+        (moduleScreen?['integrates_with'] as List<dynamic>? ??
+                const <dynamic>[])
+            .map((dynamic item) => item.toString())
+            .where((String item) => item.trim().isNotEmpty)
+            .toList();
+    final String accentLabel =
+        moduleScreen?['accent_label']?.toString() ?? 'Experiencia ativa';
+    final String description =
+        moduleScreen?['description']?.toString() ?? module?.subtitle ?? '';
+    final String helenaHint =
+        moduleScreen?['helena_hint']?.toString() ??
+        'Helena entra quando voce pedir ajuda para navegar ou explicar o contexto.';
+    final String operatorNote =
+        moduleScreen?['operator_note']?.toString() ?? '';
+    final String dataHomeLabel = _prettyDataHomeLabel(
+      moduleScreen?['data_home']?.toString() ?? '',
+    );
+    final String tierLabel = _prettyTierLabel(
+      moduleScreen?['tier']?.toString() ?? '',
+    );
+    final String domainLabel = _prettyDomainLabel(
+      moduleScreen?['domain']?.toString() ?? '',
+    );
+
+    void runQuickAction(String target) {
+      switch (target) {
+        case 'detail':
+          if (spotlightItems.isNotEmpty) {
+            onOpenItem(spotlightItems.first);
+          } else {
+            onOpenFeed();
+          }
+          return;
+        case 'chat':
+          onOpenChat();
+          return;
+        case 'statement':
+          onOpenStatement();
+          return;
+        case 'feed':
+        default:
+          onOpenFeed();
+      }
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         ValleyPanel(
-          radius: 28,
+          radius: 30,
           padding: const EdgeInsets.all(24),
           glowColor: ValleyBrandColors.cyan,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
+                decoration: BoxDecoration(
+                  color: ValleyBrandColors.cyan.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(999),
+                ),
+                child: Text(
+                  accentLabel,
+                  style: const TextStyle(
+                    color: ValleyBrandColors.cyan,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
               Text(
-                moduleScreen?['hero_title']?.toString() ?? module?.label ?? 'Modulo',
-                style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800),
+                moduleScreen?['hero_title']?.toString() ??
+                    module?.label ??
+                    'Modulo',
+                style: theme.textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.w800,
+                ),
               ),
               const SizedBox(height: 10),
               Text(
-                moduleScreen?['hero_subtitle']?.toString() ?? module?.subtitle ?? '',
+                moduleScreen?['hero_subtitle']?.toString() ??
+                    module?.subtitle ??
+                    '',
                 style: theme.textTheme.bodyLarge?.copyWith(
                   color: theme.colorScheme.onSurfaceVariant,
                 ),
@@ -3065,16 +3340,65 @@ class _GenericModuleScreen extends StatelessWidget {
               Wrap(
                 spacing: 12,
                 runSpacing: 12,
+                children: quickActions.take(2).map((
+                  Map<String, dynamic> action,
+                ) {
+                  final String label = action['label']?.toString() ?? 'Abrir';
+                  final String target = action['target']?.toString() ?? 'feed';
+                  final Icon icon = Icon(_quickActionIconFor(target));
+                  if (quickActions.indexOf(action) == 0) {
+                    return FilledButton.icon(
+                      onPressed: () => runQuickAction(target),
+                      icon: icon,
+                      label: Text(label),
+                    );
+                  }
+                  return OutlinedButton.icon(
+                    onPressed: () => runQuickAction(target),
+                    icon: icon,
+                    label: Text(label),
+                  );
+                }).toList(),
+              ),
+              const SizedBox(height: 16),
+              Wrap(
+                spacing: 10,
+                runSpacing: 10,
                 children: <Widget>[
-                  OutlinedButton(onPressed: onOpenFeed, child: const Text('Feed')),
-                  OutlinedButton(onPressed: onOpenChat, child: const Text('Chat')),
-                  OutlinedButton(onPressed: onOpenStatement, child: const Text('Extrato')),
+                  if (tierLabel.isNotEmpty)
+                    _MetaPill(icon: Icons.layers_rounded, label: tierLabel),
+                  if (dataHomeLabel.isNotEmpty)
+                    _MetaPill(
+                      icon: Icons.storage_rounded,
+                      label: dataHomeLabel,
+                    ),
+                  if (domainLabel.isNotEmpty)
+                    _MetaPill(icon: Icons.hub_rounded, label: domainLabel),
                 ],
               ),
             ],
           ),
         ),
         const SizedBox(height: 18),
+        if (quickActions.isNotEmpty)
+          Wrap(
+            spacing: 14,
+            runSpacing: 14,
+            children: quickActions
+                .take(4)
+                .map(
+                  (Map<String, dynamic> action) => _ActionCard(
+                    icon: _quickActionIconFor(
+                      action['target']?.toString() ?? 'feed',
+                    ),
+                    label: action['label']?.toString() ?? 'Abrir',
+                    onTap: () =>
+                        runQuickAction(action['target']?.toString() ?? 'feed'),
+                  ),
+                )
+                .toList(),
+          ),
+        if (quickActions.isNotEmpty) const SizedBox(height: 18),
         Wrap(
           spacing: 14,
           runSpacing: 14,
@@ -3108,49 +3432,241 @@ class _GenericModuleScreen extends StatelessWidget {
               .toList(),
         ),
         const SizedBox(height: 20),
-        for (final ProductItem item in spotlightItems)
-          Padding(
-            padding: const EdgeInsets.only(bottom: 14),
-            child: InkWell(
-              borderRadius: BorderRadius.circular(24),
-              onTap: () => onOpenItem(item),
-              child: ValleyPanel(
-                radius: 24,
-                padding: const EdgeInsets.all(16),
-                child: Row(
-                  children: <Widget>[
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(18),
-                      child: Image.network(
-                        item.imageUrl,
-                        width: 96,
-                        height: 96,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    const SizedBox(width: 14),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(item.title, style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700)),
-                          const SizedBox(height: 6),
+        LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+            final double availableWidth = constraints.maxWidth;
+            final bool wideLayout = availableWidth >= 1080;
+            final double leftWidth = wideLayout
+                ? (availableWidth - 16) * 0.58
+                : availableWidth;
+            final double rightWidth = wideLayout
+                ? (availableWidth - 16) * 0.42
+                : availableWidth;
+
+            return Wrap(
+              spacing: 16,
+              runSpacing: 16,
+              children: <Widget>[
+                SizedBox(
+                  width: leftWidth,
+                  child: ValleyPanel(
+                    radius: 26,
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          'Panorama do modulo',
+                          style: theme.textTheme.titleLarge?.copyWith(
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          description,
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                        if (operatorNote.isNotEmpty) ...<Widget>[
+                          const SizedBox(height: 14),
                           Text(
-                            item.description,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
+                            operatorNote,
                             style: theme.textTheme.bodySmall?.copyWith(
                               color: theme.colorScheme.onSurfaceVariant,
                             ),
                           ),
                         ],
-                      ),
+                        if (highlights.isNotEmpty) ...<Widget>[
+                          const SizedBox(height: 18),
+                          for (final String highlight in highlights)
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 10),
+                              child: _FieldChip(
+                                icon: Icons.auto_awesome_rounded,
+                                label: highlight,
+                              ),
+                            ),
+                        ],
+                        const SizedBox(height: 18),
+                        Wrap(
+                          spacing: 10,
+                          runSpacing: 10,
+                          children: <Widget>[
+                            ...dependsOn
+                                .take(3)
+                                .map(
+                                  (String dependency) => _MetaPill(
+                                    icon: Icons.account_tree_rounded,
+                                    label: 'Depende de $dependency',
+                                  ),
+                                ),
+                            ...integratesWith
+                                .take(3)
+                                .map(
+                                  (String integration) => _MetaPill(
+                                    icon: Icons.sync_alt_rounded,
+                                    label: 'Integra $integration',
+                                  ),
+                                ),
+                          ],
+                        ),
+                        const SizedBox(height: 18),
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: ValleyBrandColors.lilac.withValues(
+                              alpha: 0.08,
+                            ),
+                            borderRadius: BorderRadius.circular(22),
+                            border: Border.all(
+                              color: ValleyBrandColors.lilac.withValues(
+                                alpha: 0.18,
+                              ),
+                            ),
+                          ),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              const Padding(
+                                padding: EdgeInsets.only(top: 2),
+                                child: Icon(
+                                  Icons.psychology_alt_rounded,
+                                  color: ValleyBrandColors.lilac,
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Text(
+                                  helenaHint,
+                                  style: theme.textTheme.bodySmall?.copyWith(
+                                    color: theme.colorScheme.onSurfaceVariant,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-          ),
+                SizedBox(
+                  width: rightWidth,
+                  child: ValleyPanel(
+                    radius: 26,
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          'Entradas em foco',
+                          style: theme.textTheme.titleLarge?.copyWith(
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        const SizedBox(height: 14),
+                        if (spotlightItems.isEmpty)
+                          Text(
+                            'Sem itens em destaque agora.',
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: theme.colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                        for (final ProductItem item in spotlightItems)
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 12),
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(22),
+                              onTap: () => onOpenItem(item),
+                              child: Row(
+                                children: <Widget>[
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(16),
+                                    child: Image.network(
+                                      item.imageUrl,
+                                      width: 84,
+                                      height: 84,
+                                      fit: BoxFit.cover,
+                                      errorBuilder:
+                                          (
+                                            BuildContext context,
+                                            Object error,
+                                            StackTrace? stackTrace,
+                                          ) {
+                                            return const ColoredBox(
+                                              color: Color(0xFF121A2F),
+                                              child: SizedBox(
+                                                width: 84,
+                                                height: 84,
+                                              ),
+                                            );
+                                          },
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Text(
+                                          item.title,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: theme.textTheme.titleMedium
+                                              ?.copyWith(
+                                                fontWeight: FontWeight.w700,
+                                              ),
+                                        ),
+                                        const SizedBox(height: 6),
+                                        Text(
+                                          item.description,
+                                          maxLines: 3,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: theme.textTheme.bodySmall
+                                              ?.copyWith(
+                                                color: theme
+                                                    .colorScheme
+                                                    .onSurfaceVariant,
+                                              ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        const SizedBox(height: 10),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: <Widget>[
+                            _MiniStat(
+                              label: 'Itens',
+                              value: '${spotlightItems.length}',
+                            ),
+                            _MiniStat(
+                              label: 'Base',
+                              value: _shortDataHomeLabel(
+                                moduleScreen?['data_home']?.toString() ?? '',
+                              ),
+                            ),
+                            _MiniStat(
+                              label: 'Links',
+                              value: '${integratesWith.length}',
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
       ],
     );
   }
@@ -3242,9 +3758,15 @@ class _ConfiguredExperienceModuleScreen extends StatelessWidget {
                           hero.imageUrl,
                           fit: BoxFit.cover,
                           errorBuilder:
-                              (BuildContext context, Object error, StackTrace? stackTrace) {
-                            return const ColoredBox(color: Color(0xFF121A2F));
-                          },
+                              (
+                                BuildContext context,
+                                Object error,
+                                StackTrace? stackTrace,
+                              ) {
+                                return const ColoredBox(
+                                  color: Color(0xFF121A2F),
+                                );
+                              },
                         ),
                 ),
               ),
@@ -3264,7 +3786,10 @@ class _ConfiguredExperienceModuleScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 6,
+                      ),
                       decoration: BoxDecoration(
                         color: ValleyBrandColors.cyan.withValues(alpha: 0.12),
                         borderRadius: BorderRadius.circular(999),
@@ -3280,12 +3805,18 @@ class _ConfiguredExperienceModuleScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      moduleScreen?['hero_title']?.toString() ?? module?.label ?? 'Módulo Valley',
-                      style: theme.textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.w800),
+                      moduleScreen?['hero_title']?.toString() ??
+                          module?.label ??
+                          'Módulo Valley',
+                      style: theme.textTheme.headlineMedium?.copyWith(
+                        fontWeight: FontWeight.w800,
+                      ),
                     ),
                     const SizedBox(height: 10),
                     Text(
-                      moduleScreen?['hero_subtitle']?.toString() ?? module?.subtitle ?? '',
+                      moduleScreen?['hero_subtitle']?.toString() ??
+                          module?.subtitle ??
+                          '',
                       style: theme.textTheme.bodyLarge?.copyWith(
                         color: theme.colorScheme.onSurfaceVariant,
                       ),
@@ -3383,7 +3914,9 @@ class _ConfiguredExperienceModuleScreen extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       spec.insightTitle,
-                      style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
+                      style: theme.textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                     const SizedBox(height: 10),
                     Text(
@@ -3408,16 +3941,20 @@ class _ConfiguredExperienceModuleScreen extends StatelessWidget {
                                   width: 64,
                                   height: 64,
                                   fit: BoxFit.cover,
-                                  errorBuilder: (
-                                    BuildContext context,
-                                    Object error,
-                                    StackTrace? stackTrace,
-                                  ) {
-                                    return const ColoredBox(
-                                      color: Color(0xFF121A2F),
-                                      child: SizedBox(width: 64, height: 64),
-                                    );
-                                  },
+                                  errorBuilder:
+                                      (
+                                        BuildContext context,
+                                        Object error,
+                                        StackTrace? stackTrace,
+                                      ) {
+                                        return const ColoredBox(
+                                          color: Color(0xFF121A2F),
+                                          child: SizedBox(
+                                            width: 64,
+                                            height: 64,
+                                          ),
+                                        );
+                                      },
                                 ),
                               ),
                               const SizedBox(width: 12),
@@ -3427,18 +3964,22 @@ class _ConfiguredExperienceModuleScreen extends StatelessWidget {
                                   children: <Widget>[
                                     Text(
                                       item.title,
-                                      style: theme.textTheme.titleMedium?.copyWith(
-                                        fontWeight: FontWeight.w700,
-                                      ),
+                                      style: theme.textTheme.titleMedium
+                                          ?.copyWith(
+                                            fontWeight: FontWeight.w700,
+                                          ),
                                     ),
                                     const SizedBox(height: 4),
                                     Text(
                                       item.description,
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
-                                      style: theme.textTheme.bodySmall?.copyWith(
-                                        color: theme.colorScheme.onSurfaceVariant,
-                                      ),
+                                      style: theme.textTheme.bodySmall
+                                          ?.copyWith(
+                                            color: theme
+                                                .colorScheme
+                                                .onSurfaceVariant,
+                                          ),
                                     ),
                                   ],
                                 ),
@@ -3467,18 +4008,22 @@ class _ConfiguredExperienceModuleScreen extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       'Contexto ativo',
-                      style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
-                    ),
-                    const SizedBox(height: 12),
-                    ...chips.take(6).map(
-                      (String chip) => Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
-                        child: _FieldChip(
-                          icon: Icons.auto_awesome_rounded,
-                          label: chip,
-                        ),
+                      style: theme.textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
+                    const SizedBox(height: 12),
+                    ...chips
+                        .take(6)
+                        .map(
+                          (String chip) => Padding(
+                            padding: const EdgeInsets.only(bottom: 10),
+                            child: _FieldChip(
+                              icon: Icons.auto_awesome_rounded,
+                              label: chip,
+                            ),
+                          ),
+                        ),
                     const SizedBox(height: 8),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -3500,10 +4045,7 @@ class _ConfiguredExperienceModuleScreen extends StatelessWidget {
 }
 
 class _MobilityModuleScreen extends StatelessWidget {
-  const _MobilityModuleScreen({
-    required this.items,
-    required this.onOpenItem,
-  });
+  const _MobilityModuleScreen({required this.items, required this.onOpenItem});
 
   final List<ProductItem> items;
   final ValueChanged<ProductItem> onOpenItem;
@@ -3523,7 +4065,9 @@ class _MobilityModuleScreen extends StatelessWidget {
             children: <Widget>[
               Text(
                 'Chamar veiculo',
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800),
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.w800,
+                ),
               ),
               const SizedBox(height: 14),
               Container(
@@ -3560,7 +4104,9 @@ class _MobilityModuleScreen extends StatelessWidget {
                         padding: const EdgeInsets.all(14),
                         child: Row(
                           children: const <Widget>[
-                            Expanded(child: Text('Rota premium • 7 min de chegada')),
+                            Expanded(
+                              child: Text('Rota premium • 7 min de chegada'),
+                            ),
                             Text('R\$ 22,40'),
                           ],
                         ),
@@ -3581,9 +4127,16 @@ class _MobilityModuleScreen extends StatelessWidget {
               padding: const EdgeInsets.all(16),
               child: Row(
                 children: <Widget>[
-                  const Icon(Icons.directions_car_filled_rounded, color: ValleyBrandColors.cyan),
+                  const Icon(
+                    Icons.directions_car_filled_rounded,
+                    color: ValleyBrandColors.cyan,
+                  ),
                   const SizedBox(width: 12),
-                  Expanded(child: Text('${ride.brand} • ETA ${2 + (ride.stock % 6)} min')),
+                  Expanded(
+                    child: Text(
+                      '${ride.brand} • ETA ${2 + (ride.stock % 6)} min',
+                    ),
+                  ),
                   FilledButton(
                     onPressed: () => onOpenItem(ride),
                     child: const Text('Chamar'),
@@ -3598,10 +4151,7 @@ class _MobilityModuleScreen extends StatelessWidget {
 }
 
 class _FoodModuleScreen extends StatelessWidget {
-  const _FoodModuleScreen({
-    required this.items,
-    required this.onOpenItem,
-  });
+  const _FoodModuleScreen({required this.items, required this.onOpenItem});
 
   final List<ProductItem> items;
   final ValueChanged<ProductItem> onOpenItem;
@@ -3613,7 +4163,9 @@ class _FoodModuleScreen extends StatelessWidget {
       children: <Widget>[
         Text(
           'Food',
-          style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800),
+          style: Theme.of(
+            context,
+          ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800),
         ),
         const SizedBox(height: 16),
         LayoutBuilder(
@@ -3643,11 +4195,19 @@ class _FoodModuleScreen extends StatelessWidget {
                         Expanded(
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(20),
-                            child: Image.network(item.imageUrl, fit: BoxFit.cover, width: double.infinity),
+                            child: Image.network(
+                              item.imageUrl,
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                            ),
                           ),
                         ),
                         const SizedBox(height: 12),
-                        Text(item.title, maxLines: 1, overflow: TextOverflow.ellipsis),
+                        Text(
+                          item.title,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                         const SizedBox(height: 6),
                         Text('Entrega em ${18 + (item.stock % 15)} min'),
                         const SizedBox(height: 10),
@@ -3694,7 +4254,9 @@ class _MarketplaceModuleScreen extends StatelessWidget {
     final ThemeData theme = Theme.of(context);
     final List<ProductItem> showcase = items.take(5).toList();
     final ProductItem? featured = showcase.isEmpty ? null : showcase.first;
-    final List<ProductItem> secondary = showcase.length > 1 ? showcase.sublist(1) : const <ProductItem>[];
+    final List<ProductItem> secondary = showcase.length > 1
+        ? showcase.sublist(1)
+        : const <ProductItem>[];
 
     if (featured == null) {
       return const SizedBox.shrink();
@@ -3705,7 +4267,9 @@ class _MarketplaceModuleScreen extends StatelessWidget {
       children: <Widget>[
         Text(
           'Marketplace',
-          style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800),
+          style: theme.textTheme.headlineSmall?.copyWith(
+            fontWeight: FontWeight.w800,
+          ),
         ),
         const SizedBox(height: 16),
         ValleyPanel(
@@ -3718,15 +4282,22 @@ class _MarketplaceModuleScreen extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 ClipRRect(
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(32),
+                  ),
                   child: AspectRatio(
                     aspectRatio: 16 / 9,
                     child: Image.network(
                       featured.imageUrl,
                       fit: BoxFit.cover,
-                      errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
-                        return const ColoredBox(color: Color(0xFF121A2F));
-                      },
+                      errorBuilder:
+                          (
+                            BuildContext context,
+                            Object error,
+                            StackTrace? stackTrace,
+                          ) {
+                            return const ColoredBox(color: Color(0xFF121A2F));
+                          },
                     ),
                   ),
                 ),
@@ -3749,7 +4320,9 @@ class _MarketplaceModuleScreen extends StatelessWidget {
                             const SizedBox(height: 8),
                             Text(
                               featured.title,
-                              style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800),
+                              style: theme.textTheme.headlineSmall?.copyWith(
+                                fontWeight: FontWeight.w800,
+                              ),
                             ),
                             const SizedBox(height: 8),
                             Text(
@@ -3809,7 +4382,11 @@ class _MarketplaceModuleScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 12),
-                    Text(item.title, maxLines: 1, overflow: TextOverflow.ellipsis),
+                    Text(
+                      item.title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                     const SizedBox(height: 4),
                     Text(
                       'R\$ ${item.priceBrl.toStringAsFixed(2)}',
@@ -3870,7 +4447,10 @@ class _ServicesModuleScreen extends StatelessWidget {
                     colors: <Color>[ValleyBrandColors.cyan, Color(0xFF7C3AED)],
                   ),
                 ),
-                child: const Icon(Icons.auto_awesome_rounded, color: Colors.white),
+                child: const Icon(
+                  Icons.auto_awesome_rounded,
+                  color: Colors.white,
+                ),
               ),
               const SizedBox(width: 16),
               Expanded(
@@ -3895,7 +4475,9 @@ class _ServicesModuleScreen extends StatelessWidget {
                 ),
               ),
               FilledButton.icon(
-                onPressed: items.isEmpty ? onOpenChat : () => onOpenItem(items.first),
+                onPressed: items.isEmpty
+                    ? onOpenChat
+                    : () => onOpenItem(items.first),
                 icon: const Icon(Icons.bolt_rounded),
                 label: const Text('Ação rápida'),
               ),
@@ -3909,15 +4491,23 @@ class _ServicesModuleScreen extends StatelessWidget {
           child: Row(
             children: <Widget>[
               const Expanded(
-                child: _FieldChip(icon: Icons.location_on_outlined, label: 'Localização do serviço'),
+                child: _FieldChip(
+                  icon: Icons.location_on_outlined,
+                  label: 'Localização do serviço',
+                ),
               ),
               const SizedBox(width: 12),
               const Expanded(
-                child: _FieldChip(icon: Icons.event_outlined, label: 'Data e horário'),
+                child: _FieldChip(
+                  icon: Icons.event_outlined,
+                  label: 'Data e horário',
+                ),
               ),
               const SizedBox(width: 12),
               FilledButton(
-                onPressed: items.isEmpty ? onOpenChat : () => onOpenItem(items.first),
+                onPressed: items.isEmpty
+                    ? onOpenChat
+                    : () => onOpenItem(items.first),
                 child: const Text('Agendar agora'),
               ),
             ],
@@ -3926,7 +4516,9 @@ class _ServicesModuleScreen extends StatelessWidget {
         const SizedBox(height: 20),
         Text(
           'Categorias',
-          style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800),
+          style: theme.textTheme.headlineSmall?.copyWith(
+            fontWeight: FontWeight.w800,
+          ),
         ),
         const SizedBox(height: 14),
         GridView.builder(
@@ -3970,7 +4562,9 @@ class _ServicesModuleScreen extends StatelessWidget {
                       bottom: 18,
                       child: Text(
                         item.category.isEmpty ? item.title : item.category,
-                        style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
+                        style: theme.textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
                   ],
@@ -3982,7 +4576,9 @@ class _ServicesModuleScreen extends StatelessWidget {
         const SizedBox(height: 20),
         Text(
           'Profissionais em destaque',
-          style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800),
+          style: theme.textTheme.headlineSmall?.copyWith(
+            fontWeight: FontWeight.w800,
+          ),
         ),
         const SizedBox(height: 14),
         for (final ProductItem professional in professionals)
@@ -4019,7 +4615,9 @@ class _ServicesModuleScreen extends StatelessWidget {
                           const SizedBox(height: 4),
                           Text(
                             professional.title,
-                            style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
+                            style: theme.textTheme.titleLarge?.copyWith(
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
                           const SizedBox(height: 6),
                           Text(
@@ -4095,7 +4693,10 @@ class _LogisticsModuleScreen extends StatelessWidget {
                   color: ValleyBrandColors.cyan.withValues(alpha: 0.10),
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: const Icon(Icons.local_shipping_rounded, color: ValleyBrandColors.cyan),
+                child: const Icon(
+                  Icons.local_shipping_rounded,
+                  color: ValleyBrandColors.cyan,
+                ),
               ),
               const SizedBox(width: 16),
               Expanded(
@@ -4104,7 +4705,9 @@ class _LogisticsModuleScreen extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       'Refinamento Operacional',
-                      style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800),
+                      style: theme.textTheme.headlineSmall?.copyWith(
+                        fontWeight: FontWeight.w800,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     Text(
@@ -4146,16 +4749,26 @@ class _LogisticsModuleScreen extends StatelessWidget {
                               fit: StackFit.expand,
                               children: <Widget>[
                                 ClipRRect(
-                                  borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-                                  child: Image.network(item.imageUrl, fit: BoxFit.cover),
+                                  borderRadius: const BorderRadius.vertical(
+                                    top: Radius.circular(24),
+                                  ),
+                                  child: Image.network(
+                                    item.imageUrl,
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
                                 Positioned(
                                   top: 12,
                                   right: 12,
                                   child: Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                      vertical: 6,
+                                    ),
                                     decoration: BoxDecoration(
-                                      color: Colors.black.withValues(alpha: 0.55),
+                                      color: Colors.black.withValues(
+                                        alpha: 0.55,
+                                      ),
                                       borderRadius: BorderRadius.circular(999),
                                     ),
                                     child: Text(
@@ -4176,7 +4789,12 @@ class _LogisticsModuleScreen extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text(item.title, style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700)),
+                                Text(
+                                  item.title,
+                                  style: theme.textTheme.titleLarge?.copyWith(
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
                                 const SizedBox(height: 6),
                                 Text(
                                   item.description,
@@ -4190,7 +4808,8 @@ class _LogisticsModuleScreen extends StatelessWidget {
                                 Row(
                                   children: <Widget>[
                                     Text(
-                                      'ETA ${8 + (item.stock % 15)}:${(item.stock % 6) * 10}'.padLeft(2, '0'),
+                                      'ETA ${8 + (item.stock % 15)}:${(item.stock % 6) * 10}'
+                                          .padLeft(2, '0'),
                                       style: const TextStyle(
                                         color: ValleyBrandColors.cyan,
                                         fontWeight: FontWeight.w700,
@@ -4225,11 +4844,15 @@ class _LogisticsModuleScreen extends StatelessWidget {
                 children: <Widget>[
                   Text(
                     'Movimentação recente',
-                    style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
+                    style: theme.textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                   const Spacer(),
                   TextButton(
-                    onPressed: tableRows.isEmpty ? onOpenStatement : () => onOpenItem(tableRows.first),
+                    onPressed: tableRows.isEmpty
+                        ? onOpenStatement
+                        : () => onOpenItem(tableRows.first),
                     child: const Text('Ver relatório completo'),
                   ),
                 ],
@@ -4299,7 +4922,9 @@ class _PayModuleScreen extends StatelessWidget {
             children: <Widget>[
               Text(
                 'Valley Pay',
-                style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800),
+                style: theme.textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.w800,
+                ),
               ),
               const SizedBox(height: 8),
               Text(
@@ -4311,12 +4936,17 @@ class _PayModuleScreen extends StatelessWidget {
               const SizedBox(height: 20),
               Text(
                 'R\$ 14.820,00',
-                style: theme.textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w800),
+                style: theme.textTheme.displaySmall?.copyWith(
+                  fontWeight: FontWeight.w800,
+                ),
               ),
               const SizedBox(height: 8),
               const Text(
                 '+2.4% este mês',
-                style: TextStyle(color: ValleyBrandColors.cyan, fontWeight: FontWeight.w700),
+                style: TextStyle(
+                  color: ValleyBrandColors.cyan,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ],
           ),
@@ -4344,7 +4974,9 @@ class _PayModuleScreen extends StatelessWidget {
               child: _ActionCard(
                 icon: Icons.receipt_long_rounded,
                 label: 'Pagar',
-                onTap: items.isEmpty ? onOpenStatement : () => onOpenItem(items.first),
+                onTap: items.isEmpty
+                    ? onOpenStatement
+                    : () => onOpenItem(items.first),
               ),
             ),
             SizedBox(width: 14),
@@ -4366,7 +4998,9 @@ class _PayModuleScreen extends StatelessWidget {
             children: <Widget>[
               Text(
                 'Atividade recente',
-                style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
+                style: theme.textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.w700,
+                ),
               ),
               const SizedBox(height: 14),
               for (final Map<String, dynamic> entry in entries.take(6))
@@ -4381,7 +5015,10 @@ class _PayModuleScreen extends StatelessWidget {
                           color: Colors.white.withValues(alpha: 0.04),
                           borderRadius: BorderRadius.circular(16),
                         ),
-                        child: const Icon(Icons.payments_rounded, color: ValleyBrandColors.cyan),
+                        child: const Icon(
+                          Icons.payments_rounded,
+                          color: ValleyBrandColors.cyan,
+                        ),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
@@ -4449,7 +5086,9 @@ class _EnergyModuleScreen extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       'Extrato de troca',
-                      style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800),
+                      style: theme.textTheme.headlineSmall?.copyWith(
+                        fontWeight: FontWeight.w800,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     Text(
@@ -4464,17 +5103,34 @@ class _EnergyModuleScreen extends StatelessWidget {
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: List<Widget>.generate(8, (int index) {
-                          final double height = <double>[0.60, 0.45, 0.80, 0.95, 0.55, 0.70, 0.40, 0.65][index];
+                          final double height = <double>[
+                            0.60,
+                            0.45,
+                            0.80,
+                            0.95,
+                            0.55,
+                            0.70,
+                            0.40,
+                            0.65,
+                          ][index];
                           return Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 4),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 4,
+                              ),
                               child: FractionallySizedBox(
                                 heightFactor: height,
                                 alignment: Alignment.bottomCenter,
                                 child: DecoratedBox(
                                   decoration: BoxDecoration(
-                                    color: index == 3 ? ValleyBrandColors.cyan : ValleyBrandColors.cyan.withValues(alpha: 0.28),
-                                    borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
+                                    color: index == 3
+                                        ? ValleyBrandColors.cyan
+                                        : ValleyBrandColors.cyan.withValues(
+                                            alpha: 0.28,
+                                          ),
+                                    borderRadius: const BorderRadius.vertical(
+                                      top: Radius.circular(8),
+                                    ),
                                   ),
                                 ),
                               ),
@@ -4496,7 +5152,9 @@ class _EnergyModuleScreen extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         'Créditos',
-                        style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
+                        style: theme.textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                       const SizedBox(height: 12),
                       const Text(
@@ -4509,7 +5167,9 @@ class _EnergyModuleScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 16),
                       FilledButton(
-                        onPressed: items.isEmpty ? null : () => onOpenItem(items.first),
+                        onPressed: items.isEmpty
+                            ? null
+                            : () => onOpenItem(items.first),
                         child: const Text('Converter em Gaming'),
                       ),
                     ],
@@ -4561,10 +5221,7 @@ class _EnergyModuleScreen extends StatelessWidget {
 }
 
 class _PolicyModuleScreen extends StatelessWidget {
-  const _PolicyModuleScreen({
-    required this.items,
-    required this.onOpenItem,
-  });
+  const _PolicyModuleScreen({required this.items, required this.onOpenItem});
 
   final List<ProductItem> items;
   final ValueChanged<ProductItem> onOpenItem;
@@ -4588,7 +5245,9 @@ class _PolicyModuleScreen extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       'Digital Shield v.24',
-                      style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800),
+                      style: theme.textTheme.headlineSmall?.copyWith(
+                        fontWeight: FontWeight.w800,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     Text(
@@ -4623,10 +5282,15 @@ class _PolicyModuleScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           ClipRRect(
-                            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+                            borderRadius: const BorderRadius.vertical(
+                              top: Radius.circular(24),
+                            ),
                             child: AspectRatio(
                               aspectRatio: 16 / 10,
-                              child: Image.network(item.imageUrl, fit: BoxFit.cover),
+                              child: Image.network(
+                                item.imageUrl,
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
                           Padding(
@@ -4634,7 +5298,12 @@ class _PolicyModuleScreen extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text(item.title, style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700)),
+                                Text(
+                                  item.title,
+                                  style: theme.textTheme.titleLarge?.copyWith(
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
                                 const SizedBox(height: 6),
                                 Text(
                                   item.description,
@@ -4666,10 +5335,7 @@ class _PolicyModuleScreen extends StatelessWidget {
 }
 
 class _GamingModuleScreen extends StatelessWidget {
-  const _GamingModuleScreen({
-    required this.items,
-    required this.onOpenItem,
-  });
+  const _GamingModuleScreen({required this.items, required this.onOpenItem});
 
   final List<ProductItem> items;
   final ValueChanged<ProductItem> onOpenItem;
@@ -4695,9 +5361,14 @@ class _GamingModuleScreen extends StatelessWidget {
                   child: Image.network(
                     rewards.isNotEmpty ? rewards.first.imageUrl : '',
                     fit: BoxFit.cover,
-                    errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
-                      return const ColoredBox(color: Color(0xFF121A2F));
-                    },
+                    errorBuilder:
+                        (
+                          BuildContext context,
+                          Object error,
+                          StackTrace? stackTrace,
+                        ) {
+                          return const ColoredBox(color: Color(0xFF121A2F));
+                        },
                   ),
                 ),
               ),
@@ -4717,7 +5388,10 @@ class _GamingModuleScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 6,
+                      ),
                       decoration: BoxDecoration(
                         color: ValleyBrandColors.cyan.withValues(alpha: 0.12),
                         borderRadius: BorderRadius.circular(999),
@@ -4734,7 +5408,9 @@ class _GamingModuleScreen extends StatelessWidget {
                     const SizedBox(height: 16),
                     Text(
                       'PROTOCOLO NEXUS',
-                      style: theme.textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w800),
+                      style: theme.textTheme.displaySmall?.copyWith(
+                        fontWeight: FontWeight.w800,
+                      ),
                     ),
                     const SizedBox(height: 10),
                     Text(
@@ -4745,7 +5421,9 @@ class _GamingModuleScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 18),
                     FilledButton.icon(
-                      onPressed: rewards.isNotEmpty ? () => onOpenItem(rewards.first) : null,
+                      onPressed: rewards.isNotEmpty
+                          ? () => onOpenItem(rewards.first)
+                          : null,
                       icon: const Icon(Icons.play_arrow_rounded),
                       label: const Text('Ingressar agora'),
                     ),
@@ -4767,7 +5445,9 @@ class _GamingModuleScreen extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       'Recompensas',
-                      style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
+                      style: theme.textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                     const SizedBox(height: 12),
                     for (final ProductItem reward in rewards)
@@ -4775,12 +5455,17 @@ class _GamingModuleScreen extends StatelessWidget {
                         padding: const EdgeInsets.only(bottom: 10),
                         child: Row(
                           children: <Widget>[
-                            const Icon(Icons.diamond_rounded, color: ValleyBrandColors.cyan),
+                            const Icon(
+                              Icons.diamond_rounded,
+                              color: ValleyBrandColors.cyan,
+                            ),
                             const SizedBox(width: 10),
                             Expanded(child: Text(reward.title)),
                             Text(
                               '${reward.stock} pts',
-                              style: const TextStyle(color: ValleyBrandColors.cyan),
+                              style: const TextStyle(
+                                color: ValleyBrandColors.cyan,
+                              ),
                             ),
                           ],
                         ),
@@ -4799,12 +5484,28 @@ class _GamingModuleScreen extends StatelessWidget {
                   children: const <Widget>[
                     Text(
                       'Top operadores',
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                     SizedBox(height: 12),
-                    _RankingRow(position: '1', name: 'A_Ghost_X', value: '04:12s'),
-                    _RankingRow(position: '2', name: 'NovaStream', value: '04:28s'),
-                    _RankingRow(position: '12', name: 'Você', value: '--:--', highlight: true),
+                    _RankingRow(
+                      position: '1',
+                      name: 'A_Ghost_X',
+                      value: '04:12s',
+                    ),
+                    _RankingRow(
+                      position: '2',
+                      name: 'NovaStream',
+                      value: '04:28s',
+                    ),
+                    _RankingRow(
+                      position: '12',
+                      name: 'Você',
+                      value: '--:--',
+                      highlight: true,
+                    ),
                   ],
                 ),
               ),
@@ -4813,6 +5514,75 @@ class _GamingModuleScreen extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+IconData _quickActionIconFor(String target) {
+  switch (target) {
+    case 'detail':
+      return Icons.dashboard_customize_rounded;
+    case 'chat':
+      return Icons.chat_bubble_rounded;
+    case 'statement':
+      return Icons.receipt_long_rounded;
+    case 'feed':
+    default:
+      return Icons.dynamic_feed_rounded;
+  }
+}
+
+String _prettyDomainLabel(String value) {
+  if (value.trim().isEmpty) {
+    return '';
+  }
+  return value
+      .split('_')
+      .where((String item) => item.isNotEmpty)
+      .map(
+        (String item) =>
+            '${item.substring(0, 1).toUpperCase()}${item.substring(1).toLowerCase()}',
+      )
+      .join(' ');
+}
+
+String _prettyDataHomeLabel(String value) {
+  switch (value) {
+    case 'postgres':
+      return 'Postgres relacional';
+    case 'postgres_mongo':
+      return 'Postgres + Mongo';
+    case 'mongo':
+      return 'Mongo documental';
+    default:
+      return value;
+  }
+}
+
+String _shortDataHomeLabel(String value) {
+  switch (value) {
+    case 'postgres':
+      return 'PG';
+    case 'postgres_mongo':
+      return 'Hibrido';
+    case 'mongo':
+      return 'Mongo';
+    default:
+      return '--';
+  }
+}
+
+String _prettyTierLabel(String value) {
+  switch (value) {
+    case 'foundation':
+      return 'Foundation';
+    case 'core':
+      return 'Core';
+    case 'expansion':
+      return 'Expansion';
+    case 'frontier':
+      return 'Frontier';
+    default:
+      return value;
   }
 }
 
@@ -4881,6 +5651,38 @@ class _FieldChip extends StatelessWidget {
   }
 }
 
+class _MetaPill extends StatelessWidget {
+  const _MetaPill({required this.icon, required this.label});
+
+  final IconData icon;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.06),
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Icon(icon, size: 16, color: ValleyBrandColors.cyan),
+          const SizedBox(width: 8),
+          Text(
+            label,
+            style: Theme.of(
+              context,
+            ).textTheme.labelMedium?.copyWith(fontWeight: FontWeight.w700),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _MiniStat extends StatelessWidget {
   const _MiniStat({required this.label, required this.value});
 
@@ -4893,12 +5695,17 @@ class _MiniStat extends StatelessWidget {
       children: <Widget>[
         Text(
           label,
-          style: Theme.of(context).textTheme.labelSmall?.copyWith(color: Colors.white54),
+          style: Theme.of(
+            context,
+          ).textTheme.labelSmall?.copyWith(color: Colors.white54),
         ),
         const SizedBox(height: 4),
         Text(
           value,
-          style: const TextStyle(color: ValleyBrandColors.cyan, fontWeight: FontWeight.w700),
+          style: const TextStyle(
+            color: ValleyBrandColors.cyan,
+            fontWeight: FontWeight.w700,
+          ),
         ),
       ],
     );
@@ -4927,10 +5734,18 @@ class _RankingRow extends StatelessWidget {
         children: <Widget>[
           SizedBox(
             width: 28,
-            child: Text(position, style: TextStyle(color: color, fontWeight: FontWeight.w700)),
+            child: Text(
+              position,
+              style: TextStyle(color: color, fontWeight: FontWeight.w700),
+            ),
           ),
-          Expanded(child: Text(name, style: TextStyle(color: color))),
-          Text(value, style: TextStyle(color: color, fontWeight: FontWeight.w700)),
+          Expanded(
+            child: Text(name, style: TextStyle(color: color)),
+          ),
+          Text(
+            value,
+            style: TextStyle(color: color, fontWeight: FontWeight.w700),
+          ),
         ],
       ),
     );
@@ -4946,7 +5761,11 @@ class _MapPin extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        const Icon(Icons.place_rounded, color: ValleyBrandColors.cyan, size: 28),
+        const Icon(
+          Icons.place_rounded,
+          color: ValleyBrandColors.cyan,
+          size: 28,
+        ),
         const SizedBox(height: 4),
         Text(label),
       ],
@@ -4975,8 +5794,18 @@ class _RoutePainter extends CustomPainter {
 
     final Path path = Path()
       ..moveTo(42, 60)
-      ..quadraticBezierTo(size.width * 0.34, 96, size.width * 0.44, size.height * 0.48)
-      ..quadraticBezierTo(size.width * 0.64, size.height * 0.70, size.width - 58, size.height - 58);
+      ..quadraticBezierTo(
+        size.width * 0.34,
+        96,
+        size.width * 0.44,
+        size.height * 0.48,
+      )
+      ..quadraticBezierTo(
+        size.width * 0.64,
+        size.height * 0.70,
+        size.width - 58,
+        size.height - 58,
+      );
     canvas.drawPath(path, route);
   }
 
@@ -5016,99 +5845,166 @@ class _HelenaAssistant extends StatelessWidget {
       'focus' => ValleyBrandColors.cyan,
       _ => ValleyBrandColors.cyan,
     };
+    final String statusLabel = listening
+        ? 'ouvindo'
+        : voiceReady
+        ? 'voz pronta'
+        : 'sem mic';
+    final Color statusColor = listening
+        ? ValleyBrandColors.success
+        : voiceReady
+        ? ValleyBrandColors.cyan
+        : theme.colorScheme.onSurfaceVariant;
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 240),
       curve: Curves.easeOutCubic,
-      width: minimized ? 84 : 328,
-      height: minimized ? 84 : 192,
+      width: minimized ? 96 : 372,
+      height: minimized ? 96 : 224,
       child: Stack(
         clipBehavior: Clip.none,
         children: <Widget>[
           if (!minimized)
             Positioned(
               left: 0,
-              right: 18,
-              bottom: 94,
-              child: ValleyPanel(
-                radius: 24,
-                padding: const EdgeInsets.fromLTRB(18, 16, 18, 14),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        const Text(
-                          'Helena',
-                          style: TextStyle(
-                            color: ValleyBrandColors.cyan,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
-                        const Spacer(),
-                        IconButton(
-                          visualDensity: VisualDensity.compact,
-                          onPressed: onListen,
-                          icon: Icon(
-                            listening
-                                ? Icons.mic_rounded
-                                : voiceReady
-                                    ? Icons.mic_none_rounded
-                                    : Icons.mic_off_rounded,
-                            size: 20,
-                          ),
-                          color: listening
-                              ? ValleyBrandColors.success
-                              : voiceReady
-                                  ? ValleyBrandColors.cyan
-                                  : theme.colorScheme.onSurfaceVariant,
-                        ),
-                        IconButton(
-                          visualDensity: VisualDensity.compact,
-                          onPressed: onSpeak,
-                          icon: const Icon(Icons.graphic_eq_rounded, size: 20),
-                          color: ValleyBrandColors.cyan,
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      message,
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.bodySmall,
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      transcript,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.labelSmall?.copyWith(
-                        color: listening
-                            ? ValleyBrandColors.cyan
-                            : theme.colorScheme.onSurfaceVariant,
-                      ),
+              right: 76,
+              top: 14,
+              bottom: 18,
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: <Color>[
+                      const Color(0xF5171043),
+                      const Color(0xF70B1020),
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(30),
+                  border: Border.all(color: haloColor.withValues(alpha: 0.18)),
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                      color: haloColor.withValues(alpha: 0.16),
+                      blurRadius: 28,
+                      offset: const Offset(0, 16),
                     ),
                   ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(18, 16, 18, 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          const Text(
+                            'Helena',
+                            style: TextStyle(
+                              color: ValleyBrandColors.cyan,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 6,
+                            ),
+                            decoration: BoxDecoration(
+                              color: statusColor.withValues(alpha: 0.14),
+                              borderRadius: BorderRadius.circular(999),
+                            ),
+                            child: Text(
+                              statusLabel,
+                              style: theme.textTheme.labelSmall?.copyWith(
+                                color: statusColor,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                          const Spacer(),
+                          _HelenaControlButton(
+                            icon: listening
+                                ? Icons.mic_rounded
+                                : voiceReady
+                                ? Icons.mic_none_rounded
+                                : Icons.mic_off_rounded,
+                            color: statusColor,
+                            onPressed: onListen,
+                          ),
+                          const SizedBox(width: 8),
+                          _HelenaControlButton(
+                            icon: Icons.graphic_eq_rounded,
+                            color: ValleyBrandColors.cyan,
+                            onPressed: onSpeak,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        message,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.05),
+                          borderRadius: BorderRadius.circular(18),
+                          border: Border.all(
+                            color: Colors.white.withValues(alpha: 0.06),
+                          ),
+                        ),
+                        child: Text(
+                          transcript,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: theme.textTheme.labelMedium?.copyWith(
+                            color: listening
+                                ? ValleyBrandColors.cyan
+                                : theme.colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                      ),
+                      const Spacer(),
+                      Text(
+                        'Fico discreta e so anuncio navegacao quando voce pedir direto.',
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.labelSmall?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
           Positioned(
             right: 0,
-            bottom: 0,
+            bottom: minimized ? 0 : 10,
             child: GestureDetector(
               onTap: onToggle,
               onDoubleTap: onSpeak,
-              child: Container(
-                width: 84,
-                height: 84,
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 220),
+                curve: Curves.easeOutCubic,
+                width: 92,
+                height: 92,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  gradient: const LinearGradient(
+                  gradient: LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
-                    colors: <Color>[Color(0xFF141C34), Color(0xCC0B1020)],
+                    colors: <Color>[
+                      const Color(0xFF1A2344),
+                      const Color(0xFF0A1021),
+                    ],
                   ),
                   border: Border.all(
                     color: haloColor.withValues(alpha: listening ? 0.9 : 0.55),
@@ -5116,7 +6012,9 @@ class _HelenaAssistant extends StatelessWidget {
                   ),
                   boxShadow: <BoxShadow>[
                     BoxShadow(
-                      color: haloColor.withValues(alpha: listening ? 0.35 : 0.22),
+                      color: haloColor.withValues(
+                        alpha: listening ? 0.35 : 0.22,
+                      ),
                       blurRadius: listening ? 28 : 20,
                       offset: const Offset(0, 12),
                     ),
@@ -5125,7 +6023,27 @@ class _HelenaAssistant extends StatelessWidget {
                 child: Stack(
                   clipBehavior: Clip.none,
                   children: <Widget>[
-                    const Center(child: _HelenaStarBadge(size: 34)),
+                    Center(
+                      child: Container(
+                        width: 58,
+                        height: 58,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: <Color>[
+                              Colors.white.withValues(alpha: 0.10),
+                              haloColor.withValues(alpha: 0.08),
+                            ],
+                          ),
+                          border: Border.all(
+                            color: Colors.white.withValues(alpha: 0.08),
+                          ),
+                        ),
+                        child: const Center(child: _HelenaStarBadge(size: 34)),
+                      ),
+                    ),
                     Positioned(
                       top: 10,
                       right: 10,
@@ -5138,14 +6056,15 @@ class _HelenaAssistant extends StatelessWidget {
                           color: listening
                               ? ValleyBrandColors.success
                               : voiceReady
-                                  ? ValleyBrandColors.cyan
-                                  : theme.colorScheme.onSurfaceVariant,
+                              ? ValleyBrandColors.cyan
+                              : theme.colorScheme.onSurfaceVariant,
                           boxShadow: <BoxShadow>[
                             BoxShadow(
-                              color: (listening
-                                      ? ValleyBrandColors.success
-                                      : ValleyBrandColors.cyan)
-                                  .withValues(alpha: 0.35),
+                              color:
+                                  (listening
+                                          ? ValleyBrandColors.success
+                                          : ValleyBrandColors.cyan)
+                                      .withValues(alpha: 0.35),
                               blurRadius: 10,
                             ),
                           ],
@@ -5156,8 +6075,8 @@ class _HelenaAssistant extends StatelessWidget {
                       bottom: -2,
                       left: -2,
                       child: Container(
-                        width: 28,
-                        height: 28,
+                        width: 32,
+                        height: 32,
                         decoration: BoxDecoration(
                           color: const Color(0xFF10182C),
                           shape: BoxShape.circle,
@@ -5169,9 +6088,9 @@ class _HelenaAssistant extends StatelessWidget {
                           listening
                               ? Icons.mic_rounded
                               : voiceReady
-                                  ? Icons.open_with_rounded
-                                  : Icons.mic_off_rounded,
-                          size: 14,
+                              ? Icons.open_with_rounded
+                              : Icons.mic_off_rounded,
+                          size: 15,
                           color: listening
                               ? ValleyBrandColors.success
                               : ValleyBrandColors.cyan,
@@ -5184,6 +6103,39 @@ class _HelenaAssistant extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _HelenaControlButton extends StatelessWidget {
+  const _HelenaControlButton({
+    required this.icon,
+    required this.color,
+    required this.onPressed,
+  });
+
+  final IconData icon;
+  final Color color;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(999),
+        onTap: onPressed,
+        child: Container(
+          width: 36,
+          height: 36,
+          decoration: BoxDecoration(
+            color: Colors.white.withValues(alpha: 0.06),
+            shape: BoxShape.circle,
+            border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+          ),
+          child: Icon(icon, size: 18, color: color),
+        ),
       ),
     );
   }
@@ -5222,11 +6174,19 @@ class _HelenaStarPainter extends CustomPainter {
 
     final Paint star = Paint()..color = Colors.white;
     canvas.drawRect(
-      Rect.fromCenter(center: center, width: size.width * 0.16, height: size.height * 0.72),
+      Rect.fromCenter(
+        center: center,
+        width: size.width * 0.16,
+        height: size.height * 0.72,
+      ),
       star,
     );
     canvas.drawRect(
-      Rect.fromCenter(center: center, width: size.width * 0.72, height: size.height * 0.16),
+      Rect.fromCenter(
+        center: center,
+        width: size.width * 0.72,
+        height: size.height * 0.16,
+      ),
       star,
     );
   }
@@ -5240,84 +6200,164 @@ class _FloatingDock extends StatelessWidget {
     required this.modules,
     required this.expanded,
     required this.selectedModuleId,
-    required this.alignmentX,
     required this.onToggle,
-    required this.onPanUpdate,
     required this.onSelect,
   });
 
   final List<ProductModule> modules;
   final bool expanded;
   final String selectedModuleId;
-  final double alignmentX;
   final VoidCallback onToggle;
-  final GestureDragUpdateCallback onPanUpdate;
   final ValueChanged<ProductModule> onSelect;
 
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.sizeOf(context);
+    final double expandedWidth = math.min(size.width - 28, 336);
+    final double maxHeight = math.min(size.height * 0.68, 520);
+
     return Align(
-      alignment: Alignment(alignmentX, 0.83),
-      child: GestureDetector(
-        onPanUpdate: onPanUpdate,
+      alignment: const Alignment(1, 0.10),
+      child: AnimatedSlide(
+        duration: const Duration(milliseconds: 260),
+        curve: Curves.easeOutCubic,
+        offset: expanded ? Offset.zero : const Offset(0.56, 0),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 260),
           curve: Curves.easeOutCubic,
-          padding: const EdgeInsets.all(10),
-          width: expanded ? math.min(MediaQuery.sizeOf(context).width - 40, 360) : 72,
+          width: expanded ? expandedWidth : 128,
+          constraints: BoxConstraints(
+            minHeight: expanded ? 220 : 140,
+            maxHeight: maxHeight,
+          ),
+          padding: EdgeInsets.fromLTRB(expanded ? 16 : 12, 14, 14, 14),
           decoration: BoxDecoration(
-            gradient: const LinearGradient(
+            gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: <Color>[
-                Color(0xFF6EE7F9),
-                Color(0xFFD0BCFF),
+                const Color(0xFF18213D).withValues(alpha: 0.96),
+                const Color(0xFF0B1020).withValues(alpha: 0.98),
               ],
             ),
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: BorderRadius.only(
+              topLeft: const Radius.circular(30),
+              bottomLeft: const Radius.circular(30),
+              topRight: Radius.circular(expanded ? 30 : 0),
+              bottomRight: Radius.circular(expanded ? 30 : 0),
+            ),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
             boxShadow: <BoxShadow>[
               BoxShadow(
-                color: const Color(0xFF6EE7F9).withValues(alpha: 0.30),
-                blurRadius: 28,
-                offset: const Offset(0, 14),
+                color: ValleyBrandColors.cyan.withValues(alpha: 0.18),
+                blurRadius: 30,
+                offset: const Offset(-8, 18),
               ),
             ],
           ),
           child: expanded
-              ? Row(
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        const Icon(
+                          Icons.grid_view_rounded,
+                          color: ValleyBrandColors.cyan,
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                'Dock universal',
+                                style: Theme.of(context).textTheme.titleMedium
+                                    ?.copyWith(fontWeight: FontWeight.w800),
+                              ),
+                              Text(
+                                '$selectedModuleId ativo',
+                                style: Theme.of(context).textTheme.bodySmall
+                                    ?.copyWith(
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.onSurfaceVariant,
+                                    ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: onToggle,
+                          icon: const Icon(Icons.close_rounded),
+                          color: Colors.white70,
+                        ),
+                      ],
+                    ),
+                    Text(
+                      'A aba fica recolhida na lateral e so abre inteira quando voce toca nela.',
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                    const SizedBox(height: 14),
                     Expanded(
                       child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
+                        child: Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
                           children: modules
                               .map(
-                                (ProductModule module) => Padding(
-                                  padding: const EdgeInsets.only(right: 8),
-                                  child: ChoiceChip(
-                                    label: Text(module.id),
-                                    selected: selectedModuleId == module.id,
-                                    onSelected: (_) => onSelect(module),
-                                  ),
+                                (ProductModule module) => ChoiceChip(
+                                  label: Text(module.id),
+                                  selected: selectedModuleId == module.id,
+                                  onSelected: (_) => onSelect(module),
                                 ),
                               )
                               .toList(),
                         ),
                       ),
                     ),
-                    IconButton(
-                      onPressed: onToggle,
-                      icon: const Icon(Icons.close_rounded),
-                      color: const Color(0xFF0B1020),
-                    ),
                   ],
                 )
-              : IconButton(
-                  onPressed: onToggle,
-                  icon: const Icon(
-                    Icons.add_circle_rounded,
-                    size: 36,
-                    color: Color(0xFF0B1020),
+              : InkWell(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(30),
+                    bottomLeft: Radius.circular(30),
+                  ),
+                  onTap: onToggle,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                        width: 42,
+                        height: 42,
+                        decoration: BoxDecoration(
+                          color: ValleyBrandColors.cyan.withValues(alpha: 0.12),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.grid_view_rounded,
+                          color: ValleyBrandColors.cyan,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        'Dock',
+                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        selectedModuleId,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
         ),
@@ -5327,10 +6367,7 @@ class _FloatingDock extends StatelessWidget {
 }
 
 class _BottomGlassNav extends StatelessWidget {
-  const _BottomGlassNav({
-    required this.index,
-    required this.onChanged,
-  });
+  const _BottomGlassNav({required this.index, required this.onChanged});
 
   final int index;
   final ValueChanged<int> onChanged;
@@ -5369,7 +6406,10 @@ class _BottomGlassNav extends StatelessWidget {
               borderRadius: BorderRadius.circular(18),
               onTap: () => onChanged(i),
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 8,
+                  vertical: 10,
+                ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[

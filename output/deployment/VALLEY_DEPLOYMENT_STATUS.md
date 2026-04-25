@@ -1,21 +1,21 @@
 # Valley Deployment Status
 
-Gerado em UTC: `2026-04-21T20:19:12.506324+00:00`.
+Gerado em UTC: `2026-04-24T00:22:25.250361+00:00`.
 
-Total de checagens: `321`.
-Falhas ou pendencias: `0`.
+Total de checagens: `329`.
+Falhas ou pendencias: `4`.
 
 ## Resultado
 
-- OK - `tool.python_runtime`: /usr/local/bin/python
-- OK - `tool.node`: /usr/bin/node
-- OK - `tool.psql`: /usr/bin/psql
-- OK - `tool.mongosh`: /usr/bin/mongosh
-- OK - `tool.docker`: ignorado no runtime builder
-- OK - `env.DATABASE_URL`: configurado via ambiente
-- OK - `env.MONGODB_URI`: configurado via ambiente
-- OK - `tool.docker_daemon`: ignorado no runtime builder
-- OK - `tool.docker_compose`: ignorado no runtime builder
+- OK - `tool.python_runtime`: /usr/bin/python3
+- OK - `tool.node`: /home/eretazan/.nvm/versions/node/v24.14.0/bin/node
+- PENDENTE - `tool.psql`: nao encontrado no PATH
+- PENDENTE - `tool.mongosh`: nao encontrado no PATH
+- OK - `tool.docker`: /usr/bin/docker
+- OK - `env.DATABASE_URL`: configurado via .env
+- OK - `env.MONGODB_URI`: configurado via .env
+- PENDENTE - `tool.docker_daemon`: docker info nao respondeu em 30s; iniciar Docker Desktop ou verificar o engine.
+- PENDENTE - `tool.docker_compose`: comando excedeu 10s e foi interrompido
 - OK - `manifest.postgres_present`: 33 migrations PostgreSQL declaradas.
 - OK - `manifest.mongodb_present`: 4 scripts MongoDB declarados.
 - OK - `postgres.001.exists`: database/postgres/001_core_identity_wallets.sql
@@ -104,6 +104,7 @@ Falhas ou pendencias: `0`.
 - OK - `modules.artifacts.priority_delivery_contracts`: 7 contratos JSON em contracts/events/priority-domains
 - OK - `seed.database/seeds/postgres/001_v47_expansion_tourism_bio_energy_seed.sql.exists`: database/seeds/postgres/001_v47_expansion_tourism_bio_energy_seed.sql
 - OK - `seed.database/seeds/postgres/002_v47_priority_domain_delivery_packages_seed.sql.exists`: database/seeds/postgres/002_v47_priority_domain_delivery_packages_seed.sql
+- OK - `seed.database/seeds/postgres/003_v47_product_mode_demo_seed.sql.exists`: database/seeds/postgres/003_v47_product_mode_demo_seed.sql
 - OK - `seed.database/domain-delivery/priority-domains/platform_developer/operational_seed.sql.exists`: database/domain-delivery/priority-domains/platform_developer/operational_seed.sql
 - OK - `seed.database/domain-delivery/priority-domains/logistics_erp_operations/operational_seed.sql.exists`: database/domain-delivery/priority-domains/logistics_erp_operations/operational_seed.sql
 - OK - `seed.database/domain-delivery/priority-domains/ai_memory_operations/operational_seed.sql.exists`: database/domain-delivery/priority-domains/ai_memory_operations/operational_seed.sql
@@ -112,6 +113,7 @@ Falhas ou pendencias: `0`.
 - OK - `seed.database/domain-delivery/priority-domains/city_mobility_security/operational_seed.sql.exists`: database/domain-delivery/priority-domains/city_mobility_security/operational_seed.sql
 - OK - `seed.database/domain-delivery/priority-domains/commerce_fintech_assets/operational_seed.sql.exists`: database/domain-delivery/priority-domains/commerce_fintech_assets/operational_seed.sql
 - OK - `seed.database/seeds/mongodb/001_v47_expansion_media_wellness_frontier_seed.mongo.js.exists`: database/seeds/mongodb/001_v47_expansion_media_wellness_frontier_seed.mongo.js
+- OK - `seed.database/seeds/mongodb/002_v47_product_mode_demo_seed.mongo.js.exists`: database/seeds/mongodb/002_v47_product_mode_demo_seed.mongo.js
 - OK - `database/postgres/001_core_identity_wallets.sql.begin`: Migration contem BEGIN.
 - OK - `database/postgres/001_core_identity_wallets.sql.commit`: Migration contem COMMIT.
 - OK - `database/postgres/001_core_identity_wallets.sql.no_drop`: Sem DROP TABLE/TYPE destrutivo.
@@ -291,6 +293,11 @@ Falhas ou pendencias: `0`.
 - OK - `database/seeds/postgres/002_v47_priority_domain_delivery_packages_seed.sql.no_drop`: Sem DROP TABLE/TYPE destrutivo.
 - OK - `database/seeds/postgres/002_v47_priority_domain_delivery_packages_seed.sql.no_raw_delete`: Sem DELETE FROM em migration de schema.
 - OK - `database/seeds/postgres/002_v47_priority_domain_delivery_packages_seed.sql.has_comments`: Arquivo contem comentarios ou COMMENT ON.
+- OK - `database/seeds/postgres/003_v47_product_mode_demo_seed.sql.begin`: Migration contem BEGIN.
+- OK - `database/seeds/postgres/003_v47_product_mode_demo_seed.sql.commit`: Migration contem COMMIT.
+- OK - `database/seeds/postgres/003_v47_product_mode_demo_seed.sql.no_drop`: Sem DROP TABLE/TYPE destrutivo.
+- OK - `database/seeds/postgres/003_v47_product_mode_demo_seed.sql.no_raw_delete`: Sem DELETE FROM em migration de schema.
+- OK - `database/seeds/postgres/003_v47_product_mode_demo_seed.sql.has_comments`: Arquivo contem comentarios ou COMMENT ON.
 - OK - `database/domain-delivery/priority-domains/platform_developer/operational_seed.sql.begin`: Migration contem BEGIN.
 - OK - `database/domain-delivery/priority-domains/platform_developer/operational_seed.sql.commit`: Migration contem COMMIT.
 - OK - `database/domain-delivery/priority-domains/platform_developer/operational_seed.sql.no_drop`: Sem DROP TABLE/TYPE destrutivo.
@@ -327,6 +334,7 @@ Falhas ou pendencias: `0`.
 - OK - `database/domain-delivery/priority-domains/commerce_fintech_assets/operational_seed.sql.no_raw_delete`: Sem DELETE FROM em migration de schema.
 - OK - `database/domain-delivery/priority-domains/commerce_fintech_assets/operational_seed.sql.has_comments`: Arquivo contem comentarios ou COMMENT ON.
 - OK - `database/seeds/mongodb/001_v47_expansion_media_wellness_frontier_seed.mongo.js.node_check`: node --check OK
+- OK - `database/seeds/mongodb/002_v47_product_mode_demo_seed.mongo.js.node_check`: node --check OK
 - OK - `modules.registry.validate`: Registry valido: 47 modulos.
 
 ## Como Aplicar Quando Houver Banco Disponivel
