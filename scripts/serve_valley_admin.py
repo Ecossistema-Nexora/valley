@@ -4,8 +4,11 @@
 from __future__ import annotations
 
 import argparse
+import ipaddress
 import json
 import os
+import sqlite3
+import socket
 import subprocess
 import sys
 from datetime import datetime, timezone
@@ -15,6 +18,8 @@ from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any
 from urllib.parse import parse_qs, urlsplit
+from urllib.request import Request, urlopen
+from urllib.error import URLError, HTTPError
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -26,6 +31,8 @@ WORK_STATUS_PATH = RUNTIME_DIR / "bridge-work-status.json"
 PUBLIC_RUNTIME_PATH = RUNTIME_DIR / "valley-admin-public-runtime.json"
 PRODUCT_CATALOG_PATH = ROOT / "frontend" / "flutter" / "assets" / "data" / "valley_product_catalog.json"
 PRODUCT_INTERACTIONS_PATH = RUNTIME_DIR / "valley-product-interactions.jsonl"
+STOCK_DB_PATH = RUNTIME_DIR / "valley-admin-stock.sqlite3"
+MAX_REMOTE_FEED_BYTES = 2 * 1024 * 1024
 
 
 def utc_now_iso() -> str:
@@ -51,6 +58,38 @@ def write_json_file(path: Path | None, payload: dict[str, Any]) -> None:
         json.dumps(payload, ensure_ascii=False, indent=2),
         encoding="utf-8",
     )
+
+
+def ensure_stock_db() -> None:
+    STOCK_DB_PATH.parent.mkdir(parents=True, exist_ok=True)
+    with sqlite3.connect(STOCK_DB_PATH) as connection:
+        cursor = connection.cursor()
+        cursor.execute(
+            """
+            CREATE TABLE IF NOT EXISTS stock_configs (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                feed_url TEXT NOT NULL,
+                notes TEXT NOT NULL,
+                providers_json TEXT NOT NULL,
+                transporters_json TEXT NOT NULL,
+                created_at_utc TEXT NOT NULL
+            )
+            """
+        )
+        cursor.execute(
+            """
+            CREATE TABLE IF NOT EXISTS stock_import_jobs (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                feed_url TEXT NOT NULL,
+                source_type TEXT NOT NULL,
+                imported_items INTEGER NOT NULL,
+                status TEXT NOT NULL,
+                details_json TEXT NOT NULL,
+                created_at_utc TEXT NOT NULL
+            )
+            """
+        )
+        connection.commit()
 
 
 class ExclusiveThreadingHTTPServer(ThreadingHTTPServer):
@@ -133,6 +172,14 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             self.wfile.write(body)
             return
 
+        if route == "/api/stock/config":
+            self._write_json(HTTPStatus.OK, self._stock_config_payload())
+            return
+
+        if route == "/api/stock/imports":
+            self._write_json(HTTPStatus.OK, self._stock_imports_payload())
+            return
+
         super().do_GET()
 
     def do_POST(self) -> None:  # noqa: N802
@@ -173,6 +220,28 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 HTTPStatus.OK,
                 self._open_media_payload(query),
             )
+            return
+
+        if route == "/api/stock/config":
+            payload = self._read_json_body()
+            if payload is None:
+                self._write_json(
+                    HTTPStatus.BAD_REQUEST,
+                    {"status": "failed", "message": "Payload JSON invalido."},
+                )
+                return
+            self._write_json(HTTPStatus.OK, self._save_stock_config(payload))
+            return
+
+        if route == "/api/stock/import":
+            payload = self._read_json_body()
+            if payload is None:
+                self._write_json(
+                    HTTPStatus.BAD_REQUEST,
+                    {"status": "failed", "message": "Payload JSON invalido."},
+                )
+                return
+            self._write_json(HTTPStatus.OK, self._create_stock_import_job(payload))
             return
 
         self._write_json(
@@ -338,6 +407,280 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
 
+    def _read_json_body(self) -> dict[str, Any] | None:
+        raw_length = self.headers.get("Content-Length", "").strip()
+        if not raw_length:
+            return {}
+
+        try:
+            body_size = int(raw_length)
+        except ValueError:
+            return None
+        if body_size <= 0:
+            return {}
+
+        body = self.rfile.read(body_size)
+        try:
+            payload = json.loads(body.decode("utf-8"))
+        except (UnicodeDecodeError, json.JSONDecodeError):
+            return None
+
+        return payload if isinstance(payload, dict) else None
+
+    def _stock_config_payload(self) -> dict[str, Any]:
+        ensure_stock_db()
+        with sqlite3.connect(STOCK_DB_PATH) as connection:
+            connection.row_factory = sqlite3.Row
+            row = connection.execute(
+                """
+                SELECT id, feed_url, notes, providers_json, transporters_json, created_at_utc
+                FROM stock_configs
+                ORDER BY id DESC
+                LIMIT 1
+                """
+            ).fetchone()
+
+        if not row:
+            return {
+                "status": "empty",
+                "config": {
+                    "feed_url": "",
+                    "notes": "",
+                    "providers": [],
+                    "transporters": [],
+                },
+            }
+
+        return {
+            "status": "ok",
+            "config": {
+                "feed_url": row["feed_url"],
+                "notes": row["notes"],
+                "providers": json.loads(row["providers_json"] or "[]"),
+                "transporters": json.loads(row["transporters_json"] or "[]"),
+                "updated_at_utc": row["created_at_utc"],
+            },
+        }
+
+    def _save_stock_config(self, payload: dict[str, Any]) -> dict[str, Any]:
+        ensure_stock_db()
+        feed_url = str(payload.get("feed_url", "")).strip()
+        notes = str(payload.get("notes", "")).strip()
+        providers = self._normalize_string_list(payload.get("providers", []))
+        transporters = self._normalize_string_list(payload.get("transporters", []))
+        feed_ok, feed_error = self._validate_feed_reference(feed_url)
+        if not feed_ok:
+            return {"status": "failed", "message": feed_error}
+        created_at = utc_now_iso()
+
+        with sqlite3.connect(STOCK_DB_PATH) as connection:
+            connection.execute(
+                """
+                INSERT INTO stock_configs (feed_url, notes, providers_json, transporters_json, created_at_utc)
+                VALUES (?, ?, ?, ?, ?)
+                """,
+                (
+                    feed_url,
+                    notes,
+                    json.dumps(providers, ensure_ascii=False),
+                    json.dumps(transporters, ensure_ascii=False),
+                    created_at,
+                ),
+            )
+            connection.commit()
+
+        return {
+            "status": "ok",
+            "message": "Configuração STOCK persistida no banco local.",
+            "saved_at_utc": created_at,
+        }
+
+    @staticmethod
+    def _normalize_string_list(value: Any, *, max_items: int = 64, max_item_len: int = 120) -> list[str]:
+        if not isinstance(value, list):
+            return []
+        normalized: list[str] = []
+        for item in value[:max_items]:
+            text = str(item).strip()
+            if text:
+                normalized.append(text[:max_item_len])
+        return normalized
+
+    def _stock_imports_payload(self) -> dict[str, Any]:
+        ensure_stock_db()
+        with sqlite3.connect(STOCK_DB_PATH) as connection:
+            connection.row_factory = sqlite3.Row
+            rows = connection.execute(
+                """
+                SELECT id, feed_url, source_type, imported_items, status, details_json, created_at_utc
+                FROM stock_import_jobs
+                ORDER BY id DESC
+                LIMIT 20
+                """
+            ).fetchall()
+
+        return {
+            "status": "ok",
+            "items_total": len(rows),
+            "items": [
+                {
+                    "id": row["id"],
+                    "feed_url": row["feed_url"],
+                    "source_type": row["source_type"],
+                    "imported_items": row["imported_items"],
+                    "status": row["status"],
+                    "details": json.loads(row["details_json"] or "{}"),
+                    "created_at_utc": row["created_at_utc"],
+                }
+                for row in rows
+            ],
+        }
+
+    def _create_stock_import_job(self, payload: dict[str, Any]) -> dict[str, Any]:
+        ensure_stock_db()
+        feed_url = str(payload.get("feed_url", "")).strip()
+        if not feed_url:
+            return {"status": "failed", "message": "feed_url é obrigatório."}
+        feed_ok, feed_error = self._validate_feed_reference(feed_url)
+        if not feed_ok:
+            return {"status": "failed", "message": feed_error}
+
+        source_type, imported_items, details = self._resolve_import_preview(feed_url)
+        created_at = utc_now_iso()
+        status = "completed" if source_type != "invalid" else "failed"
+
+        with sqlite3.connect(STOCK_DB_PATH) as connection:
+            connection.execute(
+                """
+                INSERT INTO stock_import_jobs (feed_url, source_type, imported_items, status, details_json, created_at_utc)
+                VALUES (?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    feed_url,
+                    source_type,
+                    imported_items,
+                    status,
+                    json.dumps(details, ensure_ascii=False),
+                    created_at,
+                ),
+            )
+            connection.commit()
+
+        return {
+            "status": status,
+            "message": "Importação simulada registrada com persistência em banco local.",
+            "job": {
+                "feed_url": feed_url,
+                "source_type": source_type,
+                "imported_items": imported_items,
+                "details": details,
+                "created_at_utc": created_at,
+            },
+        }
+
+    def _resolve_import_preview(self, feed_url: str) -> tuple[str, int, dict[str, Any]]:
+        if feed_url.startswith(("http://", "https://")):
+            parsed_url = urlsplit(feed_url)
+            host = parsed_url.hostname or ""
+            if not host:
+                return ("invalid", 0, {"message": "URL remota invalida."})
+            if self._is_private_host(host):
+                return ("invalid", 0, {"message": "Host remoto bloqueado por seguranca."})
+            try:
+                request = Request(feed_url, headers={"User-Agent": "ValleyAdmin/1.0"})
+                with urlopen(request, timeout=12) as response:
+                    body_bytes = response.read(MAX_REMOTE_FEED_BYTES + 1)
+                    if len(body_bytes) > MAX_REMOTE_FEED_BYTES:
+                        return ("invalid", 0, {"message": "Feed remoto excede o limite permitido."})
+                    body = body_bytes.decode("utf-8")
+                payload = json.loads(body)
+            except (URLError, HTTPError, TimeoutError, json.JSONDecodeError, UnicodeDecodeError) as exc:
+                return ("invalid", 0, {"error": str(exc)})
+
+            if isinstance(payload, list):
+                return ("http-json-array", len(payload), {"keys_sample": list(payload[0].keys())[:8] if payload else []})
+
+            if isinstance(payload, dict):
+                items = payload.get("items")
+                if isinstance(items, list):
+                    return ("http-json-items", len(items), {"keys_sample": list(items[0].keys())[:8] if items else []})
+                return ("http-json-dict", len(payload.keys()), {"keys": list(payload.keys())[:10]})
+
+            return ("http-unknown", 0, {"message": "Formato remoto não suportado."})
+
+        local_path = (ROOT / feed_url).resolve() if not Path(feed_url).is_absolute() else Path(feed_url).resolve()
+        if local_path.is_absolute() and not self._is_allowed_local_feed(local_path):
+            return ("invalid", 0, {"message": "Caminho local fora do workspace nao e permitido."})
+        if local_path.exists():
+            try:
+                content = json.loads(local_path.read_text(encoding="utf-8"))
+            except (OSError, json.JSONDecodeError, UnicodeDecodeError) as exc:
+                return ("invalid", 0, {"error": str(exc)})
+
+            if isinstance(content, list):
+                return ("file-json-array", len(content), {"path": str(local_path)})
+            if isinstance(content, dict):
+                items = content.get("items")
+                if isinstance(items, list):
+                    return ("file-json-items", len(items), {"path": str(local_path)})
+                return ("file-json-dict", len(content.keys()), {"path": str(local_path)})
+
+        return ("invalid", 0, {"message": "Feed não encontrado ou formato inválido."})
+
+    @staticmethod
+    def _validate_feed_reference(feed_url: str) -> tuple[bool, str]:
+        if not feed_url:
+            return (True, "")
+        if "\x00" in feed_url:
+            return (False, "feed_url invalido: caractere nulo detectado.")
+        if len(feed_url) > 2048:
+            return (False, "feed_url invalido: tamanho excede 2048 caracteres.")
+
+        if feed_url.startswith(("http://", "https://")):
+            parsed = urlsplit(feed_url)
+            if not parsed.hostname:
+                return (False, "feed_url invalido: host remoto ausente.")
+            return (True, "")
+
+        candidate = (ROOT / feed_url).resolve() if not Path(feed_url).is_absolute() else Path(feed_url).resolve()
+        if not ValleyAdminHandler._is_allowed_local_feed(candidate):
+            return (False, "feed_url invalido: caminho local fora do workspace.")
+        return (True, "")
+
+    @staticmethod
+    def _is_allowed_local_feed(candidate: Path) -> bool:
+        try:
+            candidate.resolve().relative_to(ROOT)
+            return True
+        except ValueError:
+            return False
+
+    @staticmethod
+    def _is_private_host(host: str) -> bool:
+        if host in {"localhost", "0.0.0.0"}:
+            return True
+        try:
+            addresses = socket.getaddrinfo(host, None, type=socket.SOCK_STREAM)
+        except socket.gaierror:
+            return True
+
+        for _, _, _, _, sockaddr in addresses:
+            ip_text = sockaddr[0]
+            try:
+                ip_obj = ipaddress.ip_address(ip_text)
+            except ValueError:
+                return True
+            if (
+                ip_obj.is_private
+                or ip_obj.is_loopback
+                or ip_obj.is_link_local
+                or ip_obj.is_multicast
+                or ip_obj.is_reserved
+                or ip_obj.is_unspecified
+            ):
+                return True
+        return False
+
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Servidor HTTP do painel admin Valley.")
@@ -400,6 +743,7 @@ def main() -> None:
 
     if not root.exists():
         raise SystemExit(f"Diretorio admin inexistente: {root}")
+    ensure_stock_db()
 
     handler = partial(
         ValleyAdminHandler,
