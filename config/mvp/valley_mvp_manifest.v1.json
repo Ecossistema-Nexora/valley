@@ -8,19 +8,49 @@
     "central_principle": "O MVP nao e um produto completo. E uma maquina de transacao, identidade e estoque."
   },
   "included_modules": [
+    "MARKETPLACE",
+    "STOCK",
+    "CHAT"
+  ],
+  "economic_strategy": {
+    "source_spec": "docs/specs/valley-economic-flight-plan-v47.md",
+    "break_even_users": 100000,
+    "break_even_mau": 48000,
+    "million_user_monthly_result_brl": 5700000,
+    "rollout_principle": "Nao ligar os 47 modulos ao mesmo tempo; validar primeiro as jornadas que aumentam ARPU e capturam fluxo financeiro.",
+    "golden_combo": [
+      "PLUG",
+      "BUSINESS",
+      "DOCS",
+      "MARKETPLACE"
+    ],
+    "support_modules_after_revenue_core": [
+      "REPLY",
+      "STOCK",
+      "WMS"
+    ],
+    "hold_until_density": [
+      "FOOD",
+      "DELIVERY",
+      "MOBILITY"
+    ],
+    "mandatory_guardrails": [
+      "recompensas somente com fonte pagadora lojista, ADS, afiliacao ou budget registrado",
+      "IA pesada sempre assincrona e limitada por plano",
+      "bloquear rota, entrega ou SKU abaixo do piso economico",
+      "PAY fica desativado nesta rodada; PLUG, DOCS e BUSINESS preservam o desenho transacional ate a reativacao",
+      "DOCS registra recibo, contrato ou checksum das operacoes sensiveis"
+    ]
+  },
+  "excluded_modules": [
     "PAY",
     "PLUG",
     "DOCS",
     "BUSINESS",
     "REPLY",
-    "STOCK",
     "WMS",
-    "MARKETPLACE",
     "ADVISOR",
-    "CHAT",
-    "AGENDA"
-  ],
-  "excluded_modules": [
+    "AGENDA",
     "DELIVERY",
     "FOOD",
     "MOBILITY",
@@ -72,7 +102,6 @@
           "delivery_mode": "aggregated_risk_profile",
           "owners": [
             "core_identity_wallets",
-            "PAY",
             "SECURITY",
             "MARKETPLACE"
           ],
@@ -97,20 +126,20 @@
     {
       "key": "phase_1_core_activation",
       "label": "Fase 1 - Ativacao do Core",
-      "goal": "Fechar o nucleo financeiro e empresarial que gera monetizacao e trilha documental desde a primeira operacao.",
+      "goal": "Fechar o Combo de Ouro que gera monetizacao e trilha documental desde a primeira operacao, mantendo PAY desativado nesta rodada.",
       "modules": [
-        "PAY",
         "PLUG",
         "DOCS",
         "BUSINESS",
-        "REPLY"
+        "MARKETPLACE"
       ],
       "success_gates": [
-        "wallet, ledger e conciliacao validados",
-        "captura de pagamento e MDR modelados",
+        "ledger e conciliacao preservados como contrato tecnico",
+        "captura via PLUG e MDR modelados sem expor o modulo PAY",
         "documento e recibo com checksum rastreavel",
         "empresa onboardada com rotina empresarial minima",
-        "ordem de servico e compras com fechamento fiscal ponta a ponta"
+        "marketplace alimentando PLUG, BUSINESS e DOCS enquanto PAY fica desativado nesta rodada",
+        "recompensas e descontos com fonte pagadora registrada"
       ]
     },
     {
@@ -118,9 +147,9 @@
       "label": "Fase 2 - Comercio",
       "goal": "Abrir a camada de catalogo, estoque e venda para gerar fluxo comercial sem CAPEX pesado.",
       "modules": [
+        "REPLY",
         "STOCK",
-        "WMS",
-        "MARKETPLACE"
+        "WMS"
       ],
       "stock_marketplace_model": {
         "reference_behavior": [
@@ -137,7 +166,7 @@
           "card de produto com selo Valley",
           "seller score",
           "variacoes de produto",
-          "checkout conectado a PAY e PLUG",
+          "checkout preparado para PLUG e reativacao posterior de PAY",
           "comprovante e documento por DOCS"
         ],
         "admin_api_integrations": [
@@ -201,7 +230,7 @@
       "success_gates": [
         "catalogo sincronizado com margem controlada",
         "estoque simplificado com enderecamento e variancia minima",
-        "checkout do marketplace alimentando PAY e PLUG",
+        "checkout do marketplace alimentando PLUG e preservando contrato para PAY",
         "experiencia STOCK reconhecivel como Valley, mesmo com comportamento de grande marketplace"
       ]
     },
@@ -238,7 +267,9 @@
       "runtime_rules": [
         "uso limitado por plano",
         "processamento assincrono",
-        "foco em produtividade, nao volume"
+        "foco em produtividade, nao volume",
+        "sem chat livre ilimitado em plano agressivo de preco",
+        "tarefas caras entram em fila com orcamento e rate limit"
       ]
     }
   ],
@@ -254,7 +285,9 @@
     "nao subsidiar operacao",
     "separar taxa, processamento e logistica",
     "limitar custo de IA",
-    "monetizar desde o primeiro usuario"
+    "monetizar desde o primeiro usuario",
+    "recompensa so existe com fonte pagadora",
+    "piso economico por rota e por SKU e lei operacional"
   ],
   "expected_result": [
     "break-even antes de 100k usuarios",

@@ -26,12 +26,13 @@ class ValleyProductShell extends StatefulWidget {
 }
 
 class _ValleyProductShellState extends State<ValleyProductShell> {
+  static bool get _helenaEnabled => false;
+
   late ProductShellData _data;
   bool _busy = false;
   String _query = '';
   String _selectedModuleId = 'MARKETPLACE';
   String _surface = 'home';
-  bool _dockExpanded = false;
   int _navIndex = 0;
   ProductItem? _selectedItem;
   Map<String, dynamic>? _selectedConversation;
@@ -59,7 +60,9 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
     } else if (_data.modules.isNotEmpty) {
       _selectedModuleId = _data.modules.first.id;
     }
-    _setupHelena();
+    if (_helenaEnabled) {
+      _setupHelena();
+    }
   }
 
   Future<void> _setupHelena() async {
@@ -175,6 +178,9 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
   }
 
   Future<void> _speakHelena(String text) async {
+    if (!_helenaEnabled) {
+      return;
+    }
     _helenaMessage = text;
     if (mounted) {
       setState(() {});
@@ -184,6 +190,9 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
   }
 
   void _setHelenaMood(String mood, String message) {
+    if (!_helenaEnabled) {
+      return;
+    }
     setState(() {
       _helenaMood = mood;
       _helenaMessage = message;
@@ -262,15 +271,25 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
         break;
       }
     }
+    if (matchedModule == null) {
+      _setHelenaMood(
+        'calm',
+        'Esse modulo nao esta ativo nesta rodada do MVP. Posso te levar para Stock, Marketplace ou Chat.',
+      );
+      return;
+    }
 
     _showModule(moduleId);
     _setHelenaMood(
       'focus',
-      'Ta certo, vou abrir ${spokenLabel ?? matchedModule?.label ?? moduleId} pra voce, viu.',
+      'Ta certo, vou abrir ${spokenLabel ?? matchedModule.label} pra voce, viu.',
     );
   }
 
   void _handleVoiceCommand(String transcript) {
+    if (!_helenaEnabled) {
+      return;
+    }
     final String spoken = transcript.trim();
     if (spoken.isEmpty) {
       return;
@@ -308,7 +327,10 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
     }
 
     if (normalized.contains('pag') || normalized.contains('carteira')) {
-      _openModuleFromHelenaRequest('PAY', spokenLabel: 'Valley Pay');
+      _setHelenaMood(
+        'calm',
+        'O modulo Pay esta desativado nesta rodada. Posso abrir Plug, Docs ou Marketplace pra continuar o fluxo.',
+      );
       return;
     }
 
@@ -336,6 +358,9 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
   }
 
   Future<void> _toggleHelenaListening() async {
+    if (!_helenaEnabled) {
+      return;
+    }
     if (_helenaListening) {
       await _speech.stop();
       if (!mounted) {
@@ -573,6 +598,13 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
     String? message,
     String mood = 'calm',
   }) {
+    if (!_data.modules.any((ProductModule module) => module.id == moduleId)) {
+      _setHelenaMood(
+        'calm',
+        'Modulo $moduleId fora do MVP ativo nesta rodada.',
+      );
+      return;
+    }
     if (_selectedModuleId == moduleId &&
         _surface == 'home' &&
         _selectedItem == null &&
@@ -671,6 +703,13 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
     }
     if (_surface == 'conversation' && _selectedConversation != null) {
       return _ConversationScreen(conversation: _selectedConversation!);
+    }
+    if (_surface == 'client') {
+      return _ClientAreaScreen(
+        items: _data.items,
+        onOpenItem: _openItemDetail,
+        onOpenChat: () => _openSurface('chat'),
+      );
     }
     if (_surface == 'statement') {
       return _StatementScreen(entries: _rawList('statement_entries'));
@@ -1186,53 +1225,45 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
                     ],
                   ),
                 ),
-                _FloatingDock(
-                  modules: _data.modules,
-                  expanded: _dockExpanded,
-                  selectedModuleId: _selectedModuleId,
-                  onToggle: () =>
-                      setState(() => _dockExpanded = !_dockExpanded),
-                  onSelect: (ProductModule module) {
-                    _showModule(module.id);
-                    setState(() => _dockExpanded = false);
-                  },
-                ),
-                Align(
-                  alignment: Alignment(
-                    _helenaAlignment.dx,
-                    _helenaAlignment.dy,
-                  ),
-                  child: GestureDetector(
-                    onPanUpdate: (DragUpdateDetails details) {
-                      final Size size = MediaQuery.sizeOf(context);
-                      setState(() {
-                        _helenaAlignment = Offset(
-                          (_helenaAlignment.dx +
-                                  (details.delta.dx / math.max(size.width, 1)) *
-                                      2)
-                              .clamp(-0.96, 0.96),
-                          (_helenaAlignment.dy +
-                                  (details.delta.dy /
-                                          math.max(size.height, 1)) *
-                                      2)
-                              .clamp(-0.90, 0.90),
-                        );
-                      });
-                    },
-                    child: _HelenaAssistant(
-                      minimized: _helenaMinimized,
-                      mood: _helenaMood,
-                      message: _helenaMessage,
-                      transcript: _helenaTranscript,
-                      voiceReady: _helenaVoiceReady,
-                      listening: _helenaListening,
-                      onToggle: () =>
-                          setState(() => _helenaMinimized = !_helenaMinimized),
-                      onSpeak: () => _speakHelena(_helenaMessage),
-                      onListen: _toggleHelenaListening,
+                if (_helenaEnabled)
+                  Align(
+                    alignment: Alignment(
+                      _helenaAlignment.dx,
+                      _helenaAlignment.dy,
+                    ),
+                    child: GestureDetector(
+                      onPanUpdate: (DragUpdateDetails details) {
+                        final Size size = MediaQuery.sizeOf(context);
+                        setState(() {
+                          _helenaAlignment = Offset(
+                            (_helenaAlignment.dx +
+                                    (details.delta.dx /
+                                            math.max(size.width, 1)) *
+                                        2)
+                                .clamp(-0.96, 0.96),
+                            (_helenaAlignment.dy +
+                                    (details.delta.dy /
+                                            math.max(size.height, 1)) *
+                                        2)
+                                .clamp(-0.90, 0.90),
+                          );
+                        });
+                      },
+                      child: _HelenaAssistant(
+                        minimized: _helenaMinimized,
+                        mood: _helenaMood,
+                        message: _helenaMessage,
+                        transcript: _helenaTranscript,
+                        voiceReady: _helenaVoiceReady,
+                        listening: _helenaListening,
+                        onToggle: () => setState(
+                          () => _helenaMinimized = !_helenaMinimized,
+                        ),
+                        onSpeak: () => _speakHelena(_helenaMessage),
+                        onListen: _toggleHelenaListening,
+                      ),
                     ),
                   ),
-                ),
               ],
             ),
           ),
@@ -1250,9 +1281,9 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
             } else if (value == 2) {
               _showModule('STOCK');
             } else if (value == 3) {
-              _showModule('PAY');
-            } else if (value == 4) {
               _openSurface('chat');
+            } else if (value == 4) {
+              _openSurface('client');
             }
           },
         ),
@@ -1504,13 +1535,10 @@ class _IndicatorGrid extends StatelessWidget {
               Row(
                 children: <Widget>[
                   Expanded(
-                    child: _smallCard(
-                      'Ativos Em Carteira',
-                      '${summary.products}',
-                    ),
+                    child: _smallCard('Produtos ativos', '${summary.products}'),
                   ),
                   const SizedBox(width: 14),
-                  Expanded(child: _energyCard()),
+                  Expanded(child: _mvpFlowCard()),
                 ],
               ),
             ],
@@ -1522,10 +1550,10 @@ class _IndicatorGrid extends StatelessWidget {
             Expanded(flex: 2, child: _wideCard()),
             const SizedBox(width: 14),
             Expanded(
-              child: _smallCard('Ativos Em Carteira', '${summary.products}'),
+              child: _smallCard('Produtos ativos', '${summary.products}'),
             ),
             const SizedBox(width: 14),
-            Expanded(child: _energyCard()),
+            Expanded(child: _mvpFlowCard()),
           ],
         );
       },
@@ -1548,9 +1576,9 @@ class _IndicatorGrid extends StatelessWidget {
                 size: 32,
               ),
               const Spacer(),
-              Text(
-                '+12.4%',
-                style: const TextStyle(
+              const Text(
+                'MVP',
+                style: TextStyle(
                   color: Color(0xFF6EE7F9),
                   fontWeight: FontWeight.w700,
                 ),
@@ -1558,9 +1586,9 @@ class _IndicatorGrid extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 32),
-          Text(
-            'PERFORMANCE GLOBAL',
-            style: const TextStyle(
+          const Text(
+            'OPERAÇÃO ATIVA',
+            style: TextStyle(
               color: Color(0xFFBCC9CB),
               fontWeight: FontWeight.w700,
               letterSpacing: 1.2,
@@ -1650,7 +1678,7 @@ class _IndicatorGrid extends StatelessWidget {
     );
   }
 
-  Widget _energyCard() {
+  Widget _mvpFlowCard() {
     return ValleyPanel(
       radius: 24,
       padding: const EdgeInsets.all(22),
@@ -1660,7 +1688,7 @@ class _IndicatorGrid extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             const Text(
-              'CONSUMO ENERGÉTICO',
+              'FLUXOS DO MVP',
               style: TextStyle(
                 color: Color(0xFFBCC9CB),
                 fontWeight: FontWeight.w700,
@@ -1669,12 +1697,21 @@ class _IndicatorGrid extends StatelessWidget {
               ),
             ),
             const Spacer(),
-            const Text(
-              '14.2 kW',
-              style: TextStyle(
+            Text(
+              '$itemCount',
+              style: const TextStyle(
                 color: Color(0xFFDEE1F9),
                 fontWeight: FontWeight.w800,
                 fontSize: 30,
+              ),
+            ),
+            const SizedBox(height: 6),
+            const Text(
+              'itens prontos para venda, chat ou detalhe',
+              style: TextStyle(
+                color: Color(0xFF6EE7F9),
+                fontWeight: FontWeight.w700,
+                fontSize: 12,
               ),
             ),
             const SizedBox(height: 12),
@@ -2023,6 +2060,8 @@ class _StockSection extends StatelessWidget {
           },
         ),
         const SizedBox(height: 22),
+        const _DropshipApiIntegrationPage(),
+        const SizedBox(height: 22),
         Row(
           children: <Widget>[
             Expanded(
@@ -2126,6 +2165,444 @@ class _StockStatCard extends StatelessWidget {
               color: accent.withValues(alpha: 0.70),
               fontWeight: FontWeight.w600,
               fontSize: 12,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _DropshipApiIntegrationPage extends StatelessWidget {
+  const _DropshipApiIntegrationPage();
+
+  static const List<_SupplierApiSpec> _suppliers = <_SupplierApiSpec>[
+    _SupplierApiSpec(
+      name: 'AliExpress',
+      status: 'Pronto para credenciais',
+      region: 'BR / Global',
+      auth: 'OAuth 2.0 + App Key',
+      scope: 'Catálogo, preço, pedido e tracking',
+      steps: <String>[
+        'Criar app no portal do fornecedor e registrar a URL de callback Valley.',
+        'Salvar App Key, App Secret e Seller ID apenas como referência segura no Admin.',
+        'Executar a sincronização inicial de catálogo e gravar snapshots de preço.',
+        'Ativar decisão de margem append-only antes de publicar no Marketplace.',
+      ],
+    ),
+    _SupplierApiSpec(
+      name: 'Alibaba',
+      status: 'Mapeamento B2B',
+      region: 'Global',
+      auth: 'API Key + assinatura',
+      scope: 'Fornecedores, MOQ, custo e cotação',
+      steps: <String>[
+        'Cadastrar a conta corporativa e confirmar permissões de produto e cotação.',
+        'Associar supplier_id ao provider_config no banco relacional.',
+        'Importar amostras com MOQ, prazo e custo estimado por lote.',
+        'Bloquear publicação automática quando margem, prazo ou estoque ficarem abaixo do piso.',
+      ],
+    ),
+    _SupplierApiSpec(
+      name: 'CJDropshipping',
+      status: 'Operação automatizável',
+      region: 'US / CN / BR',
+      auth: 'Access Token rotativo',
+      scope: 'Pedido automático, fulfillment e tracking',
+      steps: <String>[
+        'Gerar access token no painel CJ e armazenar somente referência criptográfica.',
+        'Vincular SKU externo ao item Valley Stock com canal e margem mínima.',
+        'Enviar pedido ao fornecedor somente após validação de pagamento/contrato.',
+        'Consumir tracking e atualizar a fila operacional de dropshipping.',
+      ],
+    ),
+    _SupplierApiSpec(
+      name: 'Shopee / Magalu / Amazon',
+      status: 'Fonte de preço',
+      region: 'Brasil',
+      auth: 'Seller API ou fallback controlado',
+      scope: 'Benchmark competitivo e teto de preço',
+      steps: <String>[
+        'Configurar cada marketplace como fonte de preço, não como fornecedor primário.',
+        'Definir TTL de cache e limites de chamada por canal.',
+        'Comparar preço Valley contra o mercado antes de ativar oferta.',
+        'Registrar cada decisão de precificação para auditoria e rollback.',
+      ],
+    ),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return ValleyPanel(
+      radius: 28,
+      padding: const EdgeInsets.all(24),
+      glowColor: ValleyBrandColors.violet,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Wrap(
+            spacing: 14,
+            runSpacing: 14,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: <Widget>[
+              Container(
+                width: 54,
+                height: 54,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(18),
+                  gradient: const LinearGradient(
+                    colors: <Color>[
+                      ValleyBrandColors.cyan,
+                      ValleyBrandColors.violet,
+                    ],
+                  ),
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                      color: ValleyBrandColors.cyan.withValues(alpha: 0.28),
+                      blurRadius: 24,
+                    ),
+                  ],
+                ),
+                child: const Icon(
+                  Icons.hub_rounded,
+                  color: Colors.white,
+                  size: 28,
+                ),
+              ),
+              ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 760),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      'Central de Integração Dropship',
+                      style: Theme.of(context).textTheme.headlineSmall
+                          ?.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w900,
+                          ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      'Página operacional ligada ao blueprint de produção do Stock. Ela prepara as APIs de fornecedores, snapshots de preço, decisões append-only e fila de pedidos ao fornecedor.',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Colors.white.withValues(alpha: 0.68),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 22),
+          Wrap(
+            spacing: 10,
+            runSpacing: 10,
+            children: const <Widget>[
+              _MetaPill(
+                icon: Icons.storage_rounded,
+                label: 'DB: dropshipping_provider_configs',
+              ),
+              _MetaPill(
+                icon: Icons.price_change_rounded,
+                label: 'DB: dropshipping_pricing_decisions',
+              ),
+              _MetaPill(
+                icon: Icons.receipt_long_rounded,
+                label: 'DB: dropshipping_supplier_orders',
+              ),
+              _MetaPill(
+                icon: Icons.task_alt_rounded,
+                label: 'Fila: dropshipping_jobs',
+              ),
+            ],
+          ),
+          const SizedBox(height: 22),
+          LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+              final bool compact = constraints.maxWidth < 900;
+              final Widget pipeline = _DropshipPipeline(compact: compact);
+              final Widget checklist = const _DropshipChecklist();
+              if (compact) {
+                return Column(
+                  children: <Widget>[
+                    pipeline,
+                    const SizedBox(height: 16),
+                    checklist,
+                  ],
+                );
+              }
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Expanded(flex: 5, child: pipeline),
+                  const SizedBox(width: 16),
+                  const Expanded(flex: 4, child: _DropshipChecklist()),
+                ],
+              );
+            },
+          ),
+          const SizedBox(height: 22),
+          LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+              final int columns = constraints.maxWidth >= 1180 ? 2 : 1;
+              return GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: _suppliers.length,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: columns,
+                  mainAxisSpacing: 14,
+                  crossAxisSpacing: 14,
+                  childAspectRatio: constraints.maxWidth >= 1180 ? 1.45 : 1.18,
+                ),
+                itemBuilder: (BuildContext context, int index) {
+                  return _SupplierApiCard(spec: _suppliers[index]);
+                },
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _DropshipPipeline extends StatelessWidget {
+  const _DropshipPipeline({required this.compact});
+
+  final bool compact;
+
+  @override
+  Widget build(BuildContext context) {
+    final List<String> stages = <String>[
+      'Credencial segura',
+      'Catálogo importado',
+      'Preço comparado',
+      'Margem validada',
+      'Pedido enviado',
+      'Tracking ativo',
+    ];
+    return Container(
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: const Color(0x66080D1D),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            'Fluxo vivo da integração',
+            style: Theme.of(
+              context,
+            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w900),
+          ),
+          const SizedBox(height: 16),
+          Wrap(
+            spacing: 10,
+            runSpacing: 10,
+            children: stages.asMap().entries.map((MapEntry<int, String> item) {
+              return Container(
+                width: compact ? double.infinity : 150,
+                padding: const EdgeInsets.all(14),
+                decoration: BoxDecoration(
+                  color: item.key < 3
+                      ? ValleyBrandColors.cyan.withValues(alpha: 0.10)
+                      : Colors.white.withValues(alpha: 0.05),
+                  borderRadius: BorderRadius.circular(18),
+                  border: Border.all(
+                    color: item.key < 3
+                        ? ValleyBrandColors.cyan.withValues(alpha: 0.28)
+                        : Colors.white.withValues(alpha: 0.08),
+                  ),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Icon(
+                      item.key < 3
+                          ? Icons.check_circle_rounded
+                          : Icons.radio_button_unchecked_rounded,
+                      color: item.key < 3
+                          ? ValleyBrandColors.cyan
+                          : Colors.white38,
+                      size: 18,
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        item.value,
+                        style: const TextStyle(fontWeight: FontWeight.w800),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }).toList(),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _DropshipChecklist extends StatelessWidget {
+  const _DropshipChecklist();
+
+  @override
+  Widget build(BuildContext context) {
+    const List<String> steps = <String>[
+      'Nunca gravar segredo bruto: usar secret_ref, hash ou vault externo.',
+      'Cada importação deve criar snapshot de preço e custo com timestamp.',
+      'Toda decisão de margem entra em ledger append-only.',
+      'Pedido ao fornecedor só nasce depois de validação econômica e documental.',
+      'Falha de API cria job de retentativa com backoff e motivo visível.',
+    ];
+    return Container(
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: ValleyBrandColors.violet.withValues(alpha: 0.10),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          color: ValleyBrandColors.violet.withValues(alpha: 0.22),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            'Passo a passo obrigatório',
+            style: Theme.of(
+              context,
+            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w900),
+          ),
+          const SizedBox(height: 14),
+          for (int index = 0; index < steps.length; index++)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  CircleAvatar(
+                    radius: 12,
+                    backgroundColor: ValleyBrandColors.cyan,
+                    child: Text(
+                      '${index + 1}',
+                      style: const TextStyle(
+                        color: Color(0xFF00363D),
+                        fontSize: 11,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      steps[index],
+                      style: TextStyle(
+                        color: Colors.white.withValues(alpha: 0.76),
+                        height: 1.35,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SupplierApiSpec {
+  const _SupplierApiSpec({
+    required this.name,
+    required this.status,
+    required this.region,
+    required this.auth,
+    required this.scope,
+    required this.steps,
+  });
+
+  final String name;
+  final String status;
+  final String region;
+  final String auth;
+  final String scope;
+  final List<String> steps;
+}
+
+class _SupplierApiCard extends StatelessWidget {
+  const _SupplierApiCard({required this.spec});
+
+  final _SupplierApiSpec spec;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: const Color(0xAA121A2F),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: Text(
+                  spec.name,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w900),
+                ),
+              ),
+              _MetaPill(icon: Icons.api_rounded, label: spec.status),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: <Widget>[
+              _MetaPill(icon: Icons.public_rounded, label: spec.region),
+              _MetaPill(icon: Icons.key_rounded, label: spec.auth),
+              _MetaPill(icon: Icons.sync_alt_rounded, label: spec.scope),
+            ],
+          ),
+          const SizedBox(height: 14),
+          Expanded(
+            child: ListView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: spec.steps.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Icon(
+                        Icons.arrow_right_rounded,
+                        color: ValleyBrandColors.cyan.withValues(alpha: 0.90),
+                      ),
+                      const SizedBox(width: 6),
+                      Expanded(
+                        child: Text(
+                          spec.steps[index],
+                          style: TextStyle(
+                            color: Colors.white.withValues(alpha: 0.70),
+                            height: 1.28,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
             ),
           ),
         ],
@@ -6195,173 +6672,197 @@ class _HelenaStarPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
-class _FloatingDock extends StatelessWidget {
-  const _FloatingDock({
-    required this.modules,
-    required this.expanded,
-    required this.selectedModuleId,
-    required this.onToggle,
-    required this.onSelect,
+class _ClientAreaScreen extends StatelessWidget {
+  const _ClientAreaScreen({
+    required this.items,
+    required this.onOpenItem,
+    required this.onOpenChat,
   });
 
-  final List<ProductModule> modules;
-  final bool expanded;
-  final String selectedModuleId;
-  final VoidCallback onToggle;
-  final ValueChanged<ProductModule> onSelect;
+  final List<ProductItem> items;
+  final ValueChanged<ProductItem> onOpenItem;
+  final VoidCallback onOpenChat;
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.sizeOf(context);
-    final double expandedWidth = math.min(size.width - 28, 336);
-    final double maxHeight = math.min(size.height * 0.68, 520);
+    final ThemeData theme = Theme.of(context);
+    final List<ProductItem> recentOrders = items.take(3).toList();
 
-    return Align(
-      alignment: const Alignment(1, 0.10),
-      child: AnimatedSlide(
-        duration: const Duration(milliseconds: 260),
-        curve: Curves.easeOutCubic,
-        offset: expanded ? Offset.zero : const Offset(0.56, 0),
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 260),
-          curve: Curves.easeOutCubic,
-          width: expanded ? expandedWidth : 128,
-          constraints: BoxConstraints(
-            minHeight: expanded ? 220 : 140,
-            maxHeight: maxHeight,
-          ),
-          padding: EdgeInsets.fromLTRB(expanded ? 16 : 12, 14, 14, 14),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: <Color>[
-                const Color(0xFF18213D).withValues(alpha: 0.96),
-                const Color(0xFF0B1020).withValues(alpha: 0.98),
-              ],
-            ),
-            borderRadius: BorderRadius.only(
-              topLeft: const Radius.circular(30),
-              bottomLeft: const Radius.circular(30),
-              topRight: Radius.circular(expanded ? 30 : 0),
-              bottomRight: Radius.circular(expanded ? 30 : 0),
-            ),
-            border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
-            boxShadow: <BoxShadow>[
-              BoxShadow(
-                color: ValleyBrandColors.cyan.withValues(alpha: 0.18),
-                blurRadius: 30,
-                offset: const Offset(-8, 18),
-              ),
-            ],
-          ),
-          child: expanded
-              ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Row(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        ValleyPanel(
+          radius: 32,
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Container(
+                    width: 64,
+                    height: 64,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(22),
+                      gradient: const LinearGradient(
+                        colors: <Color>[
+                          ValleyBrandColors.cyan,
+                          Color(0xFF6D5DF6),
+                        ],
+                      ),
+                    ),
+                    child: const Icon(
+                      Icons.person_rounded,
+                      color: Colors.black,
+                      size: 34,
+                    ),
+                  ),
+                  const SizedBox(width: 18),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        const Icon(
-                          Icons.grid_view_rounded,
-                          color: ValleyBrandColors.cyan,
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                'Dock universal',
-                                style: Theme.of(context).textTheme.titleMedium
-                                    ?.copyWith(fontWeight: FontWeight.w800),
-                              ),
-                              Text(
-                                '$selectedModuleId ativo',
-                                style: Theme.of(context).textTheme.bodySmall
-                                    ?.copyWith(
-                                      color: Theme.of(
-                                        context,
-                                      ).colorScheme.onSurfaceVariant,
-                                    ),
-                              ),
-                            ],
+                        Text(
+                          'Área do Cliente',
+                          style: theme.textTheme.headlineSmall?.copyWith(
+                            fontWeight: FontWeight.w800,
+                            color: Colors.white,
                           ),
                         ),
-                        IconButton(
-                          onPressed: onToggle,
-                          icon: const Icon(Icons.close_rounded),
-                          color: Colors.white70,
+                        const SizedBox(height: 6),
+                        Text(
+                          'Perfil, pedidos, validação de CNPJ e rastreio multimodal em uma única tela.',
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: Colors.white.withValues(alpha: 0.66),
+                          ),
                         ),
                       ],
                     ),
-                    Text(
-                      'A aba fica recolhida na lateral e so abre inteira quando voce toca nela.',
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
-                    ),
-                    const SizedBox(height: 14),
-                    Expanded(
-                      child: SingleChildScrollView(
-                        child: Wrap(
-                          spacing: 8,
-                          runSpacing: 8,
-                          children: modules
-                              .map(
-                                (ProductModule module) => ChoiceChip(
-                                  label: Text(module.id),
-                                  selected: selectedModuleId == module.id,
-                                  onSelected: (_) => onSelect(module),
-                                ),
-                              )
-                              .toList(),
-                        ),
-                      ),
-                    ),
-                  ],
-                )
-              : InkWell(
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(30),
-                    bottomLeft: Radius.circular(30),
                   ),
-                  onTap: onToggle,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                ],
+              ),
+              const SizedBox(height: 22),
+              Wrap(
+                spacing: 10,
+                runSpacing: 10,
+                children: const <Widget>[
+                  _MetaPill(
+                    icon: Icons.verified_user_rounded,
+                    label: 'KYC validado',
+                  ),
+                  _MetaPill(
+                    icon: Icons.business_rounded,
+                    label: 'CNPJ em análise',
+                  ),
+                  _MetaPill(icon: Icons.stars_rounded, label: '1.840 Pepitas'),
+                ],
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 18),
+        LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+            final bool wide = constraints.maxWidth > 760;
+            final Widget ordersPanel = ValleyPanel(
+              radius: 28,
+              padding: const EdgeInsets.all(22),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    'Meus pedidos',
+                    style: theme.textTheme.titleLarge?.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  const SizedBox(height: 14),
+                  for (final ProductItem item in recentOrders)
+                    ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      leading: ClipRRect(
+                        borderRadius: BorderRadius.circular(14),
+                        child: Image.network(
+                          item.imageUrl,
+                          width: 54,
+                          height: 54,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      title: Text(
+                        item.title,
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                      subtitle: Text(
+                        'Avalie para liberar Pepitas adicionais',
+                        style: TextStyle(
+                          color: Colors.white.withValues(alpha: 0.55),
+                        ),
+                      ),
+                      trailing: TextButton(
+                        onPressed: () => onOpenItem(item),
+                        child: const Text('Detalhes'),
+                      ),
+                    ),
+                ],
+              ),
+            );
+            final Widget trackingPanel = ValleyPanel(
+              radius: 28,
+              padding: const EdgeInsets.all(22),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    'Rastreio multimodal',
+                    style: theme.textTheme.titleLarge?.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    'Ônibus estimado em 2 min. Chegada prevista 18:58, economizando R\$ 15,00 em relação ao app de transporte.',
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: Colors.white.withValues(alpha: 0.68),
+                    ),
+                  ),
+                  const SizedBox(height: 18),
+                  Row(
                     children: <Widget>[
-                      Container(
-                        width: 42,
-                        height: 42,
-                        decoration: BoxDecoration(
-                          color: ValleyBrandColors.cyan.withValues(alpha: 0.12),
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(
-                          Icons.grid_view_rounded,
-                          color: ValleyBrandColors.cyan,
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      Text(
-                        'Dock',
-                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                          fontWeight: FontWeight.w900,
-                          letterSpacing: 0.5,
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        selectedModuleId,
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          onPressed: onOpenChat,
+                          icon: const Icon(Icons.support_agent_rounded),
+                          label: const Text('Abrir suporte'),
                         ),
                       ),
                     ],
                   ),
-                ),
+                ],
+              ),
+            );
+            if (wide) {
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Expanded(flex: 6, child: ordersPanel),
+                  const SizedBox(width: 18),
+                  Expanded(flex: 5, child: trackingPanel),
+                ],
+              );
+            }
+            return Column(
+              children: <Widget>[
+                ordersPanel,
+                const SizedBox(height: 18),
+                trackingPanel,
+              ],
+            );
+          },
         ),
-      ),
+      ],
     );
   }
 }
@@ -6378,8 +6879,8 @@ class _BottomGlassNav extends StatelessWidget {
       _BottomItem(Icons.home_max_rounded, 'Início'),
       _BottomItem(Icons.storefront_rounded, 'Market'),
       _BottomItem(Icons.inventory_2_rounded, 'Stock'),
-      _BottomItem(Icons.account_balance_wallet_rounded, 'Pay'),
       _BottomItem(Icons.chat_bubble_rounded, 'Chat'),
+      _BottomItem(Icons.person_rounded, 'Cliente'),
     ];
 
     return Padding(

@@ -24,6 +24,8 @@ ENV_PATH = ROOT / ".env"
 TELEGRAM_QUEUE = ROOT / "ordem_telegram.md"
 UNIVERSAL_QUEUE = ROOT / "ordem_universal.md"
 RUNTIME_DIR = ROOT / "tmp" / "runtime"
+PLAYWRIGHT_RUNTIME_DIR = ROOT / "tmp" / "node-playwright"
+PLAYWRIGHT_NODE_MODULES = PLAYWRIGHT_RUNTIME_DIR / "node_modules"
 STATUS_PATH = RUNTIME_DIR / "codex-live-status.json"
 CODEX_INBOX_PATH = RUNTIME_DIR / "codex-inbox.jsonl"
 WORK_STATUS_PATH = RUNTIME_DIR / "bridge-work-status.json"
@@ -350,6 +352,58 @@ def load_whatsapp_link_state() -> dict[str, Any]:
     return load_json_file(WHATSAPP_LINK_STATE_PATH, {})
 
 
+def node_command() -> str:
+    return "node.exe" if os.name == "nt" else "node"
+
+
+def npm_command() -> str:
+    return "npm.cmd" if os.name == "nt" else "npm"
+
+
+def ensure_playwright_runtime() -> dict[str, str]:
+    """Mantem o Playwright fora do repositorio versionado e visivel ao Node."""
+
+    package_dir = PLAYWRIGHT_NODE_MODULES / "playwright"
+    if not package_dir.exists():
+        PLAYWRIGHT_RUNTIME_DIR.mkdir(parents=True, exist_ok=True)
+        result = subprocess.run(
+            [
+                npm_command(),
+                "install",
+                "--prefix",
+                str(PLAYWRIGHT_RUNTIME_DIR),
+                "--no-save",
+                "playwright",
+            ],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            timeout=300,
+            check=False,
+        )
+        if result.returncode != 0:
+            raise OSError(
+                (result.stderr or result.stdout or "Falha ao instalar Playwright.").strip()
+            )
+
+    env = os.environ.copy()
+    existing_node_path = env.get("NODE_PATH", "")
+    node_path_parts = [str(PLAYWRIGHT_NODE_MODULES)]
+    if existing_node_path:
+        node_path_parts.append(existing_node_path)
+    env["NODE_PATH"] = os.pathsep.join(node_path_parts)
+    return env
+
+
+def whatsapp_driver_command(command: str) -> tuple[list[str], dict[str, str]]:
+    env = ensure_playwright_runtime()
+    return [
+        node_command(),
+        str(ROOT / "scripts" / "whatsapp_web_driver.js"),
+        command,
+    ], env
+
+
 def save_whatsapp_link_state(payload: dict[str, Any]) -> dict[str, Any]:
     ensure_runtime()
     WHATSAPP_LINK_STATE_PATH.write_text(
@@ -613,16 +667,7 @@ def poll_whatsapp_web_once() -> int:
     if mode != "web" or not to:
         return 0
 
-    command = [
-        "npx.cmd" if os.name == "nt" else "npx",
-        "--yes",
-        "--package",
-        "playwright",
-        "node",
-        str(ROOT / "scripts" / "whatsapp_web_driver.js"),
-        "poll",
-    ]
-    env = os.environ.copy()
+    command, env = whatsapp_driver_command("poll")
     env["VALLEY_WHATSAPP_WEB_TO"] = to
     result = subprocess.run(command, cwd=ROOT, env=env, text=True, capture_output=True, timeout=180, check=False)
     if result.returncode != 0:
@@ -644,16 +689,7 @@ def send_whatsapp(message: str) -> bool:
         if not to:
             return False
 
-        command = [
-            "npx.cmd" if os.name == "nt" else "npx",
-            "--yes",
-            "--package",
-            "playwright",
-            "node",
-            str(ROOT / "scripts" / "whatsapp_web_driver.js"),
-            "send",
-        ]
-        env = os.environ.copy()
+        command, env = whatsapp_driver_command("send")
         env["VALLEY_WHATSAPP_WEB_TO"] = to
         env["VALLEY_WHATSAPP_WEB_MESSAGE"] = message
         result = subprocess.run(command, cwd=ROOT, env=env, text=True, capture_output=True, timeout=180, check=False)
@@ -749,27 +785,11 @@ def main() -> None:
         )
         watch(max(300, args.interval, policy_interval))
     elif args.command == "whatsapp-login":
-        command = [
-            "npx.cmd" if os.name == "nt" else "npx",
-            "--yes",
-            "--package",
-            "playwright",
-            "node",
-            str(ROOT / "scripts" / "whatsapp_web_driver.js"),
-            "login",
-        ]
-        raise SystemExit(subprocess.call(command, cwd=ROOT, env=os.environ.copy()))
+        command, env = whatsapp_driver_command("login")
+        raise SystemExit(subprocess.call(command, cwd=ROOT, env=env))
     elif args.command == "whatsapp-status":
-        command = [
-            "npx.cmd" if os.name == "nt" else "npx",
-            "--yes",
-            "--package",
-            "playwright",
-            "node",
-            str(ROOT / "scripts" / "whatsapp_web_driver.js"),
-            "status",
-        ]
-        raise SystemExit(subprocess.call(command, cwd=ROOT, env=os.environ.copy()))
+        command, env = whatsapp_driver_command("status")
+        raise SystemExit(subprocess.call(command, cwd=ROOT, env=env))
     elif args.command == "set-work-status":
         payload = save_work_status(
             activity_name=args.activity_name,

@@ -1,0 +1,80 @@
+{
+  "version": "v1",
+  "status": "safe_estimation_only",
+  "actual_codex_token_balance_available": false,
+  "actual_balance_note": "O ambiente local nao expoe API/CLI para consultar saldo real de tokens do Codex. Este arquivo usa estimativas operacionais e nunca deve fingir saldo real.",
+  "default_estimated_session_budget_tokens": 120000,
+  "reserve_tokens_before_pause": 12000,
+  "replenishment_policy": {
+    "mode": "operator_or_platform_window",
+    "default_resume_after_minutes": 60,
+    "never_create_unbounded_execution_loop": true,
+    "write_resume_order": true
+  },
+  "activity_estimates": [
+    {
+      "activity": "module_registry_validate",
+      "estimated_tokens": 2500,
+      "command": "python scripts/valley_module_automation.py validate"
+    },
+    {
+      "activity": "module_sync",
+      "estimated_tokens": 9000,
+      "command": "python scripts/valley_module_automation.py sync"
+    },
+    {
+      "activity": "module_sql_generation",
+      "estimated_tokens": 7000,
+      "command": "python scripts/valley_module_automation.py sql"
+    },
+    {
+      "activity": "admin_payload_generation",
+      "estimated_tokens": 3500,
+      "command": "python scripts/valley_module_automation.py admin"
+    },
+    {
+      "activity": "orchestrator_check",
+      "estimated_tokens": 16000,
+      "command": "python scripts/valley_db_orchestrator.py check"
+    },
+    {
+      "activity": "orchestrator_report",
+      "estimated_tokens": 8500,
+      "command": "python scripts/valley_db_orchestrator.py report"
+    },
+    {
+      "activity": "manual_pdf_generation",
+      "estimated_tokens": 4000,
+      "command": "python scripts/generate_manual_pdf.py"
+    },
+    {
+      "activity": "diff_review_and_status_message",
+      "estimated_tokens": 12000,
+      "command": "git status --short && git diff --stat"
+    }
+  ],
+  "safe_cycle_commands": [
+    "python scripts/valley_module_automation.py validate",
+    "python scripts/valley_module_automation.py sync",
+    "python scripts/valley_module_automation.py sql",
+    "python scripts/valley_module_automation.py admin",
+    "python scripts/valley_db_orchestrator.py check",
+    "python scripts/valley_db_orchestrator.py report",
+    "python scripts/generate_manual_pdf.py"
+  ],
+  "blocked_without_manual_review": [
+    "git push",
+    "git reset",
+    "compose-down",
+    "docker compose down",
+    "apply-postgres",
+    "apply-mongo",
+    "apply-compose",
+    "seed-postgres",
+    "seed-mongo",
+    "delete",
+    "drop",
+    "payment execution",
+    "secret rotation"
+  ]
+}

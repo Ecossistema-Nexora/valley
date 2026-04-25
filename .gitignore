@@ -2,6 +2,7 @@
 .codex/environments/
 tmp/runtime/
 tmp/db-deploy-runtime/
+tmp/node-playwright/
 tmp/pdfs/
 tmp/*.tgz
 tmp/vercel-release-staging/

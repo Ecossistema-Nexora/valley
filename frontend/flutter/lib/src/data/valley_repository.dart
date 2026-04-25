@@ -34,13 +34,19 @@ class ValleyRepository {
         (jsonDecode(adminText) as Map<dynamic, dynamic>)
             .cast<String, dynamic>();
 
+    final MvpManifest manifest = MvpManifest.fromJson(manifestJson);
+    final Set<String> activeModuleCodes = manifest.activeModuleCodes;
+
     return ValleyAppData(
-      manifest: MvpManifest.fromJson(manifestJson),
+      manifest: manifest,
       modules: (modulesJson['modules'] as List<dynamic>? ?? <dynamic>[])
           .map(
             (dynamic item) => ModuleRecord.fromJson(
               (item as Map<dynamic, dynamic>).cast<String, dynamic>(),
             ),
+          )
+          .where(
+            (ModuleRecord module) => activeModuleCodes.contains(module.code),
           )
           .toList(),
       release: ReleaseSummary.fromJson(

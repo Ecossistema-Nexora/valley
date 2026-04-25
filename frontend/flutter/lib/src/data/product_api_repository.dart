@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:valley_super_app/src/data/product_api_models.dart';
 
@@ -13,6 +14,7 @@ class ProductApiRepository {
 
   Future<ProductShellData> load() async {
     Object? lastError;
+    final Set<String> activeModuleIds = await _loadActiveModuleIds();
     for (final String baseUrl in _candidateBaseUrls()) {
       try {
         final http.Response response = await http
@@ -22,14 +24,21 @@ class ProductApiRepository {
           continue;
         }
         final Map<String, dynamic> json =
-            (jsonDecode(utf8.decode(response.bodyBytes)) as Map<dynamic, dynamic>)
+            (jsonDecode(utf8.decode(response.bodyBytes))
+                    as Map<dynamic, dynamic>)
                 .cast<String, dynamic>();
-        return _parseShell(baseUrl, json);
+        return _parseShell(baseUrl, json, activeModuleIds);
       } catch (error) {
         lastError = error;
       }
     }
-    throw StateError('Servidor Valley indisponivel: $lastError');
+    try {
+      return await _loadBundledShell(activeModuleIds);
+    } catch (error) {
+      throw StateError(
+        'Servidor Valley indisponivel: $lastError; fallback: $error',
+      );
+    }
   }
 
   Future<ProductActionResult> invokePath({
@@ -38,7 +47,10 @@ class ProductApiRepository {
   }) async {
     final Uri uri = Uri.parse('$baseUrl$path');
     final http.Response response = await http
-        .post(uri, headers: <String, String>{'Content-Type': 'application/json'})
+        .post(
+          uri,
+          headers: <String, String>{'Content-Type': 'application/json'},
+        )
         .timeout(const Duration(seconds: 20));
 
     final Map<String, dynamic> json =
@@ -50,7 +62,10 @@ class ProductApiRepository {
             .cast<String, dynamic>();
 
     return ProductActionResult(
-      ok: response.statusCode >= 200 && response.statusCode < 300 && status == 'ok',
+      ok:
+          response.statusCode >= 200 &&
+          response.statusCode < 300 &&
+          status == 'ok',
       status: status,
       action: json['action'] as String? ?? '',
       message: payload['message'] as String? ?? status,
@@ -58,40 +73,116 @@ class ProductApiRepository {
     );
   }
 
-  ProductShellData _parseShell(String baseUrl, Map<String, dynamic> json) {
+  ProductShellData _parseShell(
+    String baseUrl,
+    Map<String, dynamic> json,
+    Set<String> activeModuleIds,
+  ) {
     final Map<String, dynamic> publicRuntime =
-        (json['public_runtime'] as Map<dynamic, dynamic>? ?? <dynamic, dynamic>{})
+        (json['public_runtime'] as Map<dynamic, dynamic>? ??
+                <dynamic, dynamic>{})
             .cast<String, dynamic>();
+    final List<ProductModule> modules =
+        (json['modules'] as List<dynamic>? ?? <dynamic>[])
+            .map(
+              (dynamic item) => ProductModule.fromJson(
+                (item as Map<dynamic, dynamic>).cast<String, dynamic>(),
+              ),
+            )
+            .where(
+              (ProductModule module) => activeModuleIds.contains(module.id),
+            )
+            .toList();
+    final List<ProductItem> items =
+        (json['items'] as List<dynamic>? ?? <dynamic>[])
+            .map(
+              (dynamic item) => ProductItem.fromJson(
+                (item as Map<dynamic, dynamic>).cast<String, dynamic>(),
+              ),
+            )
+            .where(
+              (ProductItem item) => activeModuleIds.contains(item.moduleId),
+            )
+            .toList();
+    final Map<String, dynamic> filteredRawData = Map<String, dynamic>.from(
+      json,
+    );
+    filteredRawData['modules'] = modules
+        .map(
+          (ProductModule module) => <String, String>{
+            'id': module.id,
+            'label': module.label,
+            'subtitle': module.subtitle,
+            'badge': module.badge,
+          },
+        )
+        .toList();
+    filteredRawData['items'] = items
+        .map((ProductItem item) => item.raw)
+        .toList();
+    filteredRawData['module_screens'] =
+        (json['module_screens'] as List<dynamic>? ?? <dynamic>[]).where((
+          dynamic item,
+        ) {
+          final Map<String, dynamic> value = (item as Map<dynamic, dynamic>)
+              .cast<String, dynamic>();
+          return activeModuleIds.contains(value['module_id'] as String? ?? '');
+        }).toList();
 
     return ProductShellData(
       baseUrl: baseUrl,
       title: json['title'] as String? ?? 'Valley',
       subtitle: json['subtitle'] as String? ?? '',
       generatedAtUtc: json['generated_at_utc'] as String? ?? '',
-      modules: (json['modules'] as List<dynamic>? ?? <dynamic>[])
-          .map(
-            (dynamic item) => ProductModule.fromJson(
-              (item as Map<dynamic, dynamic>).cast<String, dynamic>(),
-            ),
-          )
-          .toList(),
+      modules: modules,
       summary: ProductSummary.fromJson(
         (json['summary'] as Map<dynamic, dynamic>? ?? <dynamic, dynamic>{})
             .cast<String, dynamic>(),
       ),
-      items: (json['items'] as List<dynamic>? ?? <dynamic>[])
-          .map(
-            (dynamic item) => ProductItem.fromJson(
-              (item as Map<dynamic, dynamic>).cast<String, dynamic>(),
-            ),
-          )
-          .toList(),
+      items: items,
       publicUrl: publicRuntime['public_url'] as String? ?? '',
-      rawData: Map<String, dynamic>.from(json),
+      rawData: filteredRawData,
+    );
+  }
+
+  Future<Set<String>> _loadActiveModuleIds() async {
+    final String manifestText = await rootBundle.loadString(
+      'assets/data/valley_mvp_manifest.v1.json',
+    );
+    final Map<String, dynamic> manifest =
+        (jsonDecode(manifestText) as Map<dynamic, dynamic>)
+            .cast<String, dynamic>();
+    final Set<String> excluded =
+        (manifest['excluded_modules'] as List<dynamic>? ?? <dynamic>[])
+            .cast<String>()
+            .toSet();
+    return (manifest['included_modules'] as List<dynamic>? ?? <dynamic>[])
+        .cast<String>()
+        .where((String code) => !excluded.contains(code))
+        .toSet();
+  }
+
+  Future<ProductShellData> _loadBundledShell(
+    Set<String> activeModuleIds,
+  ) async {
+    final String catalogText = await rootBundle.loadString(
+      'assets/data/valley_product_catalog.json',
+    );
+    final Map<String, dynamic> catalog =
+        (jsonDecode(catalogText) as Map<dynamic, dynamic>)
+            .cast<String, dynamic>();
+    return _parseShell(
+      'asset://valley-product-catalog',
+      catalog,
+      activeModuleIds,
     );
   }
 
   Iterable<String> _candidateBaseUrls() sync* {
+    final String currentOrigin = Uri.base.origin;
+    if (currentOrigin.startsWith('http')) {
+      yield _normalizeBaseUrl(currentOrigin);
+    }
     if (_envBaseUrl.trim().isNotEmpty) {
       yield _normalizeBaseUrl(_envBaseUrl);
     }
@@ -100,5 +191,6 @@ class ProductApiRepository {
     yield 'http://localhost:8080';
   }
 
-  String _normalizeBaseUrl(String value) => value.trim().replaceAll(RegExp(r'/$'), '');
+  String _normalizeBaseUrl(String value) =>
+      value.trim().replaceAll(RegExp(r'/$'), '');
 }

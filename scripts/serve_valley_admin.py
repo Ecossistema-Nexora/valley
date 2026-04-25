@@ -26,6 +26,8 @@ WORK_STATUS_PATH = RUNTIME_DIR / "bridge-work-status.json"
 PUBLIC_RUNTIME_PATH = RUNTIME_DIR / "valley-admin-public-runtime.json"
 PRODUCT_CATALOG_PATH = ROOT / "frontend" / "flutter" / "assets" / "data" / "valley_product_catalog.json"
 PRODUCT_INTERACTIONS_PATH = RUNTIME_DIR / "valley-product-interactions.jsonl"
+PRODUCT_MVP_MODULES = {"STOCK", "MARKETPLACE", "CHAT"}
+PRODUCT_LIST_LIMIT = 80
 
 
 def utc_now_iso() -> str:
@@ -237,7 +239,64 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             payload["public_runtime"] = self._public_runtime_payload()
             payload["status"] = "ok"
             payload["service"] = "valley-product"
+            payload = self._compact_product_shell_payload(payload)
         return payload
+
+    def _compact_product_shell_payload(self, payload: dict[str, Any]) -> dict[str, Any]:
+        """Mantem a API leve e alinhada ao MVP para mobile e tunel remoto."""
+        active_modules = PRODUCT_MVP_MODULES
+        compact = dict(payload)
+
+        modules = compact.get("modules", [])
+        if isinstance(modules, list):
+            compact["modules"] = [
+                module
+                for module in modules
+                if isinstance(module, dict) and module.get("id") in active_modules
+            ]
+
+        module_screens = compact.get("module_screens", [])
+        if isinstance(module_screens, list):
+            compact["module_screens"] = [
+                screen
+                for screen in module_screens
+                if isinstance(screen, dict) and screen.get("module_id") in active_modules
+            ]
+
+        items = compact.get("items", [])
+        used_profile_ids: set[str] = set()
+        if isinstance(items, list):
+            filtered_items = [
+                item
+                for item in items
+                if isinstance(item, dict) and item.get("module_id") in active_modules
+            ][:PRODUCT_LIST_LIMIT]
+            compact["items"] = filtered_items
+            used_profile_ids = {
+                str(item.get("profile_id"))
+                for item in filtered_items
+                if item.get("profile_id")
+            }
+
+        profiles = compact.get("profiles", [])
+        if isinstance(profiles, list):
+            compact["profiles"] = [
+                profile
+                for profile in profiles
+                if isinstance(profile, dict)
+                and (
+                    not used_profile_ids
+                    or str(profile.get("id")) in used_profile_ids
+                    or str(profile.get("user_id")) in used_profile_ids
+                )
+            ][:PRODUCT_LIST_LIMIT]
+
+        for key in ("feed_entries", "conversations", "statement_entries"):
+            entries = compact.get(key, [])
+            if isinstance(entries, list):
+                compact[key] = entries[:40]
+
+        return compact
 
     def _product_interest_payload(self, query: dict[str, list[str]]) -> dict[str, Any]:
         item_id = (query.get("item_id") or [""])[0]

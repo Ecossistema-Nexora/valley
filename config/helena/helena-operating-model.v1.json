@@ -287,6 +287,48 @@
       "agenda.memory.linked"
     ]
   },
+  "economic_guardrails": {
+    "source_spec": "docs/specs/valley-economic-flight-plan-v47.md",
+    "rollout_mode": "waves_before_full_ecosystem",
+    "first_wave_modules": [
+      "PAY",
+      "PLUG",
+      "BUSINESS",
+      "DOCS",
+      "MARKETPLACE"
+    ],
+    "reward_policy": {
+      "pepitas_from_valley_balance_allowed": false,
+      "allowed_funding_sources": [
+        "merchant_campaign_budget",
+        "ADS_campaign_budget",
+        "affiliate_commission_budget",
+        "documented_promotional_budget"
+      ],
+      "required_trace_fields": [
+        "funding_source",
+        "sponsor_user_id",
+        "campaign_id",
+        "budget_authorization_ref"
+      ]
+    },
+    "ai_cost_policy": {
+      "unlimited_free_chat_allowed": false,
+      "heavy_tasks_require_async_queue": true,
+      "plan_limits_required": true,
+      "degrade_to_light_response_when_limit_reached": true
+    },
+    "mobility_delivery_policy": {
+      "economic_floor_required": true,
+      "block_below_floor": true,
+      "applies_to_modules": [
+        "FOOD",
+        "DELIVERY",
+        "MOBILITY"
+      ],
+      "review_required_when_subsidy_detected": true
+    }
+  },
   "agenda_contract": {
     "required_behavior": [
       "agenda_items e a fila canonica de follow-up e execucao",

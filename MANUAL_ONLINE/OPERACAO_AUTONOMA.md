@@ -138,6 +138,28 @@ Ideias inviaveis devem ser descartadas quando:
 - tentam mover log bruto de alto volume para PostgreSQL;
 - fazem deploy, commit, push ou delete automatico sem trilha segura.
 
+## Orcamento De Tokens Codex
+
+O workspace nao expoe uma API local confiavel para consultar o saldo real de tokens do Codex. Por isso, a operacao autonoma deve registrar somente estimativas e nunca declarar saldo real como fato.
+
+O modo persistente de trabalho fica em `config/autonomy/senior_plus_autonomy_policy.json`: Codex atua como IA desenvolvedora senior plus e executa proximos passos naturais sem pedir confirmacoes intermediarias quando a acao estiver dentro do ciclo seguro.
+
+O controle canonico fica em `config/autonomy/codex_token_budget_policy.json`.
+
+O script `scripts/valley_codex_token_budget.py` gera:
+
+- `tmp/runtime/codex-token-budget-report.json`
+- `tmp/runtime/codex-autonomous-resume-order.md`
+- uma entrada em `ordem_universal.md` para retomada segura
+
+Esse ciclo pode estimar consumo, reserva e horario provavel de retomada. Ele nao deve criar loop infinito irrestrito, nem acionar deploy, banco real, pagamento, `git push`, delecao, reset ou rotacao de segredo sem revisao manual.
+
+O executor de retomada segura fica em `scripts/run_valley_safe_autonomous_cycle.ps1`.
+
+O agendador de retomada segura fica em `scripts/schedule_valley_safe_resume.ps1`.
+
+Quando houver previsao de recarga de tokens, a esteira deve agendar uma nova rodada segura com `schtasks` quando disponivel, ou fallback no Startup do Windows quando a tarefa agendada nao puder ser criada. A retomada automatica executa apenas validate, sync, sql, admin, check, report, PDF e orcamento de tokens.
+
 ## Estado Atual
 
 Em `2026-04-24`, a esteira segura confirmou `329` checagens com `4` pendencias reais de ambiente.

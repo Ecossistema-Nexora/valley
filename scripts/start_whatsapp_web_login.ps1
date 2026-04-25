@@ -5,4 +5,4 @@ $ErrorActionPreference = 'Stop'
 $root = Resolve-Path (Join-Path $PSScriptRoot '..')
 Set-Location -LiteralPath $root
 
-npx --yes --package playwright node scripts/whatsapp_web_driver.js login
+python scripts/valley_communication_bridge.py whatsapp-login

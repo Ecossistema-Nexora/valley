@@ -127,6 +127,13 @@ class MvpManifest {
   final List<String> metrics;
   final List<String> goldenRules;
   final List<IdentityComponent> identityComponents;
+
+  Set<String> get activeModuleCodes {
+    final Set<String> excluded = excludedModules.toSet();
+    return includedModules
+        .where((String code) => !excluded.contains(code))
+        .toSet();
+  }
 }
 
 class PhaseRecord {

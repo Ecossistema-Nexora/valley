@@ -1,0 +1,52 @@
+{
+  "version": "v1",
+  "mode": "senior_plus_autonomous_safe_execution",
+  "operator_instruction": "Codex atua como IA desenvolvedora senior plus para executar proximos passos naturais sem pedir confirmacoes intermediarias.",
+  "persistence_scope": "Este projeto Valley e atividades futuras neste workspace.",
+  "default_behavior": {
+    "ask_before_safe_next_step": false,
+    "continue_until_safe_cycle_done": true,
+    "prefer_existing_repo_patterns": true,
+    "keep_remote_access_and_public_runtime_alive": true,
+    "always_update_token_budget_estimate": true,
+    "always_write_resume_order": true,
+    "schedule_next_safe_resume": true
+  },
+  "allowed_without_confirmation": [
+    "documentacao",
+    "geracao de artefatos controlados",
+    "validacoes estaticas",
+    "relatorios",
+    "builds locais",
+    "envio de status",
+    "manutencao de watchdog seguro",
+    "agendamento de ciclo seguro"
+  ],
+  "blocked_without_manual_review": [
+    "git push",
+    "git reset",
+    "git checkout para reverter arquivo",
+    "delete ou limpeza recursiva",
+    "compose-down",
+    "docker compose down",
+    "apply-postgres",
+    "apply-mongo",
+    "apply-compose",
+    "seed-postgres",
+    "seed-mongo",
+    "deploy externo",
+    "pagamento real",
+    "rotacao de segredo",
+    "exposicao de token, senha ou chave"
+  ],
+  "natural_safe_cycle": [
+    "python scripts/valley_module_automation.py validate",
+    "python scripts/valley_module_automation.py sync",
+    "python scripts/valley_module_automation.py sql",
+    "python scripts/valley_module_automation.py admin",
+    "python scripts/valley_db_orchestrator.py check",
+    "python scripts/valley_db_orchestrator.py report",
+    "python scripts/generate_manual_pdf.py",
+    "python scripts/valley_codex_token_budget.py"
+  ]
+}
