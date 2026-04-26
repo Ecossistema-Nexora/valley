@@ -233,6 +233,13 @@
       "purpose_ptbr": "Materializa o blueprint de producao do Dropshipping Inteligente no MVP: providers, fontes de produto, snapshots de preco, decisoes append-only, pedidos ao fornecedor e fila operacional.",
       "requires": ["008", "010", "019", "029", "031"],
       "provides": ["dropshipping_provider_configs", "dropshipping_product_sources", "dropshipping_market_price_snapshots", "dropshipping_pricing_decisions", "dropshipping_supplier_orders", "dropshipping_jobs", "v_stock_dropshipping_production_ops", "v_stock_dropshipping_provider_health"]
+    },
+    {
+      "id": "034",
+      "path": "database/postgres/034_v47_foundation_futureproof_enrichment.sql",
+      "purpose_ptbr": "Enriquece aditivamente o core relacional com colunas futuras de identidade, risco, operacao, wallet, pedidos, transacoes e equity para reduzir retrabalho estrutural.",
+      "requires": ["001", "002", "033"],
+      "provides": ["column:users.metadata_json", "column:pj_profiles.metadata_json", "column:rider_profiles.metadata_json", "column:wallets.metadata_json", "column:led_cards.metadata_json", "column:orders.metadata_json", "column:transactions.processor_transaction_id", "column:equity_ledger.metadata_json"]
     }
   ],
   "mongodb": [
@@ -263,6 +270,13 @@
       "purpose_ptbr": "Fecha a fronteira NoSQL dos modulos planejados com colecoes para News & Podcast, Fitness, Gaming, Home, Space e a camada volumosa de Tourism, Bio e Energy.",
       "requires": ["mongo-001", "mongo-002", "mongo-003"],
       "provides": ["news_content_items", "fitness_activity_sessions", "gaming_player_states", "home_automation_events", "space_anchor_maps", "tourism_experience_feeds", "bio_impact_logs", "energy_meter_streams"]
+    },
+    {
+      "id": "mongo-005",
+      "path": "database/mongodb/005_v47_brain_futureproof_enrichment.mongo.js",
+      "purpose_ptbr": "Enriquece validators e indices das colecoes centrais de IA, social, influencer e telemetria com campos futuros de moderacao, compliance, monetizacao e operacao realtime.",
+      "requires": ["mongo-001", "mongo-002", "mongo-003", "mongo-004"],
+      "provides": ["validator:ai_memory:v2", "validator:social_videos:v2", "validator:influencer_metrics:v2", "validator:telemetry_logs:v2"]
     }
   ]
 }

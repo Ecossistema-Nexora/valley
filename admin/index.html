@@ -11,6 +11,38 @@
   <body>
     <a class="skip-link" href="#mainContent">Ir para o cockpit</a>
     <div class="shell">
+      <aside class="control-dock left-dock" aria-label="Navegacao principal">
+        <div class="dock-card">
+          <p class="panel-kicker">Menu</p>
+          <h2>Admin</h2>
+          <nav class="dock-nav">
+            <a class="dock-link" href="#homeDashboard">Home</a>
+            <a class="dock-link" href="#financialDashboard">Financeiro</a>
+            <a class="dock-link" href="#performanceDashboard">Desempenho</a>
+            <a class="dock-link" href="#modulesWorkspace">Modulos</a>
+            <a class="dock-link" href="#stockIntegrations">Stock APIs</a>
+            <a class="dock-link" href="#settingsSection">Configuracoes</a>
+          </nav>
+        </div>
+      </aside>
+
+      <aside class="control-dock right-dock" aria-label="Acessos rapidos">
+        <div class="dock-card">
+          <p class="panel-kicker">Acesso</p>
+          <h2>Links</h2>
+          <div id="adminAccessLinks" class="dock-stack"></div>
+        </div>
+        <div class="dock-card">
+          <p class="panel-kicker">Atalhos</p>
+          <h2>Dashboards</h2>
+          <div class="dock-stack">
+            <a class="dock-link" href="#publicRuntimePanel">Runtime publico</a>
+            <a class="dock-link" href="#stockIntegrations">Integracoes STOCK</a>
+            <a class="dock-link" href="#detailTitle">Modulo selecionado</a>
+          </div>
+        </div>
+      </aside>
+
       <header class="hero">
         <div class="hero-copy">
           <div class="brand-lockup" aria-label="Valley">
@@ -24,7 +56,7 @@
           <h1 id="heroTitle">Cockpit de producao para MVP e 47 modulos</h1>
           <p class="subcopy">
             Supervisao executiva, trilha tecnica e leitura operacional em uma unica superficie. O painel cruza MVP,
-            registry, contracts, roadmap, migrations, status de implantacao e exposicao publica para teste externo.
+            registry, contracts, roadmap, migrations, status de implantacao e exposicao publica para acesso externo.
           </p>
           <div id="heroTags" class="hero-tags"></div>
         </div>
@@ -58,7 +90,7 @@
       </header>
 
       <main id="mainContent" class="app-main">
-      <section class="analytics-grid" aria-label="Visao geral do release">
+      <section id="homeDashboard" class="analytics-grid" aria-label="Visao geral do release">
         <section class="glass-panel">
           <div class="section-head">
             <div>
@@ -117,7 +149,55 @@
         </section>
       </section>
 
-      <section class="glass-panel marketplace-api-section" aria-label="Integracoes de marketplaces">
+      <section id="financialDashboard" class="business-grid" aria-label="Painel financeiro e comercial">
+        <section class="glass-panel">
+          <div class="section-head">
+            <div>
+              <p class="panel-kicker">Revenue board</p>
+              <h2>Resultados financeiros</h2>
+            </div>
+            <p class="section-copy">Leitura operacional derivada do catalogo carregado no ambiente.</p>
+          </div>
+          <div id="businessSummaryBoard" class="summary-grid"></div>
+        </section>
+
+        <section class="glass-panel">
+          <div class="section-head">
+            <div>
+              <p class="panel-kicker">Commercial focus</p>
+              <h2>Destaques de vendas</h2>
+            </div>
+            <p class="section-copy">Maior segmento, maior valor de catalogo e itens com maior margem potencial.</p>
+          </div>
+          <div id="businessHighlights" class="insight-list"></div>
+        </section>
+      </section>
+
+      <section id="performanceDashboard" class="business-grid" aria-label="Desempenho por modulo e stock">
+        <section class="glass-panel">
+          <div class="section-head">
+            <div>
+              <p class="panel-kicker">Module scoreboard</p>
+              <h2>Resultados por modulo</h2>
+            </div>
+            <p class="section-copy">Volume de itens, valor potencial, estoque e cobertura comercial.</p>
+          </div>
+          <div id="modulePerformanceBoard" class="performance-board"></div>
+        </section>
+
+        <section class="glass-panel">
+          <div class="section-head">
+            <div>
+              <p class="panel-kicker">Stock intelligence</p>
+              <h2>Radar do modulo STOCK</h2>
+            </div>
+            <p class="section-copy">Produto lider, segmentos mais fortes e margem potencial do inventario.</p>
+          </div>
+          <div id="stockInsightsBoard" class="insight-list"></div>
+        </section>
+      </section>
+
+      <section id="settingsSection" class="glass-panel marketplace-api-section" aria-label="Integracoes de marketplaces">
         <div class="section-head">
           <div>
             <p class="panel-kicker">Commerce APIs</p>
@@ -131,6 +211,17 @@
           <button id="copyMarketplaceApis" class="secondary-button" type="button">Copiar JSON</button>
         </div>
         <p class="microcopy">Use referencia de segredo ou vault no campo Secret Ref. Consultas externas do dropshipping devem usar APIs oficiais; scraping fica como fallback controlado e IA externa fica bloqueada por padrao.</p>
+      </section>
+
+      <section id="stockIntegrations" class="glass-panel stock-guides-section" aria-label="Playbooks de integracao do modulo stock">
+        <div class="section-head">
+          <div>
+            <p class="panel-kicker">Stock integration desk</p>
+            <h2>Passo a passo por fornecedor</h2>
+          </div>
+          <p class="section-copy">Runbooks de integracao detalhados para ativar APIs oficiais de dropshipping sem improviso.</p>
+        </div>
+        <div id="stockProviderGuides" class="provider-guide-grid"></div>
       </section>
 
       <section class="intelligence-grid" aria-label="Matrizes operacionais">
@@ -176,7 +267,7 @@
         <div id="domainBoard" class="domain-board"></div>
       </section>
 
-      <section class="workspace" aria-label="Cockpit operacional">
+      <section id="modulesWorkspace" class="workspace" aria-label="Cockpit operacional">
         <aside class="rail glass-panel" aria-label="Filtros e operacao">
           <div class="rail-block">
             <label class="field">
@@ -213,7 +304,7 @@
           <div class="rail-block">
             <div class="section-head tight">
               <div>
-                <p class="panel-kicker">External test</p>
+                <p class="panel-kicker">External access</p>
                 <h2>Infra publica</h2>
               </div>
             </div>

@@ -138,7 +138,70 @@ pre {
   z-index: 1;
   max-width: 1580px;
   margin: 0 auto;
-  padding: 28px;
+  padding: 28px 126px;
+}
+
+.control-dock {
+  position: fixed;
+  top: 28px;
+  z-index: 20;
+  width: 112px;
+  display: grid;
+  gap: 12px;
+}
+
+.left-dock {
+  left: 12px;
+}
+
+.right-dock {
+  right: 12px;
+}
+
+.dock-card {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(7, 5, 31, 0.76);
+  color: #f6f8f5;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(14px);
+}
+
+.dock-card h2 {
+  font-size: 16px;
+  line-height: 1.1;
+}
+
+.dock-stack,
+.dock-nav {
+  display: grid;
+  gap: 8px;
+}
+
+.dock-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 10px 8px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  color: #f6f8f5;
+  text-decoration: none;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.dock-link:hover,
+.dock-link:focus-visible {
+  transform: translateY(-1px);
+  background: rgba(32, 200, 243, 0.14);
+  border-color: rgba(32, 200, 243, 0.32);
 }
 
 .glass-panel {
@@ -434,6 +497,125 @@ pre {
   grid-template-columns: minmax(0, 1.45fr) minmax(320px, 0.9fr);
   gap: 20px;
   margin-bottom: 20px;
+}
+
+.business-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.95fr);
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.business-grid > .glass-panel,
+.stock-guides-section {
+  padding: 22px;
+}
+
+.insight-list,
+.performance-board,
+.provider-guide-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.insight-card,
+.module-performance-card,
+.provider-guide-card,
+.access-card {
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--line);
+  background: var(--surface-strong);
+}
+
+.insight-card,
+.provider-guide-card,
+.access-card {
+  padding: 16px;
+}
+
+.insight-card {
+  display: grid;
+  gap: 10px;
+}
+
+.insight-card strong {
+  font-size: 18px;
+  line-height: 1.2;
+}
+
+.performance-board {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.module-performance-card {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+}
+
+.module-performance-card h3,
+.provider-guide-card h3 {
+  font-size: 16px;
+  line-height: 1.25;
+}
+
+.module-performance-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.micro-stat {
+  display: grid;
+  gap: 4px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  background: rgba(21, 39, 31, 0.04);
+  border: 1px solid var(--line);
+}
+
+.micro-stat strong {
+  font-size: 16px;
+  line-height: 1.15;
+}
+
+.stock-guides-section {
+  margin-bottom: 20px;
+}
+
+.provider-guide-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.provider-guide-card {
+  display: grid;
+  gap: 12px;
+}
+
+.provider-guide-list {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--ink-soft);
+  line-height: 1.55;
+}
+
+.provider-guide-list li + li {
+  margin-top: 6px;
+}
+
+.provider-guide-card .pill-row {
+  gap: 8px;
+}
+
+.access-card {
+  display: grid;
+  gap: 8px;
+}
+
+.access-card code {
+  display: block;
+  overflow-wrap: anywhere;
+  font: 12px/1.5 Consolas, "Courier New", monospace;
 }
 
 .analytics-grid > .glass-panel,
@@ -1219,8 +1401,26 @@ kbd {
 }
 
 @media (max-width: 1320px) {
+  .shell {
+    padding-inline: 28px;
+  }
+
+  .control-dock {
+    position: static;
+    width: auto;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-bottom: 16px;
+  }
+
+  .left-dock,
+  .right-dock {
+    left: auto;
+    right: auto;
+  }
+
   .hero,
   .analytics-grid,
+  .business-grid,
   .executive-grid,
   .workspace,
   .main-panel,
@@ -1233,7 +1433,9 @@ kbd {
   }
 
   .metrics,
-  .domain-board {
+  .domain-board,
+  .provider-guide-grid,
+  .performance-board {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -1260,7 +1462,10 @@ kbd {
   .external-grid,
   .integration-grid,
   .integration-form-grid,
-  .integration-toggle-group {
+  .integration-toggle-group,
+  .provider-guide-grid,
+  .performance-board,
+  .module-performance-grid {
     grid-template-columns: 1fr;
   }
 

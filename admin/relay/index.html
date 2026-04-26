@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Valley Relay</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <header class="topbar">
+        <div class="brand-block">
+          <p class="eyebrow">Valley Remote App</p>
+          <h1>Relay</h1>
+          <p class="subtitle">
+            Console leve para validar runtime externo, bridge Telegram e trilha
+            operacional do produto.
+          </p>
+        </div>
+        <div class="topbar-actions">
+          <button id="refreshButton" class="action-button primary" type="button">
+            Atualizar runtime
+          </button>
+          <button id="copyButton" class="action-button" type="button">
+            Copiar URL externa
+          </button>
+        </div>
+      </header>
+
+      <main class="layout">
+        <section class="hero-band">
+          <article class="hero-panel">
+            <div class="hero-copy">
+              <p class="hero-label">Runtime externo</p>
+              <h2 id="publicUrlLabel">Aguardando publicacao</h2>
+              <p id="runtimeSummary" class="hero-text">
+                O app consulta o host local e consolida o estado do tunel em
+                tempo real.
+              </p>
+            </div>
+            <div class="hero-stats">
+              <div class="stat-tile">
+                <span class="stat-label">Provider</span>
+                <strong id="providerLabel">desconhecido</strong>
+              </div>
+              <div class="stat-tile">
+                <span class="stat-label">Tunnel</span>
+                <strong id="temporaryLabel">sem leitura</strong>
+              </div>
+              <div class="stat-tile">
+                <span class="stat-label">Telegram</span>
+                <strong id="telegramLabel">sem leitura</strong>
+              </div>
+            </div>
+          </article>
+        </section>
+
+        <section class="grid">
+          <article class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="panel-label">Checks ativos</p>
+                <h3>Saude do host</h3>
+              </div>
+              <button id="runChecksButton" class="action-button compact" type="button">
+                Rodar checks
+              </button>
+            </div>
+            <div id="checksList" class="check-list"></div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="panel-label">Bridge</p>
+                <h3>Status operacional</h3>
+              </div>
+              <button id="pulseButton" class="action-button compact" type="button">
+                Pulse Telegram
+              </button>
+            </div>
+            <div id="bridgeStatus" class="stack-list"></div>
+          </article>
+        </section>
+
+        <section class="grid lower">
+          <article class="panel wide">
+            <div class="panel-head">
+              <div>
+                <p class="panel-label">Modulos ativos</p>
+                <h3>Foco de teste</h3>
+              </div>
+              <div class="segmented" id="moduleFilter"></div>
+            </div>
+            <div id="moduleCards" class="module-grid"></div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="panel-label">Log local</p>
+                <h3>Ultimas acoes</h3>
+              </div>
+            </div>
+            <div id="eventLog" class="event-log"></div>
+          </article>
+        </section>
+      </main>
+    </div>
+
+    <template id="checkItemTemplate">
+      <article class="check-item">
+        <div>
+          <p class="check-name"></p>
+          <p class="check-detail"></p>
+        </div>
+        <span class="pill"></span>
+      </article>
+    </template>
+
+    <template id="moduleCardTemplate">
+      <article class="module-card">
+        <div class="module-meta">
+          <span class="module-badge"></span>
+          <span class="module-id"></span>
+        </div>
+        <h4 class="module-title"></h4>
+        <p class="module-text"></p>
+        <div class="module-footer">
+          <span class="module-domain"></span>
+          <button class="action-button compact module-action" type="button">
+            Registrar teste
+          </button>
+        </div>
+      </article>
+    </template>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

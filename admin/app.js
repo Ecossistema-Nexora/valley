@@ -24,6 +24,11 @@
     dateStyle: "short",
     timeStyle: "short",
   });
+  const BRL_FORMATTER = new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+    maximumFractionDigits: 2,
+  });
 
   const TIER_ORDER = {
     foundation: 0,
@@ -49,8 +54,85 @@
     { key: "cjdropshipping", label: "CJDropshipping", baseUrl: "https://developers.cjdropshipping.com", siteCode: "GLOBAL" },
     { key: "shopee", label: "Shopee", baseUrl: "https://partner.shopeemobile.com", siteCode: "BR" },
   ];
+  const STOCK_PROVIDER_GUIDES = {
+    mercado_livre: {
+      auth: "OAuth2 com app Mercado Livre e seller autorizado.",
+      steps: [
+        "Criar app no Mercado Livre Developers e registrar redirect URI do admin.",
+        "Salvar Client ID, Secret Ref e seller ID no cockpit em ambiente correto.",
+        "Autorizar a conta da loja, persistir access token e refresh token no vault.",
+        "Configurar webhooks de orders, items e shipments apontando para a URL publica do Valley.",
+        "Executar primeira importacao de catalogo e validar estoque, preco e pedidos em sandbox antes de producao.",
+      ],
+    },
+    amazon: {
+      auth: "Selling Partner API com LWA + IAM role assinada.",
+      steps: [
+        "Registrar app SP-API, vincular IAM role e gerar credenciais LWA.",
+        "Preencher marketplace BR, seller ID e referencias de segredo no cockpit.",
+        "Cadastrar endpoint de notificacao e mapear scopes de catalogo, pricing, orders e listings.",
+        "Rodar sync inicial de listings e estoque, depois habilitar pedidos e webhooks.",
+        "Validar reconciliação de inventario por SKU antes de ativar producao.",
+      ],
+    },
+    aliexpress: {
+      auth: "App Key + Secret com autorizacao do seller no portal AliExpress Open Platform.",
+      steps: [
+        "Criar aplicacao na Open Platform e registrar callback de autorizacao.",
+        "Salvar App Key, Secret Ref e access token no cofre do ambiente.",
+        "Mapear catalogo, variacoes, estoque e rotas de order fulfillment.",
+        "Definir janela de sync de preco e estoque para evitar rate limit.",
+        "Executar homologacao com uma loja piloto antes de publicar toda a malha STOCK.",
+      ],
+    },
+    alibaba: {
+      auth: "OpenAPI com app enterprise e chaves assinadas.",
+      steps: [
+        "Provisionar app enterprise no Alibaba OpenAPI e liberar produtos alvo.",
+        "Cadastrar chaves e parametros de assinatura no admin.",
+        "Conectar importacao de catalogo e regras de margem por familia de produto.",
+        "Habilitar apenas leitura no primeiro ciclo e comparar SKUs com base local.",
+        "Liberar pedidos e confirmacoes apos bater consistencia de estoque e SLA.",
+      ],
+    },
+    magalu: {
+      auth: "OAuth2 / credenciais Magalu Marketplace com seller homologado.",
+      steps: [
+        "Homologar a conta seller e solicitar credenciais de API ao Magalu.",
+        "Salvar client, secret, seller ID e webhook secret no cockpit.",
+        "Configurar sincronizacao de catalogo, preco e saldo por SKU.",
+        "Mapear fluxo de pedido e cancelamento conforme regras do parceiro.",
+        "Virar ambiente para producao apenas depois de checklist fiscal e logistico fechado.",
+      ],
+    },
+    cjdropshipping: {
+      auth: "Token gerenciado da conta CJ vinculado ao workspace dropshipping.",
+      steps: [
+        "Gerar token na conta CJ e registrar ref segura no admin.",
+        "Importar catalogo inicial e normalizar categorias, shipping profile e origem.",
+        "Configurar sincronizacao de custo, disponibilidade e tracking.",
+        "Aplicar margem minima e bloqueios de produto antes da exposicao na vitrine.",
+        "Validar pedido de ponta a ponta com tracking e webhook de status antes da escala.",
+      ],
+    },
+    shopee: {
+      auth: "Partner API com partner ID, partner key e loja autorizada.",
+      steps: [
+        "Criar app partner, registrar redirect URI e assinar requisicoes com partner key.",
+        "Salvar partner ID, secret ref, tokens e store ID no cockpit.",
+        "Configurar scopes de item, estoque, orders e logistics.",
+        "Executar leitura inicial do catalogo e validar reconciliacao por variacao.",
+        "Habilitar webhooks e producao depois de testar pedido e atualizacao de status.",
+      ],
+    },
+  };
 
   const allModules = data.modules.slice().sort((left, right) => left.number - right.number);
+  const catalogState = {
+    loading: true,
+    summary: null,
+    error: "",
+  };
 
   const state = {
     search: "",
@@ -76,6 +158,12 @@
     dataHomeMatrix: document.getElementById("dataHomeMatrix"),
     domainBoard: document.getElementById("domainBoard"),
     releaseQueue: document.getElementById("releaseQueue"),
+    businessSummaryBoard: document.getElementById("businessSummaryBoard"),
+    businessHighlights: document.getElementById("businessHighlights"),
+    modulePerformanceBoard: document.getElementById("modulePerformanceBoard"),
+    stockInsightsBoard: document.getElementById("stockInsightsBoard"),
+    stockProviderGuides: document.getElementById("stockProviderGuides"),
+    adminAccessLinks: document.getElementById("adminAccessLinks"),
     moduleCount: document.getElementById("moduleCount"),
     moduleSelectionMeta: document.getElementById("moduleSelectionMeta"),
     moduleList: document.getElementById("moduleList"),
@@ -284,6 +372,10 @@
 
   function formatPercentFromHundred(value) {
     return formatPercent((Number(value) || 0) / 100);
+  }
+
+  function formatMoney(value) {
+    return BRL_FORMATTER.format(Number(value) || 0);
   }
 
   function formatTimestamp(value) {
@@ -526,6 +618,275 @@
         <div class="progress-fill" style="width: ${Math.max(0, Math.min(progress, 1)) * 100}%"></div>
       </div>
     `;
+  }
+
+  function catalogModules() {
+    return Array.isArray(catalogState.summary?.modules) ? catalogState.summary.modules : [];
+  }
+
+  function catalogModuleSnapshot(moduleCode) {
+    return catalogModules().find((entry) => entry.module_id === moduleCode) || null;
+  }
+
+  function accessCardMarkup(label, url, tone) {
+    return `
+      <article class="access-card">
+        <span class="small-label">${escapeHtml(label)}</span>
+        <code>${escapeHtml(url || "indisponivel")}</code>
+        <div class="link-row">
+          ${url ? linkMarkup("Abrir", url) : `<span class="pill ${tone || ""}">Aguardando</span>`}
+        </div>
+      </article>
+    `;
+  }
+
+  function insightCardMarkup(label, value, detail, pills) {
+    return `
+      <article class="insight-card">
+        <span class="small-label">${escapeHtml(label)}</span>
+        <strong>${escapeHtml(value)}</strong>
+        <p class="muted-copy">${escapeHtml(detail)}</p>
+        <div class="pill-row">${pills || ""}</div>
+      </article>
+    `;
+  }
+
+  function microStatMarkup(label, value) {
+    return `
+      <div class="micro-stat">
+        <span class="small-label">${escapeHtml(label)}</span>
+        <strong>${escapeHtml(value)}</strong>
+      </div>
+    `;
+  }
+
+  async function loadCatalogSummary() {
+    try {
+      const response = await fetch("/api/product-catalog-summary", { cache: "no-store" });
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+      catalogState.summary = await response.json();
+      catalogState.error = "";
+    } catch (error) {
+      catalogState.summary = null;
+      catalogState.error = error instanceof Error ? error.message : "falha ao carregar resumo";
+    } finally {
+      catalogState.loading = false;
+      renderCatalogDrivenSections();
+      renderAccessLinks();
+      renderDetail(filteredModules());
+    }
+  }
+
+  function renderCatalogDrivenSections() {
+    renderBusinessSummaryBoard();
+    renderBusinessHighlights();
+    renderModulePerformanceBoard();
+    renderStockInsightsBoard();
+    renderStockProviderGuides();
+  }
+
+  function renderBusinessSummaryBoard() {
+    if (!elements.businessSummaryBoard) {
+      return;
+    }
+
+    if (catalogState.loading) {
+      elements.businessSummaryBoard.innerHTML = `<div class="empty-state">Carregando resumo comercial...</div>`;
+      return;
+    }
+
+    if (!catalogState.summary) {
+      elements.businessSummaryBoard.innerHTML = `<div class="empty-state">Resumo comercial indisponivel: ${escapeHtml(catalogState.error || "sem resposta")}</div>`;
+      return;
+    }
+
+    const summary = catalogState.summary;
+    elements.businessSummaryBoard.innerHTML = [
+      summaryTileMarkup("Itens catalogados", formatCount(summary.items_total), "base operacional do catalogo local"),
+      summaryTileMarkup("Estoque total", formatCount(summary.inventory_units), "unidades somadas na malha ativa"),
+      summaryTileMarkup("Valor em estoque", formatMoney(summary.inventory_value_brl), "potencial bruto pelo preco atual"),
+      summaryTileMarkup("Margem potencial", formatMoney(summary.margin_potential_brl), "diferenca agregada entre price e compare_at"),
+    ].join("");
+  }
+
+  function renderBusinessHighlights() {
+    if (!elements.businessHighlights) {
+      return;
+    }
+
+    if (catalogState.loading) {
+      elements.businessHighlights.innerHTML = `<div class="empty-state">Carregando destaques comerciais...</div>`;
+      return;
+    }
+
+    if (!catalogState.summary) {
+      elements.businessHighlights.innerHTML = `<div class="empty-state">Sem dados comerciais publicados.</div>`;
+      return;
+    }
+
+    const summary = catalogState.summary;
+    const topCategory = summary.top_categories?.[0];
+    const topMerchant = summary.top_merchants?.[0];
+    const topMarginItem = summary.top_margin_item;
+
+    elements.businessHighlights.innerHTML = [
+      insightCardMarkup(
+        "Segmento lider",
+        topCategory ? topCategory.category : "Nao publicado",
+        topCategory
+          ? `${formatMoney(topCategory.inventory_value_brl)} em valor de catalogo e ${formatCount(topCategory.items_total)} SKUs.`
+          : "Nenhuma categoria consolidada no payload.",
+        topCategory ? `${rowPill(`${formatCount(topCategory.inventory_units)} unidades`, "pill-accent")}` : "",
+      ),
+      insightCardMarkup(
+        "Fornecedor com maior valor",
+        topMerchant ? topMerchant.merchant_name : "Nao publicado",
+        topMerchant
+          ? `${formatMoney(topMerchant.inventory_value_brl)} agregados no estoque monitorado.`
+          : "Nenhum merchant agregado no payload.",
+        topMerchant ? `${rowPill(`${formatCount(topMerchant.items_total)} itens`, "pill-navy")}` : "",
+      ),
+      insightCardMarkup(
+        "Item com maior margem potencial",
+        topMarginItem ? topMarginItem.title : "Nao publicado",
+        topMarginItem
+          ? `${formatMoney(topMarginItem.total_margin_brl)} de margem potencial total em ${topMarginItem.module_id}.`
+          : "Sem item de margem no resumo atual.",
+        topMarginItem
+          ? `${rowPill(topMarginItem.category, "pill-warn")}${rowPill(topMarginItem.module_id, "pill-accent")}`
+          : "",
+      ),
+    ].join("");
+  }
+
+  function renderModulePerformanceBoard() {
+    if (!elements.modulePerformanceBoard) {
+      return;
+    }
+
+    if (catalogState.loading) {
+      elements.modulePerformanceBoard.innerHTML = `<div class="empty-state">Carregando desempenho por modulo...</div>`;
+      return;
+    }
+
+    const modules = catalogModules();
+    if (!modules.length) {
+      elements.modulePerformanceBoard.innerHTML = `<div class="empty-state">Sem resumo de modulos comerciais.</div>`;
+      return;
+    }
+
+    elements.modulePerformanceBoard.innerHTML = modules.slice(0, 8).map((module) => `
+      <article class="module-performance-card">
+        <div class="module-row-top">
+          <div>
+            <h3>${escapeHtml(module.module_id)}</h3>
+            <p class="muted-copy">${escapeHtml(module.top_item_title || "Sem item lider")}</p>
+          </div>
+          ${rowPill(formatMoney(module.inventory_value_brl), "pill-accent")}
+        </div>
+        <div class="module-performance-grid">
+          ${microStatMarkup("Itens", formatCount(module.items_total))}
+          ${microStatMarkup("Unidades", formatCount(module.inventory_units))}
+          ${microStatMarkup("Ticket medio", formatMoney(module.avg_price_brl))}
+          ${microStatMarkup("Margem pot.", formatMoney(module.margin_potential_brl))}
+        </div>
+      </article>
+    `).join("");
+  }
+
+  function renderStockInsightsBoard() {
+    if (!elements.stockInsightsBoard) {
+      return;
+    }
+
+    if (catalogState.loading) {
+      elements.stockInsightsBoard.innerHTML = `<div class="empty-state">Carregando radar do STOCK...</div>`;
+      return;
+    }
+
+    if (!catalogState.summary) {
+      elements.stockInsightsBoard.innerHTML = `<div class="empty-state">Radar do STOCK indisponivel.</div>`;
+      return;
+    }
+
+    const summary = catalogState.summary;
+    const stockModule = summary.stock_module;
+    const topStockItem = summary.top_stock_item;
+    const topTicketItem = summary.top_ticket_item;
+
+    elements.stockInsightsBoard.innerHTML = [
+      insightCardMarkup(
+        "Modulo STOCK",
+        stockModule ? formatMoney(stockModule.inventory_value_brl) : "Nao publicado",
+        stockModule
+          ? `${formatCount(stockModule.items_total)} itens, ${formatCount(stockModule.inventory_units)} unidades e ${formatMoney(stockModule.margin_potential_brl)} de margem potencial.`
+          : "Resumo do modulo STOCK ainda nao chegou pelo backend.",
+        stockModule ? `${rowPill(stockModule.module_id, "pill-accent")}${rowPill(stockModule.top_item_title, "pill-navy")}` : "",
+      ),
+      insightCardMarkup(
+        "Maior item em estoque",
+        topStockItem ? topStockItem.title : "Nao publicado",
+        topStockItem
+          ? `${formatCount(topStockItem.stock)} unidades em ${topStockItem.category} com origem ${topStockItem.merchant_name}.`
+          : "Nenhum item lider por quantidade no payload.",
+        topStockItem ? `${rowPill(topStockItem.module_id, "pill-accent")}${rowPill(formatMoney(topStockItem.inventory_value_brl), "pill-warn")}` : "",
+      ),
+      insightCardMarkup(
+        "Maior ticket",
+        topTicketItem ? topTicketItem.title : "Nao publicado",
+        topTicketItem
+          ? `${formatMoney(topTicketItem.price_brl)} por unidade em ${topTicketItem.module_id}.`
+          : "Nenhum item de ticket maximo publicado.",
+        topTicketItem ? `${rowPill(topTicketItem.category, "pill-navy")}${rowPill(topTicketItem.merchant_name, "pill-accent")}` : "",
+      ),
+    ].join("");
+  }
+
+  function renderStockProviderGuides() {
+    if (!elements.stockProviderGuides) {
+      return;
+    }
+
+    const cards = MARKETPLACE_API_PROVIDERS.map((provider) => {
+      const guide = STOCK_PROVIDER_GUIDES[provider.key];
+      return `
+        <article class="provider-guide-card">
+          <div class="module-row-top">
+            <div>
+              <h3>${escapeHtml(provider.label)}</h3>
+              <p class="muted-copy">${escapeHtml(guide?.auth || "Autenticacao ainda nao publicada.")}</p>
+            </div>
+            ${rowPill(provider.siteCode, "pill-navy")}
+          </div>
+          <div class="pill-row">
+            ${rowPill(provider.key, "pill-accent")}
+            ${rowPill(provider.baseUrl, "pill-warn")}
+          </div>
+          <ol class="provider-guide-list">
+            ${(guide?.steps || ["Runbook nao publicado."]).map((step) => `<li>${escapeHtml(step)}</li>`).join("")}
+          </ol>
+        </article>
+      `;
+    });
+
+    elements.stockProviderGuides.innerHTML = cards.join("");
+  }
+
+  function renderAccessLinks() {
+    if (!elements.adminAccessLinks) {
+      return;
+    }
+
+    const runtime = data.public_runtime || {};
+    const localOrigin = window.location.origin;
+    elements.adminAccessLinks.innerHTML = [
+      accessCardMarkup("Painel local", `${localOrigin}/`),
+      accessCardMarkup("Healthz", `${localOrigin}/healthz`),
+      accessCardMarkup("Admin data", `${localOrigin}/api/admin-data`),
+      accessCardMarkup("Publico", runtime.public_url || "", runtime.public_url ? "pill-accent" : "pill-warn"),
+    ].join("");
   }
 
   function normalizeHref(value) {
@@ -1500,7 +1861,7 @@
           ${externalTileMarkup("URL fixa", reservedDomainReady ? "suportada" : "nao descrita", "depende de dominio reservado")}
         </div>
         <p class="muted-copy">
-          A superficie externa esta preparada para testes fora da rede local. Quando houver dominio reservado no ngrok, o mesmo cockpit pode
+          A superficie externa esta preparada para acesso fora da rede local. Quando houver dominio reservado no ngrok, o mesmo cockpit pode
           manter uma URL permanente sem mudar a rotina do operador.
         </p>
         <pre>${escapeHtml(preview)}</pre>
@@ -1621,6 +1982,7 @@
 
     const ids = {
       summary: sectionId(module, "summary"),
+      finance: sectionId(module, "finance"),
       architecture: sectionId(module, "architecture"),
       checklist: sectionId(module, "checklist"),
       docs: sectionId(module, "docs"),
@@ -1629,11 +1991,13 @@
 
     const navItems = [
       { label: "Resumo", target: ids.summary },
+      { label: "Financeiro", target: ids.finance },
       { label: "Acoplamentos", target: ids.architecture },
       { label: "Checklist", target: ids.checklist },
       { label: "Docs", target: ids.docs },
       { label: "Operacao", target: ids.ops },
     ];
+    const businessSnapshot = catalogModuleSnapshot(module.code);
 
     const operationalFailures = data.deployment_summary.top_failures.length
       ? `
@@ -1702,6 +2066,38 @@
               <p class="muted-copy">${escapeHtml(module.status_label)}</p>
             </div>
           </div>
+        </section>
+
+        <section class="detail-block" id="${escapeHtml(ids.finance)}">
+          <h3>Financeiro e desempenho</h3>
+          ${
+            businessSnapshot
+              ? `
+                <div class="meta-grid">
+                  <div class="meta-card">
+                    <div class="small-label">Valor em estoque</div>
+                    <p class="muted-copy">${escapeHtml(formatMoney(businessSnapshot.inventory_value_brl))}</p>
+                  </div>
+                  <div class="meta-card">
+                    <div class="small-label">Margem potencial</div>
+                    <p class="muted-copy">${escapeHtml(formatMoney(businessSnapshot.margin_potential_brl))}</p>
+                  </div>
+                  <div class="meta-card">
+                    <div class="small-label">Itens</div>
+                    <p class="muted-copy">${escapeHtml(formatCount(businessSnapshot.items_total))}</p>
+                  </div>
+                  <div class="meta-card">
+                    <div class="small-label">Ticket medio</div>
+                    <p class="muted-copy">${escapeHtml(formatMoney(businessSnapshot.avg_price_brl))}</p>
+                  </div>
+                </div>
+                <div class="stats-inline">
+                  ${rowPill(`${formatCount(businessSnapshot.inventory_units)} unidades`, "pill-accent")}
+                  ${rowPill(businessSnapshot.top_item_title || "Sem item lider", "pill-navy")}
+                </div>
+              `
+              : `<p class="muted-copy">Este modulo ainda nao recebeu resumo comercial via catalogo operacional.</p>`
+          }
         </section>
 
         <section class="detail-block">
@@ -1796,9 +2192,11 @@
     renderDataHomeMatrix(modules);
     renderReleaseQueue(modules);
     renderDomainBoard(modules);
+    renderCatalogDrivenSections();
     renderFilterMeta(modules);
     renderCommands();
     renderExternalAccess();
+    renderAccessLinks();
     renderMarketplaceIntegrations();
     renderModuleList(modules);
     renderDetail(modules);
@@ -1809,4 +2207,5 @@
   populateFilters();
   bindEvents();
   render();
+  loadCatalogSummary();
 })();

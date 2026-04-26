@@ -15,7 +15,7 @@ class ProductApiRepository {
   Future<ProductShellData> load() async {
     Object? lastError;
     final Set<String> activeModuleIds = await _loadActiveModuleIds();
-    for (final String baseUrl in _candidateBaseUrls()) {
+    for (final String baseUrl in await _candidateBaseUrls()) {
       try {
         final http.Response response = await http
             .get(Uri.parse('$baseUrl/api/product-shell'))
@@ -178,17 +178,54 @@ class ProductApiRepository {
     );
   }
 
-  Iterable<String> _candidateBaseUrls() sync* {
+  Future<List<String>> _candidateBaseUrls() async {
+    final Set<String> candidates = <String>{};
+
+    void addCandidate(String? value) {
+      final String normalized = _normalizeBaseUrl(value ?? '');
+      if (normalized.startsWith('http')) {
+        candidates.add(normalized);
+      }
+    }
+
     final String currentOrigin = Uri.base.origin;
     if (currentOrigin.startsWith('http')) {
-      yield _normalizeBaseUrl(currentOrigin);
+      addCandidate(currentOrigin);
     }
     if (_envBaseUrl.trim().isNotEmpty) {
-      yield _normalizeBaseUrl(_envBaseUrl);
+      addCandidate(_envBaseUrl);
     }
-    yield 'http://10.0.2.2:8080';
-    yield 'http://127.0.0.1:8080';
-    yield 'http://localhost:8080';
+
+    try {
+      final String adminDataText = await rootBundle.loadString(
+        'assets/data/valley_admin_data.json',
+      );
+      final Map<String, dynamic> adminData =
+          (jsonDecode(adminDataText) as Map<dynamic, dynamic>)
+              .cast<String, dynamic>();
+      final Map<String, dynamic> publicRuntime =
+          (adminData['public_runtime'] as Map<dynamic, dynamic>? ??
+                  <dynamic, dynamic>{})
+              .cast<String, dynamic>();
+      addCandidate(publicRuntime['public_url'] as String?);
+    } catch (_) {
+      // Mantem fallback fixo abaixo.
+    }
+
+    for (final String candidate in <String>[
+      'http://10.0.2.2:8085',
+      'http://127.0.0.1:8085',
+      'http://localhost:8085',
+      'http://192.168.1.2:8085',
+      'https://aged-surgeons-opinion-wanna.trycloudflare.com',
+      'http://10.0.2.2:8080',
+      'http://127.0.0.1:8080',
+      'http://localhost:8080',
+    ]) {
+      addCandidate(candidate);
+    }
+
+    return candidates.toList(growable: false);
   }
 
   String _normalizeBaseUrl(String value) =>

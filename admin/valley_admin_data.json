@@ -465,17 +465,17 @@
   "public_runtime": {
     "available": true,
     "path": "../tmp/runtime/valley-admin-public-runtime.json",
-    "status": "ok",
-    "public_url": "https://grilled-uncurrently-shaunta.ngrok-free.dev",
-    "permanence": "ephemeral",
+    "status": "production_persistent",
+    "public_url": "http://192.168.1.2:8085",
+    "permanence": "persistent_local",
     "smoke_endpoints": {
-      "healthz": "https://grilled-uncurrently-shaunta.ngrok-free.dev/healthz",
-      "admin_data": "https://grilled-uncurrently-shaunta.ngrok-free.dev/api/admin-data"
+      "healthz": "http://192.168.1.2:8085/healthz",
+      "admin_data": "http://192.168.1.2:8085/api/admin-data"
     }
   },
   "database_summary": {
-    "postgres_migrations": 33,
-    "mongodb_scripts": 4,
+    "postgres_migrations": 34,
+    "mongodb_scripts": 5,
     "postgres_items": [
       {
         "id": "001",
@@ -1097,6 +1097,26 @@
           "v_stock_dropshipping_production_ops",
           "v_stock_dropshipping_provider_health"
         ]
+      },
+      {
+        "id": "034",
+        "path": "database/postgres/034_v47_foundation_futureproof_enrichment.sql",
+        "purpose_ptbr": "Enriquece aditivamente o core relacional com colunas futuras de identidade, risco, operacao, wallets, pedidos, transacoes e equity para reduzir retrabalho estrutural.",
+        "requires": [
+          "001",
+          "002",
+          "033"
+        ],
+        "provides": [
+          "column:users.metadata_json",
+          "column:pj_profiles.metadata_json",
+          "column:rider_profiles.metadata_json",
+          "column:wallets.metadata_json",
+          "column:led_cards.metadata_json",
+          "column:orders.metadata_json",
+          "column:transactions.processor_transaction_id",
+          "column:equity_ledger.metadata_json"
+        ]
       }
     ],
     "mongodb_items": [
@@ -1160,6 +1180,23 @@
           "tourism_experience_feeds",
           "bio_impact_logs",
           "energy_meter_streams"
+        ]
+      },
+      {
+        "id": "mongo-005",
+        "path": "database/mongodb/005_v47_brain_futureproof_enrichment.mongo.js",
+        "purpose_ptbr": "Enriquece validators e indices das colecoes centrais de IA, Social, Influencer e Telemetria com moderacao, compliance, monetizacao e operacao realtime.",
+        "requires": [
+          "mongo-001",
+          "mongo-002",
+          "mongo-003",
+          "mongo-004"
+        ],
+        "provides": [
+          "validator:ai_memory:v2",
+          "validator:social_videos:v2",
+          "validator:influencer_metrics:v2",
+          "validator:telemetry_logs:v2"
         ]
       }
     ]

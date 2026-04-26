@@ -465,17 +465,17 @@
   "public_runtime": {
     "available": true,
     "path": "../tmp/runtime/valley-admin-public-runtime.json",
-    "status": "booting",
-    "public_url": "https://grilled-uncurrently-shaunta.ngrok-free.dev",
-    "permanence": "ephemeral",
+    "status": "ok",
+    "public_url": "https://aged-surgeons-opinion-wanna.trycloudflare.com",
+    "permanence": "ephemeral_external",
     "smoke_endpoints": {
-      "healthz": "https://grilled-uncurrently-shaunta.ngrok-free.dev/healthz",
-      "admin_data": "https://grilled-uncurrently-shaunta.ngrok-free.dev/api/admin-data"
+      "healthz": "https://aged-surgeons-opinion-wanna.trycloudflare.com/healthz",
+      "admin_data": "https://aged-surgeons-opinion-wanna.trycloudflare.com/api/admin-data"
     }
   },
   "database_summary": {
-    "postgres_migrations": 33,
-    "mongodb_scripts": 4,
+    "postgres_migrations": 34,
+    "mongodb_scripts": 5,
     "postgres_items": [
       {
         "id": "001",

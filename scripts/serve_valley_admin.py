@@ -8,6 +8,7 @@ import json
 import os
 import subprocess
 import sys
+from collections import defaultdict
 from datetime import datetime, timezone
 from functools import partial
 from http import HTTPStatus
@@ -24,6 +25,8 @@ RUNTIME_DIR = ROOT / "tmp" / "runtime"
 BRIDGE_STATUS_PATH = RUNTIME_DIR / "codex-live-status.json"
 WORK_STATUS_PATH = RUNTIME_DIR / "bridge-work-status.json"
 PUBLIC_RUNTIME_PATH = RUNTIME_DIR / "valley-admin-public-runtime.json"
+PRODUCT_PUBLIC_RUNTIME_PATH = RUNTIME_DIR / "valley-product-public-runtime.json"
+PRODUCT_PUBLICATION_PATH = RUNTIME_DIR / "valley-product-web-publication.json"
 PRODUCT_CATALOG_PATH = ROOT / "frontend" / "flutter" / "assets" / "data" / "valley_product_catalog.json"
 PRODUCT_INTERACTIONS_PATH = RUNTIME_DIR / "valley-product-interactions.jsonl"
 PRODUCT_MVP_MODULES = {"STOCK", "MARKETPLACE", "CHAT"}
@@ -105,6 +108,10 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
 
         if route == "/api/product-shell":
             self._write_json(HTTPStatus.OK, self._product_shell_payload())
+            return
+
+        if route == "/api/product-catalog-summary":
+            self._write_json(HTTPStatus.OK, self._product_catalog_summary_payload())
             return
 
         if route == "/api/bridge/status":
@@ -220,6 +227,34 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
     def _public_runtime_payload(self) -> dict[str, Any]:
         return load_json_file(PUBLIC_RUNTIME_PATH) or {}
 
+    def _product_public_runtime_payload(self) -> dict[str, Any]:
+        publication = load_json_file(PRODUCT_PUBLICATION_PATH) or {}
+        runtime = load_json_file(PRODUCT_PUBLIC_RUNTIME_PATH) or {}
+
+        if publication:
+            payload = dict(runtime)
+            payload.update(
+                {
+                    "status": publication.get("status", payload.get("status", "ok")),
+                    "service": payload.get("service", "valley-product-public"),
+                    "provider": publication.get("provider", payload.get("provider")),
+                    "public_url": publication.get("public_url", payload.get("public_url")),
+                    "public_api_url": publication.get("api_url", payload.get("public_api_url")),
+                    "temporary": publication.get("temporary", payload.get("temporary")),
+                    "provider_status": publication.get(
+                        "provider_status",
+                        payload.get("provider_status"),
+                    ),
+                    "generated_at": publication.get("generated_at", payload.get("generated_at")),
+                }
+            )
+            return payload
+
+        if runtime:
+            return runtime
+
+        return self._public_runtime_payload()
+
     def _product_shell_payload(self) -> dict[str, Any]:
         catalog = load_json_file(PRODUCT_CATALOG_PATH) or {}
         hero = (catalog.get("hero") or {}) if isinstance(catalog, dict) else {}
@@ -232,11 +267,11 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 "subtitle",
                 "Compra, explore e acesse seus modulos em uma unica experiencia.",
             ),
-            "public_runtime": self._public_runtime_payload(),
+            "public_runtime": self._product_public_runtime_payload(),
         }
         if isinstance(catalog, dict):
             payload.update(catalog)
-            payload["public_runtime"] = self._public_runtime_payload()
+            payload["public_runtime"] = self._product_public_runtime_payload()
             payload["status"] = "ok"
             payload["service"] = "valley-product"
             payload = self._compact_product_shell_payload(payload)
@@ -297,6 +332,166 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 compact[key] = entries[:40]
 
         return compact
+
+    def _product_catalog_summary_payload(self) -> dict[str, Any]:
+        catalog = load_json_file(PRODUCT_CATALOG_PATH) or {}
+        items = catalog.get("items", []) if isinstance(catalog, dict) else []
+
+        if not isinstance(items, list) or not items:
+            return {
+                "status": "missing",
+                "service": "valley-product-catalog-summary",
+                "generated_at_utc": utc_now_iso(),
+                "items_total": 0,
+                "modules": [],
+            }
+
+        def as_float(value: Any) -> float:
+            try:
+                return float(value or 0)
+            except (TypeError, ValueError):
+                return 0.0
+
+        totals = {
+            "items_total": 0,
+            "inventory_units": 0.0,
+            "inventory_value_brl": 0.0,
+            "compare_value_brl": 0.0,
+            "margin_potential_brl": 0.0,
+        }
+        module_rollup: dict[str, dict[str, Any]] = {}
+        category_rollup: dict[str, dict[str, float]] = defaultdict(lambda: {"items": 0.0, "value_brl": 0.0, "units": 0.0})
+        merchant_rollup: dict[str, dict[str, float]] = defaultdict(lambda: {"items": 0.0, "value_brl": 0.0})
+        top_stock_item: dict[str, Any] | None = None
+        top_ticket_item: dict[str, Any] | None = None
+        top_margin_item: dict[str, Any] | None = None
+        top_inventory_value_item: dict[str, Any] | None = None
+
+        for raw_item in items:
+            if not isinstance(raw_item, dict):
+                continue
+
+            module_id = str(raw_item.get("module_id") or "UNKNOWN").upper()
+            title = str(raw_item.get("title") or "Item sem titulo")
+            category = str(raw_item.get("category") or "Sem categoria")
+            merchant_name = str(raw_item.get("merchant_name") or "Origem nao informada")
+            price_brl = as_float(raw_item.get("price_brl"))
+            compare_at_brl = as_float(raw_item.get("compare_at_brl"))
+            stock = as_float(raw_item.get("stock"))
+            inventory_value = price_brl * stock
+            unit_margin = max(compare_at_brl - price_brl, 0.0)
+            total_margin = unit_margin * stock
+
+            totals["items_total"] += 1
+            totals["inventory_units"] += stock
+            totals["inventory_value_brl"] += inventory_value
+            totals["compare_value_brl"] += compare_at_brl * stock
+            totals["margin_potential_brl"] += total_margin
+
+            module_entry = module_rollup.setdefault(
+                module_id,
+                {
+                    "module_id": module_id,
+                    "items_total": 0,
+                    "inventory_units": 0.0,
+                    "inventory_value_brl": 0.0,
+                    "avg_price_brl": 0.0,
+                    "margin_potential_brl": 0.0,
+                    "top_item_title": title,
+                    "top_item_value_brl": inventory_value,
+                },
+            )
+            module_entry["items_total"] += 1
+            module_entry["inventory_units"] += stock
+            module_entry["inventory_value_brl"] += inventory_value
+            module_entry["avg_price_brl"] += price_brl
+            module_entry["margin_potential_brl"] += total_margin
+            if inventory_value >= float(module_entry.get("top_item_value_brl", 0.0)):
+                module_entry["top_item_title"] = title
+                module_entry["top_item_value_brl"] = inventory_value
+
+            category_rollup[category]["items"] += 1
+            category_rollup[category]["units"] += stock
+            category_rollup[category]["value_brl"] += inventory_value
+            merchant_rollup[merchant_name]["items"] += 1
+            merchant_rollup[merchant_name]["value_brl"] += inventory_value
+
+            item_view = {
+                "id": raw_item.get("id"),
+                "title": title,
+                "module_id": module_id,
+                "category": category,
+                "merchant_name": merchant_name,
+                "price_brl": round(price_brl, 2),
+                "compare_at_brl": round(compare_at_brl, 2),
+                "stock": round(stock, 2),
+                "inventory_value_brl": round(inventory_value, 2),
+                "unit_margin_brl": round(unit_margin, 2),
+                "total_margin_brl": round(total_margin, 2),
+            }
+            if top_stock_item is None or stock >= float(top_stock_item["stock"]):
+                top_stock_item = item_view
+            if top_ticket_item is None or price_brl >= float(top_ticket_item["price_brl"]):
+                top_ticket_item = item_view
+            if top_margin_item is None or total_margin >= float(top_margin_item["total_margin_brl"]):
+                top_margin_item = item_view
+            if top_inventory_value_item is None or inventory_value >= float(top_inventory_value_item["inventory_value_brl"]):
+                top_inventory_value_item = item_view
+
+        modules = []
+        for module_entry in module_rollup.values():
+            items_total = int(module_entry["items_total"])
+            avg_price = module_entry["avg_price_brl"] / items_total if items_total else 0.0
+            modules.append(
+                {
+                    **module_entry,
+                    "items_total": items_total,
+                    "inventory_units": round(module_entry["inventory_units"], 2),
+                    "inventory_value_brl": round(module_entry["inventory_value_brl"], 2),
+                    "avg_price_brl": round(avg_price, 2),
+                    "margin_potential_brl": round(module_entry["margin_potential_brl"], 2),
+                    "top_item_value_brl": round(module_entry["top_item_value_brl"], 2),
+                }
+            )
+
+        modules.sort(key=lambda item: (-float(item["inventory_value_brl"]), item["module_id"]))
+        top_categories = [
+            {
+                "category": category,
+                "items_total": int(values["items"]),
+                "inventory_units": round(values["units"], 2),
+                "inventory_value_brl": round(values["value_brl"], 2),
+            }
+            for category, values in sorted(category_rollup.items(), key=lambda item: (-item[1]["value_brl"], item[0]))[:8]
+        ]
+        top_merchants = [
+            {
+                "merchant_name": merchant_name,
+                "items_total": int(values["items"]),
+                "inventory_value_brl": round(values["value_brl"], 2),
+            }
+            for merchant_name, values in sorted(merchant_rollup.items(), key=lambda item: (-item[1]["value_brl"], item[0]))[:8]
+        ]
+        stock_summary = next((module for module in modules if module["module_id"] == "STOCK"), None)
+
+        return {
+            "status": "ok",
+            "service": "valley-product-catalog-summary",
+            "generated_at_utc": utc_now_iso(),
+            "items_total": totals["items_total"],
+            "inventory_units": round(totals["inventory_units"], 2),
+            "inventory_value_brl": round(totals["inventory_value_brl"], 2),
+            "compare_value_brl": round(totals["compare_value_brl"], 2),
+            "margin_potential_brl": round(totals["margin_potential_brl"], 2),
+            "modules": modules[:12],
+            "top_categories": top_categories,
+            "top_merchants": top_merchants,
+            "top_stock_item": top_stock_item,
+            "top_ticket_item": top_ticket_item,
+            "top_margin_item": top_margin_item,
+            "top_inventory_value_item": top_inventory_value_item,
+            "stock_module": stock_summary,
+        }
 
     def _product_interest_payload(self, query: dict[str, list[str]]) -> dict[str, Any]:
         item_id = (query.get("item_id") or [""])[0]

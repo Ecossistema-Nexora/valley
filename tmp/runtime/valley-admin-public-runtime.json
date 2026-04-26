@@ -1,7 +1,18 @@
 {
   "status": "ok",
-  "service": "valley-product-public",
-  "public_url": "https://endorsed-knows-distance-yukon.trycloudflare.com",
-  "generated_at_utc": "2026-04-23T09:10:24Z",
-  "temporary": true
+  "service": "valley-admin-public",
+  "provider": "cloudflare_quick_tunnel",
+  "public_url": "https://aged-surgeons-opinion-wanna.trycloudflare.com",
+  "local_url": "http://127.0.0.1:8085",
+  "generated_at_utc": "2026-04-26T00:59:00Z",
+  "temporary": true,
+  "permanence": "ephemeral_external",
+  "smoke_endpoints": {
+    "healthz": "https://aged-surgeons-opinion-wanna.trycloudflare.com/healthz",
+    "admin_data": "https://aged-surgeons-opinion-wanna.trycloudflare.com/api/admin-data"
+  },
+  "logs": {
+    "cloudflare_stdout": "C:\\Users\\ereta\\.codex\\worktrees\\VALLEY\\tmp\\runtime\\valley-admin-cloudflare.out.log",
+    "cloudflare_stderr": "C:\\Users\\ereta\\.codex\\worktrees\\VALLEY\\tmp\\runtime\\valley-admin-cloudflare.err.log"
+  }
 }
