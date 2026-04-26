@@ -11,6 +11,8 @@ class ProductApiRepository {
     'VALLEY_PRODUCT_API_BASE_URL',
     defaultValue: '',
   );
+  static const String _releaseBaseUrl =
+      'https://aged-surgeons-opinion-wanna.trycloudflare.com';
 
   Future<ProductShellData> load() async {
     Object? lastError;
@@ -195,6 +197,7 @@ class ProductApiRepository {
     if (_envBaseUrl.trim().isNotEmpty) {
       addCandidate(_envBaseUrl);
     }
+    addCandidate(_releaseBaseUrl);
 
     try {
       final String adminDataText = await rootBundle.loadString(
