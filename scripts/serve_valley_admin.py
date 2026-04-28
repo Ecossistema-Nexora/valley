@@ -4,8 +4,12 @@
 from __future__ import annotations
 
 import argparse
+import base64
+import hashlib
+import hmac
 import json
 import os
+import secrets
 import subprocess
 import sys
 from collections import defaultdict
@@ -15,7 +19,9 @@ from http import HTTPStatus
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any
-from urllib.parse import parse_qs, urlsplit
+from urllib.error import HTTPError, URLError
+from urllib.parse import parse_qs, urlencode, urlsplit
+from urllib.request import Request, urlopen
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -27,10 +33,40 @@ WORK_STATUS_PATH = RUNTIME_DIR / "bridge-work-status.json"
 PUBLIC_RUNTIME_PATH = RUNTIME_DIR / "valley-admin-public-runtime.json"
 PRODUCT_PUBLIC_RUNTIME_PATH = RUNTIME_DIR / "valley-product-public-runtime.json"
 PRODUCT_PUBLICATION_PATH = RUNTIME_DIR / "valley-product-web-publication.json"
+ADMIN_INTEGRATIONS_PATH = RUNTIME_DIR / "valley-admin-integrations.json"
+MARKETPLACE_OAUTH_RUNTIME_PATH = RUNTIME_DIR / "valley-marketplace-oauth-runtime.json"
+SHOPEE_OAUTH_RUNTIME_PATH = RUNTIME_DIR / "valley-shopee-oauth-runtime.json"
+ALIEXPRESS_OAUTH_RUNTIME_PATH = RUNTIME_DIR / "valley-aliexpress-oauth-runtime.json"
+PROVIDER_SECRETS_PATH = RUNTIME_DIR / "valley-provider-secrets.json"
+STOCK_REAL_CATALOG_PATH = RUNTIME_DIR / "valley-stock-real-catalog.json"
+MERCADOLIVRE_NOTIFICATIONS_PATH = RUNTIME_DIR / "valley-mercadolivre-notifications.jsonl"
+MERCADOLIVRE_NOTIFICATIONS_LATEST_PATH = RUNTIME_DIR / "valley-mercadolivre-notification-latest.json"
+MERCADOLIVRE_PKCE_PATH = RUNTIME_DIR / "valley-mercadolivre-pkce.json"
+ALIEXPRESS_NOTIFICATIONS_PATH = RUNTIME_DIR / "valley-aliexpress-notifications.jsonl"
+ALIEXPRESS_NOTIFICATIONS_LATEST_PATH = RUNTIME_DIR / "valley-aliexpress-notification-latest.json"
 PRODUCT_CATALOG_PATH = ROOT / "frontend" / "flutter" / "assets" / "data" / "valley_product_catalog.json"
 PRODUCT_INTERACTIONS_PATH = RUNTIME_DIR / "valley-product-interactions.jsonl"
 PRODUCT_MVP_MODULES = {"STOCK", "MARKETPLACE", "CHAT"}
 PRODUCT_LIST_LIMIT = 80
+STOCK_INTERNAL_FIELDS = {
+    "supplier_name",
+    "supplier_type",
+    "supplier_model",
+    "supplier_visibility",
+    "provider_key",
+    "provider_status",
+    "channel_label",
+    "official_store_id",
+    "source_product_id",
+    "source_parent_id",
+    "source_domain_id",
+    "source_category_id",
+    "source_item_id",
+    "source_seller_id",
+    "source_status",
+    "source_permalink",
+    "source_collected_at_utc",
+}
 
 
 def utc_now_iso() -> str:
@@ -47,7 +83,7 @@ def load_json_file(path: Path | None) -> dict[str, Any] | None:
         return None
 
 
-def write_json_file(path: Path | None, payload: dict[str, Any]) -> None:
+def write_json_file(path: Path | None, payload: Any) -> None:
     if path is None:
         return
 
@@ -56,6 +92,33 @@ def write_json_file(path: Path | None, payload: dict[str, Any]) -> None:
         json.dumps(payload, ensure_ascii=False, indent=2),
         encoding="utf-8",
     )
+
+
+def base64url_sha256(value: str) -> str:
+    digest = hashlib.sha256(value.encode("utf-8")).digest()
+    return base64.urlsafe_b64encode(digest).decode("ascii").rstrip("=")
+
+
+def hmac_sha256_upper(secret: str, message: str) -> str:
+    return hmac.new(
+        secret.encode("utf-8"),
+        message.encode("utf-8"),
+        hashlib.sha256,
+    ).hexdigest().upper()
+
+
+def update_marketplace_integration(provider_key: str, updates: dict[str, Any]) -> None:
+    saved = load_json_file(ADMIN_INTEGRATIONS_PATH)
+    items = saved if isinstance(saved, list) else []
+    changed = False
+    for item in items:
+        if isinstance(item, dict) and item.get("key") == provider_key:
+            item.update(updates)
+            changed = True
+            break
+
+    if changed:
+        write_json_file(ADMIN_INTEGRATIONS_PATH, items)
 
 
 class ExclusiveThreadingHTTPServer(ThreadingHTTPServer):
@@ -102,12 +165,23 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
         parsed = urlsplit(self.path)
         route = parsed.path
 
+        if route in ("/", "/index.html") and parsed.query:
+            params = parse_qs(parsed.query)
+            if params.get("code") or params.get("error") or params.get("error_description"):
+                root_redirect = self._public_admin_base_url().rstrip("/")
+                self._write_mercadolivre_callback(parsed.query, redirect_uri_override=root_redirect)
+                return
+
         if route in ("/health", "/healthz", "/readyz", "/meta/runtime", "/api/runtime"):
             self._write_json(HTTPStatus.OK, self._runtime_payload())
             return
 
         if route == "/api/product-shell":
             self._write_json(HTTPStatus.OK, self._product_shell_payload())
+            return
+
+        if route == "/api/stock-catalog":
+            self._write_json(HTTPStatus.OK, self._stock_catalog_payload())
             return
 
         if route == "/api/product-catalog-summary":
@@ -140,6 +214,34 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             self.send_header("Content-Length", str(len(body)))
             self.end_headers()
             self.wfile.write(body)
+            return
+
+        if route == "/api/admin-integrations":
+            self._write_json(HTTPStatus.OK, self._admin_integrations_payload())
+            return
+
+        if route == "/integrations/mercadolivre/callback":
+            self._write_mercadolivre_callback(parsed.query)
+            return
+
+        if route == "/integrations/shopee/callback":
+            self._write_shopee_callback(parsed.query)
+            return
+
+        if route == "/integrations/aliexpress/callback":
+            self._write_aliexpress_callback(parsed.query)
+            return
+
+        if route == "/integrations/aliexpress/notifications":
+            self._write_aliexpress_notification_probe()
+            return
+
+        if route == "/integrations/mercadolivre/authorize":
+            self._redirect_mercadolivre_authorize()
+            return
+
+        if route == "/integrations/mercadolivre/notifications":
+            self._write_mercadolivre_notification_probe()
             return
 
         super().do_GET()
@@ -182,6 +284,40 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 HTTPStatus.OK,
                 self._open_media_payload(query),
             )
+            return
+
+        if route == "/api/admin-integrations":
+            payload = self._read_json_body()
+            if not isinstance(payload, list):
+                self._write_json(
+                    HTTPStatus.BAD_REQUEST,
+                    {
+                        "status": "invalid_payload",
+                        "service": "valley-admin",
+                        "detail": "Expected JSON array.",
+                    },
+                )
+                return
+
+            write_json_file(ADMIN_INTEGRATIONS_PATH, payload)
+            self._write_json(
+                HTTPStatus.OK,
+                {
+                    "status": "ok",
+                    "service": "valley-admin",
+                    "saved_at_utc": utc_now_iso(),
+                    "path": str(ADMIN_INTEGRATIONS_PATH),
+                    "items": len(payload),
+                },
+            )
+            return
+
+        if route == "/integrations/mercadolivre/notifications":
+            self._write_mercadolivre_notification_event()
+            return
+
+        if route == "/integrations/aliexpress/notifications":
+            self._write_aliexpress_notification_event()
             return
 
         self._write_json(
@@ -277,6 +413,12 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             payload = self._compact_product_shell_payload(payload)
         return payload
 
+    def _sanitize_stock_item(self, item: dict[str, Any]) -> dict[str, Any]:
+        sanitized = dict(item)
+        for key in STOCK_INTERNAL_FIELDS:
+            sanitized.pop(key, None)
+        return sanitized
+
     def _compact_product_shell_payload(self, payload: dict[str, Any]) -> dict[str, Any]:
         """Mantem a API leve e alinhada ao MVP para mobile e tunel remoto."""
         active_modules = PRODUCT_MVP_MODULES
@@ -306,6 +448,12 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 for item in items
                 if isinstance(item, dict) and item.get("module_id") in active_modules
             ][:PRODUCT_LIST_LIMIT]
+            filtered_items = [
+                self._sanitize_stock_item(item)
+                if isinstance(item, dict) and item.get("module_id") == "STOCK"
+                else item
+                for item in filtered_items
+            ]
             compact["items"] = filtered_items
             used_profile_ids = {
                 str(item.get("profile_id"))
@@ -332,6 +480,35 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 compact[key] = entries[:40]
 
         return compact
+
+    def _stock_catalog_payload(self) -> dict[str, Any]:
+        runtime_catalog = load_json_file(STOCK_REAL_CATALOG_PATH)
+        if not isinstance(runtime_catalog, dict):
+            return {
+                "status": "missing",
+                "service": "valley-stock-catalog",
+                "generated_at_utc": utc_now_iso(),
+                "items_total": 0,
+                "categories_total": 0,
+                "items": [],
+            }
+
+        items = runtime_catalog.get("items", [])
+        sanitized_items = [
+            self._sanitize_stock_item(item)
+            for item in items
+            if isinstance(item, dict) and item.get("module_id") == "STOCK"
+        ]
+
+        return {
+            "status": "ok",
+            "service": "valley-stock-catalog",
+            "generated_at_utc": utc_now_iso(),
+            "provider": runtime_catalog.get("provider", "runtime"),
+            "items_total": len(sanitized_items),
+            "categories_total": runtime_catalog.get("categories_total", 0),
+            "items": sanitized_items,
+        }
 
     def _product_catalog_summary_payload(self) -> dict[str, Any]:
         catalog = load_json_file(PRODUCT_CATALOG_PATH) or {}
@@ -493,6 +670,630 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             "stock_module": stock_summary,
         }
 
+    def _admin_integrations_payload(self) -> dict[str, Any]:
+        saved = load_json_file(ADMIN_INTEGRATIONS_PATH)
+        items = saved if isinstance(saved, list) else []
+        return {
+            "status": "ok",
+            "service": "valley-admin",
+            "generated_at_utc": utc_now_iso(),
+            "path": str(ADMIN_INTEGRATIONS_PATH),
+            "items": items,
+        }
+
+    def _public_admin_base_url(self) -> str:
+        runtime = load_json_file(PUBLIC_RUNTIME_PATH) or {}
+        public_url = str(runtime.get("public_url") or "").strip()
+        if public_url:
+            return public_url.rstrip("/")
+        return "https://admin.brasildesconto.com.br"
+
+    def _write_mercadolivre_callback(self, query: str, redirect_uri_override: str | None = None) -> None:
+        params = parse_qs(query)
+        payload = {
+            "provider": "mercado_livre",
+            "received_at_utc": utc_now_iso(),
+            "code": (params.get("code") or [None])[0],
+            "state": (params.get("state") or [None])[0],
+            "error": (params.get("error") or [None])[0],
+            "error_description": (params.get("error_description") or [None])[0],
+            "redirect_uri_override": redirect_uri_override,
+            "raw_query": query,
+        }
+        token_exchange = None
+        if payload["code"]:
+            token_exchange = self._exchange_mercadolivre_code(
+                payload["code"],
+                state=payload["state"],
+                redirect_uri_override=redirect_uri_override,
+            )
+            payload["token_exchange"] = token_exchange
+        write_json_file(MARKETPLACE_OAUTH_RUNTIME_PATH, payload)
+
+        if token_exchange and token_exchange.get("status") == "ok":
+            status = "autorizacao concluida"
+            detail = "Codigo OAuth trocado por access token e refresh token com sucesso."
+        elif payload["code"]:
+            status = "autorizacao recebida"
+            detail = (
+                token_exchange.get("detail")
+                if isinstance(token_exchange, dict) and token_exchange.get("detail")
+                else "Codigo OAuth capturado e persistido no runtime local."
+            )
+        else:
+            status = "callback recebida"
+            detail = payload["error_description"] or payload["error"] or "Nenhum code foi informado."
+        html = f"""<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Valley | Mercado Livre OAuth</title>
+    <style>
+      body {{ font-family: Arial, sans-serif; background:#0b1020; color:#e8edf7; margin:0; }}
+      main {{ max-width:760px; margin:48px auto; padding:24px; }}
+      section {{ background:#121a31; border:1px solid #253150; border-radius:8px; padding:24px; }}
+      h1 {{ margin:0 0 8px; font-size:28px; }}
+      p, code {{ color:#b7c2dc; }}
+      code {{ display:block; margin-top:16px; white-space:pre-wrap; word-break:break-word; }}
+    </style>
+  </head>
+  <body>
+    <main>
+      <section>
+        <h1>{status}</h1>
+        <p>{detail}</p>
+        <code>{json.dumps(payload, ensure_ascii=False, indent=2)}</code>
+      </section>
+    </main>
+  </body>
+</html>
+"""
+        body = html.encode("utf-8")
+        self.send_response(HTTPStatus.OK)
+        self.send_header("Content-Type", "text/html; charset=utf-8")
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
+    def _redirect_mercadolivre_authorize(self) -> None:
+        integrations_saved = load_json_file(ADMIN_INTEGRATIONS_PATH)
+        integrations = integrations_saved if isinstance(integrations_saved, list) else []
+        provider = next(
+            (item for item in integrations if isinstance(item, dict) and item.get("key") == "mercado_livre"),
+            None,
+        )
+        client_id = str((provider or {}).get("clientId") or "").strip()
+        redirect_uri = str((provider or {}).get("redirectUri") or "").strip()
+        if not client_id or not redirect_uri:
+            self._write_json(
+                HTTPStatus.BAD_REQUEST,
+                {
+                    "status": "missing_credentials",
+                    "service": "valley-admin",
+                    "provider": "mercado_livre",
+                    "detail": "Client ID ou redirect URI ausentes para montar o fluxo OAuth com PKCE.",
+                },
+            )
+            return
+
+        state = f"valley-mlb-{secrets.token_urlsafe(12)}"
+        code_verifier = secrets.token_urlsafe(64)
+        code_challenge = base64url_sha256(code_verifier)
+        saved = load_json_file(MERCADOLIVRE_PKCE_PATH)
+        payload = saved if isinstance(saved, dict) else {}
+        payload[state] = {
+            "created_at_utc": utc_now_iso(),
+            "client_id": client_id,
+            "redirect_uri": redirect_uri,
+            "code_verifier": code_verifier,
+            "code_challenge_method": "S256",
+        }
+        write_json_file(MERCADOLIVRE_PKCE_PATH, payload)
+
+        auth_url = (
+            "https://auth.mercadolivre.com.br/authorization?"
+            + urlencode(
+                {
+                    "response_type": "code",
+                    "client_id": client_id,
+                    "redirect_uri": redirect_uri,
+                    "state": state,
+                    "code_challenge": code_challenge,
+                    "code_challenge_method": "S256",
+                }
+            )
+        )
+        self.send_response(HTTPStatus.FOUND)
+        self.send_header("Location", auth_url)
+        self.end_headers()
+
+    def _exchange_mercadolivre_code(
+        self,
+        code: str,
+        state: str | None = None,
+        redirect_uri_override: str | None = None,
+    ) -> dict[str, Any]:
+        integrations_saved = load_json_file(ADMIN_INTEGRATIONS_PATH)
+        integrations = integrations_saved if isinstance(integrations_saved, list) else []
+        provider = next(
+            (item for item in integrations if isinstance(item, dict) and item.get("key") == "mercado_livre"),
+            None,
+        )
+        secrets = load_json_file(PROVIDER_SECRETS_PATH) or {}
+        provider_secrets = secrets.get("mercado_livre") if isinstance(secrets, dict) else None
+
+        client_id = str((provider or {}).get("clientId") or "").strip()
+        configured_secret_ref = str((provider or {}).get("secretRef") or "").strip()
+        client_secret = str((provider_secrets or {}).get("clientSecret") or "").strip()
+        redirect_uri = str(redirect_uri_override or (provider or {}).get("redirectUri") or "").strip()
+
+        # O cockpit do admin hoje aceita tanto um runtime ref quanto o valor bruto
+        # do segredo. Se o operador preencheu a secret diretamente no painel,
+        # ela deve prevalecer sobre um runtime antigo para evitar invalid_client.
+        if configured_secret_ref and not configured_secret_ref.startswith("runtime://"):
+            client_secret = configured_secret_ref
+            secrets.setdefault("mercado_livre", {})
+            secrets["mercado_livre"]["clientSecret"] = client_secret
+            secrets["mercado_livre"]["updated_at_utc"] = utc_now_iso()
+            write_json_file(PROVIDER_SECRETS_PATH, secrets)
+
+        if not client_id or not client_secret or not redirect_uri:
+            return {
+                "status": "missing_credentials",
+                "detail": "Client ID, client secret ou redirect URI ausentes para a troca do token.",
+            }
+
+        pkce_saved = load_json_file(MERCADOLIVRE_PKCE_PATH)
+        pkce_entries = pkce_saved if isinstance(pkce_saved, dict) else {}
+        pkce_entry = pkce_entries.get(state or "") if state else None
+        code_verifier = str((pkce_entry or {}).get("code_verifier") or "").strip()
+
+        payload_data = {
+            "grant_type": "authorization_code",
+            "client_id": client_id,
+            "client_secret": client_secret,
+            "code": code,
+            "redirect_uri": redirect_uri,
+        }
+        if code_verifier:
+            payload_data["code_verifier"] = code_verifier
+
+        body = urlencode(payload_data).encode("utf-8")
+        request = Request(
+            "https://api.mercadolibre.com/oauth/token",
+            data=body,
+            headers={
+                "accept": "application/json",
+                "content-type": "application/x-www-form-urlencoded",
+            },
+            method="POST",
+        )
+
+        try:
+            with urlopen(request, timeout=45) as response:
+                payload = json.loads(response.read().decode("utf-8"))
+        except HTTPError as error:
+            detail = error.read().decode("utf-8", errors="replace")
+            return {
+                "status": "http_error",
+                "code": error.code,
+                "detail": detail,
+            }
+        except URLError as error:
+            return {
+                "status": "network_error",
+                "detail": str(error),
+            }
+        except Exception as error:  # noqa: BLE001
+            return {
+                "status": "failed",
+                "detail": str(error),
+            }
+
+        access_token = payload.get("access_token")
+        refresh_token = payload.get("refresh_token")
+        if access_token:
+            secrets.setdefault("mercado_livre", {})
+            secrets["mercado_livre"]["accessToken"] = access_token
+            secrets["mercado_livre"]["updated_at_utc"] = utc_now_iso()
+        if refresh_token:
+            secrets.setdefault("mercado_livre", {})
+            secrets["mercado_livre"]["refreshToken"] = refresh_token
+            secrets["mercado_livre"]["updated_at_utc"] = utc_now_iso()
+        if access_token or refresh_token:
+            write_json_file(PROVIDER_SECRETS_PATH, secrets)
+        if state and state in pkce_entries and access_token:
+            pkce_entries.pop(state, None)
+            write_json_file(MERCADOLIVRE_PKCE_PATH, pkce_entries)
+
+        update_marketplace_integration(
+            "mercado_livre",
+            {
+                "secretRef": "runtime://marketplaces/mercado_livre/client-secret",
+                "accessTokenRef": "runtime://marketplaces/mercado_livre/access-token" if access_token else "",
+                "refreshTokenRef": "runtime://marketplaces/mercado_livre/refresh-token" if refresh_token else "",
+                "notes": "OAuth concluido e tokens persistidos em runtime local."
+                if access_token or refresh_token
+                else "OAuth iniciou mas nao retornou tokens persistiveis.",
+            },
+        )
+
+        return {
+            "status": "ok",
+            "token_type": payload.get("token_type"),
+            "expires_in": payload.get("expires_in"),
+            "scope": payload.get("scope"),
+            "user_id": payload.get("user_id"),
+            "stored_access_token": bool(access_token),
+            "stored_refresh_token": bool(refresh_token),
+        }
+
+    def _write_shopee_callback(self, query: str) -> None:
+        params = parse_qs(query)
+        payload = {
+            "provider": "shopee",
+            "received_at_utc": utc_now_iso(),
+            "code": (params.get("code") or [None])[0],
+            "shop_id": (params.get("shop_id") or [None])[0],
+            "main_account_id": (params.get("main_account_id") or [None])[0],
+            "error": (params.get("error") or [None])[0],
+            "message": (params.get("message") or [None])[0],
+            "raw_query": query,
+        }
+        write_json_file(SHOPEE_OAUTH_RUNTIME_PATH, payload)
+        if payload["shop_id"]:
+            update_marketplace_integration(
+                "shopee",
+                {
+                    "sellerId": str(payload["shop_id"]),
+                    "notes": "Callback Shopee recebida; partner credentials pendentes para troca do token.",
+                },
+            )
+
+        status = "callback recebida"
+        detail = (
+            "Codigo de autorizacao e shop_id capturados para a Shopee."
+            if payload["code"] or payload["shop_id"]
+            else payload["message"] or payload["error"] or "Nenhum parametro de autorizacao foi informado."
+        )
+        html = f"""<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Valley | Shopee OAuth</title>
+    <style>
+      body {{ font-family: Arial, sans-serif; background:#0b1020; color:#e8edf7; margin:0; }}
+      main {{ max-width:760px; margin:48px auto; padding:24px; }}
+      section {{ background:#121a31; border:1px solid #253150; border-radius:8px; padding:24px; }}
+      h1 {{ margin:0 0 8px; font-size:28px; }}
+      p, code {{ color:#b7c2dc; }}
+      code {{ display:block; margin-top:16px; white-space:pre-wrap; word-break:break-word; }}
+    </style>
+  </head>
+  <body>
+    <main>
+      <section>
+        <h1>{status}</h1>
+        <p>{detail}</p>
+        <code>{json.dumps(payload, ensure_ascii=False, indent=2)}</code>
+      </section>
+    </main>
+  </body>
+</html>
+"""
+        body = html.encode("utf-8")
+        self.send_response(HTTPStatus.OK)
+        self.send_header("Content-Type", "text/html; charset=utf-8")
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
+    def _write_aliexpress_callback(self, query: str) -> None:
+        params = parse_qs(query)
+        payload = {
+            "provider": "aliexpress",
+            "received_at_utc": utc_now_iso(),
+            "code": (params.get("code") or [None])[0],
+            "state": (params.get("state") or [None])[0],
+            "error": (params.get("error") or [None])[0],
+            "error_description": (params.get("error_description") or [None])[0],
+            "raw_query": query,
+        }
+        token_exchange = None
+        if payload["code"]:
+            token_exchange = self._exchange_aliexpress_code(payload["code"])
+            payload["token_exchange"] = token_exchange
+        write_json_file(ALIEXPRESS_OAUTH_RUNTIME_PATH, payload)
+
+        if token_exchange and token_exchange.get("status") == "ok":
+            status = "autorizacao concluida"
+            detail = "Codigo OAuth trocado por access token e refresh token com sucesso."
+        elif payload["code"]:
+            status = "autorizacao recebida"
+            detail = (
+                token_exchange.get("detail")
+                if isinstance(token_exchange, dict) and token_exchange.get("detail")
+                else "Codigo de autorizacao do AliExpress capturado para troca posterior do token."
+            )
+        else:
+            status = "callback recebida"
+            detail = payload["error_description"] or payload["error"] or "Nenhum parametro de autorizacao foi informado."
+        html = f"""<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Valley | AliExpress OAuth</title>
+    <style>
+      body {{ font-family: Arial, sans-serif; background:#0b1020; color:#e8edf7; margin:0; }}
+      main {{ max-width:760px; margin:48px auto; padding:24px; }}
+      section {{ background:#121a31; border:1px solid #253150; border-radius:8px; padding:24px; }}
+      h1 {{ margin:0 0 8px; font-size:28px; }}
+      p, code {{ color:#b7c2dc; }}
+      code {{ display:block; margin-top:16px; white-space:pre-wrap; word-break:break-word; }}
+    </style>
+  </head>
+  <body>
+    <main>
+      <section>
+        <h1>{status}</h1>
+        <p>{detail}</p>
+        <code>{json.dumps(payload, ensure_ascii=False, indent=2)}</code>
+      </section>
+    </main>
+  </body>
+</html>
+"""
+        body = html.encode("utf-8")
+        self.send_response(HTTPStatus.OK)
+        self.send_header("Content-Type", "text/html; charset=utf-8")
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
+    def _exchange_aliexpress_code(self, code: str) -> dict[str, Any]:
+        integrations_saved = load_json_file(ADMIN_INTEGRATIONS_PATH)
+        integrations = integrations_saved if isinstance(integrations_saved, list) else []
+        provider = next(
+            (item for item in integrations if isinstance(item, dict) and item.get("key") == "aliexpress"),
+            None,
+        )
+        secrets_payload = load_json_file(PROVIDER_SECRETS_PATH) or {}
+        provider_secrets = secrets_payload.get("aliexpress") if isinstance(secrets_payload, dict) else None
+
+        app_key = str((provider or {}).get("clientId") or "").strip()
+        configured_secret_ref = str((provider or {}).get("secretRef") or "").strip()
+        app_secret = str((provider_secrets or {}).get("clientSecret") or "").strip()
+        base_url = str((provider or {}).get("baseUrl") or "https://api-sg.aliexpress.com").strip().rstrip("/")
+
+        if configured_secret_ref and not configured_secret_ref.startswith("runtime://"):
+            app_secret = configured_secret_ref
+            secrets_payload.setdefault("aliexpress", {})
+            secrets_payload["aliexpress"]["clientSecret"] = app_secret
+            secrets_payload["aliexpress"]["updated_at_utc"] = utc_now_iso()
+            write_json_file(PROVIDER_SECRETS_PATH, secrets_payload)
+
+        if not app_key or not app_secret:
+            return {
+                "status": "missing_credentials",
+                "detail": "AppKey ou App Secret ausentes para a troca do token do AliExpress.",
+            }
+
+        api_name = "/auth/token/create"
+        timestamp = str(int(datetime.now(timezone.utc).timestamp() * 1000))
+        params = {
+            "app_key": app_key,
+            "code": code,
+            "sign_method": "sha256",
+            "timestamp": timestamp,
+        }
+        sign_payload = api_name + "".join(f"{key}{params[key]}" for key in sorted(params))
+        sign = hmac_sha256_upper(app_secret, sign_payload)
+        request_url = f"{base_url}/rest{api_name}?{urlencode({**params, 'sign': sign})}"
+        request = Request(
+            request_url,
+            headers={
+                "accept": "application/json",
+            },
+            method="GET",
+        )
+
+        try:
+            with urlopen(request, timeout=45) as response:
+                payload = json.loads(response.read().decode("utf-8"))
+        except HTTPError as error:
+            detail = error.read().decode("utf-8", errors="replace")
+            return {
+                "status": "http_error",
+                "code": error.code,
+                "detail": detail,
+            }
+        except URLError as error:
+            return {
+                "status": "network_error",
+                "detail": str(error),
+            }
+        except Exception as error:  # noqa: BLE001
+            return {
+                "status": "failed",
+                "detail": str(error),
+            }
+
+        if str(payload.get("code")) != "0":
+            return {
+                "status": "api_error",
+                "code": payload.get("code"),
+                "detail": payload.get("message") or payload.get("msg") or "AliExpress recusou a troca do token.",
+                "response": payload,
+            }
+
+        access_token = str(payload.get("access_token") or "").strip()
+        refresh_token = str(payload.get("refresh_token") or "").strip()
+        seller_id = str(payload.get("seller_id") or payload.get("user_id") or "").strip()
+        account = str(payload.get("account") or "").strip()
+        if access_token:
+            secrets_payload.setdefault("aliexpress", {})
+            secrets_payload["aliexpress"]["accessToken"] = access_token
+            secrets_payload["aliexpress"]["updated_at_utc"] = utc_now_iso()
+        if refresh_token:
+            secrets_payload.setdefault("aliexpress", {})
+            secrets_payload["aliexpress"]["refreshToken"] = refresh_token
+            secrets_payload["aliexpress"]["updated_at_utc"] = utc_now_iso()
+        if payload.get("user_id") is not None:
+            secrets_payload.setdefault("aliexpress", {})
+            secrets_payload["aliexpress"]["userId"] = payload.get("user_id")
+        if payload.get("seller_id") is not None:
+            secrets_payload.setdefault("aliexpress", {})
+            secrets_payload["aliexpress"]["sellerId"] = payload.get("seller_id")
+        if account:
+            secrets_payload.setdefault("aliexpress", {})
+            secrets_payload["aliexpress"]["account"] = account
+        if payload.get("account_platform") is not None:
+            secrets_payload.setdefault("aliexpress", {})
+            secrets_payload["aliexpress"]["accountPlatform"] = payload.get("account_platform")
+        if payload.get("expires_in") is not None:
+            secrets_payload.setdefault("aliexpress", {})
+            secrets_payload["aliexpress"]["expiresIn"] = payload.get("expires_in")
+        if payload.get("refresh_expires_in") is not None:
+            secrets_payload.setdefault("aliexpress", {})
+            secrets_payload["aliexpress"]["refreshExpiresIn"] = payload.get("refresh_expires_in")
+        if payload.get("sp") is not None:
+            secrets_payload.setdefault("aliexpress", {})
+            secrets_payload["aliexpress"]["sp"] = payload.get("sp")
+        if access_token or refresh_token:
+            write_json_file(PROVIDER_SECRETS_PATH, secrets_payload)
+
+        update_marketplace_integration(
+            "aliexpress",
+            {
+                "enabled": bool(access_token),
+                "environment": "sandbox",
+                "secretRef": "runtime://marketplaces/aliexpress/client-secret",
+                "accessTokenRef": "runtime://marketplaces/aliexpress/access-token" if access_token else "",
+                "refreshTokenRef": "runtime://marketplaces/aliexpress/refresh-token" if refresh_token else "",
+                "sellerId": seller_id,
+                "notes": "OAuth AliExpress concluido em app Test; tokens persistidos em runtime local."
+                if access_token
+                else "OAuth AliExpress recebeu code, mas nao persistiu tokens.",
+            },
+        )
+
+        return {
+            "status": "ok",
+            "access_token_expires_in": payload.get("expires_in"),
+            "refresh_token_expires_in": payload.get("refresh_expires_in"),
+            "user_id": payload.get("user_id"),
+            "seller_id": payload.get("seller_id"),
+            "account": payload.get("account"),
+            "account_platform": payload.get("account_platform"),
+            "stored_access_token": bool(access_token),
+            "stored_refresh_token": bool(refresh_token),
+        }
+
+    def _write_aliexpress_notification_probe(self) -> None:
+        self._write_json(
+            HTTPStatus.OK,
+            {
+                "status": "ok",
+                "service": "valley-admin",
+                "provider": "aliexpress",
+                "route": "/integrations/aliexpress/notifications",
+                "method": "POST",
+                "received_at_utc": utc_now_iso(),
+                "detail": "Endpoint de mensagens do AliExpress ativo.",
+            },
+        )
+
+    def _write_aliexpress_notification_event(self) -> None:
+        content_length = int(self.headers.get("Content-Length", "0") or "0")
+        raw_body = self.rfile.read(content_length) if content_length > 0 else b""
+        text_body = raw_body.decode("utf-8", errors="replace")
+        try:
+            parsed_body = json.loads(text_body) if text_body else None
+        except json.JSONDecodeError:
+            parsed_body = None
+
+        event = {
+            "provider": "aliexpress",
+            "received_at_utc": utc_now_iso(),
+            "headers": {
+                "content_type": self.headers.get("Content-Type"),
+                "user_agent": self.headers.get("User-Agent"),
+                "x_request_id": self.headers.get("X-Request-Id"),
+                "x_real_ip": self.headers.get("X-Real-Ip"),
+                "x_forwarded_for": self.headers.get("X-Forwarded-For"),
+            },
+            "body": parsed_body if parsed_body is not None else text_body,
+        }
+        ALIEXPRESS_NOTIFICATIONS_PATH.parent.mkdir(parents=True, exist_ok=True)
+        with ALIEXPRESS_NOTIFICATIONS_PATH.open("a", encoding="utf-8") as handle:
+            handle.write(json.dumps(event, ensure_ascii=False) + "\n")
+        write_json_file(ALIEXPRESS_NOTIFICATIONS_LATEST_PATH, event)
+
+        self._write_json(
+            HTTPStatus.OK,
+            {
+                "status": "ok",
+                "service": "valley-admin",
+                "provider": "aliexpress",
+                "received_at_utc": event["received_at_utc"],
+                "detail": "Mensagem recebida e persistida.",
+            },
+        )
+
+    def _write_mercadolivre_notification_probe(self) -> None:
+        self._write_json(
+            HTTPStatus.OK,
+            {
+                "status": "ok",
+                "service": "valley-admin",
+                "provider": "mercado_livre",
+                "route": "/integrations/mercadolivre/notifications",
+                "method": "POST",
+                "received_at_utc": utc_now_iso(),
+                "detail": "Endpoint de notificacoes do Mercado Livre ativo.",
+            },
+        )
+
+    def _write_mercadolivre_notification_event(self) -> None:
+        content_length = int(self.headers.get("Content-Length", "0") or "0")
+        raw_body = self.rfile.read(content_length) if content_length > 0 else b""
+        text_body = raw_body.decode("utf-8", errors="replace")
+        try:
+            parsed_body = json.loads(text_body) if text_body else None
+        except json.JSONDecodeError:
+            parsed_body = None
+
+        event = {
+            "provider": "mercado_livre",
+            "received_at_utc": utc_now_iso(),
+            "headers": {
+                "content_type": self.headers.get("Content-Type"),
+                "user_agent": self.headers.get("User-Agent"),
+                "x_request_id": self.headers.get("X-Request-Id"),
+                "x_real_ip": self.headers.get("X-Real-Ip"),
+                "x_forwarded_for": self.headers.get("X-Forwarded-For"),
+            },
+            "body": parsed_body if parsed_body is not None else text_body,
+        }
+        MERCADOLIVRE_NOTIFICATIONS_PATH.parent.mkdir(parents=True, exist_ok=True)
+        with MERCADOLIVRE_NOTIFICATIONS_PATH.open("a", encoding="utf-8") as handle:
+            handle.write(json.dumps(event, ensure_ascii=False) + "\n")
+        write_json_file(MERCADOLIVRE_NOTIFICATIONS_LATEST_PATH, event)
+
+        self._write_json(
+            HTTPStatus.OK,
+            {
+                "status": "ok",
+                "service": "valley-admin",
+                "provider": "mercado_livre",
+                "received_at_utc": event["received_at_utc"],
+                "detail": "Notificacao recebida e persistida.",
+            },
+        )
+
     def _product_interest_payload(self, query: dict[str, list[str]]) -> dict[str, Any]:
         item_id = (query.get("item_id") or [""])[0]
         catalog = load_json_file(PRODUCT_CATALOG_PATH) or {}
@@ -591,6 +1392,17 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
         self.send_header("Content-Length", str(len(body)))
         self.end_headers()
         self.wfile.write(body)
+
+    def _read_json_body(self) -> Any:
+        content_length = int(self.headers.get("Content-Length", "0") or "0")
+        if content_length <= 0:
+            return None
+
+        raw_body = self.rfile.read(content_length)
+        try:
+            return json.loads(raw_body.decode("utf-8"))
+        except (UnicodeDecodeError, json.JSONDecodeError):
+            return None
 
 
 def parse_args() -> argparse.Namespace:

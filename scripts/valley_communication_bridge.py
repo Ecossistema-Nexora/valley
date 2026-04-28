@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import mimetypes
 import os
 import subprocess
 import time
@@ -445,12 +446,13 @@ def send_telegram_document(file_path: Path, caption: str = "") -> bool:
     if not token or not chat_id or not file_path.exists():
         return False
     url = f"https://api.telegram.org/bot{token}/sendDocument"
+    mime_type = mimetypes.guess_type(file_path.name)[0] or "application/octet-stream"
     http_multipart(
         url,
         {"chat_id": chat_id, "caption": caption},
         "document",
         file_path,
-        mime_type="application/vnd.android.package-archive",
+        mime_type=mime_type,
     )
     return True
 

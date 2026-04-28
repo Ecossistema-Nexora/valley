@@ -11,8 +11,7 @@ class ProductApiRepository {
     'VALLEY_PRODUCT_API_BASE_URL',
     defaultValue: '',
   );
-  static const String _releaseBaseUrl =
-      'https://aged-surgeons-opinion-wanna.trycloudflare.com';
+  static const String _releaseBaseUrl = 'https://admin.brasildesconto.com.br';
 
   Future<ProductShellData> load() async {
     Object? lastError;
@@ -39,6 +38,63 @@ class ProductApiRepository {
     } catch (error) {
       throw StateError(
         'Servidor Valley indisponivel: $lastError; fallback: $error',
+      );
+    }
+  }
+
+  Future<List<ProductItem>> loadStockCatalog({String? preferredBaseUrl}) async {
+    Object? lastError;
+    final List<String> candidates = <String>[];
+    final Set<String> seen = <String>{};
+
+    void addCandidate(String? value) {
+      final String normalized = _normalizeBaseUrl(value ?? '');
+      if (!normalized.startsWith('http') || !seen.add(normalized)) {
+        return;
+      }
+      candidates.add(normalized);
+    }
+
+    addCandidate(preferredBaseUrl);
+    for (final String baseUrl in await _candidateBaseUrls()) {
+      addCandidate(baseUrl);
+    }
+
+    for (final String baseUrl in candidates) {
+      try {
+        final http.Response response = await http
+            .get(Uri.parse('$baseUrl/api/stock-catalog'))
+            .timeout(const Duration(seconds: 20));
+        if (response.statusCode < 200 || response.statusCode >= 300) {
+          continue;
+        }
+        final Map<String, dynamic> json =
+            (jsonDecode(utf8.decode(response.bodyBytes))
+                    as Map<dynamic, dynamic>)
+                .cast<String, dynamic>();
+        return (json['items'] as List<dynamic>? ?? <dynamic>[])
+            .map(
+              (dynamic item) => ProductItem.fromJson(
+                (item as Map<dynamic, dynamic>).cast<String, dynamic>(),
+              ),
+            )
+            .where((ProductItem item) => item.moduleId == 'STOCK')
+            .toList();
+      } catch (error) {
+        lastError = error;
+      }
+    }
+
+    try {
+      final ProductShellData bundledShell = await _loadBundledShell(
+        await _loadActiveModuleIds(),
+      );
+      return bundledShell.items
+          .where((ProductItem item) => item.moduleId == 'STOCK')
+          .toList();
+    } catch (error) {
+      throw StateError(
+        'Catalogo STOCK indisponivel: $lastError; fallback: $error',
       );
     }
   }
@@ -216,11 +272,11 @@ class ProductApiRepository {
     }
 
     for (final String candidate in <String>[
+      'https://admin.brasildesconto.com.br',
       'http://10.0.2.2:8085',
       'http://127.0.0.1:8085',
       'http://localhost:8085',
       'http://192.168.1.2:8085',
-      'https://aged-surgeons-opinion-wanna.trycloudflare.com',
       'http://10.0.2.2:8080',
       'http://127.0.0.1:8080',
       'http://localhost:8080',

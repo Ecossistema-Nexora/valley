@@ -392,16 +392,9 @@ def build_release_queue_summary(modules: list[dict[str, object]]) -> dict[str, o
 
 
 def build_public_runtime_summary() -> dict[str, object]:
-    """Resume o runtime publico do painel admin a partir do manifesto do ngrok."""
+    """Resume o runtime publico do painel admin a partir do manifesto Cloudflare."""
 
     runtime_manifest = read_json(PUBLIC_RUNTIME_PATH)
-    ngrok_api_url = DEFAULT_NGROK_API_URL
-
-    if runtime_manifest:
-        ngrok_runtime = runtime_manifest.get('ngrok')
-        if isinstance(ngrok_runtime, dict) and ngrok_runtime.get('api_url'):
-            ngrok_api_url = str(ngrok_runtime['api_url'])
-
     summary = {
         'available': False,
         'path': relative_from_admin(PUBLIC_RUNTIME_PATH),
@@ -414,47 +407,24 @@ def build_public_runtime_summary() -> dict[str, object]:
         },
     }
 
-    ngrok_payload = read_json_url(ngrok_api_url)
-    tunnel = None
-
-    if isinstance(ngrok_payload, dict):
-        tunnels = ngrok_payload.get('tunnels')
-        if isinstance(tunnels, list) and tunnels:
-            first_tunnel = tunnels[0]
-            if isinstance(first_tunnel, dict):
-                tunnel = first_tunnel
-
-    if not runtime_manifest and not tunnel:
+    if not isinstance(runtime_manifest, dict):
         return summary
 
-    ngrok = runtime_manifest.get('ngrok') if runtime_manifest else None
-
-    public_url = None
-    permanence = None
-    status = runtime_manifest.get('status') if runtime_manifest else None
-
-    if isinstance(ngrok, dict):
-        public_url = ngrok.get('public_url')
-        permanence = ngrok.get('permanence')
-
-    if (not isinstance(public_url, str) or not public_url) and tunnel:
-        public_url = tunnel.get('public_url')
-        permanence = permanence or 'ephemeral'
-        status = status or 'ready'
-
-    if not status:
-        status = 'ready' if public_url else 'invalid'
+    public_url = runtime_manifest.get('public_url')
+    permanence = runtime_manifest.get('permanence')
+    status = runtime_manifest.get('status') or 'invalid'
+    smoke_endpoints = runtime_manifest.get('smoke_endpoints')
 
     if isinstance(public_url, str) and public_url:
-        base_url = public_url.rstrip('/')
-        healthz_url = f'{base_url}/healthz'
-        admin_data_url = f'{base_url}/api/admin-data'
+        public_url = public_url.rstrip('/')
+        default_healthz = f'{public_url}/healthz'
+        default_admin_data = f'{public_url}/api/admin-data'
         available = True
     else:
         public_url = None
-        healthz_url = None
-        admin_data_url = None
-        available = bool(runtime_manifest)
+        default_healthz = None
+        default_admin_data = None
+        available = False
 
     return {
         'available': available,
@@ -463,8 +433,8 @@ def build_public_runtime_summary() -> dict[str, object]:
         'public_url': public_url,
         'permanence': permanence,
         'smoke_endpoints': {
-            'healthz': healthz_url,
-            'admin_data': admin_data_url,
+            'healthz': (smoke_endpoints or {}).get('healthz', default_healthz),
+            'admin_data': (smoke_endpoints or {}).get('admin_data', default_admin_data),
         },
     }
 
@@ -506,7 +476,7 @@ def build_payload() -> dict[str, object]:
         'deployment_summary': report_summary,
         'public_access': {
             'path': relative_from_admin(EXTERNAL_ACCESS_PATH),
-            'ngrok_config_path': relative_from_admin(NGROK_CONFIG_PATH),
+            'cloudflare_launcher_path': relative_from_admin(ROOT / 'scripts' / 'start_termius_cloudflare_tunnel.ps1'),
             'preview': short_markdown(read_text(EXTERNAL_ACCESS_PATH), max_lines=14),
         },
         'roadmap': {

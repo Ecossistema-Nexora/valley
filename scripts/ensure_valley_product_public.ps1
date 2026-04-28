@@ -355,20 +355,14 @@ function Try-StartCloudflareQuickTunnel {
 
 function Start-ProductRuntime {
     $LocalUrl = "http://127.0.0.1:$ApiPort/api/product-shell"
-    $PublicApiUrl = "$PublicUrl/api/product-shell"
 
     Ensure-LocalApi -LocalUrl $LocalUrl
 
-    if (Try-StartNgrok -LocalUrl $LocalUrl -PublicApiUrl $PublicApiUrl) {
-        return
-    }
-
-    Write-Step ("ngrok indisponivel para o dominio reservado; fallback para Cloudflare Quick Tunnel.")
     if (Try-StartCloudflareQuickTunnel -LocalUrl $LocalUrl) {
         return
     }
 
-    throw "Nenhum runtime publico disponivel. Consulte $NgrokErrLog e $CloudflareErrLog"
+    throw "Nenhum runtime publico Cloudflare disponivel. Consulte $CloudflareErrLog"
 }
 
 function Install-RuntimeTask {

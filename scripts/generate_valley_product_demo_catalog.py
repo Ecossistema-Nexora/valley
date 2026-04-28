@@ -14,6 +14,7 @@ MODULES_PATH = ROOT / "frontend" / "flutter" / "assets" / "data" / "modules_v47.
 CATALOG_PATH = ROOT / "frontend" / "flutter" / "assets" / "data" / "valley_product_catalog.json"
 POSTGRES_SEED_PATH = ROOT / "database" / "seeds" / "postgres" / "003_v47_product_mode_demo_seed.sql"
 MONGO_SEED_PATH = ROOT / "database" / "seeds" / "mongodb" / "002_v47_product_mode_demo_seed.mongo.js"
+ADMIN_INTEGRATIONS_PATH = ROOT / "tmp" / "runtime" / "valley-admin-integrations.json"
 
 BASE_TIME = datetime(2026, 4, 23, 12, 0, tzinfo=UTC)
 
@@ -68,6 +69,164 @@ CATEGORIES = [
 
 CITIES = ["Sao Paulo", "Campinas", "Santos", "Ribeirao Preto", "Sorocaba"]
 PRESENCE = ["online", "em entrega", "em reuniao", "respondendo", "ativo agora"]
+
+STOCK_PROVIDER_BLUEPRINTS = {
+    "mercado_livre": {
+        "provider_key": "mercado_livre",
+        "provider_status": "active",
+        "supplier_name": "Mercado Livre Oficial",
+        "supplier_type": "Marketplace API nacional",
+        "supplier_model": "Cross docking nacional",
+        "channel_label": "Canal BR-01",
+    },
+    "aliexpress": {
+        "provider_key": "aliexpress",
+        "provider_status": "active",
+        "supplier_name": "AliExpress Global Sourcing",
+        "supplier_type": "Cross-border sourcing",
+        "supplier_model": "Importacao programada",
+        "channel_label": "Canal Global-02",
+    },
+    "amazon": {
+        "provider_key": "amazon",
+        "provider_status": "standby",
+        "supplier_name": "Amazon Seller API",
+        "supplier_type": "Marketplace internacional",
+        "supplier_model": "Fulfillment parceiro",
+        "channel_label": "Canal Global-03",
+    },
+    "alibaba": {
+        "provider_key": "alibaba",
+        "provider_status": "standby",
+        "supplier_name": "Alibaba B2B",
+        "supplier_type": "Fornecedor B2B",
+        "supplier_model": "MOQ e importacao por lote",
+        "channel_label": "Canal B2B-04",
+    },
+    "magalu": {
+        "provider_key": "magalu",
+        "provider_status": "standby",
+        "supplier_name": "Magalu Parceiros",
+        "supplier_type": "Marketplace nacional",
+        "supplier_model": "Cross docking nacional",
+        "channel_label": "Canal BR-05",
+    },
+    "shopee": {
+        "provider_key": "shopee",
+        "provider_status": "standby",
+        "supplier_name": "Shopee Open Platform",
+        "supplier_type": "Marketplace nacional",
+        "supplier_model": "Sortimento dinamico",
+        "channel_label": "Canal BR-06",
+    },
+    "cjdropshipping": {
+        "provider_key": "cjdropshipping",
+        "provider_status": "standby",
+        "supplier_name": "CJDropshipping",
+        "supplier_type": "Fulfillment dropshipping",
+        "supplier_model": "Pedido automatizado",
+        "channel_label": "Canal Fulfillment-07",
+    },
+}
+
+STOCK_TAXONOMY_BLUEPRINTS = [
+    {
+        "category": "Smartphones",
+        "collection_label": "Valley Edge",
+        "model_root": "Edge Phone",
+        "taxonomy_id": "267",
+        "taxonomy_path": "Electronics > Communications > Telephony > Mobile Phones",
+        "base_price": 1699.90,
+    },
+    {
+        "category": "Audio",
+        "collection_label": "Valley Pulse",
+        "model_root": "Pulse Buds",
+        "taxonomy_id": "543626",
+        "taxonomy_path": "Electronics > Audio > Audio Components > Headphones & Headsets > Headphones",
+        "base_price": 249.90,
+    },
+    {
+        "category": "Audio",
+        "collection_label": "Valley Sound",
+        "model_root": "Sound Dock",
+        "taxonomy_id": "249",
+        "taxonomy_path": "Electronics > Audio > Audio Components > Speakers",
+        "base_price": 329.90,
+    },
+    {
+        "category": "Wearables",
+        "collection_label": "Valley Motion",
+        "model_root": "Motion Watch",
+        "taxonomy_id": "201",
+        "taxonomy_path": "Apparel & Accessories > Jewelry > Watches",
+        "base_price": 489.90,
+    },
+    {
+        "category": "Casa",
+        "collection_label": "Valley Casa",
+        "model_root": "Casa Vac",
+        "taxonomy_id": "619",
+        "taxonomy_path": "Home & Garden > Household Appliances > Vacuums",
+        "base_price": 389.90,
+    },
+    {
+        "category": "Creator Gear",
+        "collection_label": "Valley Studio",
+        "model_root": "Studio Ring",
+        "taxonomy_id": "42",
+        "taxonomy_path": "Cameras & Optics > Photography > Lighting & Studio",
+        "base_price": 159.90,
+    },
+    {
+        "category": "Premium Tech",
+        "collection_label": "Valley Stream",
+        "model_root": "Stream Hub",
+        "taxonomy_id": "5276",
+        "taxonomy_path": "Electronics > Video > Video Players & Recorders > Streaming & Home Media Players",
+        "base_price": 459.90,
+    },
+    {
+        "category": "Mobilidade",
+        "collection_label": "Valley Ride",
+        "model_root": "Ride Scooter",
+        "taxonomy_id": "5879",
+        "taxonomy_path": "Sporting Goods > Outdoor Recreation > Riding Scooters",
+        "base_price": 899.90,
+    },
+    {
+        "category": "Smart Living",
+        "collection_label": "Valley Sense",
+        "model_root": "Sense Kit",
+        "taxonomy_id": "2413",
+        "taxonomy_path": "Hardware > Power & Electrical Supplies > Home Automation Kits",
+        "base_price": 279.90,
+    },
+    {
+        "category": "Premium Tech",
+        "collection_label": "Valley Charge",
+        "model_root": "Charge Max",
+        "taxonomy_id": "505295",
+        "taxonomy_path": "Electronics > Electronics Accessories > Power > Power Adapters & Chargers",
+        "base_price": 189.90,
+    },
+    {
+        "category": "Smartphones",
+        "collection_label": "Valley Guard",
+        "model_root": "Guard Case",
+        "taxonomy_id": "2353",
+        "taxonomy_path": "Electronics > Communications > Telephony > Mobile Phone Accessories > Mobile Phone Cases",
+        "base_price": 89.90,
+    },
+    {
+        "category": "Creator Gear",
+        "collection_label": "Valley Voice",
+        "model_root": "Voice Mic",
+        "taxonomy_id": "234",
+        "taxonomy_path": "Electronics > Audio > Audio Components > Microphones",
+        "base_price": 219.90,
+    },
+]
 
 DATA_HOME_LABELS = {
     "postgres": "Postgres relacional",
@@ -311,6 +470,98 @@ def load_modules() -> list[dict[str, object]]:
     return payload["modules"]
 
 
+def _load_active_stock_channels() -> list[dict[str, str]]:
+    if not ADMIN_INTEGRATIONS_PATH.exists():
+        return [
+            dict(STOCK_PROVIDER_BLUEPRINTS["mercado_livre"]),
+            dict(STOCK_PROVIDER_BLUEPRINTS["aliexpress"]),
+        ]
+
+    try:
+        payload = json.loads(ADMIN_INTEGRATIONS_PATH.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        payload = []
+
+    enabled_keys = [
+        str(item.get("key"))
+        for item in payload
+        if isinstance(item, dict) and item.get("enabled")
+    ]
+    enabled_channels = [
+        dict(STOCK_PROVIDER_BLUEPRINTS[key])
+        for key in enabled_keys
+        if key in STOCK_PROVIDER_BLUEPRINTS
+    ]
+    if enabled_channels:
+        return enabled_channels
+    return [dict(STOCK_PROVIDER_BLUEPRINTS["mercado_livre"])]
+
+
+def _build_stock_item_blueprint(
+    local_index: int,
+    module_serial: int,
+    provider_pool: list[dict[str, str]],
+) -> dict[str, object]:
+    template = STOCK_TAXONOMY_BLUEPRINTS[local_index % len(STOCK_TAXONOMY_BLUEPRINTS)]
+    provider = provider_pool[local_index % len(provider_pool)]
+    release_wave = local_index // len(STOCK_TAXONOMY_BLUEPRINTS)
+    brand = str(template["collection_label"])
+    merchant_name = "Valley"
+    model_root = str(template["model_root"])
+    model_name = f"{model_root} {module_serial:03d}"
+    title = f"{brand} {model_name}"
+    price = round(float(template["base_price"]) + (release_wave * 34.5) + ((local_index % 5) * 7.9), 2)
+    compare_price = round(price * 1.18, 2)
+    stock = 18 + ((local_index * 3) % 42)
+    stock_statuses = [
+        "Pronto para vitrine",
+        "Reposicao em validacao",
+        "Buffer de estoque",
+        "Janela promocional",
+    ]
+    return {
+        "brand": brand,
+        "merchant_name": merchant_name,
+        "category": str(template["category"]),
+        "collection_label": brand,
+        "model_name": model_name,
+        "title": title,
+        "price_brl": price,
+        "compare_at_brl": compare_price,
+        "stock": stock,
+        "status": stock_statuses[local_index % len(stock_statuses)],
+        "description": (
+            f"{title} em linha proprietaria Valley com curadoria por taxonomia Google, "
+            "precificacao protegida e operacao omnicanal sem expor origem de fornecedor na vitrine."
+        ),
+        "features": [
+            "Marca propria Valley",
+            "Classificacao por taxonomia Google",
+            "Curadoria de estoque omnicanal",
+        ],
+        "seller_name": "Curadoria Valley",
+        "seller_headline": "Colecao proprietaria com operacao integrada e sortimento governado por categoria.",
+        "google_product_category_id": str(template["taxonomy_id"]),
+        "google_product_category_path": str(template["taxonomy_path"]),
+        "provider_key": str(provider["provider_key"]),
+        "provider_status": str(provider["provider_status"]),
+        "supplier_name": str(provider["supplier_name"]),
+        "supplier_type": str(provider["supplier_type"]),
+        "supplier_model": str(provider["supplier_model"]),
+        "channel_label": str(provider["channel_label"]),
+        "supplier_visibility": "internal",
+        "price_band": (
+            "Ate R$ 199"
+            if price < 200
+            else "R$ 200 a R$ 499"
+            if price < 500
+            else "R$ 500 a R$ 999"
+            if price < 1000
+            else "Acima de R$ 1.000"
+        ),
+    }
+
+
 def _module_family(module: dict[str, object]) -> str:
     code = str(module["code"])
     if code in MODULE_FAMILY_OVERRIDES:
@@ -415,14 +666,30 @@ def _module_screen(module: dict[str, object], index: int) -> dict[str, object]:
                 "trend": str(metric["trend"]),
             }
         )
+    hero_title = str(module["name"])
+    hero_subtitle = str(context["hero_subtitle"])
+    accent_label = str(context["accent_label"])
+    highlights = context["highlights"]
+    if code == "STOCK":
+        hero_title = "Valley Stock | Catalogo proprietario"
+        hero_subtitle = (
+            "Sortimento unificado por categoria e taxonomia Google, com canais de "
+            "abastecimento internos e marca propria Valley na vitrine."
+        )
+        accent_label = "Marca propria com taxonomia viva"
+        highlights = [
+            "Vitrine unificada por categoria, nao por fornecedor.",
+            "Classificacao oficial por Google product category para busca, feed e governanca.",
+            "Origem do abastecimento fica restrita a operacao interna do Valley.",
+        ]
     return {
         "module_id": code,
-        "hero_title": str(module["name"]),
-        "hero_subtitle": str(context["hero_subtitle"]),
-        "accent_label": str(context["accent_label"]),
+        "hero_title": hero_title,
+        "hero_subtitle": hero_subtitle,
+        "accent_label": accent_label,
         "stat_cards": stat_cards,
         "quick_actions": context["quick_actions"],
-        "highlights": context["highlights"],
+        "highlights": highlights,
         "description": context["description"],
         "domain": str(module["domain"]),
         "tier": str(module["tier"]),
@@ -436,6 +703,7 @@ def _module_screen(module: dict[str, object], index: int) -> dict[str, object]:
 
 def build_demo_records() -> dict[str, object]:
     modules = load_modules()
+    stock_channels = _load_active_stock_channels()
 
     users: list[dict[str, object]] = []
     wallets: list[dict[str, object]] = []
@@ -490,6 +758,20 @@ def build_demo_records() -> dict[str, object]:
             stock = 12 + (index % 37)
             created_at = iso_at(index)
             city = CITIES[index % len(CITIES)]
+            stock_blueprint: dict[str, object] | None = None
+
+            if module_code == "STOCK":
+                stock_blueprint = _build_stock_item_blueprint(
+                    local_index=local_index,
+                    module_serial=module_serial,
+                    provider_pool=stock_channels,
+                )
+                brand = str(stock_blueprint["brand"])
+                category = str(stock_blueprint["category"])
+                title = str(stock_blueprint["title"])
+                price = float(stock_blueprint["price_brl"])
+                compare_price = float(stock_blueprint["compare_at_brl"])
+                stock = int(stock_blueprint["stock"])
 
             users.append(
                 {
@@ -541,12 +823,101 @@ def build_demo_records() -> dict[str, object]:
                     "title": title,
                     "category": category,
                     "brand": brand,
-                    "description": f"{title} com pronta entrega, demonstracao em video e fluxo de compra direto para o usuario final.",
+                    "description": (
+                        str(stock_blueprint["description"])
+                        if stock_blueprint
+                        else f"{title} com pronta entrega, demonstracao em video e fluxo de compra direto para o usuario final."
+                    ),
                     "price_brl": price,
                     "compare_at_brl": compare_price,
                     "stock": stock,
                     "image_url": image_url,
                     "video_url": video_url,
+                    "collection_label": (
+                        str(stock_blueprint["collection_label"])
+                        if stock_blueprint
+                        else brand
+                    ),
+                    "model_name": (
+                        str(stock_blueprint["model_name"])
+                        if stock_blueprint
+                        else f"{module_code} {module_serial:03d}"
+                    ),
+                    "public_merchant_name": (
+                        str(stock_blueprint["merchant_name"])
+                        if stock_blueprint
+                        else brand
+                    ),
+                    "seller_name": (
+                        str(stock_blueprint["seller_name"])
+                        if stock_blueprint
+                        else f"{brand} {module_serial:03d}"
+                    ),
+                    "seller_headline": (
+                        str(stock_blueprint["seller_headline"])
+                        if stock_blueprint
+                        else "Seller validado para continuidade no Valley."
+                    ),
+                    "google_product_category_id": (
+                        str(stock_blueprint["google_product_category_id"])
+                        if stock_blueprint
+                        else None
+                    ),
+                    "google_product_category_path": (
+                        str(stock_blueprint["google_product_category_path"])
+                        if stock_blueprint
+                        else None
+                    ),
+                    "provider_key": (
+                        str(stock_blueprint["provider_key"])
+                        if stock_blueprint
+                        else None
+                    ),
+                    "provider_status": (
+                        str(stock_blueprint["provider_status"])
+                        if stock_blueprint
+                        else None
+                    ),
+                    "supplier_name": (
+                        str(stock_blueprint["supplier_name"])
+                        if stock_blueprint
+                        else None
+                    ),
+                    "supplier_type": (
+                        str(stock_blueprint["supplier_type"])
+                        if stock_blueprint
+                        else None
+                    ),
+                    "supplier_model": (
+                        str(stock_blueprint["supplier_model"])
+                        if stock_blueprint
+                        else None
+                    ),
+                    "supplier_visibility": (
+                        str(stock_blueprint["supplier_visibility"])
+                        if stock_blueprint
+                        else None
+                    ),
+                    "channel_label": (
+                        str(stock_blueprint["channel_label"])
+                        if stock_blueprint
+                        else None
+                    ),
+                    "price_band": (
+                        str(stock_blueprint["price_band"])
+                        if stock_blueprint
+                        else None
+                    ),
+                    "status_label": (
+                        str(stock_blueprint["status"])
+                        if stock_blueprint
+                        else None
+                    ),
+                    "features": (
+                        list(stock_blueprint["features"])
+                        if stock_blueprint
+                        else None
+                    ),
                     "created_at": created_at,
                 }
             )
@@ -759,28 +1130,49 @@ def build_demo_records() -> dict[str, object]:
         item = inventory_items[index]
         module = modules[index // 100]
         profile = profiles[index]
+        is_stock = str(module["code"]) == "STOCK"
+        visible_merchant_name = str(item.get("public_merchant_name") or users[index]["display_name"])
+        status_label = (
+            str(item.get("status_label"))
+            if is_stock and item.get("status_label")
+            else ("disponivel" if index % 5 != 0 else "quase esgotado")
+        )
+        tags = (
+            [
+                "Marca Propria Valley",
+                str(item["category"]),
+                str(item.get("collection_label") or item["brand"]),
+                str(module["code"]),
+            ]
+            if is_stock
+            else [item["category"], str(module["code"]), "Premium"]
+        )
         catalog_items.append(
             {
                 "id": listing["listing_id"],
                 "module_id": module["code"],
-                    "title": listing["title"],
-                    "brand": item["brand"],
-                    "category": item["category"],
-                    "price_brl": listing["price_brl"],
-                    "compare_at_brl": item["compare_at_brl"],
+                "title": listing["title"],
+                "brand": item["brand"],
+                "category": item["category"],
+                "price_brl": listing["price_brl"],
+                "compare_at_brl": item["compare_at_brl"],
                 "stock": listing["stock"],
-                "merchant_name": users[index]["display_name"],
+                "merchant_name": visible_merchant_name,
                 "image_url": listing["image_url"],
                 "video_url": listing["video_url"],
                 "video_count": 1,
-                "status": "disponivel" if index % 5 != 0 else "quase esgotado",
-                "tags": [item["category"], str(module["code"]), "Premium"],
+                "status": status_label,
+                "tags": tags,
                 "cta_label": "Abrir",
                 "cta_path": f"/api/actions/product-interest?item_id={listing['listing_id']}",
                 "media_path": f"/api/actions/open-media?item_id={listing['listing_id']}",
                 "description": (
-                    f"{item['title']} dentro de {module['name']}: {module['description_ptbr']} "
-                    "Fluxo pronto para detalhe, conversa e continuidade no shell."
+                    str(item["description"])
+                    if is_stock
+                    else (
+                        f"{item['title']} dentro de {module['name']}: {module['description_ptbr']} "
+                        "Fluxo pronto para detalhe, conversa e continuidade no shell."
+                    )
                 ),
                 "gallery_urls": [
                     listing["image_url"],
@@ -790,13 +1182,18 @@ def build_demo_records() -> dict[str, object]:
                     ],
                 ][:3],
                 "profile_id": profile["id"],
-                "features": [
-                    "Video demonstrativo pronto",
-                    "Compra com checkout direto",
-                    "Suporte via chat integrado",
-                ],
+                "features": (
+                    list(item.get("features") or [])
+                    if is_stock
+                    else [
+                        "Video demonstrativo pronto",
+                        "Compra com checkout direto",
+                        "Suporte via chat integrado",
+                    ]
+                ),
                 "seller": {
-                    "name": profile["name"],
+                    "name": str(item.get("seller_name") or profile["name"]),
+                    "headline": str(item.get("seller_headline") or "Seller validado para continuidade no Valley."),
                     "avatar_url": profile["avatar_url"],
                     "rating": profile["rating"],
                     "city": profile["city"],
@@ -809,14 +1206,27 @@ def build_demo_records() -> dict[str, object]:
                     "eta": f"{2 + (index % 3)} dias",
                 },
                 "raw_badge": str(module["subtitle"]),
+                "collection_label": item.get("collection_label"),
+                "model_name": item.get("model_name"),
+                "google_product_category_id": item.get("google_product_category_id"),
+                "google_product_category_path": item.get("google_product_category_path"),
+                "google_product_category": item.get("google_product_category_path"),
+                "provider_key": item.get("provider_key"),
+                "provider_status": item.get("provider_status"),
+                "supplier_name": item.get("supplier_name"),
+                "supplier_type": item.get("supplier_type"),
+                "supplier_model": item.get("supplier_model"),
+                "supplier_visibility": item.get("supplier_visibility"),
+                "channel_label": item.get("channel_label"),
+                "price_band": item.get("price_band"),
             }
         )
 
     catalog = {
         "generated_at_utc": iso_at(0),
         "hero": {
-            "title": "Valley",
-            "subtitle": "Compra, explore e acesse seus modulos em uma unica experiencia.",
+            "title": "Valley Stock | Catalogo proprietario",
+            "subtitle": "Colecoes Valley organizadas por categoria e taxonomia Google, com operacao omnicanal e vitrine limpa de fornecedor.",
         },
         "modules": [
             {

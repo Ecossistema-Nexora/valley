@@ -465,12 +465,12 @@
   "public_runtime": {
     "available": true,
     "path": "../tmp/runtime/valley-admin-public-runtime.json",
-    "status": "ok",
-    "public_url": "https://aged-surgeons-opinion-wanna.trycloudflare.com",
-    "permanence": "ephemeral_external",
+    "status": "production_persistent",
+    "public_url": "https://admin.brasildesconto.com.br",
+    "permanence": "fixed_external",
     "smoke_endpoints": {
-      "healthz": "https://aged-surgeons-opinion-wanna.trycloudflare.com/healthz",
-      "admin_data": "https://aged-surgeons-opinion-wanna.trycloudflare.com/api/admin-data"
+      "healthz": "https://admin.brasildesconto.com.br/healthz",
+      "admin_data": "https://admin.brasildesconto.com.br/api/admin-data"
     }
   },
   "database_summary": {

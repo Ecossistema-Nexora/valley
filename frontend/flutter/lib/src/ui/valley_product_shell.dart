@@ -31,7 +31,7 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
   late ProductShellData _data;
   bool _busy = false;
   String _query = '';
-  String _selectedModuleId = 'MARKETPLACE';
+  String _selectedModuleId = 'STOCK';
   String _surface = 'home';
   int _navIndex = 0;
   ProductItem? _selectedItem;
@@ -53,7 +53,9 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
   void initState() {
     super.initState();
     _data = widget.initialData;
-    if (_data.modules.any(
+    if (_data.modules.any((ProductModule module) => module.id == 'STOCK')) {
+      _selectedModuleId = 'STOCK';
+    } else if (_data.modules.any(
       (ProductModule module) => module.id == 'MARKETPLACE',
     )) {
       _selectedModuleId = 'MARKETPLACE';
@@ -719,7 +721,12 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
       module?.id ?? '',
     );
     if ((module?.id ?? '') == 'STOCK') {
-      return _StockSection(items: items, onTap: _openItemDetail);
+      return _StockSection(
+        items: items,
+        onTap: _openItemDetail,
+        repository: widget.repository,
+        baseUrl: _data.baseUrl,
+      );
     }
     if ((module?.id ?? '') == 'FOOD') {
       return _FoodModuleScreen(items: items, onOpenItem: _openItemDetail);
@@ -1028,7 +1035,12 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
   ) {
     final String moduleId = module?.id ?? '';
     if (moduleId == 'STOCK') {
-      return _StockSection(items: items, onTap: _openItemDetail);
+      return _StockSection(
+        items: items,
+        onTap: _openItemDetail,
+        repository: widget.repository,
+        baseUrl: _data.baseUrl,
+      );
     }
 
     return Column(
@@ -1976,140 +1988,642 @@ class _MarketplaceCard extends StatelessWidget {
   }
 }
 
-class _StockSection extends StatelessWidget {
-  const _StockSection({required this.items, required this.onTap});
+class _StockSection extends StatefulWidget {
+  const _StockSection({
+    required this.items,
+    required this.onTap,
+    required this.repository,
+    required this.baseUrl,
+  });
 
   final List<ProductItem> items;
   final ValueChanged<ProductItem> onTap;
+  final ProductApiRepository repository;
+  final String baseUrl;
 
   @override
-  Widget build(BuildContext context) {
-    final int lowStock = items
-        .where((ProductItem item) => item.stock <= 5)
+  State<_StockSection> createState() => _StockSectionState();
+}
+
+class _StockSectionState extends State<_StockSection> {
+  static const String _allLabel = 'Todas';
+
+  String _query = '';
+  String _selectedCategory = _allLabel;
+  String _selectedCollection = _allLabel;
+  String _selectedPriceBand = _allLabel;
+  late RangeValues _priceRange;
+  List<ProductItem> _liveItems = <ProductItem>[];
+  bool _loadingLiveCatalog = false;
+  String? _catalogError;
+
+  @override
+  void initState() {
+    super.initState();
+    _syncPriceRange();
+    _loadLiveCatalog();
+  }
+
+  @override
+  void didUpdateWidget(covariant _StockSection oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.items != widget.items ||
+        oldWidget.baseUrl != widget.baseUrl) {
+      _syncPriceRange();
+      _loadLiveCatalog();
+    }
+  }
+
+  List<ProductItem> get _catalogItems =>
+      _liveItems.isNotEmpty ? _liveItems : widget.items;
+
+  bool get _usingLiveCatalog => _liveItems.isNotEmpty;
+
+  Future<void> _loadLiveCatalog() async {
+    if (_loadingLiveCatalog) {
+      return;
+    }
+
+    setState(() {
+      _loadingLiveCatalog = true;
+      _catalogError = null;
+    });
+
+    try {
+      final List<ProductItem> items = await widget.repository.loadStockCatalog(
+        preferredBaseUrl: widget.baseUrl,
+      );
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _liveItems = items;
+        _loadingLiveCatalog = false;
+        _catalogError = null;
+        _syncPriceRange();
+      });
+    } catch (error) {
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _loadingLiveCatalog = false;
+        _catalogError = error.toString();
+        _syncPriceRange();
+      });
+    }
+  }
+
+  double get _minCatalogPrice {
+    if (_catalogItems.isEmpty) {
+      return 0;
+    }
+    return _catalogItems
+        .map((ProductItem item) => item.priceBrl)
+        .reduce(math.min);
+  }
+
+  double get _maxCatalogPrice {
+    if (_catalogItems.isEmpty) {
+      return 0;
+    }
+    return _catalogItems
+        .map((ProductItem item) => item.priceBrl)
+        .reduce(math.max);
+  }
+
+  List<String> get _categoryOptions {
+    final Set<String> values = _catalogItems
+        .map((ProductItem item) => item.category)
+        .where((String value) => value.trim().isNotEmpty)
+        .toSet();
+    final List<String> ordered = values.toList()..sort();
+    return <String>[_allLabel, ...ordered];
+  }
+
+  List<String> get _collectionOptions {
+    final Set<String> values = _catalogItems
+        .map((ProductItem item) => item.collectionLabel)
+        .where((String value) => value.trim().isNotEmpty)
+        .toSet();
+    final List<String> ordered = values.toList()..sort();
+    return <String>[_allLabel, ...ordered];
+  }
+
+  List<String> get _priceBandOptions {
+    final Set<String> values = _catalogItems
+        .map((ProductItem item) => item.priceBand)
+        .where((String value) => value.trim().isNotEmpty)
+        .toSet();
+    final List<String> ordered = values.toList()..sort();
+    return <String>[_allLabel, ...ordered];
+  }
+
+  void _syncPriceRange() {
+    final double minPrice = _minCatalogPrice;
+    final double maxPrice = math.max(minPrice, _maxCatalogPrice).toDouble();
+    _priceRange = RangeValues(minPrice, maxPrice);
+  }
+
+  String _formatCurrency(num value) {
+    final String normalized = value.toStringAsFixed(2);
+    final List<String> parts = normalized.split('.');
+    final String whole = parts.first;
+    final String cents = parts.last;
+    final StringBuffer buffer = StringBuffer();
+    for (int index = 0; index < whole.length; index++) {
+      final int reverseIndex = whole.length - index;
+      buffer.write(whole[index]);
+      if (reverseIndex > 1 && reverseIndex % 3 == 1) {
+        buffer.write('.');
+      }
+    }
+    return 'R\$ ${buffer.toString()},$cents';
+  }
+
+  List<ProductItem> get _filteredItems {
+    final String search = _query.trim().toLowerCase();
+    final List<ProductItem> filtered = _catalogItems.where((ProductItem item) {
+      if (_selectedCategory != _allLabel &&
+          item.category != _selectedCategory) {
+        return false;
+      }
+      if (_selectedCollection != _allLabel &&
+          item.collectionLabel != _selectedCollection) {
+        return false;
+      }
+      if (_selectedPriceBand != _allLabel &&
+          item.priceBand != _selectedPriceBand) {
+        return false;
+      }
+      if (item.priceBrl < _priceRange.start ||
+          item.priceBrl > _priceRange.end) {
+        return false;
+      }
+      if (search.isEmpty) {
+        return true;
+      }
+      final String haystack = <String>[
+        item.title,
+        item.brand,
+        item.collectionLabel,
+        item.modelName,
+        item.category,
+        item.googleTaxonomyPath,
+        item.taxonomyLeaf,
+        ...item.tags,
+      ].join(' ').toLowerCase();
+      return haystack.contains(search);
+    }).toList();
+    filtered.sort((ProductItem left, ProductItem right) {
+      final int categoryCompare = left.category.compareTo(right.category);
+      if (categoryCompare != 0) {
+        return categoryCompare;
+      }
+      final int relevanceCompare = right.stock.compareTo(left.stock);
+      if (relevanceCompare != 0) {
+        return relevanceCompare;
+      }
+      return left.priceBrl.compareTo(right.priceBrl);
+    });
+    return filtered;
+  }
+
+  Map<String, List<ProductItem>> get _groupedByTaxonomy {
+    final Map<String, List<ProductItem>> grouped =
+        <String, List<ProductItem>>{};
+    for (final ProductItem item in _filteredItems) {
+      grouped
+          .putIfAbsent(item.googleTaxonomyPath, () => <ProductItem>[])
+          .add(item);
+    }
+    final List<MapEntry<String, List<ProductItem>>>
+    entries = grouped.entries.toList()
+      ..sort((
+        MapEntry<String, List<ProductItem>> left,
+        MapEntry<String, List<ProductItem>> right,
+      ) {
+        final int sizeCompare = right.value.length.compareTo(left.value.length);
+        if (sizeCompare != 0) {
+          return sizeCompare;
+        }
+        return left.value.first.category.compareTo(right.value.first.category);
+      });
+    return <String, List<ProductItem>>{
+      for (final MapEntry<String, List<ProductItem>> entry in entries)
+        entry.key: entry.value,
+    };
+  }
+
+  bool get _hasFocusedFilters {
+    final double minPrice = _minCatalogPrice;
+    final double maxPrice = math.max(minPrice, _maxCatalogPrice).toDouble();
+    const double epsilon = 0.01;
+    return _query.trim().isNotEmpty ||
+        _selectedCategory != _allLabel ||
+        _selectedCollection != _allLabel ||
+        _selectedPriceBand != _allLabel ||
+        (_priceRange.start - minPrice).abs() > epsilon ||
+        (_priceRange.end - maxPrice).abs() > epsilon;
+  }
+
+  void _resetFilters() {
+    setState(() {
+      _query = '';
+      _selectedCategory = _allLabel;
+      _selectedCollection = _allLabel;
+      _selectedPriceBand = _allLabel;
+      _syncPriceRange();
+    });
+  }
+
+  Widget _buildStatGrid(BuildContext context) {
+    final List<ProductItem> items = _filteredItems;
+    final int categoryCount = _groupedByTaxonomy.length;
+    final int collectionsCount = items
+        .map((ProductItem item) => item.collectionLabel)
+        .where((String value) => value.trim().isNotEmpty)
+        .toSet()
         .length;
-    final int inTransfer = items
-        .where((ProductItem item) => item.stock > 5 && item.stock <= 18)
-        .length;
-    final int totalUnits = items.fold<int>(
-      0,
-      (int sum, ProductItem item) => sum + item.stock,
+    final double averageTicket = items.isEmpty
+        ? 0
+        : items.fold<double>(
+                0,
+                (double sum, ProductItem item) => sum + item.priceBrl,
+              ) /
+              items.length;
+    final List<Widget> cards = <Widget>[
+      _StockStatCard(
+        title: 'Itens reais',
+        value: '${items.length}',
+        accent: ValleyBrandColors.cyan,
+        caption: _usingLiveCatalog
+            ? 'Catálogo vivo sincronizado'
+            : 'Preview local enquanto sincroniza',
+      ),
+      _StockStatCard(
+        title: 'Categorias Google',
+        value: '$categoryCount',
+        accent: ValleyBrandColors.violet,
+        caption: 'Agrupamento oficial da vitrine',
+      ),
+      _StockStatCard(
+        title: 'Ticket medio',
+        value: _formatCurrency(averageTicket),
+        accent: const Color(0xFFD0BCFF),
+        caption: 'Curadoria real por relevancia',
+      ),
+      _StockStatCard(
+        title: 'Colecoes ativas',
+        value: '$collectionsCount',
+        accent: const Color(0xFF7BE495),
+        caption: 'Linha proprietária Valley',
+      ),
+    ];
+
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        final bool compact = constraints.maxWidth < 1160;
+        if (compact) {
+          return Column(
+            children: cards
+                .map(
+                  (Widget card) => Padding(
+                    padding: const EdgeInsets.only(bottom: 14),
+                    child: card,
+                  ),
+                )
+                .toList(),
+          );
+        }
+        return Row(
+          children: <Widget>[
+            for (int index = 0; index < cards.length; index++) ...<Widget>[
+              Expanded(child: cards[index]),
+              if (index < cards.length - 1) const SizedBox(width: 14),
+            ],
+          ],
+        );
+      },
     );
+  }
+
+  Widget _buildFiltersPanel(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final double maxPrice = _maxCatalogPrice;
+    final double minPrice = _minCatalogPrice;
+
+    return ValleyPanel(
+      radius: 28,
+      padding: const EdgeInsets.all(22),
+      glowColor: ValleyBrandColors.violet,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            'Painel de Curadoria',
+            style: theme.textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.w900,
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            'O módulo STOCK só expõe marca Valley. Fornecedor e origem continuam internos; a leitura pública nasce de categoria, coleção e faixa de preço.',
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+          ),
+          const SizedBox(height: 18),
+          TextField(
+            onChanged: (String value) => setState(() => _query = value),
+            decoration: InputDecoration(
+              hintText: 'Buscar por nome, modelo ou categoria',
+              prefixIcon: const Icon(Icons.search_rounded),
+              filled: true,
+              fillColor: const Color(0xFF161B2B),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(18),
+                borderSide: BorderSide.none,
+              ),
+            ),
+          ),
+          const SizedBox(height: 18),
+          DropdownButtonFormField<String>(
+            initialValue: _selectedCategory,
+            decoration: const InputDecoration(
+              labelText: 'Categoria',
+              filled: true,
+            ),
+            items: _categoryOptions
+                .map(
+                  (String value) => DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  ),
+                )
+                .toList(),
+            onChanged: (String? value) {
+              if (value == null) {
+                return;
+              }
+              setState(() => _selectedCategory = value);
+            },
+          ),
+          const SizedBox(height: 16),
+          DropdownButtonFormField<String>(
+            initialValue: _selectedCollection,
+            decoration: const InputDecoration(
+              labelText: 'Coleção / Modelo',
+              filled: true,
+            ),
+            items: _collectionOptions
+                .map(
+                  (String value) => DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  ),
+                )
+                .toList(),
+            onChanged: (String? value) {
+              if (value == null) {
+                return;
+              }
+              setState(() => _selectedCollection = value);
+            },
+          ),
+          const SizedBox(height: 16),
+          DropdownButtonFormField<String>(
+            initialValue: _selectedPriceBand,
+            decoration: const InputDecoration(
+              labelText: 'Faixa de preço',
+              filled: true,
+            ),
+            items: _priceBandOptions
+                .map(
+                  (String value) => DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  ),
+                )
+                .toList(),
+            onChanged: (String? value) {
+              if (value == null) {
+                return;
+              }
+              setState(() => _selectedPriceBand = value);
+            },
+          ),
+          const SizedBox(height: 18),
+          Text(
+            'Recorte de preço',
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: Text(
+                  _formatCurrency(_priceRange.start),
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ),
+              Text(
+                _formatCurrency(_priceRange.end),
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ],
+          ),
+          RangeSlider(
+            values: _priceRange,
+            min: minPrice,
+            max: math.max(minPrice, maxPrice).toDouble(),
+            labels: RangeLabels(
+              _formatCurrency(_priceRange.start),
+              _formatCurrency(_priceRange.end),
+            ),
+            onChanged: _catalogItems.isEmpty
+                ? null
+                : (RangeValues values) {
+                    setState(() => _priceRange = values);
+                  },
+          ),
+          const SizedBox(height: 16),
+          OutlinedButton.icon(
+            onPressed: _resetFilters,
+            icon: const Icon(Icons.restart_alt_rounded),
+            label: const Text('Limpar filtros'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildResultsPanel(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final Map<String, List<ProductItem>> grouped = _groupedByTaxonomy;
+    final List<ProductItem> items = _filteredItems;
+    final bool limitedOverview = !_hasFocusedFilters;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text(
-          'Gestão de Estoque',
-          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-            color: ValleyBrandColors.cyan,
-            fontWeight: FontWeight.w800,
+        ValleyPanel(
+          radius: 30,
+          padding: const EdgeInsets.all(24),
+          glowColor: ValleyBrandColors.cyan,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Wrap(
+                spacing: 10,
+                runSpacing: 10,
+                children: <Widget>[
+                  SignalChip(
+                    label: _loadingLiveCatalog
+                        ? 'Sincronizando catálogo real'
+                        : _usingLiveCatalog
+                        ? '${items.length} itens reais filtrados'
+                        : '${items.length} itens em fallback local',
+                    color: _usingLiveCatalog
+                        ? ValleyBrandColors.cyan
+                        : const Color(0xFFF6C760),
+                    outlined: !_usingLiveCatalog,
+                  ),
+                  const SignalChip(label: 'Marca própria Valley'),
+                  const SignalChip(label: 'Taxonomia Google', outlined: true),
+                  SignalChip(
+                    label: '${grouped.length} agrupamentos ativos',
+                    outlined: true,
+                    color: const Color(0xFFD0BCFF),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 18),
+              Text(
+                'Catálogo proprietário organizado por categoria',
+                style: theme.textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                _catalogError == null
+                    ? 'A origem do abastecimento vive só na operação. Aqui a leitura é por categoria, coleção e faixa de preço, com classificação aderente à tabela taxonômica do Google.'
+                    : 'O catálogo real não respondeu nesta tentativa. O shell manteve o preview local para não quebrar a operação.',
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
+              ),
+              if (limitedOverview) ...<Widget>[
+                const SizedBox(height: 12),
+                Text(
+                  'Sem filtro, cada bloco mostra só os itens mais relevantes. Ao escolher uma categoria, o catálogo completo daquela linha é liberado.',
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ],
+            ],
           ),
         ),
-        const SizedBox(height: 8),
-        Text(
-          'Monitoramento em tempo real de ativos, suprimentos e logística do hub central.',
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
+        const SizedBox(height: 18),
+        Wrap(
+          spacing: 10,
+          runSpacing: 10,
+          children: _categoryOptions.skip(1).map((String category) {
+            final bool active = _selectedCategory == category;
+            return InkWell(
+              borderRadius: BorderRadius.circular(999),
+              onTap: () => setState(
+                () => _selectedCategory = active ? _allLabel : category,
+              ),
+              child: _FilterChip(label: category, active: active),
+            );
+          }).toList(),
+        ),
+        const SizedBox(height: 22),
+        if (items.isEmpty)
+          ValleyPanel(
+            radius: 28,
+            padding: const EdgeInsets.all(28),
+            child: Text(
+              'Nenhum item encontrado para o recorte atual. Ajuste categoria, coleção ou faixa de preço.',
+              style: theme.textTheme.bodyLarge,
+            ),
+          )
+        else
+          for (final MapEntry<String, List<ProductItem>> entry
+              in grouped.entries) ...<Widget>[
+            _StockCategoryBlock(
+              taxonomyPath: entry.key,
+              items: limitedOverview
+                  ? entry.value.take(24).toList(growable: false)
+                  : entry.value,
+              totalItems: entry.value.length,
+              onTap: widget.onTap,
+            ),
+            const SizedBox(height: 20),
+          ],
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        SectionHeader(
+          kicker: 'Stock Mode',
+          title: 'Valley Stock | catálogo real por categoria',
+          caption:
+              'Estoque em modo produto com dados reais, coleção Valley, agrupamento por categoria Google e sem exposição pública de fornecedor.',
+          trailing: Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: <Widget>[
+              const SignalChip(label: 'Categoria primeiro'),
+              const SignalChip(label: 'Fornecedor oculto', outlined: true),
+              SignalChip(
+                label: _usingLiveCatalog
+                    ? '${_catalogItems.length} itens reais'
+                    : 'Preview local',
+                outlined: !_usingLiveCatalog,
+                color: _usingLiveCatalog
+                    ? ValleyBrandColors.cyan
+                    : const Color(0xFFF6C760),
+              ),
+            ],
           ),
         ),
-        const SizedBox(height: 24),
+        const SizedBox(height: 22),
+        _buildStatGrid(context),
+        const SizedBox(height: 22),
         LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
-            final bool compact = constraints.maxWidth < 860;
-            final List<Widget> cards = <Widget>[
-              _StockStatCard(
-                title: 'Total de Itens',
-                value: '$totalUnits',
-                accent: ValleyBrandColors.cyan,
-                caption: '+${items.length} hoje',
-              ),
-              _StockStatCard(
-                title: 'Estoque Crítico',
-                value: '$lowStock',
-                accent: ValleyBrandColors.danger,
-                caption: 'Requer atenção',
-              ),
-              _StockStatCard(
-                title: 'Pedidos Pendentes',
-                value: '$inTransfer',
-                accent: const Color(0xFFD0BCFF),
-                caption: 'Em trânsito',
-              ),
-            ];
+            final bool compact = constraints.maxWidth < 1080;
             if (compact) {
               return Column(
-                children: cards
-                    .map(
-                      (Widget card) => Padding(
-                        padding: const EdgeInsets.only(bottom: 14),
-                        child: card,
-                      ),
-                    )
-                    .toList(),
+                children: <Widget>[
+                  _buildFiltersPanel(context),
+                  const SizedBox(height: 18),
+                  _buildResultsPanel(context),
+                ],
               );
             }
             return Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Expanded(child: cards[0]),
-                const SizedBox(width: 14),
-                Expanded(child: cards[1]),
-                const SizedBox(width: 14),
-                Expanded(child: cards[2]),
+                SizedBox(width: 320, child: _buildFiltersPanel(context)),
+                const SizedBox(width: 18),
+                Expanded(child: _buildResultsPanel(context)),
               ],
-            );
-          },
-        ),
-        const SizedBox(height: 22),
-        const _DropshipApiIntegrationPage(),
-        const SizedBox(height: 22),
-        Row(
-          children: <Widget>[
-            Expanded(
-              child: TextField(
-                readOnly: true,
-                decoration: InputDecoration(
-                  hintText: 'Filtrar por nome, SKU ou categoria...',
-                  prefixIcon: const Icon(Icons.search_rounded),
-                  filled: true,
-                  fillColor: const Color(0xFF161B2B),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    borderSide: BorderSide.none,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(width: 12),
-            OutlinedButton.icon(
-              onPressed: items.isEmpty ? null : () => onTap(items.first),
-              icon: const Icon(Icons.filter_list_rounded),
-              label: const Text('Filtros'),
-            ),
-          ],
-        ),
-        const SizedBox(height: 22),
-        LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints constraints) {
-            int crossAxisCount = 1;
-            if (constraints.maxWidth >= 1180) {
-              crossAxisCount = 3;
-            } else if (constraints.maxWidth >= 760) {
-              crossAxisCount = 2;
-            }
-            return GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: items.take(6).length,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: crossAxisCount,
-                mainAxisSpacing: 18,
-                crossAxisSpacing: 18,
-                childAspectRatio: 0.86,
-              ),
-              itemBuilder: (BuildContext context, int index) {
-                final ProductItem item = items[index];
-                return _StockCard(item: item, onTap: () => onTap(item));
-              },
             );
           },
         ),
@@ -2173,10 +2687,116 @@ class _StockStatCard extends StatelessWidget {
   }
 }
 
+class _StockCategoryBlock extends StatelessWidget {
+  const _StockCategoryBlock({
+    required this.taxonomyPath,
+    required this.items,
+    required this.totalItems,
+    required this.onTap,
+  });
+
+  final String taxonomyPath;
+  final List<ProductItem> items;
+  final int totalItems;
+  final ValueChanged<ProductItem> onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final ProductItem hero = items.first;
+    final List<String> segments = taxonomyPath
+        .split('>')
+        .map((String value) => value.trim())
+        .where((String value) => value.isNotEmpty)
+        .toList();
+    final String displayTitle = hero.category;
+    final String taxonomyLeaf = segments.isEmpty
+        ? hero.taxonomyLeaf
+        : segments.last;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    displayTitle,
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    '${hero.googleTaxonomyId} • $taxonomyPath',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 12),
+            _MetaPill(
+              icon: Icons.inventory_2_rounded,
+              label: items.length == totalItems
+                  ? '$totalItems itens em $taxonomyLeaf'
+                  : '${items.length} de $totalItems itens em $taxonomyLeaf',
+            ),
+          ],
+        ),
+        const SizedBox(height: 14),
+        LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+            int crossAxisCount = 1;
+            if (constraints.maxWidth >= 1360) {
+              crossAxisCount = 3;
+            } else if (constraints.maxWidth >= 760) {
+              crossAxisCount = 2;
+            }
+            return GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: items.length,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: crossAxisCount,
+                mainAxisSpacing: 16,
+                crossAxisSpacing: 16,
+                childAspectRatio: constraints.maxWidth >= 1180 ? 0.77 : 0.82,
+              ),
+              itemBuilder: (BuildContext context, int index) {
+                final ProductItem item = items[index];
+                return _StockCard(item: item, onTap: () => onTap(item));
+              },
+            );
+          },
+        ),
+      ],
+    );
+  }
+}
+
+// ignore: unused_element
 class _DropshipApiIntegrationPage extends StatelessWidget {
   const _DropshipApiIntegrationPage();
 
   static const List<_SupplierApiSpec> _suppliers = <_SupplierApiSpec>[
+    _SupplierApiSpec(
+      name: 'Mercado Livre',
+      status: 'Fluxo OAuth preparado',
+      region: 'Brasil',
+      auth: 'OAuth 2.0 + offline_access',
+      scope: 'Catálogo, preço, pedidos e inventário',
+      steps: <String>[
+        'Autorizar a conta seller com callback fixa do Valley Admin.',
+        'Persistir access token e refresh token no runtime seguro do host.',
+        'Sincronizar catálogo, preço e estoque antes de abrir pedidos em escala.',
+        'Operar inicialmente por polling, com webhook opcional numa segunda fase.',
+      ],
+    ),
     _SupplierApiSpec(
       name: 'AliExpress',
       status: 'Pronto para credenciais',
@@ -2619,23 +3239,7 @@ class _StockCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool lowStock = item.stock <= 5;
-    final bool inTransfer = item.stock > 5 && item.stock <= 18;
-    final Color accent = lowStock
-        ? ValleyBrandColors.danger
-        : inTransfer
-        ? const Color(0xFFD0BCFF)
-        : ValleyBrandColors.cyan;
-    final String status = lowStock
-        ? 'Estoque Baixo'
-        : inTransfer
-        ? 'Em Transferência'
-        : 'Disponível';
-    final String location = inTransfer
-        ? 'Pátio de Montagem Leste'
-        : lowStock
-        ? 'Armazém Logístico Sul'
-        : 'Hub Metropolitano A-1';
+    final Color accent = ValleyBrandColors.cyan;
 
     return ValleyPanel(
       radius: 24,
@@ -2697,33 +3301,86 @@ class _StockCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  Text(
+                    item.collectionLabel.toUpperCase(),
+                    style: TextStyle(
+                      color: accent,
+                      fontWeight: FontWeight.w800,
+                      fontSize: 11,
+                      letterSpacing: 1.0,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    item.title,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    item.taxonomyLeaf,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                  const SizedBox(height: 14),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
                     children: <Widget>[
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              item.title,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: Theme.of(context).textTheme.titleLarge
-                                  ?.copyWith(fontWeight: FontWeight.w700),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              'SKU: ${item.id.substring(0, 8).toUpperCase()}',
-                              style: const TextStyle(
-                                color: Color(0xFF869395),
-                                fontWeight: FontWeight.w700,
-                                letterSpacing: 0.8,
-                                fontSize: 11,
-                              ),
-                            ),
-                          ],
+                      _MetaPill(
+                        icon: Icons.sell_rounded,
+                        label: item.priceBand,
+                      ),
+                      _MetaPill(
+                        icon: Icons.category_rounded,
+                        label: item.category,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 14),
+                  Row(
+                    children: <Widget>[
+                      Icon(Icons.check_circle_rounded, size: 18, color: accent),
+                      const SizedBox(width: 10),
+                      Text(
+                        item.status,
+                        style: TextStyle(
+                          color: accent,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
+                    ],
+                  ),
+                  const SizedBox(height: 18),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: <Widget>[
+                      Text(
+                        'R\$ ${item.priceBrl.toStringAsFixed(2)}',
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          color: accent,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                      if (item.compareAtBrl > item.priceBrl)
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Text(
+                            'R\$ ${item.compareAtBrl.toStringAsFixed(2)}',
+                            style: Theme.of(context).textTheme.bodyMedium
+                                ?.copyWith(
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurfaceVariant,
+                                  decoration: TextDecoration.lineThrough,
+                                ),
+                          ),
+                        ),
+                      const Spacer(),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
@@ -2732,15 +3389,14 @@ class _StockCard extends StatelessWidget {
                             style: TextStyle(
                               color: accent,
                               fontWeight: FontWeight.w800,
-                              fontSize: 28,
+                              fontSize: 24,
                             ),
                           ),
                           const Text(
-                            'UNIDADES',
+                            'ofertas ativas',
                             style: TextStyle(
                               color: Color(0xFF869395),
                               fontWeight: FontWeight.w700,
-                              letterSpacing: 0.8,
                               fontSize: 10,
                             ),
                           ),
@@ -2748,69 +3404,7 @@ class _StockCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 16),
-                  Row(
-                    children: <Widget>[
-                      const Icon(
-                        Icons.hub_rounded,
-                        size: 18,
-                        color: Color(0xFF869395),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: Text(
-                          location,
-                          style: Theme.of(context).textTheme.bodyMedium
-                              ?.copyWith(
-                                color: Theme.of(
-                                  context,
-                                ).colorScheme.onSurfaceVariant,
-                              ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  Row(
-                    children: <Widget>[
-                      Icon(
-                        lowStock
-                            ? Icons.warning_rounded
-                            : inTransfer
-                            ? Icons.sync_alt_rounded
-                            : Icons.check_circle_rounded,
-                        size: 18,
-                        color: accent,
-                      ),
-                      const SizedBox(width: 10),
-                      Text(
-                        status,
-                        style: TextStyle(
-                          color: accent,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 14),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(999),
-                    child: SizedBox(
-                      height: 6,
-                      child: Stack(
-                        children: <Widget>[
-                          Container(
-                            color: Colors.white.withValues(alpha: 0.06),
-                          ),
-                          FractionallySizedBox(
-                            widthFactor: (item.stock.clamp(1, 100) / 100),
-                            child: Container(color: accent),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 18),
+                  const SizedBox(height: 10),
                   Row(
                     children: <Widget>[
                       Expanded(
@@ -2818,17 +3412,9 @@ class _StockCard extends StatelessWidget {
                           onPressed: onTap,
                           style: FilledButton.styleFrom(
                             backgroundColor: accent,
-                            foregroundColor: lowStock
-                                ? const Color(0xFFFFDAD6)
-                                : const Color(0xFF001F24),
+                            foregroundColor: const Color(0xFF001F24),
                           ),
-                          child: Text(
-                            lowStock
-                                ? 'REABASTECER'
-                                : inTransfer
-                                ? 'RASTREAR'
-                                : 'MOVIMENTAR',
-                          ),
+                          child: const Text('VER FICHA'),
                         ),
                       ),
                       const SizedBox(width: 10),
@@ -2843,7 +3429,7 @@ class _StockCard extends StatelessWidget {
                               borderRadius: BorderRadius.circular(12),
                             ),
                           ),
-                          child: const Icon(Icons.more_vert_rounded),
+                          child: const Icon(Icons.arrow_outward_rounded),
                         ),
                       ),
                     ],
@@ -3236,7 +3822,7 @@ class _ProductDetailScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      'Estoque ${item.stock} • ${item.status}',
+                      '${item.availabilityLabel} • ${item.status}',
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: theme.colorScheme.onSurfaceVariant,
                       ),

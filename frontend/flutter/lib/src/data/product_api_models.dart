@@ -117,6 +117,45 @@ class ProductItem {
   final List<String> galleryUrls;
   final String profileId;
   final Map<String, dynamic> raw;
+
+  String get collectionLabel => raw['collection_label'] as String? ?? brand;
+
+  String get modelName => raw['model_name'] as String? ?? title;
+
+  String get googleTaxonomyId =>
+      raw['google_product_category_id']?.toString() ?? '';
+
+  String get googleTaxonomyPath =>
+      raw['google_product_category_path'] as String? ??
+      raw['google_product_category'] as String? ??
+      category;
+
+  String get taxonomyLeaf {
+    final List<String> segments = googleTaxonomyPath
+        .split('>')
+        .map((String segment) => segment.trim())
+        .where((String segment) => segment.isNotEmpty)
+        .toList();
+    return segments.isEmpty ? category : segments.last;
+  }
+
+  String get priceBand => raw['price_band'] as String? ?? '';
+
+  String get availabilityLabel =>
+      raw['availability_label'] as String? ?? '$stock ofertas ativas';
+
+  String get providerKey => raw['provider_key'] as String? ?? '';
+
+  String get providerStatus => raw['provider_status'] as String? ?? '';
+
+  String get supplierName => raw['supplier_name'] as String? ?? '';
+
+  String get supplierType => raw['supplier_type'] as String? ?? '';
+
+  String get supplierModel => raw['supplier_model'] as String? ?? '';
+
+  bool get supplierInternal =>
+      (raw['supplier_visibility'] as String? ?? '') == 'internal';
 }
 
 class ProductShellData {

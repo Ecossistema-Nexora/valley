@@ -141,6 +141,7 @@
     status: "all",
     domain: "all",
     selectedCode: null,
+    marketplaceApiConfig: null,
   };
 
   const elements = {
@@ -162,7 +163,10 @@
     businessHighlights: document.getElementById("businessHighlights"),
     modulePerformanceBoard: document.getElementById("modulePerformanceBoard"),
     stockInsightsBoard: document.getElementById("stockInsightsBoard"),
+    marketplaceApiSummary: document.getElementById("marketplaceApiSummary"),
+    marketplaceApiControlCenter: document.getElementById("marketplaceApiControlCenter"),
     stockProviderGuides: document.getElementById("stockProviderGuides"),
+    stockGuideSummary: document.getElementById("stockGuideSummary"),
     adminAccessLinks: document.getElementById("adminAccessLinks"),
     moduleCount: document.getElementById("moduleCount"),
     moduleSelectionMeta: document.getElementById("moduleSelectionMeta"),
@@ -844,13 +848,203 @@
     ].join("");
   }
 
+  function integrationScopeList(value) {
+    return String(value || "")
+      .split(",")
+      .map((item) => item.trim())
+      .filter(Boolean);
+  }
+
+  function integrationReadiness(provider) {
+    const requiredChecks = [
+      { label: "Base URL", ready: Boolean(provider.baseUrl) },
+      { label: "Client/App", ready: Boolean(provider.clientId) },
+      { label: "Secret ref", ready: Boolean(provider.secretRef) },
+      { label: "Redirect URI", ready: Boolean(provider.redirectUri) },
+      { label: "Seller/Store", ready: Boolean(provider.sellerId) },
+      { label: "Tokens", ready: Boolean(provider.accessTokenRef || provider.refreshTokenRef) },
+      { label: "Scopes", ready: integrationScopeList(provider.scopes).length > 0 },
+    ];
+    const completed = requiredChecks.filter((item) => item.ready).length;
+    const ratio = requiredChecks.length ? completed / requiredChecks.length : 0;
+    let stage = "rascunho";
+    let variant = "pill-warn";
+
+    if (!provider.enabled) {
+      stage = "desativado";
+      variant = "pill";
+    } else if (provider.environment === "production" && ratio >= 0.85) {
+      stage = "pronto para producao";
+      variant = "pill-accent";
+    } else if (ratio >= 0.55) {
+      stage = "em homologacao";
+      variant = "pill-navy";
+    }
+
+    return {
+      ratio,
+      completed,
+      total: requiredChecks.length,
+      stage,
+      variant,
+      requiredChecks,
+    };
+  }
+
+  function providerCapabilityPills(provider) {
+    return [
+      provider.importCatalog ? rowPill("Catalogo on", "pill-accent") : rowPill("Catalogo off"),
+      provider.syncOrders ? rowPill("Pedidos on", "pill-accent") : rowPill("Pedidos off"),
+      provider.syncInventory ? rowPill("Estoque on", "pill-accent") : rowPill("Estoque off"),
+      provider.syncPricing ? rowPill("Preco on", "pill-accent") : rowPill("Preco off"),
+      provider.allowScrapingFallback ? rowPill("Fallback scraping", "pill-warn") : rowPill("Sem scraping", "pill-navy"),
+      provider.blockExternalAiLookup ? rowPill("IA externa bloqueada", "pill-accent") : rowPill("IA externa liberada", "pill-danger"),
+    ].join("");
+  }
+
+  function nextIntegrationAction(provider, readiness) {
+    if (!provider.enabled) {
+      return "Ativar o conector e escolher o ambiente de trabalho do fornecedor.";
+    }
+
+    if (!provider.clientId || !provider.secretRef) {
+      return "Publicar credenciais principais no vault e referenciar o segredo no cockpit.";
+    }
+
+    if (!provider.redirectUri) {
+      return "Registrar redirect URI valida antes de iniciar a autorizacao OAuth da conta seller.";
+    }
+
+    if (!provider.sellerId) {
+      return "Registrar seller ou store ID para fechar o contrato operacional da conta.";
+    }
+
+    if (!provider.accessTokenRef && provider.authMode !== "app_key_secret") {
+      return "Autorizar a conta seller e persistir access token ou refresh token para operar sem login manual.";
+    }
+
+    if (!provider.webhookSecretRef || !provider.webhookUrl) {
+      return "Webhook pode entrar depois; por ora opere com polling e publique notificacoes quando quiser baixa latencia.";
+    }
+
+    if (provider.environment !== "production") {
+      return "Concluir homologação e virar para produção só depois de reconciliar SKU, preço e estoque.";
+    }
+
+    if (readiness.ratio < 1) {
+      return "Fechar lacunas de credencial restantes para evitar rota parcial em produção.";
+    }
+
+    return "Operar reconciliação contínua de catálogo, pedidos e settlement com observabilidade ligada.";
+  }
+
+  function renderMarketplaceSummary(config) {
+    if (!elements.marketplaceApiSummary) {
+      return;
+    }
+
+    const enabledCount = config.filter((provider) => provider.enabled).length;
+    const productionCount = config.filter((provider) => provider.enabled && provider.environment === "production").length;
+    const fallbackCount = config.filter((provider) => provider.allowScrapingFallback).length;
+    const averageReadiness =
+      config.reduce((sum, provider) => sum + integrationReadiness(provider).ratio, 0) / Math.max(config.length, 1);
+
+    elements.marketplaceApiSummary.innerHTML = [
+      summaryTileMarkup("Fornecedores", formatCount(config.length), "base ativa do cockpit dropshipping"),
+      summaryTileMarkup("Conectores ativos", formatCount(enabledCount), `${formatCount(productionCount)} em producao`),
+      summaryTileMarkup("Prontidao media", formatPercent(averageReadiness), "credenciais, tokens e webhooks"),
+      summaryTileMarkup("Fallbacks", formatCount(fallbackCount), fallbackCount ? "revisar scraping e risco operacional" : "sem rota paralela aberta"),
+    ].join("");
+  }
+
+  function renderMarketplaceControlCenter(config) {
+    if (!elements.marketplaceApiControlCenter) {
+      return;
+    }
+
+    elements.marketplaceApiControlCenter.innerHTML = config
+      .map((provider) => {
+        const readiness = integrationReadiness(provider);
+        const guide = STOCK_PROVIDER_GUIDES[provider.key] || { steps: [] };
+
+        return `
+          <article class="integration-ops-card">
+            <div class="integration-ops-head">
+              <div>
+                <h3>${escapeHtml(provider.label)}</h3>
+                <p class="muted-copy">${escapeHtml(nextIntegrationAction(provider, readiness))}</p>
+              </div>
+              <div class="pill-row">
+                ${rowPill(provider.environment === "production" ? "producao" : "sandbox", provider.environment === "production" ? "pill-accent" : "pill-warn")}
+                ${rowPill(readiness.stage, readiness.variant)}
+              </div>
+            </div>
+            ${progressMarkup(readiness.ratio)}
+            <div class="summary-grid compact-summary-grid">
+              ${summaryTileMarkup("Credenciais", `${formatCount(readiness.completed)}/${formatCount(readiness.total)}`, "campos operacionais preenchidos")}
+              ${summaryTileMarkup("Sync", `${formatCount([provider.importCatalog, provider.syncOrders, provider.syncInventory, provider.syncPricing].filter(Boolean).length)}/4`, "catalogo, pedidos, estoque, preco")}
+              ${summaryTileMarkup("Cadencia", `${formatCount(provider.syncCadenceMinutes)} min`, `cache ${formatCount(provider.cacheTtlMinutes)} min`)}
+              ${summaryTileMarkup("Margem piso", `${provider.marginFloorPct}%`, provider.sellerId ? `seller ${provider.sellerId}` : "seller ainda ausente")}
+            </div>
+            <div class="integration-matrix">
+              <div class="integration-column">
+                <span class="small-label">Cobertura operacional</span>
+                <div class="pill-row">${providerCapabilityPills(provider)}</div>
+              </div>
+              <div class="integration-column">
+                <span class="small-label">Checklist de credenciais</span>
+                <div class="checklist-list dense-checklist">
+                  ${readiness.requiredChecks
+                    .map(
+                      (item) => `
+                        <div class="check-item ${item.ready ? "done" : ""}">
+                          <span class="check-flag">${item.ready ? "OK" : "TODO"}</span>
+                          <span>${escapeHtml(item.label)}</span>
+                        </div>
+                      `,
+                    )
+                    .join("")}
+                </div>
+              </div>
+              <div class="integration-column">
+                <span class="small-label">Passos de ativacao</span>
+                <ol class="provider-guide-list compact-guide-list">
+                  ${(guide.steps || []).slice(0, 3).map((step) => `<li>${escapeHtml(step)}</li>`).join("")}
+                </ol>
+              </div>
+            </div>
+          </article>
+        `;
+      })
+      .join("");
+  }
+
   function renderStockProviderGuides() {
     if (!elements.stockProviderGuides) {
       return;
     }
 
+    const config = readMarketplaceApiConfig();
+
+    if (elements.stockGuideSummary) {
+      const productionGuides = config.filter((provider) => provider.environment === "production").length;
+      const webhookReady = config.filter((provider) => provider.webhookUrl && provider.webhookSecretRef).length;
+      const tokenReady = config.filter((provider) => provider.accessTokenRef || provider.refreshTokenRef).length;
+      const notesOpen = config.filter((provider) => provider.notes).length;
+
+      elements.stockGuideSummary.innerHTML = [
+        summaryTileMarkup("Fornecedores mapeados", formatCount(MARKETPLACE_API_PROVIDERS.length), "playbooks ativos no cockpit"),
+        summaryTileMarkup("Webhooks fechados", formatCount(webhookReady), "assinatura e callback publicados"),
+        summaryTileMarkup("Tokens publicados", formatCount(tokenReady), "cofre operacional e refresh controlado"),
+        summaryTileMarkup("Contas em producao", formatCount(productionGuides), notesOpen ? `${formatCount(notesOpen)} com notas operacionais` : "sem observacoes manuais"),
+      ].join("");
+    }
+
     const cards = MARKETPLACE_API_PROVIDERS.map((provider) => {
       const guide = STOCK_PROVIDER_GUIDES[provider.key];
+      const providerConfig = config.find((item) => item.key === provider.key) || provider;
+      const readiness = integrationReadiness(providerConfig);
+
       return `
         <article class="provider-guide-card">
           <div class="module-row-top">
@@ -863,6 +1057,21 @@
           <div class="pill-row">
             ${rowPill(provider.key, "pill-accent")}
             ${rowPill(provider.baseUrl, "pill-warn")}
+            ${rowPill(readiness.stage, readiness.variant)}
+          </div>
+          <div class="provider-guide-meta">
+            <div class="micro-stat">
+              <span class="small-label">Prontidao</span>
+              <strong>${escapeHtml(formatPercent(readiness.ratio))}</strong>
+            </div>
+            <div class="micro-stat">
+              <span class="small-label">Ambiente</span>
+              <strong>${escapeHtml(providerConfig.environment === "production" ? "Producao" : "Sandbox")}</strong>
+            </div>
+            <div class="micro-stat">
+              <span class="small-label">Cadencia</span>
+              <strong>${escapeHtml(`${providerConfig.syncCadenceMinutes || 30} min`)}</strong>
+            </div>
           </div>
           <ol class="provider-guide-list">
             ${(guide?.steps || ["Runbook nao publicado."]).map((step) => `<li>${escapeHtml(step)}</li>`).join("")}
@@ -1072,6 +1281,7 @@
       secretRef: "",
       accessTokenRef: "",
       refreshTokenRef: "",
+      redirectUri: `https://admin.brasildesconto.com.br/integrations/${provider.key}/callback`,
       sellerId: "",
       webhookUrl: "/webhooks/marketplaces/" + provider.key,
       webhookSecretRef: "",
@@ -1089,13 +1299,41 @@
     }));
   }
 
+  function mergeMarketplaceApiConfig(saved) {
+    const byKey = Object.fromEntries(Array.isArray(saved) ? saved.map((item) => [item.key, item]) : []);
+    return defaultMarketplaceApiConfig().map((provider) => ({ ...provider, ...(byKey[provider.key] || {}) }));
+  }
+
   function readMarketplaceApiConfig() {
     try {
+      if (Array.isArray(state.marketplaceApiConfig) && state.marketplaceApiConfig.length) {
+        return mergeMarketplaceApiConfig(state.marketplaceApiConfig);
+      }
+
       const saved = JSON.parse(window.localStorage.getItem(MARKETPLACE_API_STORAGE_KEY) || "[]");
-      const byKey = Object.fromEntries(Array.isArray(saved) ? saved.map((item) => [item.key, item]) : []);
-      return defaultMarketplaceApiConfig().map((provider) => ({ ...provider, ...(byKey[provider.key] || {}) }));
+      return mergeMarketplaceApiConfig(saved);
     } catch (error) {
       return defaultMarketplaceApiConfig();
+    }
+  }
+
+  async function loadMarketplaceApiConfig() {
+    try {
+      const response = await fetch("/api/admin-integrations", { headers: { Accept: "application/json" } });
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      const payload = await response.json();
+      const items = Array.isArray(payload?.items) ? payload.items : [];
+      state.marketplaceApiConfig = mergeMarketplaceApiConfig(items);
+      window.localStorage.setItem(MARKETPLACE_API_STORAGE_KEY, JSON.stringify(state.marketplaceApiConfig, null, 2));
+      renderMarketplaceIntegrations();
+      announce("Integracoes carregadas do backend do admin.");
+    } catch (error) {
+      state.marketplaceApiConfig = readMarketplaceApiConfig();
+      renderMarketplaceIntegrations();
+      announce("Integracoes carregadas do fallback local.");
     }
   }
 
@@ -1118,6 +1356,7 @@
         secretRef: read("secretRef")?.value.trim() || "",
         accessTokenRef: read("accessTokenRef")?.value.trim() || "",
         refreshTokenRef: read("refreshTokenRef")?.value.trim() || "",
+        redirectUri: read("redirectUri")?.value.trim() || "",
         sellerId: read("sellerId")?.value.trim() || "",
         webhookUrl: read("webhookUrl")?.value.trim() || "",
         webhookSecretRef: read("webhookSecretRef")?.value.trim() || "",
@@ -1136,10 +1375,26 @@
     });
   }
 
-  function saveMarketplaceApiConfig() {
+  async function saveMarketplaceApiConfig() {
     const payload = collectMarketplaceApiConfig();
+    state.marketplaceApiConfig = mergeMarketplaceApiConfig(payload);
     window.localStorage.setItem(MARKETPLACE_API_STORAGE_KEY, JSON.stringify(payload, null, 2));
-    announce("Rascunho de integracoes salvo localmente.");
+    try {
+      const response = await fetch("/api/admin-integrations", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      announce("Integracoes salvas no backend de producao.");
+    } catch (error) {
+      announce("Integracoes salvas apenas no fallback local.");
+    }
+
+    renderMarketplaceIntegrations();
   }
 
   function renderMarketplaceIntegrations() {
@@ -1148,19 +1403,46 @@
     }
 
     const config = readMarketplaceApiConfig();
+    renderMarketplaceSummary(config);
+    renderMarketplaceControlCenter(config);
+
     elements.marketplaceApiIntegrations.innerHTML = config
       .map(
-        (provider) => `
+        (provider) => {
+          const readiness = integrationReadiness(provider);
+          const scopes = integrationScopeList(provider.scopes);
+
+          return `
           <section class="integration-card" data-integration-card="${escapeHtml(provider.key)}">
             <div class="integration-card-head">
               <div>
                 <h3>${escapeHtml(provider.label)}</h3>
                 <p class="integration-provider-code">${escapeHtml(provider.key)}</p>
+                <p class="muted-copy">${escapeHtml(nextIntegrationAction(provider, readiness))}</p>
               </div>
-              <label class="field toggle-field">
-                <span>Ativo</span>
-                <input data-provider="${escapeHtml(provider.key)}" data-field="enabled" type="checkbox" ${provider.enabled ? "checked" : ""} />
-              </label>
+              <div class="integration-card-status">
+                ${rowPill(readiness.stage, readiness.variant)}
+                <label class="field toggle-field">
+                  <span>Ativo</span>
+                  <input data-provider="${escapeHtml(provider.key)}" data-field="enabled" type="checkbox" ${provider.enabled ? "checked" : ""} />
+                </label>
+              </div>
+            </div>
+            <div class="integration-card-overview">
+              ${summaryTileMarkup("Prontidao", formatPercent(readiness.ratio), `${formatCount(readiness.completed)}/${formatCount(readiness.total)} blocos fechados`)}
+              ${summaryTileMarkup("Cadencia", `${formatCount(provider.syncCadenceMinutes)} min`, `cache ${formatCount(provider.cacheTtlMinutes)} min`)}
+              ${summaryTileMarkup("Escopos", formatCount(scopes.length), scopes.length ? scopes.join(", ") : "nenhum escopo declarado")}
+              ${summaryTileMarkup("Margem piso", `${provider.marginFloorPct}%`, provider.sellerId ? `seller ${provider.sellerId}` : "seller pendente")}
+            </div>
+            <div class="integration-inline-notes">
+              <div class="pill-row">
+                ${rowPill(provider.environment === "production" ? "producao" : "sandbox", provider.environment === "production" ? "pill-accent" : "pill-warn")}
+                ${rowPill(provider.authMode, "pill-navy")}
+                ${rowPill(provider.siteCode, "pill")}
+              </div>
+              <div class="pill-row">
+                ${providerCapabilityPills(provider)}
+              </div>
             </div>
             <div class="integration-form-grid">
               <label class="field">
@@ -1201,6 +1483,10 @@
               <label class="field">
                 <span>Refresh Token Ref</span>
                 <input data-provider="${escapeHtml(provider.key)}" data-field="refreshTokenRef" type="text" value="${escapeHtml(provider.refreshTokenRef)}" placeholder="vault/marketplaces/${escapeHtml(provider.key)}/refresh-token" autocomplete="off" />
+              </label>
+              <label class="field">
+                <span>Redirect URI</span>
+                <input data-provider="${escapeHtml(provider.key)}" data-field="redirectUri" type="url" value="${escapeHtml(provider.redirectUri)}" placeholder="https://admin.brasildesconto.com.br/integrations/${escapeHtml(provider.key)}/callback" />
               </label>
               <label class="field">
                 <span>Seller / Store ID</span>
@@ -1261,8 +1547,32 @@
                 <input data-provider="${escapeHtml(provider.key)}" data-field="notes" type="text" value="${escapeHtml(provider.notes)}" />
               </label>
             </div>
+            <div class="integration-review-grid">
+              <section class="integration-review-card">
+                <span class="small-label">Checklist de credenciais</span>
+                <div class="checklist-list dense-checklist">
+                  ${readiness.requiredChecks
+                    .map(
+                      (item) => `
+                        <div class="check-item ${item.ready ? "done" : ""}">
+                          <span class="check-flag">${item.ready ? "OK" : "TODO"}</span>
+                          <span>${escapeHtml(item.label)}</span>
+                        </div>
+                      `,
+                    )
+                    .join("")}
+                </div>
+              </section>
+              <section class="integration-review-card">
+                <span class="small-label">Proxima acao</span>
+                <p class="muted-copy">${escapeHtml(nextIntegrationAction(provider, readiness))}</p>
+                <span class="small-label">Webhook alvo</span>
+                <code>${escapeHtml(provider.webhookUrl || "nao publicado")}</code>
+              </section>
+            </div>
           </section>
-        `,
+        `;
+        },
       )
       .join("");
   }
@@ -1849,25 +2159,25 @@
 
   function renderExternalAccess() {
     const preview = trimLines(data.public_access.preview, 14);
-    const ngrokInstalled = /ja esta instalado/i.test(data.public_access.preview || "");
-    const reservedDomainReady = /VALLEY_NGROK_ADMIN_DOMAIN/i.test(data.public_access.preview || "");
+    const cloudflareReady = /cloudflare|cloudflared|CLOUDFLARED_TOKEN/i.test(data.public_access.preview || "");
+    const fixedUrlReady = /CLOUDFLARED_TOKEN|named tunnel|VALLEY_ADMIN_PUBLIC_URL/i.test(data.public_access.preview || "");
     const launcherReady = /start_valley_admin_public\.ps1/i.test(data.public_access.preview || "");
 
     elements.externalAccess.innerHTML = `
       <div class="external-panel">
         <div class="external-grid">
-          ${externalTileMarkup("Ngrok", ngrokInstalled ? "detectado" : "nao detectado", "binario e tunnel nomeado")}
+          ${externalTileMarkup("Cloudflare", cloudflareReady ? "detectado" : "nao detectado", "quick tunnel ou named tunnel")}
           ${externalTileMarkup("Launcher", launcherReady ? "publicavel" : "pendente", "start_valley_admin_public.ps1")}
-          ${externalTileMarkup("URL fixa", reservedDomainReady ? "suportada" : "nao descrita", "depende de dominio reservado")}
+          ${externalTileMarkup("URL fixa", fixedUrlReady ? "suportada" : "nao descrita", "depende de token e hostname Cloudflare")}
         </div>
         <p class="muted-copy">
-          A superficie externa esta preparada para acesso fora da rede local. Quando houver dominio reservado no ngrok, o mesmo cockpit pode
-          manter uma URL permanente sem mudar a rotina do operador.
+          A superficie externa esta preparada para acesso fora da rede local. Quando houver token e hostname publicados no Cloudflare,
+          o mesmo cockpit pode manter uma URL permanente sem mudar a rotina do operador.
         </p>
         <pre>${escapeHtml(preview)}</pre>
         <div class="link-row">
           ${linkMarkup("Abrir runbook externo", data.public_access.path)}
-          ${linkMarkup("Abrir config ngrok", data.public_access.ngrok_config_path)}
+          ${linkMarkup("Abrir launcher Cloudflare", data.public_access.cloudflare_launcher_path)}
         </div>
         <div class="action-row">
           <button class="secondary-button" type="button" data-copy-external="preview">Copiar runbook</button>
@@ -1982,6 +2292,7 @@
 
     const ids = {
       summary: sectionId(module, "summary"),
+      management: sectionId(module, "management"),
       finance: sectionId(module, "finance"),
       architecture: sectionId(module, "architecture"),
       checklist: sectionId(module, "checklist"),
@@ -1991,6 +2302,7 @@
 
     const navItems = [
       { label: "Resumo", target: ids.summary },
+      { label: "Gestao", target: ids.management },
       { label: "Financeiro", target: ids.finance },
       { label: "Acoplamentos", target: ids.architecture },
       { label: "Checklist", target: ids.checklist },
@@ -1998,6 +2310,29 @@
       { label: "Operacao", target: ids.ops },
     ];
     const businessSnapshot = catalogModuleSnapshot(module.code);
+    const stockOpsBlock =
+      module.code === "STOCK"
+        ? `
+          <section class="detail-block detail-block-wide">
+            <h3>Desk de integracoes do STOCK</h3>
+            <p class="muted-copy">Este modulo concentra a ativacao de fornecedores, credenciais, webhooks, margens, catalogo e reconciliacao de pedidos.</p>
+            <div class="link-row">
+              <a href="#settingsSection">Abrir central de APIs</a>
+              <a href="#stockIntegrations">Abrir playbooks</a>
+              <a href="#financialDashboard">Abrir dashboard financeiro</a>
+            </div>
+            <div class="pill-row">
+              ${rowPill("Mercado Livre", "pill-accent")}
+              ${rowPill("Amazon", "pill-accent")}
+              ${rowPill("AliExpress", "pill-accent")}
+              ${rowPill("Alibaba", "pill-accent")}
+              ${rowPill("Magalu", "pill-accent")}
+              ${rowPill("CJDropshipping", "pill-accent")}
+              ${rowPill("Shopee", "pill-accent")}
+            </div>
+          </section>
+        `
+        : "";
 
     const operationalFailures = data.deployment_summary.top_failures.length
       ? `
@@ -2043,6 +2378,26 @@
             ${summaryTileMarkup("Checklist", `${formatCount(module.checklist.done)}/${formatCount(module.checklist.total)}`, "itens concluidos no modulo")}
             ${summaryTileMarkup("Integracoes", formatCount(module.integrates_with.length), "conexoes declaradas no manifesto")}
             ${summaryTileMarkup("Pendencias", formatCount(module.checklist.pending), openItems.length ? "fila residual para fechamento" : "sem fila material aberta")}
+          </div>
+        </section>
+
+        <section class="detail-block" id="${escapeHtml(ids.management)}">
+          <h3>Gestao do modulo</h3>
+          <div class="summary-grid compact-summary-grid">
+            ${summaryTileMarkup("Acoes admin", formatCount(module.admin_actions.length), "playbooks e comandos publicados")}
+            ${summaryTileMarkup("Dependencias", formatCount(module.depends_on.length), "malha de bloqueio e sequenciamento")}
+            ${summaryTileMarkup("Integracoes", formatCount(module.integrates_with.length), "contratos declarados no manifesto")}
+            ${summaryTileMarkup("Fila aberta", formatCount(openItems.length), openItems.length ? "itens ainda pedem fechamento" : "sem fila material")}
+          </div>
+          <div class="meta-grid">
+            <div class="meta-card">
+              <div class="small-label">Acoes administrativas</div>
+              <p class="muted-copy">${escapeHtml(formatList(module.admin_actions))}</p>
+            </div>
+            <div class="meta-card">
+              <div class="small-label">Proximo foco</div>
+              <p class="muted-copy">${escapeHtml(openItems[0]?.label || "Sem pendencia aberta no checklist atual.")}</p>
+            </div>
           </div>
         </section>
 
@@ -2174,6 +2529,7 @@
           </div>
         </section>
 
+        ${stockOpsBlock}
         ${operationalFailures}
       </div>
     `;
@@ -2208,4 +2564,5 @@
   bindEvents();
   render();
   loadCatalogSummary();
+  loadMarketplaceApiConfig();
 })();

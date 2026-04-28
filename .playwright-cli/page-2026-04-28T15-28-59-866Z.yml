@@ -1,0 +1,21 @@
+- generic [ref=e2]:
+  - heading "点击查看源网页" [level=1] [ref=e4]:
+    - link "点击查看源网页" [ref=e5] [cursor=pointer]:
+      - /url: https://aliexpress.com/
+      - img "点击查看源网页" [ref=e6]
+  - generic:
+    - generic:
+      - generic [ref=e7]:
+        - img [ref=e9]
+        - generic [ref=e10]:
+          - generic [ref=e11]: Sorry, we have detected unusual traffic from your network.
+          - generic [ref=e12]:
+            - img [ref=e14]
+            - paragraph
+            - generic [ref=e39]:
+              - generic "PtX7DlHWGV3HkufwBk7tSA|afDSNA|ApqH_g_0|BfhAbg|1" [ref=e40]:
+                - img [ref=e41]
+              - link "Click to feedback >" [ref=e42] [cursor=pointer]:
+                - /url: https://www.aliexpress.com:443//w/wholesale-smartphone.html/_____tmd_____/page/feedback?rand=S3WxGHAgAt756EpznwfNzJq2AFA2qBNla3j6EINUS8We9dazM_iKElp8DwVSHZUevpC41Bx7RzivXIj9RnZgdg&x5secdata=xgbe9be8c46c5e2a79ka3ed5fb0e51d6195dc792e7f0064eed481777390132a-1168960602a43681790abaac3aaa33bce6395c641c8b1e99aa34d387cf6d144__bx__www.aliexpress.com%3A443%2Fw%2Fwholesale-smartphone.html&type=1&language=pt_BR
+              - paragraph
+      - generic [ref=e44]: ©️ 2010-2023 AliExpress.com.All rights reserved.

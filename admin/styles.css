@@ -338,6 +338,64 @@ pre {
   padding: 22px;
 }
 
+.integration-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.integration-control-center {
+  display: grid;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.integration-ops-card {
+  display: grid;
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface-strong);
+}
+
+.integration-ops-head,
+.integration-card-status {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.integration-matrix {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.integration-column,
+.integration-review-card {
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--line);
+  background: rgba(21, 39, 31, 0.04);
+}
+
+.compact-summary-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.dense-checklist {
+  gap: 8px;
+}
+
+.compact-guide-list {
+  margin: 0;
+}
+
 .integration-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -360,6 +418,12 @@ pre {
   gap: 12px;
 }
 
+.integration-card-overview {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
 .integration-card h3 {
   font-size: 17px;
   line-height: 1.2;
@@ -377,11 +441,22 @@ pre {
   gap: 10px;
 }
 
+.integration-inline-notes {
+  display: grid;
+  gap: 10px;
+}
+
 .integration-toggle-group {
   display: grid;
   grid-column: 1 / -1;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 10px;
+}
+
+.integration-review-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
 }
 
 .integration-actions {
@@ -592,6 +667,12 @@ pre {
   gap: 12px;
 }
 
+.provider-guide-meta {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
 .provider-guide-list {
   margin: 0;
   padding-left: 18px;
@@ -613,6 +694,12 @@ pre {
 }
 
 .access-card code {
+  display: block;
+  overflow-wrap: anywhere;
+  font: 12px/1.5 Consolas, "Courier New", monospace;
+}
+
+.integration-review-card code {
   display: block;
   overflow-wrap: anywhere;
   font: 12px/1.5 Consolas, "Courier New", monospace;
@@ -1434,6 +1521,11 @@ kbd {
 
   .metrics,
   .domain-board,
+  .integration-summary-grid,
+  .integration-card-overview,
+  .integration-review-grid,
+  .integration-matrix,
+  .provider-guide-meta,
   .provider-guide-grid,
   .performance-board {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1460,10 +1552,16 @@ kbd {
   .meta-grid,
   .summary-grid,
   .external-grid,
+  .integration-summary-grid,
+  .integration-control-center,
   .integration-grid,
+  .integration-card-overview,
   .integration-form-grid,
   .integration-toggle-group,
+  .integration-review-grid,
+  .integration-matrix,
   .provider-guide-grid,
+  .provider-guide-meta,
   .performance-board,
   .module-performance-grid {
     grid-template-columns: 1fr;
@@ -1471,7 +1569,10 @@ kbd {
 
   .critical-top,
   .runtime-header,
-  .endpoint-item {
+  .endpoint-item,
+  .integration-ops-head,
+  .integration-card-head,
+  .integration-card-status {
     flex-direction: column;
   }
 

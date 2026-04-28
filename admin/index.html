@@ -201,10 +201,12 @@
         <div class="section-head">
           <div>
             <p class="panel-kicker">Commerce APIs</p>
-            <h2>Integracoes de marketplaces</h2>
+            <h2>Central de integracoes de dropshipping</h2>
           </div>
-          <p class="section-copy">Campos operacionais para configurar Mercado Livre, Amazon, AliExpress, Alibaba, Magalu, CJDropshipping e Shopee.</p>
+          <p class="section-copy">Cockpit operacional para credenciais, webhooks, escopos, sincronizacao e prontidao por fornecedor.</p>
         </div>
+        <div id="marketplaceApiSummary" class="integration-summary-grid"></div>
+        <div id="marketplaceApiControlCenter" class="integration-control-center"></div>
         <div id="marketplaceApiIntegrations" class="integration-grid"></div>
         <div class="integration-actions">
           <button id="saveMarketplaceApis" class="secondary-button" type="button">Salvar rascunho local</button>
@@ -221,6 +223,7 @@
           </div>
           <p class="section-copy">Runbooks de integracao detalhados para ativar APIs oficiais de dropshipping sem improviso.</p>
         </div>
+        <div id="stockGuideSummary" class="integration-summary-grid"></div>
         <div id="stockProviderGuides" class="provider-guide-grid"></div>
       </section>
 
@@ -321,7 +324,7 @@
               </div>
               <div id="moduleSelectionMeta" class="panel-inline"></div>
             </div>
-            <div id="moduleList" class="module-list" role="listbox" aria-live="polite"></div>
+            <div id="moduleList" class="module-list" role="listbox" aria-label="Lista de modulos" aria-live="polite"></div>
           </section>
 
           <section class="detail-panel glass-panel" aria-label="Inspetor do modulo">

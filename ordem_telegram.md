@@ -138,3 +138,27 @@ received_at_utc: 2026-04-23T21:14:31Z
 auto_approval: safe_only
 ---
 Whatsapp
+
+---
+source: telegram
+kind: queue_triage
+status: accepted
+priority: normal
+codex_route: auto_start
+execution_gate: safe_only
+received_at_utc: 2026-04-28T07:33:19Z
+auto_approval: safe_only
+---
+/start
+
+---
+source: telegram
+kind: queue_triage
+status: accepted
+priority: normal
+codex_route: auto_start
+execution_gate: safe_only
+received_at_utc: 2026-04-28T07:33:19Z
+auto_approval: safe_only
+---
+whatsapp_status

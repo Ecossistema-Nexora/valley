@@ -1,6 +1,0 @@
-Servindo Valley Admin em http://127.0.0.1:61802
-Healthcheck: http://127.0.0.1:61802/healthz
-Payload JSON: http://127.0.0.1:61802/api/admin-data
-[valley-admin] 127.0.0.1 "GET /healthz HTTP/1.1" 200 -
-[valley-admin] 127.0.0.1 "GET /healthz HTTP/1.1" 200 -
-[valley-admin] 127.0.0.1 "GET /healthz HTTP/1.1" 200 -
