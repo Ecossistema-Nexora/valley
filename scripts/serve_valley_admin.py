@@ -40,6 +40,7 @@ MARKETPLACE_OAUTH_RUNTIME_PATH = RUNTIME_DIR / "valley-marketplace-oauth-runtime
 SHOPEE_OAUTH_RUNTIME_PATH = RUNTIME_DIR / "valley-shopee-oauth-runtime.json"
 ALIEXPRESS_OAUTH_RUNTIME_PATH = RUNTIME_DIR / "valley-aliexpress-oauth-runtime.json"
 MAGALU_OAUTH_RUNTIME_PATH = RUNTIME_DIR / "valley-magalu-oauth-runtime.json"
+ALIBABA_OAUTH_RUNTIME_PATH = RUNTIME_DIR / "valley-alibaba-oauth-runtime.json"
 PROVIDER_SECRETS_PATH = RUNTIME_DIR / "valley-provider-secrets.json"
 STOCK_REAL_CATALOG_PATH = RUNTIME_DIR / "valley-stock-real-catalog.json"
 MERCADOLIVRE_NOTIFICATIONS_PATH = RUNTIME_DIR / "valley-mercadolivre-notifications.jsonl"
@@ -126,6 +127,17 @@ def hmac_sha256_upper(secret: str, message: str) -> str:
         message.encode("utf-8"),
         hashlib.sha256,
     ).hexdigest().upper()
+
+
+def top_md5_upper(secret: str, params: dict[str, Any]) -> str:
+    parts: list[str] = []
+    for key in sorted(params):
+        value = params[key]
+        if value is None:
+            continue
+        parts.append(f"{key}{value}")
+    payload = secret + "".join(parts) + secret
+    return hashlib.md5(payload.encode("utf-8")).hexdigest().upper()
 
 
 def update_marketplace_integration(provider_key: str, updates: dict[str, Any]) -> None:
@@ -546,6 +558,14 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
 
         if route == "/integrations/aliexpress/callback":
             self._write_aliexpress_callback(parsed.query)
+            return
+
+        if route == "/integrations/alibaba/authorize":
+            self._redirect_alibaba_authorize()
+            return
+
+        if route == "/integrations/alibaba/callback":
+            self._write_alibaba_callback(parsed.query)
             return
 
         if route == "/integrations/magalu/authorize":
@@ -1399,6 +1419,143 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
 
+    def _redirect_alibaba_authorize(self) -> None:
+        integrations_saved = load_json_file(ADMIN_INTEGRATIONS_PATH)
+        integrations = integrations_saved if isinstance(integrations_saved, list) else []
+        provider = next(
+            (item for item in integrations if isinstance(item, dict) and item.get("key") == "alibaba"),
+            None,
+        )
+        client_id = str((provider or {}).get("clientId") or "").strip()
+        redirect_uri = str((provider or {}).get("redirectUri") or "").strip()
+        if not client_id or not redirect_uri:
+            self._write_json(
+                HTTPStatus.BAD_REQUEST,
+                {
+                    "status": "missing_credentials",
+                    "service": "valley-admin",
+                    "provider": "alibaba",
+                    "detail": "App Key ou redirect URI ausentes para montar o fluxo OAuth do Alibaba.",
+                },
+            )
+            return
+
+        state = f"valley-alibaba-{secrets.token_urlsafe(12)}"
+        auth_url = (
+            "https://oauth.alibaba.com/authorize?"
+            + urlencode(
+                {
+                    "response_type": "code",
+                    "client_id": client_id,
+                    "redirect_uri": redirect_uri,
+                    "state": state,
+                    "view": "web",
+                    "sp": "ICBU",
+                    "force_login": "true",
+                }
+            )
+        )
+        write_json_file(
+            ALIBABA_OAUTH_RUNTIME_PATH,
+            {
+                "provider": "alibaba",
+                "generated_at_utc": utc_now_iso(),
+                "state": state,
+                "authorize_url": auth_url,
+                "redirect_uri": redirect_uri,
+            },
+        )
+        self.send_response(HTTPStatus.FOUND)
+        self.send_header("Location", auth_url)
+        self.end_headers()
+
+    def _write_alibaba_callback(self, query: str) -> None:
+        params = parse_qs(query)
+        payload = {
+            "provider": "alibaba",
+            "received_at_utc": utc_now_iso(),
+            "code": (params.get("code") or [None])[0],
+            "state": (params.get("state") or [None])[0],
+            "error": (params.get("error") or [None])[0],
+            "error_description": (params.get("error_description") or [None])[0],
+            "raw_query": query,
+        }
+        token_exchange = None
+        if payload["code"]:
+            token_exchange = self._exchange_alibaba_code(payload["code"])
+            payload["token_exchange"] = token_exchange
+        write_json_file(ALIBABA_OAUTH_RUNTIME_PATH, payload)
+
+        if token_exchange and token_exchange.get("status") == "ok":
+            update_marketplace_integration(
+                "alibaba",
+                {
+                    "enabled": True,
+                    "environment": "production",
+                    "authMode": "oauth2",
+                    "redirectUri": "https://admin.brasildesconto.com.br/integrations/alibaba/callback",
+                    "secretRef": "runtime://marketplaces/alibaba/client-secret",
+                    "accessTokenRef": "runtime://marketplaces/alibaba/access-token",
+                    "refreshTokenRef": "runtime://marketplaces/alibaba/refresh-token",
+                    "sellerId": str(token_exchange.get("user_id") or token_exchange.get("user_nick") or "").strip(),
+                    "notes": "OAuth Alibaba concluido; access token e refresh token persistidos em runtime local.",
+                },
+            )
+        elif payload["code"]:
+            update_marketplace_integration(
+                "alibaba",
+                {
+                    "redirectUri": "https://admin.brasildesconto.com.br/integrations/alibaba/callback",
+                    "notes": "Callback OAuth Alibaba recebida; troca de token pendente ou com falha.",
+                },
+            )
+
+        if token_exchange and token_exchange.get("status") == "ok":
+            status = "autorizacao concluida"
+            detail = "Codigo OAuth trocado por access token e refresh token com sucesso."
+        elif payload["code"]:
+            status = "autorizacao recebida"
+            detail = (
+                token_exchange.get("detail")
+                if isinstance(token_exchange, dict) and token_exchange.get("detail")
+                else "Codigo OAuth do Alibaba capturado para troca posterior do token."
+            )
+        else:
+            status = "callback recebida"
+            detail = payload["error_description"] or payload["error"] or "Nenhum parametro de autorizacao foi informado."
+        html = f"""<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Valley | Alibaba OAuth</title>
+    <style>
+      body {{ font-family: Arial, sans-serif; background:#0b1020; color:#e8edf7; margin:0; }}
+      main {{ max-width:760px; margin:48px auto; padding:24px; }}
+      section {{ background:#121a31; border:1px solid #253150; border-radius:8px; padding:24px; }}
+      h1 {{ margin:0 0 8px; font-size:28px; }}
+      p, code {{ color:#b7c2dc; }}
+      code {{ display:block; margin-top:16px; white-space:pre-wrap; word-break:break-word; }}
+    </style>
+  </head>
+  <body>
+    <main>
+      <section>
+        <h1>{status}</h1>
+        <p>{detail}</p>
+        <code>{json.dumps(payload, ensure_ascii=False, indent=2)}</code>
+      </section>
+    </main>
+  </body>
+</html>
+"""
+        body = html.encode("utf-8")
+        self.send_response(HTTPStatus.OK)
+        self.send_header("Content-Type", "text/html; charset=utf-8")
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
     def _redirect_magalu_authorize(self) -> None:
         integrations_saved = load_json_file(ADMIN_INTEGRATIONS_PATH)
         integrations = integrations_saved if isinstance(integrations_saved, list) else []
@@ -1631,6 +1788,150 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             "token_type": payload.get("token_type"),
             "expires_in": payload.get("expires_in"),
             "scope": payload.get("scope"),
+            "stored_access_token": bool(access_token),
+            "stored_refresh_token": bool(refresh_token),
+        }
+
+    def _exchange_alibaba_code(self, code: str) -> dict[str, Any]:
+        integrations_saved = load_json_file(ADMIN_INTEGRATIONS_PATH)
+        integrations = integrations_saved if isinstance(integrations_saved, list) else []
+        provider = next(
+            (item for item in integrations if isinstance(item, dict) and item.get("key") == "alibaba"),
+            None,
+        )
+        secrets_payload = load_json_file(PROVIDER_SECRETS_PATH) or {}
+        provider_secrets = secrets_payload.get("alibaba") if isinstance(secrets_payload, dict) else None
+
+        app_key = str((provider or {}).get("clientId") or "").strip()
+        configured_secret_ref = str((provider or {}).get("secretRef") or "").strip()
+        app_secret = str((provider_secrets or {}).get("clientSecret") or "").strip()
+
+        if configured_secret_ref and not configured_secret_ref.startswith("runtime://"):
+            app_secret = configured_secret_ref
+            secrets_payload.setdefault("alibaba", {})
+            secrets_payload["alibaba"]["clientSecret"] = app_secret
+            secrets_payload["alibaba"]["updated_at_utc"] = utc_now_iso()
+            write_json_file(PROVIDER_SECRETS_PATH, secrets_payload)
+
+        if not app_key or not app_secret:
+            return {
+                "status": "missing_credentials",
+                "detail": "AppKey ou App Secret ausentes para a troca do token do Alibaba.",
+            }
+
+        now_gmt8 = datetime.now(timezone.utc).astimezone(timezone.utc).timestamp() + 8 * 3600
+        timestamp = datetime.fromtimestamp(now_gmt8, tz=timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
+        params = {
+            "app_key": app_key,
+            "code": code,
+            "format": "json",
+            "method": "taobao.top.auth.token.create",
+            "partner_id": "valley",
+            "sign_method": "md5",
+            "timestamp": timestamp,
+            "v": "2.0",
+        }
+        sign = top_md5_upper(app_secret, params)
+        body = urlencode({**params, "sign": sign}).encode("utf-8")
+        request = Request(
+            "https://eco.taobao.com/router/rest",
+            data=body,
+            headers={
+                "accept": "application/json",
+                "content-type": "application/x-www-form-urlencoded;charset=utf-8",
+            },
+            method="POST",
+        )
+
+        try:
+            with urlopen(request, timeout=45) as response:
+                payload = json.loads(response.read().decode("utf-8"))
+        except HTTPError as error:
+            detail = error.read().decode("utf-8", errors="replace")
+            return {
+                "status": "http_error",
+                "code": error.code,
+                "detail": detail,
+            }
+        except URLError as error:
+            return {
+                "status": "network_error",
+                "detail": str(error),
+            }
+        except Exception as error:  # noqa: BLE001
+            return {
+                "status": "failed",
+                "detail": str(error),
+            }
+
+        error_payload = payload.get("error_response")
+        if isinstance(error_payload, dict):
+            return {
+                "status": "api_error",
+                "code": error_payload.get("code"),
+                "detail": error_payload.get("sub_msg") or error_payload.get("msg") or "Alibaba recusou a troca do token.",
+                "response": payload,
+            }
+
+        response_payload = payload.get("top_auth_token_create_response")
+        if not isinstance(response_payload, dict):
+            return {
+                "status": "api_error",
+                "detail": "Alibaba nao retornou top_auth_token_create_response.",
+                "response": payload,
+            }
+
+        token_result_raw = response_payload.get("token_result")
+        if isinstance(token_result_raw, str):
+            try:
+                token_result = json.loads(token_result_raw)
+            except json.JSONDecodeError:
+                return {
+                    "status": "api_error",
+                    "detail": "Alibaba retornou token_result em formato invalido.",
+                    "response": payload,
+                }
+        elif isinstance(token_result_raw, dict):
+            token_result = token_result_raw
+        else:
+            return {
+                "status": "api_error",
+                "detail": "Alibaba nao retornou token_result.",
+                "response": payload,
+            }
+
+        access_token = str(token_result.get("access_token") or "").strip()
+        refresh_token = str(token_result.get("refresh_token") or "").strip()
+        user_id = str(token_result.get("user_id") or "").strip()
+        user_nick = str(token_result.get("user_nick") or "").strip()
+        if not access_token:
+            return {
+                "status": "api_error",
+                "detail": "Alibaba nao retornou access token na troca do code.",
+                "response": payload,
+            }
+
+        secrets_payload.setdefault("alibaba", {})
+        secrets_payload["alibaba"]["clientSecret"] = app_secret
+        secrets_payload["alibaba"]["accessToken"] = access_token
+        secrets_payload["alibaba"]["updated_at_utc"] = utc_now_iso()
+        if refresh_token:
+            secrets_payload["alibaba"]["refreshToken"] = refresh_token
+        if user_id:
+            secrets_payload["alibaba"]["userId"] = user_id
+        if user_nick:
+            secrets_payload["alibaba"]["userNick"] = user_nick
+        for key in ["expire_time", "refresh_token_valid_time", "locale", "sp", "w1_valid", "w2_valid", "r1_valid", "r2_valid"]:
+            if token_result.get(key) is not None:
+                secrets_payload["alibaba"][key] = token_result.get(key)
+        write_json_file(PROVIDER_SECRETS_PATH, secrets_payload)
+
+        return {
+            "status": "ok",
+            "user_id": user_id,
+            "user_nick": user_nick,
+            "sp": token_result.get("sp"),
+            "expire_time": token_result.get("expire_time"),
             "stored_access_token": bool(access_token),
             "stored_refresh_token": bool(refresh_token),
         }
