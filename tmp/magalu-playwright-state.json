@@ -1,0 +1,276 @@
+{
+  "cookies": [
+    {
+      "name": "__uzma",
+      "value": "9dcfc9e6-8c4c-4351-be2b-b1877e2b5092",
+      "domain": "id.magalu.com",
+      "path": "/",
+      "expires": 1793202584.972521,
+      "httpOnly": true,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "__uzmb",
+      "value": "1777477784",
+      "domain": "id.magalu.com",
+      "path": "/",
+      "expires": 1793202584.972783,
+      "httpOnly": true,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "__uzme",
+      "value": "4383",
+      "domain": "id.magalu.com",
+      "path": "/",
+      "expires": 1793202584.972858,
+      "httpOnly": true,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "__ssds",
+      "value": "2",
+      "domain": ".magalu.com",
+      "path": "/",
+      "expires": 1793029787,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "__ssuzjsr0",
+      "value": "a9be0cd8e",
+      "domain": "id.magalu.com",
+      "path": "/",
+      "expires": 1793029788,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "__uzmaj0",
+      "value": "f0726b46-c879-4d57-bb98-f1af8a9de274",
+      "domain": "id.magalu.com",
+      "path": "/",
+      "expires": 1793029788,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "__uzmbj0",
+      "value": "1777477788",
+      "domain": "id.magalu.com",
+      "path": "/",
+      "expires": 1793029788,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "__uzmcj0",
+      "value": "705231351829",
+      "domain": "id.magalu.com",
+      "path": "/",
+      "expires": 1793029788,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "__uzmdj0",
+      "value": "1777477788",
+      "domain": "id.magalu.com",
+      "path": "/",
+      "expires": 1793029788,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "__uzmlj0",
+      "value": "TDxsiw4ZVV4si/swN67CzlFef2Xe5EYA2LmJG9jo+mk=",
+      "domain": "id.magalu.com",
+      "path": "/",
+      "expires": 1793029788,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "__uzmfj0",
+      "value": "7f9000f0726b46-c879-4d57-bb98-f1af8a9de2741-17774777889580-0034975111a07f8c5ca13",
+      "domain": "id.magalu.com",
+      "path": "/",
+      "expires": 1793029788,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_hjSessionUser_3916850",
+      "value": "eyJpZCI6IjU4NTQ5Zjc5LTc1Y2MtNWFjYy05MDQwLTk4MTFmNzkxMmExMiIsImNyZWF0ZWQiOjE3Nzc0Nzc3ODk2MDMsImV4aXN0aW5nIjpmYWxzZX0=",
+      "domain": ".magalu.com",
+      "path": "/",
+      "expires": 1809013789,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "_hjSession_3916850",
+      "value": "eyJpZCI6IjMyMDJkNTU3LTljMjctNDlhNC1iMTUwLTE0ODBjY2E0MzIxMSIsImMiOjE3Nzc0Nzc3ODk2MDUsInMiOjAsInIiOjAsInNiIjowLCJzciI6MCwic2UiOjAsImZzIjoxLCJzcCI6MH0=",
+      "domain": ".magalu.com",
+      "path": "/",
+      "expires": 1777479683,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "_azfp_sc",
+      "value": "6abd1a1a8efe17677661ad1aead6f03a482116257254e85be4ca4614a7c9d5f7",
+      "domain": "id.magalu.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "thx_guid",
+      "value": "374fdcc643b392e51a27e7232a85920d",
+      "domain": "d.mlcdn.com.br",
+      "path": "/",
+      "expires": 1812037793.396091,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "tmx_guid",
+      "value": "AAzZQfqtgaZJWr-b_r0-2VQjfEOCYwnXn9SCPWQP7JFNyocsYJF_gKPJSGQS-kS05e6rN8gW_PMKvxRO8x_GCpms1Dttnw",
+      "domain": "d.mlcdn.com.br",
+      "path": "/",
+      "expires": 1812037793.396512,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "thx_global_guid",
+      "value": "3db2bf99c1104f81bfccbf44f56d24ea",
+      "domain": "h.online-metrix.net",
+      "path": "/",
+      "expires": 1812037794.937164,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "__uzmc",
+      "value": "330193438468",
+      "domain": "id.magalu.com",
+      "path": "/",
+      "expires": 1793202662.428735,
+      "httpOnly": true,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "__uzmd",
+      "value": "1777477862",
+      "domain": "id.magalu.com",
+      "path": "/",
+      "expires": 1793202662.42898,
+      "httpOnly": true,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "az_asm_20250704",
+      "value": "/ewCvW9CTbbXL3+OP+cRli4B8rmJV790RKFJ7Ay/DTluWc3oaPr7sWZaP9M86ccvd3WvxFWhIK7Kpps8",
+      "domain": ".id.magalu.com",
+      "path": "/",
+      "expires": 1777564262.429318,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "az_botm_20250704",
+      "value": "a97185813b1709d1cac5d91af338328e",
+      "domain": ".id.magalu.com",
+      "path": "/",
+      "expires": 1777564262.429558,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "user",
+      "value": "3mEbXs6a5wSnH3IsvcdG4aiA3QiQv5z2%2FsKLrhR7615SnHpVES5U2csg0yaa2ohaJpNgUJATCqh%2F8CzxAP3XoJ5a6V1m9Dx5QqTIxm%2F6x6qHIYwzaU2JbaKK9mREgbSoNHdedJOCG1kJLBgc2bRtCJ5U2TfMnNnkRntBgKpElqvfxg%3D%3D--sWPmx2TLKFYnNbEB--m0uomIhedbOyVnFi0PKjEQ%3D%3D",
+      "domain": ".magalu.com",
+      "path": "/",
+      "expires": 1778341900.366728,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    }
+  ],
+  "origins": [
+    {
+      "origin": "https://id.magalu.com",
+      "localStorage": [
+        {
+          "name": "state",
+          "value": "{}"
+        },
+        {
+          "name": "radRandom",
+          "value": "d6a59114c47c96ab07736a999a7acda55e0beb0d9e3609b6b07349a1b17962a0"
+        },
+        {
+          "name": "profiling",
+          "value": "idm_aa71aedb-916f-4788-81ef-67f12466dab0"
+        },
+        {
+          "name": "5718FABB002E",
+          "value": "AAxqQt0yC2rhzw6HCEOiI2M268fONr1fILWcdCsGS8pzAKgqePezxAIHjrSanWeMoaTgs_n-gsXWXgahGEqNRM7t5psY-w"
+        },
+        {
+          "name": "ed73f20edbf2b74",
+          "value": "0:1:1777477789918:1777477789918:6092bd60cab47f7332d8805b1ec744d6"
+        },
+        {
+          "name": "ed73f20edbf2b73",
+          "value": "4577cd713a604f59959c513a0089ab4b_1932997793963"
+        },
+        {
+          "name": "request-id",
+          "value": "\"71b5897b579e040050906a4b44bb3f6c\""
+        },
+        {
+          "name": "locale",
+          "value": "br"
+        }
+      ]
+    },
+    {
+      "origin": "https://d.mlcdn.com.br",
+      "localStorage": [
+        {
+          "name": "ed73f20edbf2b73",
+          "value": "c2a568ffdb734c4088d4556a2b6bdc4f_1932997794999"
+        },
+        {
+          "name": "5718FABB002E",
+          "value": "AAx53YFBUJZQTHrFgVTp-IUpCLlZVabK4dhSwTeH2kWeN1UzYFKqfe0WsvlCGXKHm3w9C6SZ2cQ2aBgy3Iutj2dWJxx9TQ"
+        }
+      ]
+    }
+  ]
+}

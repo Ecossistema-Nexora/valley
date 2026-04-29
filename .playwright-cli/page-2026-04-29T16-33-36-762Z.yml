@@ -1,0 +1,302 @@
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e84]:
+      - img [ref=e88] [cursor=pointer]
+    - contentinfo [ref=e90]:
+      - generic [ref=e91]:
+        - generic [ref=e92]: © 2026 Magalu
+        - generic [ref=e93]:
+          - generic [ref=e94] [cursor=pointer]: Termos e condições
+          - generic [ref=e95] [cursor=pointer]: Política de Privacidade
+      - generic [ref=e96]:
+        - generic [ref=e97]:
+          - img [ref=e98]
+          - generic [ref=e100] [cursor=pointer]: Precisa de ajuda?
+        - generic [ref=e103]:
+          - button [ref=e104] [cursor=pointer]:
+            - img [ref=e105]
+            - paragraph [ref=e106]: BR
+          - textbox: br
+          - img
+  - iframe [ref=e53]:
+    
+  - generic [ref=e109]:
+    - generic [ref=e110]:
+      - generic [ref=e111]:
+        - paragraph [ref=e112]: O aplicativo Valley Marketplace solicita acesso a seu ID Magalu
+        - paragraph [ref=e113]: Acesse a política de privacidade e os termos de serviços do aplicativo Valley Marketplace
+      - generic [ref=e114]:
+        - link "Política de Privacidade" [ref=e115] [cursor=pointer]:
+          - /url: https://admin.brasildesconto.com.br/legal/privacy-policy.html
+        - link "Termos de serviço" [ref=e116] [cursor=pointer]:
+          - /url: https://admin.brasildesconto.com.br/legal/terms-of-use.html
+    - generic [ref=e117]:
+      - generic [ref=e119] [cursor=pointer]:
+        - generic [ref=e121]:
+          - checkbox "Selecionar todos" [ref=e122]
+          - img [ref=e123]
+        - paragraph [ref=e126]: Selecionar todos
+      - generic [ref=e127]:
+        - generic [ref=e128] [cursor=pointer]:
+          - generic [ref=e130]:
+            - checkbox "Ver os dados dos seus pedidos" [ref=e131]
+            - img [ref=e132]
+          - paragraph [ref=e135]: Ver os dados dos seus pedidos
+        - paragraph [ref=e137]: Ao marcar esta opção, você autoriza que a aplicação acesse os pedidos da sua loja.
+      - generic [ref=e138]:
+        - generic [ref=e139] [cursor=pointer]:
+          - generic [ref=e141]:
+            - checkbox "Permitir alterar posições de estoque do SKU" [ref=e142]
+            - img [ref=e143]
+          - paragraph [ref=e146]: Permitir alterar posições de estoque do SKU
+        - paragraph [ref=e148]: Ao selecionar esta opção, você autoriza que a aplicação altere posições de estoque dos SKUs da sua loja.
+      - generic [ref=e149]:
+        - generic [ref=e150] [cursor=pointer]:
+          - generic [ref=e152]:
+            - checkbox "Permitir a atualização de dados de protocolos" [ref=e153]
+            - img [ref=e154]
+          - paragraph [ref=e157]: Permitir a atualização de dados de protocolos
+        - paragraph [ref=e159]: Ao selecionar esta opção, você autoriza que a aplicação altere informações dos tickets abertos para a sua conta no Marketplace.
+      - generic [ref=e160]:
+        - generic [ref=e161] [cursor=pointer]:
+          - generic [ref=e163]:
+            - checkbox "Permitir alterar preços do SKU" [ref=e164]
+            - img [ref=e165]
+          - paragraph [ref=e168]: Permitir alterar preços do SKU
+        - paragraph [ref=e170]: Ao selecionar esta opção, você autoriza que a aplicação altere preços dos SKUs da sua loja.
+      - generic [ref=e171]:
+        - generic [ref=e172] [cursor=pointer]:
+          - generic [ref=e174]:
+            - checkbox "Permitir alterar posições de estoque do SKU" [ref=e175]
+            - img [ref=e176]
+          - paragraph [ref=e179]: Permitir alterar posições de estoque do SKU
+        - paragraph [ref=e181]: Ao selecionar esta opção, você autoriza que a aplicação altere posições de estoque dos SKUs da sua loja.
+      - generic [ref=e182]:
+        - generic [ref=e183] [cursor=pointer]:
+          - generic [ref=e185]:
+            - checkbox "Permitir a leitura de transações" [ref=e186]
+            - img [ref=e187]
+          - paragraph [ref=e190]: Permitir a leitura de transações
+        - paragraph [ref=e192]: Ao selecionar esta opção, você autoriza que a aplicação consulte as transações do SAC para a sua conta no Marketplace.
+      - generic [ref=e193]:
+        - generic [ref=e194] [cursor=pointer]:
+          - generic [ref=e196]:
+            - checkbox "Editar dados de logistica" [ref=e197]
+            - img [ref=e198]
+          - paragraph [ref=e201]: Editar dados de logistica
+        - paragraph [ref=e203]: Ao selecionar esta opção, você autoriza que a aplicação modifique dados de logística de pedidos da sua loja.
+      - generic [ref=e204]:
+        - generic [ref=e205] [cursor=pointer]:
+          - generic [ref=e207]:
+            - checkbox "Permissão acesso marketplace" [ref=e208]
+            - img [ref=e209]
+          - paragraph [ref=e212]: Permissão acesso marketplace
+        - paragraph [ref=e214]: Ao marcar esta opção, você autoriza que a aplicação acesse todas as informações da sua conta no Magalu Marketplace.
+      - generic [ref=e215]:
+        - generic [ref=e216] [cursor=pointer]:
+          - generic [ref=e218]:
+            - checkbox "Permitir alterar dados do SKU" [ref=e219]
+            - img [ref=e220]
+          - paragraph [ref=e223]: Permitir alterar dados do SKU
+        - paragraph [ref=e225]: Ao selecionar esta opção, você autoriza que a aplicação altere informações dos SKUs da sua loja.
+      - generic [ref=e226]:
+        - generic [ref=e227] [cursor=pointer]:
+          - generic [ref=e229]:
+            - checkbox "Permite enviar mensagens e marcar a conversas como lidas" [ref=e230]
+            - img [ref=e231]
+          - paragraph [ref=e234]: Permite enviar mensagens e marcar a conversas como lidas
+        - paragraph [ref=e236]: Ao marcar esta opção, você autoriza que a aplicação publique mensagens e marque conversas como lidas.
+      - generic [ref=e237]:
+        - generic [ref=e238] [cursor=pointer]:
+          - generic [ref=e240]:
+            - checkbox "Permitir alterar preços do SKU" [ref=e241]
+            - img [ref=e242]
+          - paragraph [ref=e245]: Permitir alterar preços do SKU
+        - paragraph [ref=e247]: Ao selecionar esta opção, você autoriza que a aplicação altere preços dos SKUs da sua loja.
+      - generic [ref=e248]:
+        - generic [ref=e249] [cursor=pointer]:
+          - generic [ref=e251]:
+            - checkbox "Permitir a leitura dos preços do SKU" [ref=e252]
+            - img [ref=e253]
+          - paragraph [ref=e256]: Permitir a leitura dos preços do SKU
+        - paragraph [ref=e258]: Ao marcar esta opção, você autoriza que a aplicação acesse os preços dos SKUs da sua loja.
+      - generic [ref=e259]:
+        - generic [ref=e260] [cursor=pointer]:
+          - generic [ref=e262]:
+            - checkbox "Permitir a criação de mensagens em protocolos" [ref=e263]
+            - img [ref=e264]
+          - paragraph [ref=e267]: Permitir a criação de mensagens em protocolos
+        - paragraph [ref=e269]: Ao selecionar esta opção, você autoriza que a aplicação envie mensagens nos protocolos abertos para a sua conta no Marketplace.
+      - generic [ref=e270]:
+        - generic [ref=e271] [cursor=pointer]:
+          - generic [ref=e273]:
+            - checkbox "Permite consultar dados de notas fiscais" [ref=e274]
+            - img [ref=e275]
+          - paragraph [ref=e278]: Permite consultar dados de notas fiscais
+        - paragraph [ref=e280]: Ao marcar esta opção, você autoriza que a aplicação acesse as informações das notas ficais da sua loja.
+      - generic [ref=e281]:
+        - generic [ref=e282] [cursor=pointer]:
+          - generic [ref=e284]:
+            - checkbox "Permitir a escrita de eventos do ticket" [ref=e285]
+            - img [ref=e286]
+          - paragraph [ref=e289]: Permitir a escrita de eventos do ticket
+        - paragraph [ref=e291]: Ao marcar esta opção, você autoriza que a aplicação grave eventos nos tickets da sua conta no Marketplace.
+      - generic [ref=e292]:
+        - generic [ref=e293] [cursor=pointer]:
+          - generic [ref=e295]:
+            - checkbox "Permitir a leitura de dados do SKU" [ref=e296]
+            - img [ref=e297]
+          - paragraph [ref=e300]: Permitir a leitura de dados do SKU
+        - paragraph [ref=e302]: Ao marcar esta opção, você autoriza que a aplicação acesse as informações dos SKUs da sua loja.
+      - generic [ref=e303]:
+        - generic [ref=e304] [cursor=pointer]:
+          - generic [ref=e306]:
+            - checkbox "Permitir acesso de leitura no Perguntas e Repostas" [ref=e307]
+            - img [ref=e308]
+          - paragraph [ref=e311]: Permitir acesso de leitura no Perguntas e Repostas
+        - paragraph [ref=e313]: Permite a consulta nas APIs de leitura do módulo de Perguntas e Respostas
+      - generic [ref=e314]:
+        - generic [ref=e315] [cursor=pointer]:
+          - generic [ref=e317]:
+            - checkbox "Permitir a leitura de mensagens dos protocolos" [ref=e318]
+            - img [ref=e319]
+          - paragraph [ref=e322]: Permitir a leitura de mensagens dos protocolos
+        - paragraph [ref=e324]: Ao marcar esta opção, você autoriza que a aplicação acesse as mensagens enviadas nos protocolos abertos para a sua conta no Marketplace.
+      - generic [ref=e325]:
+        - generic [ref=e326] [cursor=pointer]:
+          - generic [ref=e328]:
+            - checkbox "Permitir a leitura de mensagens dos protocolos" [ref=e329]
+            - img [ref=e330]
+          - paragraph [ref=e333]: Permitir a leitura de mensagens dos protocolos
+        - paragraph [ref=e335]: Ao marcar esta opção, você autoriza que a aplicação acesse as mensagens enviadas nos protocolos abertos para a sua conta no Marketplace.
+      - generic [ref=e336]:
+        - generic [ref=e337] [cursor=pointer]:
+          - generic [ref=e339]:
+            - checkbox "Permitir acesso de escrita no Perguntas e Repostas" [ref=e340]
+            - img [ref=e341]
+          - paragraph [ref=e344]: Permitir acesso de escrita no Perguntas e Repostas
+        - paragraph [ref=e346]: Permite o acesso nas APIs de escrita do módulo de Perguntas e Respostas
+      - generic [ref=e347]:
+        - generic [ref=e348] [cursor=pointer]:
+          - generic [ref=e350]:
+            - checkbox "Ver informações sobre logistica" [ref=e351]
+            - img [ref=e352]
+          - paragraph [ref=e355]: Ver informações sobre logistica
+        - paragraph [ref=e357]: Ao marcar esta opção, você autoriza que a aplicação acesse as informações de logística de pedidos da sua loja.
+      - generic [ref=e358]:
+        - generic [ref=e359] [cursor=pointer]:
+          - generic [ref=e361]:
+            - checkbox "Permitir a atualização de dados de protocolos" [ref=e362]
+            - img [ref=e363]
+          - paragraph [ref=e366]: Permitir a atualização de dados de protocolos
+        - paragraph [ref=e368]: Ao selecionar esta opção, você autoriza que a aplicação altere informações dos tickets abertos para a sua conta no Marketplace.
+      - generic [ref=e369]:
+        - generic [ref=e370] [cursor=pointer]:
+          - generic [ref=e372]:
+            - checkbox "Permitir alterar dados do SKU" [ref=e373]
+            - img [ref=e374]
+          - paragraph [ref=e377]: Permitir alterar dados do SKU
+        - paragraph [ref=e379]: Ao selecionar esta opção, você autoriza que a aplicação altere informações dos SKUs da sua loja.
+      - generic [ref=e380]:
+        - generic [ref=e381] [cursor=pointer]:
+          - generic [ref=e383]:
+            - checkbox "Ver dados de notas fiscais" [ref=e384]
+            - img [ref=e385]
+          - paragraph [ref=e388]: Ver dados de notas fiscais
+        - paragraph [ref=e390]: Ao marcar esta opção, você autoriza que a aplicação acesse as informações das notas ficais da sua loja.
+      - generic [ref=e391]:
+        - generic [ref=e392] [cursor=pointer]:
+          - generic [ref=e394]:
+            - checkbox "Permitir a leitura das posições de estoque do SKU" [ref=e395]
+            - img [ref=e396]
+          - paragraph [ref=e399]: Permitir a leitura das posições de estoque do SKU
+        - paragraph [ref=e401]: Ao marcar esta opção, você autoriza que a aplicação acesse as posições de estoque dos SKUs da sua loja.
+      - generic [ref=e402]:
+        - generic [ref=e403] [cursor=pointer]:
+          - generic [ref=e405]:
+            - checkbox "Permitir a leitura de dados de logística reversa do ticket" [ref=e406]
+            - img [ref=e407]
+          - paragraph [ref=e410]: Permitir a leitura de dados de logística reversa do ticket
+        - paragraph [ref=e412]: Ao selecionar esta opção, você autoriza que a aplicação consulte informaçẽos de logística reversa para a sua conta no Marketplace.
+      - generic [ref=e413]:
+        - generic [ref=e414] [cursor=pointer]:
+          - generic [ref=e416]:
+            - checkbox "Ver informações sobre entregas" [ref=e417]
+            - img [ref=e418]
+          - paragraph [ref=e421]: Ver informações sobre entregas
+        - paragraph [ref=e423]: Ao marcar esta opção, você autoriza que a aplicação acesse os entregas da sua loja.
+      - generic [ref=e424]:
+        - generic [ref=e425] [cursor=pointer]:
+          - generic [ref=e427]:
+            - checkbox "Permite a consulta de conversas e mensagens do Chat" [ref=e428]
+            - img [ref=e429]
+          - paragraph [ref=e432]: Permite a consulta de conversas e mensagens do Chat
+        - paragraph [ref=e434]: Ao marcar esta opção, você autoriza que a aplicação acesse todas as conversas de chat da sua conta no Marketplace.
+      - generic [ref=e435]:
+        - generic [ref=e436] [cursor=pointer]:
+          - generic [ref=e438]:
+            - checkbox "Permitir a leitura de dados do SKU" [ref=e439]
+            - img [ref=e440]
+          - paragraph [ref=e443]: Permitir a leitura de dados do SKU
+        - paragraph [ref=e445]: Ao marcar esta opção, você autoriza que a aplicação acesse as informações dos SKUs da sua loja.
+      - generic [ref=e446]:
+        - generic [ref=e447] [cursor=pointer]:
+          - generic [ref=e449]:
+            - checkbox "Permitir a leitura de protocolos" [ref=e450]
+            - img [ref=e451]
+          - paragraph [ref=e454]: Permitir a leitura de protocolos
+        - paragraph [ref=e456]: Ao marcar esta opção, você autoriza que a aplicação acesse todas as informações dos tickets abertos para a sua conta no Marketplace.
+      - generic [ref=e457]:
+        - generic [ref=e458] [cursor=pointer]:
+          - generic [ref=e460]:
+            - checkbox "Permitir a leitura das posições de estoque do SKU" [ref=e461]
+            - img [ref=e462]
+          - paragraph [ref=e465]: Permitir a leitura das posições de estoque do SKU
+        - paragraph [ref=e467]: Ao marcar esta opção, você autoriza que a aplicação acesse as posições de estoque dos SKUs da sua loja.
+      - generic [ref=e468]:
+        - generic [ref=e469] [cursor=pointer]:
+          - generic [ref=e471]:
+            - checkbox "Permitir a leitura dos preços do SKU" [ref=e472]
+            - img [ref=e473]
+          - paragraph [ref=e476]: Permitir a leitura dos preços do SKU
+        - paragraph [ref=e478]: Ao marcar esta opção, você autoriza que a aplicação acesse os preços dos SKUs da sua loja.
+      - generic [ref=e479]:
+        - generic [ref=e480] [cursor=pointer]:
+          - generic [ref=e482]:
+            - checkbox "Permitir a leitura de eventos do ticket" [ref=e483]
+            - img [ref=e484]
+          - paragraph [ref=e487]: Permitir a leitura de eventos do ticket
+        - paragraph [ref=e489]: Ao selecionar esta opção, você autoriza que a aplicação consulte os eventos dos tickets da sua conta no Marketplace.
+      - generic [ref=e490]:
+        - generic [ref=e491] [cursor=pointer]:
+          - generic [ref=e493]:
+            - checkbox "Editar dados de entregas" [ref=e494]
+            - img [ref=e495]
+          - paragraph [ref=e498]: Editar dados de entregas
+        - paragraph [ref=e500]: Ao selecionar esta opção, você autoriza que a aplicação modifique dados de entregas de pedidos da sua loja.
+      - generic [ref=e501]:
+        - generic [ref=e502] [cursor=pointer]:
+          - generic [ref=e504]:
+            - checkbox "Permitir a leitura de protocolos" [ref=e505]
+            - img [ref=e506]
+          - paragraph [ref=e509]: Permitir a leitura de protocolos
+        - paragraph [ref=e511]: Ao marcar esta opção, você autoriza que a aplicação acesse todas as informações dos tickets abertos para a sua conta no Marketplace.
+      - generic [ref=e512]:
+        - generic [ref=e513] [cursor=pointer]:
+          - generic [ref=e515]:
+            - checkbox "Permitir a criar logísticas reversas para tickets" [ref=e516]
+            - img [ref=e517]
+          - paragraph [ref=e520]: Permitir a criar logísticas reversas para tickets
+        - paragraph [ref=e522]: Ao marcar esta opção, você autoriza que a aplicação crie solicitações de logística reversa nos tickets da sua conta no Marketplace.
+      - generic [ref=e523]:
+        - generic [ref=e524] [cursor=pointer]:
+          - generic [ref=e526]:
+            - checkbox "Permitir a criação de mensagens em protocolos" [ref=e527]
+            - img [ref=e528]
+          - paragraph [ref=e531]: Permitir a criação de mensagens em protocolos
+        - paragraph [ref=e533]: Ao selecionar esta opção, você autoriza que a aplicação envie mensagens nos protocolos abertos para a sua conta no Marketplace.
+    - generic [ref=e534]:
+      - button "Cancelar" [ref=e535] [cursor=pointer]:
+        - generic [ref=e537]: Cancelar
+      - button "Continuar" [ref=e538] [cursor=pointer]:
+        - generic [ref=e540]: Continuar

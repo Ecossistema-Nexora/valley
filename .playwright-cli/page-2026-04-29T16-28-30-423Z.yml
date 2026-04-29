@@ -1,0 +1,69 @@
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic "Go to ID Magalu" [ref=e6]:
+        - img "ID Magalu" [ref=e7] [cursor=pointer]
+    - generic [ref=e13]:
+      - generic [ref=e14]:
+        - img "ID Magalu" [ref=e16]
+        - paragraph [ref=e17]: Boas vindas!
+        - generic [ref=e18]:
+          - paragraph [ref=e19]:
+            - text: Acesse com sua conta da
+            - strong [ref=e20]: Magalu
+          - img "Acesse a sua conta com seus dados do ID Magalu, Magalu.com.br ou do SuperApp Magalu" [ref=e21]
+      - generic [ref=e22]:
+        - generic [ref=e23]:
+          - generic [ref=e24]:
+            - generic:
+              - text: Email
+              - generic: "*"
+            - generic [ref=e25]:
+              - textbox "Email" [disabled] [ref=e26]: nazareteandersoncarvalho@gmail.com
+              - group
+          - generic [ref=e57]:
+            - generic [ref=e58]: Não é você?
+            - link "Usar outro email" [ref=e59] [cursor=pointer]:
+              - /url: "#"
+          - generic [ref=e60]:
+            - generic:
+              - text: Senha
+              - generic: "*"
+            - generic [ref=e61]:
+              - textbox "Senha" [active] [ref=e62]
+              - img "icone visibilidade off" [ref=e64] [cursor=pointer]
+              - group
+          - link "Esqueceu a senha?" [ref=e67] [cursor=pointer]:
+            - /url: /account/verify-email?client_id=LzAs9QtKje_MxZtW3P9DSOj6W8Fz1ncckrHvqxi67iE&redirect_uri=https%3A%2F%2Fadmin.brasildesconto.com.br%2Fintegrations%2Fmagalu%2Fcallback&scope=apiin%3Aall+open%3Aorder-delivery-seller%3Aread+open%3Aorder-delivery-seller%3Awrite+open%3Aorder-invoice-seller%3Aread+open%3Aorder-invoice%3Aread+open%3Aorder-logistics-seller%3Aread+open%3Aorder-logistics-seller%3Awrite+open%3Aorder-order-seller%3Aread+open%3Aportfolio-categories-seller%3Aread+open%3Aportfolio-prices-seller%3Aread+open%3Aportfolio-prices-seller%3Awrite+open%3Aportfolio-prices%3Aread+open%3Aportfolio-prices%3Awrite+open%3Aportfolio-scores-seller%3Aread+open%3Aportfolio-skus-seller%3Aread+open%3Aportfolio-skus-seller%3Awrite+open%3Aportfolio-skus%3Aread+open%3Aportfolio-skus%3Awrite+open%3Aportfolio-stocks-seller%3Aread+open%3Aportfolio-stocks-seller%3Awrite+open%3Aportfolio-stocks%3Aread+open%3Aportfolio-stocks%3Awrite+open%3Asac-transaction-seller%3Aread+open%3Aticket-events-seller%3Aread+open%3Aticket-events-seller%3Awrite+open%3Aticket-messages-seller%3Aread+open%3Aticket-messages-seller%3Awrite+open%3Aticket-returns-seller%3Aread+open%3Aticket-returns-seller%3Awrite+open%3Atickets-seller%3Aread+open%3Atickets-seller%3Awrite+services%3Aconversations-seller%3Aread+services%3Aconversations-seller%3Awrite+services%3Aquestions-seller%3Aread+services%3Aquestions-seller%3Awrite+services%3Aticket-messages-seller%3Aread+services%3Aticket-messages-seller%3Awrite+services%3Atickets-seller%3Aread+services%3Atickets-seller%3Awrite&response_type=code&choose_tenants=true&state=valley-magalu-SotJnV32wvzjdKnH
+          - generic [ref=e27]:
+            - generic [ref=e69]:
+              - generic: Entrar sem senha
+              - generic [ref=e70]:
+                - button [ref=e71] [cursor=pointer]
+                - textbox
+                - img
+                - group
+            - button "Entrar" [ref=e72] [cursor=pointer]:
+              - generic [ref=e31]: Entrar
+        - generic [ref=e73]:
+          - paragraph [ref=e74]: Não possui conta?
+          - link "Crie sua conta" [ref=e75] [cursor=pointer]:
+            - /url: /account/signup?client_id=LzAs9QtKje_MxZtW3P9DSOj6W8Fz1ncckrHvqxi67iE&redirect_uri=https%3A%2F%2Fadmin.brasildesconto.com.br%2Fintegrations%2Fmagalu%2Fcallback&scope=apiin%3Aall+open%3Aorder-delivery-seller%3Aread+open%3Aorder-delivery-seller%3Awrite+open%3Aorder-invoice-seller%3Aread+open%3Aorder-invoice%3Aread+open%3Aorder-logistics-seller%3Aread+open%3Aorder-logistics-seller%3Awrite+open%3Aorder-order-seller%3Aread+open%3Aportfolio-categories-seller%3Aread+open%3Aportfolio-prices-seller%3Aread+open%3Aportfolio-prices-seller%3Awrite+open%3Aportfolio-prices%3Aread+open%3Aportfolio-prices%3Awrite+open%3Aportfolio-scores-seller%3Aread+open%3Aportfolio-skus-seller%3Aread+open%3Aportfolio-skus-seller%3Awrite+open%3Aportfolio-skus%3Aread+open%3Aportfolio-skus%3Awrite+open%3Aportfolio-stocks-seller%3Aread+open%3Aportfolio-stocks-seller%3Awrite+open%3Aportfolio-stocks%3Aread+open%3Aportfolio-stocks%3Awrite+open%3Asac-transaction-seller%3Aread+open%3Aticket-events-seller%3Aread+open%3Aticket-events-seller%3Awrite+open%3Aticket-messages-seller%3Aread+open%3Aticket-messages-seller%3Awrite+open%3Aticket-returns-seller%3Aread+open%3Aticket-returns-seller%3Awrite+open%3Atickets-seller%3Aread+open%3Atickets-seller%3Awrite+services%3Aconversations-seller%3Aread+services%3Aconversations-seller%3Awrite+services%3Aquestions-seller%3Aread+services%3Aquestions-seller%3Awrite+services%3Aticket-messages-seller%3Aread+services%3Aticket-messages-seller%3Awrite+services%3Atickets-seller%3Aread+services%3Atickets-seller%3Awrite&response_type=code&choose_tenants=true&state=valley-magalu-SotJnV32wvzjdKnH
+    - contentinfo [ref=e36]:
+      - generic [ref=e37]:
+        - generic [ref=e38]: © 2026 Magalu
+        - generic [ref=e39]:
+          - generic [ref=e40] [cursor=pointer]: Termos e condições
+          - generic [ref=e41] [cursor=pointer]: Política de Privacidade
+      - generic [ref=e42]:
+        - generic [ref=e43]:
+          - img [ref=e44]
+          - generic [ref=e46] [cursor=pointer]: Precisa de ajuda?
+        - generic [ref=e49]:
+          - button "Without label" [ref=e50] [cursor=pointer]:
+            - img "Brasil" [ref=e51]
+            - paragraph [ref=e52]: BR
+          - textbox: br
+          - img "flag"
+  - iframe [ref=e53]:
+    

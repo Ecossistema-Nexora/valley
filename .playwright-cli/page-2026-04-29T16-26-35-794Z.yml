@@ -1,0 +1,37 @@
+- generic [ref=e5]:
+  - generic [ref=e6]:
+    - img "Magalu Logo" [ref=e8]
+    - generic [ref=e9] [cursor=pointer]:
+      - img "Brasil" [ref=e11]
+      - generic [ref=e12]: Português
+      - img [ref=e14]
+  - generic [ref=e16]:
+    - heading "Parece que você acessou nosso site de uma forma um pouco diferente do comum. Para sua segurança precisamos de uma verificação rápida. Isso nos ajuda a manter a sua navegação segura e a proteger seus dados. Não se preocupe, essa é uma etapa simples e rápida!" [level=1] [ref=e17]:
+      - text: Parece que você acessou nosso site de uma forma um pouco diferente do comum. Para sua segurança precisamos de uma verificação rápida. Isso nos ajuda a manter a sua navegação segura e a proteger seus dados.
+      - text: Não se preocupe, essa é uma etapa simples e rápida!
+    - generic [ref=e19]:
+      - iframe [ref=e21]:
+        - generic [ref=f2e2] [cursor=pointer]:
+          - checkbox "'Eu sou humano', selecione para acionar o desafio ou para ignorá-lo se você tiver um cookie de acessibilidade" [ref=f2e7]
+          - generic [ref=f2e11]: Sou humano
+          - generic [ref=f2e12]:
+            - generic "hCaptcha" [ref=f2e13]:
+              - button "Logotipo do hCaptcha, abre uma nova janela com mais informações" [ref=f2e14]:
+                - img [ref=f2e16]
+            - generic [ref=f2e78]:
+              - link "Política de Privacidade do hCaptcha (abre em nova aba)" [ref=f2e79]:
+                - /url: https://hcaptcha.com/privacy?ref=validate.perfdrive.com&utm_campaign=ae73173b-7003-44e0-bc87-654d0dab8b75&utm_medium=checkbox&hl=pt-BR
+                - text: Privacidade
+              - text: "-"
+              - link "Termos de Serviço do hCaptcha (abre em nova aba)" [ref=f2e80]:
+                - /url: https://hcaptcha.com/terms?ref=validate.perfdrive.com&utm_campaign=ae73173b-7003-44e0-bc87-654d0dab8b75&utm_medium=checkbox&hl=pt-BR
+                - text: Termos e Condições
+      - button "Submit" [ref=e23] [cursor=pointer]
+    - paragraph [ref=e24]: Complete o CAPTCHA para confirmar. Agradecemos sua compreensão e estamos ansiosos para te receber!
+    - generic [ref=e25]:
+      - paragraph [ref=e26]:
+        - text: Precisa de ajuda? Entre em
+        - link "contato conosco" [ref=e27] [cursor=pointer]:
+          - /url: https://www.magazineluiza.com.br/atendimento
+        - text: .
+      - paragraph [ref=e28]: "ID: bd746720-c4v7-4c7d-be9a-f8c74863638c, IP: 45.185.45.230"

@@ -12,6 +12,8 @@ import os
 import secrets
 import subprocess
 import sys
+import threading
+import time
 from collections import defaultdict
 from datetime import datetime, timezone
 from functools import partial
@@ -37,6 +39,7 @@ ADMIN_INTEGRATIONS_PATH = RUNTIME_DIR / "valley-admin-integrations.json"
 MARKETPLACE_OAUTH_RUNTIME_PATH = RUNTIME_DIR / "valley-marketplace-oauth-runtime.json"
 SHOPEE_OAUTH_RUNTIME_PATH = RUNTIME_DIR / "valley-shopee-oauth-runtime.json"
 ALIEXPRESS_OAUTH_RUNTIME_PATH = RUNTIME_DIR / "valley-aliexpress-oauth-runtime.json"
+MAGALU_OAUTH_RUNTIME_PATH = RUNTIME_DIR / "valley-magalu-oauth-runtime.json"
 PROVIDER_SECRETS_PATH = RUNTIME_DIR / "valley-provider-secrets.json"
 STOCK_REAL_CATALOG_PATH = RUNTIME_DIR / "valley-stock-real-catalog.json"
 MERCADOLIVRE_NOTIFICATIONS_PATH = RUNTIME_DIR / "valley-mercadolivre-notifications.jsonl"
@@ -44,6 +47,10 @@ MERCADOLIVRE_NOTIFICATIONS_LATEST_PATH = RUNTIME_DIR / "valley-mercadolivre-noti
 MERCADOLIVRE_PKCE_PATH = RUNTIME_DIR / "valley-mercadolivre-pkce.json"
 ALIEXPRESS_NOTIFICATIONS_PATH = RUNTIME_DIR / "valley-aliexpress-notifications.jsonl"
 ALIEXPRESS_NOTIFICATIONS_LATEST_PATH = RUNTIME_DIR / "valley-aliexpress-notification-latest.json"
+CJDROPSHIPPING_NOTIFICATIONS_PATH = RUNTIME_DIR / "valley-cjdropshipping-notifications.jsonl"
+CJDROPSHIPPING_NOTIFICATIONS_LATEST_PATH = RUNTIME_DIR / "valley-cjdropshipping-notification-latest.json"
+STOCK_SYNC_STATE_PATH = RUNTIME_DIR / "valley-stock-sync-state.json"
+STOCK_SYNC_EVENTS_PATH = RUNTIME_DIR / "valley-stock-sync-events.jsonl"
 PRODUCT_CATALOG_PATH = ROOT / "frontend" / "flutter" / "assets" / "data" / "valley_product_catalog.json"
 PRODUCT_INTERACTIONS_PATH = RUNTIME_DIR / "valley-product-interactions.jsonl"
 PRODUCT_MVP_MODULES = {"STOCK", "MARKETPLACE", "CHAT"}
@@ -66,7 +73,21 @@ STOCK_INTERNAL_FIELDS = {
     "source_status",
     "source_permalink",
     "source_collected_at_utc",
+    "source_currency",
+    "fx_rate_brl_per_usd",
+    "fx_reference_date",
+    "tracking_capable",
+    "tracking_mode",
+    "tracking_webhook_enabled",
+    "tracking_status",
+    "source_inventory_verified",
+    "source_inventory_unverified",
+    "source_verified_warehouses",
+    "source_relevance_score",
+    "provider_priority",
 }
+
+CATALOG_SYNC_MANAGER: "CatalogSyncManager | None" = None
 
 
 def utc_now_iso() -> str:
@@ -121,6 +142,297 @@ def update_marketplace_integration(provider_key: str, updates: dict[str, Any]) -
         write_json_file(ADMIN_INTEGRATIONS_PATH, items)
 
 
+def active_catalog_providers() -> list[dict[str, Any]]:
+    saved = load_json_file(ADMIN_INTEGRATIONS_PATH)
+    items = saved if isinstance(saved, list) else []
+    return [
+        item
+        for item in items
+        if isinstance(item, dict) and item.get("enabled") and item.get("importCatalog")
+    ]
+
+
+class CatalogSyncManager:
+    """Debounce e agenda a atualização real do catálogo STOCK."""
+
+    def __init__(self) -> None:
+        self._lock = threading.Lock()
+        self._cond = threading.Condition(self._lock)
+        self._next_run_at = 0.0
+        self._queued = False
+        self._queued_reason = ""
+        self._pending_pids: set[str] = set()
+        self._pending_vids: set[str] = set()
+        self._force_full_sync = False
+        self._running = False
+        self._stopped = False
+        self._thread = threading.Thread(
+            target=self._worker_loop,
+            name="valley-stock-sync-worker",
+            daemon=True,
+        )
+        self._periodic_thread = threading.Thread(
+            target=self._periodic_loop,
+            name="valley-stock-sync-periodic",
+            daemon=True,
+        )
+        self._thread.start()
+        self._periodic_thread.start()
+        self._write_state({"status": "idle", "started_at_utc": utc_now_iso()})
+
+    def schedule(
+        self,
+        reason: str,
+        *,
+        delay_seconds: float = 20.0,
+        pids: list[str] | None = None,
+        vids: list[str] | None = None,
+        force_full_sync: bool = False,
+    ) -> dict[str, Any]:
+        scheduled_for = time.time() + max(delay_seconds, 0.0)
+        with self._cond:
+            self._queued = True
+            self._force_full_sync = self._force_full_sync or force_full_sync
+            for pid in pids or []:
+                if pid and pid.strip():
+                    self._pending_pids.add(pid.strip())
+            for vid in vids or []:
+                if vid and vid.strip():
+                    self._pending_vids.add(vid.strip())
+            if not self._queued_reason:
+                self._queued_reason = reason
+            elif reason not in self._queued_reason:
+                self._queued_reason = f"{self._queued_reason}; {reason}"
+            if self._next_run_at <= 0 or scheduled_for < self._next_run_at:
+                self._next_run_at = scheduled_for
+            self._write_state_locked(
+                {
+                    "status": "queued",
+                    "queued": True,
+                    "queued_reason": self._queued_reason,
+                    "pending_pids": sorted(self._pending_pids),
+                    "pending_vids": sorted(self._pending_vids),
+                    "force_full_sync": self._force_full_sync,
+                    "scheduled_for_utc": datetime.fromtimestamp(self._next_run_at, tz=timezone.utc)
+                    .isoformat()
+                    .replace("+00:00", "Z"),
+                }
+            )
+            self._append_event_locked(
+                {
+                    "event": "schedule",
+                    "reason": reason,
+                    "delay_seconds": delay_seconds,
+                    "pids": sorted(self._pending_pids),
+                    "vids": sorted(self._pending_vids),
+                    "force_full_sync": self._force_full_sync,
+                    "scheduled_for_utc": datetime.fromtimestamp(scheduled_for, tz=timezone.utc)
+                    .isoformat()
+                    .replace("+00:00", "Z"),
+                }
+            )
+            self._cond.notify_all()
+            return {
+                "queued": True,
+                "reason": self._queued_reason,
+                "pending_pids": sorted(self._pending_pids),
+                "pending_vids": sorted(self._pending_vids),
+                "force_full_sync": self._force_full_sync,
+                "scheduled_for_utc": datetime.fromtimestamp(self._next_run_at, tz=timezone.utc)
+                .isoformat()
+                .replace("+00:00", "Z"),
+                "running": self._running,
+            }
+
+    def snapshot(self) -> dict[str, Any]:
+        return load_json_file(STOCK_SYNC_STATE_PATH) or {
+            "status": "idle",
+            "generated_at_utc": utc_now_iso(),
+        }
+
+    def stop(self) -> None:
+        with self._cond:
+            self._stopped = True
+            self._cond.notify_all()
+
+    def _periodic_loop(self) -> None:
+        while not self._stopped:
+            time.sleep(60)
+            if self._stopped:
+                break
+            providers = active_catalog_providers()
+            if not providers:
+                continue
+            cadence_minutes = min(
+                max(int(provider.get("syncCadenceMinutes") or 30), 5)
+                for provider in providers
+            )
+            snapshot = self.snapshot()
+            last_success = str(snapshot.get("last_success_at_utc") or "").strip()
+            if last_success:
+                try:
+                    last_dt = datetime.fromisoformat(last_success.replace("Z", "+00:00"))
+                except ValueError:
+                    last_dt = None
+            else:
+                last_dt = None
+            if last_dt is None:
+                self.schedule("periodic-bootstrap", delay_seconds=10)
+                continue
+            elapsed = datetime.now(timezone.utc) - last_dt
+            if elapsed.total_seconds() >= cadence_minutes * 60:
+                self.schedule("periodic-cadence", delay_seconds=10)
+
+    def _worker_loop(self) -> None:
+        while True:
+            with self._cond:
+                while not self._stopped and not self._queued:
+                    self._cond.wait(timeout=5)
+                if self._stopped:
+                    return
+                while not self._stopped:
+                    wait = self._next_run_at - time.time()
+                    if wait <= 0:
+                        break
+                    self._cond.wait(timeout=min(wait, 5))
+                    if self._stopped:
+                        return
+                reason = self._queued_reason or "scheduled"
+                pids = sorted(self._pending_pids)
+                vids = sorted(self._pending_vids)
+                force_full_sync = self._force_full_sync
+                self._queued = False
+                self._queued_reason = ""
+                self._next_run_at = 0.0
+                self._pending_pids.clear()
+                self._pending_vids.clear()
+                self._force_full_sync = False
+                self._running = True
+                started_at = utc_now_iso()
+                self._write_state_locked(
+                    {
+                        "status": "running",
+                        "running": True,
+                        "queued": False,
+                        "current_reason": reason,
+                        "pending_pids": pids,
+                        "pending_vids": vids,
+                        "force_full_sync": force_full_sync,
+                        "last_started_at_utc": started_at,
+                    }
+                )
+                self._append_event_locked(
+                    {
+                        "event": "start",
+                        "reason": reason,
+                        "pids": pids,
+                        "vids": vids,
+                        "force_full_sync": force_full_sync,
+                        "started_at_utc": started_at,
+                    }
+                )
+
+            result = self._run_import(reason, pids=pids, vids=vids, force_full_sync=force_full_sync)
+
+            with self._cond:
+                finished_at = utc_now_iso()
+                self._running = False
+                success = result.get("status") == "ok"
+                state_update = {
+                    "status": "idle" if success else "failed",
+                    "running": False,
+                    "last_finished_at_utc": finished_at,
+                    "last_run_reason": reason,
+                    "last_result": result,
+                }
+                if success:
+                    state_update["last_success_at_utc"] = finished_at
+                self._write_state_locked(state_update)
+                self._append_event_locked(
+                    {
+                        "event": "finish",
+                        "reason": reason,
+                        "finished_at_utc": finished_at,
+                        "result": result,
+                    }
+                )
+
+    def _run_import(
+        self,
+        reason: str,
+        *,
+        pids: list[str],
+        vids: list[str],
+        force_full_sync: bool,
+    ) -> dict[str, Any]:
+        script_path = ROOT / "scripts" / "import_real_stock_catalog.py"
+        command = [sys.executable, str(script_path)]
+        mode = "full"
+        if not force_full_sync and (pids or vids):
+            script_path = ROOT / "scripts" / "refresh_cj_stock_runtime.py"
+            command = [sys.executable, str(script_path)]
+            for pid in pids:
+                command.extend(["--pid", pid])
+            for vid in vids:
+                command.extend(["--vid", vid])
+            mode = "incremental_cj"
+        try:
+            result = subprocess.run(
+                command,
+                cwd=ROOT,
+                capture_output=True,
+                text=True,
+                timeout=1800,
+                check=False,
+            )
+        except subprocess.TimeoutExpired:
+            return {
+                "status": "timeout",
+                "reason": reason,
+            }
+
+        stdout = (result.stdout or "").strip()
+        payload: dict[str, Any] | None = None
+        if stdout:
+            lines = [line for line in stdout.splitlines() if line.strip()]
+            for line_index in range(len(lines) - 1, -1, -1):
+                candidate = "\n".join(lines[line_index:])
+                try:
+                    payload = json.loads(candidate)
+                    break
+                except json.JSONDecodeError:
+                    continue
+        return {
+            "status": "ok" if result.returncode == 0 else "failed",
+            "reason": reason,
+            "mode": mode,
+            "returncode": result.returncode,
+            "payload": payload or {},
+            "stderr": (result.stderr or "").strip(),
+        }
+
+    def _write_state(self, updates: dict[str, Any]) -> None:
+        with self._lock:
+            self._write_state_locked(updates)
+
+    def _write_state_locked(self, updates: dict[str, Any]) -> None:
+        current = load_json_file(STOCK_SYNC_STATE_PATH) or {}
+        if not isinstance(current, dict):
+            current = {}
+        current.update(updates)
+        current["generated_at_utc"] = utc_now_iso()
+        write_json_file(STOCK_SYNC_STATE_PATH, current)
+
+    def _append_event_locked(self, payload: dict[str, Any]) -> None:
+        STOCK_SYNC_EVENTS_PATH.parent.mkdir(parents=True, exist_ok=True)
+        envelope = {
+            "received_at_utc": utc_now_iso(),
+            **payload,
+        }
+        with STOCK_SYNC_EVENTS_PATH.open("a", encoding="utf-8") as handle:
+            handle.write(json.dumps(envelope, ensure_ascii=False) + "\n")
+
+
 class ExclusiveThreadingHTTPServer(ThreadingHTTPServer):
     """Impede bind reaproveitado para nao disputar porta com outro processo."""
 
@@ -163,7 +475,7 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
 
     def do_GET(self) -> None:  # noqa: N802
         parsed = urlsplit(self.path)
-        route = parsed.path
+        route = self._normalize_public_route(parsed.path)
 
         if route in ("/", "/index.html") and parsed.query:
             params = parse_qs(parsed.query)
@@ -186,6 +498,10 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
 
         if route == "/api/product-catalog-summary":
             self._write_json(HTTPStatus.OK, self._product_catalog_summary_payload())
+            return
+
+        if route == "/api/stock-sync-status":
+            self._write_json(HTTPStatus.OK, self._stock_sync_status_payload())
             return
 
         if route == "/api/bridge/status":
@@ -232,8 +548,20 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             self._write_aliexpress_callback(parsed.query)
             return
 
+        if route == "/integrations/magalu/authorize":
+            self._redirect_magalu_authorize()
+            return
+
+        if route == "/integrations/magalu/callback":
+            self._write_magalu_callback(parsed.query)
+            return
+
         if route == "/integrations/aliexpress/notifications":
             self._write_aliexpress_notification_probe()
+            return
+
+        if route == "/integrations/cjdropshipping/notifications":
+            self._write_cjdropshipping_notification_probe()
             return
 
         if route == "/integrations/mercadolivre/authorize":
@@ -248,7 +576,7 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
 
     def do_POST(self) -> None:  # noqa: N802
         parsed = urlsplit(self.path)
-        route = parsed.path
+        route = self._normalize_public_route(parsed.path)
         query = parse_qs(parsed.query)
 
         if route == "/api/actions/pulse-telegram":
@@ -320,6 +648,10 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             self._write_aliexpress_notification_event()
             return
 
+        if route == "/integrations/cjdropshipping/notifications":
+            self._write_cjdropshipping_notification_event()
+            return
+
         self._write_json(
             HTTPStatus.NOT_FOUND,
             {"status": "not_found", "route": route, "service": "valley-admin"},
@@ -346,6 +678,11 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             "startup_file_exists": bool(self.startup_file and self.startup_file.exists()),
             "startup_manifest": startup_manifest,
         }
+
+    def _normalize_public_route(self, route: str) -> str:
+        if route.startswith("/product/api/"):
+            return route.removeprefix("/product")
+        return route
 
     def _bridge_status_payload(self) -> dict[str, Any]:
         return load_json_file(BRIDGE_STATUS_PATH) or {
@@ -680,6 +1017,15 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             "path": str(ADMIN_INTEGRATIONS_PATH),
             "items": items,
         }
+
+    def _stock_sync_status_payload(self) -> dict[str, Any]:
+        manager = CATALOG_SYNC_MANAGER
+        snapshot = manager.snapshot() if manager is not None else (load_json_file(STOCK_SYNC_STATE_PATH) or {})
+        payload = snapshot if isinstance(snapshot, dict) else {}
+        payload.setdefault("status", "idle")
+        payload.setdefault("service", "valley-stock-sync")
+        payload.setdefault("generated_at_utc", utc_now_iso())
+        return payload
 
     def _public_admin_base_url(self) -> str:
         runtime = load_json_file(PUBLIC_RUNTIME_PATH) or {}
@@ -1053,6 +1399,242 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
 
+    def _redirect_magalu_authorize(self) -> None:
+        integrations_saved = load_json_file(ADMIN_INTEGRATIONS_PATH)
+        integrations = integrations_saved if isinstance(integrations_saved, list) else []
+        provider = next(
+            (item for item in integrations if isinstance(item, dict) and item.get("key") == "magalu"),
+            None,
+        )
+        client_id = str((provider or {}).get("clientId") or "").strip()
+        redirect_uri = str((provider or {}).get("redirectUri") or "").strip()
+        scopes = str((provider or {}).get("scopes") or "").strip()
+        if not client_id or not redirect_uri or not scopes:
+            self._write_json(
+                HTTPStatus.BAD_REQUEST,
+                {
+                    "status": "missing_credentials",
+                    "service": "valley-admin",
+                    "provider": "magalu",
+                    "detail": "Client ID, redirect URI ou scopes ausentes para montar o fluxo OAuth da Magalu.",
+                },
+            )
+            return
+
+        state = f"valley-magalu-{secrets.token_urlsafe(12)}"
+        auth_url = (
+            "https://id.magalu.com/login?"
+            + urlencode(
+                {
+                    "client_id": client_id,
+                    "redirect_uri": redirect_uri,
+                    "scope": scopes,
+                    "response_type": "code",
+                    "choose_tenants": "true",
+                    "state": state,
+                }
+            )
+        )
+        write_json_file(
+            MAGALU_OAUTH_RUNTIME_PATH,
+            {
+                "provider": "magalu",
+                "generated_at_utc": utc_now_iso(),
+                "state": state,
+                "authorize_url": auth_url,
+                "redirect_uri": redirect_uri,
+            },
+        )
+        self.send_response(HTTPStatus.FOUND)
+        self.send_header("Location", auth_url)
+        self.end_headers()
+
+    def _write_magalu_callback(self, query: str) -> None:
+        params = parse_qs(query)
+        payload = {
+            "provider": "magalu",
+            "received_at_utc": utc_now_iso(),
+            "code": (params.get("code") or [None])[0],
+            "state": (params.get("state") or [None])[0],
+            "error": (params.get("error") or [None])[0],
+            "error_description": (params.get("error_description") or [None])[0],
+            "raw_query": query,
+        }
+        token_exchange = None
+        if payload["code"]:
+            token_exchange = self._exchange_magalu_code(payload["code"])
+            payload["token_exchange"] = token_exchange
+        write_json_file(MAGALU_OAUTH_RUNTIME_PATH, payload)
+        if token_exchange and token_exchange.get("status") == "ok":
+            update_marketplace_integration(
+                "magalu",
+                {
+                    "enabled": True,
+                    "environment": "production",
+                    "redirectUri": "https://admin.brasildesconto.com.br/integrations/magalu/callback",
+                    "secretRef": "runtime://marketplaces/magalu/client-secret",
+                    "accessTokenRef": "runtime://marketplaces/magalu/access-token",
+                    "refreshTokenRef": "runtime://marketplaces/magalu/refresh-token",
+                    "notes": "OAuth Magalu concluido; access token e refresh token persistidos em runtime local.",
+                },
+            )
+        elif payload["code"]:
+            update_marketplace_integration(
+                "magalu",
+                {
+                    "redirectUri": "https://admin.brasildesconto.com.br/integrations/magalu/callback",
+                    "notes": "Callback OAuth Magalu recebida; troca de token pendente ou com falha.",
+                },
+            )
+
+        if token_exchange and token_exchange.get("status") == "ok":
+            status = "autorizacao concluida"
+            detail = "Codigo OAuth trocado por access token e refresh token com sucesso."
+        elif payload["code"]:
+            status = "autorizacao recebida"
+            detail = (
+                token_exchange.get("detail")
+                if isinstance(token_exchange, dict) and token_exchange.get("detail")
+                else "Codigo OAuth da Magalu capturado para troca posterior do token."
+            )
+        else:
+            status = "callback recebida"
+            detail = payload["error_description"] or payload["error"] or "Nenhum parametro de autorizacao foi informado."
+        html = f"""<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Valley | Magalu OAuth</title>
+    <style>
+      body {{ font-family: Arial, sans-serif; background:#0b1020; color:#e8edf7; margin:0; }}
+      main {{ max-width:760px; margin:48px auto; padding:24px; }}
+      section {{ background:#121a31; border:1px solid #253150; border-radius:8px; padding:24px; }}
+      h1 {{ margin:0 0 8px; font-size:28px; }}
+      p, code {{ color:#b7c2dc; }}
+      code {{ display:block; margin-top:16px; white-space:pre-wrap; word-break:break-word; }}
+    </style>
+  </head>
+  <body>
+    <main>
+      <section>
+        <h1>{status}</h1>
+        <p>{detail}</p>
+        <code>{json.dumps(payload, ensure_ascii=False, indent=2)}</code>
+      </section>
+    </main>
+  </body>
+</html>
+"""
+        body = html.encode("utf-8")
+        self.send_response(HTTPStatus.OK)
+        self.send_header("Content-Type", "text/html; charset=utf-8")
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
+    def _exchange_magalu_code(self, code: str) -> dict[str, Any]:
+        integrations_saved = load_json_file(ADMIN_INTEGRATIONS_PATH)
+        integrations = integrations_saved if isinstance(integrations_saved, list) else []
+        provider = next(
+            (item for item in integrations if isinstance(item, dict) and item.get("key") == "magalu"),
+            None,
+        )
+        secrets_payload = load_json_file(PROVIDER_SECRETS_PATH) or {}
+        provider_secrets = secrets_payload.get("magalu") if isinstance(secrets_payload, dict) else None
+
+        client_id = str((provider or {}).get("clientId") or "").strip()
+        configured_secret_ref = str((provider or {}).get("secretRef") or "").strip()
+        client_secret = str((provider_secrets or {}).get("clientSecret") or "").strip()
+        redirect_uri = str((provider or {}).get("redirectUri") or "").strip()
+
+        if configured_secret_ref and not configured_secret_ref.startswith("runtime://"):
+            client_secret = configured_secret_ref
+            secrets_payload.setdefault("magalu", {})
+            secrets_payload["magalu"]["clientSecret"] = client_secret
+            secrets_payload["magalu"]["updated_at_utc"] = utc_now_iso()
+            write_json_file(PROVIDER_SECRETS_PATH, secrets_payload)
+
+        if not client_id or not client_secret or not redirect_uri:
+            return {
+                "status": "missing_credentials",
+                "detail": "Client ID, client secret ou redirect URI ausentes para a troca do token da Magalu.",
+            }
+
+        body = json.dumps(
+            {
+                "client_id": client_id,
+                "client_secret": client_secret,
+                "redirect_uri": redirect_uri,
+                "code": code,
+                "grant_type": "authorization_code",
+            }
+        ).encode("utf-8")
+        request = Request(
+            "https://id.magalu.com/oauth/token",
+            data=body,
+            headers={
+                "accept": "application/json",
+                "content-type": "application/json",
+            },
+            method="POST",
+        )
+
+        try:
+            with urlopen(request, timeout=45) as response:
+                payload = json.loads(response.read().decode("utf-8"))
+        except HTTPError as error:
+            detail = error.read().decode("utf-8", errors="replace")
+            return {
+                "status": "http_error",
+                "code": error.code,
+                "detail": detail,
+            }
+        except URLError as error:
+            return {
+                "status": "network_error",
+                "detail": str(error),
+            }
+        except Exception as error:  # noqa: BLE001
+            return {
+                "status": "failed",
+                "detail": str(error),
+            }
+
+        access_token = str(payload.get("access_token") or "").strip()
+        refresh_token = str(payload.get("refresh_token") or "").strip()
+        if not access_token:
+            return {
+                "status": "api_error",
+                "detail": payload.get("error_description")
+                or payload.get("error")
+                or "Magalu nao retornou access token na troca do code.",
+                "response": payload,
+            }
+
+        secrets_payload.setdefault("magalu", {})
+        secrets_payload["magalu"]["clientSecret"] = client_secret
+        secrets_payload["magalu"]["accessToken"] = access_token
+        secrets_payload["magalu"]["updated_at_utc"] = utc_now_iso()
+        if refresh_token:
+            secrets_payload["magalu"]["refreshToken"] = refresh_token
+        if payload.get("scope") is not None:
+            secrets_payload["magalu"]["scope"] = payload.get("scope")
+        if payload.get("expires_in") is not None:
+            secrets_payload["magalu"]["expiresIn"] = payload.get("expires_in")
+        if payload.get("created_at") is not None:
+            secrets_payload["magalu"]["createdAt"] = payload.get("created_at")
+        write_json_file(PROVIDER_SECRETS_PATH, secrets_payload)
+
+        return {
+            "status": "ok",
+            "token_type": payload.get("token_type"),
+            "expires_in": payload.get("expires_in"),
+            "scope": payload.get("scope"),
+            "stored_access_token": bool(access_token),
+            "stored_refresh_token": bool(refresh_token),
+        }
+
     def _exchange_aliexpress_code(self, code: str) -> dict[str, Any]:
         integrations_saved = load_json_file(ADMIN_INTEGRATIONS_PATH)
         integrations = integrations_saved if isinstance(integrations_saved, list) else []
@@ -1240,6 +1822,105 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 "provider": "aliexpress",
                 "received_at_utc": event["received_at_utc"],
                 "detail": "Mensagem recebida e persistida.",
+            },
+        )
+
+    def _write_cjdropshipping_notification_probe(self) -> None:
+        self._write_json(
+            HTTPStatus.OK,
+            {
+                "status": "ok",
+                "service": "valley-admin",
+                "provider": "cjdropshipping",
+                "route": "/integrations/cjdropshipping/notifications",
+                "method": "POST",
+                "received_at_utc": utc_now_iso(),
+                "detail": "Endpoint de notificacoes do CJDropshipping ativo.",
+            },
+        )
+
+    def _write_cjdropshipping_notification_event(self) -> None:
+        content_length = int(self.headers.get("Content-Length", "0") or "0")
+        raw_body = self.rfile.read(content_length) if content_length > 0 else b""
+        text_body = raw_body.decode("utf-8", errors="replace")
+        try:
+            parsed_body = json.loads(text_body) if text_body else None
+        except json.JSONDecodeError:
+            parsed_body = None
+
+        body_payload = parsed_body if parsed_body is not None else text_body
+        topic = ""
+        message_type = ""
+        incremental_pids: list[str] = []
+        incremental_vids: list[str] = []
+        if isinstance(parsed_body, dict):
+            topic = str(parsed_body.get("type") or "").upper().strip()
+            message_type = str(parsed_body.get("messageType") or "").upper().strip()
+            params = parsed_body.get("params")
+            if topic == "PRODUCT" and isinstance(params, dict):
+                pid = str(params.get("pid") or "").strip()
+                if pid:
+                    incremental_pids.append(pid)
+            elif topic == "VARIANT" and isinstance(params, dict):
+                vid = str(params.get("vid") or "").strip()
+                if vid:
+                    incremental_vids.append(vid)
+            elif topic == "STOCK" and isinstance(params, dict):
+                incremental_vids.extend(
+                    str(key).strip()
+                    for key in params.keys()
+                    if str(key).strip()
+                )
+
+        event = {
+            "provider": "cjdropshipping",
+            "received_at_utc": utc_now_iso(),
+            "headers": {
+                "content_type": self.headers.get("Content-Type"),
+                "user_agent": self.headers.get("User-Agent"),
+                "x_request_id": self.headers.get("X-Request-Id"),
+                "x_real_ip": self.headers.get("X-Real-Ip"),
+                "x_forwarded_for": self.headers.get("X-Forwarded-For"),
+            },
+            "topic": topic,
+            "message_type": message_type,
+            "body": body_payload,
+        }
+        CJDROPSHIPPING_NOTIFICATIONS_PATH.parent.mkdir(parents=True, exist_ok=True)
+        with CJDROPSHIPPING_NOTIFICATIONS_PATH.open("a", encoding="utf-8") as handle:
+            handle.write(json.dumps(event, ensure_ascii=False) + "\n")
+        write_json_file(CJDROPSHIPPING_NOTIFICATIONS_LATEST_PATH, event)
+
+        sync_result: dict[str, Any] | None = None
+        if topic in {"PRODUCT", "VARIANT", "STOCK"}:
+            manager = CATALOG_SYNC_MANAGER
+            if manager is not None:
+                force_full_sync = message_type == "DELETE" and topic in {"PRODUCT", "VARIANT"}
+                sync_result = manager.schedule(
+                    f"cj-webhook:{topic}:{message_type or 'UPDATE'}",
+                    delay_seconds=25,
+                    pids=incremental_pids,
+                    vids=incremental_vids,
+                    force_full_sync=force_full_sync,
+                )
+        elif topic in {"ORDER", "LOGISTICS"}:
+            manager = CATALOG_SYNC_MANAGER
+            if manager is not None:
+                sync_result = manager.snapshot()
+
+        self._write_json(
+            HTTPStatus.OK,
+            {
+                "status": "ok",
+                "service": "valley-admin",
+                "provider": "cjdropshipping",
+                "received_at_utc": event["received_at_utc"],
+                "topic": topic or None,
+                "message_type": message_type or None,
+                "sync": sync_result,
+                "detail": "Notificacao recebida, persistida e encaminhada para automacao do catalogo."
+                if topic in {"PRODUCT", "VARIANT", "STOCK"}
+                else "Notificacao recebida e persistida.",
             },
         )
 
@@ -1458,6 +2139,7 @@ def build_startup_payload(
 
 
 def main() -> None:
+    global CATALOG_SYNC_MANAGER
     args = parse_args()
     root = Path(args.root).resolve()
     data_path = Path(args.data).resolve()
@@ -1499,11 +2181,16 @@ def main() -> None:
     print(f"Healthcheck: http://{args.host}:{args.port}/healthz")
     print(f"Payload JSON: http://{args.host}:{args.port}/api/admin-data")
 
+    CATALOG_SYNC_MANAGER = CatalogSyncManager()
+    CATALOG_SYNC_MANAGER.schedule("server-startup", delay_seconds=15)
+
     try:
         server.serve_forever(poll_interval=0.5)
     except KeyboardInterrupt:
         print("\nEncerrando Valley Admin.")
     finally:
+        if CATALOG_SYNC_MANAGER is not None:
+            CATALOG_SYNC_MANAGER.stop()
         server.server_close()
 
 

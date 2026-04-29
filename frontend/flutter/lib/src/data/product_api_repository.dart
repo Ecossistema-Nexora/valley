@@ -11,7 +11,7 @@ class ProductApiRepository {
     'VALLEY_PRODUCT_API_BASE_URL',
     defaultValue: '',
   );
-  static const String _releaseBaseUrl = 'https://admin.brasildesconto.com.br';
+  static const String _releaseBaseUrl = 'https://admin.brasildesconto.com.br/product';
 
   Future<ProductShellData> load() async {
     Object? lastError;
@@ -249,6 +249,9 @@ class ProductApiRepository {
     final String currentOrigin = Uri.base.origin;
     if (currentOrigin.startsWith('http')) {
       addCandidate(currentOrigin);
+      if (Uri.base.path.startsWith('/product')) {
+        addCandidate('$currentOrigin/product');
+      }
     }
     if (_envBaseUrl.trim().isNotEmpty) {
       addCandidate(_envBaseUrl);
@@ -267,15 +270,24 @@ class ProductApiRepository {
                   <dynamic, dynamic>{})
               .cast<String, dynamic>();
       addCandidate(publicRuntime['public_url'] as String?);
+      final String publicUrl = publicRuntime['public_url'] as String? ?? '';
+      if (publicUrl.isNotEmpty) {
+        addCandidate('$publicUrl/product');
+      }
     } catch (_) {
       // Mantem fallback fixo abaixo.
     }
 
     for (final String candidate in <String>[
+      'https://admin.brasildesconto.com.br/product',
       'https://admin.brasildesconto.com.br',
+      'http://10.0.2.2:8085/product',
       'http://10.0.2.2:8085',
+      'http://127.0.0.1:8085/product',
       'http://127.0.0.1:8085',
+      'http://localhost:8085/product',
       'http://localhost:8085',
+      'http://192.168.1.2:8085/product',
       'http://192.168.1.2:8085',
       'http://10.0.2.2:8080',
       'http://127.0.0.1:8080',

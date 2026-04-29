@@ -106,9 +106,11 @@
       ],
     },
     cjdropshipping: {
-      auth: "Token gerenciado da conta CJ vinculado ao workspace dropshipping.",
+      auth: "API Key da conta CJ com exchange para access token e refresh token.",
       steps: [
-        "Gerar token na conta CJ e registrar ref segura no admin.",
+        "Gerar API Key em My CJ > Authorization > API e registrar a referencia segura no admin.",
+        "Trocar a API Key por access token no backend e persistir refresh token em runtime seguro.",
+        "Configurar webhook em /integrations/cjdropshipping/notifications.",
         "Importar catalogo inicial e normalizar categorias, shipping profile e origem.",
         "Configurar sincronizacao de custo, disponibilidade e tracking.",
         "Aplicar margem minima e bloqueios de produto antes da exposicao na vitrine.",
