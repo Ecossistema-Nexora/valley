@@ -1,4 +1,6 @@
 .env
+.env.*
+!.env.example
 .codex/environments/
 tmp/runtime/
 tmp/db-deploy-runtime/

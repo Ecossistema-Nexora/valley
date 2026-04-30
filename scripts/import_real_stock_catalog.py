@@ -144,6 +144,28 @@ def clean_text(value: str) -> str:
     return re.sub(r"\s+", " ", text).strip()
 
 
+def parse_string_array(raw_value: Any) -> list[str]:
+    if isinstance(raw_value, list):
+        values = raw_value
+    else:
+        text = str(raw_value or "").strip()
+        if not text:
+            return []
+        try:
+            parsed = json.loads(text)
+        except json.JSONDecodeError:
+            values = [text]
+        else:
+            values = parsed if isinstance(parsed, list) else [text]
+
+    normalized: list[str] = []
+    for value in values:
+        candidate = str(value or "").strip()
+        if candidate and candidate not in normalized:
+            normalized.append(candidate)
+    return normalized
+
+
 def safe_int(value: Any, default: int = 0) -> int:
     try:
         if value is None or value == "":
@@ -816,7 +838,7 @@ def build_ml_stock_item(
         "cta_path": "",
         "media_path": "",
         "description": build_description(category, brand, model, offer_count, first_offer),
-        "gallery_urls": gallery_urls[:6],
+        "gallery_urls": gallery_urls,
         "profile_id": "",
         "features": [
             f"Catálogo real {SITE_ID}",
@@ -968,7 +990,12 @@ def build_cj_stock_item(
         compare_usd = active_usd
     price_brl = round(active_usd * usd_brl_rate, 2)
     compare_at_brl = round(compare_usd * usd_brl_rate, 2)
+    gallery_urls = parse_string_array(item.get("productImages") or item.get("productImage"))
     image_url = str(item.get("bigImage") or "").strip()
+    if not image_url and gallery_urls:
+        image_url = gallery_urls[0]
+    if image_url and image_url not in gallery_urls:
+        gallery_urls.insert(0, image_url)
     video_url = build_cj_video_url(item.get("videoList"))
     title_text = normalize_text(title)
     model_name = str(item.get("threeCategoryName") or item.get("twoCategoryName") or title).strip()
@@ -1004,7 +1031,7 @@ def build_cj_stock_item(
         "cta_path": "",
         "media_path": "",
         "description": build_cj_description(category, source, item),
-        "gallery_urls": [image_url] if image_url else [],
+        "gallery_urls": gallery_urls,
         "profile_id": "",
         "features": features,
         "seller": {

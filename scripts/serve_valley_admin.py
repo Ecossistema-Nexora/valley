@@ -43,6 +43,10 @@ MAGALU_OAUTH_RUNTIME_PATH = RUNTIME_DIR / "valley-magalu-oauth-runtime.json"
 ALIBABA_OAUTH_RUNTIME_PATH = RUNTIME_DIR / "valley-alibaba-oauth-runtime.json"
 PROVIDER_SECRETS_PATH = RUNTIME_DIR / "valley-provider-secrets.json"
 STOCK_REAL_CATALOG_PATH = RUNTIME_DIR / "valley-stock-real-catalog.json"
+TRANSLATED_STOCK_REAL_CATALOG_PATH = RUNTIME_DIR / "valley-stock-real-catalog-ptbr.json"
+MERCADOPAGO_NOTIFICATIONS_PATH = RUNTIME_DIR / "valley-mercadopago-notifications.jsonl"
+MERCADOPAGO_NOTIFICATIONS_LATEST_PATH = RUNTIME_DIR / "valley-mercadopago-notification-latest.json"
+MERCADOPAGO_PREFERENCES_PATH = RUNTIME_DIR / "valley-mercadopago-preferences.jsonl"
 MERCADOLIVRE_NOTIFICATIONS_PATH = RUNTIME_DIR / "valley-mercadolivre-notifications.jsonl"
 MERCADOLIVRE_NOTIFICATIONS_LATEST_PATH = RUNTIME_DIR / "valley-mercadolivre-notification-latest.json"
 MERCADOLIVRE_PKCE_PATH = RUNTIME_DIR / "valley-mercadolivre-pkce.json"
@@ -414,7 +418,7 @@ class CatalogSyncManager:
                     break
                 except json.JSONDecodeError:
                     continue
-        return {
+        response = {
             "status": "ok" if result.returncode == 0 else "failed",
             "reason": reason,
             "mode": mode,
@@ -422,6 +426,40 @@ class CatalogSyncManager:
             "payload": payload or {},
             "stderr": (result.stderr or "").strip(),
         }
+        if result.returncode == 0:
+            translation_script = ROOT / "scripts" / "translate_stock_catalog_ptbr.py"
+            try:
+                translation = subprocess.run(
+                    [sys.executable, str(translation_script)],
+                    cwd=ROOT,
+                    capture_output=True,
+                    text=True,
+                    timeout=1800,
+                    check=False,
+                )
+                translation_payload: dict[str, Any] | None = None
+                translation_stdout = (translation.stdout or "").strip()
+                if translation_stdout:
+                    lines = [line for line in translation_stdout.splitlines() if line.strip()]
+                    for line_index in range(len(lines) - 1, -1, -1):
+                        candidate = "\n".join(lines[line_index:])
+                        try:
+                            translation_payload = json.loads(candidate)
+                            break
+                        except json.JSONDecodeError:
+                            continue
+                response["translation"] = {
+                    "status": "ok" if translation.returncode == 0 else "failed",
+                    "returncode": translation.returncode,
+                    "payload": translation_payload or {},
+                    "stderr": (translation.stderr or "").strip(),
+                }
+            except subprocess.TimeoutExpired:
+                response["translation"] = {
+                    "status": "timeout",
+                    "detail": "Traducao pt-BR do catalogo excedeu a janela de execucao do worker.",
+                }
+        return response
 
     def _write_state(self, updates: dict[str, Any]) -> None:
         with self._lock:
@@ -576,6 +614,14 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             self._write_magalu_callback(parsed.query)
             return
 
+        if route == "/integrations/mercadopago/return":
+            self._write_mercadopago_return_page(parsed.query)
+            return
+
+        if route == "/integrations/mercadopago/notifications":
+            self._write_mercadopago_notification_probe()
+            return
+
         if route == "/integrations/aliexpress/notifications":
             self._write_aliexpress_notification_probe()
             return
@@ -634,6 +680,13 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             )
             return
 
+        if route == "/api/actions/checkout":
+            self._write_json(
+                HTTPStatus.OK,
+                self._checkout_payload(query),
+            )
+            return
+
         if route == "/api/admin-integrations":
             payload = self._read_json_body()
             if not isinstance(payload, list):
@@ -670,6 +723,10 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
 
         if route == "/integrations/cjdropshipping/notifications":
             self._write_cjdropshipping_notification_event()
+            return
+
+        if route == "/integrations/mercadopago/notifications":
+            self._write_mercadopago_notification_event(parsed.query)
             return
 
         self._write_json(
@@ -774,7 +831,116 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
         sanitized = dict(item)
         for key in STOCK_INTERNAL_FIELDS:
             sanitized.pop(key, None)
+        item_id = str(item.get("id") or "").strip()
+        media_url = self._derive_media_url(item)
+        checkout_url = self._derive_checkout_url(item)
+        mercadopago_ready = self._mercadopago_checkout_ready(item)
+        checkout_ready = mercadopago_ready or bool(checkout_url)
+        if item_id:
+            sanitized["media_path"] = (
+                f"/api/actions/open-media?{urlencode({'item_id': item_id})}"
+                if media_url
+                else ""
+            )
+            sanitized["cta_path"] = (
+                f"/api/actions/checkout?{urlencode({'item_id': item_id})}"
+                if checkout_ready
+                else f"/api/actions/product-interest?{urlencode({'item_id': item_id})}"
+            )
+            sanitized["cta_label"] = "Abrir pagamento" if checkout_ready else "Registrar interesse"
+            sanitized["checkout_ready"] = checkout_ready
+            sanitized["payment_provider"] = (
+                "mercado_pago"
+                if mercadopago_ready
+                else ("mercado_livre" if checkout_url else "")
+            )
         return sanitized
+
+    def _preferred_stock_catalog_path(self) -> Path:
+        if TRANSLATED_STOCK_REAL_CATALOG_PATH.exists():
+            if (
+                not STOCK_REAL_CATALOG_PATH.exists()
+                or TRANSLATED_STOCK_REAL_CATALOG_PATH.stat().st_mtime
+                >= STOCK_REAL_CATALOG_PATH.stat().st_mtime
+            ):
+                return TRANSLATED_STOCK_REAL_CATALOG_PATH
+        return STOCK_REAL_CATALOG_PATH
+
+    def _load_stock_runtime_catalog(self) -> dict[str, Any] | None:
+        payload = load_json_file(self._preferred_stock_catalog_path())
+        return payload if isinstance(payload, dict) else None
+
+    def _find_catalog_item(self, item_id: str) -> dict[str, Any] | None:
+        normalized_item_id = str(item_id or "").strip()
+        if not normalized_item_id:
+            return None
+
+        runtime_payload = self._load_stock_runtime_catalog()
+        runtime_items = runtime_payload.get("items", []) if isinstance(runtime_payload, dict) else []
+        for candidate in runtime_items:
+            if isinstance(candidate, dict) and str(candidate.get("id") or "").strip() == normalized_item_id:
+                return candidate
+
+        if self._preferred_stock_catalog_path() != STOCK_REAL_CATALOG_PATH:
+            fallback_runtime = load_json_file(STOCK_REAL_CATALOG_PATH) or {}
+            fallback_items = fallback_runtime.get("items", []) if isinstance(fallback_runtime, dict) else []
+            for candidate in fallback_items:
+                if isinstance(candidate, dict) and str(candidate.get("id") or "").strip() == normalized_item_id:
+                    return candidate
+
+        catalog = load_json_file(PRODUCT_CATALOG_PATH) or {}
+        items = catalog.get("items", []) if isinstance(catalog, dict) else []
+        for candidate in items:
+            if isinstance(candidate, dict) and str(candidate.get("id") or "").strip() == normalized_item_id:
+                return candidate
+        return None
+
+    def _first_string_value(self, value: Any) -> str:
+        if isinstance(value, list):
+            for candidate in value:
+                normalized = str(candidate or "").strip()
+                if normalized:
+                    return normalized
+            return ""
+
+        text = str(value or "").strip()
+        if not text:
+            return ""
+        if text.startswith("[") and text.endswith("]"):
+            try:
+                parsed = json.loads(text.replace("'", '"'))
+            except json.JSONDecodeError:
+                return text
+            if isinstance(parsed, list):
+                for candidate in parsed:
+                    normalized = str(candidate or "").strip()
+                    if normalized:
+                        return normalized
+        return text
+
+    def _is_http_url(self, value: str) -> bool:
+        normalized = str(value or "").strip().lower()
+        return normalized.startswith("http://") or normalized.startswith("https://")
+
+    def _derive_media_url(self, item: dict[str, Any]) -> str:
+        video_url = self._first_string_value(item.get("video_url"))
+        return video_url if self._is_http_url(video_url) else ""
+
+    def _derive_checkout_url(self, item: dict[str, Any]) -> str:
+        source_permalink = str(item.get("source_permalink") or "").strip()
+        if self._is_http_url(source_permalink):
+            return source_permalink
+
+        provider_key = str(item.get("provider_key") or "").strip().lower()
+        source_product_id = str(item.get("source_product_id") or "").strip()
+        source_item_id = str(item.get("source_item_id") or "").strip()
+
+        if provider_key == "mercado_livre":
+            if source_product_id.startswith("MLB"):
+                return f"https://www.mercadolivre.com.br/p/{source_product_id}"
+            if source_item_id.startswith("MLB"):
+                return f"https://lista.mercadolivre.com.br/{source_item_id}"
+        return ""
 
     def _compact_product_shell_payload(self, payload: dict[str, Any]) -> dict[str, Any]:
         """Mantem a API leve e alinhada ao MVP para mobile e tunel remoto."""
@@ -839,7 +1005,7 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
         return compact
 
     def _stock_catalog_payload(self) -> dict[str, Any]:
-        runtime_catalog = load_json_file(STOCK_REAL_CATALOG_PATH)
+        runtime_catalog = self._load_stock_runtime_catalog()
         if not isinstance(runtime_catalog, dict):
             return {
                 "status": "missing",
@@ -862,6 +1028,7 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             "service": "valley-stock-catalog",
             "generated_at_utc": utc_now_iso(),
             "provider": runtime_catalog.get("provider", "runtime"),
+            "locale": runtime_catalog.get("translation_locale") or "source",
             "items_total": len(sanitized_items),
             "categories_total": runtime_catalog.get("categories_total", 0),
             "items": sanitized_items,
@@ -1053,6 +1220,324 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
         if public_url:
             return public_url.rstrip("/")
         return "https://admin.brasildesconto.com.br"
+
+    def _provider_secrets_payload(self) -> dict[str, Any]:
+        payload = load_json_file(PROVIDER_SECRETS_PATH) or {}
+        return payload if isinstance(payload, dict) else {}
+
+    def _mercadopago_secret_value(self, *candidates: str) -> str:
+        for env_key in candidates:
+            env_value = str(os.environ.get(env_key) or "").strip()
+            if env_value:
+                return env_value
+
+        provider_secrets = self._provider_secrets_payload().get("mercado_pago")
+        if not isinstance(provider_secrets, dict):
+            return ""
+
+        for candidate in candidates:
+            normalized_keys = {
+                candidate,
+                candidate.lower(),
+                candidate.replace("VALLEY_", "").lower(),
+                candidate.replace("VALLEY_", "").replace("MERCADOPAGO_", "").lower(),
+            }
+            for key in normalized_keys:
+                value = str(provider_secrets.get(key) or "").strip()
+                if value:
+                    return value
+
+        return ""
+
+    def _mercadopago_access_token(self) -> str:
+        return self._mercadopago_secret_value(
+            "VALLEY_MERCADOPAGO_ACCESS_TOKEN",
+            "MERCADOPAGO_ACCESS_TOKEN",
+            "MP_ACCESS_TOKEN",
+            "accessToken",
+            "access_token",
+        )
+
+    def _mercadopago_public_key(self) -> str:
+        return self._mercadopago_secret_value(
+            "VALLEY_MERCADOPAGO_PUBLIC_KEY",
+            "MERCADOPAGO_PUBLIC_KEY",
+            "MP_PUBLIC_KEY",
+            "publicKey",
+            "public_key",
+        )
+
+    def _mercadopago_notification_url(self) -> str:
+        return (
+            f"{self._public_admin_base_url()}/integrations/mercadopago/notifications"
+            "?source_news=webhooks"
+        )
+
+    def _mercadopago_return_url(self, status: str, item_id: str) -> str:
+        query = urlencode({"status": status, "item_id": item_id})
+        return f"{self._public_admin_base_url()}/integrations/mercadopago/return?{query}"
+
+    def _trim_checkout_text(self, value: Any, limit: int) -> str:
+        text = " ".join(str(value or "").split())
+        return text[:limit].strip()
+
+    def _mercadopago_checkout_ready(self, item: dict[str, Any] | None) -> bool:
+        if not isinstance(item, dict):
+            return False
+        access_token = self._mercadopago_access_token()
+        title = self._trim_checkout_text(item.get("title"), 120)
+        price_brl = float(item.get("price_brl") or 0)
+        return bool(access_token and title and price_brl > 0)
+
+    def _append_jsonl(self, path: Path, payload: dict[str, Any]) -> None:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        with path.open("a", encoding="utf-8") as handle:
+            handle.write(json.dumps(payload, ensure_ascii=False) + "\n")
+
+    def _write_mercadopago_notification_probe(self) -> None:
+        self._write_json(
+            HTTPStatus.OK,
+            {
+                "status": "ok",
+                "service": "valley-admin",
+                "provider": "mercado_pago",
+                "route": "/integrations/mercadopago/notifications",
+                "method": "POST",
+                "received_at_utc": utc_now_iso(),
+                "detail": "Endpoint de notificacoes do Mercado Pago ativo.",
+            },
+        )
+
+    def _write_mercadopago_notification_event(self, query: str) -> None:
+        content_length = int(self.headers.get("Content-Length", "0") or "0")
+        raw_body = self.rfile.read(content_length) if content_length > 0 else b""
+        text_body = raw_body.decode("utf-8", errors="replace")
+        try:
+            parsed_body = json.loads(text_body) if text_body else None
+        except json.JSONDecodeError:
+            parsed_body = None
+
+        event = {
+            "provider": "mercado_pago",
+            "received_at_utc": utc_now_iso(),
+            "query": parse_qs(query),
+            "headers": {
+                "content_type": self.headers.get("Content-Type"),
+                "user_agent": self.headers.get("User-Agent"),
+                "x_request_id": self.headers.get("X-Request-Id"),
+                "x_signature": self.headers.get("X-Signature"),
+                "x_topic": self.headers.get("X-Topic"),
+                "x_idempotency_key": self.headers.get("X-Idempotency-Key"),
+            },
+            "body": parsed_body if parsed_body is not None else text_body,
+        }
+        self._append_jsonl(MERCADOPAGO_NOTIFICATIONS_PATH, event)
+        write_json_file(MERCADOPAGO_NOTIFICATIONS_LATEST_PATH, event)
+
+        self._write_json(
+            HTTPStatus.OK,
+            {
+                "status": "ok",
+                "service": "valley-admin",
+                "provider": "mercado_pago",
+                "received_at_utc": event["received_at_utc"],
+                "detail": "Notificacao recebida e persistida.",
+            },
+        )
+
+    def _write_mercadopago_return_page(self, query: str) -> None:
+        params = parse_qs(query)
+        status = str(
+            (params.get("status") or params.get("collection_status") or ["pending"])[0]
+            or "pending"
+        ).strip().lower()
+        item_id = str(
+            (params.get("item_id") or params.get("external_reference") or [""])[0] or ""
+        ).strip()
+        title = {
+            "approved": "Pagamento aprovado",
+            "pending": "Pagamento pendente",
+            "failure": "Pagamento não concluído",
+            "rejected": "Pagamento recusado",
+        }.get(status, "Retorno do pagamento")
+        detail = {
+            "approved": "O checkout do Valley recebeu a confirmação inicial do Mercado Pago.",
+            "pending": "O pagamento foi criado e aguarda confirmação final do Mercado Pago.",
+            "failure": "O pagamento não foi concluído. Você pode retornar ao produto e tentar novamente.",
+            "rejected": "O Mercado Pago recusou a transação. Revise o meio de pagamento e tente novamente.",
+        }.get(status, "O fluxo de pagamento retornou ao Valley.")
+        payload = {
+            "provider": "mercado_pago",
+            "received_at_utc": utc_now_iso(),
+            "status": status,
+            "item_id": item_id,
+            "query": {key: values for key, values in params.items()},
+        }
+        body = f"""<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title} • Valley</title>
+    <style>
+      body {{
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(180deg, #07051F 0%, #151047 100%);
+        color: #FFFFFF;
+        font-family: Inter, Arial, sans-serif;
+      }}
+      main {{
+        width: min(680px, calc(100vw - 32px));
+        padding: 28px;
+        border-radius: 24px;
+        background: rgba(12, 14, 36, 0.88);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+      }}
+      h1 {{ margin: 0 0 12px; font-size: 28px; }}
+      p {{ color: rgba(255,255,255,0.78); line-height: 1.55; }}
+      code {{
+        display: block;
+        margin-top: 18px;
+        padding: 16px;
+        border-radius: 16px;
+        background: rgba(255,255,255,0.04);
+        overflow: auto;
+        white-space: pre-wrap;
+      }}
+      a {{
+        display: inline-flex;
+        margin-top: 18px;
+        padding: 12px 16px;
+        border-radius: 999px;
+        background: #6F2CFF;
+        color: #FFFFFF;
+        text-decoration: none;
+        font-weight: 700;
+      }}
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>{title}</h1>
+      <p>{detail}</p>
+      <a href="{self._public_admin_base_url()}/product/">Voltar ao catálogo Valley</a>
+      <code>{json.dumps(payload, ensure_ascii=False, indent=2)}</code>
+    </main>
+  </body>
+</html>""".encode("utf-8")
+        self.send_response(HTTPStatus.OK)
+        self.send_header("Content-Type", "text/html; charset=utf-8")
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
+    def _create_mercadopago_preference(self, item: dict[str, Any]) -> dict[str, Any]:
+        access_token = self._mercadopago_access_token()
+        if not access_token:
+            return {
+                "status": "missing_credentials",
+                "detail": "Access token do Mercado Pago ausente no runtime.",
+            }
+
+        item_id = str(item.get("id") or "").strip()
+        title = self._trim_checkout_text(item.get("title"), 120)
+        description = self._trim_checkout_text(item.get("description"), 240)
+        picture_url = str(item.get("image_url") or "").strip()
+        price_brl = round(float(item.get("price_brl") or 0), 2)
+        if not item_id or not title or price_brl <= 0:
+            return {
+                "status": "invalid_item",
+                "detail": "Item sem identificador, título ou preço válido para checkout.",
+            }
+
+        payload = {
+            "items": [
+                {
+                    "id": item_id,
+                    "title": title,
+                    "description": description or title,
+                    "quantity": 1,
+                    "currency_id": "BRL",
+                    "unit_price": price_brl,
+                }
+            ],
+            "external_reference": item_id,
+            "statement_descriptor": "VALLEY",
+            "auto_return": "approved",
+            "back_urls": {
+                "success": self._mercadopago_return_url("approved", item_id),
+                "pending": self._mercadopago_return_url("pending", item_id),
+                "failure": self._mercadopago_return_url("failure", item_id),
+            },
+            "notification_url": self._mercadopago_notification_url(),
+            "metadata": {
+                "item_id": item_id,
+                "module_id": str(item.get("module_id") or "STOCK"),
+                "surface": "valley_stock",
+            },
+        }
+        if self._is_http_url(picture_url):
+            payload["items"][0]["picture_url"] = picture_url
+
+        request = Request(
+            "https://api.mercadopago.com/checkout/preferences",
+            data=json.dumps(payload).encode("utf-8"),
+            headers={
+                "Authorization": f"Bearer {access_token}",
+                "Content-Type": "application/json",
+                "X-Idempotency-Key": f"valley-{item_id}-{int(time.time())}",
+            },
+            method="POST",
+        )
+        try:
+            with urlopen(request, timeout=45) as response:
+                response_payload = json.loads(response.read().decode("utf-8"))
+        except HTTPError as error:
+            return {
+                "status": "http_error",
+                "detail": error.read().decode("utf-8", errors="replace"),
+                "code": error.code,
+            }
+        except URLError as error:
+            return {"status": "network_error", "detail": str(error)}
+        except json.JSONDecodeError as error:
+            return {"status": "invalid_response", "detail": str(error)}
+        except Exception as error:  # noqa: BLE001
+            return {"status": "failed", "detail": str(error)}
+
+        init_point = str(
+            response_payload.get("init_point")
+            or response_payload.get("sandbox_init_point")
+            or ""
+        ).strip()
+        if not init_point:
+            return {
+                "status": "api_error",
+                "detail": "Mercado Pago não retornou init_point para a preferência.",
+                "response": response_payload,
+            }
+
+        event = {
+            "provider": "mercado_pago",
+            "created_at_utc": utc_now_iso(),
+            "item_id": item_id,
+            "preference_id": response_payload.get("id"),
+            "external_reference": response_payload.get("external_reference"),
+            "init_point": init_point,
+            "sandbox_init_point": response_payload.get("sandbox_init_point"),
+        }
+        self._append_jsonl(MERCADOPAGO_PREFERENCES_PATH, event)
+
+        return {
+            "status": "ok",
+            "url": init_point,
+            "preference_id": response_payload.get("id"),
+            "sandbox": "sandbox" in init_point,
+        }
 
     def _write_mercadolivre_callback(self, query: str, redirect_uri_override: str | None = None) -> None:
         params = parse_qs(query)
@@ -2278,12 +2763,7 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
 
     def _product_interest_payload(self, query: dict[str, list[str]]) -> dict[str, Any]:
         item_id = (query.get("item_id") or [""])[0]
-        catalog = load_json_file(PRODUCT_CATALOG_PATH) or {}
-        items = catalog.get("items", []) if isinstance(catalog, dict) else []
-        item = next(
-            (candidate for candidate in items if candidate.get("id") == item_id),
-            None,
-        )
+        item = self._find_catalog_item(item_id)
         if item is None:
             return {
                 "status": "failed",
@@ -2311,17 +2791,15 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
 
     def _open_media_payload(self, query: dict[str, list[str]]) -> dict[str, Any]:
         item_id = (query.get("item_id") or [""])[0]
-        catalog = load_json_file(PRODUCT_CATALOG_PATH) or {}
-        items = catalog.get("items", []) if isinstance(catalog, dict) else []
-        item = next(
-            (candidate for candidate in items if candidate.get("id") == item_id),
-            None,
-        )
-        if item is None or not item.get("video_url"):
+        item = self._find_catalog_item(item_id)
+        media_url = self._derive_media_url(item) if item is not None else ""
+        if item is None or not media_url:
             return {
                 "status": "failed",
                 "action": "open-media",
-                "payload": {"message": "Midia indisponivel."},
+                "payload": {
+                    "message": "Midia indisponivel para abertura direta nesta oferta.",
+                },
             }
 
         return {
@@ -2329,7 +2807,57 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             "action": "open-media",
             "payload": {
                 "message": "Abrindo demonstracao.",
-                "url": item.get("video_url"),
+                "url": media_url,
+            },
+        }
+
+    def _checkout_payload(self, query: dict[str, list[str]]) -> dict[str, Any]:
+        item_id = (query.get("item_id") or [""])[0]
+        item = self._find_catalog_item(item_id)
+        if item is None:
+            return {
+                "status": "failed",
+                "action": "checkout",
+                "payload": {
+                    "message": "Checkout indisponivel nesta oferta no momento.",
+                },
+            }
+
+        if self._mercadopago_checkout_ready(item):
+            mercadopago_result = self._create_mercadopago_preference(item)
+            if mercadopago_result.get("status") == "ok":
+                return {
+                    "status": "ok",
+                    "action": "checkout",
+                    "payload": {
+                        "message": "Abrindo checkout seguro do Valley com Mercado Pago.",
+                        "url": mercadopago_result.get("url"),
+                        "provider": "mercado_pago",
+                        "preference_id": mercadopago_result.get("preference_id"),
+                    },
+                }
+
+        checkout_url = self._derive_checkout_url(item)
+        if not checkout_url:
+            mercadopago_detail = ""
+            if self._mercadopago_access_token():
+                mercadopago_result = self._create_mercadopago_preference(item)
+                mercadopago_detail = str(mercadopago_result.get("detail") or "").strip()
+            return {
+                "status": "failed",
+                "action": "checkout",
+                "payload": {
+                    "message": mercadopago_detail or "Checkout indisponivel nesta oferta no momento.",
+                },
+            }
+
+        return {
+            "status": "ok",
+            "action": "checkout",
+            "payload": {
+                "message": "Abrindo pagamento protegido da oferta.",
+                "url": checkout_url,
+                "provider": "mercado_livre",
             },
         }
 

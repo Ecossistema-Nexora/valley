@@ -92,13 +92,14 @@ def detail_to_cj_item(detail: dict[str, Any]) -> dict[str, Any]:
     cj_inventory_total, total_inventory, verified_warehouses = derive_stock_from_variants(variants)
     images = parse_json_array(detail.get("productImage"))
     big_image = str(detail.get("bigImage") or (images[0] if images else "")).strip()
-    product_video = str(detail.get("productVideo") or "").strip()
+    product_videos = parse_json_array(detail.get("productVideo"))
     return {
         "id": str(detail.get("pid") or "").strip(),
         "nameEn": str(detail.get("productNameEn") or "").strip(),
         "sku": str(detail.get("productSku") or "").strip(),
         "listedNum": safe_int(detail.get("listedNum")),
         "bigImage": big_image,
+        "productImage": images,
         "sellPrice": detail.get("sellPrice"),
         "productType": detail.get("productType"),
         "categoryId": str(detail.get("categoryId") or "").strip(),
@@ -108,7 +109,7 @@ def detail_to_cj_item(detail: dict[str, Any]) -> dict[str, Any]:
         "oneCategoryId": "",
         "oneCategoryName": one_category,
         "supplierName": str(detail.get("supplierName") or "").strip() or None,
-        "videoList": [product_video] if product_video else [],
+        "videoList": product_videos,
         "warehouseInventoryNum": total_inventory,
         "totalVerifiedInventory": cj_inventory_total,
         "totalUnVerifiedInventory": max(total_inventory - cj_inventory_total, 0),

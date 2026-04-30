@@ -47,6 +47,8 @@
       "secretRef": "vault/marketplaces/amazon/client-secret",
       "accessTokenRef": "vault/marketplaces/amazon/access-token",
       "refreshTokenRef": "vault/marketplaces/amazon/refresh-token",
+      "usernameRef": "runtime://marketplaces/amazon/username",
+      "passwordRef": "runtime://marketplaces/amazon/password",
       "sellerId": "",
       "webhookUrl": "/webhooks/marketplaces/amazon",
       "webhookSecretRef": "vault/marketplaces/amazon/webhook-secret"
@@ -75,6 +77,8 @@
       "secretRef": "vault/marketplaces/alibaba/client-secret",
       "accessTokenRef": "vault/marketplaces/alibaba/access-token",
       "refreshTokenRef": "vault/marketplaces/alibaba/refresh-token",
+      "usernameRef": "runtime://marketplaces/alibaba/username",
+      "passwordRef": "runtime://marketplaces/alibaba/password",
       "sellerId": "",
       "webhookUrl": "/webhooks/marketplaces/alibaba",
       "webhookSecretRef": "vault/marketplaces/alibaba/webhook-secret"
@@ -117,6 +121,8 @@
       "secretRef": "vault/marketplaces/shopee/client-secret",
       "accessTokenRef": "vault/marketplaces/shopee/access-token",
       "refreshTokenRef": "vault/marketplaces/shopee/refresh-token",
+      "usernameRef": "runtime://marketplaces/shopee/username",
+      "passwordRef": "runtime://marketplaces/shopee/password",
       "sellerId": "",
       "webhookUrl": "/webhooks/marketplaces/shopee",
       "webhookSecretRef": "vault/marketplaces/shopee/webhook-secret"
