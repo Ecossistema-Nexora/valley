@@ -11,11 +11,19 @@ class ProductApiRepository {
     'VALLEY_PRODUCT_API_BASE_URL',
     defaultValue: '',
   );
-  static const String _releaseBaseUrl = 'https://admin.brasildesconto.com.br/product';
+  static const String _releaseBaseUrl =
+      'https://admin.brasildesconto.com.br/product';
 
   Future<ProductShellData> load() async {
     Object? lastError;
     final Set<String> activeModuleIds = await _loadActiveModuleIds();
+    if (_shouldPreferBundledShell()) {
+      try {
+        return await _loadBundledShell(activeModuleIds);
+      } catch (error) {
+        lastError = error;
+      }
+    }
     for (final String baseUrl in await _candidateBaseUrls()) {
       try {
         final http.Response response = await http
@@ -40,6 +48,18 @@ class ProductApiRepository {
         'Servidor Valley indisponivel: $lastError; fallback: $error',
       );
     }
+  }
+
+  bool _shouldPreferBundledShell() {
+    if (_envBaseUrl.trim().isNotEmpty) {
+      return false;
+    }
+    final Uri base = Uri.base;
+    if (base.scheme != 'http' && base.scheme != 'https') {
+      return true;
+    }
+    final String host = base.host.toLowerCase();
+    return host == 'localhost' || host == '127.0.0.1' || host == '10.0.2.2';
   }
 
   Future<List<ProductItem>> loadStockCatalog({String? preferredBaseUrl}) async {

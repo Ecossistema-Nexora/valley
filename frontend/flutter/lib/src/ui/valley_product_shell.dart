@@ -26,7 +26,12 @@ class ValleyProductShell extends StatefulWidget {
 }
 
 class _ValleyProductShellState extends State<ValleyProductShell> {
-  static bool get _helenaEnabled => false;
+  static bool get _helenaEnabled => true;
+  static const Set<String> _activeMvpModuleIds = <String>{
+    'MARKETPLACE',
+    'STOCK',
+    'CHAT',
+  };
 
   late ProductShellData _data;
   bool _busy = false;
@@ -36,14 +41,16 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
   int _navIndex = 0;
   ProductItem? _selectedItem;
   Map<String, dynamic>? _selectedConversation;
+  final List<ProductItem> _cartItems = <ProductItem>[];
+  ProductItem? _confirmedOrderItem;
   final List<_NavigationSnapshot> _navigationHistory = <_NavigationSnapshot>[];
   final FlutterTts _tts = FlutterTts();
   final SpeechToText _speech = SpeechToText();
   DateTime? _lastBackPressAt;
-  bool _helenaMinimized = false;
+  bool _helenaMinimized = true;
   bool _helenaListening = false;
   bool _helenaVoiceReady = false;
-  Offset _helenaAlignment = const Offset(-0.86, 0.72);
+  Offset _helenaAlignment = const Offset(0.84, 0.60);
   String _helenaMood = 'calm';
   String _helenaMessage =
       'Helena pronta para acompanhar sua jornada com calma.';
@@ -62,45 +69,6 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
     } else if (_data.modules.isNotEmpty) {
       _selectedModuleId = _data.modules.first.id;
     }
-    if (_helenaEnabled) {
-      _setupHelena();
-    }
-  }
-
-  Future<void> _setupHelena() async {
-    await _tts.setLanguage('pt-BR');
-    await _tts.setPitch(1.12);
-    await _tts.setSpeechRate(0.40);
-    await _tts.setVolume(0.92);
-    await _configureHelenaVoice();
-    _helenaVoiceReady = await _speech.initialize(
-      onStatus: (String status) {
-        if (!mounted) {
-          return;
-        }
-        final bool listening = status.toLowerCase().contains('listening');
-        setState(() {
-          _helenaListening = listening;
-          if (!listening && _helenaTranscript.trim().isEmpty) {
-            _helenaTranscript = 'Helena pronta para te ouvir com calma.';
-          }
-        });
-      },
-      onError: (dynamic error) {
-        if (!mounted) {
-          return;
-        }
-        setState(() {
-          _helenaListening = false;
-          _helenaMood = 'alert';
-          _helenaMessage = 'Nao consegui abrir o microfone agora, viu.';
-          _helenaTranscript = 'Audio de entrada indisponivel no dispositivo.';
-        });
-      },
-    );
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _speakHelena('Oi. Eu sou a Helena e vou ficar por aqui com voce, viu.');
-    });
   }
 
   Future<void> _configureHelenaVoice() async {
@@ -375,6 +343,11 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
     }
 
     if (!_helenaVoiceReady) {
+      await _tts.setLanguage('pt-BR');
+      await _tts.setPitch(1.12);
+      await _tts.setSpeechRate(0.40);
+      await _tts.setVolume(0.92);
+      await _configureHelenaVoice();
       _helenaVoiceReady = await _speech.initialize();
     }
 
@@ -551,6 +524,35 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
     }
   }
 
+  void _openIdentity({ProductItem? returnItem}) {
+    if (_surface == 'identity' && _selectedItem?.id == returnItem?.id) {
+      return;
+    }
+    _rememberNavigationState();
+    setState(() {
+      _surface = 'identity';
+      _selectedItem = returnItem;
+      _selectedConversation = null;
+      _navIndex = 4;
+    });
+    _setHelenaMood(
+      'focus',
+      'Abrindo a camada de confiança para validar Face ID, Voice ID e score.',
+    );
+  }
+
+  void _openNotifications() {
+    if (_surface == 'notifications') {
+      return;
+    }
+    _rememberNavigationState();
+    setState(() {
+      _surface = 'notifications';
+      _selectedItem = null;
+      _selectedConversation = null;
+    });
+  }
+
   void _openItemDetail(ProductItem item) {
     if (_surface == 'detail' && _selectedItem?.id == item.id) {
       return;
@@ -567,6 +569,33 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
     );
   }
 
+  void _addToCart(ProductItem item) {
+    final bool alreadyAdded = _cartItems.any(
+      (ProductItem cartItem) => cartItem.id == item.id,
+    );
+    if (!alreadyAdded) {
+      setState(() {
+        _cartItems.add(item);
+      });
+    }
+    _rememberNavigationState();
+    setState(() {
+      _selectedItem = item;
+      _selectedConversation = null;
+      _surface = 'cart';
+    });
+    _setHelenaMood('happy', '${item.title} entrou no resumo rapido do pedido.');
+  }
+
+  void _removeFromCart(ProductItem item) {
+    setState(() {
+      _cartItems.removeWhere((ProductItem cartItem) => cartItem.id == item.id);
+      if (_cartItems.isEmpty) {
+        _selectedItem = null;
+      }
+    });
+  }
+
   void _openCheckout(ProductItem item) {
     if (_surface == 'checkout' && _selectedItem?.id == item.id) {
       return;
@@ -578,6 +607,36 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
       _surface = 'checkout';
     });
     _setHelenaMood('happy', 'Checkout pronto para ${item.title}.');
+  }
+
+  void _confirmPreparedOrder(ProductItem item) {
+    if (item.ctaPath.isNotEmpty) {
+      _runItemAction(item.ctaPath);
+      _setHelenaMood('focus', 'Abrindo o pagamento seguro para ${item.title}.');
+      return;
+    }
+    _rememberNavigationState();
+    setState(() {
+      _confirmedOrderItem = item;
+      _selectedItem = item;
+      _selectedConversation = null;
+      _surface = 'confirmation';
+      _cartItems.removeWhere((ProductItem cartItem) => cartItem.id == item.id);
+    });
+    _setHelenaMood(
+      'happy',
+      'Pedido confirmado com comprovante Valley Docs preparado.',
+    );
+  }
+
+  void _openReceipt(ProductItem item) {
+    _rememberNavigationState();
+    setState(() {
+      _confirmedOrderItem = item;
+      _selectedItem = item;
+      _selectedConversation = null;
+      _surface = 'receipt';
+    });
   }
 
   void _openConversation(Map<String, dynamic> conversation) {
@@ -607,6 +666,10 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
       );
       return;
     }
+    if (!_activeMvpModuleIds.contains(moduleId)) {
+      _openPreparedModule(moduleId);
+      return;
+    }
     if (_selectedModuleId == moduleId &&
         _surface == 'home' &&
         _selectedItem == null &&
@@ -619,10 +682,32 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
       _surface = 'home';
       _selectedItem = null;
       _selectedConversation = null;
+      if (moduleId == 'MARKETPLACE') {
+        _navIndex = 1;
+      } else if (moduleId == 'STOCK') {
+        _navIndex = 2;
+      } else if (moduleId == 'CHAT') {
+        _navIndex = 3;
+      }
     });
     if (announce) {
       _setHelenaMood(mood, message ?? 'Módulo $moduleId ativo.');
     }
+  }
+
+  void _openPreparedModule(String moduleId) {
+    _rememberNavigationState();
+    setState(() {
+      _selectedModuleId = moduleId;
+      _surface = 'module_prepared';
+      _selectedItem = null;
+      _selectedConversation = null;
+      _navIndex = 0;
+    });
+    _setHelenaMood(
+      'calm',
+      'Modulo $moduleId em preparacao para uma proxima rodada.',
+    );
   }
 
   List<ProductItem> get _filteredItems {
@@ -675,13 +760,65 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
         onPlay: _selectedItem!.mediaPath.isEmpty
             ? null
             : () => _runItemAction(_selectedItem!.mediaPath),
+        onAddToCart: () => _addToCart(_selectedItem!),
         onCheckout: () => _openCheckout(_selectedItem!),
+        onChat: () => _openSurface('chat'),
+      );
+    }
+    if (_surface == 'cart') {
+      return _CartScreen(
+        items: _cartItems,
+        fallbackItem: _selectedItem,
+        onRemove: _removeFromCart,
+        onBrowse: () => _showModule('MARKETPLACE'),
+        onCheckout: (ProductItem item) => _openCheckout(item),
       );
     }
     if (_surface == 'checkout' && _selectedItem != null) {
       return _CheckoutScreen(
         item: _selectedItem!,
-        onConfirm: () => _runItemAction(_selectedItem!.ctaPath),
+        onConfirm: () => _confirmPreparedOrder(_selectedItem!),
+        onIdentity: () => _openIdentity(returnItem: _selectedItem),
+        onCancel: () => _addToCart(_selectedItem!),
+      );
+    }
+    if (_surface == 'confirmation' &&
+        (_selectedItem != null || _confirmedOrderItem != null)) {
+      final ProductItem item = _selectedItem ?? _confirmedOrderItem!;
+      return _ConfirmationScreen(
+        item: item,
+        onOpenReceipt: () => _openReceipt(item),
+        onOpenOrders: () => _openSurface('client'),
+        onContinueShopping: () => _showModule('MARKETPLACE'),
+        onSupport: () => _openSurface('chat'),
+      );
+    }
+    if (_surface == 'receipt' &&
+        (_selectedItem != null || _confirmedOrderItem != null)) {
+      return _ReceiptScreen(item: _selectedItem ?? _confirmedOrderItem!);
+    }
+    if (_surface == 'identity') {
+      return _IdentityTrustScreen(
+        pendingItem: _selectedItem,
+        onConfirm: _selectedItem == null
+            ? null
+            : () => _openCheckout(_selectedItem!),
+      );
+    }
+    if (_surface == 'notifications') {
+      return _NotificationsScreen(
+        items: _data.items,
+        onOpenItem: _openItemDetail,
+        onOpenStock: () => _showModule('STOCK'),
+        onOpenChat: () => _openSurface('chat'),
+        onOpenIdentity: () => _openIdentity(),
+      );
+    }
+    if (_surface == 'module_prepared') {
+      return _PreparedModuleScreen(
+        moduleId: _selectedModuleId,
+        onNotify: _openNotifications,
+        onHome: () => _openSurface('home'),
       );
     }
     if (_surface == 'feed') {
@@ -726,6 +863,13 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
         onTap: _openItemDetail,
         repository: widget.repository,
         baseUrl: _data.baseUrl,
+      );
+    }
+    if (!_activeMvpModuleIds.contains(module?.id ?? '')) {
+      return _PreparedModuleScreen(
+        moduleId: module?.id ?? 'MVP',
+        onNotify: _openNotifications,
+        onHome: () => _openSurface('home'),
       );
     }
     if ((module?.id ?? '') == 'FOOD') {
@@ -804,7 +948,7 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
         items: items,
         spec: const _ModuleExperienceSpec(
           badge: 'Document flow',
-          primaryLabel: 'Abrir preview',
+          primaryLabel: 'Abrir modulo',
           primaryIcon: Icons.description_rounded,
           secondaryLabel: 'Assinatura',
           secondaryIcon: Icons.draw_rounded,
@@ -1142,6 +1286,9 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
         ? (_data.items.isEmpty ? null : _data.items.first)
         : items.first;
     final List<ProductItem> recentItems = items.take(2).toList();
+    final double viewportWidth = MediaQuery.sizeOf(context).width;
+    final bool wide = viewportWidth >= 1100;
+    final bool compact = viewportWidth < 760;
 
     return PopScope(
       canPop: false,
@@ -1174,14 +1321,23 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
                     slivers: <Widget>[
                       SliverToBoxAdapter(
                         child: Padding(
-                          padding: const EdgeInsets.fromLTRB(20, 12, 20, 120),
+                          padding: EdgeInsets.fromLTRB(
+                            wide ? 112 : 20,
+                            12,
+                            20,
+                            compact ? 150 : 120,
+                          ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               _TopBar(
                                 busy: _busy,
+                                cartCount: _cartItems.length,
                                 onSearchChanged: (String value) =>
                                     setState(() => _query = value),
+                                onCart: () => _openSurface('cart'),
+                                onNotifications: _openNotifications,
+                                onIdentity: () => _openIdentity(),
                               ),
                               const SizedBox(height: 24),
                               if (heroItem != null && _surface == 'home')
@@ -1276,31 +1432,54 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
                       ),
                     ),
                   ),
+                Positioned(
+                  left: compact ? 20 : (wide ? 112 : 18),
+                  right: compact ? null : 18,
+                  bottom: compact ? 18 : 14,
+                  child: _FloatingModuleDock(
+                    modules: _data.modules,
+                    selectedModuleId: _selectedModuleId,
+                    onOpenModule: _showModule,
+                    onOpenIdentity: () => _openIdentity(),
+                    onOpenSettings: () => _openSurface('notifications'),
+                  ),
+                ),
+                if (wide)
+                  Positioned(
+                    left: 20,
+                    top: 92,
+                    bottom: 24,
+                    child: _DesktopSideRail(
+                      index: _navIndex,
+                      onChanged: _handlePrimaryNav,
+                    ),
+                  ),
               ],
             ),
           ),
         ),
-        bottomNavigationBar: _BottomGlassNav(
-          index: _navIndex,
-          onChanged: (int value) {
-            setState(() {
-              _navIndex = value;
-            });
-            if (value == 0) {
-              _openSurface('home');
-            } else if (value == 1) {
-              _showModule('MARKETPLACE');
-            } else if (value == 2) {
-              _showModule('STOCK');
-            } else if (value == 3) {
-              _openSurface('chat');
-            } else if (value == 4) {
-              _openSurface('client');
-            }
-          },
-        ),
+        bottomNavigationBar: wide
+            ? null
+            : _BottomGlassNav(index: _navIndex, onChanged: _handlePrimaryNav),
       ),
     );
+  }
+
+  void _handlePrimaryNav(int value) {
+    setState(() {
+      _navIndex = value;
+    });
+    if (value == 0) {
+      _openSurface('home');
+    } else if (value == 1) {
+      _showModule('MARKETPLACE');
+    } else if (value == 2) {
+      _showModule('STOCK');
+    } else if (value == 3) {
+      _openSurface('chat');
+    } else if (value == 4) {
+      _openSurface('client');
+    }
   }
 }
 
@@ -1329,54 +1508,64 @@ class _NavigationSnapshot {
 }
 
 class _TopBar extends StatelessWidget {
-  const _TopBar({required this.busy, required this.onSearchChanged});
+  const _TopBar({
+    required this.busy,
+    required this.cartCount,
+    required this.onSearchChanged,
+    required this.onCart,
+    required this.onNotifications,
+    required this.onIdentity,
+  });
 
   final bool busy;
+  final int cartCount;
   final ValueChanged<String> onSearchChanged;
+  final VoidCallback onCart;
+  final VoidCallback onNotifications;
+  final VoidCallback onIdentity;
 
   @override
   Widget build(BuildContext context) {
+    final bool compact = MediaQuery.sizeOf(context).width < 760;
     return Row(
       children: <Widget>[
-        Container(
-          width: 44,
-          height: 44,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(
-              color: ValleyBrandColors.cyan.withValues(alpha: 0.28),
-            ),
-          ),
-          clipBehavior: Clip.antiAlias,
-          child: Image.network(
-            'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80',
-            fit: BoxFit.cover,
-            errorBuilder:
-                (BuildContext context, Object error, StackTrace? stackTrace) {
-                  return const ColoredBox(color: Color(0xFF1A1F30));
-                },
-          ),
-        ),
+        const ValleyLogoMark(size: 44, borderRadius: 14),
         const SizedBox(width: 14),
-        const Expanded(
-          child: Text(
-            'VALLEY',
-            style: TextStyle(
-              color: ValleyBrandColors.cyan,
-              fontWeight: FontWeight.w800,
-              letterSpacing: 3.2,
-              fontSize: 12,
+        if (!compact)
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                const Text(
+                  'VALLEY MVP',
+                  style: TextStyle(
+                    color: ValleyBrandColors.cyan,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 2.4,
+                    fontSize: 12,
+                  ),
+                ),
+                const SizedBox(height: 3),
+                Text(
+                  'Marketplace, Stock, Chat e confiança em modo produto',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ],
             ),
           ),
-        ),
+        if (compact) const Spacer(),
         SizedBox(
-          width: 180,
+          width: compact ? 118 : 260,
           child: TextField(
             onChanged: onSearchChanged,
             style: Theme.of(context).textTheme.bodyMedium,
             decoration: InputDecoration(
               isDense: true,
-              hintText: 'Buscar',
+              hintText: compact ? 'Buscar' : 'Buscar produto, pedido ou chat',
               prefixIcon: const Icon(Icons.search_rounded),
               suffixIcon: busy
                   ? const Padding(
@@ -1397,7 +1586,93 @@ class _TopBar extends StatelessWidget {
             ),
           ),
         ),
+        const SizedBox(width: 10),
+        _TopBarIconButton(
+          icon: Icons.verified_user_rounded,
+          tooltip: 'Identidade',
+          onTap: onIdentity,
+        ),
+        if (!compact)
+          _TopBarIconButton(
+            icon: Icons.notifications_rounded,
+            tooltip: 'Notificações',
+            onTap: onNotifications,
+          ),
+        _TopBarIconButton(
+          icon: Icons.shopping_bag_rounded,
+          tooltip: 'Carrinho',
+          badge: cartCount == 0 ? null : cartCount.toString(),
+          onTap: onCart,
+        ),
       ],
+    );
+  }
+}
+
+class _TopBarIconButton extends StatelessWidget {
+  const _TopBarIconButton({
+    required this.icon,
+    required this.tooltip,
+    required this.onTap,
+    this.badge,
+  });
+
+  final IconData icon;
+  final String tooltip;
+  final VoidCallback onTap;
+  final String? badge;
+
+  @override
+  Widget build(BuildContext context) {
+    return Tooltip(
+      message: tooltip,
+      child: Padding(
+        padding: const EdgeInsets.only(left: 8),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: onTap,
+          child: Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.06),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
+            ),
+            child: Stack(
+              clipBehavior: Clip.none,
+              children: <Widget>[
+                Center(
+                  child: Icon(icon, size: 21, color: ValleyBrandColors.cyan),
+                ),
+                if (badge != null)
+                  Positioned(
+                    right: -4,
+                    top: -4,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 3,
+                      ),
+                      decoration: BoxDecoration(
+                        color: ValleyBrandColors.violet,
+                        borderRadius: BorderRadius.circular(999),
+                      ),
+                      child: Text(
+                        badge!,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
@@ -1415,10 +1690,11 @@ class _HeroSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool compact = MediaQuery.sizeOf(context).width < 760;
     return ClipRRect(
       borderRadius: BorderRadius.circular(32),
       child: SizedBox(
-        height: 430,
+        height: compact ? 340 : 430,
         child: Stack(
           fit: StackFit.expand,
           children: <Widget>[
@@ -1478,6 +1754,7 @@ class _HeroSection extends StatelessWidget {
                       style: Theme.of(context).textTheme.displaySmall?.copyWith(
                         fontWeight: FontWeight.w800,
                         height: 1.02,
+                        fontSize: compact ? 34 : null,
                       ),
                       children: <InlineSpan>[
                         const TextSpan(text: 'Bem-vindo ao\n'),
@@ -2259,7 +2536,7 @@ class _StockSectionState extends State<_StockSection> {
         accent: ValleyBrandColors.cyan,
         caption: _usingLiveCatalog
             ? 'Catálogo vivo sincronizado'
-            : 'Preview local enquanto sincroniza',
+            : 'Catalogo preparado enquanto sincroniza',
       ),
       _StockStatCard(
         title: 'Categorias Google',
@@ -2515,7 +2792,7 @@ class _StockSectionState extends State<_StockSection> {
               Text(
                 _catalogError == null
                     ? 'A origem do abastecimento vive só na operação. Aqui a leitura é por categoria, coleção e faixa de preço, com classificação aderente à tabela taxonômica do Google.'
-                    : 'O catálogo real não respondeu nesta tentativa. O shell manteve o preview local para não quebrar a operação.',
+                    : 'O catalogo externo nao respondeu nesta tentativa. O shell manteve a operacao preparada para continuidade.',
                 style: theme.textTheme.bodyLarge?.copyWith(
                   color: theme.colorScheme.onSurfaceVariant,
                 ),
@@ -2593,7 +2870,7 @@ class _StockSectionState extends State<_StockSection> {
               SignalChip(
                 label: _usingLiveCatalog
                     ? '${_catalogItems.length} itens reais'
-                    : 'Preview local',
+                    : 'Operacao preparada',
                 outlined: !_usingLiveCatalog,
                 color: _usingLiveCatalog
                     ? ValleyBrandColors.cyan
@@ -2765,7 +3042,7 @@ class _StockCategoryBlock extends StatelessWidget {
                 crossAxisCount: crossAxisCount,
                 mainAxisSpacing: 16,
                 crossAxisSpacing: 16,
-                childAspectRatio: constraints.maxWidth >= 1180 ? 0.77 : 0.82,
+                childAspectRatio: constraints.maxWidth >= 1180 ? 0.68 : 0.74,
               ),
               itemBuilder: (BuildContext context, int index) {
                 final ProductItem item = items[index];
@@ -3240,202 +3517,238 @@ class _StockCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Color accent = ValleyBrandColors.cyan;
+    final ThemeData theme = Theme.of(context);
 
     return ValleyPanel(
-      radius: 24,
-      padding: EdgeInsets.zero,
+      radius: 26,
+      padding: const EdgeInsets.all(16),
       glowColor: accent,
-      child: ClipRRect(
+      child: InkWell(
         borderRadius: BorderRadius.circular(24),
+        onTap: onTap,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            SizedBox(
-              height: 188,
-              child: Stack(
-                fit: StackFit.expand,
-                children: <Widget>[
-                  Image.network(
-                    item.imageUrl,
-                    fit: BoxFit.cover,
-                    errorBuilder:
-                        (
-                          BuildContext context,
-                          Object error,
-                          StackTrace? stackTrace,
-                        ) {
-                          return const ColoredBox(color: Color(0xFF1A1F30));
-                        },
+            AspectRatio(
+              aspectRatio: 1,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: const Color(0xFF0F1526),
+                  borderRadius: BorderRadius.circular(24),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.06),
                   ),
-                  Positioned(
-                    top: 16,
-                    left: 16,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 6,
-                      ),
-                      decoration: BoxDecoration(
-                        color: const Color(0xCC0E1323),
-                        borderRadius: BorderRadius.circular(999),
-                        border: Border.all(
-                          color: accent.withValues(alpha: 0.22),
+                ),
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: <Widget>[
+                    _ProductGalleryCarousel(
+                      imageUrls: item.mediaGallery,
+                      fit: BoxFit.contain,
+                      emptyColor: const Color(0xFF0F1526),
+                      compact: true,
+                      imagePadding: const EdgeInsets.all(18),
+                    ),
+                    Positioned(
+                      top: 14,
+                      left: 14,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 6,
                         ),
-                      ),
-                      child: Text(
-                        item.category,
-                        style: TextStyle(
-                          color: accent,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 0.8,
-                          fontSize: 10,
+                        decoration: BoxDecoration(
+                          color: const Color(0xCC0E1323),
+                          borderRadius: BorderRadius.circular(999),
+                          border: Border.all(
+                            color: accent.withValues(alpha: 0.24),
+                          ),
+                        ),
+                        child: Text(
+                          item.category,
+                          style: TextStyle(
+                            color: accent,
+                            fontWeight: FontWeight.w800,
+                            fontSize: 10,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                    if (item.hasVideo)
+                      Positioned(
+                        top: 14,
+                        right: 14,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 6,
+                          ),
+                          decoration: BoxDecoration(
+                            color: const Color(0xCC0E1323),
+                            borderRadius: BorderRadius.circular(999),
+                            border: Border.all(
+                              color: ValleyBrandColors.violet.withValues(
+                                alpha: 0.30,
+                              ),
+                            ),
+                          ),
+                          child: const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Icon(
+                                Icons.play_circle_fill_rounded,
+                                color: ValleyBrandColors.violet,
+                                size: 14,
+                              ),
+                              SizedBox(width: 6),
+                              Text(
+                                'Vídeo',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 10,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    item.collectionLabel.toUpperCase(),
-                    style: TextStyle(
-                      color: accent,
-                      fontWeight: FontWeight.w800,
-                      fontSize: 11,
-                      letterSpacing: 1.0,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    item.title,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    item.taxonomyLeaf,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                  const SizedBox(height: 14),
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: <Widget>[
-                      _MetaPill(
-                        icon: Icons.sell_rounded,
-                        label: item.priceBand,
-                      ),
-                      _MetaPill(
-                        icon: Icons.category_rounded,
-                        label: item.category,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 14),
-                  Row(
-                    children: <Widget>[
-                      Icon(Icons.check_circle_rounded, size: 18, color: accent),
-                      const SizedBox(width: 10),
-                      Text(
-                        item.status,
-                        style: TextStyle(
-                          color: accent,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 18),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
+            const SizedBox(height: 16),
+            Text(
+              item.collectionLabel.toUpperCase(),
+              style: TextStyle(
+                color: accent,
+                fontWeight: FontWeight.w800,
+                fontSize: 11,
+                letterSpacing: 1.0,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              item.title,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: theme.textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              item.modelName,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              item.description,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+                height: 1.35,
+              ),
+            ),
+            const SizedBox(height: 14),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: <Widget>[
+                _MetaPill(
+                  icon: Icons.category_rounded,
+                  label: item.taxonomyLeaf,
+                ),
+                _MetaPill(icon: Icons.sell_rounded, label: item.priceBand),
+              ],
+            ),
+            const SizedBox(height: 14),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: <Widget>[
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
                         'R\$ ${item.priceBrl.toStringAsFixed(2)}',
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        style: theme.textTheme.titleLarge?.copyWith(
                           color: accent,
                           fontWeight: FontWeight.w800,
                         ),
                       ),
                       if (item.compareAtBrl > item.priceBrl)
                         Padding(
-                          padding: const EdgeInsets.only(left: 10),
+                          padding: const EdgeInsets.only(top: 4),
                           child: Text(
                             'R\$ ${item.compareAtBrl.toStringAsFixed(2)}',
-                            style: Theme.of(context).textTheme.bodyMedium
-                                ?.copyWith(
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onSurfaceVariant,
-                                  decoration: TextDecoration.lineThrough,
-                                ),
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: theme.colorScheme.onSurfaceVariant,
+                              decoration: TextDecoration.lineThrough,
+                            ),
                           ),
                         ),
-                      const Spacer(),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: <Widget>[
-                          Text(
-                            '${item.stock}',
-                            style: TextStyle(
-                              color: accent,
-                              fontWeight: FontWeight.w800,
-                              fontSize: 24,
-                            ),
-                          ),
-                          const Text(
-                            'ofertas ativas',
-                            style: TextStyle(
-                              color: Color(0xFF869395),
-                              fontWeight: FontWeight.w700,
-                              fontSize: 10,
-                            ),
-                          ),
-                        ],
-                      ),
                     ],
                   ),
-                  const SizedBox(height: 10),
-                  Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: FilledButton(
-                          onPressed: onTap,
-                          style: FilledButton.styleFrom(
-                            backgroundColor: accent,
-                            foregroundColor: const Color(0xFF001F24),
-                          ),
-                          child: const Text('VER FICHA'),
-                        ),
+                ),
+                const SizedBox(width: 12),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: <Widget>[
+                    Text(
+                      item.availabilityLabel,
+                      textAlign: TextAlign.right,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
                       ),
-                      const SizedBox(width: 10),
-                      SizedBox(
-                        width: 44,
-                        height: 44,
-                        child: OutlinedButton(
-                          onPressed: onTap,
-                          style: OutlinedButton.styleFrom(
-                            padding: EdgeInsets.zero,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                          child: const Icon(Icons.arrow_outward_rounded),
-                        ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      item.status,
+                      textAlign: TextAlign.right,
+                      style: const TextStyle(
+                        color: ValleyBrandColors.cyan,
+                        fontWeight: FontWeight.w800,
                       ),
-                    ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: FilledButton(
+                    onPressed: onTap,
+                    style: FilledButton.styleFrom(
+                      backgroundColor: accent,
+                      foregroundColor: const Color(0xFF001F24),
+                    ),
+                    child: const Text('VER PRODUTO'),
                   ),
-                ],
-              ),
+                ),
+                const SizedBox(width: 10),
+                SizedBox(
+                  width: 48,
+                  height: 48,
+                  child: OutlinedButton(
+                    onPressed: onTap,
+                    style: OutlinedButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                    ),
+                    child: const Icon(Icons.arrow_outward_rounded),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -3615,13 +3928,17 @@ class _ProductDetailScreen extends StatelessWidget {
     required this.item,
     required this.profile,
     required this.onPlay,
+    required this.onAddToCart,
     required this.onCheckout,
+    required this.onChat,
   });
 
   final ProductItem item;
   final Map<String, dynamic>? profile;
   final VoidCallback? onPlay;
+  final VoidCallback onAddToCart;
   final VoidCallback onCheckout;
+  final VoidCallback onChat;
 
   @override
   Widget build(BuildContext context) {
@@ -3632,222 +3949,286 @@ class _ProductDetailScreen extends StatelessWidget {
         (item.raw['seller'] as Map<dynamic, dynamic>? ?? <dynamic, dynamic>{})
             .cast<String, dynamic>();
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        ClipRRect(
-          borderRadius: BorderRadius.circular(28),
-          child: AspectRatio(
-            aspectRatio: 16 / 9,
-            child: Stack(
-              fit: StackFit.expand,
-              children: <Widget>[
-                Image.network(
-                  item.imageUrl,
-                  fit: BoxFit.cover,
-                  errorBuilder:
-                      (
-                        BuildContext context,
-                        Object error,
-                        StackTrace? stackTrace,
-                      ) {
-                        return const ColoredBox(color: Color(0xFF121A2F));
-                      },
+    final Widget summaryPanel = ValleyPanel(
+      radius: 28,
+      padding: const EdgeInsets.all(22),
+      glowColor: ValleyBrandColors.cyan,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Wrap(
+            spacing: 10,
+            runSpacing: 10,
+            children: <Widget>[
+              _MetaPill(icon: Icons.category_rounded, label: item.category),
+              _MetaPill(icon: Icons.hub_rounded, label: item.taxonomyLeaf),
+              _MetaPill(icon: Icons.sell_rounded, label: item.priceBand),
+              if (item.hasVideo)
+                const _MetaPill(
+                  icon: Icons.play_circle_fill_rounded,
+                  label: 'Vídeo disponível',
                 ),
-                DecoratedBox(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: <Color>[
-                        Colors.black.withValues(alpha: 0.08),
-                        Colors.black.withValues(alpha: 0.70),
-                      ],
-                    ),
+            ],
+          ),
+          const SizedBox(height: 18),
+          Text(
+            item.brand.toUpperCase(),
+            style: const TextStyle(
+              color: ValleyBrandColors.cyan,
+              fontSize: 11,
+              fontWeight: FontWeight.w800,
+              letterSpacing: 1.2,
+            ),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            item.title,
+            style: theme.textTheme.headlineMedium?.copyWith(
+              fontWeight: FontWeight.w900,
+            ),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            item.modelName,
+            style: theme.textTheme.titleMedium?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            item.description,
+            maxLines: 5,
+            overflow: TextOverflow.ellipsis,
+            style: theme.textTheme.bodyLarge?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+              height: 1.45,
+            ),
+          ),
+          const SizedBox(height: 20),
+          Text(
+            'R\$ ${item.priceBrl.toStringAsFixed(2)}',
+            style: theme.textTheme.headlineMedium?.copyWith(
+              fontWeight: FontWeight.w900,
+              color: ValleyBrandColors.cyan,
+            ),
+          ),
+          if (item.compareAtBrl > item.priceBrl) ...<Widget>[
+            const SizedBox(height: 6),
+            Text(
+              'De R\$ ${item.compareAtBrl.toStringAsFixed(2)}',
+              style: theme.textTheme.bodyLarge?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+                decoration: TextDecoration.lineThrough,
+              ),
+            ),
+          ],
+          const SizedBox(height: 8),
+          Text(
+            '${item.availabilityLabel} • ${item.status}',
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+          ),
+          const SizedBox(height: 18),
+          Wrap(
+            spacing: 12,
+            runSpacing: 12,
+            children: <Widget>[
+              FilledButton.icon(
+                onPressed: onCheckout,
+                icon: const Icon(Icons.shopping_cart_checkout_rounded),
+                label: const Text('Comprar agora'),
+              ),
+              OutlinedButton.icon(
+                onPressed: onAddToCart,
+                icon: const Icon(Icons.add_shopping_cart_rounded),
+                label: const Text('Adicionar ao carrinho'),
+              ),
+              if (item.hasVideo)
+                OutlinedButton.icon(
+                  onPressed: onPlay,
+                  icon: const Icon(Icons.play_circle_fill_rounded),
+                  label: Text(
+                    onPlay == null ? 'Vídeo catalogado' : 'Assistir vídeo',
                   ),
                 ),
-                Positioned(
-                  left: 20,
-                  right: 20,
-                  bottom: 20,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
+              OutlinedButton.icon(
+                onPressed: onChat,
+                icon: const Icon(Icons.chat_bubble_rounded),
+                label: const Text('Perguntar no chat'),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+
+    final Widget sellerPanel = ValleyPanel(
+      radius: 26,
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              CircleAvatar(
+                radius: 24,
+                backgroundImage: NetworkImage(
+                  (profile?['avatar_url'] ??
+                          seller['avatar_url'] ??
+                          item.imageUrl)
+                      .toString(),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      (profile?['name'] ?? seller['name'] ?? item.merchantName)
+                          .toString(),
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      (profile?['headline'] ?? item.category).toString(),
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 18),
+          Text(
+            'Visão operacional',
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            'O produto fica em evidência e o checkout só aparece quando a rota comercial já está pronta. Quando houver vídeo, ele ocupa a mídia principal da ficha.',
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+              height: 1.45,
+            ),
+          ),
+        ],
+      ),
+    );
+
+    final Widget descriptionPanel = ValleyPanel(
+      radius: 28,
+      padding: const EdgeInsets.all(22),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            'Descrição e destaques',
+            style: theme.textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+          const SizedBox(height: 14),
+          Text(
+            item.description,
+            style: theme.textTheme.bodyLarge?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+              height: 1.5,
+            ),
+          ),
+          const SizedBox(height: 18),
+          Wrap(
+            spacing: 10,
+            runSpacing: 10,
+            children: features
+                .map(
+                  (dynamic feature) => Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 10,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.05),
+                      borderRadius: BorderRadius.circular(999),
+                    ),
+                    child: Text(feature.toString()),
+                  ),
+                )
+                .toList(),
+          ),
+        ],
+      ),
+    );
+
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        final bool compact = constraints.maxWidth < 1120;
+        if (compact) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              _ProductMediaStage(item: item, onPlay: onPlay),
+              const SizedBox(height: 18),
+              summaryPanel,
+              const SizedBox(height: 18),
+              descriptionPanel,
+              const SizedBox(height: 18),
+              sellerPanel,
+            ],
+          );
+        }
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Expanded(
+                  flex: 7,
+                  child: _ProductMediaStage(item: item, onPlay: onPlay),
+                ),
+                const SizedBox(width: 20),
+                Expanded(
+                  flex: 5,
+                  child: Column(
                     children: <Widget>[
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              item.brand.toUpperCase(),
-                              style: const TextStyle(
-                                color: ValleyBrandColors.cyan,
-                                fontSize: 11,
-                                fontWeight: FontWeight.w700,
-                                letterSpacing: 1.4,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              item.title,
-                              style: theme.textTheme.headlineMedium?.copyWith(
-                                fontWeight: FontWeight.w800,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              item.description,
-                              style: theme.textTheme.bodyMedium?.copyWith(
-                                color: theme.colorScheme.onSurfaceVariant,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      FilledButton.icon(
-                        onPressed: onPlay,
-                        icon: const Icon(Icons.play_circle_fill_rounded),
-                        label: const Text('Video'),
-                      ),
+                      summaryPanel,
+                      const SizedBox(height: 18),
+                      sellerPanel,
                     ],
                   ),
                 ),
               ],
             ),
-          ),
-        ),
-        const SizedBox(height: 20),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Expanded(
-              flex: 2,
-              child: ValleyPanel(
-                radius: 26,
-                padding: const EdgeInsets.all(20),
-                glowColor: ValleyBrandColors.cyan,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      'Descricao',
-                      style: theme.textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      item.description,
-                      style: theme.textTheme.bodyLarge?.copyWith(
-                        color: theme.colorScheme.onSurfaceVariant,
-                      ),
-                    ),
-                    const SizedBox(height: 18),
-                    Wrap(
-                      spacing: 10,
-                      runSpacing: 10,
-                      children: features
-                          .map(
-                            (dynamic feature) => Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 14,
-                                vertical: 10,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.white.withValues(alpha: 0.05),
-                                borderRadius: BorderRadius.circular(999),
-                              ),
-                              child: Text(feature.toString()),
-                            ),
-                          )
-                          .toList(),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(width: 18),
-            Expanded(
-              child: ValleyPanel(
-                radius: 26,
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        CircleAvatar(
-                          radius: 24,
-                          backgroundImage: NetworkImage(
-                            (profile?['avatar_url'] ??
-                                    seller['avatar_url'] ??
-                                    item.imageUrl)
-                                .toString(),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                (profile?['name'] ??
-                                        seller['name'] ??
-                                        item.merchantName)
-                                    .toString(),
-                                style: theme.textTheme.titleMedium?.copyWith(
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                (profile?['headline'] ?? item.category)
-                                    .toString(),
-                                style: theme.textTheme.bodySmall?.copyWith(
-                                  color: theme.colorScheme.onSurfaceVariant,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 18),
-                    Text(
-                      'R\$ ${item.priceBrl.toStringAsFixed(2)}',
-                      style: theme.textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.w800,
-                        color: ValleyBrandColors.cyan,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      '${item.availabilityLabel} • ${item.status}',
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: theme.colorScheme.onSurfaceVariant,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    FilledButton(
-                      onPressed: onCheckout,
-                      child: const Text('Ir para checkout'),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            const SizedBox(height: 20),
+            descriptionPanel,
           ],
-        ),
-      ],
+        );
+      },
     );
   }
 }
 
 class _CheckoutScreen extends StatelessWidget {
-  const _CheckoutScreen({required this.item, required this.onConfirm});
+  const _CheckoutScreen({
+    required this.item,
+    required this.onConfirm,
+    required this.onIdentity,
+    required this.onCancel,
+  });
 
   final ProductItem item;
   final VoidCallback onConfirm;
+  final VoidCallback onIdentity;
+  final VoidCallback onCancel;
 
   @override
   Widget build(BuildContext context) {
@@ -3860,79 +4241,177 @@ class _CheckoutScreen extends StatelessWidget {
     final double service = (checkout['service_brl'] as num?)?.toDouble() ?? 4.9;
     final double total = item.priceBrl + shipping + service;
 
-    return ValleyPanel(
-      radius: 30,
-      padding: const EdgeInsets.all(24),
-      glowColor: ValleyBrandColors.cyan,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            checkout['headline']?.toString() ?? 'Checkout',
-            style: theme.textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.w800,
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        final bool compact = constraints.maxWidth < 900;
+        final Widget totals = Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            _CheckoutRow(
+              label: item.title,
+              value: 'R\$ ${item.priceBrl.toStringAsFixed(2)}',
             ),
-          ),
-          const SizedBox(height: 18),
-          Row(
+            _CheckoutRow(
+              label: 'Entrega preparada',
+              value: 'R\$ ${shipping.toStringAsFixed(2)}',
+            ),
+            _CheckoutRow(
+              label: 'Servico Valley',
+              value: 'R\$ ${service.toStringAsFixed(2)}',
+            ),
+            const Divider(height: 28),
+            _CheckoutRow(
+              label: 'Total',
+              value: 'R\$ ${total.toStringAsFixed(2)}',
+              highlight: true,
+            ),
+          ],
+        );
+
+        final Widget trustPanel = ValleyPanel(
+          radius: 24,
+          padding: const EdgeInsets.all(18),
+          glowColor: ValleyBrandColors.violet,
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    _CheckoutRow(
-                      label: item.title,
-                      value: 'R\$ ${item.priceBrl.toStringAsFixed(2)}',
-                    ),
-                    _CheckoutRow(
-                      label: 'Entrega',
-                      value: 'R\$ ${shipping.toStringAsFixed(2)}',
-                    ),
-                    _CheckoutRow(
-                      label: 'Servico',
-                      value: 'R\$ ${service.toStringAsFixed(2)}',
-                    ),
-                    const Divider(height: 28),
-                    _CheckoutRow(
-                      label: 'Total',
-                      value: 'R\$ ${total.toStringAsFixed(2)}',
-                      highlight: true,
-                    ),
-                  ],
+              Text(
+                'Confiança da operação',
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w800,
                 ),
               ),
-              const SizedBox(width: 20),
-              Expanded(
-                child: ValleyPanel(
-                  radius: 24,
-                  padding: const EdgeInsets.all(18),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        'Entrega prevista',
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(checkout['eta']?.toString() ?? '2 dias'),
-                      const SizedBox(height: 14),
-                      Text(
-                        'Parcelamento em ate ${checkout['installments'] ?? 12}x sem juros',
-                      ),
-                      const SizedBox(height: 18),
-                      FilledButton.icon(
-                        onPressed: onConfirm,
-                        icon: const Icon(Icons.lock_rounded),
-                        label: const Text('Finalizar pedido'),
-                      ),
-                    ],
-                  ),
-                ),
+              const SizedBox(height: 12),
+              const _TrustSignalRow(
+                icon: Icons.verified_user_rounded,
+                title: 'Identity Score 92',
+                body: 'Compra liberada com trilha antifraude explicável.',
+              ),
+              const _TrustSignalRow(
+                icon: Icons.point_of_sale_rounded,
+                title: 'Plug preparado',
+                body: 'Captura visual pronta sem ativar Pay completo.',
+              ),
+              const _TrustSignalRow(
+                icon: Icons.description_rounded,
+                title: 'Docs leve',
+                body: 'Recibo e checksum gerados na confirmação.',
+              ),
+              const SizedBox(height: 10),
+              OutlinedButton.icon(
+                onPressed: onIdentity,
+                icon: const Icon(Icons.face_retouching_natural_rounded),
+                label: const Text('Ativar Face ID'),
               ),
             ],
+          ),
+        );
+
+        final Widget body = compact
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  totals,
+                  const SizedBox(height: 18),
+                  trustPanel,
+                ],
+              )
+            : Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Expanded(child: totals),
+                  const SizedBox(width: 20),
+                  Expanded(child: trustPanel),
+                ],
+              );
+
+        return ValleyPanel(
+          radius: 30,
+          padding: const EdgeInsets.all(24),
+          glowColor: ValleyBrandColors.cyan,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                checkout['headline']?.toString() ?? 'Checkout preparado',
+                style: theme.textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Entrega prevista em ${checkout['eta']?.toString() ?? '2 dias'} • Ao seguir, o pagamento abre em ambiente seguro com retorno controlado ao Valley.',
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
+              ),
+              const SizedBox(height: 20),
+              body,
+              const SizedBox(height: 20),
+              Wrap(
+                spacing: 12,
+                runSpacing: 12,
+                children: <Widget>[
+                  FilledButton.icon(
+                    onPressed: onConfirm,
+                    icon: const Icon(Icons.lock_rounded),
+                    label: const Text('Ir para pagamento seguro'),
+                  ),
+                  OutlinedButton.icon(
+                    onPressed: onCancel,
+                    icon: const Icon(Icons.shopping_bag_rounded),
+                    label: const Text('Voltar ao carrinho'),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _TrustSignalRow extends StatelessWidget {
+  const _TrustSignalRow({
+    required this.icon,
+    required this.title,
+    required this.body,
+  });
+
+  final IconData icon;
+  final String title;
+  final String body;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Icon(icon, color: ValleyBrandColors.cyan, size: 22),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  title,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w800),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  body,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    height: 1.35,
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -3964,6 +4443,942 @@ class _CheckoutRow extends StatelessWidget {
               color: highlight ? ValleyBrandColors.cyan : null,
               fontWeight: highlight ? FontWeight.w800 : FontWeight.w600,
             ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _CartScreen extends StatelessWidget {
+  const _CartScreen({
+    required this.items,
+    required this.fallbackItem,
+    required this.onRemove,
+    required this.onBrowse,
+    required this.onCheckout,
+  });
+
+  final List<ProductItem> items;
+  final ProductItem? fallbackItem;
+  final ValueChanged<ProductItem> onRemove;
+  final VoidCallback onBrowse;
+  final ValueChanged<ProductItem> onCheckout;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final List<ProductItem> visibleItems = items.isEmpty && fallbackItem != null
+        ? <ProductItem>[fallbackItem!]
+        : items;
+    final double subtotal = visibleItems.fold<double>(
+      0,
+      (double total, ProductItem item) => total + item.priceBrl,
+    );
+
+    if (visibleItems.isEmpty) {
+      return _EmptyStatePanel(
+        icon: Icons.shopping_bag_rounded,
+        title: 'Carrinho pronto para o primeiro item',
+        body:
+            'Explore o marketplace ou importe produtos no Stock para iniciar uma compra preparada.',
+        primaryLabel: 'Explorar marketplace',
+        onPrimary: onBrowse,
+      );
+    }
+
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        final bool compact = constraints.maxWidth < 900;
+        final Widget itemsPanel = ValleyPanel(
+          radius: 30,
+          padding: const EdgeInsets.all(22),
+          glowColor: ValleyBrandColors.violet,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                'Resumo rápido',
+                style: theme.textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+              const SizedBox(height: 16),
+              for (final ProductItem item in visibleItems)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 14),
+                  child: Row(
+                    children: <Widget>[
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(18),
+                        child: Image.network(
+                          item.imageUrl,
+                          width: 72,
+                          height: 72,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) =>
+                              const ColoredBox(color: Color(0xFF171D31)),
+                        ),
+                      ),
+                      const SizedBox(width: 14),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              item.title,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: theme.textTheme.titleMedium?.copyWith(
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              '${item.merchantName} • ${item.availabilityLabel}',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: theme.colorScheme.onSurfaceVariant,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: <Widget>[
+                          Text(
+                            'R\$ ${item.priceBrl.toStringAsFixed(2)}',
+                            style: const TextStyle(
+                              color: ValleyBrandColors.cyan,
+                              fontWeight: FontWeight.w900,
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () => onRemove(item),
+                            child: const Text('Remover'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+            ],
+          ),
+        );
+
+        final Widget totalsPanel = ValleyPanel(
+          radius: 30,
+          padding: const EdgeInsets.all(22),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                'Checkout preparado',
+                style: theme.textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+              const SizedBox(height: 16),
+              _CheckoutRow(
+                label: 'Subtotal',
+                value: 'R\$ ${subtotal.toStringAsFixed(2)}',
+              ),
+              _CheckoutRow(
+                label: 'Entrega estimada',
+                value: 'R\$ ${(visibleItems.length * 19.9).toStringAsFixed(2)}',
+              ),
+              _CheckoutRow(
+                label: 'Taxa Valley',
+                value: 'R\$ ${(visibleItems.length * 4.9).toStringAsFixed(2)}',
+              ),
+              const Divider(height: 28),
+              _CheckoutRow(
+                label: 'Total',
+                value:
+                    'R\$ ${(subtotal + visibleItems.length * 24.8).toStringAsFixed(2)}',
+                highlight: true,
+              ),
+              const SizedBox(height: 14),
+              Text(
+                'O MVP valida estoque, margem e identidade antes de confirmar o pedido.',
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                  height: 1.35,
+                ),
+              ),
+              const SizedBox(height: 18),
+              SizedBox(
+                width: double.infinity,
+                child: FilledButton.icon(
+                  onPressed: () => onCheckout(visibleItems.first),
+                  icon: const Icon(Icons.lock_rounded),
+                  label: const Text('Finalizar compra'),
+                ),
+              ),
+              const SizedBox(height: 10),
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton.icon(
+                  onPressed: onBrowse,
+                  icon: const Icon(Icons.storefront_rounded),
+                  label: const Text('Continuar comprando'),
+                ),
+              ),
+            ],
+          ),
+        );
+
+        if (compact) {
+          return Column(
+            children: <Widget>[
+              itemsPanel,
+              const SizedBox(height: 18),
+              totalsPanel,
+            ],
+          );
+        }
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Expanded(flex: 7, child: itemsPanel),
+            const SizedBox(width: 20),
+            Expanded(flex: 4, child: totalsPanel),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _ConfirmationScreen extends StatelessWidget {
+  const _ConfirmationScreen({
+    required this.item,
+    required this.onOpenReceipt,
+    required this.onOpenOrders,
+    required this.onContinueShopping,
+    required this.onSupport,
+  });
+
+  final ProductItem item;
+  final VoidCallback onOpenReceipt;
+  final VoidCallback onOpenOrders;
+  final VoidCallback onContinueShopping;
+  final VoidCallback onSupport;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final double total = item.priceBrl + 24.8;
+    return ValleyPanel(
+      radius: 34,
+      padding: const EdgeInsets.all(26),
+      glowColor: ValleyBrandColors.cyan,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Container(
+                width: 58,
+                height: 58,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: ValleyBrandColors.cyan.withValues(alpha: 0.16),
+                  border: Border.all(
+                    color: ValleyBrandColors.cyan.withValues(alpha: 0.45),
+                  ),
+                ),
+                child: const Icon(
+                  Icons.check_rounded,
+                  color: ValleyBrandColors.cyan,
+                  size: 34,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      'Pedido confirmado',
+                      style: theme.textTheme.headlineSmall?.copyWith(
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'VAL-${item.id.hashCode.abs().toString().padLeft(6, '0').substring(0, 6)} • Plug e Docs preparados',
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 22),
+          _PreparedOrderStrip(item: item, total: total),
+          const SizedBox(height: 22),
+          Wrap(
+            spacing: 12,
+            runSpacing: 12,
+            children: <Widget>[
+              FilledButton.icon(
+                onPressed: onOpenReceipt,
+                icon: const Icon(Icons.description_rounded),
+                label: const Text('Abrir comprovante'),
+              ),
+              OutlinedButton.icon(
+                onPressed: onOpenOrders,
+                icon: const Icon(Icons.local_shipping_rounded),
+                label: const Text('Ver pedido'),
+              ),
+              OutlinedButton.icon(
+                onPressed: onContinueShopping,
+                icon: const Icon(Icons.storefront_rounded),
+                label: const Text('Continuar comprando'),
+              ),
+              OutlinedButton.icon(
+                onPressed: onSupport,
+                icon: const Icon(Icons.support_agent_rounded),
+                label: const Text('Falar com suporte'),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PreparedOrderStrip extends StatelessWidget {
+  const _PreparedOrderStrip({required this.item, required this.total});
+
+  final ProductItem item;
+  final double total;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    return Container(
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.05),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+      ),
+      child: Row(
+        children: <Widget>[
+          ClipRRect(
+            borderRadius: BorderRadius.circular(18),
+            child: Image.network(
+              item.imageUrl,
+              width: 76,
+              height: 76,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) =>
+                  const ColoredBox(color: Color(0xFF171D31)),
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  item.title,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  '${item.merchantName} • comprovante com checksum',
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 12),
+          Text(
+            'R\$ ${total.toStringAsFixed(2)}',
+            style: theme.textTheme.titleLarge?.copyWith(
+              color: ValleyBrandColors.cyan,
+              fontWeight: FontWeight.w900,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ReceiptScreen extends StatelessWidget {
+  const _ReceiptScreen({required this.item});
+
+  final ProductItem item;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final String checksum =
+        'VX-${item.id.hashCode.abs().toRadixString(16).padLeft(8, '0').toUpperCase()}';
+    return ValleyPanel(
+      radius: 32,
+      padding: const EdgeInsets.all(24),
+      glowColor: ValleyBrandColors.violet,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            'Comprovante Valley Docs',
+            style: theme.textTheme.headlineSmall?.copyWith(
+              fontWeight: FontWeight.w900,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Prova leve para o MVP, preparada para documento formal e auditoria futura.',
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+          ),
+          const SizedBox(height: 22),
+          _ReceiptLine(label: 'Pedido', value: 'VAL-${item.id}'),
+          _ReceiptLine(label: 'Produto', value: item.title),
+          _ReceiptLine(label: 'Seller', value: item.merchantName),
+          _ReceiptLine(
+            label: 'Valor',
+            value: 'R\$ ${(item.priceBrl + 24.8).toStringAsFixed(2)}',
+          ),
+          _ReceiptLine(label: 'Metodo', value: 'Plug preparado'),
+          _ReceiptLine(label: 'Checksum', value: checksum, highlight: true),
+          const SizedBox(height: 18),
+          Wrap(
+            spacing: 12,
+            runSpacing: 12,
+            children: <Widget>[
+              FilledButton.icon(
+                onPressed: () =>
+                    Clipboard.setData(ClipboardData(text: checksum)),
+                icon: const Icon(Icons.copy_rounded),
+                label: const Text('Copiar checksum'),
+              ),
+              OutlinedButton.icon(
+                onPressed: () {},
+                icon: const Icon(Icons.ios_share_rounded),
+                label: const Text('Compartilhar'),
+              ),
+              OutlinedButton.icon(
+                onPressed: () {},
+                icon: const Icon(Icons.picture_as_pdf_rounded),
+                label: const Text('Baixar PDF'),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ReceiptLine extends StatelessWidget {
+  const _ReceiptLine({
+    required this.label,
+    required this.value,
+    this.highlight = false,
+  });
+
+  final String label;
+  final String value;
+  final bool highlight;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          SizedBox(
+            width: 112,
+            child: Text(
+              label,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Text(
+              value,
+              style: TextStyle(
+                color: highlight ? ValleyBrandColors.cyan : null,
+                fontWeight: highlight ? FontWeight.w900 : FontWeight.w700,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _IdentityTrustScreen extends StatelessWidget {
+  const _IdentityTrustScreen({
+    required this.pendingItem,
+    required this.onConfirm,
+  });
+
+  final ProductItem? pendingItem;
+  final VoidCallback? onConfirm;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        ValleyPanel(
+          radius: 32,
+          padding: const EdgeInsets.all(24),
+          glowColor: ValleyBrandColors.cyan,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                'Identidade e confiança',
+                style: theme.textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Face ID, Voice ID e Identity Score aparecem como camada de segurança do MVP, sem criar outro cadastro.',
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
+              ),
+              const SizedBox(height: 20),
+              Wrap(
+                spacing: 12,
+                runSpacing: 12,
+                children: <Widget>[
+                  _IdentityMetric(
+                    icon: Icons.face_retouching_natural_rounded,
+                    label: 'Face ID',
+                    value: 'Ativo',
+                    color: ValleyBrandColors.cyan,
+                  ),
+                  _IdentityMetric(
+                    icon: Icons.graphic_eq_rounded,
+                    label: 'Voice ID',
+                    value: 'Leve',
+                    color: ValleyBrandColors.violet,
+                  ),
+                  _IdentityMetric(
+                    icon: Icons.shield_rounded,
+                    label: 'Score',
+                    value: '92',
+                    color: ValleyBrandColors.success,
+                  ),
+                ],
+              ),
+              if (pendingItem != null) ...<Widget>[
+                const SizedBox(height: 20),
+                Text(
+                  'Operação sensível',
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  pendingItem!.title,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                FilledButton.icon(
+                  onPressed: onConfirm,
+                  icon: const Icon(Icons.lock_open_rounded),
+                  label: const Text('Confirmar operação'),
+                ),
+              ],
+            ],
+          ),
+        ),
+        const SizedBox(height: 18),
+        Row(
+          children: const <Widget>[
+            Expanded(
+              child: _TrustExplanationCard(
+                title: 'Fatores positivos',
+                body:
+                    'Dispositivo recorrente, seller score alto e histórico sem disputa.',
+                icon: Icons.trending_up_rounded,
+              ),
+            ),
+            SizedBox(width: 14),
+            Expanded(
+              child: _TrustExplanationCard(
+                title: 'Pendências leves',
+                body:
+                    'Voice ID pode ser solicitado em aceite sensível ou revisão manual.',
+                icon: Icons.pending_actions_rounded,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class _IdentityMetric extends StatelessWidget {
+  const _IdentityMetric({
+    required this.icon,
+    required this.label,
+    required this.value,
+    required this.color,
+  });
+
+  final IconData icon;
+  final String label;
+  final String value;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 190,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(color: color.withValues(alpha: 0.28)),
+      ),
+      child: Row(
+        children: <Widget>[
+          Icon(icon, color: color),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(label, style: Theme.of(context).textTheme.bodySmall),
+                Text(
+                  value,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w900),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _TrustExplanationCard extends StatelessWidget {
+  const _TrustExplanationCard({
+    required this.title,
+    required this.body,
+    required this.icon,
+  });
+
+  final String title;
+  final String body;
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return ValleyPanel(
+      radius: 24,
+      padding: const EdgeInsets.all(18),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Icon(icon, color: ValleyBrandColors.cyan),
+          const SizedBox(height: 12),
+          Text(
+            title,
+            style: Theme.of(
+              context,
+            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w900),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            body,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+              height: 1.35,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _NotificationsScreen extends StatelessWidget {
+  const _NotificationsScreen({
+    required this.items,
+    required this.onOpenItem,
+    required this.onOpenStock,
+    required this.onOpenChat,
+    required this.onOpenIdentity,
+  });
+
+  final List<ProductItem> items;
+  final ValueChanged<ProductItem> onOpenItem;
+  final VoidCallback onOpenStock;
+  final VoidCallback onOpenChat;
+  final VoidCallback onOpenIdentity;
+
+  @override
+  Widget build(BuildContext context) {
+    final ProductItem? firstItem = items.isEmpty ? null : items.first;
+    final List<_NotificationEntry> entries = <_NotificationEntry>[
+      if (firstItem != null)
+        _NotificationEntry(
+          icon: Icons.local_offer_rounded,
+          title: 'Oferta pronta para checkout',
+          body: firstItem.title,
+          actionLabel: 'Abrir produto',
+          onTap: () => onOpenItem(firstItem),
+        ),
+      _NotificationEntry(
+        icon: Icons.inventory_2_rounded,
+        title: 'Margem precisa de revisão',
+        body: 'Revise itens pausados antes de publicar no Marketplace.',
+        actionLabel: 'Abrir Stock',
+        onTap: onOpenStock,
+      ),
+      _NotificationEntry(
+        icon: Icons.verified_user_rounded,
+        title: 'Identidade em ordem',
+        body: 'Face ID ativo e score suficiente para operações sensíveis.',
+        actionLabel: 'Ver identidade',
+        onTap: onOpenIdentity,
+      ),
+      _NotificationEntry(
+        icon: Icons.chat_bubble_rounded,
+        title: 'Suporte contextual',
+        body: 'Uma conversa pode ser aberta com produto ou pedido anexado.',
+        actionLabel: 'Abrir chat',
+        onTap: onOpenChat,
+      ),
+    ];
+
+    return ValleyPanel(
+      radius: 30,
+      padding: const EdgeInsets.all(22),
+      glowColor: ValleyBrandColors.cyan,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            'Notificações',
+            style: Theme.of(
+              context,
+            ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w900),
+          ),
+          const SizedBox(height: 16),
+          for (final _NotificationEntry entry in entries)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: InkWell(
+                borderRadius: BorderRadius.circular(22),
+                onTap: entry.onTap,
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.05),
+                    borderRadius: BorderRadius.circular(22),
+                    border: Border.all(
+                      color: Colors.white.withValues(alpha: 0.08),
+                    ),
+                  ),
+                  child: Row(
+                    children: <Widget>[
+                      Icon(entry.icon, color: ValleyBrandColors.cyan),
+                      const SizedBox(width: 14),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              entry.title,
+                              style: Theme.of(context).textTheme.titleMedium
+                                  ?.copyWith(fontWeight: FontWeight.w800),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              entry.body,
+                              style: Theme.of(context).textTheme.bodySmall
+                                  ?.copyWith(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurfaceVariant,
+                                  ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: entry.onTap,
+                        child: Text(entry.actionLabel),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _NotificationEntry {
+  const _NotificationEntry({
+    required this.icon,
+    required this.title,
+    required this.body,
+    required this.actionLabel,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String title;
+  final String body;
+  final String actionLabel;
+  final VoidCallback onTap;
+}
+
+class _EmptyStatePanel extends StatelessWidget {
+  const _EmptyStatePanel({
+    required this.icon,
+    required this.title,
+    required this.body,
+    required this.primaryLabel,
+    required this.onPrimary,
+  });
+
+  final IconData icon;
+  final String title;
+  final String body;
+  final String primaryLabel;
+  final VoidCallback onPrimary;
+
+  @override
+  Widget build(BuildContext context) {
+    return ValleyPanel(
+      radius: 30,
+      padding: const EdgeInsets.all(28),
+      glowColor: ValleyBrandColors.cyan,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Icon(icon, color: ValleyBrandColors.cyan, size: 34),
+          const SizedBox(height: 18),
+          Text(
+            title,
+            style: Theme.of(
+              context,
+            ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w900),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            body,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+          ),
+          const SizedBox(height: 20),
+          FilledButton(onPressed: onPrimary, child: Text(primaryLabel)),
+        ],
+      ),
+    );
+  }
+}
+
+class _PreparedModuleScreen extends StatelessWidget {
+  const _PreparedModuleScreen({
+    required this.moduleId,
+    required this.onNotify,
+    required this.onHome,
+  });
+
+  final String moduleId;
+  final VoidCallback onNotify;
+  final VoidCallback onHome;
+
+  @override
+  Widget build(BuildContext context) {
+    final String label = moduleId.isEmpty ? 'Modulo' : moduleId;
+    return ValleyPanel(
+      radius: 30,
+      padding: const EdgeInsets.all(28),
+      glowColor: ValleyBrandColors.violet,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Container(
+            width: 54,
+            height: 54,
+            decoration: BoxDecoration(
+              color: ValleyBrandColors.violet.withValues(alpha: 0.14),
+              borderRadius: BorderRadius.circular(18),
+              border: Border.all(
+                color: ValleyBrandColors.violet.withValues(alpha: 0.28),
+              ),
+            ),
+            child: const Icon(
+              Icons.pending_rounded,
+              color: ValleyBrandColors.lilac,
+            ),
+          ),
+          const SizedBox(height: 20),
+          Text(
+            '$label em preparacao',
+            style: Theme.of(
+              context,
+            ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w900),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            'Esta jornada fica apenas como contrato visual do ecossistema. O MVP ativo continua em Marketplace, Stock, Chat, identidade, checkout e comprovante.',
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+          ),
+          const SizedBox(height: 22),
+          Wrap(
+            spacing: 12,
+            runSpacing: 12,
+            children: <Widget>[
+              FilledButton(
+                onPressed: onNotify,
+                child: const Text('Receber aviso'),
+              ),
+              OutlinedButton(
+                onPressed: onHome,
+                child: const Text('Voltar ao inicio'),
+              ),
+            ],
           ),
         ],
       ),
@@ -6714,6 +8129,413 @@ class _FieldChip extends StatelessWidget {
   }
 }
 
+class _ProductGalleryCarousel extends StatefulWidget {
+  const _ProductGalleryCarousel({
+    required this.imageUrls,
+    this.fit = BoxFit.cover,
+    this.emptyColor = const Color(0xFF121A2F),
+    this.compact = false,
+    this.imagePadding = EdgeInsets.zero,
+  });
+
+  final List<String> imageUrls;
+  final BoxFit fit;
+  final Color emptyColor;
+  final bool compact;
+  final EdgeInsets imagePadding;
+
+  @override
+  State<_ProductGalleryCarousel> createState() =>
+      _ProductGalleryCarouselState();
+}
+
+class _ProductGalleryCarouselState extends State<_ProductGalleryCarousel> {
+  late final PageController _pageController;
+  int _currentIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController();
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final List<String> images = widget.imageUrls;
+    if (images.isEmpty) {
+      return ColoredBox(color: widget.emptyColor);
+    }
+
+    return Stack(
+      fit: StackFit.expand,
+      children: <Widget>[
+        PageView.builder(
+          controller: _pageController,
+          itemCount: images.length,
+          onPageChanged: (int index) {
+            if (!mounted) {
+              return;
+            }
+            setState(() {
+              _currentIndex = index;
+            });
+          },
+          itemBuilder: (BuildContext context, int index) {
+            return Container(
+              color: widget.emptyColor,
+              alignment: Alignment.center,
+              padding: widget.imagePadding,
+              child: Image.network(
+                images[index],
+                fit: widget.fit,
+                errorBuilder:
+                    (
+                      BuildContext context,
+                      Object error,
+                      StackTrace? stackTrace,
+                    ) {
+                      return ColoredBox(color: widget.emptyColor);
+                    },
+              ),
+            );
+          },
+        ),
+        if (images.length > 1)
+          Positioned(
+            right: widget.compact ? 12 : 18,
+            top: widget.compact ? 12 : 18,
+            child: Container(
+              padding: EdgeInsets.symmetric(
+                horizontal: widget.compact ? 8 : 10,
+                vertical: widget.compact ? 5 : 6,
+              ),
+              decoration: BoxDecoration(
+                color: const Color(0xC20E1323),
+                borderRadius: BorderRadius.circular(999),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
+              ),
+              child: Text(
+                '${_currentIndex + 1}/${images.length}',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w700,
+                  fontSize: widget.compact ? 10 : 11,
+                ),
+              ),
+            ),
+          ),
+        if (images.length > 1)
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: widget.compact ? 10 : 14,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List<Widget>.generate(images.length, (int index) {
+                final bool active = index == _currentIndex;
+                return AnimatedContainer(
+                  duration: const Duration(milliseconds: 180),
+                  margin: const EdgeInsets.symmetric(horizontal: 3),
+                  width: active ? (widget.compact ? 18 : 22) : 6,
+                  height: 6,
+                  decoration: BoxDecoration(
+                    color: active
+                        ? ValleyBrandColors.cyan
+                        : Colors.white.withValues(alpha: 0.55),
+                    borderRadius: BorderRadius.circular(999),
+                  ),
+                );
+              }),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+class _ProductMediaEntry {
+  const _ProductMediaEntry._({
+    required this.kind,
+    required this.previewUrl,
+    required this.label,
+  });
+
+  const _ProductMediaEntry.image(String url)
+    : this._(kind: 'image', previewUrl: url, label: 'Imagem');
+
+  const _ProductMediaEntry.video({required String previewUrl})
+    : this._(kind: 'video', previewUrl: previewUrl, label: 'Vídeo');
+
+  final String kind;
+  final String previewUrl;
+  final String label;
+
+  bool get isVideo => kind == 'video';
+}
+
+class _ProductMediaStage extends StatefulWidget {
+  const _ProductMediaStage({required this.item, this.onPlay});
+
+  final ProductItem item;
+  final VoidCallback? onPlay;
+
+  @override
+  State<_ProductMediaStage> createState() => _ProductMediaStageState();
+}
+
+class _ProductMediaStageState extends State<_ProductMediaStage> {
+  int _selectedIndex = 0;
+
+  List<_ProductMediaEntry> get _entries {
+    final List<_ProductMediaEntry> entries = <_ProductMediaEntry>[];
+    if (widget.item.hasVideo) {
+      entries.add(
+        _ProductMediaEntry.video(
+          previewUrl: widget.item.imageUrl.isNotEmpty
+              ? widget.item.imageUrl
+              : (widget.item.mediaGallery.isNotEmpty
+                    ? widget.item.mediaGallery.first
+                    : ''),
+        ),
+      );
+    }
+    for (final String imageUrl in widget.item.mediaGallery) {
+      if (imageUrl.trim().isEmpty) {
+        continue;
+      }
+      entries.add(_ProductMediaEntry.image(imageUrl));
+    }
+    if (entries.isEmpty) {
+      entries.add(const _ProductMediaEntry.image(''));
+    }
+    return entries;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final List<_ProductMediaEntry> entries = _entries;
+    final int safeIndex = _selectedIndex.clamp(0, entries.length - 1);
+    final _ProductMediaEntry selected = entries[safeIndex];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        ClipRRect(
+          borderRadius: BorderRadius.circular(30),
+          child: Container(
+            color: const Color(0xFF0E1323),
+            child: AspectRatio(
+              aspectRatio: 5 / 4,
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 220),
+                child: selected.isVideo
+                    ? _buildVideoStage(context, selected)
+                    : _buildImageStage(selected),
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 14),
+        SizedBox(
+          height: 82,
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            itemCount: entries.length,
+            separatorBuilder: (BuildContext context, int index) =>
+                const SizedBox(width: 10),
+            itemBuilder: (BuildContext context, int index) {
+              final _ProductMediaEntry entry = entries[index];
+              final bool active = index == safeIndex;
+              return InkWell(
+                borderRadius: BorderRadius.circular(20),
+                onTap: () {
+                  setState(() {
+                    _selectedIndex = index;
+                  });
+                },
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 180),
+                  width: 92,
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF11182A),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: active
+                          ? ValleyBrandColors.cyan
+                          : Colors.white.withValues(alpha: 0.08),
+                    ),
+                  ),
+                  child: entry.isVideo
+                      ? Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            const Icon(
+                              Icons.play_circle_fill_rounded,
+                              color: ValleyBrandColors.cyan,
+                              size: 28,
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              'Vídeo',
+                              style: theme.textTheme.labelMedium?.copyWith(
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                          ],
+                        )
+                      : ClipRRect(
+                          borderRadius: BorderRadius.circular(14),
+                          child: Container(
+                            color: const Color(0xFF0E1323),
+                            alignment: Alignment.center,
+                            child: entry.previewUrl.isEmpty
+                                ? const SizedBox.shrink()
+                                : Image.network(
+                                    entry.previewUrl,
+                                    fit: BoxFit.contain,
+                                    errorBuilder:
+                                        (
+                                          BuildContext context,
+                                          Object error,
+                                          StackTrace? stackTrace,
+                                        ) {
+                                          return const SizedBox.shrink();
+                                        },
+                                  ),
+                          ),
+                        ),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildImageStage(_ProductMediaEntry entry) {
+    return Container(
+      key: ValueKey<String>('image:${entry.previewUrl}'),
+      color: const Color(0xFF0E1323),
+      padding: const EdgeInsets.all(28),
+      alignment: Alignment.center,
+      child: entry.previewUrl.isEmpty
+          ? const SizedBox.shrink()
+          : Image.network(
+              entry.previewUrl,
+              fit: BoxFit.contain,
+              errorBuilder:
+                  (BuildContext context, Object error, StackTrace? stackTrace) {
+                    return const SizedBox.shrink();
+                  },
+            ),
+    );
+  }
+
+  Widget _buildVideoStage(BuildContext context, _ProductMediaEntry entry) {
+    final ThemeData theme = Theme.of(context);
+    return Container(
+      key: const ValueKey<String>('video-stage'),
+      color: const Color(0xFF0E1323),
+      child: Stack(
+        fit: StackFit.expand,
+        children: <Widget>[
+          if (entry.previewUrl.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.all(28),
+              child: Image.network(
+                entry.previewUrl,
+                fit: BoxFit.contain,
+                errorBuilder:
+                    (
+                      BuildContext context,
+                      Object error,
+                      StackTrace? stackTrace,
+                    ) {
+                      return const SizedBox.shrink();
+                    },
+              ),
+            ),
+          DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: <Color>[
+                  Colors.black.withValues(alpha: 0.10),
+                  Colors.black.withValues(alpha: 0.68),
+                ],
+              ),
+            ),
+          ),
+          Positioned(
+            top: 18,
+            left: 18,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              decoration: BoxDecoration(
+                color: const Color(0xCC0E1323),
+                borderRadius: BorderRadius.circular(999),
+                border: Border.all(
+                  color: ValleyBrandColors.cyan.withValues(alpha: 0.35),
+                ),
+              ),
+              child: const Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Icon(
+                    Icons.play_circle_fill_rounded,
+                    color: ValleyBrandColors.cyan,
+                    size: 16,
+                  ),
+                  SizedBox(width: 8),
+                  Text(
+                    'Vídeo do produto',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Center(
+            child: FilledButton.icon(
+              onPressed: widget.onPlay,
+              icon: const Icon(Icons.play_arrow_rounded),
+              label: Text(
+                widget.onPlay == null
+                    ? 'Vídeo catalogado'
+                    : 'Abrir demonstração',
+              ),
+            ),
+          ),
+          Positioned(
+            left: 20,
+            right: 20,
+            bottom: 18,
+            child: Text(
+              'A mídia principal prioriza vídeo quando o catálogo publica demonstração.',
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: Colors.white.withValues(alpha: 0.86),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _MetaPill extends StatelessWidget {
   const _MetaPill({required this.icon, required this.label});
 
@@ -7450,6 +9272,325 @@ class _ClientAreaScreen extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+class _DesktopSideRail extends StatelessWidget {
+  const _DesktopSideRail({required this.index, required this.onChanged});
+
+  final int index;
+  final ValueChanged<int> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    const List<_BottomItem> items = <_BottomItem>[
+      _BottomItem(Icons.home_max_rounded, 'Início'),
+      _BottomItem(Icons.storefront_rounded, 'Market'),
+      _BottomItem(Icons.inventory_2_rounded, 'Stock'),
+      _BottomItem(Icons.chat_bubble_rounded, 'Chat'),
+      _BottomItem(Icons.person_rounded, 'Cliente'),
+    ];
+
+    return Container(
+      width: 72,
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      decoration: BoxDecoration(
+        color: const Color(0xCC0B1020),
+        borderRadius: BorderRadius.circular(28),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.30),
+            blurRadius: 24,
+            offset: const Offset(0, 14),
+          ),
+        ],
+      ),
+      child: Column(
+        children: <Widget>[
+          for (int i = 0; i < items.length; i++) ...<Widget>[
+            _RailButton(
+              icon: items[i].icon,
+              label: items[i].label,
+              selected: index == i,
+              onTap: () => onChanged(i),
+            ),
+            if (i != items.length - 1) const SizedBox(height: 8),
+          ],
+          const Spacer(),
+          Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: ValleyBrandColors.cyan.withValues(alpha: 0.12),
+              border: Border.all(
+                color: ValleyBrandColors.cyan.withValues(alpha: 0.35),
+              ),
+            ),
+            child: const Center(child: _HelenaStarBadge(size: 24)),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _RailButton extends StatelessWidget {
+  const _RailButton({
+    required this.icon,
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Tooltip(
+      message: label,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(20),
+        onTap: onTap,
+        child: Container(
+          width: 52,
+          height: 58,
+          decoration: BoxDecoration(
+            color: selected
+                ? ValleyBrandColors.cyan.withValues(alpha: 0.16)
+                : Colors.transparent,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: selected
+                  ? ValleyBrandColors.cyan.withValues(alpha: 0.40)
+                  : Colors.transparent,
+            ),
+          ),
+          child: Icon(
+            icon,
+            color: selected
+                ? ValleyBrandColors.cyan
+                : Colors.white.withValues(alpha: 0.48),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _FloatingModuleDock extends StatelessWidget {
+  const _FloatingModuleDock({
+    required this.modules,
+    required this.selectedModuleId,
+    required this.onOpenModule,
+    required this.onOpenIdentity,
+    required this.onOpenSettings,
+  });
+
+  final List<ProductModule> modules;
+  final String selectedModuleId;
+  final ValueChanged<String> onOpenModule;
+  final VoidCallback onOpenIdentity;
+  final VoidCallback onOpenSettings;
+
+  @override
+  Widget build(BuildContext context) {
+    final bool compact = MediaQuery.sizeOf(context).width < 760;
+    final List<ProductModule> visibleModules = modules
+        .where(
+          (ProductModule module) =>
+              module.id == 'MARKETPLACE' ||
+              module.id == 'STOCK' ||
+              module.id == 'CHAT',
+        )
+        .toList();
+
+    if (compact) {
+      return Tooltip(
+        message: 'Dock MVP',
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(999),
+            onTap: onOpenSettings,
+            child: Container(
+              width: 58,
+              height: 58,
+              decoration: BoxDecoration(
+                color: const Color(0xE60D1024),
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: ValleyBrandColors.cyan.withValues(alpha: 0.48),
+                ),
+                boxShadow: <BoxShadow>[
+                  BoxShadow(
+                    color: ValleyBrandColors.cyan.withValues(alpha: 0.18),
+                    blurRadius: 24,
+                    offset: const Offset(0, 12),
+                  ),
+                ],
+              ),
+              child: const Icon(
+                Icons.grid_view_rounded,
+                color: ValleyBrandColors.cyan,
+                size: 23,
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
+    return Align(
+      alignment: compact ? Alignment.bottomCenter : Alignment.bottomRight,
+      child: ConstrainedBox(
+        constraints: BoxConstraints(maxWidth: compact ? double.infinity : 740),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          decoration: BoxDecoration(
+            color: const Color(0xD90D1024),
+            borderRadius: BorderRadius.circular(28),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                color: ValleyBrandColors.cyan.withValues(alpha: 0.13),
+                blurRadius: 30,
+                offset: const Offset(0, 14),
+              ),
+            ],
+          ),
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: <Widget>[
+                _DockPill(
+                  icon: Icons.grid_view_rounded,
+                  label: compact ? 'MVP' : 'Dock MVP',
+                  selected: false,
+                  color: ValleyBrandColors.cyan,
+                  onTap: onOpenSettings,
+                ),
+                const SizedBox(width: 8),
+                for (final ProductModule module in visibleModules) ...<Widget>[
+                  _DockPill(
+                    icon: _moduleIcon(module.id),
+                    label: module.id == 'MARKETPLACE' ? 'Market' : module.id,
+                    selected: selectedModuleId == module.id,
+                    color: module.id == 'STOCK'
+                        ? ValleyBrandColors.cyan
+                        : ValleyBrandColors.violet,
+                    onTap: () => onOpenModule(module.id),
+                  ),
+                  const SizedBox(width: 8),
+                ],
+                _DockPill(
+                  icon: Icons.verified_user_rounded,
+                  label: 'Identidade',
+                  selected: false,
+                  color: ValleyBrandColors.success,
+                  onTap: onOpenIdentity,
+                ),
+                const SizedBox(width: 8),
+                for (final String label in const <String>[
+                  'PLUG',
+                  'DOCS',
+                  'WMS',
+                ])
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: _DockPill(
+                      icon: Icons.pending_rounded,
+                      label: label,
+                      selected: false,
+                      color: Colors.white.withValues(alpha: 0.44),
+                      onTap: onOpenSettings,
+                      disabled: true,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _DockPill extends StatelessWidget {
+  const _DockPill({
+    required this.icon,
+    required this.label,
+    required this.selected,
+    required this.color,
+    required this.onTap,
+    this.disabled = false,
+  });
+
+  final IconData icon;
+  final String label;
+  final bool selected;
+  final Color color;
+  final VoidCallback onTap;
+  final bool disabled;
+
+  @override
+  Widget build(BuildContext context) {
+    return Tooltip(
+      message: disabled ? '$label em preparação' : label,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(999),
+        onTap: onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 180),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
+          decoration: BoxDecoration(
+            color: selected
+                ? color.withValues(alpha: 0.22)
+                : Colors.white.withValues(alpha: disabled ? 0.03 : 0.06),
+            borderRadius: BorderRadius.circular(999),
+            border: Border.all(
+              color: selected
+                  ? color.withValues(alpha: 0.66)
+                  : Colors.white.withValues(alpha: 0.10),
+            ),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Icon(icon, color: color, size: 17),
+              const SizedBox(width: 7),
+              Text(
+                label,
+                style: TextStyle(
+                  color: disabled
+                      ? Colors.white.withValues(alpha: 0.48)
+                      : Colors.white,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+IconData _moduleIcon(String id) {
+  switch (id) {
+    case 'MARKETPLACE':
+      return Icons.storefront_rounded;
+    case 'STOCK':
+      return Icons.inventory_2_rounded;
+    case 'CHAT':
+      return Icons.chat_bubble_rounded;
+    default:
+      return Icons.hexagon_rounded;
   }
 }
 

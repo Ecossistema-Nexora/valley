@@ -118,6 +118,30 @@ class ProductItem {
   final String profileId;
   final Map<String, dynamic> raw;
 
+  List<String> get mediaGallery {
+    final List<String> merged = <String>[];
+    void addImage(String value) {
+      final String normalized = value.trim();
+      if (normalized.isEmpty || merged.contains(normalized)) {
+        return;
+      }
+      merged.add(normalized);
+    }
+
+    addImage(imageUrl);
+    for (final String galleryUrl in galleryUrls) {
+      addImage(galleryUrl);
+    }
+    return merged;
+  }
+
+  bool get hasVideo =>
+      videoUrl.trim().isNotEmpty || mediaPath.trim().isNotEmpty;
+
+  bool get checkoutReady =>
+      raw['checkout_ready'] == true ||
+      ctaPath.contains('/api/actions/checkout');
+
   String get collectionLabel => raw['collection_label'] as String? ?? brand;
 
   String get modelName => raw['model_name'] as String? ?? title;
