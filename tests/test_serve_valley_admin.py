@@ -42,3 +42,12 @@ def test_validate_feed_reference_accepts_supported_inputs():
     ok_local, _ = ValleyAdminHandler._validate_feed_reference("admin/valley_admin_data.json")
     assert ok_remote
     assert ok_local
+
+
+def test_extract_keys_sample_handles_scalar_entries():
+    assert ValleyAdminHandler._extract_keys_sample([1, 2, 3]) == []
+
+
+def test_extract_keys_sample_uses_first_object_entry():
+    sample = ValleyAdminHandler._extract_keys_sample(["x", {"sku": "A1", "qty": 5}, {"other": "ignored"}])
+    assert sample == ["sku", "qty"]

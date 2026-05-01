@@ -18,7 +18,7 @@ from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any
 from urllib.parse import parse_qs, urlsplit
-from urllib.request import Request, urlopen
+from urllib.request import HTTPRedirectHandler, Request, build_opener
 from urllib.error import URLError, HTTPError
 
 
@@ -587,8 +587,19 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             if self._is_private_host(host):
                 return ("invalid", 0, {"message": "Host remoto bloqueado por seguranca."})
             try:
+                handler = self
+
+                class SafeRedirectHandler(HTTPRedirectHandler):
+                    def redirect_request(self, req, fp, code, msg, headers, newurl):  # type: ignore[override]
+                        redirected = urlsplit(newurl)
+                        redirected_host = redirected.hostname or ""
+                        if not redirected_host or handler._is_private_host(redirected_host):
+                            raise URLError("Host remoto bloqueado por redirecionamento.")
+                        return super().redirect_request(req, fp, code, msg, headers, newurl)
+
+                opener = build_opener(SafeRedirectHandler)
                 request = Request(feed_url, headers={"User-Agent": "ValleyAdmin/1.0"})
-                with urlopen(request, timeout=12) as response:
+                with opener.open(request, timeout=12) as response:
                     body_bytes = response.read(MAX_REMOTE_FEED_BYTES + 1)
                     if len(body_bytes) > MAX_REMOTE_FEED_BYTES:
                         return ("invalid", 0, {"message": "Feed remoto excede o limite permitido."})
@@ -598,12 +609,12 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 return ("invalid", 0, {"error": str(exc)})
 
             if isinstance(payload, list):
-                return ("http-json-array", len(payload), {"keys_sample": list(payload[0].keys())[:8] if payload else []})
+                return ("http-json-array", len(payload), {"keys_sample": self._extract_keys_sample(payload)})
 
             if isinstance(payload, dict):
                 items = payload.get("items")
                 if isinstance(items, list):
-                    return ("http-json-items", len(items), {"keys_sample": list(items[0].keys())[:8] if items else []})
+                    return ("http-json-items", len(items), {"keys_sample": self._extract_keys_sample(items)})
                 return ("http-json-dict", len(payload.keys()), {"keys": list(payload.keys())[:10]})
 
             return ("http-unknown", 0, {"message": "Formato remoto não suportado."})
@@ -626,6 +637,13 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 return ("file-json-dict", len(content.keys()), {"path": str(local_path)})
 
         return ("invalid", 0, {"message": "Feed não encontrado ou formato inválido."})
+
+    @staticmethod
+    def _extract_keys_sample(values: list[Any]) -> list[str]:
+        for entry in values:
+            if isinstance(entry, dict):
+                return [str(key) for key in list(entry.keys())[:8]]
+        return []
 
     @staticmethod
     def _validate_feed_reference(feed_url: str) -> tuple[bool, str]:
