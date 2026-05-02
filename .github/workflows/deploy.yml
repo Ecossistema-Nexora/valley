@@ -15,6 +15,15 @@ env:
   EKS_CLUSTER_NAME: ${{ secrets.EKS_CLUSTER_NAME }}
   K8S_NAMESPACE: ${{ secrets.K8S_NAMESPACE }}
   HELM_RELEASE_NAME: ${{ secrets.HELM_RELEASE_NAME }}
+  DATABASE_URL: ${{ secrets.DATABASE_URL }}
+  MONGODB_URI: ${{ secrets.MONGODB_URI }}
+  REDIS_URL: ${{ secrets.REDIS_URL }}
+  RABBITMQ_URL: ${{ secrets.RABBITMQ_URL }}
+  JWT_SECRET: ${{ secrets.JWT_SECRET }}
+  STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+  STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
+  VALLEY_DOMAIN: ${{ secrets.VALLEY_DOMAIN }}
+  AWS_ROLE_TO_ASSUME: ${{ secrets.AWS_ROLE_TO_ASSUME }}
 
 jobs:
   deploy:
