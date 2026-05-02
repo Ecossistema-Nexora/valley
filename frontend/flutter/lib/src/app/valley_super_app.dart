@@ -33,7 +33,7 @@ class _ValleySuperAppState extends State<ValleySuperApp> {
       debugShowCheckedModeBanner: false,
       theme: ValleyBrandTheme.light(),
       darkTheme: ValleyBrandTheme.dark(),
-      themeMode: ThemeMode.dark,
+      themeMode: ThemeMode.light,
       home: FutureBuilder<ProductShellData>(
         future: _future,
         builder: (BuildContext context, AsyncSnapshot<ProductShellData> snapshot) {
@@ -66,20 +66,20 @@ class _LoadingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: <Color>[
-              ValleyBrandColors.night,
-              ValleyBrandColors.cosmic,
-              Color(0xFF120C39),
+              const Color(0xFFF9F7FF),
+              const Color(0xFFF1F7FF),
+              ValleyBrandColors.surface,
             ],
           ),
         ),
         child: const Center(
           child: CircularProgressIndicator(
-            color: ValleyBrandColors.cyan,
+            color: ValleyBrandColors.violet,
           ),
         ),
       ),
@@ -95,7 +95,7 @@ class _FailureScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ValleyBrandColors.night,
+      backgroundColor: ValleyBrandColors.surface,
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(24),

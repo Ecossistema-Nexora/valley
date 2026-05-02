@@ -1,22 +1,26 @@
 {
-  "status": "booting",
-  "service": "valley-admin",
-  "pid": 21136,
-  "started_at_utc": "2026-04-29T10:59:56.554922Z",
-  "local": {
-    "host": "127.0.0.1",
-    "port": 8085,
-    "base_url": "http://127.0.0.1:8085",
-    "health_url": "http://127.0.0.1:8085/healthz",
-    "data_url": "http://127.0.0.1:8085/api/admin-data"
-  },
-  "paths": {
-    "root": "C:\\Users\\ereta\\.codex\\worktrees\\VALLEY\\admin",
-    "data_file": "C:\\Users\\ereta\\.codex\\worktrees\\VALLEY\\admin\\valley_admin_data.json",
-    "startup_file": "C:\\Users\\ereta\\.codex\\worktrees\\VALLEY\\tmp\\runtime\\valley-admin-public-runtime.json"
-  },
-  "checks": {
-    "root_exists": true,
-    "data_exists": true
-  }
+    "status":  "ok",
+    "service":  "valley-admin-public",
+    "provider":  "cloudflare_named_tunnel",
+    "public_url":  "https://admin.brasildesconto.com.br",
+    "local_url":  "http://127.0.0.1:8085",
+    "generated_at_utc":  "2026-05-02T00:19:00Z",
+    "temporary":  false,
+    "permanence":  "fixed_external",
+    "provider_status":  "healthy",
+    "smoke_endpoints":  {
+                            "admin_data":  "https://admin.brasildesconto.com.br/api/admin-data",
+                            "healthz":  "https://admin.brasildesconto.com.br/healthz"
+                        },
+    "logs":  {
+                 "cloudflare_stdout":  "C:\\Users\\ereta\\.codex\\worktrees\\VALLEY\\tmp\\runtime\\valley-admin-cloudflare.out.log",
+                 "http_stdout":  "C:\\Users\\ereta\\.codex\\worktrees\\VALLEY\\tmp\\runtime\\valley-admin-http.out.log",
+                 "cloudflare_stderr":  "C:\\Users\\ereta\\.codex\\worktrees\\VALLEY\\tmp\\runtime\\valley-admin-cloudflare.err.log",
+                 "http_stderr":  "C:\\Users\\ereta\\.codex\\worktrees\\VALLEY\\tmp\\runtime\\valley-admin-http.err.log"
+             },
+    "cloudflare":  {
+                       "token_present":  true,
+                       "mode":  "named",
+                       "configured_public_url":  "https://admin.brasildesconto.com.br"
+                   }
 }

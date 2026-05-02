@@ -36,6 +36,10 @@ PUBLIC_RUNTIME_PATH = RUNTIME_DIR / "valley-admin-public-runtime.json"
 PRODUCT_PUBLIC_RUNTIME_PATH = RUNTIME_DIR / "valley-product-public-runtime.json"
 PRODUCT_PUBLICATION_PATH = RUNTIME_DIR / "valley-product-web-publication.json"
 ADMIN_INTEGRATIONS_PATH = RUNTIME_DIR / "valley-admin-integrations.json"
+ADMIN_IMPORTED_PRODUCTS_PRICING_PATH = (
+    RUNTIME_DIR / "valley-admin-imported-products-pricing.json"
+)
+CODEX_CLOUD_ENV_PATH = RUNTIME_DIR / "codex-cloud-secrets.env"
 MARKETPLACE_OAUTH_RUNTIME_PATH = RUNTIME_DIR / "valley-marketplace-oauth-runtime.json"
 SHOPEE_OAUTH_RUNTIME_PATH = RUNTIME_DIR / "valley-shopee-oauth-runtime.json"
 ALIEXPRESS_OAUTH_RUNTIME_PATH = RUNTIME_DIR / "valley-aliexpress-oauth-runtime.json"
@@ -47,6 +51,7 @@ TRANSLATED_STOCK_REAL_CATALOG_PATH = RUNTIME_DIR / "valley-stock-real-catalog-pt
 MERCADOPAGO_NOTIFICATIONS_PATH = RUNTIME_DIR / "valley-mercadopago-notifications.jsonl"
 MERCADOPAGO_NOTIFICATIONS_LATEST_PATH = RUNTIME_DIR / "valley-mercadopago-notification-latest.json"
 MERCADOPAGO_PREFERENCES_PATH = RUNTIME_DIR / "valley-mercadopago-preferences.jsonl"
+MERCADOPAGO_STATUS_PATH = RUNTIME_DIR / "valley-mercadopago-status.json"
 MERCADOLIVRE_NOTIFICATIONS_PATH = RUNTIME_DIR / "valley-mercadolivre-notifications.jsonl"
 MERCADOLIVRE_NOTIFICATIONS_LATEST_PATH = RUNTIME_DIR / "valley-mercadolivre-notification-latest.json"
 MERCADOLIVRE_PKCE_PATH = RUNTIME_DIR / "valley-mercadolivre-pkce.json"
@@ -118,6 +123,28 @@ def write_json_file(path: Path | None, payload: Any) -> None:
         json.dumps(payload, ensure_ascii=False, indent=2),
         encoding="utf-8",
     )
+
+
+def load_env_file(path: Path | None) -> dict[str, str]:
+    if path is None or not path.exists():
+        return {}
+
+    values: dict[str, str] = {}
+    try:
+        lines = path.read_text(encoding="utf-8").splitlines()
+    except OSError:
+        return {}
+
+    for raw_line in lines:
+        line = raw_line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        key = key.strip()
+        value = value.strip().strip('"').strip("'")
+        if key and value:
+            values[key] = value
+    return values
 
 
 def base64url_sha256(value: str) -> str:
@@ -493,6 +520,9 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
     """Expande o SimpleHTTPRequestHandler com endpoints operacionais."""
 
     server_version = "ValleyAdminHTTP/1.1"
+    _runtime_catalog_index_path: Path | None = None
+    _runtime_catalog_index_mtime_ns: int | None = None
+    _runtime_catalog_index: dict[str, dict[str, Any]] = {}
 
     def __init__(
         self,
@@ -550,6 +580,10 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             self._write_json(HTTPStatus.OK, self._product_catalog_summary_payload())
             return
 
+        if route == "/api/admin-imported-products-pricing":
+            self._write_json(HTTPStatus.OK, self._admin_imported_products_pricing_payload())
+            return
+
         if route == "/api/stock-sync-status":
             self._write_json(HTTPStatus.OK, self._stock_sync_status_payload())
             return
@@ -584,6 +618,16 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
 
         if route == "/api/admin-integrations":
             self._write_json(HTTPStatus.OK, self._admin_integrations_payload())
+            return
+
+        if route == "/api/checkout-health":
+            refresh = str((parse_qs(parsed.query).get("refresh") or [""])[0]).strip().lower()
+            self._write_json(
+                HTTPStatus.OK,
+                self._mercadopago_checkout_status_payload(
+                    force_refresh=refresh in {"1", "true", "yes", "force"},
+                ),
+            )
             return
 
         if route == "/integrations/mercadolivre/callback":
@@ -713,6 +757,51 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             )
             return
 
+        if route == "/api/checkout-health/refresh":
+            self._write_json(
+                HTTPStatus.OK,
+                self._mercadopago_checkout_status_payload(force_refresh=True),
+            )
+            return
+
+        if route == "/api/admin-imported-products-pricing":
+            payload = self._read_json_body()
+            if not isinstance(payload, dict):
+                self._write_json(
+                    HTTPStatus.BAD_REQUEST,
+                    {
+                        "status": "invalid_payload",
+                        "service": "valley-admin-imported-products-pricing",
+                        "detail": "Expected JSON object.",
+                    },
+                )
+                return
+
+            normalized_payload = {
+                "status": "ok",
+                "service": "valley-admin-imported-products-pricing",
+                "updated_at_utc": utc_now_iso(),
+                "supplier_defaults": payload.get("supplier_defaults")
+                if isinstance(payload.get("supplier_defaults"), dict)
+                else {},
+                "item_overrides": payload.get("item_overrides")
+                if isinstance(payload.get("item_overrides"), dict)
+                else {},
+            }
+            write_json_file(ADMIN_IMPORTED_PRODUCTS_PRICING_PATH, normalized_payload)
+            self._write_json(
+                HTTPStatus.OK,
+                {
+                    "status": "ok",
+                    "service": "valley-admin-imported-products-pricing",
+                    "saved_at_utc": normalized_payload["updated_at_utc"],
+                    "path": str(ADMIN_IMPORTED_PRODUCTS_PRICING_PATH),
+                    "supplier_defaults_total": len(normalized_payload["supplier_defaults"]),
+                    "item_overrides_total": len(normalized_payload["item_overrides"]),
+                },
+            )
+            return
+
         if route == "/integrations/mercadolivre/notifications":
             self._write_mercadolivre_notification_event()
             return
@@ -828,14 +917,20 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
         return payload
 
     def _sanitize_stock_item(self, item: dict[str, Any]) -> dict[str, Any]:
-        sanitized = dict(item)
+        item_id = str(item.get("id") or "").strip()
+        runtime_item = self._find_catalog_item(item_id) if item_id else None
+        context_item = dict(runtime_item) if isinstance(runtime_item, dict) else {}
+        context_item.update(item)
+
+        sanitized = dict(context_item)
         for key in STOCK_INTERNAL_FIELDS:
             sanitized.pop(key, None)
-        item_id = str(item.get("id") or "").strip()
-        media_url = self._derive_media_url(item)
-        checkout_url = self._derive_checkout_url(item)
-        mercadopago_ready = self._mercadopago_checkout_ready(item)
+
+        media_url = self._derive_media_url(context_item)
+        checkout_url = self._derive_checkout_url(context_item)
+        mercadopago_ready = self._mercadopago_checkout_ready(context_item)
         checkout_ready = mercadopago_ready or bool(checkout_url)
+        provider_key = str(context_item.get("provider_key") or "").strip().lower()
         if item_id:
             sanitized["media_path"] = (
                 f"/api/actions/open-media?{urlencode({'item_id': item_id})}"
@@ -847,14 +942,44 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 if checkout_ready
                 else f"/api/actions/product-interest?{urlencode({'item_id': item_id})}"
             )
-            sanitized["cta_label"] = "Abrir pagamento" if checkout_ready else "Registrar interesse"
+            sanitized["cta_label"] = (
+                "Abrir pagamento"
+                if mercadopago_ready
+                else ("Abrir oferta" if checkout_url else "Registrar interesse")
+            )
             sanitized["checkout_ready"] = checkout_ready
             sanitized["payment_provider"] = (
                 "mercado_pago"
                 if mercadopago_ready
-                else ("mercado_livre" if checkout_url else "")
+                else (provider_key if checkout_url else "")
             )
         return sanitized
+
+    def _stock_public_sort_key(
+        self,
+        item: dict[str, Any],
+        original_index: int,
+    ) -> tuple[int, int, int, int, int, float, int]:
+        item_id = str(item.get("id") or "").strip()
+        runtime_item = self._find_catalog_item(item_id) if item_id else None
+        context_item = dict(runtime_item) if isinstance(runtime_item, dict) else {}
+        context_item.update(item)
+        checkout_url = bool(self._derive_checkout_url(context_item))
+        mercadopago_ready = self._mercadopago_checkout_ready(context_item)
+        checkout_ready = mercadopago_ready or checkout_url
+        provider_priority = int(context_item.get("provider_priority") or 0)
+        offer_count = int(context_item.get("offer_count") or 0)
+        stock_units = int(context_item.get("stock") or 0)
+        price_brl = float(context_item.get("price_brl") or 0.0)
+        return (
+            -int(checkout_ready),
+            -int(mercadopago_ready),
+            -provider_priority,
+            -offer_count,
+            -stock_units,
+            price_brl,
+            original_index,
+        )
 
     def _preferred_stock_catalog_path(self) -> Path:
         if TRANSLATED_STOCK_REAL_CATALOG_PATH.exists():
@@ -870,16 +995,138 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
         payload = load_json_file(self._preferred_stock_catalog_path())
         return payload if isinstance(payload, dict) else None
 
+    def _runtime_catalog_items_by_id(self) -> dict[str, dict[str, Any]]:
+        path = self._preferred_stock_catalog_path()
+        try:
+            mtime_ns = path.stat().st_mtime_ns
+        except FileNotFoundError:
+            return {}
+
+        handler_cls = type(self)
+        if (
+            handler_cls._runtime_catalog_index_path != path
+            or handler_cls._runtime_catalog_index_mtime_ns != mtime_ns
+        ):
+            payload = load_json_file(path) or {}
+            items = payload.get("items", []) if isinstance(payload, dict) else []
+            handler_cls._runtime_catalog_index = {
+                str(item.get("id") or "").strip(): item
+                for item in items
+                if isinstance(item, dict) and str(item.get("id") or "").strip()
+            }
+            handler_cls._runtime_catalog_index_path = path
+            handler_cls._runtime_catalog_index_mtime_ns = mtime_ns
+        return handler_cls._runtime_catalog_index
+
+    def _catalog_items_for_admin(
+        self,
+        *,
+        include_stock_internal: bool = True,
+    ) -> list[dict[str, Any]]:
+        catalog = load_json_file(PRODUCT_CATALOG_PATH) or {}
+        public_items = catalog.get("items", []) if isinstance(catalog, dict) else []
+        combined: list[dict[str, Any]] = []
+        runtime_catalog = self._load_stock_runtime_catalog()
+        runtime_items = runtime_catalog.get("items", []) if isinstance(runtime_catalog, dict) else []
+
+        if isinstance(runtime_items, list):
+            for item in runtime_items:
+                if not isinstance(item, dict) or item.get("module_id") != "STOCK":
+                    continue
+                combined.append(dict(item) if include_stock_internal else self._sanitize_stock_item(item))
+        else:
+            for item in public_items:
+                if isinstance(item, dict) and item.get("module_id") == "STOCK":
+                    combined.append(dict(item))
+
+        for item in public_items:
+            if isinstance(item, dict) and item.get("module_id") != "STOCK":
+                combined.append(dict(item))
+
+        return combined
+
+    def _pricing_defaults_by_provider(self) -> dict[str, dict[str, float]]:
+        saved = load_json_file(ADMIN_INTEGRATIONS_PATH)
+        items = saved if isinstance(saved, list) else []
+        defaults: dict[str, dict[str, float]] = {}
+        for item in items:
+            if not isinstance(item, dict):
+                continue
+            provider_key = str(item.get("key") or "").strip().lower()
+            if not provider_key:
+                continue
+            defaults[provider_key] = {
+                "target_net_revenue_pct": float(item.get("marginFloorPct") or 12.0),
+                "platform_fee_pct": 8.0,
+                "operational_fee_pct": 3.0,
+                "marketing_fee_pct": 2.0,
+                "tax_pct": 6.0,
+            }
+        return defaults
+
+    def _admin_imported_products_pricing_state(self) -> dict[str, Any]:
+        payload = load_json_file(ADMIN_IMPORTED_PRODUCTS_PRICING_PATH) or {}
+        if not isinstance(payload, dict):
+            return {"supplier_defaults": {}, "item_overrides": {}}
+        return {
+            "supplier_defaults": payload.get("supplier_defaults")
+            if isinstance(payload.get("supplier_defaults"), dict)
+            else {},
+            "item_overrides": payload.get("item_overrides")
+            if isinstance(payload.get("item_overrides"), dict)
+            else {},
+            "updated_at_utc": payload.get("updated_at_utc"),
+        }
+
+    def _pricing_controls_for_item(
+        self,
+        *,
+        provider_key: str,
+        supplier_key: str,
+        item_id: str,
+        pricing_state: dict[str, Any],
+        provider_defaults: dict[str, dict[str, float]],
+    ) -> dict[str, Any]:
+        base_defaults = {
+            "target_net_revenue_pct": 12.0,
+            "platform_fee_pct": 8.0,
+            "operational_fee_pct": 3.0,
+            "marketing_fee_pct": 2.0,
+            "tax_pct": 6.0,
+            "notes": "",
+        }
+        merged = {
+            **base_defaults,
+            **provider_defaults.get(provider_key, {}),
+            **(
+                pricing_state.get("supplier_defaults", {}).get(supplier_key, {})
+                if isinstance(pricing_state.get("supplier_defaults"), dict)
+                else {}
+            ),
+            **(
+                pricing_state.get("item_overrides", {}).get(item_id, {})
+                if isinstance(pricing_state.get("item_overrides"), dict)
+                else {}
+            ),
+        }
+        return {
+            "target_net_revenue_pct": float(merged.get("target_net_revenue_pct") or 0.0),
+            "platform_fee_pct": float(merged.get("platform_fee_pct") or 0.0),
+            "operational_fee_pct": float(merged.get("operational_fee_pct") or 0.0),
+            "marketing_fee_pct": float(merged.get("marketing_fee_pct") or 0.0),
+            "tax_pct": float(merged.get("tax_pct") or 0.0),
+            "notes": str(merged.get("notes") or ""),
+        }
+
     def _find_catalog_item(self, item_id: str) -> dict[str, Any] | None:
         normalized_item_id = str(item_id or "").strip()
         if not normalized_item_id:
             return None
 
-        runtime_payload = self._load_stock_runtime_catalog()
-        runtime_items = runtime_payload.get("items", []) if isinstance(runtime_payload, dict) else []
-        for candidate in runtime_items:
-            if isinstance(candidate, dict) and str(candidate.get("id") or "").strip() == normalized_item_id:
-                return candidate
+        runtime_index = self._runtime_catalog_items_by_id()
+        runtime_match = runtime_index.get(normalized_item_id)
+        if isinstance(runtime_match, dict):
+            return runtime_match
 
         if self._preferred_stock_catalog_path() != STOCK_REAL_CATALOG_PATH:
             fallback_runtime = load_json_file(STOCK_REAL_CATALOG_PATH) or {}
@@ -966,17 +1213,29 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
         items = compact.get("items", [])
         used_profile_ids: set[str] = set()
         if isinstance(items, list):
-            filtered_items = [
+            raw_items = [
                 item
                 for item in items
                 if isinstance(item, dict) and item.get("module_id") in active_modules
-            ][:PRODUCT_LIST_LIMIT]
+            ]
             filtered_items = [
                 self._sanitize_stock_item(item)
                 if isinstance(item, dict) and item.get("module_id") == "STOCK"
                 else item
-                for item in filtered_items
+                for item in raw_items
             ]
+            filtered_items = [
+                item
+                for _, item in sorted(
+                    enumerate(filtered_items),
+                    key=lambda pair: (
+                        self._stock_public_sort_key(raw_items[pair[0]], pair[0])
+                        if isinstance(raw_items[pair[0]], dict)
+                        and raw_items[pair[0]].get("module_id") == "STOCK"
+                        else (0, 0, 0, 0, 0, 0.0, pair[0])
+                    ),
+                )
+            ][:PRODUCT_LIST_LIMIT]
             compact["items"] = filtered_items
             used_profile_ids = {
                 str(item.get("profile_id"))
@@ -1035,8 +1294,7 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
         }
 
     def _product_catalog_summary_payload(self) -> dict[str, Any]:
-        catalog = load_json_file(PRODUCT_CATALOG_PATH) or {}
-        items = catalog.get("items", []) if isinstance(catalog, dict) else []
+        items = self._catalog_items_for_admin(include_stock_internal=True)
 
         if not isinstance(items, list) or not items:
             return {
@@ -1075,7 +1333,11 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             module_id = str(raw_item.get("module_id") or "UNKNOWN").upper()
             title = str(raw_item.get("title") or "Item sem titulo")
             category = str(raw_item.get("category") or "Sem categoria")
-            merchant_name = str(raw_item.get("merchant_name") or "Origem nao informada")
+            merchant_name = str(
+                raw_item.get("supplier_name")
+                or raw_item.get("merchant_name")
+                or "Origem nao informada"
+            )
             price_brl = as_float(raw_item.get("price_brl"))
             compare_at_brl = as_float(raw_item.get("compare_at_brl"))
             stock = as_float(raw_item.get("stock"))
@@ -1194,6 +1456,218 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             "stock_module": stock_summary,
         }
 
+    def _admin_imported_products_pricing_payload(self) -> dict[str, Any]:
+        runtime_catalog = self._load_stock_runtime_catalog()
+        items = runtime_catalog.get("items", []) if isinstance(runtime_catalog, dict) else []
+        if not isinstance(items, list) or not items:
+            return {
+                "status": "missing",
+                "service": "valley-admin-imported-products-pricing",
+                "generated_at_utc": utc_now_iso(),
+                "items_total": 0,
+                "supplier_summary": [],
+                "items": [],
+                "supplier_defaults": {},
+                "item_overrides": {},
+            }
+
+        pricing_state = self._admin_imported_products_pricing_state()
+        provider_defaults = self._pricing_defaults_by_provider()
+
+        def as_float(value: Any) -> float:
+            try:
+                return float(value or 0)
+            except (TypeError, ValueError):
+                return 0.0
+
+        supplier_rollup: dict[str, dict[str, Any]] = defaultdict(
+            lambda: {
+                "supplier_key": "",
+                "supplier_name": "",
+                "provider_key": "",
+                "supplier_type": "",
+                "items_total": 0,
+                "inventory_units": 0.0,
+                "base_cost_value_brl": 0.0,
+                "suggested_revenue_value_brl": 0.0,
+                "estimated_net_revenue_value_brl": 0.0,
+            }
+        )
+        response_items: list[dict[str, Any]] = []
+
+        for raw_item in items:
+            if not isinstance(raw_item, dict) or raw_item.get("module_id") != "STOCK":
+                continue
+
+            item_id = str(raw_item.get("id") or "").strip()
+            provider_key = str(raw_item.get("provider_key") or "catalog").strip().lower()
+            supplier_name = str(
+                raw_item.get("supplier_name")
+                or raw_item.get("merchant_name")
+                or provider_key
+                or "Origem nao informada"
+            ).strip()
+            supplier_key = f"{provider_key or 'catalog'}::{supplier_name.lower().replace(' ', '_')}"
+            controls = self._pricing_controls_for_item(
+                provider_key=provider_key,
+                supplier_key=supplier_key,
+                item_id=item_id,
+                pricing_state=pricing_state,
+                provider_defaults=provider_defaults,
+            )
+
+            base_cost_brl = as_float(raw_item.get("price_brl"))
+            stock_units = as_float(raw_item.get("stock"))
+            fees_pct_total = (
+                controls["platform_fee_pct"]
+                + controls["operational_fee_pct"]
+                + controls["marketing_fee_pct"]
+                + controls["tax_pct"]
+            )
+            target_pct_total = fees_pct_total + controls["target_net_revenue_pct"]
+            denominator = max(0.05, 1 - (target_pct_total / 100))
+            suggested_sale_price_brl = base_cost_brl / denominator if denominator else base_cost_brl
+            estimated_fees_brl = suggested_sale_price_brl * (fees_pct_total / 100)
+            estimated_net_revenue_brl = max(
+                suggested_sale_price_brl - base_cost_brl - estimated_fees_brl,
+                0.0,
+            )
+            estimated_net_revenue_pct = (
+                (estimated_net_revenue_brl / suggested_sale_price_brl) * 100
+                if suggested_sale_price_brl > 0
+                else 0.0
+            )
+
+            supplier_entry = supplier_rollup[supplier_key]
+            supplier_entry["supplier_key"] = supplier_key
+            supplier_entry["supplier_name"] = supplier_name
+            supplier_entry["provider_key"] = provider_key
+            supplier_entry["supplier_type"] = str(raw_item.get("supplier_type") or "").strip()
+            supplier_entry["items_total"] += 1
+            supplier_entry["inventory_units"] += stock_units
+            supplier_entry["base_cost_value_brl"] += base_cost_brl * stock_units
+            supplier_entry["suggested_revenue_value_brl"] += suggested_sale_price_brl * stock_units
+            supplier_entry["estimated_net_revenue_value_brl"] += estimated_net_revenue_brl * stock_units
+
+            response_items.append(
+                {
+                    "id": item_id,
+                    "title": str(raw_item.get("title") or "Produto sem titulo"),
+                    "brand": str(raw_item.get("brand") or ""),
+                    "category": str(raw_item.get("category") or ""),
+                    "collection_label": str(raw_item.get("collection_label") or ""),
+                    "price_band": str(raw_item.get("price_band") or ""),
+                    "availability_label": str(raw_item.get("availability_label") or ""),
+                    "provider_key": provider_key,
+                    "provider_status": str(raw_item.get("provider_status") or ""),
+                    "supplier_key": supplier_key,
+                    "supplier_name": supplier_name,
+                    "supplier_type": str(raw_item.get("supplier_type") or ""),
+                    "supplier_model": str(raw_item.get("supplier_model") or ""),
+                    "merchant_name": str(raw_item.get("merchant_name") or ""),
+                    "channel_label": str(raw_item.get("channel_label") or ""),
+                    "google_product_category_path": str(
+                        raw_item.get("google_product_category_path")
+                        or raw_item.get("google_product_category")
+                        or ""
+                    ),
+                    "source_permalink": str(raw_item.get("source_permalink") or ""),
+                    "source_product_id": str(raw_item.get("source_product_id") or ""),
+                    "source_item_id": str(raw_item.get("source_item_id") or ""),
+                    "shipping_free": bool(raw_item.get("shipping_free")),
+                    "stock": round(stock_units, 2),
+                    "base_cost_brl": round(base_cost_brl, 2),
+                    "inventory_cost_brl": round(base_cost_brl * stock_units, 2),
+                    "suggested_sale_price_brl": round(suggested_sale_price_brl, 2),
+                    "estimated_fees_brl": round(estimated_fees_brl, 2),
+                    "estimated_net_revenue_brl": round(estimated_net_revenue_brl, 2),
+                    "estimated_net_revenue_pct": round(estimated_net_revenue_pct, 2),
+                    "estimated_inventory_net_revenue_brl": round(
+                        estimated_net_revenue_brl * stock_units,
+                        2,
+                    ),
+                    "target_net_revenue_pct": round(
+                        controls["target_net_revenue_pct"],
+                        2,
+                    ),
+                    "platform_fee_pct": round(controls["platform_fee_pct"], 2),
+                    "operational_fee_pct": round(
+                        controls["operational_fee_pct"],
+                        2,
+                    ),
+                    "marketing_fee_pct": round(controls["marketing_fee_pct"], 2),
+                    "tax_pct": round(controls["tax_pct"], 2),
+                    "notes": controls["notes"],
+                    "tags": [
+                        value
+                        for value in raw_item.get("tags", [])
+                        if isinstance(value, str)
+                    ],
+                }
+            )
+
+        supplier_summary = []
+        for entry in supplier_rollup.values():
+            items_total = int(entry["items_total"])
+            avg_cost = (
+                entry["base_cost_value_brl"] / entry["inventory_units"]
+                if entry["inventory_units"]
+                else 0.0
+            )
+            supplier_summary.append(
+                {
+                    "supplier_key": entry["supplier_key"],
+                    "supplier_name": entry["supplier_name"],
+                    "provider_key": entry["provider_key"],
+                    "supplier_type": entry["supplier_type"],
+                    "items_total": items_total,
+                    "inventory_units": round(entry["inventory_units"], 2),
+                    "average_base_cost_brl": round(avg_cost, 2),
+                    "inventory_cost_value_brl": round(
+                        entry["base_cost_value_brl"],
+                        2,
+                    ),
+                    "suggested_revenue_value_brl": round(
+                        entry["suggested_revenue_value_brl"],
+                        2,
+                    ),
+                    "estimated_net_revenue_value_brl": round(
+                        entry["estimated_net_revenue_value_brl"],
+                        2,
+                    ),
+                }
+            )
+
+        supplier_summary.sort(
+            key=lambda item: (
+                -float(item["suggested_revenue_value_brl"]),
+                str(item["supplier_name"]),
+            )
+        )
+        response_items.sort(
+            key=lambda item: (
+                str(item["supplier_name"]),
+                str(item["category"]),
+                -float(item["estimated_inventory_net_revenue_brl"]),
+                str(item["title"]),
+            )
+        )
+
+        return {
+            "status": "ok",
+            "service": "valley-admin-imported-products-pricing",
+            "generated_at_utc": utc_now_iso(),
+            "locale": runtime_catalog.get("translation_locale") if isinstance(runtime_catalog, dict) else "pt-BR",
+            "providers_active": runtime_catalog.get("providers_active") if isinstance(runtime_catalog, dict) else [],
+            "provider_counts": runtime_catalog.get("provider_counts") if isinstance(runtime_catalog, dict) else {},
+            "items_total": len(response_items),
+            "supplier_summary": supplier_summary,
+            "items": response_items,
+            "supplier_defaults": pricing_state.get("supplier_defaults", {}),
+            "item_overrides": pricing_state.get("item_overrides", {}),
+            "updated_at_utc": pricing_state.get("updated_at_utc"),
+        }
+
     def _admin_integrations_payload(self) -> dict[str, Any]:
         saved = load_json_file(ADMIN_INTEGRATIONS_PATH)
         items = saved if isinstance(saved, list) else []
@@ -1225,9 +1699,18 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
         payload = load_json_file(PROVIDER_SECRETS_PATH) or {}
         return payload if isinstance(payload, dict) else {}
 
+    def _runtime_env_payload(self) -> dict[str, str]:
+        return load_env_file(CODEX_CLOUD_ENV_PATH)
+
     def _mercadopago_secret_value(self, *candidates: str) -> str:
         for env_key in candidates:
             env_value = str(os.environ.get(env_key) or "").strip()
+            if env_value:
+                return env_value
+
+        runtime_env = self._runtime_env_payload()
+        for env_key in candidates:
+            env_value = str(runtime_env.get(env_key) or "").strip()
             if env_value:
                 return env_value
 
@@ -1267,6 +1750,15 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             "public_key",
         )
 
+    def _mercadopago_webhook_secret(self) -> str:
+        return self._mercadopago_secret_value(
+            "VALLEY_MERCADOPAGO_WEBHOOK_SECRET",
+            "MERCADOPAGO_WEBHOOK_SECRET",
+            "MP_WEBHOOK_SECRET",
+            "webhookSecret",
+            "webhook_secret",
+        )
+
     def _mercadopago_notification_url(self) -> str:
         return (
             f"{self._public_admin_base_url()}/integrations/mercadopago/notifications"
@@ -1288,6 +1780,111 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
         title = self._trim_checkout_text(item.get("title"), 120)
         price_brl = float(item.get("price_brl") or 0)
         return bool(access_token and title and price_brl > 0)
+
+    def _mercadopago_validate_access_token(self, access_token: str) -> dict[str, Any]:
+        request = Request(
+            "https://api.mercadopago.com/v1/payment_methods",
+            headers={
+                "Authorization": f"Bearer {access_token}",
+                "Accept": "application/json",
+                "User-Agent": "ValleyAdmin/1.0",
+            },
+            method="GET",
+        )
+        checked_at = utc_now_iso()
+        try:
+            with urlopen(request, timeout=25) as response:
+                payload = json.loads(response.read().decode("utf-8", errors="replace"))
+        except HTTPError as error:
+            detail = error.read().decode("utf-8", errors="replace")
+            return {
+                "status": "http_error",
+                "checked_at_utc": checked_at,
+                "http_code": error.code,
+                "detail": self._trim_checkout_text(detail, 280),
+            }
+        except URLError as error:
+            return {
+                "status": "network_error",
+                "checked_at_utc": checked_at,
+                "detail": self._trim_checkout_text(str(error), 280),
+            }
+        except json.JSONDecodeError as error:
+            return {
+                "status": "invalid_response",
+                "checked_at_utc": checked_at,
+                "detail": self._trim_checkout_text(str(error), 280),
+            }
+        except Exception as error:  # noqa: BLE001
+            return {
+                "status": "failed",
+                "checked_at_utc": checked_at,
+                "detail": self._trim_checkout_text(str(error), 280),
+            }
+
+        methods = payload if isinstance(payload, list) else []
+        method_ids = {
+            str(method.get("id") or "").strip().lower()
+            for method in methods
+            if isinstance(method, dict)
+        }
+        payment_type_ids = {
+            str(method.get("payment_type_id") or "").strip().lower()
+            for method in methods
+            if isinstance(method, dict)
+        }
+        return {
+            "status": "ok",
+            "checked_at_utc": checked_at,
+            "payment_methods_total": len(methods),
+            "pix_available": "pix" in method_ids,
+            "account_money_available": "account_money" in payment_type_ids,
+        }
+
+    def _mercadopago_checkout_status_payload(self, *, force_refresh: bool = False) -> dict[str, Any]:
+        saved = load_json_file(MERCADOPAGO_STATUS_PATH) or {}
+        access_token = self._mercadopago_access_token()
+        public_key = self._mercadopago_public_key()
+        webhook_secret = self._mercadopago_webhook_secret()
+        latest_notification = load_json_file(MERCADOPAGO_NOTIFICATIONS_LATEST_PATH) or {}
+
+        validation = saved.get("validation") if isinstance(saved.get("validation"), dict) else None
+        if access_token and (
+            force_refresh
+            or not isinstance(validation, dict)
+            or str(validation.get("status") or "").strip() not in {"ok", "http_error", "network_error", "invalid_response", "failed"}
+        ):
+            validation = self._mercadopago_validate_access_token(access_token)
+        elif not access_token:
+            validation = {
+                "status": "missing_credentials",
+                "checked_at_utc": utc_now_iso(),
+                "detail": "Access token do Mercado Pago ausente no runtime.",
+            }
+
+        if access_token and isinstance(validation, dict) and validation.get("status") == "ok":
+            status = "ready"
+        elif access_token or public_key or webhook_secret:
+            status = "partial"
+        else:
+            status = "missing_credentials"
+
+        payload = {
+            "status": status,
+            "service": "valley-mercadopago-checkout",
+            "provider": "mercado_pago",
+            "generated_at_utc": utc_now_iso(),
+            "checkout_ready": bool(access_token),
+            "access_token_present": bool(access_token),
+            "public_key_present": bool(public_key),
+            "webhook_secret_present": bool(webhook_secret),
+            "notification_url": self._mercadopago_notification_url(),
+            "sample_return_url": self._mercadopago_return_url("approved", "demo-item"),
+            "latest_notification_at_utc": latest_notification.get("received_at_utc"),
+            "validation": validation,
+        }
+        write_json_file(MERCADOPAGO_STATUS_PATH, payload)
+        return payload
 
     def _append_jsonl(self, path: Path, payload: dict[str, Any]) -> None:
         path.parent.mkdir(parents=True, exist_ok=True)

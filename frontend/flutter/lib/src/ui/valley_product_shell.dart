@@ -11,6 +11,38 @@ import 'package:valley_super_app/src/data/product_api_repository.dart';
 import 'package:valley_super_app/src/ui/ui_components.dart';
 import 'package:valley_super_app/valley_brand_theme.dart';
 
+ValleySurfacePalette _surfacePalette(BuildContext context) =>
+    Theme.of(context).extension<ValleySurfacePalette>()!;
+
+bool _useLightTemplate(BuildContext context) =>
+    Theme.of(context).brightness == Brightness.light;
+
+Color _softContainerColor(
+  BuildContext context, {
+  double lightAlpha = 0.94,
+  double darkAlpha = 0.06,
+}) {
+  final ValleySurfacePalette palette = _surfacePalette(context);
+  return _useLightTemplate(context)
+      ? palette.panelStrong.withValues(alpha: lightAlpha)
+      : Colors.white.withValues(alpha: darkAlpha);
+}
+
+Color _softBorderColor(
+  BuildContext context, {
+  double lightAlpha = 1,
+  double darkAlpha = 0.08,
+}) {
+  final ValleySurfacePalette palette = _surfacePalette(context);
+  return _useLightTemplate(context)
+      ? palette.border.withValues(alpha: lightAlpha)
+      : Colors.white.withValues(alpha: darkAlpha);
+}
+
+Color _mediaStageColor(BuildContext context) => _useLightTemplate(context)
+    ? const Color(0xFFF4F7FF)
+    : const Color(0xFF0E1323);
+
 class ValleyProductShell extends StatefulWidget {
   const ValleyProductShell({
     super.key,
@@ -26,7 +58,7 @@ class ValleyProductShell extends StatefulWidget {
 }
 
 class _ValleyProductShellState extends State<ValleyProductShell> {
-  static bool get _helenaEnabled => true;
+  static bool get _helenaEnabled => false;
   static const Set<String> _activeMvpModuleIds = <String>{
     'MARKETPLACE',
     'STOCK',
@@ -1298,17 +1330,23 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
         }
       },
       child: Scaffold(
-        backgroundColor: const Color(0xFF0B1020),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: <Color>[
-                Color(0xFF0B1020),
-                Color(0xFF121A2F),
-                Color(0xFF0E1323),
-              ],
+              colors: _useLightTemplate(context)
+                  ? const <Color>[
+                      Color(0xFFF9F7FF),
+                      Color(0xFFF2F7FF),
+                      Color(0xFFF7F8FF),
+                    ]
+                  : const <Color>[
+                      Color(0xFF0B1020),
+                      Color(0xFF121A2F),
+                      Color(0xFF0E1323),
+                    ],
             ),
           ),
           child: SafeArea(
@@ -1527,6 +1565,9 @@ class _TopBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool compact = MediaQuery.sizeOf(context).width < 760;
+    final Color searchFill = _useLightTemplate(context)
+        ? const Color(0xFFF8FBFF)
+        : const Color(0x66161B2B);
     return Row(
       children: <Widget>[
         const ValleyLogoMark(size: 44, borderRadius: 14),
@@ -1578,7 +1619,7 @@ class _TopBar extends StatelessWidget {
                     )
                   : null,
               filled: true,
-              fillColor: const Color(0x66161B2B),
+              fillColor: searchFill,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
                 borderSide: BorderSide.none,
@@ -1624,6 +1665,7 @@ class _TopBarIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool light = _useLightTemplate(context);
     return Tooltip(
       message: tooltip,
       child: Padding(
@@ -1635,9 +1677,28 @@ class _TopBarIconButton extends StatelessWidget {
             width: 44,
             height: 44,
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.06),
+              color: _softContainerColor(
+                context,
+                lightAlpha: 0.94,
+                darkAlpha: 0.06,
+              ),
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
+              border: Border.all(
+                color: _softBorderColor(
+                  context,
+                  lightAlpha: 1,
+                  darkAlpha: 0.10,
+                ),
+              ),
+              boxShadow: light
+                  ? <BoxShadow>[
+                      BoxShadow(
+                        color: ValleyBrandColors.violet.withValues(alpha: 0.06),
+                        blurRadius: 18,
+                        offset: const Offset(0, 8),
+                      ),
+                    ]
+                  : null,
             ),
             child: Stack(
               clipBehavior: Clip.none,
@@ -1691,6 +1752,7 @@ class _HeroSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool compact = MediaQuery.sizeOf(context).width < 760;
+    final bool light = _useLightTemplate(context);
     return ClipRRect(
       borderRadius: BorderRadius.circular(32),
       child: SizedBox(
@@ -1703,7 +1765,11 @@ class _HeroSection extends StatelessWidget {
               fit: BoxFit.cover,
               errorBuilder:
                   (BuildContext context, Object error, StackTrace? stackTrace) {
-                    return const ColoredBox(color: Color(0xFF121A2F));
+                    return ColoredBox(
+                      color: light
+                          ? const Color(0xFFE8F0FF)
+                          : const Color(0xFF121A2F),
+                    );
                   },
             ),
             DecoratedBox(
@@ -1711,11 +1777,17 @@ class _HeroSection extends StatelessWidget {
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  colors: <Color>[
-                    Colors.black.withValues(alpha: 0.12),
-                    const Color(0xFF0E1323).withValues(alpha: 0.28),
-                    const Color(0xFF0E1323).withValues(alpha: 0.92),
-                  ],
+                  colors: light
+                      ? <Color>[
+                          Colors.white.withValues(alpha: 0.04),
+                          const Color(0xFF172137).withValues(alpha: 0.28),
+                          const Color(0xFF172137).withValues(alpha: 0.78),
+                        ]
+                      : <Color>[
+                          Colors.black.withValues(alpha: 0.12),
+                          const Color(0xFF0E1323).withValues(alpha: 0.28),
+                          const Color(0xFF0E1323).withValues(alpha: 0.92),
+                        ],
                 ),
               ),
             ),
@@ -1752,6 +1824,7 @@ class _HeroSection extends StatelessWidget {
                   RichText(
                     text: TextSpan(
                       style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                        color: Colors.white,
                         fontWeight: FontWeight.w800,
                         height: 1.02,
                         fontSize: compact ? 34 : null,
@@ -1771,7 +1844,7 @@ class _HeroSection extends StatelessWidget {
                     child: Text(
                       subtitle,
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        color: Colors.white.withValues(alpha: 0.84),
                       ),
                     ),
                   ),
@@ -1819,15 +1892,19 @@ class _IndicatorGrid extends StatelessWidget {
         if (constraints.maxWidth < 860) {
           return Column(
             children: <Widget>[
-              _wideCard(),
+              _wideCard(context),
               const SizedBox(height: 14),
               Row(
                 children: <Widget>[
                   Expanded(
-                    child: _smallCard('Produtos ativos', '${summary.products}'),
+                    child: _smallCard(
+                      context,
+                      'Produtos ativos',
+                      '${summary.products}',
+                    ),
                   ),
                   const SizedBox(width: 14),
-                  Expanded(child: _mvpFlowCard()),
+                  Expanded(child: _mvpFlowCard(context)),
                 ],
               ),
             ],
@@ -1836,20 +1913,25 @@ class _IndicatorGrid extends StatelessWidget {
         return Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Expanded(flex: 2, child: _wideCard()),
+            Expanded(flex: 2, child: _wideCard(context)),
             const SizedBox(width: 14),
             Expanded(
-              child: _smallCard('Produtos ativos', '${summary.products}'),
+              child: _smallCard(
+                context,
+                'Produtos ativos',
+                '${summary.products}',
+              ),
             ),
             const SizedBox(width: 14),
-            Expanded(child: _mvpFlowCard()),
+            Expanded(child: _mvpFlowCard(context)),
           ],
         );
       },
     );
   }
 
-  Widget _wideCard() {
+  Widget _wideCard(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
     return ValleyPanel(
       radius: 24,
       padding: const EdgeInsets.all(22),
@@ -1875,22 +1957,19 @@ class _IndicatorGrid extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 32),
-          const Text(
+          Text(
             'OPERAÇÃO ATIVA',
-            style: TextStyle(
-              color: Color(0xFFBCC9CB),
+            style: theme.textTheme.labelMedium?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
               fontWeight: FontWeight.w700,
               letterSpacing: 1.2,
-              fontSize: 11,
             ),
           ),
           const SizedBox(height: 6),
           Text(
             selectedModule?.id ?? 'VALY.OS',
-            style: const TextStyle(
-              color: Color(0xFFDEE1F9),
+            style: theme.textTheme.headlineMedium?.copyWith(
               fontWeight: FontWeight.w800,
-              fontSize: 30,
             ),
           ),
           const SizedBox(height: 22),
@@ -1925,7 +2004,8 @@ class _IndicatorGrid extends StatelessWidget {
     );
   }
 
-  Widget _smallCard(String label, String value) {
+  Widget _smallCard(BuildContext context, String label, String value) {
+    final ThemeData theme = Theme.of(context);
     return ValleyPanel(
       radius: 24,
       padding: const EdgeInsets.all(22),
@@ -1936,29 +2016,25 @@ class _IndicatorGrid extends StatelessWidget {
           children: <Widget>[
             Text(
               label.toUpperCase(),
-              style: const TextStyle(
-                color: Color(0xFFBCC9CB),
+              style: theme.textTheme.labelMedium?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
                 fontWeight: FontWeight.w700,
                 letterSpacing: 1.2,
-                fontSize: 11,
               ),
             ),
             const Spacer(),
             Text(
               value,
-              style: const TextStyle(
-                color: Color(0xFFDEE1F9),
+              style: theme.textTheme.headlineMedium?.copyWith(
                 fontWeight: FontWeight.w800,
-                fontSize: 30,
               ),
             ),
             const SizedBox(height: 6),
             Text(
               '$itemCount sincronizados',
-              style: const TextStyle(
-                color: Color(0xFF6EE7F9),
+              style: theme.textTheme.labelLarge?.copyWith(
+                color: ValleyBrandColors.cyan,
                 fontWeight: FontWeight.w700,
-                fontSize: 12,
               ),
             ),
           ],
@@ -1967,7 +2043,8 @@ class _IndicatorGrid extends StatelessWidget {
     );
   }
 
-  Widget _mvpFlowCard() {
+  Widget _mvpFlowCard(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
     return ValleyPanel(
       radius: 24,
       padding: const EdgeInsets.all(22),
@@ -1976,31 +2053,27 @@ class _IndicatorGrid extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            const Text(
+            Text(
               'FLUXOS DO MVP',
-              style: TextStyle(
-                color: Color(0xFFBCC9CB),
+              style: theme.textTheme.labelMedium?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
                 fontWeight: FontWeight.w700,
                 letterSpacing: 1.2,
-                fontSize: 11,
               ),
             ),
             const Spacer(),
             Text(
               '$itemCount',
-              style: const TextStyle(
-                color: Color(0xFFDEE1F9),
+              style: theme.textTheme.headlineMedium?.copyWith(
                 fontWeight: FontWeight.w800,
-                fontSize: 30,
               ),
             ),
             const SizedBox(height: 6),
-            const Text(
+            Text(
               'itens prontos para venda, chat ou detalhe',
-              style: TextStyle(
-                color: Color(0xFF6EE7F9),
+              style: theme.textTheme.labelLarge?.copyWith(
+                color: ValleyBrandColors.cyan,
                 fontWeight: FontWeight.w700,
-                fontSize: 12,
               ),
             ),
             const SizedBox(height: 12),
@@ -2043,6 +2116,7 @@ class _MarketplaceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
     return ValleyPanel(
       radius: 24,
       padding: EdgeInsets.zero,
@@ -2057,17 +2131,11 @@ class _MarketplaceCard extends StatelessWidget {
               child: Stack(
                 fit: StackFit.expand,
                 children: <Widget>[
-                  Image.network(
-                    item.imageUrl,
+                  _ProductGalleryCarousel(
+                    imageUrls: item.mediaGallery,
                     fit: BoxFit.cover,
-                    errorBuilder:
-                        (
-                          BuildContext context,
-                          Object error,
-                          StackTrace? stackTrace,
-                        ) {
-                          return const ColoredBox(color: Color(0xFF1A1F30));
-                        },
+                    emptyColor: _mediaStageColor(context),
+                    compact: true,
                   ),
                   Positioned(
                     top: 16,
@@ -2106,6 +2174,14 @@ class _MarketplaceCard extends StatelessWidget {
                       ),
                     ),
                   ),
+                  Positioned(
+                    left: 16,
+                    bottom: 16,
+                    child: _MetaPill(
+                      icon: Icons.storefront_rounded,
+                      label: item.supplierDisplayName,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -2118,7 +2194,7 @@ class _MarketplaceCard extends StatelessWidget {
                     item.title,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    style: theme.textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.w800,
                     ),
                   ),
@@ -2131,22 +2207,18 @@ class _MarketplaceCard extends StatelessWidget {
                           children: <Widget>[
                             Text(
                               item.brand.toUpperCase(),
-                              style: const TextStyle(
-                                color: Color(0xFF869395),
+                              style: theme.textTheme.labelMedium?.copyWith(
+                                color: theme.colorScheme.onSurfaceVariant,
                                 fontWeight: FontWeight.w700,
                                 letterSpacing: 1,
-                                fontSize: 11,
                               ),
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              item.category,
-                              style: Theme.of(context).textTheme.bodyMedium
-                                  ?.copyWith(
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.onSurfaceVariant,
-                                  ),
+                              '${item.category} • ${item.providerDisplayName}',
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                color: theme.colorScheme.onSurfaceVariant,
+                              ),
                             ),
                           ],
                         ),
@@ -2162,11 +2234,26 @@ class _MarketplaceCard extends StatelessWidget {
                       else
                         Text(
                           'R\$ ${item.priceBrl.toStringAsFixed(0)}',
-                          style: Theme.of(context).textTheme.bodyMedium
-                              ?.copyWith(
-                                color: Theme.of(context).colorScheme.onSurface,
-                                fontWeight: FontWeight.w800,
-                              ),
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: theme.colorScheme.onSurface,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: <Widget>[
+                      _MetaPill(
+                        icon: Icons.category_rounded,
+                        label: item.taxonomyLeaf,
+                      ),
+                      if (item.shippingFree)
+                        const _MetaPill(
+                          icon: Icons.local_shipping_rounded,
+                          label: 'Frete integrado',
                         ),
                     ],
                   ),
@@ -2176,17 +2263,16 @@ class _MarketplaceCard extends StatelessWidget {
                       children: <Widget>[
                         Text(
                           'R\$ ${item.priceBrl.toStringAsFixed(0)}',
-                          style: const TextStyle(
-                            color: Color(0xFFDEE1F9),
+                          style: theme.textTheme.headlineMedium?.copyWith(
+                            color: theme.colorScheme.onSurface,
                             fontWeight: FontWeight.w800,
-                            fontSize: 30,
                           ),
                         ),
                         const Spacer(),
                         FilledButton.icon(
                           onPressed: busy ? null : onPrimary,
                           style: FilledButton.styleFrom(
-                            backgroundColor: const Color(0xFF6EE7F9),
+                            backgroundColor: ValleyBrandColors.cyan,
                             foregroundColor: const Color(0xFF001F24),
                             padding: const EdgeInsets.symmetric(
                               horizontal: 20,
@@ -2206,10 +2292,8 @@ class _MarketplaceCard extends StatelessWidget {
                       children: <Widget>[
                         Text(
                           'R\$ ${item.priceBrl.toStringAsFixed(0)}',
-                          style: const TextStyle(
-                            color: Color(0xFFDEE1F9),
+                          style: theme.textTheme.headlineSmall?.copyWith(
                             fontWeight: FontWeight.w800,
-                            fontSize: 24,
                           ),
                         ),
                         const Spacer(),
@@ -2224,7 +2308,11 @@ class _MarketplaceCard extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(999),
                               ),
                               side: BorderSide(
-                                color: Colors.white.withValues(alpha: 0.12),
+                                color: _softBorderColor(
+                                  context,
+                                  lightAlpha: 1,
+                                  darkAlpha: 0.12,
+                                ),
                               ),
                             ),
                             child: const Icon(
@@ -2245,7 +2333,11 @@ class _MarketplaceCard extends StatelessWidget {
                         style: OutlinedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 14),
                           side: BorderSide(
-                            color: Colors.white.withValues(alpha: 0.12),
+                            color: _softBorderColor(
+                              context,
+                              lightAlpha: 1,
+                              darkAlpha: 0.12,
+                            ),
                           ),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(14),
@@ -2287,6 +2379,7 @@ class _StockSectionState extends State<_StockSection> {
 
   String _query = '';
   String _selectedCategory = _allLabel;
+  String _selectedSupplier = _allLabel;
   String _selectedCollection = _allLabel;
   String _selectedPriceBand = _allLabel;
   late RangeValues _priceRange;
@@ -2387,6 +2480,15 @@ class _StockSectionState extends State<_StockSection> {
     return <String>[_allLabel, ...ordered];
   }
 
+  List<String> get _supplierOptions {
+    final Set<String> values = _catalogItems
+        .map((ProductItem item) => item.supplierDisplayName)
+        .where((String value) => value.trim().isNotEmpty)
+        .toSet();
+    final List<String> ordered = values.toList()..sort();
+    return <String>[_allLabel, ...ordered];
+  }
+
   List<String> get _priceBandOptions {
     final Set<String> values = _catalogItems
         .map((ProductItem item) => item.priceBand)
@@ -2425,6 +2527,10 @@ class _StockSectionState extends State<_StockSection> {
           item.category != _selectedCategory) {
         return false;
       }
+      if (_selectedSupplier != _allLabel &&
+          item.supplierDisplayName != _selectedSupplier) {
+        return false;
+      }
       if (_selectedCollection != _allLabel &&
           item.collectionLabel != _selectedCollection) {
         return false;
@@ -2446,6 +2552,9 @@ class _StockSectionState extends State<_StockSection> {
         item.collectionLabel,
         item.modelName,
         item.category,
+        item.supplierDisplayName,
+        item.providerDisplayName,
+        item.channelLabel,
         item.googleTaxonomyPath,
         item.taxonomyLeaf,
         ...item.tags,
@@ -2498,6 +2607,7 @@ class _StockSectionState extends State<_StockSection> {
     const double epsilon = 0.01;
     return _query.trim().isNotEmpty ||
         _selectedCategory != _allLabel ||
+        _selectedSupplier != _allLabel ||
         _selectedCollection != _allLabel ||
         _selectedPriceBand != _allLabel ||
         (_priceRange.start - minPrice).abs() > epsilon ||
@@ -2508,6 +2618,7 @@ class _StockSectionState extends State<_StockSection> {
     setState(() {
       _query = '';
       _selectedCategory = _allLabel;
+      _selectedSupplier = _allLabel;
       _selectedCollection = _allLabel;
       _selectedPriceBand = _allLabel;
       _syncPriceRange();
@@ -2519,6 +2630,11 @@ class _StockSectionState extends State<_StockSection> {
     final int categoryCount = _groupedByTaxonomy.length;
     final int collectionsCount = items
         .map((ProductItem item) => item.collectionLabel)
+        .where((String value) => value.trim().isNotEmpty)
+        .toSet()
+        .length;
+    final int supplierCount = items
+        .map((ProductItem item) => item.supplierDisplayName)
         .where((String value) => value.trim().isNotEmpty)
         .toSet()
         .length;
@@ -2551,10 +2667,10 @@ class _StockSectionState extends State<_StockSection> {
         caption: 'Curadoria real por relevancia',
       ),
       _StockStatCard(
-        title: 'Colecoes ativas',
-        value: '$collectionsCount',
+        title: 'Fornecedores ativos',
+        value: '$supplierCount',
         accent: const Color(0xFF7BE495),
-        caption: 'Linha proprietária Valley',
+        caption: '$collectionsCount coleções mapeadas na vitrine',
       ),
     ];
 
@@ -2605,7 +2721,7 @@ class _StockSectionState extends State<_StockSection> {
           ),
           const SizedBox(height: 6),
           Text(
-            'O módulo STOCK só expõe marca Valley. Fornecedor e origem continuam internos; a leitura pública nasce de categoria, coleção e faixa de preço.',
+            'Catálogo integrado, traduzido para português e pronto para leitura por fornecedor, coleção, taxonomia e faixa de preço.',
             style: theme.textTheme.bodyMedium?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,
             ),
@@ -2617,7 +2733,7 @@ class _StockSectionState extends State<_StockSection> {
               hintText: 'Buscar por nome, modelo ou categoria',
               prefixIcon: const Icon(Icons.search_rounded),
               filled: true,
-              fillColor: const Color(0xFF161B2B),
+              fillColor: _softContainerColor(context),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(18),
                 borderSide: BorderSide.none,
@@ -2644,6 +2760,28 @@ class _StockSectionState extends State<_StockSection> {
                 return;
               }
               setState(() => _selectedCategory = value);
+            },
+          ),
+          const SizedBox(height: 16),
+          DropdownButtonFormField<String>(
+            initialValue: _selectedSupplier,
+            decoration: const InputDecoration(
+              labelText: 'Fornecedor',
+              filled: true,
+            ),
+            items: _supplierOptions
+                .map(
+                  (String value) => DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  ),
+                )
+                .toList(),
+            onChanged: (String? value) {
+              if (value == null) {
+                return;
+              }
+              setState(() => _selectedSupplier = value);
             },
           ),
           const SizedBox(height: 16),
@@ -2772,7 +2910,12 @@ class _StockSectionState extends State<_StockSection> {
                         : const Color(0xFFF6C760),
                     outlined: !_usingLiveCatalog,
                   ),
-                  const SignalChip(label: 'Marca própria Valley'),
+                  const SignalChip(label: 'Catálogo traduzido pt-BR'),
+                  SignalChip(
+                    label: '${_supplierOptions.length - 1} fornecedores ativos',
+                    outlined: true,
+                    color: ValleyBrandColors.violet,
+                  ),
                   const SignalChip(label: 'Taxonomia Google', outlined: true),
                   SignalChip(
                     label: '${grouped.length} agrupamentos ativos',
@@ -2791,7 +2934,7 @@ class _StockSectionState extends State<_StockSection> {
               const SizedBox(height: 8),
               Text(
                 _catalogError == null
-                    ? 'A origem do abastecimento vive só na operação. Aqui a leitura é por categoria, coleção e faixa de preço, com classificação aderente à tabela taxonômica do Google.'
+                    ? 'A curadoria agora parte do catálogo integrado dos fornecedores ativos, com tradução pt-BR, carrossel de mídia e leitura por categoria, fornecedor e coleção.'
                     : 'O catalogo externo nao respondeu nesta tentativa. O shell manteve a operacao preparada para continuidade.',
                 style: theme.textTheme.bodyLarge?.copyWith(
                   color: theme.colorScheme.onSurfaceVariant,
@@ -2800,7 +2943,7 @@ class _StockSectionState extends State<_StockSection> {
               if (limitedOverview) ...<Widget>[
                 const SizedBox(height: 12),
                 Text(
-                  'Sem filtro, cada bloco mostra só os itens mais relevantes. Ao escolher uma categoria, o catálogo completo daquela linha é liberado.',
+                  'Sem filtro, cada bloco mostra só os itens mais relevantes. Ao escolher um fornecedor ou categoria, o catálogo completo daquela linha é liberado.',
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: theme.colorScheme.onSurfaceVariant,
                   ),
@@ -2813,14 +2956,14 @@ class _StockSectionState extends State<_StockSection> {
         Wrap(
           spacing: 10,
           runSpacing: 10,
-          children: _categoryOptions.skip(1).map((String category) {
-            final bool active = _selectedCategory == category;
+          children: _supplierOptions.skip(1).map((String supplier) {
+            final bool active = _selectedSupplier == supplier;
             return InkWell(
               borderRadius: BorderRadius.circular(999),
               onTap: () => setState(
-                () => _selectedCategory = active ? _allLabel : category,
+                () => _selectedSupplier = active ? _allLabel : supplier,
               ),
-              child: _FilterChip(label: category, active: active),
+              child: _FilterChip(label: supplier, active: active),
             );
           }).toList(),
         ),
@@ -2830,7 +2973,7 @@ class _StockSectionState extends State<_StockSection> {
             radius: 28,
             padding: const EdgeInsets.all(28),
             child: Text(
-              'Nenhum item encontrado para o recorte atual. Ajuste categoria, coleção ou faixa de preço.',
+              'Nenhum item encontrado para o recorte atual. Ajuste fornecedor, categoria, coleção ou faixa de preço.',
               style: theme.textTheme.bodyLarge,
             ),
           )
@@ -2860,13 +3003,13 @@ class _StockSectionState extends State<_StockSection> {
           kicker: 'Stock Mode',
           title: 'Valley Stock | catálogo real por categoria',
           caption:
-              'Estoque em modo produto com dados reais, coleção Valley, agrupamento por categoria Google e sem exposição pública de fornecedor.',
+              'Estoque em modo produto com catálogo integrado, tradução pt-BR, carrossel de mídia e filtros por fornecedor, coleção e taxonomia.',
           trailing: Wrap(
             spacing: 8,
             runSpacing: 8,
             children: <Widget>[
-              const SignalChip(label: 'Categoria primeiro'),
-              const SignalChip(label: 'Fornecedor oculto', outlined: true),
+              const SignalChip(label: 'Fornecedor primeiro'),
+              const SignalChip(label: 'Carrossel ativo', outlined: true),
               SignalChip(
                 label: _usingLiveCatalog
                     ? '${_catalogItems.length} itens reais'
@@ -2924,6 +3067,7 @@ class _StockStatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
     return ValleyPanel(
       radius: 22,
       padding: const EdgeInsets.all(20),
@@ -2933,11 +3077,10 @@ class _StockStatCard extends StatelessWidget {
         children: <Widget>[
           Text(
             title.toUpperCase(),
-            style: const TextStyle(
-              color: Color(0xFFBCC9CB),
+            style: theme.textTheme.labelMedium?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
               fontWeight: FontWeight.w700,
               letterSpacing: 1.2,
-              fontSize: 11,
             ),
           ),
           const SizedBox(height: 10),
@@ -3518,6 +3661,7 @@ class _StockCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final Color accent = ValleyBrandColors.cyan;
     final ThemeData theme = Theme.of(context);
+    final Color stageColor = _mediaStageColor(context);
 
     return ValleyPanel(
       radius: 26,
@@ -3533,10 +3677,10 @@ class _StockCard extends StatelessWidget {
               aspectRatio: 1,
               child: Container(
                 decoration: BoxDecoration(
-                  color: const Color(0xFF0F1526),
+                  color: stageColor,
                   borderRadius: BorderRadius.circular(24),
                   border: Border.all(
-                    color: Colors.white.withValues(alpha: 0.06),
+                    color: _softBorderColor(context),
                   ),
                 ),
                 child: Stack(
@@ -3545,7 +3689,7 @@ class _StockCard extends StatelessWidget {
                     _ProductGalleryCarousel(
                       imageUrls: item.mediaGallery,
                       fit: BoxFit.contain,
-                      emptyColor: const Color(0xFF0F1526),
+                      emptyColor: stageColor,
                       compact: true,
                       imagePadding: const EdgeInsets.all(18),
                     ),
@@ -3661,6 +3805,10 @@ class _StockCard extends StatelessWidget {
               runSpacing: 8,
               children: <Widget>[
                 _MetaPill(
+                  icon: Icons.storefront_rounded,
+                  label: item.supplierDisplayName,
+                ),
+                _MetaPill(
                   icon: Icons.category_rounded,
                   label: item.taxonomyLeaf,
                 ),
@@ -3711,7 +3859,7 @@ class _StockCard extends StatelessWidget {
                     Text(
                       item.status,
                       textAlign: TextAlign.right,
-                      style: const TextStyle(
+                      style: theme.textTheme.labelLarge?.copyWith(
                         color: ValleyBrandColors.cyan,
                         fontWeight: FontWeight.w800,
                       ),
@@ -3768,12 +3916,16 @@ class _FilterChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
       decoration: BoxDecoration(
-        color: const Color(0xB3121A2F),
+        color: _softContainerColor(
+          context,
+          lightAlpha: active ? 1 : 0.86,
+          darkAlpha: active ? 0.10 : 0.05,
+        ),
         borderRadius: BorderRadius.circular(999),
         border: Border.all(
           color: active
               ? ValleyBrandColors.cyan.withValues(alpha: 0.50)
-              : Colors.white.withValues(alpha: 0.05),
+              : _softBorderColor(context, darkAlpha: 0.05),
         ),
         boxShadow: active
             ? <BoxShadow>[
@@ -4104,6 +4256,26 @@ class _ProductDetailScreen extends StatelessWidget {
               ),
             ],
           ),
+          const SizedBox(height: 14),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: <Widget>[
+              _MetaPill(
+                icon: Icons.storefront_rounded,
+                label: item.supplierDisplayName,
+              ),
+              _MetaPill(
+                icon: Icons.sync_alt_rounded,
+                label: item.providerDisplayName,
+              ),
+              if (item.channelLabel.trim().isNotEmpty)
+                _MetaPill(
+                  icon: Icons.route_rounded,
+                  label: item.channelLabel,
+                ),
+            ],
+          ),
           const SizedBox(height: 18),
           Text(
             'Visão operacional',
@@ -4113,7 +4285,7 @@ class _ProductDetailScreen extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           Text(
-            'O produto fica em evidência e o checkout só aparece quando a rota comercial já está pronta. Quando houver vídeo, ele ocupa a mídia principal da ficha.',
+            'O catálogo integrado mantém fornecedor, canal e taxonomia à mão para revisão comercial. Quando houver vídeo, ele ocupa a mídia principal da ficha.',
             style: theme.textTheme.bodyMedium?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,
               height: 1.45,
@@ -4155,7 +4327,11 @@ class _ProductDetailScreen extends StatelessWidget {
                       vertical: 10,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.05),
+                      color: _softContainerColor(
+                        context,
+                        lightAlpha: 0.96,
+                        darkAlpha: 0.05,
+                      ),
                       borderRadius: BorderRadius.circular(999),
                     ),
                     child: Text(feature.toString()),
@@ -5734,7 +5910,7 @@ class _GenericModuleScreen extends StatelessWidget {
         moduleScreen?['description']?.toString() ?? module?.subtitle ?? '';
     final String helenaHint =
         moduleScreen?['helena_hint']?.toString() ??
-        'Helena entra quando voce pedir ajuda para navegar ou explicar o contexto.';
+        'Use os atalhos da tela para navegar, abrir contexto e revisar os dados do modulo.';
     final String operatorNote =
         moduleScreen?['operator_note']?.toString() ?? '';
     final String dataHomeLabel = _prettyDataHomeLabel(
@@ -8323,6 +8499,7 @@ class _ProductMediaStageState extends State<_ProductMediaStage> {
     final List<_ProductMediaEntry> entries = _entries;
     final int safeIndex = _selectedIndex.clamp(0, entries.length - 1);
     final _ProductMediaEntry selected = entries[safeIndex];
+    final Color stageColor = _mediaStageColor(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -8330,14 +8507,14 @@ class _ProductMediaStageState extends State<_ProductMediaStage> {
         ClipRRect(
           borderRadius: BorderRadius.circular(30),
           child: Container(
-            color: const Color(0xFF0E1323),
+            color: stageColor,
             child: AspectRatio(
               aspectRatio: 5 / 4,
               child: AnimatedSwitcher(
                 duration: const Duration(milliseconds: 220),
                 child: selected.isVideo
                     ? _buildVideoStage(context, selected)
-                    : _buildImageStage(selected),
+                    : _buildImageStage(context, selected),
               ),
             ),
           ),
@@ -8365,12 +8542,16 @@ class _ProductMediaStageState extends State<_ProductMediaStage> {
                   width: 92,
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF11182A),
+                    color: _softContainerColor(
+                      context,
+                      lightAlpha: 0.94,
+                      darkAlpha: 0.06,
+                    ),
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(
                       color: active
                           ? ValleyBrandColors.cyan
-                          : Colors.white.withValues(alpha: 0.08),
+                          : _softBorderColor(context, darkAlpha: 0.08),
                     ),
                   ),
                   child: entry.isVideo
@@ -8394,7 +8575,7 @@ class _ProductMediaStageState extends State<_ProductMediaStage> {
                       : ClipRRect(
                           borderRadius: BorderRadius.circular(14),
                           child: Container(
-                            color: const Color(0xFF0E1323),
+                            color: stageColor,
                             alignment: Alignment.center,
                             child: entry.previewUrl.isEmpty
                                 ? const SizedBox.shrink()
@@ -8421,10 +8602,10 @@ class _ProductMediaStageState extends State<_ProductMediaStage> {
     );
   }
 
-  Widget _buildImageStage(_ProductMediaEntry entry) {
+  Widget _buildImageStage(BuildContext context, _ProductMediaEntry entry) {
     return Container(
       key: ValueKey<String>('image:${entry.previewUrl}'),
-      color: const Color(0xFF0E1323),
+      color: _mediaStageColor(context),
       padding: const EdgeInsets.all(28),
       alignment: Alignment.center,
       child: entry.previewUrl.isEmpty
@@ -8444,7 +8625,7 @@ class _ProductMediaStageState extends State<_ProductMediaStage> {
     final ThemeData theme = Theme.of(context);
     return Container(
       key: const ValueKey<String>('video-stage'),
-      color: const Color(0xFF0E1323),
+      color: _mediaStageColor(context),
       child: Stack(
         fit: StackFit.expand,
         children: <Widget>[
@@ -8547,9 +8728,15 @@ class _MetaPill extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.06),
+        color: _softContainerColor(
+          context,
+          lightAlpha: 0.96,
+          darkAlpha: 0.06,
+        ),
         borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
+        border: Border.all(
+          color: _softBorderColor(context, darkAlpha: 0.10),
+        ),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

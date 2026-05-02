@@ -19,6 +19,7 @@
             <a class="dock-link" href="#homeDashboard">Home</a>
             <a class="dock-link" href="#financialDashboard">Financeiro</a>
             <a class="dock-link" href="#performanceDashboard">Desempenho</a>
+            <a class="dock-link" href="#importedPricingSection">Importados</a>
             <a class="dock-link" href="#modulesWorkspace">Modulos</a>
             <a class="dock-link" href="#stockIntegrations">Stock APIs</a>
             <a class="dock-link" href="#settingsSection">Configuracoes</a>
@@ -147,6 +148,17 @@
           </div>
           <div id="publicRuntimePanel" class="runtime-panel"></div>
         </section>
+
+        <section class="glass-panel">
+          <div class="section-head">
+            <div>
+              <p class="panel-kicker">Checkout health</p>
+              <h2>Mercado Pago</h2>
+            </div>
+            <p class="section-copy">Saúde do checkout, webhook e credenciais operacionais do Valley.</p>
+          </div>
+          <div id="checkoutHealthPanel" class="runtime-panel"></div>
+        </section>
       </section>
 
       <section id="financialDashboard" class="business-grid" aria-label="Painel financeiro e comercial">
@@ -225,6 +237,25 @@
         </div>
         <div id="stockGuideSummary" class="integration-summary-grid"></div>
         <div id="stockProviderGuides" class="provider-guide-grid"></div>
+      </section>
+
+      <section id="importedPricingSection" class="glass-panel imported-pricing-section" aria-label="Gestao de produtos importados">
+        <div class="section-head">
+          <div>
+            <p class="panel-kicker">Imported pricing desk</p>
+            <h2>Gestão de produtos importados</h2>
+          </div>
+          <p class="section-copy">Precificação por faturamento líquido, filtros completos e gestão referenciada por fornecedor.</p>
+        </div>
+        <div id="importedPricingSummary" class="integration-summary-grid"></div>
+        <div id="importedSupplierBoard" class="imported-supplier-board"></div>
+        <div id="importedPricingFilters" class="imported-pricing-filters"></div>
+        <div id="importedPricingTableWrap" class="imported-pricing-table-wrap"></div>
+        <div class="integration-actions">
+          <button id="saveImportedPricing" class="secondary-button" type="button">Salvar regras de pricing</button>
+          <button id="copyImportedPricing" class="secondary-button" type="button">Copiar JSON</button>
+        </div>
+        <p class="microcopy">O custo base vem do catálogo importado. A mesa calcula preço sugerido, taxas e faturamento líquido estimado por SKU e por fornecedor.</p>
       </section>
 
       <section class="intelligence-grid" aria-label="Matrizes operacionais">

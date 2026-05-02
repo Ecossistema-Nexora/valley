@@ -29,6 +29,14 @@ from import_real_stock_catalog import (
 TRANSLATED_STOCK_PATH = RUNTIME_DIR / "valley-stock-real-catalog-ptbr.json"
 TRANSLATION_CACHE_PATH = RUNTIME_DIR / "valley-stock-translation-cache.json"
 TRANSLATION_STATUS_PATH = RUNTIME_DIR / "valley-stock-translation-status.json"
+BUNDLED_STOCK_RUNTIME_ASSET_PATH = (
+    RUNTIME_DIR.parents[1]
+    / "frontend"
+    / "flutter"
+    / "assets"
+    / "data"
+    / "valley_stock_runtime_ptbr.json"
+)
 
 TRANSLATE_URL = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=pt-BR&dt=t"
 MYMEMORY_TRANSLATE_URL = "https://api.mymemory.translated.net/get"
@@ -492,6 +500,7 @@ def update_public_preview(translated_runtime: dict[str, Any]) -> None:
     catalog["summary"] = summary
     catalog["generated_at_utc"] = utc_now_iso()
     write_json(CATALOG_PATH, catalog)
+    write_json(BUNDLED_STOCK_RUNTIME_ASSET_PATH, translated_runtime)
 
 
 def main() -> None:

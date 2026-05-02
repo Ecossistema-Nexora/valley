@@ -383,10 +383,33 @@ class ValleyBackdrop extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool light = Theme.of(context).brightness == Brightness.light;
     return IgnorePointer(
       child: Stack(
         children: <Widget>[
-          Positioned.fill(child: CustomPaint(painter: _MountainPulsePainter())),
+          Positioned.fill(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: light
+                      ? const <Color>[
+                          Color(0x40FFFFFF),
+                          Color(0x1A6F2CFF),
+                          Color(0x1420C8F3),
+                        ]
+                      : const <Color>[
+                          Color(0x00000000),
+                          Color(0x00000000),
+                        ],
+                ),
+              ),
+              child: CustomPaint(
+                painter: _MountainPulsePainter(light: light),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -394,10 +417,14 @@ class ValleyBackdrop extends StatelessWidget {
 }
 
 class _MountainPulsePainter extends CustomPainter {
+  const _MountainPulsePainter({required this.light});
+
+  final bool light;
+
   @override
   void paint(Canvas canvas, Size size) {
     final Paint linePaint = Paint()
-      ..color = const Color(0x14FFFFFF)
+      ..color = light ? const Color(0x186F2CFF) : const Color(0x14FFFFFF)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1;
 

@@ -13,13 +13,21 @@ class ProductApiRepository {
   );
   static const String _releaseBaseUrl =
       'https://admin.brasildesconto.com.br/product';
+  static const String _bundledStockRuntimeAsset =
+      'assets/data/valley_stock_runtime_ptbr.json';
 
   Future<ProductShellData> load() async {
     Object? lastError;
     final Set<String> activeModuleIds = await _loadActiveModuleIds();
     if (_shouldPreferBundledShell()) {
       try {
-        return await _loadBundledShell(activeModuleIds);
+        final ProductShellData bundledShell = await _loadBundledShell(
+          activeModuleIds,
+        );
+        return await _withIntegratedStockCatalog(
+          bundledShell,
+          preferredBaseUrl: bundledShell.baseUrl,
+        );
       } catch (error) {
         lastError = error;
       }
@@ -36,13 +44,23 @@ class ProductApiRepository {
             (jsonDecode(utf8.decode(response.bodyBytes))
                     as Map<dynamic, dynamic>)
                 .cast<String, dynamic>();
-        return _parseShell(baseUrl, json, activeModuleIds);
+        final ProductShellData shell = _parseShell(baseUrl, json, activeModuleIds);
+        return await _withIntegratedStockCatalog(
+          shell,
+          preferredBaseUrl: baseUrl,
+        );
       } catch (error) {
         lastError = error;
       }
     }
     try {
-      return await _loadBundledShell(activeModuleIds);
+      final ProductShellData bundledShell = await _loadBundledShell(
+        activeModuleIds,
+      );
+      return await _withIntegratedStockCatalog(
+        bundledShell,
+        preferredBaseUrl: bundledShell.baseUrl,
+      );
     } catch (error) {
       throw StateError(
         'Servidor Valley indisponivel: $lastError; fallback: $error',
@@ -106,16 +124,20 @@ class ProductApiRepository {
     }
 
     try {
-      final ProductShellData bundledShell = await _loadBundledShell(
-        await _loadActiveModuleIds(),
-      );
-      return bundledShell.items
-          .where((ProductItem item) => item.moduleId == 'STOCK')
-          .toList();
+      return await _loadBundledStockCatalog();
     } catch (error) {
-      throw StateError(
-        'Catalogo STOCK indisponivel: $lastError; fallback: $error',
-      );
+      try {
+        final ProductShellData bundledShell = await _loadBundledShell(
+          await _loadActiveModuleIds(),
+        );
+        return bundledShell.items
+            .where((ProductItem item) => item.moduleId == 'STOCK')
+            .toList();
+      } catch (bundledShellError) {
+        throw StateError(
+          'Catalogo STOCK indisponivel: $lastError; fallback asset: $error; shell: $bundledShellError',
+        );
+      }
     }
   }
 
@@ -253,6 +275,82 @@ class ProductApiRepository {
       'asset://valley-product-catalog',
       catalog,
       activeModuleIds,
+    );
+  }
+
+  Future<List<ProductItem>> _loadBundledStockCatalog() async {
+    final String catalogText = await rootBundle.loadString(
+      _bundledStockRuntimeAsset,
+    );
+    final Map<String, dynamic> catalog =
+        (jsonDecode(catalogText) as Map<dynamic, dynamic>)
+            .cast<String, dynamic>();
+    return (catalog['items'] as List<dynamic>? ?? <dynamic>[])
+        .map(
+          (dynamic item) => ProductItem.fromJson(
+            (item as Map<dynamic, dynamic>).cast<String, dynamic>(),
+          ),
+        )
+        .where((ProductItem item) => item.moduleId == 'STOCK')
+        .toList();
+  }
+
+  Future<ProductShellData> _withIntegratedStockCatalog(
+    ProductShellData shell, {
+    String? preferredBaseUrl,
+  }) async {
+    List<ProductItem> stockItems = <ProductItem>[];
+    try {
+      stockItems = await loadStockCatalog(preferredBaseUrl: preferredBaseUrl);
+    } catch (_) {
+      return shell;
+    }
+
+    if (stockItems.isEmpty) {
+      return shell;
+    }
+
+    final List<ProductItem> nonStockItems = shell.items
+        .where((ProductItem item) => item.moduleId != 'STOCK')
+        .toList();
+    final List<ProductItem> mergedItems = <ProductItem>[
+      ...stockItems,
+      ...nonStockItems,
+    ];
+
+    final int merchantCount = mergedItems
+        .map(
+          (ProductItem item) => item.supplierDisplayName.trim().isEmpty
+              ? item.merchantName.trim()
+              : item.supplierDisplayName.trim(),
+        )
+        .where((String value) => value.isNotEmpty)
+        .toSet()
+        .length;
+    final int videoCount = mergedItems
+        .where((ProductItem item) => item.hasVideo)
+        .length;
+
+    final Map<String, dynamic> rawData = Map<String, dynamic>.from(shell.rawData);
+    rawData['items'] = mergedItems
+        .map((ProductItem item) => item.raw)
+        .toList(growable: false);
+
+    return ProductShellData(
+      baseUrl: shell.baseUrl,
+      title: shell.title,
+      subtitle: shell.subtitle,
+      generatedAtUtc: shell.generatedAtUtc,
+      modules: shell.modules,
+      summary: ProductSummary(
+        products: mergedItems.length,
+        videos: videoCount,
+        merchants: merchantCount,
+        warehouses: shell.summary.warehouses,
+      ),
+      items: mergedItems,
+      publicUrl: shell.publicUrl,
+      rawData: rawData,
     );
   }
 

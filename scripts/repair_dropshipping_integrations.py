@@ -26,6 +26,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 RUNTIME_DIR = ROOT / "tmp" / "runtime"
 ENV_PATH = ROOT / ".env"
+CODEX_CLOUD_ENV_PATH = RUNTIME_DIR / "codex-cloud-secrets.env"
 TEMPLATE_PATH = ROOT / "config" / "integrations" / "marketplace_api_integrations.template.json"
 INTEGRATIONS_PATH = RUNTIME_DIR / "valley-admin-integrations.json"
 SECRETS_PATH = RUNTIME_DIR / "valley-provider-secrets.json"
@@ -164,8 +165,48 @@ def parse_env_file(path: Path) -> dict[str, str]:
 
 def merged_env() -> dict[str, str]:
     values = parse_env_file(ENV_PATH)
+    values.update(parse_env_file(CODEX_CLOUD_ENV_PATH))
     values.update({key: value for key, value in os.environ.items() if value})
     return values
+
+
+def public_admin_base_url(env_values: dict[str, str]) -> str:
+    for key in ("VALLEY_ADMIN_PUBLIC_URL", "VALLEY_CLOUDFLARE_PUBLIC_URL"):
+        value = str(env_values.get(key) or "").strip().rstrip("/")
+        if value:
+            return value
+
+    host = str(env_values.get("VALLEY_TERMIUS_CLOUDFLARE_HOST") or "").strip()
+    if host:
+        if host.startswith("http://") or host.startswith("https://"):
+            return host.rstrip("/")
+        return f"https://{host}"
+
+    return "https://admin.brasildesconto.com.br"
+
+
+def provider_redirect_uri(provider_key: str, admin_base_url: str) -> str:
+    if provider_key == "mercado_livre":
+        return admin_base_url
+    if provider_key == "shopee":
+        return f"{admin_base_url}/integrations/shopee/callback"
+    if provider_key == "aliexpress":
+        return f"{admin_base_url}/integrations/aliexpress/callback"
+    if provider_key == "alibaba":
+        return f"{admin_base_url}/integrations/alibaba/callback"
+    if provider_key == "magalu":
+        return f"{admin_base_url}/integrations/magalu/callback"
+    return ""
+
+
+def provider_webhook_url(provider_key: str, admin_base_url: str) -> str:
+    if provider_key == "mercado_livre":
+        return f"{admin_base_url}/integrations/mercadolivre/notifications"
+    if provider_key == "aliexpress":
+        return f"{admin_base_url}/integrations/aliexpress/notifications"
+    if provider_key == "cjdropshipping":
+        return f"{admin_base_url}/integrations/cjdropshipping/notifications"
+    return ""
 
 
 def template_provider_map() -> dict[str, dict[str, Any]]:
@@ -311,11 +352,14 @@ def safe_integration_defaults(provider: ProviderPolicy, template: dict[str, Any]
     return item
 
 
-def repair_integrations(secrets: dict[str, Any]) -> list[dict[str, Any]]:
+def repair_integrations(
+    secrets: dict[str, Any],
+    env_values: dict[str, str],
+) -> list[dict[str, Any]]:
     template_map = template_provider_map()
     existing = load_json(INTEGRATIONS_PATH, [])
     integrations = existing if isinstance(existing, list) else []
-    known = provider_by_key()
+    admin_base_url = public_admin_base_url(env_values)
     by_key: dict[str, dict[str, Any]] = {}
     for item in integrations:
         if isinstance(item, dict) and str(item.get("key") or "").strip():
@@ -329,6 +373,7 @@ def repair_integrations(secrets: dict[str, Any]) -> list[dict[str, Any]]:
         for enforced_key in (
             "enabled",
             "importCatalog",
+            "syncOrders",
             "syncInventory",
             "syncPricing",
             "allowScrapingFallback",
@@ -343,6 +388,23 @@ def repair_integrations(secrets: dict[str, Any]) -> list[dict[str, Any]]:
                 merged["sellerId"] = str(provider_secrets.get("sellerId"))
             if provider_secrets.get("clientId") and not str(merged.get("clientId") or "").strip():
                 merged["clientId"] = str(provider_secrets.get("clientId"))
+            if provider_secrets.get("username") and provider_secrets.get("password"):
+                merged["authMode"] = "operator_login"
+            elif provider_secrets.get("accessToken") or provider_secrets.get("access_token"):
+                merged["authMode"] = "oauth2"
+                merged["environment"] = "production"
+
+        redirect_uri = provider_redirect_uri(provider.key, admin_base_url)
+        if redirect_uri:
+            merged["redirectUri"] = redirect_uri
+
+        webhook_url = provider_webhook_url(provider.key, admin_base_url)
+        if webhook_url:
+            merged["webhookUrl"] = webhook_url
+
+        merged["notes"] = (
+            "Integração reparada automaticamente com política segura, refs de runtime e superfície pública alinhada."
+        )
         by_key[provider.key] = merged
 
     ordered_keys = [item.get("key") for item in integrations if isinstance(item, dict)]
@@ -460,7 +522,7 @@ def repair(dry_run: bool = False) -> dict[str, Any]:
     if oauth_touched:
         repaired_sources.append(f"runtime_oauth:{','.join(sorted(oauth_touched))}")
 
-    integrations = repair_integrations(secrets)
+    integrations = repair_integrations(secrets, env_values)
     report = build_status(integrations, secrets, repaired_sources)
 
     if not dry_run:

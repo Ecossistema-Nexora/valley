@@ -1428,33 +1428,77 @@ def import_real_stock_catalog(refresh_mercado: bool = False) -> dict[str, Any]:
     merged_stock_items: list[dict[str, Any]] = []
     provider_counts: dict[str, int] = {}
     import_notes: list[str] = []
+    provider_errors: dict[str, str] = {}
 
     mercado_items: list[dict[str, Any]] = []
     if MERCADOLIVRE_KEY in active_catalog_keys:
+        existing_mercado_items = load_existing_provider_items(MERCADOLIVRE_KEY)
         if not refresh_mercado:
-            mercado_items = load_existing_provider_items(MERCADOLIVRE_KEY)
+            mercado_items = existing_mercado_items
         if mercado_items:
             import_notes.append("Mercado Livre reutilizado do runtime atual.")
         else:
-            mercado_items = collect_mercadolivre_catalog(
-                integrations if isinstance(integrations, list) else [],
-                provider_secrets if isinstance(provider_secrets, dict) else {},
-            )
-            import_notes.append("Mercado Livre recarregado via API.")
+            try:
+                mercado_items = collect_mercadolivre_catalog(
+                    integrations if isinstance(integrations, list) else [],
+                    provider_secrets if isinstance(provider_secrets, dict) else {},
+                )
+                import_notes.append("Mercado Livre recarregado via API.")
+            except Exception as error:  # noqa: BLE001
+                provider_errors[MERCADOLIVRE_KEY] = str(error)
+                if existing_mercado_items:
+                    mercado_items = existing_mercado_items
+                    import_notes.append(
+                        "Mercado Livre reaproveitado do runtime anterior após falha na API."
+                    )
+                else:
+                    import_notes.append(
+                        "Mercado Livre sem dados reutilizáveis após falha na API."
+                    )
         provider_counts[MERCADOLIVRE_KEY] = len(mercado_items)
         merged_stock_items.extend(mercado_items)
 
     cj_items: list[dict[str, Any]] = []
     cj_fx_meta: dict[str, Any] = {}
     if CJDROPSHIPPING_KEY in active_catalog_keys:
-        cj_items, cj_fx_meta = collect_cj_catalog(
-            integrations if isinstance(integrations, list) else [],
-            provider_secrets if isinstance(provider_secrets, dict) else {},
-            collect_global_seen(merged_stock_items),
+        existing_cj_items = load_existing_provider_items(CJDROPSHIPPING_KEY)
+        existing_fx_meta = (
+            existing_runtime.get("ptax_usd_brl")
+            if isinstance(existing_runtime, dict) and isinstance(existing_runtime.get("ptax_usd_brl"), dict)
+            else {}
         )
+        try:
+            cj_items, cj_fx_meta = collect_cj_catalog(
+                integrations if isinstance(integrations, list) else [],
+                provider_secrets if isinstance(provider_secrets, dict) else {},
+                collect_global_seen(merged_stock_items),
+            )
+            import_notes.append("CJ sincronizado com estoque, preço em BRL via PTAX e tracking por webhook.")
+        except Exception as error:  # noqa: BLE001
+            provider_errors[CJDROPSHIPPING_KEY] = str(error)
+            cj_items = existing_cj_items
+            cj_fx_meta = existing_fx_meta
+            if cj_items:
+                import_notes.append(
+                    "CJ reaproveitado do runtime anterior após falha/limite da API."
+                )
+            else:
+                import_notes.append(
+                    "CJ sem dados reutilizáveis após falha/limite da API."
+                )
         provider_counts[CJDROPSHIPPING_KEY] = len(cj_items)
         merged_stock_items.extend(cj_items)
-        import_notes.append("CJ sincronizado com estoque, preço em BRL via PTAX e tracking por webhook.")
+
+    unsupported_active_keys = sorted(
+        provider_key
+        for provider_key in active_catalog_keys
+        if provider_key not in {MERCADOLIVRE_KEY, CJDROPSHIPPING_KEY}
+    )
+    for provider_key in unsupported_active_keys:
+        import_notes.append(
+            f"{provider_key} autenticado/configurado, mas ainda sem coletor oficial no importador do STOCK."
+        )
+        provider_counts.setdefault(provider_key, 0)
 
     merged_stock_items = dedupe_stock_items(merged_stock_items)
 
@@ -1495,6 +1539,7 @@ def import_real_stock_catalog(refresh_mercado: bool = False) -> dict[str, Any]:
         },
         "indexes": existing_indexes,
         "notes": import_notes,
+        "provider_errors": provider_errors,
         "items_total": len(merged_stock_items),
         "categories_total": len({str(item.get("category") or "") for item in merged_stock_items}),
         "items": merged_stock_items,
@@ -1510,6 +1555,7 @@ def import_real_stock_catalog(refresh_mercado: bool = False) -> dict[str, Any]:
         "provider_counts": provider_counts,
         "providers_active": providers_active,
         "ptax_usd_brl": cj_fx_meta,
+        "provider_errors": provider_errors,
     }
 
 

@@ -20,6 +20,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_ENV_FILE = ROOT / ".env"
 RUNTIME_DIR = ROOT / "tmp" / "runtime"
+CODEX_CLOUD_ENV_FILE = RUNTIME_DIR / "codex-cloud-secrets.env"
 ADMIN_INTEGRATIONS_PATH = RUNTIME_DIR / "valley-admin-integrations.json"
 PROVIDER_SECRETS_PATH = RUNTIME_DIR / "valley-provider-secrets.json"
 INTEGRATION_TEMPLATE_PATH = ROOT / "config" / "integrations" / "marketplace_api_integrations.template.json"
@@ -105,6 +106,7 @@ def parse_env_file(path: Path) -> dict[str, str]:
 
 def merged_env(env_file: Path) -> dict[str, str]:
     values = parse_env_file(env_file)
+    values.update(parse_env_file(CODEX_CLOUD_ENV_FILE))
     values.update({key: value for key, value in os.environ.items() if value})
     return values
 

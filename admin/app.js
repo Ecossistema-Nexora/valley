@@ -128,12 +128,49 @@
       ],
     },
   };
+  const PRICING_EDITABLE_FIELDS = [
+    "target_net_revenue_pct",
+    "platform_fee_pct",
+    "operational_fee_pct",
+    "marketing_fee_pct",
+    "tax_pct",
+    "notes",
+  ];
 
   const allModules = data.modules.slice().sort((left, right) => left.number - right.number);
   const catalogState = {
     loading: true,
     summary: null,
     error: "",
+  };
+  const checkoutHealthState = {
+    loading: true,
+    payload: null,
+    error: "",
+  };
+  const importedPricingState = {
+    loading: true,
+    payload: null,
+    error: "",
+    page: 1,
+    pageSize: 24,
+    filters: {
+      query: "",
+      supplierKey: "all",
+      providerKey: "all",
+      category: "all",
+      collectionLabel: "all",
+      availabilityLabel: "all",
+      priceBand: "all",
+      title: "",
+      supplierName: "",
+      categoryText: "",
+      notes: "",
+    },
+    draft: {
+      supplier_defaults: {},
+      item_overrides: {},
+    },
   };
 
   const state = {
@@ -169,6 +206,7 @@
     marketplaceApiControlCenter: document.getElementById("marketplaceApiControlCenter"),
     stockProviderGuides: document.getElementById("stockProviderGuides"),
     stockGuideSummary: document.getElementById("stockGuideSummary"),
+    checkoutHealthPanel: document.getElementById("checkoutHealthPanel"),
     adminAccessLinks: document.getElementById("adminAccessLinks"),
     moduleCount: document.getElementById("moduleCount"),
     moduleSelectionMeta: document.getElementById("moduleSelectionMeta"),
@@ -190,6 +228,12 @@
     marketplaceApiIntegrations: document.getElementById("marketplaceApiIntegrations"),
     saveMarketplaceApis: document.getElementById("saveMarketplaceApis"),
     copyMarketplaceApis: document.getElementById("copyMarketplaceApis"),
+    importedPricingSummary: document.getElementById("importedPricingSummary"),
+    importedSupplierBoard: document.getElementById("importedSupplierBoard"),
+    importedPricingFilters: document.getElementById("importedPricingFilters"),
+    importedPricingTableWrap: document.getElementById("importedPricingTableWrap"),
+    saveImportedPricing: document.getElementById("saveImportedPricing"),
+    copyImportedPricing: document.getElementById("copyImportedPricing"),
     liveRegion: document.getElementById("liveRegion"),
   };
 
@@ -382,6 +426,27 @@
 
   function formatMoney(value) {
     return BRL_FORMATTER.format(Number(value) || 0);
+  }
+
+  function deepClone(value) {
+    return JSON.parse(JSON.stringify(value ?? null));
+  }
+
+  function toNumber(value, fallback = 0) {
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : fallback;
+  }
+
+  function normalizeSearch(value) {
+    return String(value || "")
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .trim();
+  }
+
+  function matchesSearch(value, query) {
+    return !query || normalizeSearch(value).includes(query);
   }
 
   function formatTimestamp(value) {
@@ -1085,6 +1150,743 @@
     elements.stockProviderGuides.innerHTML = cards.join("");
   }
 
+  function importedPricingItems() {
+    return Array.isArray(importedPricingState.payload?.items) ? importedPricingState.payload.items : [];
+  }
+
+  function importedPricingPayloadUpdatedAt() {
+    return importedPricingState.payload?.updated_at_utc || importedPricingState.payload?.generated_at_utc || "";
+  }
+
+  function importedSupplierBaseline(supplierKey) {
+    const items = importedPricingItems().filter((item) => item.supplier_key === supplierKey);
+    const persistedOverrides = importedPricingState.payload?.item_overrides || {};
+    const fallback = {
+      target_net_revenue_pct: 12,
+      platform_fee_pct: 8,
+      operational_fee_pct: 3,
+      marketing_fee_pct: 2,
+      tax_pct: 6,
+      notes: "",
+    };
+    const baselineItem = items.find((item) => !persistedOverrides[item.id]) || items[0];
+
+    if (!baselineItem) {
+      return fallback;
+    }
+
+    return {
+      target_net_revenue_pct: toNumber(baselineItem.target_net_revenue_pct, 12),
+      platform_fee_pct: toNumber(baselineItem.platform_fee_pct, 8),
+      operational_fee_pct: toNumber(baselineItem.operational_fee_pct, 3),
+      marketing_fee_pct: toNumber(baselineItem.marketing_fee_pct, 2),
+      tax_pct: toNumber(baselineItem.tax_pct, 6),
+      notes: "",
+    };
+  }
+
+  function importedSupplierControls(supplierKey) {
+    const override = importedPricingState.draft.supplier_defaults?.[supplierKey] || {};
+    return {
+      ...importedSupplierBaseline(supplierKey),
+      ...override,
+      notes: String(override.notes || ""),
+    };
+  }
+
+  function importedItemControls(item) {
+    const override = importedPricingState.draft.item_overrides?.[item.id] || {};
+    return {
+      ...importedSupplierControls(item.supplier_key),
+      ...override,
+      notes: String(override.notes || importedSupplierControls(item.supplier_key).notes || ""),
+    };
+  }
+
+  function projectImportedPricingItem(item) {
+    const controls = importedItemControls(item);
+    const baseCost = toNumber(item.base_cost_brl);
+    const stock = toNumber(item.stock);
+    const feesPctTotal =
+      toNumber(controls.platform_fee_pct) +
+      toNumber(controls.operational_fee_pct) +
+      toNumber(controls.marketing_fee_pct) +
+      toNumber(controls.tax_pct);
+    const targetPctTotal = feesPctTotal + toNumber(controls.target_net_revenue_pct);
+    const denominator = Math.max(0.05, 1 - targetPctTotal / 100);
+    const suggestedSalePrice = denominator ? baseCost / denominator : baseCost;
+    const estimatedFees = suggestedSalePrice * (feesPctTotal / 100);
+    const estimatedNetRevenue = Math.max(suggestedSalePrice - baseCost - estimatedFees, 0);
+    const estimatedNetRevenuePct = suggestedSalePrice > 0 ? (estimatedNetRevenue / suggestedSalePrice) * 100 : 0;
+    const tags = Array.isArray(item.tags) ? item.tags : [];
+
+    return {
+      ...item,
+      ...controls,
+      tags,
+      inventory_cost_brl: Number((baseCost * stock).toFixed(2)),
+      suggested_sale_price_brl: Number(suggestedSalePrice.toFixed(2)),
+      estimated_fees_brl: Number(estimatedFees.toFixed(2)),
+      estimated_net_revenue_brl: Number(estimatedNetRevenue.toFixed(2)),
+      estimated_net_revenue_pct: Number(estimatedNetRevenuePct.toFixed(2)),
+      estimated_inventory_net_revenue_brl: Number((estimatedNetRevenue * stock).toFixed(2)),
+      _titleIndex: normalizeSearch(`${item.title} ${item.brand} ${item.id}`),
+      _supplierIndex: normalizeSearch(
+        `${item.supplier_name} ${item.supplier_type} ${item.supplier_model} ${item.merchant_name}`,
+      ),
+      _categoryIndex: normalizeSearch(
+        `${item.category} ${item.collection_label} ${item.google_product_category_path} ${tags.join(" ")}`,
+      ),
+      _notesIndex: normalizeSearch(controls.notes),
+      _searchIndex: normalizeSearch(
+        [
+          item.id,
+          item.title,
+          item.brand,
+          item.category,
+          item.collection_label,
+          item.price_band,
+          item.availability_label,
+          item.provider_key,
+          item.provider_status,
+          item.supplier_name,
+          item.supplier_type,
+          item.supplier_model,
+          item.merchant_name,
+          item.channel_label,
+          item.google_product_category_path,
+          item.source_product_id,
+          item.source_item_id,
+          tags.join(" "),
+          controls.notes,
+        ].join(" "),
+      ),
+    };
+  }
+
+  function materializeImportedPricingRows() {
+    return importedPricingItems()
+      .map((item) => projectImportedPricingItem(item))
+      .sort((left, right) => {
+        const supplierComparison = String(left.supplier_name || "").localeCompare(String(right.supplier_name || ""), "pt-BR");
+        if (supplierComparison !== 0) {
+          return supplierComparison;
+        }
+        const categoryComparison = String(left.category || "").localeCompare(String(right.category || ""), "pt-BR");
+        if (categoryComparison !== 0) {
+          return categoryComparison;
+        }
+        if (right.estimated_inventory_net_revenue_brl !== left.estimated_inventory_net_revenue_brl) {
+          return right.estimated_inventory_net_revenue_brl - left.estimated_inventory_net_revenue_brl;
+        }
+        return String(left.title || "").localeCompare(String(right.title || ""), "pt-BR");
+      });
+  }
+
+  function importedSupplierSummaries(rows) {
+    const grouped = new Map();
+
+    rows.forEach((row) => {
+      const current = grouped.get(row.supplier_key) || {
+        supplier_key: row.supplier_key,
+        supplier_name: row.supplier_name,
+        provider_key: row.provider_key,
+        supplier_type: row.supplier_type,
+        items_total: 0,
+        inventory_units: 0,
+        inventory_cost_value_brl: 0,
+        suggested_revenue_value_brl: 0,
+        estimated_net_revenue_value_brl: 0,
+      };
+
+      current.items_total += 1;
+      current.inventory_units += toNumber(row.stock);
+      current.inventory_cost_value_brl += toNumber(row.inventory_cost_brl);
+      current.suggested_revenue_value_brl += toNumber(row.suggested_sale_price_brl) * toNumber(row.stock);
+      current.estimated_net_revenue_value_brl += toNumber(row.estimated_inventory_net_revenue_brl);
+      grouped.set(row.supplier_key, current);
+    });
+
+    return [...grouped.values()].sort((left, right) => {
+      if (right.suggested_revenue_value_brl !== left.suggested_revenue_value_brl) {
+        return right.suggested_revenue_value_brl - left.suggested_revenue_value_brl;
+      }
+      return String(left.supplier_name || "").localeCompare(String(right.supplier_name || ""), "pt-BR");
+    });
+  }
+
+  function importedFilterOptions(rows, field) {
+    return [...new Set(rows.map((row) => String(row[field] || "").trim()).filter(Boolean))].sort((left, right) =>
+      left.localeCompare(right, "pt-BR"),
+    );
+  }
+
+  function filteredImportedPricingRows(rows) {
+    const filters = importedPricingState.filters;
+    const query = normalizeSearch(filters.query);
+    const title = normalizeSearch(filters.title);
+    const supplierName = normalizeSearch(filters.supplierName);
+    const categoryText = normalizeSearch(filters.categoryText);
+    const notes = normalizeSearch(filters.notes);
+    const targetNetPct = normalizeSearch(filters.targetNetPct);
+    const platformPct = normalizeSearch(filters.platformPct);
+    const operationalPct = normalizeSearch(filters.operationalPct);
+    const marketingPct = normalizeSearch(filters.marketingPct);
+    const taxPct = normalizeSearch(filters.taxPct);
+
+    return rows.filter((row) => {
+      return (
+        (!query || row._searchIndex.includes(query)) &&
+        (filters.supplierKey === "all" || row.supplier_key === filters.supplierKey) &&
+        (filters.providerKey === "all" || row.provider_key === filters.providerKey) &&
+        (filters.category === "all" || row.category === filters.category) &&
+        (filters.collectionLabel === "all" || row.collection_label === filters.collectionLabel) &&
+        (filters.availabilityLabel === "all" || row.availability_label === filters.availabilityLabel) &&
+        (filters.priceBand === "all" || row.price_band === filters.priceBand) &&
+        (!title || row._titleIndex.includes(title)) &&
+        (!supplierName || row._supplierIndex.includes(supplierName)) &&
+        (!categoryText || row._categoryIndex.includes(categoryText)) &&
+        (!notes || row._notesIndex.includes(notes)) &&
+        (!targetNetPct || matchesSearch(row.target_net_revenue_pct, targetNetPct)) &&
+        (!platformPct || matchesSearch(row.platform_fee_pct, platformPct)) &&
+        (!operationalPct || matchesSearch(row.operational_fee_pct, operationalPct)) &&
+        (!marketingPct || matchesSearch(row.marketing_fee_pct, marketingPct)) &&
+        (!taxPct || matchesSearch(row.tax_pct, taxPct))
+      );
+    });
+  }
+
+  function pricingEntryMarkup(field, value, supplierKey, itemId) {
+    const normalizedValue = field === "notes" ? String(value || "") : String(toNumber(value));
+    const extraClass = field === "notes" ? "pricing-note-input" : "";
+    const inputType = field === "notes" ? "text" : "number";
+    const step = field === "notes" ? "" : ' step="0.1"';
+    const min = field === "notes" ? "" : ' min="0"';
+
+    return `
+      <input
+        class="${extraClass}"
+        data-imported-supplier-key="${escapeHtml(supplierKey || "")}"
+        ${itemId ? `data-imported-item-id="${escapeHtml(itemId)}"` : ""}
+        data-imported-field="${escapeHtml(field)}"
+        type="${inputType}"
+        value="${escapeHtml(normalizedValue)}"${step}${min}
+      />
+    `;
+  }
+
+  async function loadImportedPricing() {
+    try {
+      const response = await fetch("/api/admin-imported-products-pricing", {
+        cache: "no-store",
+        headers: { Accept: "application/json" },
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      const payload = await response.json();
+      importedPricingState.payload = payload;
+      importedPricingState.draft = {
+        supplier_defaults: deepClone(payload?.supplier_defaults) || {},
+        item_overrides: deepClone(payload?.item_overrides) || {},
+      };
+      importedPricingState.error = "";
+    } catch (error) {
+      importedPricingState.payload = null;
+      importedPricingState.draft = { supplier_defaults: {}, item_overrides: {} };
+      importedPricingState.error = error instanceof Error ? error.message : "falha ao carregar pricing";
+    } finally {
+      importedPricingState.loading = false;
+      renderImportedPricingDesk();
+    }
+  }
+
+  function renderImportedPricingDesk() {
+    if (
+      !elements.importedPricingSummary ||
+      !elements.importedSupplierBoard ||
+      !elements.importedPricingFilters ||
+      !elements.importedPricingTableWrap
+    ) {
+      return;
+    }
+
+    if (importedPricingState.loading) {
+      elements.importedPricingSummary.innerHTML = `<div class="empty-state">Carregando mesa de pricing importado...</div>`;
+      elements.importedSupplierBoard.innerHTML = `<div class="empty-state">Carregando fornecedores...</div>`;
+      elements.importedPricingFilters.innerHTML = `<div class="empty-state">Preparando filtros...</div>`;
+      elements.importedPricingTableWrap.innerHTML = `<div class="empty-state">Carregando produtos importados...</div>`;
+      return;
+    }
+
+    if (!importedPricingState.payload) {
+      const message = escapeHtml(importedPricingState.error || "servico indisponivel");
+      elements.importedPricingSummary.innerHTML = `<div class="empty-state">Mesa indisponivel: ${message}</div>`;
+      elements.importedSupplierBoard.innerHTML = `<div class="empty-state">Nenhum fornecedor publicado.</div>`;
+      elements.importedPricingFilters.innerHTML = `<div class="empty-state">Filtros indisponiveis.</div>`;
+      elements.importedPricingTableWrap.innerHTML = `<div class="empty-state">Tabela indisponivel.</div>`;
+      return;
+    }
+
+    const allRows = materializeImportedPricingRows();
+    const filteredRows = filteredImportedPricingRows(allRows);
+
+    renderImportedPricingSummary(filteredRows);
+    renderImportedSupplierBoard(allRows);
+    renderImportedPricingFilters(allRows);
+    renderImportedPricingTable(filteredRows);
+  }
+
+  function renderImportedPricingSummary(rows) {
+    const suppliers = new Set(rows.map((row) => row.supplier_key));
+    const inventoryCost = rows.reduce((sum, row) => sum + toNumber(row.inventory_cost_brl), 0);
+    const suggestedRevenue = rows.reduce(
+      (sum, row) => sum + toNumber(row.suggested_sale_price_brl) * toNumber(row.stock),
+      0,
+    );
+    const estimatedNetRevenue = rows.reduce((sum, row) => sum + toNumber(row.estimated_inventory_net_revenue_brl), 0);
+    const updatedAt = importedPricingPayloadUpdatedAt();
+
+    elements.importedPricingSummary.innerHTML = [
+      summaryTileMarkup("Itens filtrados", formatCount(rows.length), "produtos importados no recorte atual"),
+      summaryTileMarkup("Fornecedores", formatCount(suppliers.size), "origens comerciais ativas no desk"),
+      summaryTileMarkup("Custo em estoque", formatMoney(inventoryCost), "base de custo agregada pela regra local"),
+      summaryTileMarkup(
+        "Faturamento liquido estimado",
+        formatMoney(estimatedNetRevenue),
+        updatedAt ? `regras atualizadas ${formatTimestamp(updatedAt)} | receita sugerida ${formatMoney(suggestedRevenue)}` : "regras ainda nao persistidas",
+      ),
+    ].join("");
+  }
+
+  function renderImportedSupplierBoard(rows) {
+    const suppliers = importedSupplierSummaries(rows);
+    const activeSupplierKey = importedPricingState.filters.supplierKey;
+    const totalItems = rows.length;
+    const totalNet = rows.reduce((sum, row) => sum + toNumber(row.estimated_inventory_net_revenue_brl), 0);
+
+    const cards = [
+      `
+        <article class="imported-supplier-card ${activeSupplierKey === "all" ? "is-active" : ""}" data-imported-supplier-card data-imported-supplier="all">
+          <div class="integration-card-head">
+            <div>
+              <h3>Todos os fornecedores</h3>
+              <p class="muted-copy">Visao consolidada do catálogo importado traduzido.</p>
+            </div>
+            ${rowPill("consolidado", "pill-accent")}
+          </div>
+          <div class="integration-card-overview">
+            ${summaryTileMarkup("Itens", formatCount(totalItems), "produtos ativos no desk")}
+            ${summaryTileMarkup("Fornecedores", formatCount(suppliers.length), "bases integradas")}
+            ${summaryTileMarkup("Liquido estimado", formatMoney(totalNet), "estoque total recalculado")}
+            ${summaryTileMarkup("Locale", escapeHtml(importedPricingState.payload?.locale || "pt-BR"), "catálogo traduzido")}
+          </div>
+        </article>
+      `,
+      ...suppliers.map((supplier) => {
+        const controls = importedSupplierControls(supplier.supplier_key);
+
+        return `
+          <article
+            class="imported-supplier-card ${activeSupplierKey === supplier.supplier_key ? "is-active" : ""}"
+            data-imported-supplier-card
+            data-imported-supplier="${escapeHtml(supplier.supplier_key)}"
+          >
+            <div class="integration-card-head">
+              <div>
+                <h3>${escapeHtml(supplier.supplier_name)}</h3>
+                <p class="muted-copy">${escapeHtml(supplier.provider_key)} · ${escapeHtml(supplier.supplier_type || "supplier")}</p>
+              </div>
+              <div class="pill-row">
+                ${rowPill(formatCount(supplier.items_total) + " itens", "pill-accent")}
+                ${rowPill(formatMoney(supplier.estimated_net_revenue_value_brl), "pill-navy")}
+              </div>
+            </div>
+            <div class="integration-card-overview">
+              ${summaryTileMarkup("Estoque", formatCount(supplier.inventory_units), "unidades importadas")}
+              ${summaryTileMarkup("Custo", formatMoney(supplier.inventory_cost_value_brl), "valor base agregado")}
+              ${summaryTileMarkup("Receita", formatMoney(supplier.suggested_revenue_value_brl), "preco sugerido")}
+              ${summaryTileMarkup("Liquido", formatMoney(supplier.estimated_net_revenue_value_brl), "margem estimada em estoque")}
+            </div>
+            <div class="integration-form-grid">
+              <label class="field">
+                <span>Meta liquida %</span>
+                ${pricingEntryMarkup("target_net_revenue_pct", controls.target_net_revenue_pct, supplier.supplier_key)}
+              </label>
+              <label class="field">
+                <span>Plataforma %</span>
+                ${pricingEntryMarkup("platform_fee_pct", controls.platform_fee_pct, supplier.supplier_key)}
+              </label>
+              <label class="field">
+                <span>Operacao %</span>
+                ${pricingEntryMarkup("operational_fee_pct", controls.operational_fee_pct, supplier.supplier_key)}
+              </label>
+              <label class="field">
+                <span>Marketing %</span>
+                ${pricingEntryMarkup("marketing_fee_pct", controls.marketing_fee_pct, supplier.supplier_key)}
+              </label>
+              <label class="field">
+                <span>Tributos %</span>
+                ${pricingEntryMarkup("tax_pct", controls.tax_pct, supplier.supplier_key)}
+              </label>
+              <label class="field">
+                <span>Notas do fornecedor</span>
+                ${pricingEntryMarkup("notes", controls.notes, supplier.supplier_key)}
+              </label>
+            </div>
+            <div class="integration-actions">
+              <button class="secondary-button" type="button" data-imported-reset-supplier="${escapeHtml(supplier.supplier_key)}">Limpar regra do fornecedor</button>
+            </div>
+          </article>
+        `;
+      }),
+    ];
+
+    elements.importedSupplierBoard.innerHTML = cards.join("");
+  }
+
+  function renderImportedPricingFilters(rows) {
+    const filters = importedPricingState.filters;
+    const suppliers = importedSupplierSummaries(rows);
+    const providerOptions = importedFilterOptions(rows, "provider_key");
+    const categoryOptions = importedFilterOptions(rows, "category");
+    const collectionOptions = importedFilterOptions(rows, "collection_label");
+    const availabilityOptions = importedFilterOptions(rows, "availability_label");
+    const priceBandOptions = importedFilterOptions(rows, "price_band");
+
+    elements.importedPricingFilters.innerHTML = `
+      <label class="field">
+        <span>Busca geral</span>
+        <input data-imported-filter="query" type="text" value="${escapeHtml(filters.query)}" placeholder="sku, titulo, fornecedor, tags, origem" />
+      </label>
+      <label class="field">
+        <span>Fornecedor</span>
+        <select data-imported-filter="supplierKey">
+          ${optionMarkup("all", "Todos")}
+          ${suppliers.map((supplier) => optionMarkup(supplier.supplier_key, supplier.supplier_name)).join("")}
+        </select>
+      </label>
+      <label class="field">
+        <span>Provider</span>
+        <select data-imported-filter="providerKey">
+          ${optionMarkup("all", "Todos")}
+          ${providerOptions.map((value) => optionMarkup(value, value)).join("")}
+        </select>
+      </label>
+      <label class="field">
+        <span>Categoria</span>
+        <select data-imported-filter="category">
+          ${optionMarkup("all", "Todas")}
+          ${categoryOptions.map((value) => optionMarkup(value, value)).join("")}
+        </select>
+      </label>
+      <label class="field">
+        <span>Colecao</span>
+        <select data-imported-filter="collectionLabel">
+          ${optionMarkup("all", "Todas")}
+          ${collectionOptions.map((value) => optionMarkup(value, value)).join("")}
+        </select>
+      </label>
+      <label class="field">
+        <span>Disponibilidade</span>
+        <select data-imported-filter="availabilityLabel">
+          ${optionMarkup("all", "Todas")}
+          ${availabilityOptions.map((value) => optionMarkup(value, value)).join("")}
+        </select>
+      </label>
+      <label class="field">
+        <span>Faixa de preco</span>
+        <select data-imported-filter="priceBand">
+          ${optionMarkup("all", "Todas")}
+          ${priceBandOptions.map((value) => optionMarkup(value, value)).join("")}
+        </select>
+      </label>
+      <label class="field">
+        <span>Linhas por pagina</span>
+        <select data-imported-filter="pageSize">
+          ${[12, 24, 48, 96].map((value) => optionMarkup(String(value), `${value} linhas`)).join("")}
+        </select>
+      </label>
+    `;
+
+    elements.importedPricingFilters.querySelector('[data-imported-filter="supplierKey"]').value = filters.supplierKey;
+    elements.importedPricingFilters.querySelector('[data-imported-filter="providerKey"]').value = filters.providerKey;
+    elements.importedPricingFilters.querySelector('[data-imported-filter="category"]').value = filters.category;
+    elements.importedPricingFilters.querySelector('[data-imported-filter="collectionLabel"]').value = filters.collectionLabel;
+    elements.importedPricingFilters.querySelector('[data-imported-filter="availabilityLabel"]').value = filters.availabilityLabel;
+    elements.importedPricingFilters.querySelector('[data-imported-filter="priceBand"]').value = filters.priceBand;
+    elements.importedPricingFilters.querySelector('[data-imported-filter="pageSize"]').value = String(importedPricingState.pageSize);
+  }
+
+  function renderImportedPricingTable(rows) {
+    const totalPages = Math.max(1, Math.ceil(rows.length / importedPricingState.pageSize));
+    importedPricingState.page = Math.min(importedPricingState.page, totalPages);
+    const pageStart = (importedPricingState.page - 1) * importedPricingState.pageSize;
+    const pageRows = rows.slice(pageStart, pageStart + importedPricingState.pageSize);
+    const filters = importedPricingState.filters;
+    const providerOptions = importedFilterOptions(materializeImportedPricingRows(), "provider_key");
+    const availabilityOptions = importedFilterOptions(materializeImportedPricingRows(), "availability_label");
+
+    elements.importedPricingTableWrap.innerHTML = `
+      <div class="pricing-toolbar">
+        <div>
+          <strong>${escapeHtml(formatCount(rows.length))} itens visiveis</strong>
+          <p class="muted-copy">Catalogo integrado pt-BR com calculo de preco sugerido, taxas e faturamento liquido por SKU.</p>
+        </div>
+        <div class="pricing-toolbar-meta">
+          ${rowPill(`${formatCount(new Set(rows.map((row) => row.supplier_key)).size)} fornecedores`, "pill-accent")}
+          ${rowPill(`${formatCount(pageRows.length)} linhas na pagina`, "pill-navy")}
+          ${rowPill(importedPricingState.payload?.providers_active?.join(", ") || "catalogo ativo", "pill")}
+        </div>
+      </div>
+      <table class="imported-pricing-table">
+        <thead>
+          <tr>
+            <th>Produto</th>
+            <th>Fornecedor</th>
+            <th>Origem</th>
+            <th>Segmento</th>
+            <th>Disponibilidade</th>
+            <th>Custo base</th>
+            <th>Estoque</th>
+            <th>Meta liquida %</th>
+            <th>Plataforma %</th>
+            <th>Operacao %</th>
+            <th>Marketing %</th>
+            <th>Tributos %</th>
+            <th>Preco sugerido</th>
+            <th>Liquido unit.</th>
+            <th>Liquido estoque</th>
+            <th>Notas</th>
+            <th>Acoes</th>
+          </tr>
+          <tr>
+            <th><input data-imported-filter="title" type="text" value="${escapeHtml(filters.title || "")}" placeholder="filtrar produto" /></th>
+            <th><input data-imported-filter="supplierName" type="text" value="${escapeHtml(filters.supplierName || "")}" placeholder="filtrar fornecedor" /></th>
+            <th>
+              <select data-imported-filter="providerKey">
+                ${optionMarkup("all", "todos")}
+                ${providerOptions.map((value) => optionMarkup(value, value)).join("")}
+              </select>
+            </th>
+            <th><input data-imported-filter="categoryText" type="text" value="${escapeHtml(filters.categoryText || "")}" placeholder="categoria ou colecao" /></th>
+            <th>
+              <select data-imported-filter="availabilityLabel">
+                ${optionMarkup("all", "todas")}
+                ${availabilityOptions.map((value) => optionMarkup(value, value)).join("")}
+              </select>
+            </th>
+            <th></th>
+            <th></th>
+            <th><input data-imported-filter="targetNetPct" type="text" value="${escapeHtml(filters.targetNetPct || "")}" placeholder="%" /></th>
+            <th><input data-imported-filter="platformPct" type="text" value="${escapeHtml(filters.platformPct || "")}" placeholder="%" /></th>
+            <th><input data-imported-filter="operationalPct" type="text" value="${escapeHtml(filters.operationalPct || "")}" placeholder="%" /></th>
+            <th><input data-imported-filter="marketingPct" type="text" value="${escapeHtml(filters.marketingPct || "")}" placeholder="%" /></th>
+            <th><input data-imported-filter="taxPct" type="text" value="${escapeHtml(filters.taxPct || "")}" placeholder="%" /></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th><input data-imported-filter="notes" type="text" value="${escapeHtml(filters.notes || "")}" placeholder="anotacoes" /></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          ${
+            pageRows.length
+              ? pageRows
+                  .map(
+                    (row) => `
+                      <tr>
+                        <td>
+                          <div class="pricing-cell-title">
+                            <strong>${escapeHtml(row.title)}</strong>
+                            <span class="muted-copy">${escapeHtml(row.brand || "marca livre")} · ${escapeHtml(row.category || "sem categoria")}</span>
+                            <code>${escapeHtml(row.id)}</code>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="pricing-inline-stack">
+                            <span class="pricing-value">${escapeHtml(row.supplier_name)}</span>
+                            <span class="muted-copy">${escapeHtml(row.supplier_type || "supplier")} · ${escapeHtml(row.supplier_model || "modelo padrao")}</span>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="pricing-inline-stack">
+                            ${rowPill(row.provider_key, "pill-accent")}
+                            <span class="muted-copy">${escapeHtml(row.channel_label || row.provider_status || "canal integrado")}</span>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="pricing-inline-stack">
+                            <span class="pricing-value">${escapeHtml(row.collection_label || row.category || "sem colecao")}</span>
+                            <span class="muted-copy">${escapeHtml(row.google_product_category_path || "taxonomia local")}</span>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="pricing-inline-stack">
+                            ${rowPill(row.availability_label || "disponivel", "pill")}
+                            <span class="muted-copy">${escapeHtml(row.price_band || "faixa livre")}${row.shipping_free ? " · frete integrado" : ""}</span>
+                          </div>
+                        </td>
+                        <td>${escapeHtml(formatMoney(row.base_cost_brl))}</td>
+                        <td>${escapeHtml(formatCount(row.stock))}</td>
+                        <td>${pricingEntryMarkup("target_net_revenue_pct", row.target_net_revenue_pct, row.supplier_key, row.id)}</td>
+                        <td>${pricingEntryMarkup("platform_fee_pct", row.platform_fee_pct, row.supplier_key, row.id)}</td>
+                        <td>${pricingEntryMarkup("operational_fee_pct", row.operational_fee_pct, row.supplier_key, row.id)}</td>
+                        <td>${pricingEntryMarkup("marketing_fee_pct", row.marketing_fee_pct, row.supplier_key, row.id)}</td>
+                        <td>${pricingEntryMarkup("tax_pct", row.tax_pct, row.supplier_key, row.id)}</td>
+                        <td>${escapeHtml(formatMoney(row.suggested_sale_price_brl))}</td>
+                        <td>${escapeHtml(formatMoney(row.estimated_net_revenue_brl))}<br /><span class="muted-copy">${escapeHtml(`${row.estimated_net_revenue_pct.toFixed(2)}%`)}</span></td>
+                        <td>${escapeHtml(formatMoney(row.estimated_inventory_net_revenue_brl))}</td>
+                        <td>${pricingEntryMarkup("notes", row.notes, row.supplier_key, row.id)}</td>
+                        <td>
+                          <button class="secondary-button" type="button" data-imported-reset-item="${escapeHtml(row.id)}">Limpar override</button>
+                        </td>
+                      </tr>
+                    `,
+                  )
+                  .join("")
+              : `<tr><td colspan="17"><div class="empty-state">Nenhum produto corresponde aos filtros e regras atuais.</div></td></tr>`
+          }
+        </tbody>
+      </table>
+      <div class="pricing-pager">
+        <div class="muted-copy">Pagina ${escapeHtml(String(importedPricingState.page))} de ${escapeHtml(String(totalPages))}</div>
+        <div class="pricing-pager-actions">
+          <button class="secondary-button" type="button" data-imported-page="prev" ${importedPricingState.page <= 1 ? "disabled" : ""}>Anterior</button>
+          <button class="secondary-button" type="button" data-imported-page="next" ${importedPricingState.page >= totalPages ? "disabled" : ""}>Proxima</button>
+        </div>
+      </div>
+    `;
+
+    const providerFilter = elements.importedPricingTableWrap.querySelector('select[data-imported-filter="providerKey"]');
+    if (providerFilter) {
+      providerFilter.value = filters.providerKey;
+    }
+    const availabilityFilter = elements.importedPricingTableWrap.querySelector('select[data-imported-filter="availabilityLabel"]');
+    if (availabilityFilter) {
+      availabilityFilter.value = filters.availabilityLabel;
+    }
+  }
+
+  function sanitizeImportedPricingEntry(entry) {
+    if (!entry || typeof entry !== "object") {
+      return null;
+    }
+
+    const normalized = {};
+    PRICING_EDITABLE_FIELDS.forEach((field) => {
+      if (!(field in entry)) {
+        return;
+      }
+      if (field === "notes") {
+        normalized.notes = String(entry.notes || "").trim();
+        return;
+      }
+      normalized[field] = toNumber(entry[field]);
+    });
+
+    return Object.keys(normalized).length ? normalized : null;
+  }
+
+  function collectImportedPricingPayload() {
+    const supplierDefaults = {};
+    const itemOverrides = {};
+
+    Object.entries(importedPricingState.draft.supplier_defaults || {}).forEach(([key, value]) => {
+      const normalized = sanitizeImportedPricingEntry(value);
+      if (normalized) {
+        supplierDefaults[key] = normalized;
+      }
+    });
+
+    Object.entries(importedPricingState.draft.item_overrides || {}).forEach(([key, value]) => {
+      const normalized = sanitizeImportedPricingEntry(value);
+      if (normalized) {
+        itemOverrides[key] = normalized;
+      }
+    });
+
+    return {
+      supplier_defaults: supplierDefaults,
+      item_overrides: itemOverrides,
+    };
+  }
+
+  async function saveImportedPricing() {
+    const payload = collectImportedPricingPayload();
+
+    try {
+      const response = await fetch("/api/admin-imported-products-pricing", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      announce("Regras de pricing importado salvas.");
+      importedPricingState.loading = true;
+      renderImportedPricingDesk();
+      await loadImportedPricing();
+    } catch (error) {
+      announce("Falha ao salvar pricing importado.");
+    }
+  }
+
+  function updateImportedPricingFilter(field, value) {
+    if (field === "pageSize") {
+      importedPricingState.pageSize = Math.max(1, toNumber(value, 24));
+    } else {
+      importedPricingState.filters[field] = String(value || "");
+    }
+    importedPricingState.page = 1;
+    renderImportedPricingDesk();
+  }
+
+  function updateImportedSupplierField(supplierKey, field, value) {
+    const next = {
+      ...(importedPricingState.draft.supplier_defaults?.[supplierKey] || {}),
+    };
+    next[field] = field === "notes" ? String(value || "") : toNumber(value);
+    importedPricingState.draft.supplier_defaults = {
+      ...(importedPricingState.draft.supplier_defaults || {}),
+      [supplierKey]: next,
+    };
+    renderImportedPricingDesk();
+  }
+
+  function updateImportedItemField(itemId, field, value) {
+    const next = {
+      ...(importedPricingState.draft.item_overrides?.[itemId] || {}),
+    };
+    next[field] = field === "notes" ? String(value || "") : toNumber(value);
+    importedPricingState.draft.item_overrides = {
+      ...(importedPricingState.draft.item_overrides || {}),
+      [itemId]: next,
+    };
+    renderImportedPricingDesk();
+  }
+
+  function resetImportedSupplierDefaults(supplierKey) {
+    const next = { ...(importedPricingState.draft.supplier_defaults || {}) };
+    delete next[supplierKey];
+    importedPricingState.draft.supplier_defaults = next;
+    renderImportedPricingDesk();
+  }
+
+  function resetImportedItemOverride(itemId) {
+    const next = { ...(importedPricingState.draft.item_overrides || {}) };
+    delete next[itemId];
+    importedPricingState.draft.item_overrides = next;
+    renderImportedPricingDesk();
+  }
+
   function renderAccessLinks() {
     if (!elements.adminAccessLinks) {
       return;
@@ -1619,6 +2421,108 @@
 
     elements.copyMarketplaceApis?.addEventListener("click", () => {
       copyText(JSON.stringify(collectMarketplaceApiConfig(), null, 2), "JSON de integracoes");
+    });
+
+    elements.saveImportedPricing?.addEventListener("click", () => {
+      saveImportedPricing();
+    });
+
+    elements.copyImportedPricing?.addEventListener("click", () => {
+      copyText(JSON.stringify(collectImportedPricingPayload(), null, 2), "JSON de pricing importado");
+    });
+
+    elements.importedSupplierBoard?.addEventListener("click", (event) => {
+      const reset = event.target.closest("[data-imported-reset-supplier]");
+      if (reset) {
+        resetImportedSupplierDefaults(reset.dataset.importedResetSupplier);
+        announce("Regra do fornecedor removida.");
+        return;
+      }
+
+      if (event.target.closest("input, select, button")) {
+        return;
+      }
+
+      const trigger = event.target.closest("[data-imported-supplier]");
+      if (!trigger) {
+        return;
+      }
+
+      updateImportedPricingFilter("supplierKey", trigger.dataset.importedSupplier || "all");
+      announce(
+        trigger.dataset.importedSupplier === "all"
+          ? "Visao consolidada de fornecedores ativada."
+          : "Fornecedor selecionado no desk de pricing.",
+      );
+    });
+
+    elements.importedSupplierBoard?.addEventListener("input", (event) => {
+      const target = event.target.closest("[data-imported-supplier-key][data-imported-field]");
+      if (!target || target.dataset.importedItemId) {
+        return;
+      }
+
+      updateImportedSupplierField(
+        target.dataset.importedSupplierKey,
+        target.dataset.importedField,
+        target.value,
+      );
+    });
+
+    const handleImportedFilterEvent = (event) => {
+      const target = event.target.closest("[data-imported-filter]");
+      if (!target) {
+        return;
+      }
+
+      updateImportedPricingFilter(target.dataset.importedFilter, target.value);
+    };
+
+    elements.importedPricingFilters?.addEventListener("input", handleImportedFilterEvent);
+    elements.importedPricingFilters?.addEventListener("change", handleImportedFilterEvent);
+
+    elements.importedPricingTableWrap?.addEventListener("input", (event) => {
+      const filterTarget = event.target.closest("[data-imported-filter]");
+      if (filterTarget) {
+        updateImportedPricingFilter(filterTarget.dataset.importedFilter, filterTarget.value);
+        return;
+      }
+
+      const fieldTarget = event.target.closest("[data-imported-item-id][data-imported-field]");
+      if (!fieldTarget) {
+        return;
+      }
+
+      updateImportedItemField(
+        fieldTarget.dataset.importedItemId,
+        fieldTarget.dataset.importedField,
+        fieldTarget.value,
+      );
+    });
+
+    elements.importedPricingTableWrap?.addEventListener("change", (event) => {
+      const filterTarget = event.target.closest("[data-imported-filter]");
+      if (filterTarget) {
+        updateImportedPricingFilter(filterTarget.dataset.importedFilter, filterTarget.value);
+      }
+    });
+
+    elements.importedPricingTableWrap?.addEventListener("click", (event) => {
+      const reset = event.target.closest("[data-imported-reset-item]");
+      if (reset) {
+        resetImportedItemOverride(reset.dataset.importedResetItem);
+        announce("Override do SKU removido.");
+        return;
+      }
+
+      const pager = event.target.closest("[data-imported-page]");
+      if (!pager) {
+        return;
+      }
+
+      importedPricingState.page += pager.dataset.importedPage === "next" ? 1 : -1;
+      importedPricingState.page = Math.max(1, importedPricingState.page);
+      renderImportedPricingDesk();
     });
 
     elements.criticalModules.addEventListener("click", (event) => {
@@ -2537,6 +3441,111 @@
     `;
   }
 
+  function loadCheckoutHealth() {
+    checkoutHealthState.loading = true;
+    checkoutHealthState.error = "";
+    renderCheckoutHealth();
+
+    fetch("/api/checkout-health?refresh=1", { headers: { Accept: "application/json" } })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((payload) => {
+        checkoutHealthState.payload = payload;
+        checkoutHealthState.loading = false;
+        renderCheckoutHealth();
+      })
+      .catch((error) => {
+        checkoutHealthState.loading = false;
+        checkoutHealthState.error = error.message || "Falha ao carregar checkout.";
+        renderCheckoutHealth();
+      });
+  }
+
+  function renderCheckoutHealth() {
+    if (!elements.checkoutHealthPanel) {
+      return;
+    }
+
+    if (checkoutHealthState.loading) {
+      elements.checkoutHealthPanel.innerHTML = `
+        <article class="runtime-status-card warn">
+          <div class="runtime-header">
+            <div>
+              <div class="runtime-url">Mercado Pago</div>
+              <div class="runtime-copy">Validando credenciais e endpoints do checkout.</div>
+            </div>
+            ${rowPill("carregando", "pill-warn")}
+          </div>
+        </article>
+      `;
+      return;
+    }
+
+    if (checkoutHealthState.error) {
+      elements.checkoutHealthPanel.innerHTML = `
+        <article class="runtime-status-card danger">
+          <div class="runtime-header">
+            <div>
+              <div class="runtime-url">Mercado Pago</div>
+              <div class="runtime-copy">${escapeHtml(checkoutHealthState.error)}</div>
+            </div>
+            ${rowPill("falha", "pill-danger")}
+          </div>
+        </article>
+      `;
+      return;
+    }
+
+    const payload = checkoutHealthState.payload || {};
+    const validation = payload.validation || {};
+    const presentCount = [payload.access_token_present, payload.public_key_present, payload.webhook_secret_present].filter(Boolean).length;
+    const tone = payload.status === "ready" ? "ok" : payload.status === "partial" ? "warn" : "danger";
+    const readinessLabel = payload.checkout_ready ? "operacional" : payload.status === "partial" ? "parcial" : "pendente";
+    const validationLabel = validation.status || "nao validado";
+    const notificationUrl = payload.notification_url || "";
+    const returnUrl = payload.sample_return_url || "";
+
+    elements.checkoutHealthPanel.innerHTML = `
+      <article class="runtime-status-card ${escapeHtml(tone)}">
+        <div class="runtime-header">
+          <div>
+            <div class="runtime-url">Mercado Pago Checkout</div>
+            <div class="runtime-copy">Checkout Pro do Valley com preferências server-side, retorno e webhook público.</div>
+          </div>
+          ${rowPill(readinessLabel, tone === "ok" ? "pill-accent" : tone === "warn" ? "pill-warn" : "pill-danger")}
+        </div>
+        <div class="external-grid">
+          ${externalTileMarkup("Checkout", payload.checkout_ready ? "pronto" : "bloqueado", payload.access_token_present ? "access token presente" : "access token ausente")}
+          ${externalTileMarkup("Credenciais", `${presentCount}/3`, "token, public key e webhook secret")}
+          ${externalTileMarkup("Validação", validationLabel, validation.checked_at_utc ? formatTimestamp(validation.checked_at_utc) : "sem checagem")}
+        </div>
+        <p class="muted-copy">
+          ${escapeHtml(validation.detail || "O backend valida o access token no endpoint oficial do Mercado Pago antes de liberar o checkout próprio.")}
+        </p>
+        <div class="endpoint-list">
+          <div class="endpoint-item">
+            <div>
+              <strong>notification_url</strong>
+              <div class="muted-copy">${escapeHtml(notificationUrl || "endpoint indisponível")}</div>
+            </div>
+            ${notificationUrl ? linkMarkup("Abrir", notificationUrl) : `<span class="pill">Aguardando</span>`}
+          </div>
+          <div class="endpoint-item">
+            <div>
+              <strong>return_url</strong>
+              <div class="muted-copy">${escapeHtml(returnUrl || "endpoint indisponível")}</div>
+            </div>
+            ${returnUrl ? linkMarkup("Abrir", returnUrl) : `<span class="pill">Aguardando</span>`}
+          </div>
+        </div>
+      </article>
+    `;
+  }
+
   function render() {
     const modules = filteredModules();
 
@@ -2546,6 +3555,7 @@
     renderReleaseSummaryBoard();
     renderCriticalModules();
     renderPublicRuntime();
+    renderCheckoutHealth();
     renderTierMatrix(modules);
     renderDataHomeMatrix(modules);
     renderReleaseQueue(modules);
@@ -2556,6 +3566,7 @@
     renderExternalAccess();
     renderAccessLinks();
     renderMarketplaceIntegrations();
+    renderImportedPricingDesk();
     renderModuleList(modules);
     renderDetail(modules);
     syncHash();
@@ -2566,5 +3577,7 @@
   bindEvents();
   render();
   loadCatalogSummary();
+  loadCheckoutHealth();
   loadMarketplaceApiConfig();
+  loadImportedPricing();
 })();

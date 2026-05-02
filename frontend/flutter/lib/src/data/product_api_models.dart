@@ -178,8 +178,49 @@ class ProductItem {
 
   String get supplierModel => raw['supplier_model'] as String? ?? '';
 
+  String get channelLabel => raw['channel_label'] as String? ?? '';
+
+  bool get shippingFree => raw['shipping_free'] == true;
+
+  String get supplierDisplayName {
+    if (supplierName.trim().isNotEmpty) {
+      return supplierName.trim();
+    }
+    if (providerKey.trim().isNotEmpty) {
+      return _humanizeProvider(providerKey);
+    }
+    if (merchantName.trim().isNotEmpty) {
+      return merchantName.trim();
+    }
+    return 'Fornecedor integrado';
+  }
+
+  String get providerDisplayName {
+    if (providerKey.trim().isNotEmpty) {
+      return _humanizeProvider(providerKey);
+    }
+    return supplierDisplayName;
+  }
+
   bool get supplierInternal =>
       (raw['supplier_visibility'] as String? ?? '') == 'internal';
+
+  String _humanizeProvider(String value) {
+    final List<String> parts = value
+        .split(RegExp(r'[_\-\s]+'))
+        .map((String part) => part.trim())
+        .where((String part) => part.isNotEmpty)
+        .toList();
+    if (parts.isEmpty) {
+      return value;
+    }
+    return parts
+        .map(
+          (String part) =>
+              '${part[0].toUpperCase()}${part.substring(1).toLowerCase()}',
+        )
+        .join(' ');
+  }
 }
 
 class ProductShellData {

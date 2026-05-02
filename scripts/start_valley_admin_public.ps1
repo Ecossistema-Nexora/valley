@@ -11,12 +11,15 @@ $ErrorActionPreference = 'Stop'
 $RepoRoot = Split-Path -Parent $PSScriptRoot
 $RuntimeDir = Join-Path $RepoRoot 'tmp\runtime'
 $RuntimeManifest = Join-Path $RuntimeDir 'valley-admin-public-runtime.json'
+$ProductRuntimeManifest = Join-Path $RuntimeDir 'valley-product-public-runtime.json'
+$ProductPublicationManifest = Join-Path $RuntimeDir 'valley-product-web-publication.json'
 $ServeScript = Join-Path $RepoRoot 'scripts\serve_valley_admin.py'
 $AdminRoot = Join-Path $RepoRoot 'admin'
 $AdminData = Join-Path $AdminRoot 'valley_admin_data.json'
 $EnvExamplePath = Join-Path $RepoRoot '.env.example'
 $ReleaseEnvExamplePath = Join-Path $RepoRoot 'config\VALLEY_RELEASE_ENV.example'
 $EnvPath = Join-Path $RepoRoot '.env'
+$CodexCloudEnvPath = Join-Path $RuntimeDir 'codex-cloud-secrets.env'
 $ServeStdoutLog = Join-Path $RuntimeDir 'valley-admin-http.out.log'
 $ServeStderrLog = Join-Path $RuntimeDir 'valley-admin-http.err.log'
 $CloudflareStdoutLog = Join-Path $RuntimeDir 'valley-admin-cloudflare.out.log'
@@ -250,7 +253,61 @@ function Write-RuntimeManifest {
     [System.IO.File]::WriteAllText($RuntimeManifest, $Json, [System.Text.UTF8Encoding]::new($false))
 }
 
-Import-ValleyEnv -Paths @($EnvExamplePath, $ReleaseEnvExamplePath, $EnvPath)
+function Write-ProductManifests {
+    param(
+        [string]$Provider,
+        [string]$PublicUrl,
+        [string]$LocalUrl,
+        [bool]$Temporary,
+        [string]$ProviderStatus
+    )
+
+    $BaseUrl = $PublicUrl.TrimEnd('/')
+    $ProductBaseUrl = "$BaseUrl/product"
+    $ProductApiUrl = "$BaseUrl/api/product-shell"
+    $LocalApiUrl = "$LocalUrl/api/product-shell"
+
+    $RuntimePayload = [ordered]@{
+        status = 'ok'
+        service = 'valley-product-public'
+        provider = $Provider
+        public_url = $ProductBaseUrl
+        public_api_url = $ProductApiUrl
+        local_api_url = $LocalApiUrl
+        generated_at = (Get-Date).ToString('o')
+        temporary = $Temporary
+        provider_status = $ProviderStatus
+        logs = @{
+            admin_http_stdout = $ServeStdoutLog
+            admin_http_stderr = $ServeStderrLog
+            cloudflare_stdout = $CloudflareStdoutLog
+            cloudflare_stderr = $CloudflareStderrLog
+        }
+    }
+
+    $PublicationPayload = [ordered]@{
+        status = 'published'
+        provider = $Provider
+        public_url = $ProductBaseUrl
+        api_url = $ProductApiUrl
+        generated_at = (Get-Date).ToString('o')
+        temporary = $Temporary
+        provider_status = $ProviderStatus
+    }
+
+    [System.IO.File]::WriteAllText(
+        $ProductRuntimeManifest,
+        ($RuntimePayload | ConvertTo-Json -Depth 8),
+        [System.Text.UTF8Encoding]::new($false)
+    )
+    [System.IO.File]::WriteAllText(
+        $ProductPublicationManifest,
+        ($PublicationPayload | ConvertTo-Json -Depth 8),
+        [System.Text.UTF8Encoding]::new($false)
+    )
+}
+
+Import-ValleyEnv -Paths @($EnvExamplePath, $ReleaseEnvExamplePath, $EnvPath, $CodexCloudEnvPath)
 
 if (-not $PSBoundParameters.ContainsKey('CloudflaredToken')) {
     $CloudflaredToken = $env:CLOUDFLARED_TOKEN
@@ -261,6 +318,8 @@ if (-not $PSBoundParameters.ContainsKey('PublicBaseUrl')) {
         $PublicBaseUrl = $env:VALLEY_ADMIN_PUBLIC_URL
     } elseif ($env:VALLEY_CLOUDFLARE_PUBLIC_URL) {
         $PublicBaseUrl = $env:VALLEY_CLOUDFLARE_PUBLIC_URL
+    } elseif ($env:VALLEY_TERMIUS_CLOUDFLARE_HOST) {
+        $PublicBaseUrl = 'https://{0}' -f $env:VALLEY_TERMIUS_CLOUDFLARE_HOST.Trim().Trim('/')
     }
 }
 
@@ -330,6 +389,7 @@ if (-not [string]::IsNullOrWhiteSpace($CloudflaredToken) -and -not [string]::IsN
         Start-Sleep -Seconds 2
         if (Test-AdminHealth -BaseUrl $PublicBaseUrl) {
             Write-RuntimeManifest -Provider 'cloudflare_named_tunnel' -PublicUrl $PublicBaseUrl -LocalUrl $LocalBaseUrl -Temporary $false -Permanence 'fixed_external' -ProviderStatus 'healthy' -Mode 'named'
+            Write-ProductManifests -Provider 'cloudflare_named_tunnel' -PublicUrl $PublicBaseUrl -LocalUrl $LocalBaseUrl -Temporary $false -ProviderStatus 'healthy'
             Write-Step ("Admin publico ativo via Cloudflare named tunnel: {0}" -f $PublicBaseUrl)
             exit 0
         }
@@ -358,6 +418,7 @@ do {
 
     if ($QuickTunnelUrl -and (Test-AdminHealth -BaseUrl $QuickTunnelUrl)) {
         Write-RuntimeManifest -Provider 'cloudflare_quick_tunnel' -PublicUrl $QuickTunnelUrl -LocalUrl $LocalBaseUrl -Temporary $true -Permanence 'ephemeral_external' -ProviderStatus 'healthy' -Mode 'quick'
+        Write-ProductManifests -Provider 'cloudflare_quick_tunnel' -PublicUrl $QuickTunnelUrl -LocalUrl $LocalBaseUrl -Temporary $true -ProviderStatus 'healthy'
         Write-Step ("Admin publico ativo via Cloudflare Quick Tunnel: {0}" -f $QuickTunnelUrl)
         exit 0
     }
