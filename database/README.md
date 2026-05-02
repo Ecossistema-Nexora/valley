@@ -92,6 +92,10 @@ Esse script adiciona unidades e fechamento fiscal, politicas e trilhas de aprova
 
 `database/postgres/032_v47_mobility_production_schema.sql` cria o schema `mobility` de modo producao para benchmark de custo, rotas de usuario e buffer realtime, mantendo `mobility_trips` como execucao consolidada de corrida.
 
+`database/postgres/035_v47_phase1_commerce_identity_engagement.sql` fecha a Fase 1 comercial focada do Valley.
+
+Esse script adiciona auth/sessao, perfis de usuario e lojista, home personalizada, integracoes de checkout, intents/webhooks de pagamento, chat comprador-lojista, carrinho, favoritos, reviews e SAC, mantendo `users`, `wallets`, `orders`, `transactions`, `inventory_items`, `marketplace_listings`, `merchant_storefronts` e `dropshipping_*` como ancora do fluxo.
+
 `database/seeds/postgres/002_v47_priority_domain_delivery_packages_seed.sql` popula esse registry com os dominios cuja prioridade minima do backlog e `<= 2`, sem perder idempotencia.
 
 `database/domain-delivery/priority-domains/` guarda os pacotes fisicos por dominio, com `ddl_complement.sql` e `operational_seed.sql` prontos para revisao e aplicacao controlada.

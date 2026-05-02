@@ -240,6 +240,13 @@
       "purpose_ptbr": "Enriquece aditivamente o core relacional com colunas futuras de identidade, risco, operacao, wallet, pedidos, transacoes e equity para reduzir retrabalho estrutural.",
       "requires": ["001", "002", "033"],
       "provides": ["column:users.metadata_json", "column:pj_profiles.metadata_json", "column:rider_profiles.metadata_json", "column:wallets.metadata_json", "column:led_cards.metadata_json", "column:orders.metadata_json", "column:transactions.processor_transaction_id", "column:equity_ledger.metadata_json"]
+    },
+    {
+      "id": "035",
+      "path": "database/postgres/035_v47_phase1_commerce_identity_engagement.sql",
+      "purpose_ptbr": "Fecha a Fase 1 comercial focada com auth, perfis, home, checkout, chat comprador-lojista, carrinho, favoritos, reviews e SAC sobre Financeiro, Stock, Marketplace e Dropshipping.",
+      "requires": ["004", "005", "008", "010", "033", "034"],
+      "provides": ["auth_identities", "auth_sessions", "auth_login_events", "user_profiles", "merchant_profiles", "home_surface_preferences", "checkout_provider_configs", "checkout_payment_intents", "checkout_webhook_events", "commerce_chat_threads", "shopping_carts", "shopping_cart_items", "user_favorites", "marketplace_item_reviews", "support_tickets", "support_ticket_messages"]
     }
   ],
   "mongodb": [
