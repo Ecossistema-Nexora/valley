@@ -1,6 +1,6 @@
 # VALLEY Implementation Memorandum
 
-Atualizado em `2026-04-29` para registrar, em um unico artefato, o que ja foi criado, integrado, publicado e validado no worktree atual do Valley.
+Atualizado em `2026-05-01` para registrar, em um unico artefato, o que ja foi criado, integrado, publicado e validado no worktree atual do Valley.
 
 ## 1. Resumo executivo
 
@@ -249,14 +249,19 @@ Leitura correta:
 
 ## 7. Base de dados e esteira de infraestrutura
 
-Estado comprovado por [output/deployment/VALLEY_DEPLOYMENT_STATUS.md](C:/Users/ereta/.codex/worktrees/VALLEY/output/deployment/VALLEY_DEPLOYMENT_STATUS.md:1):
+Estado comprovado por [output/deployment/VALLEY_DEPLOYMENT_STATUS.md](C:/Users/ereta/.codex/worktrees/VALLEY/output/deployment/VALLEY_DEPLOYMENT_STATUS.md:1), regenerado em `2026-05-02T00:48:30.210949+00:00`:
 
-- `33` migrations PostgreSQL declaradas;
-- `4` scripts MongoDB declarados;
-- `329` checagens totais;
-- `0` falhas ou pendencias no relatorio registrado;
+- `34` migrations PostgreSQL declaradas;
+- `5` scripts MongoDB declarados;
+- `339` checagens totais;
+- `2` pendencias operacionais externas no relatorio registrado;
 - esteira local com `check`, `report`, `apply-compose`, `seed-compose`, `smoke-compose`, `snapshot-compose`, `snapshot-verify` e `restore-compose`;
 - `47` pastas de modulo encontradas com artefatos de contrato e status.
+
+Pendencias atuais observadas:
+
+- Docker daemon local nao respondeu ao `docker info` dentro do timeout de 30s;
+- `docker compose` excedeu 10s durante a checagem automatica, coerente com o daemon indisponivel no momento da validacao.
 
 Documentos base:
 

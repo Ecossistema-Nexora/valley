@@ -1,14 +1,14 @@
 # Memorial Descritivo Completo Do Desenvolvimento - Valley
 
-Base consolidada em 21/04/2026 a partir dos artefatos reais do repositorio.
+Base consolidada em 2026-05-02T00:48:30.210949+00:00 a partir dos artefatos reais do repositorio.
 
 ## Resumo executivo
 - 47 modulos registrados e organizados em 9 dominios.
-- 32 migrations PostgreSQL declaradas e 4 scripts MongoDB declarados.
+- 34 migrations PostgreSQL declaradas e 5 scripts MongoDB declarados.
 - Cobertura atual por fase: VALIDATE=38, BUILD=4, DATA_CONTRACT=5.
 - Cobertura atual por data home: postgres=22, postgres_mongo=13, mongo=12.
 - 7 dominios prioritarios ja empacotados em database/domain-delivery/priority-domains.
-- Relatorio operacional atual: 314 checagens e 0 falhas ou pendencias.
+- Relatorio operacional atual: 339 checagens e 2 falhas ou pendencias.
 
 ## O que ja foi desenvolvido
 ### 1. Nucleo de dados e arquitetura
@@ -24,6 +24,7 @@ Base consolidada em 21/04/2026 a partir dos artefatos reais do repositorio.
 - 018-026: DDL de negocio por dominio. Platform, logistics, city security, commerce, AI, media e frontier em estrutura operacional dedicada.
 - 027-031: Guardrails e correcoes. Helena identity, pricing rules, aliases de catalogo e correcoes de reward/account status.
 - 032: Mobility production schema. Schema mobility com cost_benchmarks, user_routes, realtime_buffer e view operacional.
+- 033-034: Dropshipping MVP e futureproof enrichment. Blueprint produtivo de STOCK/dropshipping e enriquecimento aditivo do core relacional para reduzir retrabalho estrutural.
 
 Arquivos declarados:
 - database/postgres/001_core_identity_wallets.sql
@@ -58,6 +59,8 @@ Arquivos declarados:
 - database/postgres/030_v47_fix_gold_campaign_reward_type_ambiguity.sql
 - database/postgres/031_v47_fix_pepita_account_status_ambiguity.sql
 - database/postgres/032_v47_mobility_production_schema.sql
+- database/postgres/033_v47_stock_dropshipping_production_blueprint.sql
+- database/postgres/034_v47_foundation_futureproof_enrichment.sql
 
 ### 3. Banco MongoDB
 - Validators e colecoes base para AI, social, telemetria, field ops, wellness e frontier.
@@ -65,6 +68,7 @@ Arquivos declarados:
 - database/mongodb/002_v47_log_iot_foundation.mongo.js
 - database/mongodb/003_v47_field_ops_security_agenda.mongo.js
 - database/mongodb/004_v47_expansion_media_wellness_frontier.mongo.js
+- database/mongodb/005_v47_brain_futureproof_enrichment.mongo.js
 
 ### 4. Modulos e governanca
 - 47 pastas de modulo presentes com README.md, STATUS.md e CONTRACT.md.
@@ -86,9 +90,9 @@ Arquivos declarados:
 - Documentos de modo producao local, acesso externo e checklist de primeira conexao.
 
 ### 7. Evidencias operacionais
-- Relatorio em output/deployment/VALLEY_DEPLOYMENT_STATUS.md gerado em 2026-04-21T17:41:06.134869+00:00.
-- Snapshots presentes em output/snapshots/: valley_db_snapshot_20260421T073400Z, valley_db_snapshot_20260421T172552Z.
-- PDFs ja gerados: VALLEY_MANUAL_ONLINE.pdf, VALLEY_MEMORANDO_ESTRUTURADO_MODULOS_ECONOMIA.pdf, VALLEY_SUMARIO_ENTREGA_MODULOS_SERVICOS.pdf.
+- Relatorio em output/deployment/VALLEY_DEPLOYMENT_STATUS.md gerado em 2026-05-02T00:48:30.210949+00:00.
+- Snapshots presentes em output/snapshots/: valley_db_snapshot_20260421T073400Z, valley_db_snapshot_20260421T172552Z, valley_db_snapshot_20260421T200356Z, valley_db_snapshot_20260421T202041Z.
+- PDFs ja gerados: VALLEY_MANUAL_ONLINE.pdf, VALLEY_MEMORANDO_ESTRUTURADO_MODULOS_ECONOMIA.pdf, VALLEY_MEMORIAL_DESCRITIVO_COMPLETO_DO_DESENVOLVIMENTO.pdf, VALLEY_SUMARIO_ENTREGA_MODULOS_SERVICOS.pdf, VALLEY_VISION_ABNT.pdf.
 
 ### 8. Frentes institucionais recentes
 - Valley Vision consolidando macroarquitetura, ondas e mapa institucional do ecossistema.
@@ -182,8 +186,11 @@ Educacao, jobs e impacto social.
 - database/postgres/024_v47_ai_memory_operations_business_ddl.sql
 - database/postgres/027_v47_helena_identity_pricing_guardrails.sql
 - database/postgres/032_v47_mobility_production_schema.sql
+- database/postgres/033_v47_stock_dropshipping_production_blueprint.sql
+- database/postgres/034_v47_foundation_futureproof_enrichment.sql
 - database/mongodb/001_ai_social_telemetry.mongo.js
 - database/mongodb/003_v47_field_ops_security_agenda.mongo.js
+- database/mongodb/005_v47_brain_futureproof_enrichment.mongo.js
 - scripts/valley_db_orchestrator.py
 - docker-compose.yml
 - output/deployment/VALLEY_DEPLOYMENT_STATUS.md

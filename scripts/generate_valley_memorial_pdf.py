@@ -66,6 +66,7 @@ MIGRATION_GROUPS = [
     ("018-026", "DDL de negocio por dominio", "Platform, logistics, city security, commerce, AI, media e frontier em estrutura operacional dedicada."),
     ("027-031", "Guardrails e correcoes", "Helena identity, pricing rules, aliases de catalogo e correcoes de reward/account status."),
     ("032", "Mobility production schema", "Schema mobility com cost_benchmarks, user_routes, realtime_buffer e view operacional."),
+    ("033-034", "Dropshipping MVP e futureproof enrichment", "Blueprint produtivo de STOCK/dropshipping e enriquecimento aditivo do core relacional para reduzir retrabalho estrutural."),
 ]
 
 
@@ -76,8 +77,11 @@ KEY_ARTIFACTS = [
     "database/postgres/024_v47_ai_memory_operations_business_ddl.sql",
     "database/postgres/027_v47_helena_identity_pricing_guardrails.sql",
     "database/postgres/032_v47_mobility_production_schema.sql",
+    "database/postgres/033_v47_stock_dropshipping_production_blueprint.sql",
+    "database/postgres/034_v47_foundation_futureproof_enrichment.sql",
     "database/mongodb/001_ai_social_telemetry.mongo.js",
     "database/mongodb/003_v47_field_ops_security_agenda.mongo.js",
+    "database/mongodb/005_v47_brain_futureproof_enrichment.mongo.js",
     "scripts/valley_db_orchestrator.py",
     "docker-compose.yml",
     "output/deployment/VALLEY_DEPLOYMENT_STATUS.md",
@@ -247,11 +251,11 @@ def build_markdown(state: dict) -> str:
     lines: list[str] = []
     lines.append("# Memorial Descritivo Completo Do Desenvolvimento - Valley")
     lines.append("")
-    lines.append("Base consolidada em 21/04/2026 a partir dos artefatos reais do repositorio.")
+    lines.append(f"Base consolidada em {state['deployment']['generated_at']} a partir dos artefatos reais do repositorio.")
     lines.append("")
     lines.append("## Resumo executivo")
     lines.append(f"- 47 modulos registrados e organizados em 9 dominios.")
-    lines.append(f"- 32 migrations PostgreSQL declaradas e 4 scripts MongoDB declarados.")
+    lines.append(f"- {len(state['postgres_files'])} migrations PostgreSQL declaradas e {len(state['mongo_files'])} scripts MongoDB declarados.")
     lines.append(f"- Cobertura atual por fase: VALIDATE={state['phase_counts'].get('VALIDATE', 0)}, BUILD={state['phase_counts'].get('BUILD', 0)}, DATA_CONTRACT={state['phase_counts'].get('DATA_CONTRACT', 0)}.")
     lines.append(f"- Cobertura atual por data home: postgres={state['home_counts'].get('postgres', 0)}, postgres_mongo={state['home_counts'].get('postgres_mongo', 0)}, mongo={state['home_counts'].get('mongo', 0)}.")
     lines.append(f"- 7 dominios prioritarios ja empacotados em database/domain-delivery/priority-domains.")
@@ -332,7 +336,7 @@ def build_story(state: dict, styles) -> list:
     story: list = []
     story.append(Spacer(1, 0.55 * inch))
     story.append(Paragraph("Memorial Descritivo Completo Do Desenvolvimento", styles["Title"]))
-    story.append(Paragraph("Valley - consolidado a partir dos artefatos reais do repositorio", styles["Caption"]))
+    story.append(Paragraph(f"Valley - consolidado em {escape(state['deployment']['generated_at'])} a partir dos artefatos reais do repositorio", styles["Caption"]))
     story.append(Spacer(1, 0.12 * inch))
     story.append(Paragraph("Objetivo: registrar de forma institucional tudo que ja foi efetivamente desenvolvido, documentado, validado e empacotado no worktree atual.", styles["Caption"]))
     story.append(PageBreak())

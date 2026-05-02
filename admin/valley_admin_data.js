@@ -1,5 +1,5 @@
 window.VALLEY_ADMIN_DATA = {
-  "generated_at_utc": "2026-04-24T20:07:44.382275+00:00",
+  "generated_at_utc": "2026-05-02T00:48:30.723104+00:00",
   "registry_name": "Valley Omniverse V47 - Registro Canonico de Modulos",
   "source": "Esquema Consolidado do Valley Omniverse v47.pdf",
   "language_policy": "pt-BR simples com termos tecnicos em ingles quando forem padroes",
@@ -465,7 +465,7 @@ window.VALLEY_ADMIN_DATA = {
   "public_runtime": {
     "available": true,
     "path": "../tmp/runtime/valley-admin-public-runtime.json",
-    "status": "production_persistent",
+    "status": "ok",
     "public_url": "https://admin.brasildesconto.com.br",
     "permanence": "fixed_external",
     "smoke_endpoints": {
@@ -474,8 +474,8 @@ window.VALLEY_ADMIN_DATA = {
     }
   },
   "database_summary": {
-    "postgres_migrations": 33,
-    "mongodb_scripts": 4,
+    "postgres_migrations": 34,
+    "mongodb_scripts": 5,
     "postgres_items": [
       {
         "id": "001",
@@ -1097,6 +1097,26 @@ window.VALLEY_ADMIN_DATA = {
           "v_stock_dropshipping_production_ops",
           "v_stock_dropshipping_provider_health"
         ]
+      },
+      {
+        "id": "034",
+        "path": "database/postgres/034_v47_foundation_futureproof_enrichment.sql",
+        "purpose_ptbr": "Enriquece aditivamente o core relacional com colunas futuras de identidade, risco, operacao, wallet, pedidos, transacoes e equity para reduzir retrabalho estrutural.",
+        "requires": [
+          "001",
+          "002",
+          "033"
+        ],
+        "provides": [
+          "column:users.metadata_json",
+          "column:pj_profiles.metadata_json",
+          "column:rider_profiles.metadata_json",
+          "column:wallets.metadata_json",
+          "column:led_cards.metadata_json",
+          "column:orders.metadata_json",
+          "column:transactions.processor_transaction_id",
+          "column:equity_ledger.metadata_json"
+        ]
       }
     ],
     "mongodb_items": [
@@ -1161,20 +1181,40 @@ window.VALLEY_ADMIN_DATA = {
           "bio_impact_logs",
           "energy_meter_streams"
         ]
+      },
+      {
+        "id": "mongo-005",
+        "path": "database/mongodb/005_v47_brain_futureproof_enrichment.mongo.js",
+        "purpose_ptbr": "Enriquece validators e indices das colecoes centrais de IA, social, influencer e telemetria com campos futuros de moderacao, compliance, monetizacao e operacao realtime.",
+        "requires": [
+          "mongo-001",
+          "mongo-002",
+          "mongo-003",
+          "mongo-004"
+        ],
+        "provides": [
+          "validator:ai_memory:v2",
+          "validator:social_videos:v2",
+          "validator:influencer_metrics:v2",
+          "validator:telemetry_logs:v2"
+        ]
       }
     ]
   },
   "deployment_summary": {
     "available": true,
-    "generated_at_utc": "2026-04-24T20:07:44.048554+00:00",
-    "total_checks": 329,
-    "failed_checks": 0,
-    "top_failures": []
+    "generated_at_utc": "2026-05-02T00:48:30.210949+00:00",
+    "total_checks": 339,
+    "failed_checks": 2,
+    "top_failures": [
+      "`tool.docker_daemon`: docker info nao respondeu em 30s; iniciar Docker Desktop ou verificar o engine.",
+      "`tool.docker_compose`: comando excedeu 10s e foi interrompido"
+    ]
   },
   "public_access": {
     "path": "../output/deployment/VALLEY_EXTERNAL_ACCESS.md",
     "cloudflare_launcher_path": "../scripts/start_termius_cloudflare_tunnel.ps1",
-    "preview": "# Valley External Access\nEste runbook publica o painel `admin/` para acesso externo fora da rede local usando `cloudflared`, com quick tunnel para subida imediata e named tunnel quando houver `CLOUDFLARED_TOKEN` e hostname definitivo.\n## Entrada rapida\n- Launcher do painel: `scripts/start_valley_admin_public.ps1`\n- Launcher de tunnel nomeado: `scripts/start_termius_cloudflare_tunnel.ps1`\n## Estado atual do host\n- `cloudflared` e o caminho preferencial de exposicao externa\n- quick tunnel atende subida imediata\n- URL fixa depende de `CLOUDFLARED_TOKEN` e `VALLEY_ADMIN_PUBLIC_URL`\n## Operacao\n- sem token: quick tunnel efemero\n- com token e hostname: named tunnel persistente\n- manifesto ativo: `tmp/runtime/valley-admin-public-runtime.json`"
+    "preview": "# Valley External Access\nEste runbook publica o painel `admin/` para testes externos fora da rede local usando `ngrok`, com trilha separada para URL dinamica e URL permanente de release.\n## Entrada rapida\n- Checklist de primeira conexao: `config/VALLEY_FIRST_CONNECTION_CHECKLIST.md`\n- Esse checklist resume OAuth MCP, diferenca entre conectores do workspace e da plataforma, e ativacao da URL permanente sem gravar segredo no repositorio.\n## Estado atual do host\n- `ngrok` validado no host em `2026-04-20`\n- versao detectada: `3.37.3`\n- instalacao encontrada via WinGet\n- configuracao global do `ngrok` detectada fora do repositorio\n- `VALLEY_NGROK_ADMIN_DOMAIN` ainda nao esta exportada no ambiente atual\n## Componentes versionados no workspace\n- tunnel dinamico: `config/ngrok/valley-ngrok.yml`\n- template de release com dominio reservado: `config/ngrok/valley-ngrok.release.example.yml`\n..."
   },
   "roadmap": {
     "path": "../output/module-roadmap/VALLEY_MODULE_ROADMAP.md",
