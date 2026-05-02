@@ -202,10 +202,18 @@ def provider_redirect_uri(provider_key: str, admin_base_url: str) -> str:
 def provider_webhook_url(provider_key: str, admin_base_url: str) -> str:
     if provider_key == "mercado_livre":
         return f"{admin_base_url}/integrations/mercadolivre/notifications"
+    if provider_key == "amazon":
+        return f"{admin_base_url}/integrations/amazon/notifications"
     if provider_key == "aliexpress":
         return f"{admin_base_url}/integrations/aliexpress/notifications"
+    if provider_key == "alibaba":
+        return f"{admin_base_url}/integrations/alibaba/notifications"
+    if provider_key == "magalu":
+        return f"{admin_base_url}/integrations/magalu/notifications"
     if provider_key == "cjdropshipping":
         return f"{admin_base_url}/integrations/cjdropshipping/notifications"
+    if provider_key == "shopee":
+        return f"{admin_base_url}/integrations/shopee/notifications"
     return ""
 
 
@@ -340,11 +348,20 @@ def safe_integration_defaults(provider: ProviderPolicy, template: dict[str, Any]
             "syncOrders": bool(item.get("syncOrders", True)),
             "syncInventory": True,
             "syncPricing": True,
+            "stockModuleEnabled": True,
+            "sandboxEnabled": True,
+            "productionEnabled": True,
+            "importCategories": True,
+            "publishApprovedOnly": True,
+            "requireRetailAdvantage": True,
+            "requireLiquidityCheck": True,
             "allowScrapingFallback": False,
             "blockExternalAiLookup": True,
             "secretRef": item.get("secretRef") or f"runtime://marketplaces/{provider.key}/secret",
             "accessTokenRef": item.get("accessTokenRef") or f"runtime://marketplaces/{provider.key}/access-token",
             "refreshTokenRef": item.get("refreshTokenRef") or f"runtime://marketplaces/{provider.key}/refresh-token",
+            "webhookSecretRef": item.get("webhookSecretRef")
+            or f"runtime://marketplaces/{provider.key}/webhook-secret",
             "usernameRef": item.get("usernameRef") or f"runtime://marketplaces/{provider.key}/username",
             "passwordRef": item.get("passwordRef") or f"runtime://marketplaces/{provider.key}/password",
         }
@@ -376,12 +393,27 @@ def repair_integrations(
             "syncOrders",
             "syncInventory",
             "syncPricing",
+            "stockModuleEnabled",
+            "sandboxEnabled",
+            "productionEnabled",
+            "importCategories",
+            "publishApprovedOnly",
+            "requireRetailAdvantage",
+            "requireLiquidityCheck",
             "allowScrapingFallback",
             "blockExternalAiLookup",
             "usernameRef",
             "passwordRef",
         ):
             merged[enforced_key] = base[enforced_key]
+        for safe_ref_key in (
+            "secretRef",
+            "accessTokenRef",
+            "refreshTokenRef",
+            "webhookSecretRef",
+        ):
+            if not str(merged.get(safe_ref_key) or "").strip():
+                merged[safe_ref_key] = base[safe_ref_key]
         provider_secrets = secrets.get(provider.key)
         if isinstance(provider_secrets, dict):
             if provider_secrets.get("sellerId") and not str(merged.get("sellerId") or "").strip():

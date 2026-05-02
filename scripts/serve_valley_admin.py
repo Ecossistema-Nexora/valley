@@ -8,12 +8,15 @@ import base64
 import hashlib
 import hmac
 import json
+import math
 import os
+import re
 import secrets
 import subprocess
 import sys
 import threading
 import time
+import unicodedata
 from collections import defaultdict
 from datetime import datetime, timezone
 from functools import partial
@@ -39,6 +42,7 @@ ADMIN_INTEGRATIONS_PATH = RUNTIME_DIR / "valley-admin-integrations.json"
 ADMIN_IMPORTED_PRODUCTS_PRICING_PATH = (
     RUNTIME_DIR / "valley-admin-imported-products-pricing.json"
 )
+DROPSHIPPING_STATUS_PATH = RUNTIME_DIR / "valley-dropshipping-integration-status.json"
 CODEX_CLOUD_ENV_PATH = RUNTIME_DIR / "codex-cloud-secrets.env"
 MARKETPLACE_OAUTH_RUNTIME_PATH = RUNTIME_DIR / "valley-marketplace-oauth-runtime.json"
 SHOPEE_OAUTH_RUNTIME_PATH = RUNTIME_DIR / "valley-shopee-oauth-runtime.json"
@@ -55,16 +59,26 @@ MERCADOPAGO_STATUS_PATH = RUNTIME_DIR / "valley-mercadopago-status.json"
 MERCADOLIVRE_NOTIFICATIONS_PATH = RUNTIME_DIR / "valley-mercadolivre-notifications.jsonl"
 MERCADOLIVRE_NOTIFICATIONS_LATEST_PATH = RUNTIME_DIR / "valley-mercadolivre-notification-latest.json"
 MERCADOLIVRE_PKCE_PATH = RUNTIME_DIR / "valley-mercadolivre-pkce.json"
+AMAZON_NOTIFICATIONS_PATH = RUNTIME_DIR / "valley-amazon-notifications.jsonl"
+AMAZON_NOTIFICATIONS_LATEST_PATH = RUNTIME_DIR / "valley-amazon-notification-latest.json"
 ALIEXPRESS_NOTIFICATIONS_PATH = RUNTIME_DIR / "valley-aliexpress-notifications.jsonl"
 ALIEXPRESS_NOTIFICATIONS_LATEST_PATH = RUNTIME_DIR / "valley-aliexpress-notification-latest.json"
+ALIBABA_NOTIFICATIONS_PATH = RUNTIME_DIR / "valley-alibaba-notifications.jsonl"
+ALIBABA_NOTIFICATIONS_LATEST_PATH = RUNTIME_DIR / "valley-alibaba-notification-latest.json"
+MAGALU_NOTIFICATIONS_PATH = RUNTIME_DIR / "valley-magalu-notifications.jsonl"
+MAGALU_NOTIFICATIONS_LATEST_PATH = RUNTIME_DIR / "valley-magalu-notification-latest.json"
 CJDROPSHIPPING_NOTIFICATIONS_PATH = RUNTIME_DIR / "valley-cjdropshipping-notifications.jsonl"
 CJDROPSHIPPING_NOTIFICATIONS_LATEST_PATH = RUNTIME_DIR / "valley-cjdropshipping-notification-latest.json"
+SHOPEE_NOTIFICATIONS_PATH = RUNTIME_DIR / "valley-shopee-notifications.jsonl"
+SHOPEE_NOTIFICATIONS_LATEST_PATH = RUNTIME_DIR / "valley-shopee-notification-latest.json"
 STOCK_SYNC_STATE_PATH = RUNTIME_DIR / "valley-stock-sync-state.json"
 STOCK_SYNC_EVENTS_PATH = RUNTIME_DIR / "valley-stock-sync-events.jsonl"
 PRODUCT_CATALOG_PATH = ROOT / "frontend" / "flutter" / "assets" / "data" / "valley_product_catalog.json"
 PRODUCT_INTERACTIONS_PATH = RUNTIME_DIR / "valley-product-interactions.jsonl"
 PRODUCT_MVP_MODULES = {"STOCK", "MARKETPLACE", "CHAT"}
 PRODUCT_LIST_LIMIT = 80
+MARKETPLACE_RUNTIME_PROVIDERS = {"mercado_livre", "amazon", "magalu", "shopee"}
+SUPPLIER_RUNTIME_PROVIDERS = {"cjdropshipping", "aliexpress", "alibaba"}
 STOCK_INTERNAL_FIELDS = {
     "supplier_name",
     "supplier_type",
@@ -666,12 +680,44 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             self._write_mercadopago_notification_probe()
             return
 
+        if route == "/integrations/amazon/notifications":
+            self._write_marketplace_notification_probe(
+                provider_key="amazon",
+                route="/integrations/amazon/notifications",
+                detail="Endpoint de notificacoes da Amazon SP-API ativo.",
+            )
+            return
+
         if route == "/integrations/aliexpress/notifications":
             self._write_aliexpress_notification_probe()
             return
 
+        if route == "/integrations/alibaba/notifications":
+            self._write_marketplace_notification_probe(
+                provider_key="alibaba",
+                route="/integrations/alibaba/notifications",
+                detail="Endpoint de notificacoes do Alibaba ativo.",
+            )
+            return
+
+        if route == "/integrations/magalu/notifications":
+            self._write_marketplace_notification_probe(
+                provider_key="magalu",
+                route="/integrations/magalu/notifications",
+                detail="Endpoint de notificacoes do Magalu ativo.",
+            )
+            return
+
         if route == "/integrations/cjdropshipping/notifications":
             self._write_cjdropshipping_notification_probe()
+            return
+
+        if route == "/integrations/shopee/notifications":
+            self._write_marketplace_notification_probe(
+                provider_key="shopee",
+                route="/integrations/shopee/notifications",
+                detail="Endpoint de notificacoes da Shopee ativo.",
+            )
             return
 
         if route == "/integrations/mercadolivre/authorize":
@@ -806,12 +852,44 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             self._write_mercadolivre_notification_event()
             return
 
+        if route == "/integrations/amazon/notifications":
+            self._write_marketplace_notification_event(
+                provider_key="amazon",
+                path=AMAZON_NOTIFICATIONS_PATH,
+                latest_path=AMAZON_NOTIFICATIONS_LATEST_PATH,
+            )
+            return
+
         if route == "/integrations/aliexpress/notifications":
             self._write_aliexpress_notification_event()
             return
 
+        if route == "/integrations/alibaba/notifications":
+            self._write_marketplace_notification_event(
+                provider_key="alibaba",
+                path=ALIBABA_NOTIFICATIONS_PATH,
+                latest_path=ALIBABA_NOTIFICATIONS_LATEST_PATH,
+            )
+            return
+
+        if route == "/integrations/magalu/notifications":
+            self._write_marketplace_notification_event(
+                provider_key="magalu",
+                path=MAGALU_NOTIFICATIONS_PATH,
+                latest_path=MAGALU_NOTIFICATIONS_LATEST_PATH,
+            )
+            return
+
         if route == "/integrations/cjdropshipping/notifications":
             self._write_cjdropshipping_notification_event()
+            return
+
+        if route == "/integrations/shopee/notifications":
+            self._write_marketplace_notification_event(
+                provider_key="shopee",
+                path=SHOPEE_NOTIFICATIONS_PATH,
+                latest_path=SHOPEE_NOTIFICATIONS_LATEST_PATH,
+            )
             return
 
         if route == "/integrations/mercadopago/notifications":
@@ -1117,6 +1195,100 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             "tax_pct": float(merged.get("tax_pct") or 0.0),
             "notes": str(merged.get("notes") or ""),
         }
+
+    def _title_signature_tokens(self, value: Any) -> list[str]:
+        normalized = unicodedata.normalize("NFKD", str(value or "").lower())
+        ascii_only = normalized.encode("ascii", "ignore").decode("ascii")
+        tokens = re.findall(r"[a-z0-9]+", ascii_only)
+        stopwords = {
+            "a",
+            "an",
+            "and",
+            "com",
+            "da",
+            "de",
+            "do",
+            "for",
+            "in",
+            "new",
+            "of",
+            "on",
+            "or",
+            "para",
+            "pro",
+            "the",
+            "valley",
+            "wireless",
+            "bluetooth",
+        }
+        deduped: list[str] = []
+        for token in tokens:
+            if len(token) <= 2 or token in stopwords:
+                continue
+            if token not in deduped:
+                deduped.append(token)
+        return deduped[:10]
+
+    def _publication_signature(self, category: str, title: Any) -> str:
+        category_tokens = self._title_signature_tokens(category)
+        title_tokens = self._title_signature_tokens(title)
+        signature_tokens = title_tokens[:8] if title_tokens else category_tokens[:4]
+        category_label = " ".join(category_tokens[:4]) or "sem-categoria"
+        signature_label = " ".join(signature_tokens) or "sem-assinatura"
+        return f"{category_label}|{signature_label}"
+
+    def _title_overlap_score(self, left: Any, right: Any) -> float:
+        left_tokens = set(self._title_signature_tokens(left))
+        right_tokens = set(self._title_signature_tokens(right))
+        if not left_tokens or not right_tokens:
+            return 0.0
+        return len(left_tokens & right_tokens) / max(len(left_tokens), len(right_tokens))
+
+    def _marketplace_status_by_key(self) -> dict[str, dict[str, Any]]:
+        payload = load_json_file(DROPSHIPPING_STATUS_PATH) or {}
+        providers = payload.get("providers", []) if isinstance(payload, dict) else []
+        return {
+            str(provider.get("key") or "").strip(): provider
+            for provider in providers
+            if isinstance(provider, dict) and str(provider.get("key") or "").strip()
+        }
+
+    def _marketplace_policy_by_key(self) -> dict[str, dict[str, Any]]:
+        saved = load_json_file(ADMIN_INTEGRATIONS_PATH)
+        items = saved if isinstance(saved, list) else []
+        policies: dict[str, dict[str, Any]] = {}
+        for item in items:
+            if not isinstance(item, dict):
+                continue
+            provider_key = str(item.get("key") or "").strip().lower()
+            if not provider_key:
+                continue
+            policies[provider_key] = {
+                "enabled": bool(item.get("enabled")),
+                "environment": str(item.get("environment") or "sandbox").strip().lower() or "sandbox",
+                "siteCode": str(item.get("siteCode") or "").strip(),
+                "authMode": str(item.get("authMode") or "oauth2").strip(),
+                "marginFloorPct": float(item.get("marginFloorPct") or 12.0),
+                "importCatalog": bool(item.get("importCatalog", True)),
+                "syncOrders": bool(item.get("syncOrders", True)),
+                "syncInventory": bool(item.get("syncInventory", True)),
+                "syncPricing": bool(item.get("syncPricing", True)),
+                "stockModuleEnabled": bool(item.get("stockModuleEnabled", item.get("syncInventory", True))),
+                "sandboxEnabled": bool(item.get("sandboxEnabled", True)),
+                "productionEnabled": bool(
+                    item.get(
+                        "productionEnabled",
+                        str(item.get("environment") or "").strip().lower() == "production",
+                    )
+                ),
+                "importCategories": bool(item.get("importCategories", True)),
+                "publishApprovedOnly": bool(item.get("publishApprovedOnly", True)),
+                "requireRetailAdvantage": bool(item.get("requireRetailAdvantage", True)),
+                "requireLiquidityCheck": bool(item.get("requireLiquidityCheck", True)),
+                "allowScrapingFallback": bool(item.get("allowScrapingFallback")),
+                "blockExternalAiLookup": bool(item.get("blockExternalAiLookup", True)),
+            }
+        return policies
 
     def _find_catalog_item(self, item_id: str) -> dict[str, Any] | None:
         normalized_item_id = str(item_id or "").strip()
@@ -1469,16 +1641,83 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 "items": [],
                 "supplier_defaults": {},
                 "item_overrides": {},
+                "publication_summary": {
+                    "supplier_items_total": 0,
+                    "approved_total": 0,
+                    "review_total": 0,
+                    "do_not_publish_total": 0,
+                    "benchmark_reference_total": 0,
+                    "top_reasons": [],
+                },
             }
 
         pricing_state = self._admin_imported_products_pricing_state()
         provider_defaults = self._pricing_defaults_by_provider()
+        provider_policies = self._marketplace_policy_by_key()
 
         def as_float(value: Any) -> float:
             try:
                 return float(value or 0)
             except (TypeError, ValueError):
                 return 0.0
+
+        def category_key(value: Any) -> str:
+            tokens = self._title_signature_tokens(value)
+            return "|".join(tokens[:4]) or str(value or "").strip().lower() or "sem-categoria"
+
+        def liquidity_score(raw_item: dict[str, Any]) -> float:
+            offer_count = max(as_float(raw_item.get("offer_count")), 0.0)
+            stock_units = max(as_float(raw_item.get("stock")), 0.0)
+            relevance = max(
+                as_float(raw_item.get("source_relevance_score") or raw_item.get("offer_count")),
+                0.0,
+            )
+            score = (
+                math.log10(offer_count + 1.0) * 18.0
+                + math.log10(stock_units + 1.0) * 14.0
+                + (min(relevance, offer_count or relevance or 1.0) / max(relevance, offer_count, 1.0))
+                * 8.0
+            )
+            if raw_item.get("shipping_free"):
+                score += 6.0
+            if raw_item.get("tracking_capable"):
+                score += 8.0
+            return round(min(score, 100.0), 2)
+
+        default_policy = {
+            "enabled": True,
+            "environment": "production",
+            "siteCode": "",
+            "authMode": "oauth2",
+            "marginFloorPct": 12.0,
+            "importCatalog": True,
+            "syncOrders": True,
+            "syncInventory": True,
+            "syncPricing": True,
+            "stockModuleEnabled": True,
+            "sandboxEnabled": True,
+            "productionEnabled": True,
+            "importCategories": True,
+            "publishApprovedOnly": True,
+            "requireRetailAdvantage": True,
+            "requireLiquidityCheck": True,
+            "allowScrapingFallback": False,
+            "blockExternalAiLookup": True,
+        }
+        reason_labels = {
+            "benchmark_reference": "Item usado como benchmark de varejo para homologar preço de importação.",
+            "catalog_import_disabled": "Importação de catálogo está desligada para este fornecedor.",
+            "category_import_disabled": "Importação de categorias está desligada para este fornecedor.",
+            "duplicate_loser": "Outro fornecedor venceu a disputa por menor custo e maior liquidez.",
+            "low_liquidity": "Liquidez abaixo do piso operacional definido para publicação.",
+            "no_margin": "A precificação atual não gera margem líquida positiva.",
+            "no_market_benchmark": "Não existe benchmark confiável em marketplace para validar vantagem de varejo.",
+            "no_stock": "Fornecedor sem estoque confirmado para esta oferta.",
+            "production_mode_disabled": "Modo de produção desligado para este fornecedor.",
+            "retail_price_not_advantageous": "O preço sugerido não fica abaixo do varejo de marketplace.",
+            "sandbox_mode_disabled": "Modo sandbox desligado; manter homologação e produção ativas em paralelo.",
+            "stock_module_disabled": "Módulo STOCK desativado para este fornecedor.",
+        }
 
         supplier_rollup: dict[str, dict[str, Any]] = defaultdict(
             lambda: {
@@ -1491,9 +1730,14 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 "base_cost_value_brl": 0.0,
                 "suggested_revenue_value_brl": 0.0,
                 "estimated_net_revenue_value_brl": 0.0,
+                "approved_total": 0,
+                "review_total": 0,
+                "do_not_publish_total": 0,
             }
         )
         response_items: list[dict[str, Any]] = []
+        grouped_rows: dict[str, list[dict[str, Any]]] = defaultdict(list)
+        marketplace_rows_by_category: dict[str, list[dict[str, Any]]] = defaultdict(list)
 
         for raw_item in items:
             if not isinstance(raw_item, dict) or raw_item.get("module_id") != "STOCK":
@@ -1501,6 +1745,10 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
 
             item_id = str(raw_item.get("id") or "").strip()
             provider_key = str(raw_item.get("provider_key") or "catalog").strip().lower()
+            provider_policy = {
+                **default_policy,
+                **provider_policies.get(provider_key, {}),
+            }
             supplier_name = str(
                 raw_item.get("supplier_name")
                 or raw_item.get("merchant_name")
@@ -1537,6 +1785,13 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 if suggested_sale_price_brl > 0
                 else 0.0
             )
+            publication_signature = self._publication_signature(
+                str(raw_item.get("category") or ""),
+                raw_item.get("title"),
+            )
+            row_liquidity_score = liquidity_score(raw_item)
+            normalized_category_key = category_key(raw_item.get("category"))
+            is_marketplace_reference = provider_key in MARKETPLACE_RUNTIME_PROVIDERS
 
             supplier_entry = supplier_rollup[supplier_key]
             supplier_entry["supplier_key"] = supplier_key
@@ -1549,63 +1804,235 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             supplier_entry["suggested_revenue_value_brl"] += suggested_sale_price_brl * stock_units
             supplier_entry["estimated_net_revenue_value_brl"] += estimated_net_revenue_brl * stock_units
 
-            response_items.append(
-                {
-                    "id": item_id,
-                    "title": str(raw_item.get("title") or "Produto sem titulo"),
-                    "brand": str(raw_item.get("brand") or ""),
-                    "category": str(raw_item.get("category") or ""),
-                    "collection_label": str(raw_item.get("collection_label") or ""),
-                    "price_band": str(raw_item.get("price_band") or ""),
-                    "availability_label": str(raw_item.get("availability_label") or ""),
-                    "provider_key": provider_key,
-                    "provider_status": str(raw_item.get("provider_status") or ""),
-                    "supplier_key": supplier_key,
-                    "supplier_name": supplier_name,
-                    "supplier_type": str(raw_item.get("supplier_type") or ""),
-                    "supplier_model": str(raw_item.get("supplier_model") or ""),
-                    "merchant_name": str(raw_item.get("merchant_name") or ""),
-                    "channel_label": str(raw_item.get("channel_label") or ""),
-                    "google_product_category_path": str(
-                        raw_item.get("google_product_category_path")
-                        or raw_item.get("google_product_category")
-                        or ""
-                    ),
-                    "source_permalink": str(raw_item.get("source_permalink") or ""),
-                    "source_product_id": str(raw_item.get("source_product_id") or ""),
-                    "source_item_id": str(raw_item.get("source_item_id") or ""),
-                    "shipping_free": bool(raw_item.get("shipping_free")),
-                    "stock": round(stock_units, 2),
-                    "base_cost_brl": round(base_cost_brl, 2),
-                    "inventory_cost_brl": round(base_cost_brl * stock_units, 2),
-                    "suggested_sale_price_brl": round(suggested_sale_price_brl, 2),
-                    "estimated_fees_brl": round(estimated_fees_brl, 2),
-                    "estimated_net_revenue_brl": round(estimated_net_revenue_brl, 2),
-                    "estimated_net_revenue_pct": round(estimated_net_revenue_pct, 2),
-                    "estimated_inventory_net_revenue_brl": round(
-                        estimated_net_revenue_brl * stock_units,
-                        2,
-                    ),
-                    "target_net_revenue_pct": round(
-                        controls["target_net_revenue_pct"],
-                        2,
-                    ),
-                    "platform_fee_pct": round(controls["platform_fee_pct"], 2),
-                    "operational_fee_pct": round(
-                        controls["operational_fee_pct"],
-                        2,
-                    ),
-                    "marketing_fee_pct": round(controls["marketing_fee_pct"], 2),
-                    "tax_pct": round(controls["tax_pct"], 2),
-                    "notes": controls["notes"],
-                    "tags": [
-                        value
-                        for value in raw_item.get("tags", [])
-                        if isinstance(value, str)
-                    ],
-                }
+            row = {
+                "id": item_id,
+                "title": str(raw_item.get("title") or "Produto sem titulo"),
+                "brand": str(raw_item.get("brand") or ""),
+                "category": str(raw_item.get("category") or ""),
+                "collection_label": str(raw_item.get("collection_label") or ""),
+                "price_band": str(raw_item.get("price_band") or ""),
+                "availability_label": str(raw_item.get("availability_label") or ""),
+                "provider_key": provider_key,
+                "provider_status": str(raw_item.get("provider_status") or ""),
+                "supplier_key": supplier_key,
+                "supplier_name": supplier_name,
+                "supplier_type": str(raw_item.get("supplier_type") or ""),
+                "supplier_model": str(raw_item.get("supplier_model") or ""),
+                "merchant_name": str(raw_item.get("merchant_name") or ""),
+                "channel_label": str(raw_item.get("channel_label") or ""),
+                "google_product_category_path": str(
+                    raw_item.get("google_product_category_path")
+                    or raw_item.get("google_product_category")
+                    or ""
+                ),
+                "source_permalink": str(raw_item.get("source_permalink") or ""),
+                "source_product_id": str(raw_item.get("source_product_id") or ""),
+                "source_item_id": str(raw_item.get("source_item_id") or ""),
+                "shipping_free": bool(raw_item.get("shipping_free")),
+                "stock": round(stock_units, 2),
+                "base_cost_brl": round(base_cost_brl, 2),
+                "inventory_cost_brl": round(base_cost_brl * stock_units, 2),
+                "offer_count": int(as_float(raw_item.get("offer_count"))),
+                "source_relevance_score": round(
+                    as_float(raw_item.get("source_relevance_score") or raw_item.get("offer_count")),
+                    2,
+                ),
+                "provider_priority": int(raw_item.get("provider_priority") or 0),
+                "liquidity_score": row_liquidity_score,
+                "suggested_sale_price_brl": round(suggested_sale_price_brl, 2),
+                "estimated_fees_brl": round(estimated_fees_brl, 2),
+                "estimated_net_revenue_brl": round(estimated_net_revenue_brl, 2),
+                "estimated_net_revenue_pct": round(estimated_net_revenue_pct, 2),
+                "estimated_inventory_net_revenue_brl": round(
+                    estimated_net_revenue_brl * stock_units,
+                    2,
+                ),
+                "target_net_revenue_pct": round(controls["target_net_revenue_pct"], 2),
+                "platform_fee_pct": round(controls["platform_fee_pct"], 2),
+                "operational_fee_pct": round(controls["operational_fee_pct"], 2),
+                "marketing_fee_pct": round(controls["marketing_fee_pct"], 2),
+                "tax_pct": round(controls["tax_pct"], 2),
+                "notes": controls["notes"],
+                "enabled": bool(provider_policy["enabled"]),
+                "environment": str(provider_policy["environment"]),
+                "site_code": str(provider_policy["siteCode"]),
+                "auth_mode": str(provider_policy["authMode"]),
+                "stock_module_enabled": bool(provider_policy["stockModuleEnabled"]),
+                "sandbox_enabled": bool(provider_policy["sandboxEnabled"]),
+                "production_enabled": bool(provider_policy["productionEnabled"]),
+                "import_catalog": bool(provider_policy["importCatalog"]),
+                "import_categories": bool(provider_policy["importCategories"]),
+                "publish_approved_only": bool(provider_policy["publishApprovedOnly"]),
+                "require_retail_advantage": bool(provider_policy["requireRetailAdvantage"]),
+                "require_liquidity_check": bool(provider_policy["requireLiquidityCheck"]),
+                "allow_scraping_fallback": bool(provider_policy["allowScrapingFallback"]),
+                "block_external_ai_lookup": bool(provider_policy["blockExternalAiLookup"]),
+                "publication_signature": publication_signature,
+                "duplicate_group_key": publication_signature,
+                "duplicate_group_size": 1,
+                "duplicate_winner_item_id": item_id,
+                "duplicate_winner_supplier_name": supplier_name,
+                "benchmark_provider_key": "",
+                "benchmark_retail_price_brl": None,
+                "benchmark_title": "",
+                "benchmark_similarity_score": 0.0,
+                "price_gap_to_benchmark_brl": None,
+                "publication_status": "",
+                "publication_status_label": "",
+                "publication_reason_codes": [],
+                "publication_reasons": [],
+                "is_marketplace_reference": is_marketplace_reference,
+                "_category_key": normalized_category_key,
+                "tags": [
+                    value
+                    for value in raw_item.get("tags", [])
+                    if isinstance(value, str)
+                ],
+            }
+            response_items.append(row)
+            grouped_rows[publication_signature].append(row)
+            if is_marketplace_reference:
+                marketplace_rows_by_category[normalized_category_key].append(row)
+
+        def supplier_selection_key(row: dict[str, Any]) -> tuple[Any, ...]:
+            return (
+                float(row.get("base_cost_brl") or 0.0),
+                -float(row.get("liquidity_score") or 0.0),
+                -float(row.get("stock") or 0.0),
+                -int(row.get("provider_priority") or 0),
+                str(row.get("id") or ""),
             )
 
+        review_reason_rollup: dict[str, int] = defaultdict(int)
+        approved_total = 0
+        review_total = 0
+        do_not_publish_total = 0
+        benchmark_reference_total = 0
+
+        for signature, rows_in_group in grouped_rows.items():
+            supplier_rows = [row for row in rows_in_group if not row.get("is_marketplace_reference")]
+            marketplace_rows = [row for row in rows_in_group if row.get("is_marketplace_reference")]
+            supplier_winner = min(supplier_rows, key=supplier_selection_key) if supplier_rows else None
+
+            for row in rows_in_group:
+                row["duplicate_group_key"] = signature
+                row["duplicate_group_size"] = len(supplier_rows) if supplier_rows else len(rows_in_group)
+                if supplier_winner is not None:
+                    row["duplicate_winner_item_id"] = str(supplier_winner.get("id") or "")
+                    row["duplicate_winner_supplier_name"] = str(supplier_winner.get("supplier_name") or "")
+
+            for row in supplier_rows:
+                benchmark: dict[str, Any] | None = None
+                benchmark_similarity = 0.0
+
+                if marketplace_rows:
+                    benchmark = min(
+                        marketplace_rows,
+                        key=lambda candidate: (
+                            float(candidate.get("base_cost_brl") or 0.0),
+                            -float(candidate.get("liquidity_score") or 0.0),
+                            -float(candidate.get("stock") or 0.0),
+                            str(candidate.get("title") or ""),
+                        ),
+                    )
+                    benchmark_similarity = max(
+                        self._title_overlap_score(row.get("title"), benchmark.get("title")),
+                        0.82,
+                    )
+                else:
+                    fuzzy_candidates: list[tuple[dict[str, Any], float]] = []
+                    for candidate in marketplace_rows_by_category.get(str(row.get("_category_key") or ""), []):
+                        similarity = self._title_overlap_score(row.get("title"), candidate.get("title"))
+                        if similarity >= 0.46:
+                            fuzzy_candidates.append((candidate, similarity))
+                    if fuzzy_candidates:
+                        benchmark, benchmark_similarity = min(
+                            fuzzy_candidates,
+                            key=lambda pair: (
+                                float(pair[0].get("base_cost_brl") or 0.0),
+                                -pair[1],
+                                -float(pair[0].get("liquidity_score") or 0.0),
+                                -float(pair[0].get("stock") or 0.0),
+                                str(pair[0].get("title") or ""),
+                            ),
+                        )
+
+                price_gap = None
+                if benchmark is not None:
+                    price_gap = round(
+                        float(benchmark.get("base_cost_brl") or 0.0)
+                        - float(row.get("suggested_sale_price_brl") or 0.0),
+                        2,
+                    )
+                    row["benchmark_provider_key"] = str(benchmark.get("provider_key") or "")
+                    row["benchmark_retail_price_brl"] = round(float(benchmark.get("base_cost_brl") or 0.0), 2)
+                    row["benchmark_title"] = str(benchmark.get("title") or "")
+                    row["benchmark_similarity_score"] = round(benchmark_similarity, 2)
+                    row["price_gap_to_benchmark_brl"] = price_gap
+
+                blocking_codes: list[str] = []
+                review_codes: list[str] = []
+
+                if not row.get("stock_module_enabled"):
+                    blocking_codes.append("stock_module_disabled")
+                if not row.get("production_enabled"):
+                    blocking_codes.append("production_mode_disabled")
+                if not row.get("sandbox_enabled"):
+                    review_codes.append("sandbox_mode_disabled")
+                if not row.get("import_catalog"):
+                    review_codes.append("catalog_import_disabled")
+                if not row.get("import_categories"):
+                    review_codes.append("category_import_disabled")
+                if float(row.get("stock") or 0.0) <= 0:
+                    blocking_codes.append("no_stock")
+                if float(row.get("estimated_net_revenue_brl") or 0.0) <= 0:
+                    blocking_codes.append("no_margin")
+                if row.get("require_liquidity_check") and float(row.get("liquidity_score") or 0.0) < 35.0:
+                    review_codes.append("low_liquidity")
+                if supplier_winner is not None and len(supplier_rows) > 1 and row.get("id") != supplier_winner.get("id"):
+                    blocking_codes.append("duplicate_loser")
+                if row.get("require_retail_advantage"):
+                    if benchmark is None:
+                        review_codes.append("no_market_benchmark")
+                    elif price_gap is not None and price_gap <= 0:
+                        blocking_codes.append("retail_price_not_advantageous")
+
+                reason_codes = list(dict.fromkeys(blocking_codes + review_codes))
+                row["publication_reason_codes"] = reason_codes
+                row["publication_reasons"] = [reason_labels[code] for code in reason_codes if code in reason_labels]
+
+                if blocking_codes:
+                    row["publication_status"] = "do_not_publish"
+                    row["publication_status_label"] = "Nao publicar"
+                    do_not_publish_total += 1
+                elif review_codes:
+                    row["publication_status"] = "review"
+                    row["publication_status_label"] = "Revisao"
+                    review_total += 1
+                else:
+                    row["publication_status"] = "approved"
+                    row["publication_status_label"] = "Aprovado"
+                    approved_total += 1
+
+                supplier_rollup[str(row.get("supplier_key") or "")][row["publication_status"] + "_total"] += 1
+                if row["publication_status"] in {"review", "do_not_publish"}:
+                    for code in reason_codes:
+                        review_reason_rollup[code] += 1
+
+        for row in response_items:
+            if row.get("is_marketplace_reference"):
+                row["publication_status"] = "benchmark_reference"
+                row["publication_status_label"] = "Benchmark"
+                row["publication_reason_codes"] = ["benchmark_reference"]
+                row["publication_reasons"] = [reason_labels["benchmark_reference"]]
+                benchmark_reference_total += 1
+
+        publication_status_order = {
+            "do_not_publish": 0,
+            "review": 1,
+            "approved": 2,
+            "benchmark_reference": 3,
+        }
         supplier_summary = []
         for entry in supplier_rollup.values():
             items_total = int(entry["items_total"])
@@ -1623,18 +2050,12 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                     "items_total": items_total,
                     "inventory_units": round(entry["inventory_units"], 2),
                     "average_base_cost_brl": round(avg_cost, 2),
-                    "inventory_cost_value_brl": round(
-                        entry["base_cost_value_brl"],
-                        2,
-                    ),
-                    "suggested_revenue_value_brl": round(
-                        entry["suggested_revenue_value_brl"],
-                        2,
-                    ),
-                    "estimated_net_revenue_value_brl": round(
-                        entry["estimated_net_revenue_value_brl"],
-                        2,
-                    ),
+                    "inventory_cost_value_brl": round(entry["base_cost_value_brl"], 2),
+                    "suggested_revenue_value_brl": round(entry["suggested_revenue_value_brl"], 2),
+                    "estimated_net_revenue_value_brl": round(entry["estimated_net_revenue_value_brl"], 2),
+                    "approved_total": int(entry["approved_total"]),
+                    "review_total": int(entry["review_total"]),
+                    "do_not_publish_total": int(entry["do_not_publish_total"]),
                 }
             )
 
@@ -1646,12 +2067,24 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
         )
         response_items.sort(
             key=lambda item: (
+                publication_status_order.get(str(item.get("publication_status") or ""), 9),
                 str(item["supplier_name"]),
                 str(item["category"]),
                 -float(item["estimated_inventory_net_revenue_brl"]),
                 str(item["title"]),
             )
         )
+        top_reasons = [
+            {
+                "code": code,
+                "label": reason_labels.get(code, code),
+                "items_total": int(total),
+            }
+            for code, total in sorted(
+                review_reason_rollup.items(),
+                key=lambda item: (-item[1], item[0]),
+            )[:8]
+        ]
 
         return {
             "status": "ok",
@@ -1660,23 +2093,115 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             "locale": runtime_catalog.get("translation_locale") if isinstance(runtime_catalog, dict) else "pt-BR",
             "providers_active": runtime_catalog.get("providers_active") if isinstance(runtime_catalog, dict) else [],
             "provider_counts": runtime_catalog.get("provider_counts") if isinstance(runtime_catalog, dict) else {},
+            "categories_total": runtime_catalog.get("categories_total") if isinstance(runtime_catalog, dict) else 0,
             "items_total": len(response_items),
             "supplier_summary": supplier_summary,
-            "items": response_items,
+            "items": [
+                {key: value for key, value in item.items() if not str(key).startswith("_")}
+                for item in response_items
+            ],
             "supplier_defaults": pricing_state.get("supplier_defaults", {}),
             "item_overrides": pricing_state.get("item_overrides", {}),
             "updated_at_utc": pricing_state.get("updated_at_utc"),
+            "publication_summary": {
+                "supplier_items_total": approved_total + review_total + do_not_publish_total,
+                "approved_total": approved_total,
+                "review_total": review_total,
+                "do_not_publish_total": do_not_publish_total,
+                "benchmark_reference_total": benchmark_reference_total,
+                "top_reasons": top_reasons,
+            },
         }
 
     def _admin_integrations_payload(self) -> dict[str, Any]:
         saved = load_json_file(ADMIN_INTEGRATIONS_PATH)
         items = saved if isinstance(saved, list) else []
+        runtime_status = self._marketplace_status_by_key()
+        secrets_payload = self._provider_secrets_payload()
+        enriched_items: list[dict[str, Any]] = []
+
+        for item in items:
+            if not isinstance(item, dict):
+                continue
+
+            provider_key = str(item.get("key") or "").strip().lower()
+            runtime_entry = runtime_status.get(provider_key, {})
+            provider_secrets = (
+                secrets_payload.get(provider_key)
+                if isinstance(secrets_payload.get(provider_key), dict)
+                else {}
+            )
+            merged = dict(item)
+            merged["stockModuleEnabled"] = bool(
+                merged.get("stockModuleEnabled", merged.get("syncInventory", True))
+            )
+            merged["sandboxEnabled"] = bool(merged.get("sandboxEnabled", True))
+            merged["productionEnabled"] = bool(
+                merged.get(
+                    "productionEnabled",
+                    str(merged.get("environment") or "").strip().lower() == "production",
+                )
+            )
+            merged["importCategories"] = bool(merged.get("importCategories", True))
+            merged["publishApprovedOnly"] = bool(merged.get("publishApprovedOnly", True))
+            merged["requireRetailAdvantage"] = bool(merged.get("requireRetailAdvantage", True))
+            merged["requireLiquidityCheck"] = bool(merged.get("requireLiquidityCheck", True))
+            merged["runtimeStatus"] = str(runtime_entry.get("status") or "")
+            merged["runtimePending"] = (
+                runtime_entry.get("pending")
+                if isinstance(runtime_entry.get("pending"), list)
+                else []
+            )
+            merged["runtimeEvidence"] = (
+                runtime_entry.get("runtimeEvidence")
+                if isinstance(runtime_entry.get("runtimeEvidence"), list)
+                else []
+            )
+            merged["runtimeActive"] = str(runtime_entry.get("status") or "").strip() == "active"
+            merged["secretsPresence"] = {
+                "client": bool(
+                    provider_secrets.get("clientId") or provider_secrets.get("clientSecret")
+                ),
+                "accessToken": bool(
+                    provider_secrets.get("accessToken") or provider_secrets.get("access_token")
+                ),
+                "refreshToken": bool(
+                    provider_secrets.get("refreshToken") or provider_secrets.get("refresh_token")
+                ),
+                "sellerId": bool(provider_secrets.get("sellerId") or provider_secrets.get("seller_id")),
+                "operatorLogin": bool(
+                    provider_secrets.get("username") and provider_secrets.get("password")
+                ),
+            }
+            enriched_items.append(merged)
+
+        enriched_items.sort(key=lambda item: str(item.get("label") or item.get("key") or ""))
+        active_total = sum(1 for item in enriched_items if item.get("enabled"))
+        production_total = sum(
+            1
+            for item in enriched_items
+            if item.get("enabled") and str(item.get("environment") or "").lower() == "production"
+        )
+        stock_active_total = sum(1 for item in enriched_items if item.get("stockModuleEnabled"))
+        pending_runtime_total = sum(1 for item in enriched_items if item.get("runtimePending"))
         return {
             "status": "ok",
             "service": "valley-admin",
             "generated_at_utc": utc_now_iso(),
             "path": str(ADMIN_INTEGRATIONS_PATH),
-            "items": items,
+            "public_admin_url": self._public_admin_base_url(),
+            "public_product_url": str(
+                self._product_public_runtime_payload().get("public_url")
+                or f"{self._public_admin_base_url()}/product"
+            ).rstrip("/"),
+            "summary": {
+                "providers_total": len(enriched_items),
+                "active_total": active_total,
+                "production_total": production_total,
+                "stock_active_total": stock_active_total,
+                "pending_runtime_total": pending_runtime_total,
+            },
+            "items": enriched_items,
         }
 
     def _stock_sync_status_payload(self) -> dict[str, Any]:
@@ -1847,6 +2372,13 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
         public_key = self._mercadopago_public_key()
         webhook_secret = self._mercadopago_webhook_secret()
         latest_notification = load_json_file(MERCADOPAGO_NOTIFICATIONS_LATEST_PATH) or {}
+        inferred_mode = (
+            "sandbox"
+            if str(access_token or "").startswith("TEST-")
+            else "production"
+            if access_token
+            else "unconfigured"
+        )
 
         validation = saved.get("validation") if isinstance(saved.get("validation"), dict) else None
         if access_token and (
@@ -1878,6 +2410,9 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             "access_token_present": bool(access_token),
             "public_key_present": bool(public_key),
             "webhook_secret_present": bool(webhook_secret),
+            "sandbox_enabled": True,
+            "production_enabled": True,
+            "preferred_environment": inferred_mode,
             "notification_url": self._mercadopago_notification_url(),
             "sample_return_url": self._mercadopago_return_url("approved", "demo-item"),
             "latest_notification_at_utc": latest_notification.get("received_at_utc"),
@@ -1890,6 +2425,79 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
         path.parent.mkdir(parents=True, exist_ok=True)
         with path.open("a", encoding="utf-8") as handle:
             handle.write(json.dumps(payload, ensure_ascii=False) + "\n")
+
+    def _write_marketplace_notification_probe(
+        self,
+        *,
+        provider_key: str,
+        route: str,
+        detail: str,
+    ) -> None:
+        self._write_json(
+            HTTPStatus.OK,
+            {
+                "status": "ok",
+                "service": "valley-admin",
+                "provider": provider_key,
+                "route": route,
+                "method": "POST",
+                "received_at_utc": utc_now_iso(),
+                "detail": detail,
+            },
+        )
+
+    def _write_marketplace_notification_event(
+        self,
+        *,
+        provider_key: str,
+        path: Path,
+        latest_path: Path,
+    ) -> None:
+        content_length = int(self.headers.get("Content-Length", "0") or "0")
+        raw_body = self.rfile.read(content_length) if content_length > 0 else b""
+        text_body = raw_body.decode("utf-8", errors="replace")
+        try:
+            parsed_body = json.loads(text_body) if text_body else None
+        except json.JSONDecodeError:
+            parsed_body = None
+
+        event = {
+            "provider": provider_key,
+            "received_at_utc": utc_now_iso(),
+            "headers": {
+                "content_type": self.headers.get("Content-Type"),
+                "user_agent": self.headers.get("User-Agent"),
+                "x_request_id": self.headers.get("X-Request-Id"),
+                "x_real_ip": self.headers.get("X-Real-Ip"),
+                "x_forwarded_for": self.headers.get("X-Forwarded-For"),
+            },
+            "body": parsed_body if parsed_body is not None else text_body,
+        }
+        self._append_jsonl(path, event)
+        write_json_file(latest_path, event)
+
+        sync_result: dict[str, Any] | None = None
+        manager = CATALOG_SYNC_MANAGER
+        if manager is not None and provider_key in (MARKETPLACE_RUNTIME_PROVIDERS | SUPPLIER_RUNTIME_PROVIDERS):
+            sync_result = manager.schedule(
+                f"{provider_key}-webhook",
+                delay_seconds=35,
+                force_full_sync=True,
+            )
+
+        self._write_json(
+            HTTPStatus.OK,
+            {
+                "status": "ok",
+                "service": "valley-admin",
+                "provider": provider_key,
+                "received_at_utc": event["received_at_utc"],
+                "sync": sync_result,
+                "detail": "Notificacao recebida, persistida e encaminhada para reconciliacao do catalogo."
+                if sync_result is not None
+                else "Notificacao recebida e persistida.",
+            },
+        )
 
     def _write_mercadopago_notification_probe(self) -> None:
         self._write_json(

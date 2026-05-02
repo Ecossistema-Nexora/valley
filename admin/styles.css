@@ -845,6 +845,93 @@ pre {
   font: 12px/1.5 Consolas, "Courier New", monospace;
 }
 
+.launchpad-section,
+.publication-review-section {
+  padding: 22px;
+  margin-bottom: 20px;
+}
+
+.launchpad-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.launchpad-card {
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--line);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(246, 248, 255, 0.96));
+  box-shadow: 0 16px 30px rgba(21, 39, 31, 0.06);
+}
+
+.launchpad-card h3,
+.publication-review-card h3 {
+  font-size: 16px;
+  line-height: 1.25;
+}
+
+.launchpad-meta,
+.review-reason-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.publication-review-board {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.publication-review-card {
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--line);
+  background: var(--surface-strong);
+}
+
+.publication-review-card.is-blocked {
+  border-color: rgba(179, 68, 50, 0.36);
+  box-shadow: 0 16px 30px rgba(179, 68, 50, 0.12);
+}
+
+.publication-review-card.is-review {
+  border-color: rgba(175, 107, 21, 0.28);
+  box-shadow: 0 16px 30px rgba(175, 107, 21, 0.09);
+}
+
+.publication-review-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.review-reason {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(21, 39, 31, 0.1);
+  background: rgba(21, 39, 31, 0.04);
+  color: var(--ink-soft);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.runtime-evidence-box {
+  display: grid;
+  gap: 8px;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--line);
+  background: rgba(21, 39, 31, 0.035);
+}
+
 .analytics-grid > .glass-panel,
 .executive-grid > .glass-panel,
 .intelligence-grid > .glass-panel,
@@ -1662,6 +1749,8 @@ kbd {
   .metrics,
   .domain-board,
   .integration-summary-grid,
+  .launchpad-grid,
+  .publication-review-board,
   .imported-supplier-board,
   .imported-pricing-filters,
   .integration-card-overview,
@@ -1695,6 +1784,8 @@ kbd {
   .summary-grid,
   .external-grid,
   .integration-summary-grid,
+  .launchpad-grid,
+  .publication-review-board,
   .imported-supplier-board,
   .imported-pricing-filters,
   .integration-control-center,
@@ -1707,7 +1798,8 @@ kbd {
   .provider-guide-grid,
   .provider-guide-meta,
   .performance-board,
-  .module-performance-grid {
+  .module-performance-grid,
+  .publication-review-metrics {
     grid-template-columns: 1fr;
   }
 

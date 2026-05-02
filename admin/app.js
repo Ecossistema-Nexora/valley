@@ -46,13 +46,13 @@
 
   const MARKETPLACE_API_STORAGE_KEY = "valley.marketplaceApiIntegrations.v1";
   const MARKETPLACE_API_PROVIDERS = [
-    { key: "mercado_livre", label: "Mercado Livre", baseUrl: "https://api.mercadolibre.com", siteCode: "MLB" },
-    { key: "amazon", label: "Amazon", baseUrl: "https://sellingpartnerapi-na.amazon.com", siteCode: "BR" },
-    { key: "aliexpress", label: "AliExpress", baseUrl: "https://api-sg.aliexpress.com", siteCode: "GLOBAL" },
-    { key: "alibaba", label: "Alibaba", baseUrl: "https://openapi.alibaba.com", siteCode: "GLOBAL" },
-    { key: "magalu", label: "Magalu", baseUrl: "https://api.magalu.com", siteCode: "BR" },
-    { key: "cjdropshipping", label: "CJDropshipping", baseUrl: "https://developers.cjdropshipping.com", siteCode: "GLOBAL" },
-    { key: "shopee", label: "Shopee", baseUrl: "https://partner.shopeemobile.com", siteCode: "BR" },
+    { key: "mercado_livre", label: "Mercado Livre", providerRole: "marketplace_price", baseUrl: "https://api.mercadolibre.com", siteCode: "MLB" },
+    { key: "amazon", label: "Amazon", providerRole: "marketplace_price", baseUrl: "https://sellingpartnerapi-na.amazon.com", siteCode: "BR" },
+    { key: "aliexpress", label: "AliExpress", providerRole: "supplier_api", baseUrl: "https://api-sg.aliexpress.com", siteCode: "GLOBAL" },
+    { key: "alibaba", label: "Alibaba", providerRole: "supplier_api", baseUrl: "https://openapi.alibaba.com", siteCode: "GLOBAL" },
+    { key: "magalu", label: "Magalu", providerRole: "marketplace_price", baseUrl: "https://api.magalu.com", siteCode: "BR" },
+    { key: "cjdropshipping", label: "CJDropshipping", providerRole: "supplier_api", baseUrl: "https://developers.cjdropshipping.com", siteCode: "GLOBAL" },
+    { key: "shopee", label: "Shopee", providerRole: "marketplace_price", baseUrl: "https://partner.shopeemobile.com", siteCode: "BR" },
   ];
   const STOCK_PROVIDER_GUIDES = {
     mercado_livre: {
@@ -158,6 +158,7 @@
       query: "",
       supplierKey: "all",
       providerKey: "all",
+      publicationStatus: "all",
       category: "all",
       collectionLabel: "all",
       availabilityLabel: "all",
@@ -181,6 +182,7 @@
     domain: "all",
     selectedCode: null,
     marketplaceApiConfig: null,
+    marketplaceApiPayload: null,
   };
 
   const elements = {
@@ -204,6 +206,8 @@
     stockInsightsBoard: document.getElementById("stockInsightsBoard"),
     marketplaceApiSummary: document.getElementById("marketplaceApiSummary"),
     marketplaceApiControlCenter: document.getElementById("marketplaceApiControlCenter"),
+    adminLaunchpadSummary: document.getElementById("adminLaunchpadSummary"),
+    adminLaunchpadGrid: document.getElementById("adminLaunchpadGrid"),
     stockProviderGuides: document.getElementById("stockProviderGuides"),
     stockGuideSummary: document.getElementById("stockGuideSummary"),
     checkoutHealthPanel: document.getElementById("checkoutHealthPanel"),
@@ -227,13 +231,19 @@
     copyCommands: document.getElementById("copyCommands"),
     marketplaceApiIntegrations: document.getElementById("marketplaceApiIntegrations"),
     saveMarketplaceApis: document.getElementById("saveMarketplaceApis"),
+    applyMarketplaceApis: document.getElementById("applyMarketplaceApis"),
+    resetMarketplaceApis: document.getElementById("resetMarketplaceApis"),
     copyMarketplaceApis: document.getElementById("copyMarketplaceApis"),
     importedPricingSummary: document.getElementById("importedPricingSummary"),
     importedSupplierBoard: document.getElementById("importedSupplierBoard"),
     importedPricingFilters: document.getElementById("importedPricingFilters"),
     importedPricingTableWrap: document.getElementById("importedPricingTableWrap"),
     saveImportedPricing: document.getElementById("saveImportedPricing"),
+    applyImportedPricing: document.getElementById("applyImportedPricing"),
+    resetImportedPricing: document.getElementById("resetImportedPricing"),
     copyImportedPricing: document.getElementById("copyImportedPricing"),
+    publicationReviewSummary: document.getElementById("publicationReviewSummary"),
+    publicationReviewBoard: document.getElementById("publicationReviewBoard"),
     liveRegion: document.getElementById("liveRegion"),
   };
 
@@ -931,18 +941,27 @@
       { label: "Seller/Store", ready: Boolean(provider.sellerId) },
       { label: "Tokens", ready: Boolean(provider.accessTokenRef || provider.refreshTokenRef) },
       { label: "Scopes", ready: integrationScopeList(provider.scopes).length > 0 },
+      { label: "Webhook", ready: Boolean(provider.webhookUrl && provider.webhookSecretRef) },
+      { label: "Stock ativo", ready: provider.stockModuleEnabled !== false },
+      { label: "Sandbox + producao", ready: provider.sandboxEnabled !== false && provider.productionEnabled !== false },
+      { label: "Categorias", ready: provider.importCategories !== false },
     ];
     const completed = requiredChecks.filter((item) => item.ready).length;
     const ratio = requiredChecks.length ? completed / requiredChecks.length : 0;
+    const runtimeStatus = String(provider.runtimeStatus || "");
+    const runtimePending = Array.isArray(provider.runtimePending) ? provider.runtimePending : [];
     let stage = "rascunho";
     let variant = "pill-warn";
 
-    if (!provider.enabled) {
+    if (!provider.enabled || provider.stockModuleEnabled === false) {
       stage = "desativado";
       variant = "pill";
-    } else if (provider.environment === "production" && ratio >= 0.85) {
+    } else if (runtimeStatus === "active" && provider.productionEnabled !== false && ratio >= 0.85) {
       stage = "pronto para producao";
       variant = "pill-accent";
+    } else if (runtimePending.length || runtimeStatus === "external_auth_pending") {
+      stage = "credencial externa pendente";
+      variant = "pill-danger";
     } else if (ratio >= 0.55) {
       stage = "em homologacao";
       variant = "pill-navy";
@@ -954,16 +973,24 @@
       total: requiredChecks.length,
       stage,
       variant,
+      runtimeStatus,
+      runtimePending,
       requiredChecks,
     };
   }
 
   function providerCapabilityPills(provider) {
     return [
+      provider.stockModuleEnabled ? rowPill("Stock on", "pill-accent") : rowPill("Stock off", "pill-danger"),
       provider.importCatalog ? rowPill("Catalogo on", "pill-accent") : rowPill("Catalogo off"),
+      provider.importCategories ? rowPill("Categorias on", "pill-accent") : rowPill("Categorias off", "pill-warn"),
       provider.syncOrders ? rowPill("Pedidos on", "pill-accent") : rowPill("Pedidos off"),
       provider.syncInventory ? rowPill("Estoque on", "pill-accent") : rowPill("Estoque off"),
       provider.syncPricing ? rowPill("Preco on", "pill-accent") : rowPill("Preco off"),
+      provider.sandboxEnabled ? rowPill("Sandbox on", "pill-navy") : rowPill("Sandbox off", "pill-warn"),
+      provider.productionEnabled ? rowPill("Prod on", "pill-accent") : rowPill("Prod off", "pill-danger"),
+      provider.requireRetailAdvantage ? rowPill("Regra varejo", "pill-accent") : rowPill("Sem regra varejo", "pill-warn"),
+      provider.requireLiquidityCheck ? rowPill("Liquidez on", "pill-accent") : rowPill("Liquidez off", "pill-warn"),
       provider.allowScrapingFallback ? rowPill("Fallback scraping", "pill-warn") : rowPill("Sem scraping", "pill-navy"),
       provider.blockExternalAiLookup ? rowPill("IA externa bloqueada", "pill-accent") : rowPill("IA externa liberada", "pill-danger"),
     ].join("");
@@ -972,6 +999,10 @@
   function nextIntegrationAction(provider, readiness) {
     if (!provider.enabled) {
       return "Ativar o conector e escolher o ambiente de trabalho do fornecedor.";
+    }
+
+    if (provider.stockModuleEnabled === false) {
+      return "Reativar o modulo STOCK para recolocar catálogo, estoque e pricing em operação.";
     }
 
     if (!provider.clientId || !provider.secretRef) {
@@ -994,8 +1025,16 @@
       return "Webhook pode entrar depois; por ora opere com polling e publique notificacoes quando quiser baixa latencia.";
     }
 
+    if (provider.sandboxEnabled === false || provider.productionEnabled === false) {
+      return "Manter sandbox e produção ativos no mesmo cockpit para homologar sem perder a esteira operacional.";
+    }
+
+    if (readiness.runtimePending.length) {
+      return "Fechar a pendencia externa do parceiro e persistir tokens, seller ID e webhook no ambiente correto.";
+    }
+
     if (provider.environment !== "production") {
-      return "Concluir homologação e virar para produção só depois de reconciliar SKU, preço e estoque.";
+      return "Concluir homologacao e virar para producao so depois de reconciliar SKU, preco e estoque.";
     }
 
     if (readiness.ratio < 1) {
@@ -1011,14 +1050,17 @@
     }
 
     const enabledCount = config.filter((provider) => provider.enabled).length;
-    const productionCount = config.filter((provider) => provider.enabled && provider.environment === "production").length;
+    const productionCount = config.filter((provider) => provider.enabled && provider.productionEnabled !== false).length;
+    const stockEnabledCount = config.filter((provider) => provider.stockModuleEnabled !== false).length;
     const fallbackCount = config.filter((provider) => provider.allowScrapingFallback).length;
+    const pendingRuntimeCount = config.filter((provider) => Array.isArray(provider.runtimePending) && provider.runtimePending.length).length;
     const averageReadiness =
       config.reduce((sum, provider) => sum + integrationReadiness(provider).ratio, 0) / Math.max(config.length, 1);
 
     elements.marketplaceApiSummary.innerHTML = [
       summaryTileMarkup("Fornecedores", formatCount(config.length), "base ativa do cockpit dropshipping"),
       summaryTileMarkup("Conectores ativos", formatCount(enabledCount), `${formatCount(productionCount)} em producao`),
+      summaryTileMarkup("Stock ativo", formatCount(stockEnabledCount), pendingRuntimeCount ? `${formatCount(pendingRuntimeCount)} com pendencia externa` : "sem bloqueio externo publicado"),
       summaryTileMarkup("Prontidao media", formatPercent(averageReadiness), "credenciais, tokens e webhooks"),
       summaryTileMarkup("Fallbacks", formatCount(fallbackCount), fallbackCount ? "revisar scraping e risco operacional" : "sem rota paralela aberta"),
     ].join("");
@@ -1044,6 +1086,7 @@
               <div class="pill-row">
                 ${rowPill(provider.environment === "production" ? "producao" : "sandbox", provider.environment === "production" ? "pill-accent" : "pill-warn")}
                 ${rowPill(readiness.stage, readiness.variant)}
+                ${provider.runtimeStatus ? rowPill(provider.runtimeStatus, provider.runtimeActive ? "pill-accent" : "pill-danger") : ""}
               </div>
             </div>
             ${progressMarkup(readiness.ratio)}
@@ -1052,6 +1095,7 @@
               ${summaryTileMarkup("Sync", `${formatCount([provider.importCatalog, provider.syncOrders, provider.syncInventory, provider.syncPricing].filter(Boolean).length)}/4`, "catalogo, pedidos, estoque, preco")}
               ${summaryTileMarkup("Cadencia", `${formatCount(provider.syncCadenceMinutes)} min`, `cache ${formatCount(provider.cacheTtlMinutes)} min`)}
               ${summaryTileMarkup("Margem piso", `${provider.marginFloorPct}%`, provider.sellerId ? `seller ${provider.sellerId}` : "seller ainda ausente")}
+              ${summaryTileMarkup("Modos", `${provider.sandboxEnabled ? "sandbox" : "sem sandbox"} / ${provider.productionEnabled ? "prod" : "sem prod"}`, provider.importCategories ? "categorias importadas" : "categorias bloqueadas")}
             </div>
             <div class="integration-matrix">
               <div class="integration-column">
@@ -1080,6 +1124,26 @@
                 </ol>
               </div>
             </div>
+            ${
+              Array.isArray(provider.runtimePending) && provider.runtimePending.length
+                ? `
+                  <div class="runtime-evidence-box">
+                    <span class="small-label">Pendencias externas</span>
+                    <div class="pill-row">${provider.runtimePending.map((item) => rowPill(item, "pill-danger")).join("")}</div>
+                  </div>
+                `
+                : ""
+            }
+            ${
+              Array.isArray(provider.runtimeEvidence) && provider.runtimeEvidence.length
+                ? `
+                  <div class="runtime-evidence-box">
+                    <span class="small-label">Evidencias runtime</span>
+                    <div class="pill-row">${provider.runtimeEvidence.map((item) => rowPill(item, "pill-navy")).join("")}</div>
+                  </div>
+                `
+                : ""
+            }
           </article>
         `;
       })
@@ -1098,9 +1162,11 @@
       const webhookReady = config.filter((provider) => provider.webhookUrl && provider.webhookSecretRef).length;
       const tokenReady = config.filter((provider) => provider.accessTokenRef || provider.refreshTokenRef).length;
       const notesOpen = config.filter((provider) => provider.notes).length;
+      const stockEnabled = config.filter((provider) => provider.stockModuleEnabled !== false).length;
 
       elements.stockGuideSummary.innerHTML = [
         summaryTileMarkup("Fornecedores mapeados", formatCount(MARKETPLACE_API_PROVIDERS.length), "playbooks ativos no cockpit"),
+        summaryTileMarkup("Stock habilitado", formatCount(stockEnabled), "fornecedores com modulo STOCK ligado"),
         summaryTileMarkup("Webhooks fechados", formatCount(webhookReady), "assinatura e callback publicados"),
         summaryTileMarkup("Tokens publicados", formatCount(tokenReady), "cofre operacional e refresh controlado"),
         summaryTileMarkup("Contas em producao", formatCount(productionGuides), notesOpen ? `${formatCount(notesOpen)} com notas operacionais` : "sem observacoes manuais"),
@@ -1125,6 +1191,7 @@
             ${rowPill(provider.key, "pill-accent")}
             ${rowPill(provider.baseUrl, "pill-warn")}
             ${rowPill(readiness.stage, readiness.variant)}
+            ${providerConfig.runtimeStatus ? rowPill(providerConfig.runtimeStatus, providerConfig.runtimeActive ? "pill-accent" : "pill-danger") : ""}
           </div>
           <div class="provider-guide-meta">
             <div class="micro-stat">
@@ -1203,6 +1270,96 @@
     };
   }
 
+  function derivePublicationAssessment(row) {
+    const addReason = (codes, reasons, code, message) => {
+      if (!codes.includes(code)) {
+        codes.push(code);
+        reasons.push(message);
+      }
+    };
+
+    if (row.is_marketplace_reference) {
+      return {
+        publication_status: "benchmark_reference",
+        publication_status_label: "Benchmark",
+        publication_reason_codes: ["benchmark_reference"],
+        publication_reasons: ["Item usado como benchmark de varejo para homologar preço de importação."],
+        price_gap_to_benchmark_brl: row.price_gap_to_benchmark_brl,
+      };
+    }
+
+    const blockingCodes = [];
+    const reviewCodes = [];
+    const reasons = [];
+    const benchmarkGap =
+      row.benchmark_retail_price_brl === null || row.benchmark_retail_price_brl === undefined
+        ? null
+        : Number((toNumber(row.benchmark_retail_price_brl) - toNumber(row.suggested_sale_price_brl)).toFixed(2));
+
+    if (!row.stock_module_enabled) {
+      addReason(blockingCodes, reasons, "stock_module_disabled", "Modulo STOCK desativado para este fornecedor.");
+    }
+    if (!row.production_enabled) {
+      addReason(blockingCodes, reasons, "production_mode_disabled", "Modo de producao desligado para este fornecedor.");
+    }
+    if (!row.sandbox_enabled) {
+      addReason(reviewCodes, reasons, "sandbox_mode_disabled", "Modo sandbox desligado; manter homologacao e producao ativas em paralelo.");
+    }
+    if (!row.import_catalog) {
+      addReason(reviewCodes, reasons, "catalog_import_disabled", "Importacao de catalogo esta desligada para este fornecedor.");
+    }
+    if (!row.import_categories) {
+      addReason(reviewCodes, reasons, "category_import_disabled", "Importacao de categorias esta desligada para este fornecedor.");
+    }
+    if (toNumber(row.stock) <= 0) {
+      addReason(blockingCodes, reasons, "no_stock", "Fornecedor sem estoque confirmado para esta oferta.");
+    }
+    if (toNumber(row.estimated_net_revenue_brl) <= 0) {
+      addReason(blockingCodes, reasons, "no_margin", "A precificacao atual nao gera margem liquida positiva.");
+    }
+    if (row.require_liquidity_check && toNumber(row.liquidity_score) < 35) {
+      addReason(reviewCodes, reasons, "low_liquidity", "Liquidez abaixo do piso operacional definido para publicacao.");
+    }
+    if (toNumber(row.duplicate_group_size) > 1 && row.id !== row.duplicate_winner_item_id) {
+      addReason(blockingCodes, reasons, "duplicate_loser", "Outro fornecedor venceu a disputa por menor custo e maior liquidez.");
+    }
+    if (row.require_retail_advantage) {
+      if (benchmarkGap === null) {
+        addReason(reviewCodes, reasons, "no_market_benchmark", "Nao existe benchmark confiavel em marketplace para validar vantagem de varejo.");
+      } else if (benchmarkGap <= 0) {
+        addReason(blockingCodes, reasons, "retail_price_not_advantageous", "O preco sugerido nao fica abaixo do varejo de marketplace.");
+      }
+    }
+
+    if (blockingCodes.length) {
+      return {
+        publication_status: "do_not_publish",
+        publication_status_label: "Nao publicar",
+        publication_reason_codes: [...blockingCodes, ...reviewCodes],
+        publication_reasons: reasons,
+        price_gap_to_benchmark_brl: benchmarkGap,
+      };
+    }
+
+    if (reviewCodes.length) {
+      return {
+        publication_status: "review",
+        publication_status_label: "Revisao",
+        publication_reason_codes: reviewCodes,
+        publication_reasons: reasons,
+        price_gap_to_benchmark_brl: benchmarkGap,
+      };
+    }
+
+    return {
+      publication_status: "approved",
+      publication_status_label: "Aprovado",
+      publication_reason_codes: [],
+      publication_reasons: [],
+      price_gap_to_benchmark_brl: benchmarkGap,
+    };
+  }
+
   function projectImportedPricingItem(item) {
     const controls = importedItemControls(item);
     const baseCost = toNumber(item.base_cost_brl);
@@ -1219,10 +1376,18 @@
     const estimatedNetRevenue = Math.max(suggestedSalePrice - baseCost - estimatedFees, 0);
     const estimatedNetRevenuePct = suggestedSalePrice > 0 ? (estimatedNetRevenue / suggestedSalePrice) * 100 : 0;
     const tags = Array.isArray(item.tags) ? item.tags : [];
+    const publication = derivePublicationAssessment({
+      ...item,
+      ...controls,
+      suggested_sale_price_brl: Number(suggestedSalePrice.toFixed(2)),
+      estimated_net_revenue_brl: Number(estimatedNetRevenue.toFixed(2)),
+      estimated_net_revenue_pct: Number(estimatedNetRevenuePct.toFixed(2)),
+    });
 
     return {
       ...item,
       ...controls,
+      ...publication,
       tags,
       inventory_cost_brl: Number((baseCost * stock).toFixed(2)),
       suggested_sale_price_brl: Number(suggestedSalePrice.toFixed(2)),
@@ -1257,6 +1422,9 @@
           item.google_product_category_path,
           item.source_product_id,
           item.source_item_id,
+          publication.publication_status_label,
+          publication.publication_reason_codes.join(" "),
+          publication.publication_reasons.join(" "),
           tags.join(" "),
           controls.notes,
         ].join(" "),
@@ -1339,6 +1507,7 @@
         (!query || row._searchIndex.includes(query)) &&
         (filters.supplierKey === "all" || row.supplier_key === filters.supplierKey) &&
         (filters.providerKey === "all" || row.provider_key === filters.providerKey) &&
+        (filters.publicationStatus === "all" || row.publication_status === filters.publicationStatus) &&
         (filters.category === "all" || row.category === filters.category) &&
         (filters.collectionLabel === "all" || row.collection_label === filters.collectionLabel) &&
         (filters.availabilityLabel === "all" || row.availability_label === filters.availabilityLabel) &&
@@ -1398,6 +1567,7 @@
       importedPricingState.error = error instanceof Error ? error.message : "falha ao carregar pricing";
     } finally {
       importedPricingState.loading = false;
+      renderAdminLaunchpad();
       renderImportedPricingDesk();
     }
   }
@@ -1407,7 +1577,9 @@
       !elements.importedPricingSummary ||
       !elements.importedSupplierBoard ||
       !elements.importedPricingFilters ||
-      !elements.importedPricingTableWrap
+      !elements.importedPricingTableWrap ||
+      !elements.publicationReviewSummary ||
+      !elements.publicationReviewBoard
     ) {
       return;
     }
@@ -1417,6 +1589,8 @@
       elements.importedSupplierBoard.innerHTML = `<div class="empty-state">Carregando fornecedores...</div>`;
       elements.importedPricingFilters.innerHTML = `<div class="empty-state">Preparando filtros...</div>`;
       elements.importedPricingTableWrap.innerHTML = `<div class="empty-state">Carregando produtos importados...</div>`;
+      elements.publicationReviewSummary.innerHTML = `<div class="empty-state">Preparando fila de revisao...</div>`;
+      elements.publicationReviewBoard.innerHTML = `<div class="empty-state">Carregando itens em revisao...</div>`;
       return;
     }
 
@@ -1426,6 +1600,8 @@
       elements.importedSupplierBoard.innerHTML = `<div class="empty-state">Nenhum fornecedor publicado.</div>`;
       elements.importedPricingFilters.innerHTML = `<div class="empty-state">Filtros indisponiveis.</div>`;
       elements.importedPricingTableWrap.innerHTML = `<div class="empty-state">Tabela indisponivel.</div>`;
+      elements.publicationReviewSummary.innerHTML = `<div class="empty-state">Fila de revisao indisponivel.</div>`;
+      elements.publicationReviewBoard.innerHTML = `<div class="empty-state">Sem leitura de bloqueios.</div>`;
       return;
     }
 
@@ -1436,6 +1612,8 @@
     renderImportedSupplierBoard(allRows);
     renderImportedPricingFilters(allRows);
     renderImportedPricingTable(filteredRows);
+    renderPublicationReviewDesk(allRows);
+    renderAdminLaunchpad();
   }
 
   function renderImportedPricingSummary(rows) {
@@ -1447,10 +1625,14 @@
     );
     const estimatedNetRevenue = rows.reduce((sum, row) => sum + toNumber(row.estimated_inventory_net_revenue_brl), 0);
     const updatedAt = importedPricingPayloadUpdatedAt();
+    const approved = rows.filter((row) => row.publication_status === "approved").length;
+    const review = rows.filter((row) => row.publication_status === "review").length;
+    const blocked = rows.filter((row) => row.publication_status === "do_not_publish").length;
 
     elements.importedPricingSummary.innerHTML = [
       summaryTileMarkup("Itens filtrados", formatCount(rows.length), "produtos importados no recorte atual"),
       summaryTileMarkup("Fornecedores", formatCount(suppliers.size), "origens comerciais ativas no desk"),
+      summaryTileMarkup("Publicacao", `${formatCount(approved)} aprovados`, review || blocked ? `${formatCount(review)} em revisao | ${formatCount(blocked)} bloqueados` : "sem bloqueio no recorte atual"),
       summaryTileMarkup("Custo em estoque", formatMoney(inventoryCost), "base de custo agregada pela regra local"),
       summaryTileMarkup(
         "Faturamento liquido estimado",
@@ -1486,6 +1668,10 @@
       `,
       ...suppliers.map((supplier) => {
         const controls = importedSupplierControls(supplier.supplier_key);
+        const supplierRows = rows.filter((row) => row.supplier_key === supplier.supplier_key);
+        const approvedCount = supplierRows.filter((row) => row.publication_status === "approved").length;
+        const reviewCount = supplierRows.filter((row) => row.publication_status === "review").length;
+        const blockedCount = supplierRows.filter((row) => row.publication_status === "do_not_publish").length;
 
         return `
           <article
@@ -1508,6 +1694,7 @@
               ${summaryTileMarkup("Custo", formatMoney(supplier.inventory_cost_value_brl), "valor base agregado")}
               ${summaryTileMarkup("Receita", formatMoney(supplier.suggested_revenue_value_brl), "preco sugerido")}
               ${summaryTileMarkup("Liquido", formatMoney(supplier.estimated_net_revenue_value_brl), "margem estimada em estoque")}
+              ${summaryTileMarkup("Publicacao", `${formatCount(approvedCount)} ok`, reviewCount || blockedCount ? `${formatCount(reviewCount)} revisao | ${formatCount(blockedCount)} bloqueados` : "sem fila")}
             </div>
             <div class="integration-form-grid">
               <label class="field">
@@ -1550,6 +1737,12 @@
     const filters = importedPricingState.filters;
     const suppliers = importedSupplierSummaries(rows);
     const providerOptions = importedFilterOptions(rows, "provider_key");
+    const publicationOptions = [
+      ["approved", "Aprovados"],
+      ["review", "Revisao"],
+      ["do_not_publish", "Nao publicar"],
+      ["benchmark_reference", "Benchmarks"],
+    ];
     const categoryOptions = importedFilterOptions(rows, "category");
     const collectionOptions = importedFilterOptions(rows, "collection_label");
     const availabilityOptions = importedFilterOptions(rows, "availability_label");
@@ -1572,6 +1765,13 @@
         <select data-imported-filter="providerKey">
           ${optionMarkup("all", "Todos")}
           ${providerOptions.map((value) => optionMarkup(value, value)).join("")}
+        </select>
+      </label>
+      <label class="field">
+        <span>Status de publicacao</span>
+        <select data-imported-filter="publicationStatus">
+          ${optionMarkup("all", "Todos")}
+          ${publicationOptions.map(([value, label]) => optionMarkup(value, label)).join("")}
         </select>
       </label>
       <label class="field">
@@ -1612,6 +1812,7 @@
 
     elements.importedPricingFilters.querySelector('[data-imported-filter="supplierKey"]').value = filters.supplierKey;
     elements.importedPricingFilters.querySelector('[data-imported-filter="providerKey"]').value = filters.providerKey;
+    elements.importedPricingFilters.querySelector('[data-imported-filter="publicationStatus"]').value = filters.publicationStatus;
     elements.importedPricingFilters.querySelector('[data-imported-filter="category"]').value = filters.category;
     elements.importedPricingFilters.querySelector('[data-imported-filter="collectionLabel"]').value = filters.collectionLabel;
     elements.importedPricingFilters.querySelector('[data-imported-filter="availabilityLabel"]').value = filters.availabilityLabel;
@@ -1627,6 +1828,12 @@
     const filters = importedPricingState.filters;
     const providerOptions = importedFilterOptions(materializeImportedPricingRows(), "provider_key");
     const availabilityOptions = importedFilterOptions(materializeImportedPricingRows(), "availability_label");
+    const publicationVariant = {
+      approved: "pill-accent",
+      review: "pill-warn",
+      do_not_publish: "pill-danger",
+      benchmark_reference: "pill-navy",
+    };
 
     elements.importedPricingTableWrap.innerHTML = `
       <div class="pricing-toolbar">
@@ -1637,6 +1844,7 @@
         <div class="pricing-toolbar-meta">
           ${rowPill(`${formatCount(new Set(rows.map((row) => row.supplier_key)).size)} fornecedores`, "pill-accent")}
           ${rowPill(`${formatCount(pageRows.length)} linhas na pagina`, "pill-navy")}
+          ${rowPill(`${formatCount(rows.filter((row) => row.publication_status === "review" || row.publication_status === "do_not_publish").length)} em fila`, "pill-danger")}
           ${rowPill(importedPricingState.payload?.providers_active?.join(", ") || "catalogo ativo", "pill")}
         </div>
       </div>
@@ -1648,6 +1856,7 @@
             <th>Origem</th>
             <th>Segmento</th>
             <th>Disponibilidade</th>
+            <th>Publicacao</th>
             <th>Custo base</th>
             <th>Estoque</th>
             <th>Meta liquida %</th>
@@ -1675,6 +1884,15 @@
               <select data-imported-filter="availabilityLabel">
                 ${optionMarkup("all", "todas")}
                 ${availabilityOptions.map((value) => optionMarkup(value, value)).join("")}
+              </select>
+            </th>
+            <th>
+              <select data-imported-filter="publicationStatus">
+                ${optionMarkup("all", "todos")}
+                ${optionMarkup("approved", "aprovados")}
+                ${optionMarkup("review", "revisao")}
+                ${optionMarkup("do_not_publish", "nao publicar")}
+                ${optionMarkup("benchmark_reference", "benchmarks")}
               </select>
             </th>
             <th></th>
@@ -1729,6 +1947,12 @@
                             <span class="muted-copy">${escapeHtml(row.price_band || "faixa livre")}${row.shipping_free ? " · frete integrado" : ""}</span>
                           </div>
                         </td>
+                        <td>
+                          <div class="pricing-inline-stack">
+                            ${rowPill(row.publication_status_label || row.publication_status || "revisao", publicationVariant[row.publication_status] || "pill")}
+                            <span class="muted-copy">${escapeHtml(row.publication_reasons?.[0] || (row.benchmark_provider_key ? `benchmark ${row.benchmark_provider_key}` : "sem alerta"))}</span>
+                          </div>
+                        </td>
                         <td>${escapeHtml(formatMoney(row.base_cost_brl))}</td>
                         <td>${escapeHtml(formatCount(row.stock))}</td>
                         <td>${pricingEntryMarkup("target_net_revenue_pct", row.target_net_revenue_pct, row.supplier_key, row.id)}</td>
@@ -1747,7 +1971,7 @@
                     `,
                   )
                   .join("")
-              : `<tr><td colspan="17"><div class="empty-state">Nenhum produto corresponde aos filtros e regras atuais.</div></td></tr>`
+              : `<tr><td colspan="18"><div class="empty-state">Nenhum produto corresponde aos filtros e regras atuais.</div></td></tr>`
           }
         </tbody>
       </table>
@@ -1768,6 +1992,90 @@
     if (availabilityFilter) {
       availabilityFilter.value = filters.availabilityLabel;
     }
+    const publicationFilter = elements.importedPricingTableWrap.querySelector('select[data-imported-filter="publicationStatus"]');
+    if (publicationFilter) {
+      publicationFilter.value = filters.publicationStatus;
+    }
+  }
+
+  function renderPublicationReviewDesk(rows) {
+    if (!elements.publicationReviewSummary || !elements.publicationReviewBoard) {
+      return;
+    }
+
+    const reviewRows = rows
+      .filter((row) => row.publication_status === "review" || row.publication_status === "do_not_publish")
+      .sort((left, right) => {
+        const leftRank = left.publication_status === "do_not_publish" ? 0 : 1;
+        const rightRank = right.publication_status === "do_not_publish" ? 0 : 1;
+        if (leftRank !== rightRank) {
+          return leftRank - rightRank;
+        }
+        return toNumber(left.price_gap_to_benchmark_brl, 999999) - toNumber(right.price_gap_to_benchmark_brl, 999999);
+      });
+
+    const blocked = reviewRows.filter((row) => row.publication_status === "do_not_publish").length;
+    const review = reviewRows.filter((row) => row.publication_status === "review").length;
+    const topReasons = new Map();
+
+    reviewRows.forEach((row) => {
+      (row.publication_reasons || []).forEach((reason) => {
+        topReasons.set(reason, (topReasons.get(reason) || 0) + 1);
+      });
+    });
+
+    const topReasonsList = [...topReasons.entries()]
+      .sort((left, right) => right[1] - left[1])
+      .slice(0, 4)
+      .map(([reason, total]) => `${reason} (${formatCount(total)})`)
+      .join(" | ");
+
+    elements.publicationReviewSummary.innerHTML = [
+      summaryTileMarkup("Itens na fila", formatCount(reviewRows.length), reviewRows.length ? "bloqueios e revisoes comerciais ativas" : "nenhum item fora da politica"),
+      summaryTileMarkup("Nao publicar", formatCount(blocked), blocked ? "preco, margem, duplicidade ou estoque bloqueando a oferta" : "sem bloqueios fatais"),
+      summaryTileMarkup("Revisao", formatCount(review), review ? "falta benchmark, liquidez ou configuracao complementar" : "sem revisoes abertas"),
+      summaryTileMarkup("Motivos dominantes", formatCount(topReasons.size), topReasonsList || "sem recorrencia no filtro atual"),
+    ].join("");
+
+    if (!reviewRows.length) {
+      elements.publicationReviewBoard.innerHTML = `<div class="empty-state">Nenhum item exige revisao ou bloqueio no recorte atual.</div>`;
+      return;
+    }
+
+    elements.publicationReviewBoard.innerHTML = reviewRows
+      .slice(0, 18)
+      .map(
+        (row) => `
+          <article class="publication-review-card ${row.publication_status === "do_not_publish" ? "is-blocked" : "is-review"}">
+            <div class="module-row-top">
+              <div>
+                <h3>${escapeHtml(row.title)}</h3>
+                <p class="muted-copy">${escapeHtml(row.supplier_name)} · ${escapeHtml(row.category || "sem categoria")}</p>
+              </div>
+              ${rowPill(row.publication_status_label || row.publication_status, row.publication_status === "do_not_publish" ? "pill-danger" : "pill-warn")}
+            </div>
+            <div class="publication-review-metrics">
+              ${summaryTileMarkup("Custo", formatMoney(row.base_cost_brl), `sugerido ${formatMoney(row.suggested_sale_price_brl)}`)}
+              ${summaryTileMarkup("Liquidez", formatCount(row.liquidity_score), row.require_liquidity_check ? "regra ativa" : "regra desligada")}
+              ${summaryTileMarkup("Benchmark", row.benchmark_retail_price_brl ? formatMoney(row.benchmark_retail_price_brl) : "ausente", row.benchmark_provider_key || "sem marketplace")}
+              ${summaryTileMarkup("Gap", row.price_gap_to_benchmark_brl === null || row.price_gap_to_benchmark_brl === undefined ? "n/d" : formatMoney(row.price_gap_to_benchmark_brl), row.price_gap_to_benchmark_brl > 0 ? "abaixo do varejo" : "acima ou igual ao varejo")}
+            </div>
+            <div class="pill-row">
+              ${rowPill(row.provider_key, "pill-accent")}
+              ${rowPill(`${formatCount(row.stock)} un`, "pill")}
+              ${row.import_categories ? rowPill("categorias on", "pill-accent") : rowPill("categorias off", "pill-warn")}
+            </div>
+            <div class="review-reason-list">
+              ${(row.publication_reasons || []).map((reason) => `<span class="review-reason">${escapeHtml(reason)}</span>`).join("")}
+            </div>
+            <div class="link-row">
+              ${row.source_permalink ? `<a href="${escapeHtml(row.source_permalink)}" target="_blank" rel="noreferrer">Abrir origem</a>` : `<span class="pill">Origem sem URL</span>`}
+              <a href="#importedPricingSection">Abrir mesa</a>
+            </div>
+          </article>
+        `,
+      )
+      .join("");
   }
 
   function sanitizeImportedPricingEntry(entry) {
@@ -1812,6 +2120,15 @@
       supplier_defaults: supplierDefaults,
       item_overrides: itemOverrides,
     };
+  }
+
+  function resetImportedPricingDefaults() {
+    importedPricingState.draft = {
+      supplier_defaults: {},
+      item_overrides: {},
+    };
+    renderImportedPricingDesk();
+    announce("Regras locais de pricing restauradas para o padrao.");
   }
 
   async function saveImportedPricing() {
@@ -1887,6 +2204,45 @@
     renderImportedPricingDesk();
   }
 
+  function activeAdminPublicUrl() {
+    return state.marketplaceApiPayload?.public_admin_url || data.public_runtime?.public_url || "";
+  }
+
+  function activeProductPublicUrl() {
+    const explicit = state.marketplaceApiPayload?.public_product_url || "";
+    if (explicit) {
+      return explicit;
+    }
+
+    const adminUrl = activeAdminPublicUrl();
+    return adminUrl ? `${adminUrl.replace(/\/$/, "")}/product` : "";
+  }
+
+  function activeLocalProductUrl() {
+    return `${window.location.origin.replace(/\/$/, "")}/product/`;
+  }
+
+  function integrationWebhookPath(providerKey) {
+    if (providerKey === "mercado_livre") {
+      return "/integrations/mercadolivre/notifications";
+    }
+    return `/integrations/${providerKey}/notifications`;
+  }
+
+  function integrationRedirectUri(providerKey) {
+    const adminUrl = activeAdminPublicUrl() || "https://admin.brasildesconto.com.br";
+
+    if (providerKey === "mercado_livre") {
+      return adminUrl;
+    }
+
+    if (providerKey === "amazon" || providerKey === "cjdropshipping") {
+      return "";
+    }
+
+    return `${adminUrl}/integrations/${providerKey}/callback`;
+  }
+
   function renderAccessLinks() {
     if (!elements.adminAccessLinks) {
       return;
@@ -1894,12 +2250,130 @@
 
     const runtime = data.public_runtime || {};
     const localOrigin = window.location.origin;
+    const publicAdminUrl = activeAdminPublicUrl();
+    const publicProductUrl = activeProductPublicUrl();
     elements.adminAccessLinks.innerHTML = [
       accessCardMarkup("Painel local", `${localOrigin}/`),
+      accessCardMarkup("Stock local", activeLocalProductUrl()),
       accessCardMarkup("Healthz", `${localOrigin}/healthz`),
       accessCardMarkup("Admin data", `${localOrigin}/api/admin-data`),
-      accessCardMarkup("Publico", runtime.public_url || "", runtime.public_url ? "pill-accent" : "pill-warn"),
+      accessCardMarkup("Admin publico", publicAdminUrl || runtime.public_url || "", (publicAdminUrl || runtime.public_url) ? "pill-accent" : "pill-warn"),
+      accessCardMarkup("Stock publico", publicProductUrl, publicProductUrl ? "pill-accent" : "pill-warn"),
     ].join("");
+  }
+
+  function renderAdminLaunchpad() {
+    if (!elements.adminLaunchpadSummary || !elements.adminLaunchpadGrid) {
+      return;
+    }
+
+    const config = readMarketplaceApiConfig();
+    const publicationRows = importedPricingState.payload ? materializeImportedPricingRows() : [];
+    const publicAdminUrl = activeAdminPublicUrl();
+    const publicProductUrl = activeProductPublicUrl();
+    const localOrigin = window.location.origin.replace(/\/$/, "");
+    const providerReady = config.filter((provider) => provider.enabled && provider.stockModuleEnabled !== false).length;
+    const productionReady = config.filter((provider) => provider.productionEnabled !== false).length;
+    const pendingReview = publicationRows.length
+      ? publicationRows.filter((row) => row.publication_status === "review" || row.publication_status === "do_not_publish").length
+      : Number(importedPricingState.payload?.publication_summary?.review_total || 0) +
+        Number(importedPricingState.payload?.publication_summary?.do_not_publish_total || 0);
+
+    elements.adminLaunchpadSummary.innerHTML = [
+      summaryTileMarkup("Entradas", formatCount(8), "atalhos para home, stock, integrações e operacao"),
+      summaryTileMarkup("Providers STOCK", formatCount(providerReady), `${formatCount(productionReady)} com producao ligada`),
+      summaryTileMarkup("Revisao de publicacao", formatCount(pendingReview), pendingReview ? "itens aguardando decisao comercial" : "sem fila de bloqueio"),
+      summaryTileMarkup("Checkout", checkoutHealthState.payload?.checkout_ready ? "pronto" : "pendente", checkoutHealthState.payload?.preferred_environment || "unconfigured"),
+    ].join("");
+
+    const cards = [
+      {
+        title: "Home Admin",
+        copy: "Painel principal em admin.brasildesconto.com.br com todas as areas do cockpit.",
+        href: publicAdminUrl || `${localOrigin}/`,
+        action: "Abrir home",
+        status: publicAdminUrl ? rowPill("publico", "pill-accent") : rowPill("local", "pill-navy"),
+        meta: ["Subdominio ativo", "admin.brasildesconto.com.br"],
+      },
+      {
+        title: "Painel STOCK",
+        copy: "Catálogo, checkout e vitrine pública do módulo STOCK com imagens em carrossel.",
+        href: publicProductUrl || activeLocalProductUrl(),
+        action: "Abrir stock",
+        status: publicProductUrl ? rowPill("publico", "pill-accent") : rowPill("local", "pill-navy"),
+        meta: ["Rota atual", publicProductUrl || `${localOrigin}/product/`],
+      },
+      {
+        title: "Integracoes",
+        copy: "Credenciais, webhooks, flags, sandbox e producao por fornecedor.",
+        href: "#settingsSection",
+        action: "Abrir integracoes",
+        status: rowPill(`${formatCount(providerReady)} ativos`, "pill-accent"),
+        meta: ["Subdominio reservado", "integrations.admin.brasildesconto.com.br"],
+      },
+      {
+        title: "Revisao de Publicacao",
+        copy: "Fila exclusiva de nao publicados e itens em revisao com motivo operacional.",
+        href: "#publicationReviewSection",
+        action: "Abrir revisao",
+        status: pendingReview ? rowPill(`${formatCount(pendingReview)} pendentes`, "pill-danger") : rowPill("sem fila", "pill-accent"),
+        meta: ["Subdominio reservado", "review.admin.brasildesconto.com.br"],
+      },
+      {
+        title: "Financeiro",
+        copy: "Resultados financeiros, margens estimadas e saude comercial do catalogo.",
+        href: "#financialDashboard",
+        action: "Abrir financeiro",
+        status: rowPill("cockpit", "pill-navy"),
+        meta: ["Subdominio reservado", "finance.admin.brasildesconto.com.br"],
+      },
+      {
+        title: "Lojistas",
+        copy: "Cadastro e gestão operacional de sellers e parceiros marketplace.",
+        href: "#modulesWorkspace",
+        action: "Abrir lojistas",
+        status: rowPill("workspace", "pill"),
+        meta: ["Subdominio reservado", "merchants.admin.brasildesconto.com.br"],
+      },
+      {
+        title: "Usuarios",
+        copy: "Cadastro de usuarios, flags de acesso e trilha de configuracao institucional.",
+        href: "#modulesWorkspace",
+        action: "Abrir usuarios",
+        status: rowPill("workspace", "pill"),
+        meta: ["Subdominio reservado", "users.admin.brasildesconto.com.br"],
+      },
+      {
+        title: "Checkout e Sandbox",
+        copy: "Mercado Pago, retorno, webhook e saude de sandbox/producao do checkout.",
+        href: "#checkoutHealthPanel",
+        action: "Abrir checkout",
+        status: checkoutHealthState.payload?.checkout_ready ? rowPill("checkout pronto", "pill-accent") : rowPill("checkout pendente", "pill-warn"),
+        meta: ["Subdominio reservado", "checkout.admin.brasildesconto.com.br"],
+      },
+    ];
+
+    elements.adminLaunchpadGrid.innerHTML = cards
+      .map(
+        (card) => `
+          <article class="launchpad-card">
+            <div class="module-row-top">
+              <div>
+                <h3>${escapeHtml(card.title)}</h3>
+                <p class="muted-copy">${escapeHtml(card.copy)}</p>
+              </div>
+              ${card.status}
+            </div>
+            <div class="launchpad-meta">
+              ${card.meta.map((item) => rowPill(item, "pill-navy")).join("")}
+            </div>
+            <div class="link-row">
+              <a href="${escapeHtml(card.href)}">${escapeHtml(card.action)}</a>
+            </div>
+          </article>
+        `,
+      )
+      .join("");
   }
 
   function normalizeHref(value) {
@@ -2077,26 +2551,33 @@
   function defaultMarketplaceApiConfig() {
     return MARKETPLACE_API_PROVIDERS.map((provider) => ({
       ...provider,
-      enabled: false,
-      environment: "sandbox",
+      enabled: true,
+      environment: "production",
       siteCode: provider.siteCode,
       authMode: "oauth2",
       clientId: "",
-      secretRef: "",
-      accessTokenRef: "",
-      refreshTokenRef: "",
-      redirectUri: `https://admin.brasildesconto.com.br/integrations/${provider.key}/callback`,
+      secretRef: `vault/marketplaces/${provider.key}/client-secret`,
+      accessTokenRef: `vault/marketplaces/${provider.key}/access-token`,
+      refreshTokenRef: `vault/marketplaces/${provider.key}/refresh-token`,
+      redirectUri: integrationRedirectUri(provider.key),
       sellerId: "",
-      webhookUrl: "/webhooks/marketplaces/" + provider.key,
-      webhookSecretRef: "",
+      webhookUrl: `https://admin.brasildesconto.com.br${integrationWebhookPath(provider.key)}`,
+      webhookSecretRef: `vault/marketplaces/${provider.key}/webhook-secret`,
       scopes: "catalog,orders,pricing,inventory,settlement",
       syncCadenceMinutes: 30,
       cacheTtlMinutes: 20,
       marginFloorPct: 12,
+      stockModuleEnabled: true,
+      sandboxEnabled: true,
+      productionEnabled: true,
       importCatalog: true,
+      importCategories: true,
       syncOrders: true,
       syncInventory: true,
       syncPricing: true,
+      publishApprovedOnly: true,
+      requireRetailAdvantage: true,
+      requireLiquidityCheck: true,
       allowScrapingFallback: false,
       blockExternalAiLookup: true,
       notes: "",
@@ -2130,12 +2611,16 @@
 
       const payload = await response.json();
       const items = Array.isArray(payload?.items) ? payload.items : [];
+      state.marketplaceApiPayload = payload;
       state.marketplaceApiConfig = mergeMarketplaceApiConfig(items);
       window.localStorage.setItem(MARKETPLACE_API_STORAGE_KEY, JSON.stringify(state.marketplaceApiConfig, null, 2));
+      renderAdminLaunchpad();
       renderMarketplaceIntegrations();
       announce("Integracoes carregadas do backend do admin.");
     } catch (error) {
+      state.marketplaceApiPayload = null;
       state.marketplaceApiConfig = readMarketplaceApiConfig();
+      renderAdminLaunchpad();
       renderMarketplaceIntegrations();
       announce("Integracoes carregadas do fallback local.");
     }
@@ -2146,11 +2631,15 @@
       return [];
     }
 
+    const currentByKey = Object.fromEntries(readMarketplaceApiConfig().map((provider) => [provider.key, provider]));
+
     return MARKETPLACE_API_PROVIDERS.map((provider) => {
       const read = (field) => elements.marketplaceApiIntegrations.querySelector(`[data-provider="${provider.key}"][data-field="${field}"]`);
+      const current = currentByKey[provider.key] || {};
       return {
         key: provider.key,
         label: provider.label,
+        providerRole: current.providerRole || "",
         enabled: Boolean(read("enabled")?.checked),
         environment: read("environment")?.value || "sandbox",
         siteCode: read("siteCode")?.value.trim() || provider.siteCode,
@@ -2168,15 +2657,49 @@
         syncCadenceMinutes: Number(read("syncCadenceMinutes")?.value) || 30,
         cacheTtlMinutes: Number(read("cacheTtlMinutes")?.value) || 20,
         marginFloorPct: Number(read("marginFloorPct")?.value) || 12,
+        stockModuleEnabled: Boolean(read("stockModuleEnabled")?.checked),
+        sandboxEnabled: Boolean(read("sandboxEnabled")?.checked),
+        productionEnabled: Boolean(read("productionEnabled")?.checked),
         importCatalog: Boolean(read("importCatalog")?.checked),
+        importCategories: Boolean(read("importCategories")?.checked),
         syncOrders: Boolean(read("syncOrders")?.checked),
         syncInventory: Boolean(read("syncInventory")?.checked),
         syncPricing: Boolean(read("syncPricing")?.checked),
+        publishApprovedOnly: Boolean(read("publishApprovedOnly")?.checked),
+        requireRetailAdvantage: Boolean(read("requireRetailAdvantage")?.checked),
+        requireLiquidityCheck: Boolean(read("requireLiquidityCheck")?.checked),
         allowScrapingFallback: Boolean(read("allowScrapingFallback")?.checked),
         blockExternalAiLookup: Boolean(read("blockExternalAiLookup")?.checked),
+        usernameRef: current.usernameRef || "",
+        passwordRef: current.passwordRef || "",
         notes: read("notes")?.value.trim() || "",
       };
     });
+  }
+
+  function resetMarketplaceApiDefaults() {
+    const current = readMarketplaceApiConfig();
+    const reset = defaultMarketplaceApiConfig().map((provider) => {
+      const currentProvider = current.find((item) => item.key === provider.key) || {};
+      return {
+        ...provider,
+        providerRole: currentProvider.providerRole || "",
+        clientId: currentProvider.clientId || "",
+        secretRef: currentProvider.secretRef || provider.secretRef,
+        accessTokenRef: currentProvider.accessTokenRef || provider.accessTokenRef,
+        refreshTokenRef: currentProvider.refreshTokenRef || provider.refreshTokenRef,
+        sellerId: currentProvider.sellerId || "",
+        webhookSecretRef: currentProvider.webhookSecretRef || provider.webhookSecretRef,
+        usernameRef: currentProvider.usernameRef || "",
+        passwordRef: currentProvider.passwordRef || "",
+        notes: currentProvider.notes || "",
+      };
+    });
+    state.marketplaceApiConfig = reset;
+    window.localStorage.setItem(MARKETPLACE_API_STORAGE_KEY, JSON.stringify(reset, null, 2));
+    renderAdminLaunchpad();
+    renderMarketplaceIntegrations();
+    announce("Politica padrao das integracoes restaurada.");
   }
 
   async function saveMarketplaceApiConfig() {
@@ -2198,6 +2721,7 @@
       announce("Integracoes salvas apenas no fallback local.");
     }
 
+    renderAdminLaunchpad();
     renderMarketplaceIntegrations();
   }
 
@@ -2226,6 +2750,7 @@
               </div>
               <div class="integration-card-status">
                 ${rowPill(readiness.stage, readiness.variant)}
+                ${provider.runtimeStatus ? rowPill(provider.runtimeStatus, provider.runtimeActive ? "pill-accent" : "pill-danger") : ""}
                 <label class="field toggle-field">
                   <span>Ativo</span>
                   <input data-provider="${escapeHtml(provider.key)}" data-field="enabled" type="checkbox" ${provider.enabled ? "checked" : ""} />
@@ -2247,6 +2772,11 @@
               <div class="pill-row">
                 ${providerCapabilityPills(provider)}
               </div>
+              ${
+                Array.isArray(provider.runtimePending) && provider.runtimePending.length
+                  ? `<div class="pill-row">${provider.runtimePending.map((item) => rowPill(item, "pill-danger")).join("")}</div>`
+                  : ""
+              }
             </div>
             <div class="integration-form-grid">
               <label class="field">
@@ -2322,8 +2852,24 @@
               </label>
               <div class="integration-toggle-group" aria-label="Sincronizacoes ${escapeHtml(provider.label)}">
                 <label class="field toggle-field">
+                  <span>Modulo STOCK</span>
+                  <input data-provider="${escapeHtml(provider.key)}" data-field="stockModuleEnabled" type="checkbox" ${provider.stockModuleEnabled ? "checked" : ""} />
+                </label>
+                <label class="field toggle-field">
+                  <span>Sandbox</span>
+                  <input data-provider="${escapeHtml(provider.key)}" data-field="sandboxEnabled" type="checkbox" ${provider.sandboxEnabled ? "checked" : ""} />
+                </label>
+                <label class="field toggle-field">
+                  <span>Producao</span>
+                  <input data-provider="${escapeHtml(provider.key)}" data-field="productionEnabled" type="checkbox" ${provider.productionEnabled ? "checked" : ""} />
+                </label>
+                <label class="field toggle-field">
                   <span>Catalogo</span>
                   <input data-provider="${escapeHtml(provider.key)}" data-field="importCatalog" type="checkbox" ${provider.importCatalog ? "checked" : ""} />
+                </label>
+                <label class="field toggle-field">
+                  <span>Categorias</span>
+                  <input data-provider="${escapeHtml(provider.key)}" data-field="importCategories" type="checkbox" ${provider.importCategories ? "checked" : ""} />
                 </label>
                 <label class="field toggle-field">
                   <span>Pedidos</span>
@@ -2336,6 +2882,18 @@
                 <label class="field toggle-field">
                   <span>Preco</span>
                   <input data-provider="${escapeHtml(provider.key)}" data-field="syncPricing" type="checkbox" ${provider.syncPricing ? "checked" : ""} />
+                </label>
+                <label class="field toggle-field">
+                  <span>Publicar aprovados</span>
+                  <input data-provider="${escapeHtml(provider.key)}" data-field="publishApprovedOnly" type="checkbox" ${provider.publishApprovedOnly ? "checked" : ""} />
+                </label>
+                <label class="field toggle-field">
+                  <span>Varejo abaixo</span>
+                  <input data-provider="${escapeHtml(provider.key)}" data-field="requireRetailAdvantage" type="checkbox" ${provider.requireRetailAdvantage ? "checked" : ""} />
+                </label>
+                <label class="field toggle-field">
+                  <span>Checar liquidez</span>
+                  <input data-provider="${escapeHtml(provider.key)}" data-field="requireLiquidityCheck" type="checkbox" ${provider.requireLiquidityCheck ? "checked" : ""} />
                 </label>
                 <label class="field toggle-field">
                   <span>Fallback scraping</span>
@@ -2374,6 +2932,16 @@
                 <code>${escapeHtml(provider.webhookUrl || "nao publicado")}</code>
               </section>
             </div>
+            ${
+              Array.isArray(provider.runtimeEvidence) && provider.runtimeEvidence.length
+                ? `
+                  <div class="runtime-evidence-box">
+                    <span class="small-label">Evidencias runtime</span>
+                    <div class="pill-row">${provider.runtimeEvidence.map((item) => rowPill(item, "pill-navy")).join("")}</div>
+                  </div>
+                `
+                : ""
+            }
           </section>
         `;
         },
@@ -2419,12 +2987,28 @@
       saveMarketplaceApiConfig();
     });
 
+    elements.applyMarketplaceApis?.addEventListener("click", () => {
+      saveMarketplaceApiConfig();
+    });
+
+    elements.resetMarketplaceApis?.addEventListener("click", () => {
+      resetMarketplaceApiDefaults();
+    });
+
     elements.copyMarketplaceApis?.addEventListener("click", () => {
       copyText(JSON.stringify(collectMarketplaceApiConfig(), null, 2), "JSON de integracoes");
     });
 
     elements.saveImportedPricing?.addEventListener("click", () => {
       saveImportedPricing();
+    });
+
+    elements.applyImportedPricing?.addEventListener("click", () => {
+      saveImportedPricing();
+    });
+
+    elements.resetImportedPricing?.addEventListener("click", () => {
+      resetImportedPricingDefaults();
     });
 
     elements.copyImportedPricing?.addEventListener("click", () => {
@@ -3456,11 +4040,13 @@
       .then((payload) => {
         checkoutHealthState.payload = payload;
         checkoutHealthState.loading = false;
+        renderAdminLaunchpad();
         renderCheckoutHealth();
       })
       .catch((error) => {
         checkoutHealthState.loading = false;
         checkoutHealthState.error = error.message || "Falha ao carregar checkout.";
+        renderAdminLaunchpad();
         renderCheckoutHealth();
       });
   }
@@ -3508,6 +4094,7 @@
     const validationLabel = validation.status || "nao validado";
     const notificationUrl = payload.notification_url || "";
     const returnUrl = payload.sample_return_url || "";
+    const checkoutMode = payload.preferred_environment || "unconfigured";
 
     elements.checkoutHealthPanel.innerHTML = `
       <article class="runtime-status-card ${escapeHtml(tone)}">
@@ -3522,6 +4109,7 @@
           ${externalTileMarkup("Checkout", payload.checkout_ready ? "pronto" : "bloqueado", payload.access_token_present ? "access token presente" : "access token ausente")}
           ${externalTileMarkup("Credenciais", `${presentCount}/3`, "token, public key e webhook secret")}
           ${externalTileMarkup("Validação", validationLabel, validation.checked_at_utc ? formatTimestamp(validation.checked_at_utc) : "sem checagem")}
+          ${externalTileMarkup("Modo", checkoutMode, payload.sandbox_enabled && payload.production_enabled ? "sandbox e producao ligados" : "ajustar modos do checkout")}
         </div>
         <p class="muted-copy">
           ${escapeHtml(validation.detail || "O backend valida o access token no endpoint oficial do Mercado Pago antes de liberar o checkout próprio.")}
@@ -3565,6 +4153,7 @@
     renderCommands();
     renderExternalAccess();
     renderAccessLinks();
+    renderAdminLaunchpad();
     renderMarketplaceIntegrations();
     renderImportedPricingDesk();
     renderModuleList(modules);

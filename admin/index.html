@@ -17,9 +17,11 @@
           <h2>Admin</h2>
           <nav class="dock-nav">
             <a class="dock-link" href="#homeDashboard">Home</a>
+            <a class="dock-link" href="#adminLaunchpadSection">Launchpad</a>
             <a class="dock-link" href="#financialDashboard">Financeiro</a>
             <a class="dock-link" href="#performanceDashboard">Desempenho</a>
             <a class="dock-link" href="#importedPricingSection">Importados</a>
+            <a class="dock-link" href="#publicationReviewSection">Revisao</a>
             <a class="dock-link" href="#modulesWorkspace">Modulos</a>
             <a class="dock-link" href="#stockIntegrations">Stock APIs</a>
             <a class="dock-link" href="#settingsSection">Configuracoes</a>
@@ -37,8 +39,10 @@
           <p class="panel-kicker">Atalhos</p>
           <h2>Dashboards</h2>
           <div class="dock-stack">
+            <a class="dock-link" href="#adminLaunchpadSection">Launchpad admin</a>
             <a class="dock-link" href="#publicRuntimePanel">Runtime publico</a>
             <a class="dock-link" href="#stockIntegrations">Integracoes STOCK</a>
+            <a class="dock-link" href="#publicationReviewSection">Fila de revisao</a>
             <a class="dock-link" href="#detailTitle">Modulo selecionado</a>
           </div>
         </div>
@@ -113,6 +117,18 @@
           </div>
           <div id="prioritySignals" class="signal-list"></div>
         </section>
+      </section>
+
+      <section id="adminLaunchpadSection" class="glass-panel launchpad-section" aria-label="Home do painel administrador">
+        <div class="section-head">
+          <div>
+            <p class="panel-kicker">Admin launchpad</p>
+            <h2>Home do painel administrador</h2>
+          </div>
+          <p class="section-copy">Botões de acesso rápido para subdomínios, módulos operacionais e áreas de configuração do cockpit.</p>
+        </div>
+        <div id="adminLaunchpadSummary" class="integration-summary-grid"></div>
+        <div id="adminLaunchpadGrid" class="launchpad-grid"></div>
       </section>
 
       <section class="executive-grid" aria-label="Sinais executivos de release">
@@ -221,7 +237,9 @@
         <div id="marketplaceApiControlCenter" class="integration-control-center"></div>
         <div id="marketplaceApiIntegrations" class="integration-grid"></div>
         <div class="integration-actions">
-          <button id="saveMarketplaceApis" class="secondary-button" type="button">Salvar rascunho local</button>
+          <button id="saveMarketplaceApis" class="secondary-button" type="button">Salvar</button>
+          <button id="applyMarketplaceApis" class="secondary-button" type="button">Alterar</button>
+          <button id="resetMarketplaceApis" class="secondary-button" type="button">Padrao</button>
           <button id="copyMarketplaceApis" class="secondary-button" type="button">Copiar JSON</button>
         </div>
         <p class="microcopy">Use referencia de segredo ou vault no campo Secret Ref. Consultas externas do dropshipping devem usar APIs oficiais; scraping fica como fallback controlado e IA externa fica bloqueada por padrao.</p>
@@ -252,10 +270,24 @@
         <div id="importedPricingFilters" class="imported-pricing-filters"></div>
         <div id="importedPricingTableWrap" class="imported-pricing-table-wrap"></div>
         <div class="integration-actions">
-          <button id="saveImportedPricing" class="secondary-button" type="button">Salvar regras de pricing</button>
+          <button id="saveImportedPricing" class="secondary-button" type="button">Salvar</button>
+          <button id="applyImportedPricing" class="secondary-button" type="button">Alterar</button>
+          <button id="resetImportedPricing" class="secondary-button" type="button">Padrao</button>
           <button id="copyImportedPricing" class="secondary-button" type="button">Copiar JSON</button>
         </div>
         <p class="microcopy">O custo base vem do catálogo importado. A mesa calcula preço sugerido, taxas e faturamento líquido estimado por SKU e por fornecedor.</p>
+      </section>
+
+      <section id="publicationReviewSection" class="glass-panel publication-review-section" aria-label="Fila exclusiva de revisao de publicacao">
+        <div class="section-head">
+          <div>
+            <p class="panel-kicker">Publication review</p>
+            <h2>Itens nao publicados ou em revisao</h2>
+          </div>
+          <p class="section-copy">Fila exclusiva para produtos bloqueados por preço, liquidez, estoque, duplicidade ou falta de benchmark em marketplace.</p>
+        </div>
+        <div id="publicationReviewSummary" class="integration-summary-grid"></div>
+        <div id="publicationReviewBoard" class="publication-review-board"></div>
       </section>
 
       <section class="intelligence-grid" aria-label="Matrizes operacionais">

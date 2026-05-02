@@ -1299,14 +1299,16 @@ def dedupe_stock_items(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
             best_by_signature[signature] = item
             continue
         left_score = (
-            int(current.get("provider_priority") or 0),
+            -float(current.get("price_brl") or 0.0),
             int(current.get("source_relevance_score") or current.get("offer_count") or 0),
             int(current.get("stock") or 0),
+            int(current.get("provider_priority") or 0),
         )
         right_score = (
-            int(item.get("provider_priority") or 0),
+            -float(item.get("price_brl") or 0.0),
             int(item.get("source_relevance_score") or item.get("offer_count") or 0),
             int(item.get("stock") or 0),
+            int(item.get("provider_priority") or 0),
         )
         if right_score > left_score:
             best_by_signature[signature] = item
@@ -1401,6 +1403,8 @@ def enabled_catalog_provider_keys(integrations: list[dict[str, Any]]) -> set[str
         if not isinstance(integration, dict):
             continue
         if not integration.get("enabled"):
+            continue
+        if integration.get("stockModuleEnabled") is False:
             continue
         if not integration.get("importCatalog"):
             continue
