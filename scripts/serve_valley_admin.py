@@ -55,6 +55,7 @@ TRANSLATED_STOCK_REAL_CATALOG_PATH = RUNTIME_DIR / "valley-stock-real-catalog-pt
 MERCADOPAGO_NOTIFICATIONS_PATH = RUNTIME_DIR / "valley-mercadopago-notifications.jsonl"
 MERCADOPAGO_NOTIFICATIONS_LATEST_PATH = RUNTIME_DIR / "valley-mercadopago-notification-latest.json"
 MERCADOPAGO_PREFERENCES_PATH = RUNTIME_DIR / "valley-mercadopago-preferences.jsonl"
+MERCADOPAGO_CHECKOUT_ATTEMPTS_PATH = RUNTIME_DIR / "valley-mercadopago-checkout-attempts.jsonl"
 MERCADOPAGO_STATUS_PATH = RUNTIME_DIR / "valley-mercadopago-status.json"
 MERCADOLIVRE_NOTIFICATIONS_PATH = RUNTIME_DIR / "valley-mercadolivre-notifications.jsonl"
 MERCADOLIVRE_NOTIFICATIONS_LATEST_PATH = RUNTIME_DIR / "valley-mercadolivre-notification-latest.json"
@@ -75,6 +76,7 @@ STOCK_SYNC_STATE_PATH = RUNTIME_DIR / "valley-stock-sync-state.json"
 STOCK_SYNC_EVENTS_PATH = RUNTIME_DIR / "valley-stock-sync-events.jsonl"
 PRODUCT_CATALOG_PATH = ROOT / "frontend" / "flutter" / "assets" / "data" / "valley_product_catalog.json"
 PRODUCT_INTERACTIONS_PATH = RUNTIME_DIR / "valley-product-interactions.jsonl"
+MOVE_TELEMETRY_PATH = RUNTIME_DIR / "move-telemetry.jsonl"
 PRODUCT_MVP_MODULES = {"STOCK", "MARKETPLACE", "CHAT"}
 PRODUCT_LIST_LIMIT = 80
 MARKETPLACE_RUNTIME_PROVIDERS = {"mercado_livre", "amazon", "magalu", "shopee"}
@@ -126,6 +128,31 @@ def load_json_file(path: Path | None) -> dict[str, Any] | None:
         return json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError):
         return None
+
+
+def load_jsonl_tail(path: Path | None, *, limit: int = 20) -> list[dict[str, Any]]:
+    if path is None or not path.exists() or limit <= 0:
+        return []
+
+    try:
+        lines = path.read_text(encoding="utf-8").splitlines()
+    except OSError:
+        return []
+
+    payload: list[dict[str, Any]] = []
+    for raw_line in reversed(lines):
+        line = raw_line.strip()
+        if not line:
+            continue
+        try:
+            item = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if isinstance(item, dict):
+            payload.append(item)
+        if len(payload) >= limit:
+            break
+    return payload
 
 
 def write_json_file(path: Path | None, payload: Any) -> None:
@@ -599,6 +626,10 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             self._write_json(HTTPStatus.OK, self._product_catalog_summary_payload())
             return
 
+        if route == "/api/module-runtime-snapshots":
+            self._write_json(HTTPStatus.OK, self._module_runtime_snapshots_payload())
+            return
+
         if route == "/api/admin-imported-products-pricing":
             self._write_json(HTTPStatus.OK, self._admin_imported_products_pricing_payload())
             return
@@ -613,6 +644,10 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
 
         if route == "/api/work-status":
             self._write_json(HTTPStatus.OK, self._work_status_payload())
+            return
+
+        if route == "/api/move-telemetry":
+            self._write_json(HTTPStatus.OK, self._move_telemetry_payload())
             return
 
         if route in ("/api/admin-data", "/api/admin-data.json"):
@@ -782,6 +817,13 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             )
             return
 
+        if route == "/api/actions/move-telemetry":
+            self._write_json(
+                HTTPStatus.OK,
+                self._write_move_telemetry_action(query),
+            )
+            return
+
         if route == "/api/admin-integrations":
             payload = self._read_json_body()
             if not isinstance(payload, list):
@@ -901,6 +943,10 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             self._write_mercadopago_notification_event(parsed.query)
             return
 
+        if route == "/api/move-telemetry":
+            self._write_move_telemetry_event()
+            return
+
         self._write_json(
             HTTPStatus.NOT_FOUND,
             {"status": "not_found", "route": route, "service": "valley-admin"},
@@ -944,6 +990,15 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             "activity_name": "Valley",
             "progress_percent": 0,
             "status": "missing",
+        }
+
+    def _move_telemetry_payload(self) -> dict[str, Any]:
+        return {
+            "status": "ok",
+            "service": "valley-move-telemetry",
+            "generated_at_utc": utc_now_iso(),
+            "events": load_jsonl_tail(MOVE_TELEMETRY_PATH, limit=24),
+            "path": str(MOVE_TELEMETRY_PATH),
         }
 
     def _public_runtime_payload(self) -> dict[str, Any]:
@@ -998,6 +1053,10 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             payload["service"] = "valley-product"
             payload = self._compact_product_shell_payload(payload)
         return payload
+
+    def _admin_data_payload(self) -> dict[str, Any]:
+        payload = load_json_file(self.data_path) or {}
+        return payload if isinstance(payload, dict) else {}
 
     def _sanitize_stock_item(self, item: dict[str, Any]) -> dict[str, Any]:
         item_id = str(item.get("id") or "").strip()
@@ -2209,6 +2268,190 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             "items": enriched_items,
         }
 
+    def _module_runtime_snapshots_payload(self) -> dict[str, Any]:
+        admin_data = self._admin_data_payload()
+        modules = admin_data.get("modules") if isinstance(admin_data.get("modules"), list) else []
+        module_by_code = {
+            str(item.get("code") or "").upper(): item
+            for item in modules
+            if isinstance(item, dict)
+        }
+
+        catalog_summary = self._product_catalog_summary_payload()
+        imported_pricing = self._admin_imported_products_pricing_payload()
+        integrations = self._admin_integrations_payload()
+        stock_sync = self._stock_sync_status_payload()
+        checkout = self._mercadopago_checkout_status_payload(force_refresh=False)
+        public_runtime = self._public_runtime_payload()
+        work_status = self._work_status_payload()
+        deployment_summary = admin_data.get("deployment_summary") if isinstance(admin_data.get("deployment_summary"), dict) else {}
+
+        stock_module = catalog_summary.get("stock_module") if isinstance(catalog_summary.get("stock_module"), dict) else {}
+        provider_summary = integrations.get("summary") if isinstance(integrations.get("summary"), dict) else {}
+        publication_summary = imported_pricing.get("publication_summary") if isinstance(imported_pricing.get("publication_summary"), dict) else {}
+        supplier_summary = imported_pricing.get("supplier_summary") if isinstance(imported_pricing.get("supplier_summary"), list) else []
+        latest_stock_event = stock_sync.get("latest_event") if isinstance(stock_sync.get("latest_event"), dict) else {}
+        top_reasons = publication_summary.get("top_reasons") if isinstance(publication_summary.get("top_reasons"), list) else []
+        imported_items = imported_pricing.get("items") if isinstance(imported_pricing.get("items"), list) else []
+        stock_supplier_rows = supplier_summary[:8]
+        stock_review_rows = [
+            {
+                "id": str(item.get("id") or ""),
+                "title": str(item.get("title") or "Produto sem titulo"),
+                "supplier_name": str(item.get("supplier_name") or ""),
+                "category": str(item.get("category") or ""),
+                "publication_status": str(item.get("publication_status") or ""),
+                "publication_status_label": str(item.get("publication_status_label") or ""),
+                "reason": (
+                    (item.get("publication_reasons") or [""])[0]
+                    if isinstance(item.get("publication_reasons"), list)
+                    else ""
+                ),
+                "suggested_sale_price_brl": float(item.get("suggested_sale_price_brl") or 0),
+                "estimated_net_revenue_brl": float(item.get("estimated_net_revenue_brl") or 0),
+                "stock": float(item.get("stock") or 0),
+            }
+            for item in imported_items
+            if isinstance(item, dict)
+            and str(item.get("publication_status") or "") in {"review", "do_not_publish"}
+        ][:10]
+
+        mercadopago_notifications = load_jsonl_tail(MERCADOPAGO_NOTIFICATIONS_PATH, limit=8)
+        mercadopago_preferences = load_jsonl_tail(MERCADOPAGO_PREFERENCES_PATH, limit=8)
+        mercadopago_checkout_attempts = load_jsonl_tail(MERCADOPAGO_CHECKOUT_ATTEMPTS_PATH, limit=8)
+
+        move_module = module_by_code.get("MOVE", {})
+        move_checklist = move_module.get("checklist") if isinstance(move_module.get("checklist"), dict) else {}
+        move_items = move_checklist.get("items") if isinstance(move_checklist.get("items"), list) else []
+        move_pending_items = [
+            str(item.get("label") or "").strip()
+            for item in move_items
+            if isinstance(item, dict) and not item.get("done") and str(item.get("label") or "").strip()
+        ]
+
+        move_dependencies = move_module.get("depends_on") if isinstance(move_module.get("depends_on"), list) else []
+        move_integrations = move_module.get("integrates_with") if isinstance(move_module.get("integrates_with"), list) else []
+        top_failures = deployment_summary.get("top_failures") if isinstance(deployment_summary.get("top_failures"), list) else []
+        move_feed: list[dict[str, Any]] = []
+        move_telemetry = load_jsonl_tail(MOVE_TELEMETRY_PATH, limit=12)
+        work_updated_at = str(work_status.get("updated_at_utc") or "").strip()
+        if work_updated_at:
+            move_feed.append(
+                {
+                    "kind": "work_status",
+                    "timestamp": work_updated_at,
+                    "title": str(work_status.get("activity_name") or "Runtime"),
+                    "detail": str(work_status.get("activity_description") or work_status.get("next_steps") or ""),
+                    "status": str(work_status.get("status") or "info"),
+                }
+            )
+        runtime_generated_at = str(public_runtime.get("generated_at_utc") or public_runtime.get("generated_at") or "").strip()
+        if runtime_generated_at:
+            move_feed.append(
+                {
+                    "kind": "runtime",
+                    "timestamp": runtime_generated_at,
+                    "title": "Runtime publico",
+                    "detail": str(public_runtime.get("public_url") or public_runtime.get("status") or "Runtime sem URL publica"),
+                    "status": str(public_runtime.get("status") or "unknown"),
+                }
+            )
+        if move_telemetry:
+            move_feed = [
+                {
+                    "kind": str(item.get("kind") or "telemetry"),
+                    "timestamp": str(item.get("timestamp") or item.get("received_at_utc") or utc_now_iso()),
+                    "title": str(item.get("title") or "MOVE event"),
+                    "detail": str(item.get("detail") or ""),
+                    "status": str(item.get("status") or "info"),
+                }
+                for item in move_telemetry
+                if isinstance(item, dict)
+            ]
+        else:
+            for failure in top_failures[:3]:
+                move_feed.append(
+                    {
+                        "kind": "deployment_failure",
+                        "timestamp": str(deployment_summary.get("generated_at_utc") or utc_now_iso()),
+                        "title": "Falha operacional",
+                        "detail": str(failure),
+                        "status": "danger",
+                    }
+                )
+
+        return {
+            "status": "ok",
+            "service": "valley-module-runtime-snapshots",
+            "generated_at_utc": utc_now_iso(),
+            "modules": {
+                "STOCK": {
+                    "catalog_status": catalog_summary.get("status", "missing"),
+                    "items_total": int(catalog_summary.get("items_total") or 0),
+                    "inventory_units": float(catalog_summary.get("inventory_units") or 0),
+                    "inventory_value_brl": float(catalog_summary.get("inventory_value_brl") or 0),
+                    "margin_potential_brl": float(catalog_summary.get("margin_potential_brl") or 0),
+                    "stock_module": stock_module,
+                    "top_stock_item": catalog_summary.get("top_stock_item"),
+                    "top_margin_item": catalog_summary.get("top_margin_item"),
+                    "top_categories": (catalog_summary.get("top_categories") or [])[:4],
+                    "providers_total": int(provider_summary.get("providers_total") or 0),
+                    "providers_active": int(provider_summary.get("active_total") or 0),
+                    "providers_production": int(provider_summary.get("production_total") or 0),
+                    "pending_runtime_total": int(provider_summary.get("pending_runtime_total") or 0),
+                    "review_total": int(publication_summary.get("review_total") or 0),
+                    "approved_total": int(publication_summary.get("approved_total") or 0),
+                    "do_not_publish_total": int(publication_summary.get("do_not_publish_total") or 0),
+                    "supplier_summary": supplier_summary[:4],
+                    "supplier_rows": stock_supplier_rows,
+                    "review_rows": stock_review_rows,
+                    "blocking_reasons": top_reasons[:4],
+                    "sync_status": stock_sync.get("status", "idle"),
+                    "sync_detail": stock_sync.get("detail") or stock_sync.get("message") or "",
+                    "latest_sync_event": latest_stock_event,
+                },
+                "PAY": {
+                    "checkout_status": checkout.get("status", "missing_credentials"),
+                    "checkout_ready": bool(checkout.get("checkout_ready")),
+                    "preferred_environment": checkout.get("preferred_environment", "unconfigured"),
+                    "access_token_present": bool(checkout.get("access_token_present")),
+                    "public_key_present": bool(checkout.get("public_key_present")),
+                    "webhook_secret_present": bool(checkout.get("webhook_secret_present")),
+                    "operator_login_present": bool(checkout.get("operator_login_present")),
+                    "notification_url": checkout.get("notification_url"),
+                    "sample_return_url": checkout.get("sample_return_url"),
+                    "latest_notification_at_utc": checkout.get("latest_notification_at_utc"),
+                    "notifications_total": len(mercadopago_notifications),
+                    "preferences_total": len(mercadopago_preferences),
+                    "checkout_attempts_total": len(mercadopago_checkout_attempts),
+                    "notification_history": mercadopago_notifications,
+                    "preference_history": mercadopago_preferences,
+                    "checkout_attempt_history": mercadopago_checkout_attempts,
+                    "validation": checkout.get("validation") if isinstance(checkout.get("validation"), dict) else {},
+                },
+                "MOVE": {
+                    "runtime_available": bool(public_runtime.get("available")),
+                    "runtime_status": public_runtime.get("status", "missing"),
+                    "public_url": public_runtime.get("public_url"),
+                    "healthz_url": ((public_runtime.get("smoke_endpoints") or {}).get("healthz") if isinstance(public_runtime.get("smoke_endpoints"), dict) else ""),
+                    "work_status": work_status.get("status", "missing"),
+                    "work_activity": work_status.get("activity_name", "Valley"),
+                    "work_activity_description": work_status.get("activity_description", ""),
+                    "work_progress_percent": float(work_status.get("progress_percent") or 0),
+                    "checklist_total": int(move_checklist.get("total") or 0),
+                    "checklist_done": int(move_checklist.get("done") or 0),
+                    "checklist_pending": int(move_checklist.get("pending") or 0),
+                    "pending_items": move_pending_items[:5],
+                    "dependencies": move_dependencies[:5],
+                    "integrations": move_integrations[:5],
+                    "telemetry_mode": "dedicated_jsonl" if move_telemetry else "fallback_runtime",
+                    "telemetry_source": str(MOVE_TELEMETRY_PATH if move_telemetry else WORK_STATUS_PATH),
+                    "operational_feed": move_feed[:8],
+                    "deployment_failures": top_failures[:5],
+                },
+            },
+        }
+
     def _stock_sync_status_payload(self) -> dict[str, Any]:
         manager = CATALOG_SYNC_MANAGER
         snapshot = manager.snapshot() if manager is not None else (load_json_file(STOCK_SYNC_STATE_PATH) or {})
@@ -2247,6 +2490,20 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
         provider_secrets = self._provider_secrets_payload().get("mercado_pago")
         if not isinstance(provider_secrets, dict):
             return ""
+
+        direct_keys: list[str] = []
+        for candidate in candidates:
+            direct_keys.extend(
+                [
+                    candidate,
+                    candidate.replace("VALLEY_", ""),
+                    candidate.replace("VALLEY_", "").replace("MERCADOPAGO_", ""),
+                ]
+            )
+        for key in direct_keys:
+            value = str(provider_secrets.get(key) or "").strip()
+            if value:
+                return value
 
         for candidate in candidates:
             normalized_keys = {
@@ -2288,6 +2545,30 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             "webhookSecret",
             "webhook_secret",
         )
+
+    def _mercadopago_operator_login_present(self) -> bool:
+        runtime_env = self._runtime_env_payload()
+        env_user = str(
+            os.environ.get("VALLEY_MERCADOPAGO_USERNAME")
+            or os.environ.get("VALLEY_MERCADOPAGO_USER")
+            or runtime_env.get("VALLEY_MERCADOPAGO_USERNAME")
+            or runtime_env.get("VALLEY_MERCADOPAGO_USER")
+            or ""
+        ).strip()
+        env_password = str(
+            os.environ.get("VALLEY_MERCADOPAGO_PASSWORD")
+            or runtime_env.get("VALLEY_MERCADOPAGO_PASSWORD")
+            or ""
+        ).strip()
+        if env_user and env_password:
+            return True
+
+        provider_secrets = self._provider_secrets_payload().get("mercado_pago")
+        if not isinstance(provider_secrets, dict):
+            return False
+        username = str(provider_secrets.get("username") or "").strip()
+        password = str(provider_secrets.get("password") or "").strip()
+        return bool(username and password)
 
     def _mercadopago_notification_url(self) -> str:
         return (
@@ -2377,6 +2658,7 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
         public_key = self._mercadopago_public_key()
         webhook_secret = self._mercadopago_webhook_secret()
         latest_notification = load_json_file(MERCADOPAGO_NOTIFICATIONS_LATEST_PATH) or {}
+        operator_login_present = self._mercadopago_operator_login_present()
         inferred_mode = (
             "sandbox"
             if str(access_token or "").startswith("TEST-")
@@ -2403,6 +2685,8 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             status = "ready"
         elif access_token or public_key or webhook_secret:
             status = "partial"
+        elif operator_login_present:
+            status = "operator_login_ready"
         else:
             status = "missing_credentials"
 
@@ -2415,6 +2699,7 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             "access_token_present": bool(access_token),
             "public_key_present": bool(public_key),
             "webhook_secret_present": bool(webhook_secret),
+            "operator_login_present": operator_login_present,
             "sandbox_enabled": True,
             "production_enabled": True,
             "preferred_environment": inferred_mode,
@@ -2430,6 +2715,58 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
         path.parent.mkdir(parents=True, exist_ok=True)
         with path.open("a", encoding="utf-8") as handle:
             handle.write(json.dumps(payload, ensure_ascii=False) + "\n")
+
+    def _write_move_telemetry_event(self) -> None:
+        payload = self._read_json_body()
+        if not isinstance(payload, dict):
+            self._write_json(
+                HTTPStatus.BAD_REQUEST,
+                {
+                    "status": "invalid_payload",
+                    "service": "valley-move-telemetry",
+                    "detail": "Expected JSON object.",
+                },
+            )
+            return
+
+        event = {
+            "kind": str(payload.get("kind") or "telemetry").strip() or "telemetry",
+            "timestamp": str(payload.get("timestamp") or utc_now_iso()).strip() or utc_now_iso(),
+            "title": str(payload.get("title") or "MOVE event").strip() or "MOVE event",
+            "detail": str(payload.get("detail") or "").strip(),
+            "status": str(payload.get("status") or "info").strip() or "info",
+            "actor": str(payload.get("actor") or "runtime").strip() or "runtime",
+            "module": "MOVE",
+        }
+        self._append_jsonl(MOVE_TELEMETRY_PATH, event)
+        self._write_json(
+            HTTPStatus.OK,
+            {
+                "status": "ok",
+                "service": "valley-move-telemetry",
+                "saved_at_utc": utc_now_iso(),
+                "event": event,
+            },
+        )
+
+    def _write_move_telemetry_action(self, query: dict[str, list[str]]) -> dict[str, Any]:
+        event = {
+            "kind": str((query.get("kind") or ["manual_probe"])[0] or "manual_probe").strip() or "manual_probe",
+            "timestamp": utc_now_iso(),
+            "title": str((query.get("title") or ["MOVE manual probe"])[0] or "MOVE manual probe").strip() or "MOVE manual probe",
+            "detail": str((query.get("detail") or ["Evento operacional registrado manualmente pelo cockpit."])[0] or "Evento operacional registrado manualmente pelo cockpit.").strip(),
+            "status": str((query.get("status") or ["info"])[0] or "info").strip() or "info",
+            "actor": "admin_action",
+            "module": "MOVE",
+        }
+        self._append_jsonl(MOVE_TELEMETRY_PATH, event)
+        return {
+            "status": "ok",
+            "service": "valley-move-telemetry",
+            "action": "move-telemetry",
+            "saved_at_utc": event["timestamp"],
+            "event": event,
+        }
 
     def _write_marketplace_notification_probe(
         self,
@@ -4024,19 +4361,32 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
     def _checkout_payload(self, query: dict[str, list[str]]) -> dict[str, Any]:
         item_id = (query.get("item_id") or [""])[0]
         item = self._find_catalog_item(item_id)
+        attempt = {
+            "provider": "mercado_pago",
+            "attempted_at_utc": utc_now_iso(),
+            "item_id": item_id,
+            "module": "PAY",
+        }
         if item is None:
-            return {
+            result = {
                 "status": "failed",
                 "action": "checkout",
                 "payload": {
                     "message": "Checkout indisponivel nesta oferta no momento.",
                 },
             }
+            attempt.update({
+                "status": "failed",
+                "detail": "Item indisponivel para checkout.",
+                "result": result["payload"],
+            })
+            self._append_jsonl(MERCADOPAGO_CHECKOUT_ATTEMPTS_PATH, attempt)
+            return result
 
         if self._mercadopago_checkout_ready(item):
             mercadopago_result = self._create_mercadopago_preference(item)
             if mercadopago_result.get("status") == "ok":
-                return {
+                result = {
                     "status": "ok",
                     "action": "checkout",
                     "payload": {
@@ -4046,6 +4396,13 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                         "preference_id": mercadopago_result.get("preference_id"),
                     },
                 }
+                attempt.update({
+                    "status": "ok",
+                    "detail": "Preferencia Mercado Pago criada com sucesso.",
+                    "result": result["payload"],
+                })
+                self._append_jsonl(MERCADOPAGO_CHECKOUT_ATTEMPTS_PATH, attempt)
+                return result
 
         checkout_url = self._derive_checkout_url(item)
         if not checkout_url:
@@ -4053,15 +4410,22 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             if self._mercadopago_access_token():
                 mercadopago_result = self._create_mercadopago_preference(item)
                 mercadopago_detail = str(mercadopago_result.get("detail") or "").strip()
-            return {
+            result = {
                 "status": "failed",
                 "action": "checkout",
                 "payload": {
                     "message": mercadopago_detail or "Checkout indisponivel nesta oferta no momento.",
                 },
             }
+            attempt.update({
+                "status": "failed",
+                "detail": result["payload"]["message"],
+                "result": result["payload"],
+            })
+            self._append_jsonl(MERCADOPAGO_CHECKOUT_ATTEMPTS_PATH, attempt)
+            return result
 
-        return {
+        result = {
             "status": "ok",
             "action": "checkout",
             "payload": {
@@ -4070,6 +4434,13 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 "provider": "mercado_livre",
             },
         }
+        attempt.update({
+            "status": "ok",
+            "detail": "Fallback de checkout externo utilizado.",
+            "result": result["payload"],
+        })
+        self._append_jsonl(MERCADOPAGO_CHECKOUT_ATTEMPTS_PATH, attempt)
+        return result
 
     def _run_bridge_command(self, command: str, *, action: str) -> dict[str, Any]:
         script_path = ROOT / "scripts" / "valley_communication_bridge.py"

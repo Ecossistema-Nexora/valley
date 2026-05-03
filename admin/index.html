@@ -3,21 +3,21 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Valley Release Cockpit</title>
+    <title>Valley Admin ERP</title>
     <link rel="stylesheet" href="/styles.css" />
     <script src="/valley_admin_data.js"></script>
     <script src="/app.js" defer></script>
   </head>
   <body>
-    <a class="skip-link" href="#mainContent">Ir para o cockpit</a>
+    <a class="skip-link" href="#mainContent">Ir para o painel</a>
     <div class="shell">
       <aside class="control-dock left-dock" aria-label="Navegacao principal">
         <div class="dock-card">
           <p class="panel-kicker">Menu</p>
           <h2>Admin</h2>
           <nav class="dock-nav">
-            <a class="dock-link" href="#homeDashboard">Home</a>
-            <a class="dock-link" href="#adminLaunchpadSection">Launchpad</a>
+            <a class="dock-link" href="#stockIntegrations">STOCK</a>
+            <a class="dock-link" href="#adminLaunchpadSection">Operacao</a>
             <a class="dock-link" href="#financialDashboard">Financeiro</a>
             <a class="dock-link" href="#performanceDashboard">Desempenho</a>
             <a class="dock-link" href="#importedPricingSection">Importados</a>
@@ -39,11 +39,11 @@
           <p class="panel-kicker">Atalhos</p>
           <h2>Dashboards</h2>
           <div class="dock-stack">
-            <a class="dock-link" href="#adminLaunchpadSection">Launchpad admin</a>
+            <a class="dock-link" href="#adminLaunchpadSection">Painel admin</a>
             <a class="dock-link" href="#publicRuntimePanel">Runtime publico</a>
             <a class="dock-link" href="#stockIntegrations">Integracoes STOCK</a>
             <a class="dock-link" href="#publicationReviewSection">Fila de revisao</a>
-            <a class="dock-link" href="#detailTitle">Modulo selecionado</a>
+            <a class="dock-link" href="#detailTitle">Modulo ativo</a>
           </div>
         </div>
       </aside>
@@ -54,11 +54,11 @@
             <img src="/assets/logo-valley-official.png" alt="Logomarca oficial Valley" />
             <div>
               <p class="brand-name">Valley</p>
-              <p class="brand-subline">Super App Production Cockpit</p>
+              <p class="brand-subline">Super App Production Panel</p>
             </div>
           </div>
           <p class="eyebrow">Valley Omniverse Release Mode</p>
-          <h1 id="heroTitle">Cockpit de producao para MVP e 47 modulos</h1>
+          <h1 id="heroTitle">Painel de producao para MVP e 47 modulos</h1>
           <p id="heroSubcopy" class="subcopy">
             Supervisao executiva, trilha tecnica e leitura operacional em uma unica superficie. O painel cruza MVP,
             registry, contracts, roadmap, migrations, status de implantacao e exposicao publica para acesso externo.
@@ -67,8 +67,8 @@
           <div id="heroWorkspaceIcons" class="hero-workspace-icons"></div>
         </div>
         <div class="hero-side">
-          <section class="showcase-panel" aria-label="Preview do cockpit em desktop e mobile">
-            <div id="heroBadge" class="hero-badge">SEM MENSALIDADE</div>
+          <section class="showcase-panel" aria-label="Preview do painel em desktop e mobile">
+            <div id="heroBadge" class="hero-badge">PRODUCAO ATIVA</div>
             <div class="device-stage">
               <div class="desktop-shell">
                 <div class="device-app-topbar">
@@ -153,7 +153,7 @@
             <p class="panel-kicker">Admin launchpad</p>
             <h2>Home do painel administrador</h2>
           </div>
-          <p class="section-copy">Botões de acesso rápido para subdomínios, módulos operacionais e áreas de configuração do cockpit.</p>
+          <p class="section-copy">Acesso rápido para subdomínios, módulos operacionais e áreas de configuração do painel.</p>
         </div>
         <div id="adminLaunchpadSummary" class="integration-summary-grid"></div>
         <section id="workspaceFocusBanner" class="workspace-focus-banner" hidden aria-live="polite"></section>

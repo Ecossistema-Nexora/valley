@@ -45,6 +45,9 @@
   };
 
   const MARKETPLACE_API_STORAGE_KEY = "valley.marketplaceApiIntegrations.v1";
+  const MODULE_WORKSPACE_TAB_STORAGE_KEY = "valley.moduleWorkspaceTabs.v1";
+  const PRIMARY_WORKSPACE_KEY = "stock";
+  const PRODUCTION_MODE_LOCKED = true;
   const MARKETPLACE_API_PROVIDERS = [
     { key: "mercado_livre", label: "Mercado Livre", providerRole: "marketplace_price", baseUrl: "https://api.mercadolibre.com", siteCode: "MLB" },
     { key: "amazon", label: "Amazon", providerRole: "marketplace_price", baseUrl: "https://sellingpartnerapi-na.amazon.com", siteCode: "BR" },
@@ -131,10 +134,10 @@
   const STATIC_ADMIN_WORKSPACES = [
     {
       key: "home",
-      title: "Home Admin",
+      title: "Nucleo Admin",
       subdomain: "admin",
       sectionId: "adminLaunchpadSection",
-      copy: "Entrada principal do cockpit institucional e distribuicao dos workspaces.",
+      copy: "Governanca central do admin, com distribuicao dos workspaces e trilha institucional.",
     },
     {
       key: "stock",
@@ -216,6 +219,11 @@
     summary: null,
     error: "",
   };
+  const moduleSnapshotsState = {
+    loading: true,
+    payload: null,
+    error: "",
+  };
   const checkoutHealthState = {
     loading: true,
     payload: null,
@@ -256,6 +264,7 @@
     selectedCode: null,
     marketplaceApiConfig: null,
     marketplaceApiPayload: null,
+    moduleWorkspaceTabs: loadModuleWorkspaceTabs(),
   };
   const workspaceFocusState = {
     appliedKey: "",
@@ -332,6 +341,31 @@
     heroTitle: document.getElementById("heroTitle"),
     heroSubcopy: document.getElementById("heroSubcopy"),
   };
+
+  function loadModuleWorkspaceTabs() {
+    try {
+      const saved = JSON.parse(window.localStorage.getItem(MODULE_WORKSPACE_TAB_STORAGE_KEY) || "{}");
+      return saved && typeof saved === "object" ? saved : {};
+    } catch (_error) {
+      return {};
+    }
+  }
+
+  function persistModuleWorkspaceTabs() {
+    try {
+      window.localStorage.setItem(MODULE_WORKSPACE_TAB_STORAGE_KEY, JSON.stringify(state.moduleWorkspaceTabs || {}, null, 2));
+    } catch (_error) {
+      return;
+    }
+  }
+
+  function setModuleWorkspaceTab(moduleCode, tabKey) {
+    state.moduleWorkspaceTabs = {
+      ...(state.moduleWorkspaceTabs || {}),
+      [moduleCode]: tabKey,
+    };
+    persistModuleWorkspaceTabs();
+  }
 
   function adminWorkspaces() {
     return [...STATIC_ADMIN_WORKSPACES, ...DYNAMIC_MODULE_WORKSPACES];
@@ -844,6 +878,14 @@
     return catalogModules().find((entry) => entry.module_id === moduleCode) || null;
   }
 
+  function moduleRuntimeSnapshot(moduleCode) {
+    const modules = moduleSnapshotsState.payload?.modules;
+    if (!modules || typeof modules !== "object") {
+      return null;
+    }
+    return modules[moduleCode] || null;
+  }
+
   function accessCardMarkup(label, url, tone) {
     return `
       <article class="access-card">
@@ -891,6 +933,23 @@
       catalogState.loading = false;
       renderCatalogDrivenSections();
       renderAccessLinks();
+      renderDetail(filteredModules());
+    }
+  }
+
+  async function loadModuleRuntimeSnapshots() {
+    try {
+      const response = await fetch("/api/module-runtime-snapshots", { cache: "no-store" });
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+      moduleSnapshotsState.payload = await response.json();
+      moduleSnapshotsState.error = "";
+    } catch (error) {
+      moduleSnapshotsState.payload = null;
+      moduleSnapshotsState.error = error instanceof Error ? error.message : "falha ao carregar snapshots";
+    } finally {
+      moduleSnapshotsState.loading = false;
       renderDetail(filteredModules());
     }
   }
@@ -2429,7 +2488,7 @@
     const adminHost = activeAdminHost().hostname.toLowerCase();
     const currentHost = window.location.hostname.toLowerCase();
     if (currentHost === adminHost || currentHost === "localhost" || currentHost === "127.0.0.1") {
-      return "home";
+      return PRIMARY_WORKSPACE_KEY;
     }
 
     if (currentHost.endsWith(`.${adminHost}`)) {
@@ -2440,7 +2499,7 @@
       }
     }
 
-    return "home";
+      return PRIMARY_WORKSPACE_KEY;
   }
 
   function workspaceDescriptor(workspace, config, pendingReview) {
@@ -2451,7 +2510,7 @@
 
     switch (workspace.key) {
       case "home":
-        return { label: "cockpit raiz", variant: "pill-accent", detail: "admin.brasildesconto.com.br" };
+        return { label: "nucleo admin", variant: "pill-accent", detail: "admin.brasildesconto.com.br" };
       case "stock":
         return {
           label: importedPricingState.payload?.items_total ? "catalogo online" : "catalogo local",
@@ -2528,7 +2587,7 @@
       </div>
       <div class="link-row">
         <a href="${escapeHtml(workspaceHref(workspace))}">Abrir workspace</a>
-        <a href="${escapeHtml(workspaceMirrorHref(workspace))}">Abrir dentro do cockpit</a>
+        <a href="${escapeHtml(workspaceMirrorHref(workspace))}">Abrir dentro do painel</a>
       </div>
     `;
   }
@@ -2556,7 +2615,7 @@
           <code>${escapeHtml(workspaceHref(workspace))}</code>
           <div class="link-row">
             <a href="${escapeHtml(workspaceHref(workspace))}">Abrir subdominio</a>
-            <a href="${escapeHtml(workspaceMirrorHref(workspace))}">Espelho no cockpit</a>
+            <a href="${escapeHtml(workspaceMirrorHref(workspace))}">Espelho no painel</a>
           </div>
         </article>
       `;
@@ -2569,10 +2628,10 @@
     }
 
     elements.moduleWorkspaceSummary.innerHTML = [
-      summaryTileMarkup("Workspaces de modulo", formatCount(DYNAMIC_MODULE_WORKSPACES.length), "um cockpit dedicado por modulo"),
+      summaryTileMarkup("Workspaces de modulo", formatCount(DYNAMIC_MODULE_WORKSPACES.length), "um workspace dedicado por modulo"),
       summaryTileMarkup("Modo", "producao", "shell e navegação preparados para ambiente real"),
       summaryTileMarkup("Docs rastreados", formatCount(allModules.filter((module) => module.paths.readme && module.paths.status && module.paths.contract).length), "readme, status e contract por modulo"),
-      summaryTileMarkup("Hibridos", formatCount(allModules.filter((module) => module.data_home === "postgres_mongo").length), "postgres + mongo no mesmo cockpit"),
+      summaryTileMarkup("Hibridos", formatCount(allModules.filter((module) => module.data_home === "postgres_mongo").length), "postgres + mongo no mesmo painel"),
     ].join("");
 
     elements.moduleWorkspaceGrid.innerHTML = DYNAMIC_MODULE_WORKSPACES.map((workspace) => {
@@ -2605,7 +2664,7 @@
           <code>${escapeHtml(workspaceHref(workspace))}</code>
           <div class="link-row">
             <a href="${escapeHtml(workspaceHref(workspace))}">Abrir subdominio</a>
-            <a href="${escapeHtml(workspaceMirrorHref(workspace))}">Espelho no cockpit</a>
+            <a href="${escapeHtml(workspaceMirrorHref(workspace))}">Espelho no painel</a>
           </div>
         </article>
       `;
@@ -2687,7 +2746,7 @@
     const workspaceCount = adminWorkspaces().length;
 
     elements.adminLaunchpadSummary.innerHTML = [
-      summaryTileMarkup("Subdominios", formatCount(workspaceCount), "cockpit fixo + paginas dedicadas por modulo"),
+      summaryTileMarkup("Subdominios", formatCount(workspaceCount), "producao fixa + paginas dedicadas por modulo"),
       summaryTileMarkup("Providers STOCK", formatCount(providerReady), `${formatCount(productionReady)} com producao ligada`),
       summaryTileMarkup("Revisao de publicacao", formatCount(pendingReview), pendingReview ? "itens aguardando decisao comercial" : "sem fila de bloqueio"),
       summaryTileMarkup("Checkout", checkoutHealthState.payload?.checkout_ready ? "pronto" : "pendente", checkoutHealthState.payload?.preferred_environment || "unconfigured"),
@@ -2698,8 +2757,8 @@
 
     const cards = [
       {
-        title: "Home Admin",
-        copy: "Painel principal em admin.brasildesconto.com.br com todas as areas do cockpit.",
+        title: "Nucleo Admin",
+        copy: "Governanca central em admin.brasildesconto.com.br com acesso aos workspaces de producao.",
         href: workspaceHref(workspaceByKey("home")),
         mirrorHref: workspaceMirrorHref(workspaceByKey("home")),
         action: "Abrir home",
@@ -2754,7 +2813,7 @@
         mirrorHref: workspaceMirrorHref(workspaceByKey("finance")),
         action: "Abrir financeiro",
         secondaryAction: "Abrir secao",
-        status: rowPill("cockpit", "pill-navy"),
+        status: rowPill("painel", "pill-navy"),
         meta: ["Subdominio", workspaceHostLabel(workspaceByKey("finance"))],
       },
       {
@@ -2817,7 +2876,7 @@
             </div>
             <div class="link-row">
               <a href="${escapeHtml(card.href)}">${escapeHtml(card.action)}</a>
-              ${card.mirrorHref ? `<a href="${escapeHtml(card.mirrorHref)}">${escapeHtml(card.secondaryAction || "Abrir cockpit")}</a>` : ""}
+              ${card.mirrorHref ? `<a href="${escapeHtml(card.mirrorHref)}">${escapeHtml(card.secondaryAction || "Abrir painel")}</a>` : ""}
             </div>
           </article>
         `,
@@ -3643,6 +3702,29 @@
     });
 
     elements.detailContent.addEventListener("click", (event) => {
+      const tabTrigger = event.target.closest("[data-workspace-tab][data-module-code]");
+      if (tabTrigger) {
+        setModuleWorkspaceTab(tabTrigger.dataset.moduleCode, tabTrigger.dataset.workspaceTab);
+        renderDetail(filteredModules());
+        announce(`Aba ${tabTrigger.textContent.trim()} aberta.`);
+        return;
+      }
+
+      const actionTrigger = event.target.closest("[data-workspace-action][data-module-code]");
+      if (actionTrigger) {
+        const module = allModules.find((item) => item.code === actionTrigger.dataset.moduleCode);
+        if (module) {
+          runModuleWorkspaceAction(module, actionTrigger.dataset.workspaceAction);
+        }
+        return;
+      }
+
+      const stockActionTrigger = event.target.closest("[data-stock-action]");
+      if (stockActionTrigger) {
+        runStockTableAction(stockActionTrigger);
+        return;
+      }
+
       const trigger = event.target.closest("[data-copy-path]");
 
       if (!trigger) {
@@ -3740,11 +3822,15 @@
         elements.heroSubcopy.textContent = `${workspaceModule.subtitle}. Este subdominio dedicado centraliza docs, checklist, contratos, acoplamentos, leituras comerciais e trilha operacional do modulo ${workspaceModule.code}.`;
       } else if (workspace && workspace.key !== "home") {
         elements.heroTitle.textContent = `${workspace.title} em modo de producao`;
-        elements.heroSubcopy.textContent = `${workspace.copy} O cockpit permanece conectado ao manifesto, ao runtime publico e aos dashboards comerciais sem trocar de shell.`;
+        elements.heroSubcopy.textContent = `${workspace.copy} O painel permanece conectado ao manifesto, ao runtime publico e aos dashboards comerciais sem trocar de shell.`;
       } else {
-        elements.heroTitle.textContent = "Cockpit de producao para MVP e 47 modulos";
+        elements.heroTitle.textContent = "Painel de producao para MVP e 47 modulos";
         elements.heroSubcopy.textContent = "Supervisao executiva, trilha tecnica e leitura operacional em uma unica superficie. O painel cruza MVP, registry, contracts, roadmap, migrations, status de implantacao e exposicao publica para acesso externo.";
       }
+    }
+
+    if (elements.heroBadge) {
+      elements.heroBadge.textContent = PRODUCTION_MODE_LOCKED ? "PRODUCAO ATIVA" : workspace && workspace.key !== "home" ? "PRODUCAO ATIVA" : "SANDBOX EM PRODUCAO";
     }
 
     elements.registryName.textContent = data.registry_name || "Registry sem nome";
@@ -3917,7 +4003,7 @@
           ${externalTileMarkup("Smoke", healthUrl || adminDataUrl ? "exposto" : "indisponivel", "healthz e admin_data")}
         </div>
         <p class="muted-copy">
-          O cockpit ja consome o manifesto de runtime publico quando ele existir. Ate la, o painel continua apontando para o runbook
+          O painel ja consome o manifesto de runtime publico quando ele existir. Ate la, o painel continua apontando para o runbook
           e para o arquivo esperado sem bloquear a operacao local.
         </p>
         <div class="endpoint-list">
@@ -4169,7 +4255,7 @@
         </div>
         <p class="muted-copy">
           A superficie externa esta preparada para acesso fora da rede local. Quando houver token e hostname publicados no Cloudflare,
-          o mesmo cockpit pode manter uma URL permanente sem mudar a rotina do operador.
+          o mesmo painel pode manter uma URL permanente sem mudar a rotina do operador.
         </p>
         <pre>${escapeHtml(preview)}</pre>
         <div class="link-row">
@@ -4272,42 +4358,104 @@
     return palette[module.code] || "#2563eb";
   }
 
+  function moduleWorkspaceMenuEntries(module) {
+    const byDomain = {
+      logistics_erp_operations: ["Painel", "Pedidos", "Estoque", "Compras", "Expedicao", "Financeiro", "Relatorios", "Configuracoes"],
+      commerce_fintech_assets: ["Painel", "Clientes", "Recebimentos", "Produtos", "Aprovacoes", "Conciliacao", "Risco", "Configuracoes"],
+      services_health_human: ["Painel", "Agenda", "Cadastros", "Atendimentos", "Faturamento", "Filas", "Indicadores", "Configuracoes"],
+      education_work_social: ["Painel", "Cadastros", "Presenca", "Turmas", "Financeiro", "Calendario", "Relatorios", "Configuracoes"],
+      media_social_growth: ["Painel", "Campanhas", "Creators", "Conteudo", "Moderacao", "Metricas", "Receitas", "Configuracoes"],
+      ai_memory_operations: ["Painel", "Memoria", "Conversas", "Operacoes", "Aprovacoes", "Runbooks", "Auditoria", "Configuracoes"],
+      city_mobility_security: ["Painel", "Chamados", "Rotas", "Ocorrencias", "Protecao", "Monitoramento", "Escalas", "Configuracoes"],
+      platform_developer: ["Painel", "Docs", "Contratos", "Automacoes", "Filas", "Entregas", "Auditoria", "Configuracoes"],
+      frontier_iot_energy: ["Painel", "Sensores", "Ativos", "Telemetria", "Eventos", "Alertas", "Energia", "Configuracoes"],
+    };
+
+    if (module.code === "SCHOOL") {
+      return ["Painel", "Alunos", "Presenca", "Mensalidades", "Calendario", "Secretaria", "Relatorios", "Configuracoes"];
+    }
+
+    if (module.code === "PAY") {
+      return ["Painel", "Carteiras", "Recebimentos", "Transferencias", "Conciliacao", "Risco", "Extratos", "Configuracoes"];
+    }
+
+    if (module.code === "MARKETPLACE") {
+      return ["Painel", "Lojas", "Produtos", "Precos", "Anuncios", "Aprovacoes", "Integracoes", "Configuracoes"];
+    }
+
+    return byDomain[module.domain] || ["Painel", "Cadastros", "Operacoes", "Financeiro", "Relatorios", "Aprovacoes", "Integracoes", "Configuracoes"];
+  }
+
+  function moduleWorkspaceTileSet(module, businessSnapshot) {
+    const itemsValue = businessSnapshot ? businessSnapshot.items_total : module.checklist.total;
+    const catalogValue = businessSnapshot ? businessSnapshot.inventory_value_brl : 0;
+    const definitions = {
+      logistics_erp_operations: [
+        ["Pedidos", formatCount(itemsValue), "volume operacional"],
+        ["Fila", formatCount(module.checklist.pending), "itens aguardando"],
+        ["Integracoes", formatCount(module.integrates_with.length), "rotas ativas"],
+        ["Prontidao", formatPercent(moduleReadiness(module)), "indice atual"],
+      ],
+      commerce_fintech_assets: [
+        ["Receita", businessSnapshot ? formatMoney(catalogValue) : formatCount(module.checklist.done), "base comercial"],
+        ["Aprovacoes", formatCount(module.checklist.pending), "analises abertas"],
+        ["Conectores", formatCount(module.integrates_with.length), "marketplaces e pay"],
+        ["Prontidao", formatPercent(moduleReadiness(module)), "indice atual"],
+      ],
+      services_health_human: [
+        ["Agenda", formatCount(module.checklist.total), "slots mapeados"],
+        ["Atendimentos", formatCount(module.checklist.done), "rotinas prontas"],
+        ["Filas", formatCount(module.checklist.pending), "espera operacional"],
+        ["Prontidao", formatPercent(moduleReadiness(module)), "indice atual"],
+      ],
+      education_work_social: [
+        ["Cadastros", formatCount(module.checklist.total), "base academica"],
+        ["Presenca", formatCount(module.checklist.done), "rotinas prontas"],
+        ["Pendencias", formatCount(module.checklist.pending), "secretaria e regras"],
+        ["Prontidao", formatPercent(moduleReadiness(module)), "indice atual"],
+      ],
+      media_social_growth: [
+        ["Campanhas", formatCount(module.checklist.total), "ciclos ativos"],
+        ["Conteudos", formatCount(module.checklist.done), "fluxos preparados"],
+        ["Moderacao", formatCount(module.checklist.pending), "itens aguardando"],
+        ["Prontidao", formatPercent(moduleReadiness(module)), "indice atual"],
+      ],
+      ai_memory_operations: [
+        ["Contextos", formatCount(module.checklist.total), "superficies ligadas"],
+        ["Memorias", formatCount(module.checklist.done), "rotinas modeladas"],
+        ["Ajustes", formatCount(module.checklist.pending), "fila de calibracao"],
+        ["Prontidao", formatPercent(moduleReadiness(module)), "indice atual"],
+      ],
+      city_mobility_security: [
+        ["Chamados", formatCount(module.checklist.total), "eventos rastreados"],
+        ["Escalas", formatCount(module.checklist.done), "trilhas prontas"],
+        ["Alertas", formatCount(module.checklist.pending), "itens de risco"],
+        ["Prontidao", formatPercent(moduleReadiness(module)), "indice atual"],
+      ],
+      platform_developer: [
+        ["Contratos", formatCount(module.checklist.total), "objetos versionados"],
+        ["Automacoes", formatCount(module.checklist.done), "rotinas ativas"],
+        ["Filas", formatCount(module.checklist.pending), "pendencias de entrega"],
+        ["Prontidao", formatPercent(moduleReadiness(module)), "indice atual"],
+      ],
+      frontier_iot_energy: [
+        ["Ativos", formatCount(module.checklist.total), "mapa operacional"],
+        ["Sensores", formatCount(module.checklist.done), "rotas prontas"],
+        ["Alertas", formatCount(module.checklist.pending), "eventos criticos"],
+        ["Prontidao", formatPercent(moduleReadiness(module)), "indice atual"],
+      ],
+    };
+
+    const selected = definitions[module.domain] || definitions.logistics_erp_operations;
+    return selected.map(([label, value, meta]) => ({ label, value, meta }));
+  }
+
   function moduleWorkspaceMenu(module) {
-    return [
-      "Painel",
-      "Cadastros",
-      "Operações",
-      "Financeiro",
-      "Relatórios",
-      "Aprovações",
-      "Integrações",
-      "Configurações",
-    ];
+    return moduleWorkspaceMenuEntries(module);
   }
 
   function moduleWorkspaceTiles(module, businessSnapshot) {
-    return [
-      {
-        label: "Pedidos",
-        value: businessSnapshot ? formatCount(businessSnapshot.items_total) : formatCount(module.checklist.total),
-        meta: "itens do módulo",
-      },
-      {
-        label: "Pendências",
-        value: formatCount(module.checklist.pending),
-        meta: "fila operacional",
-      },
-      {
-        label: "Integrações",
-        value: formatCount(module.integrates_with.length),
-        meta: "conexões ativas",
-      },
-      {
-        label: "Prontidão",
-        value: formatPercent(moduleReadiness(module)),
-        meta: "índice atual",
-      },
-    ];
+    return moduleWorkspaceTileSet(module, businessSnapshot);
   }
 
   function moduleClassicFormFields(module) {
@@ -4319,6 +4467,515 @@
       ["Status", module.status_label],
       ["Responsável", "Valley Admin"],
     ];
+  }
+
+  function moduleOperationsSnapshot(module, openItems) {
+    return [
+      {
+        title: "Fila critica",
+        value: formatCount(openItems.length),
+        meta: openItems.length ? openItems[0].label : "Sem item bloqueando o módulo",
+        tone: openItems.length ? "danger" : "accent",
+      },
+      {
+        title: "Dependencias",
+        value: formatCount(module.depends_on.length),
+        meta: module.depends_on.length ? formatList(module.depends_on.slice(0, 3)) : "Sem bloqueio externo declarado",
+        tone: module.depends_on.length ? "warn" : "accent",
+      },
+      {
+        title: "Acoplamentos",
+        value: formatCount(module.integrates_with.length),
+        meta: module.integrates_with.length ? formatList(module.integrates_with.slice(0, 3)) : "Sem integracao formal listada",
+        tone: "navy",
+      },
+      {
+        title: "Modo",
+        value: "Producao",
+        meta: "sandbox espelhado no shell principal",
+        tone: "accent",
+      },
+    ];
+  }
+
+  function moduleSubdomainRoutes(module) {
+    const workspace = moduleWorkspaceByCode(module.code);
+    const subdomain = workspace?.subdomain || module.slug || module.code.toLowerCase();
+    const code = module.code.toLowerCase();
+    return [
+      {
+        label: "workspace",
+        route: `${subdomain}.admin.valley.local`,
+        description: `cockpit principal de ${module.name.toLowerCase()}`,
+      },
+      {
+        label: "ops",
+        route: `ops-${code}.valley.local`,
+        description: "operacao, filas, playbooks e monitoramento",
+      },
+      {
+        label: "api",
+        route: `api-${code}.valley.local`,
+        description: "integracoes, webhooks, credenciais e saude",
+      },
+      {
+        label: "backoffice",
+        route: `backoffice-${code}.valley.local`,
+        description: "cadastros, permissoes, auditoria e fechamento",
+      },
+    ];
+  }
+
+  function moduleWorkspaceSections(module) {
+    const byCode = {
+      STOCK: [
+        ["Catalogo e SKUs", "curadoria, midia, estoque, custo e margem por item"],
+        ["Publicacao", "fila por marketplace, revisao comercial e rejeicoes"],
+        ["Fornecedores", "SLA, lead time, origem e disputa de custo"],
+        ["Rentabilidade", "margem, taxa, frete e ruptura por categoria"],
+      ],
+      PAY: [
+        ["Carteiras", "saldo, ledger, split, limites e conciliacao"],
+        ["Checkout", "PIX, cartao, webhook, fallback e antifraude"],
+        ["Compliance", "KYC, risco, chargeback e bloqueios"],
+        ["Recebiveis", "agenda financeira, repasse e fechamento diario"],
+      ],
+      MOVE: [
+        ["Corridas", "despacho, SLA, aceite e cancelamentos"],
+        ["Motoristas", "cadastro, score, documentos e incentivos"],
+        ["Telemetria", "GPS, incidentes, heatmap e eventos de risco"],
+        ["Financeiro", "repasse, taxa, custo por km e ajustes"],
+      ],
+      FOOD: [
+        ["Pedidos", "cozinha, fila, ticket medio e cancelamentos"],
+        ["Restaurantes", "menus, onboarding, disponibilidade e horario"],
+        ["Entrega", "riders, despacho, SLA e ocorrencias"],
+        ["CRM", "cupom, recompra, cohort e expansao regional"],
+      ],
+      SCHOOL: [
+        ["Alunos", "matricula, suporte, historico e evasao"],
+        ["Turmas", "agenda, lotacao, professores e reposicao"],
+        ["Financeiro", "mensalidades, bolsas e inadimplencia"],
+        ["Conteudo", "trilhas, provas, certificados e engajamento"],
+      ],
+    };
+
+    const byDomain = {
+      media_social_growth: [
+        ["Campanhas", "planejamento, janelas, criativos e aprovacoes"],
+        ["Creators", "comissao, contratos, links e performance"],
+        ["Moderacao", "qualidade, risco, conteudo e compliance"],
+        ["Receita", "trafego, conversao, payout e relatorio de rede"],
+      ],
+      ai_memory_operations: [
+        ["Contexto", "memoria, preferencia, sinal e embeddings"],
+        ["Conversas", "fila, modelos, roteamento e audicao"],
+        ["Aprovacoes", "guardrails, decisao humana e rastreabilidade"],
+        ["Observabilidade", "latencia, custo, erro e rollout"],
+      ],
+      frontier_iot_energy: [
+        ["Sensores", "ativos, heartbeat, status e provisionamento"],
+        ["Telemetria", "eventos, stream, retenção e anomalias"],
+        ["Alertas", "criticos, escalonamento e resposta"],
+        ["Energia", "consumo, sazonalidade e eficiencia operacional"],
+      ],
+    };
+
+    const selected = byCode[module.code] || byDomain[module.domain] || [
+      ["Operacao", "fila principal, excecoes, checkpoints e produtividade"],
+      ["Cadastros", "entidades, regras, formularios e validacoes"],
+      ["Integracoes", "api, webhook, sincronismo e observabilidade"],
+      ["Governanca", "auditoria, permissoes, logs e fechamento"],
+    ];
+
+    return selected.map(([title, text]) => ({ title, text }));
+  }
+
+  function moduleDeepWorkspaceTabs(module) {
+    const defaults = [
+      { key: "overview", label: "Visao geral", description: "KPI, ficha e resumo executivo" },
+      { key: "operations", label: "Operacao", description: "filas, cadencia e blocos funcionais" },
+      { key: "integrations", label: "Integracoes", description: "subdominios, APIs e atalhos do cockpit" },
+      { key: "governance", label: "Governanca", description: "registros, auditoria e fechamento" },
+    ];
+
+    if (module.code === "PAY") {
+      defaults[2] = { key: "integrations", label: "Checkout", description: "saude, ambiente e integracoes financeiras" };
+    }
+
+    if (module.code === "STOCK") {
+      defaults[1] = { key: "operations", label: "Catalogo", description: "fila, publicacao e rentabilidade" };
+      defaults[2] = { key: "integrations", label: "Marketplaces", description: "APIs, pricing e canais ativos" };
+    }
+
+    return defaults;
+  }
+
+  function activeModuleWorkspaceTab(module) {
+    const tabs = moduleDeepWorkspaceTabs(module);
+    const saved = state.moduleWorkspaceTabs?.[module.code];
+    return tabs.some((tab) => tab.key === saved) ? saved : tabs[0].key;
+  }
+
+  function moduleWorkspaceActions(module) {
+    const actions = [
+      { label: "Abrir workspace", action: "open-workspace", tone: "navy", meta: "rota espelho ou subdominio do modulo" },
+      { label: "Abrir docs", action: "jump-docs", tone: "accent", meta: "README, status e contract do modulo" },
+      { label: "Ir para operacao", action: "jump-ops", tone: "warn", meta: "pendencias e checks do ambiente" },
+    ];
+
+    if (module.code === "STOCK" || module.code === "MARKETPLACE") {
+      actions.unshift(
+        { label: "Salvar APIs", action: "save-integrations", tone: "accent", meta: "persistir /api/admin-integrations" },
+        { label: "Aplicar APIs", action: "apply-integrations", tone: "navy", meta: "salvar e validar configuracao de canais" },
+        { label: "Resetar APIs", action: "reset-integrations", tone: "warn", meta: "voltar ao baseline de conectores" },
+      );
+    }
+
+    if (module.code === "STOCK" || module.code === "DROPSHIPPING") {
+      actions.push(
+        { label: "Salvar pricing", action: "save-pricing", tone: "accent", meta: "persistir /api/admin-imported-products-pricing" },
+        { label: "Aplicar pricing", action: "apply-pricing", tone: "navy", meta: "replicar overrides e defaults" },
+        { label: "Resetar pricing", action: "reset-pricing", tone: "warn", meta: "limpar ajustes locais de margem" },
+      );
+    }
+
+    if (module.code === "PAY") {
+      actions.unshift(
+        { label: "Atualizar checkout", action: "refresh-checkout", tone: "accent", meta: "revalidar /api/checkout-health" },
+        { label: "Abrir checkout", action: "jump-checkout", tone: "navy", meta: "painel operacional do Mercado Pago" },
+      );
+    }
+
+    return actions;
+  }
+
+  function moduleSpecificRuntimePanel(module) {
+    if (moduleSnapshotsState.loading) {
+      return `<div class="empty-state">Carregando snapshot real do módulo...</div>`;
+    }
+
+    if (moduleSnapshotsState.error) {
+      return `<div class="empty-state">Snapshot indisponível: ${escapeHtml(moduleSnapshotsState.error)}</div>`;
+    }
+
+    const snapshot = moduleRuntimeSnapshot(module.code);
+    if (!snapshot) {
+      return "";
+    }
+
+    if (module.code === "STOCK") {
+      const categories = Array.isArray(snapshot.top_categories) ? snapshot.top_categories : [];
+      const suppliers = Array.isArray(snapshot.supplier_summary) ? snapshot.supplier_summary : [];
+      const supplierRows = Array.isArray(snapshot.supplier_rows) ? snapshot.supplier_rows : [];
+      const reviewRows = Array.isArray(snapshot.review_rows) ? snapshot.review_rows : [];
+      const reasons = Array.isArray(snapshot.blocking_reasons) ? snapshot.blocking_reasons : [];
+      const topItem = snapshot.top_stock_item || {};
+      const topMargin = snapshot.top_margin_item || {};
+      return `
+        <section class="erp-specific-panel">
+          <div class="erp-specific-head">
+            <div>
+              <span class="small-label">Runtime real do módulo</span>
+              <h4>STOCK control plane</h4>
+            </div>
+            <div class="pill-row">
+              ${rowPill(snapshot.sync_status || "idle", snapshot.pending_runtime_total ? "pill-warn" : "pill-accent")}
+              ${rowPill(`${formatCount(snapshot.providers_active || 0)}/${formatCount(snapshot.providers_total || 0)} providers ativos`, "pill-navy")}
+            </div>
+          </div>
+          <div class="erp-specific-grid stock">
+            ${insightCardMarkup("Catálogo", formatCount(snapshot.items_total || 0), "itens reais disponíveis no resumo do catálogo", rowPill(formatMoney(snapshot.inventory_value_brl || 0), "pill-accent"))}
+            ${insightCardMarkup("Publicação", formatCount(snapshot.approved_total || 0), "aprovados para publicação", rowPill(`${formatCount(snapshot.review_total || 0)} em revisão`, "pill-warn"))}
+            ${insightCardMarkup("Margem potencial", formatMoney(snapshot.margin_potential_brl || 0), "margem agregada atual do módulo", rowPill(`${formatCount(snapshot.do_not_publish_total || 0)} bloqueados`, "pill-danger"))}
+            ${insightCardMarkup("Sync", escapeHtml(snapshot.sync_status || "idle"), escapeHtml(snapshot.sync_detail || "sem detalhe adicional"), rowPill(snapshot.latest_sync_event?.source || "runtime", "pill"))}
+          </div>
+          <div class="erp-specific-grid stock">
+            <article class="erp-specific-card">
+              <span class="small-label">Top item por estoque</span>
+              <strong>${escapeHtml(topItem.title || "Sem item")}</strong>
+              <p class="muted-copy">${escapeHtml(topItem.category || "Sem categoria")} · ${formatCount(topItem.stock || 0)} unidades</p>
+            </article>
+            <article class="erp-specific-card">
+              <span class="small-label">Top item por margem</span>
+              <strong>${escapeHtml(topMargin.title || "Sem item")}</strong>
+              <p class="muted-copy">${formatMoney(topMargin.total_margin_brl || 0)} de margem total estimada</p>
+            </article>
+            <article class="erp-specific-card">
+              <span class="small-label">Categorias líderes</span>
+              <div class="pill-row">${categories.map((item) => rowPill(`${item.category} · ${formatCount(item.items_total || 0)}`, "pill")).join("") || rowPill("Sem categorias", "pill")}</div>
+            </article>
+            <article class="erp-specific-card">
+              <span class="small-label">Fornecedores líderes</span>
+              <div class="pill-row">${suppliers.map((item) => rowPill(`${item.supplier_name} · ${formatCount(item.items_total || 0)}`, "pill-navy")).join("") || rowPill("Sem fornecedores", "pill")}</div>
+            </article>
+          </div>
+          <div class="erp-specific-list">
+            <strong>Motivos correntes de bloqueio e revisão</strong>
+            ${reasons.length ? reasons.map((item) => `<div class="erp-task-item">${escapeHtml(item.code || "motivo")} · ${escapeHtml(item.label || "sem descrição")} · ${formatCount(item.total || 0)}</div>`).join("") : `<div class="erp-task-item">Sem motivo crítico de bloqueio no snapshot atual.</div>`}
+          </div>
+          <div class="erp-specific-grid stock">
+            <section class="erp-specific-card erp-specific-card-wide">
+              <div class="erp-card-head">
+                <div>
+                  <span class="small-label">Tabela viva</span>
+                  <strong>Fornecedores e publicação</strong>
+                </div>
+                ${rowPill(`${formatCount(supplierRows.length)} linhas`, "pill-navy")}
+              </div>
+              <div class="erp-table-wrap">
+                <table class="erp-data-table">
+                  <thead>
+                    <tr>
+                      <th>Fornecedor</th>
+                      <th>Itens</th>
+                      <th>Aprov.</th>
+                      <th>Revisão</th>
+                      <th>Bloq.</th>
+                      <th>Receita estimada</th>
+                      <th>Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${supplierRows.map((item) => `
+                      <tr>
+                        <td>${escapeHtml(item.supplier_name || "Fornecedor")}</td>
+                        <td>${escapeHtml(formatCount(item.items_total || 0))}</td>
+                        <td>${escapeHtml(formatCount(item.approved_total || 0))}</td>
+                        <td>${escapeHtml(formatCount(item.review_total || 0))}</td>
+                        <td>${escapeHtml(formatCount(item.do_not_publish_total || 0))}</td>
+                        <td>${escapeHtml(formatMoney(item.suggested_revenue_value_brl || 0))}</td>
+                        <td>
+                          <div class="pricing-inline-stack">
+                            <button type="button" class="secondary-button" data-stock-action="filter-supplier" data-supplier-key="${escapeHtml(item.supplier_key || "")}">Filtrar</button>
+                            <button type="button" class="secondary-button" data-stock-action="open-pricing">Pricing</button>
+                          </div>
+                        </td>
+                      </tr>
+                    `).join("") || `<tr><td colspan="7">Sem fornecedor no snapshot atual.</td></tr>`}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+            <section class="erp-specific-card erp-specific-card-wide">
+              <div class="erp-card-head">
+                <div>
+                  <span class="small-label">Fila viva</span>
+                  <strong>Itens em revisão ou bloqueio</strong>
+                </div>
+                ${rowPill(`${formatCount(reviewRows.length)} itens`, "pill-warn")}
+              </div>
+              <div class="erp-table-wrap">
+                <table class="erp-data-table">
+                  <thead>
+                    <tr>
+                      <th>Produto</th>
+                      <th>Fornecedor</th>
+                      <th>Status</th>
+                      <th>Estoque</th>
+                      <th>Venda sugerida</th>
+                      <th>Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${reviewRows.map((item) => `
+                      <tr>
+                        <td>${escapeHtml(item.title || "Produto")}</td>
+                        <td>${escapeHtml(item.supplier_name || "-")}</td>
+                        <td>${escapeHtml(item.publication_status_label || item.publication_status || "-")}</td>
+                        <td>${escapeHtml(formatCount(item.stock || 0))}</td>
+                        <td>${escapeHtml(formatMoney(item.suggested_sale_price_brl || 0))}</td>
+                        <td>
+                          <div class="pricing-inline-stack">
+                            <button type="button" class="secondary-button" data-stock-action="filter-supplier" data-supplier-name="${escapeHtml(item.supplier_name || "")}">Fornecedor</button>
+                            <button type="button" class="secondary-button" data-stock-action="open-review">Revisão</button>
+                            <button type="button" class="secondary-button" data-stock-action="copy-item" data-item-id="${escapeHtml(item.id || "")}">Copiar ID</button>
+                          </div>
+                        </td>
+                      </tr>
+                    `).join("") || `<tr><td colspan="6">Sem item pendente na fila atual.</td></tr>`}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+        </section>
+      `;
+    }
+
+    if (module.code === "PAY") {
+      const validation = snapshot.validation || {};
+      const notifications = Array.isArray(snapshot.notification_history) ? snapshot.notification_history : [];
+      const preferences = Array.isArray(snapshot.preference_history) ? snapshot.preference_history : [];
+      const attempts = Array.isArray(snapshot.checkout_attempt_history) ? snapshot.checkout_attempt_history : [];
+      return `
+        <section class="erp-specific-panel">
+          <div class="erp-specific-head">
+            <div>
+              <span class="small-label">Runtime real do módulo</span>
+              <h4>PAY checkout ops</h4>
+            </div>
+            <div class="pill-row">
+              ${rowPill(snapshot.checkout_ready ? "checkout pronto" : "checkout pendente", snapshot.checkout_ready ? "pill-accent" : "pill-warn")}
+              ${rowPill(snapshot.preferred_environment || "unconfigured", "pill-navy")}
+            </div>
+          </div>
+          <div class="erp-specific-grid pay">
+            ${insightCardMarkup("Status", escapeHtml(snapshot.checkout_status || "missing"), "saúde agregada do checkout do Mercado Pago", rowPill(validation.status || "sem validação", validation.status === "ok" ? "pill-accent" : "pill-warn"))}
+            ${insightCardMarkup("Credenciais", `${[snapshot.access_token_present, snapshot.public_key_present, snapshot.webhook_secret_present].filter(Boolean).length}/3`, "access token, public key e webhook secret", rowPill(snapshot.operator_login_present ? "login operador salvo" : "sem login operador", snapshot.operator_login_present ? "pill-accent" : "pill"))}
+            ${insightCardMarkup("Validação", escapeHtml(validation.status || "missing"), escapeHtml(validation.detail || "sem detalhe adicional"), rowPill(validation.checked_at_utc ? formatTimestamp(validation.checked_at_utc) : "sem checagem", "pill"))}
+            ${insightCardMarkup("Retorno", snapshot.sample_return_url ? "habilitado" : "pendente", "URL pública de retorno do checkout", snapshot.notification_url ? rowPill("webhook configurado", "pill-accent") : rowPill("webhook pendente", "pill-warn"))}
+          </div>
+          <div class="erp-specific-grid pay">
+            <article class="erp-specific-card">
+              <span class="small-label">notification_url</span>
+              <strong>${escapeHtml(snapshot.notification_url || "indisponível")}</strong>
+            </article>
+            <article class="erp-specific-card">
+              <span class="small-label">return_url</span>
+              <strong>${escapeHtml(snapshot.sample_return_url || "indisponível")}</strong>
+            </article>
+          </div>
+          <div class="erp-specific-grid pay">
+            <section class="erp-specific-card erp-specific-card-wide">
+              <div class="erp-card-head">
+                <div>
+                  <span class="small-label">Histórico real</span>
+                  <strong>Notificações recebidas</strong>
+                </div>
+                ${rowPill(`${formatCount(snapshot.notifications_total || 0)} eventos`, notifications.length ? "pill-accent" : "pill")}
+              </div>
+              <div class="erp-history-list">
+                ${notifications.map((item) => `
+                  <article class="erp-history-item">
+                    <strong>${escapeHtml(item.received_at_utc || "sem data")}</strong>
+                    <span>${escapeHtml(item.headers?.x_topic || item.query?.topic?.[0] || "notificação")}</span>
+                    <p class="muted-copy">${escapeHtml(item.body?.type || item.body?.action || item.body?.topic || "payload persistido em runtime")}</p>
+                  </article>
+                `).join("") || `<div class="erp-task-item">Nenhuma notificação Mercado Pago persistida no runtime até agora.</div>`}
+              </div>
+            </section>
+            <section class="erp-specific-card erp-specific-card-wide">
+              <div class="erp-card-head">
+                <div>
+                  <span class="small-label">Histórico real</span>
+                  <strong>Preferências de checkout</strong>
+                </div>
+                ${rowPill(`${formatCount(snapshot.preferences_total || 0)} preferências`, preferences.length ? "pill-accent" : "pill")}
+              </div>
+              <div class="erp-history-list">
+                ${preferences.map((item) => `
+                  <article class="erp-history-item">
+                    <strong>${escapeHtml(item.created_at_utc || "sem data")}</strong>
+                    <span>${escapeHtml(item.item_id || item.external_reference || "item")}</span>
+                    <p class="muted-copy">${escapeHtml(item.preference_id || "sem preference_id")} · ${escapeHtml(item.sandbox_init_point ? "sandbox" : "produção")}</p>
+                  </article>
+                `).join("") || `<div class="erp-task-item">Nenhuma preferência Mercado Pago foi gerada no runtime atual.</div>`}
+              </div>
+            </section>
+          </div>
+          <section class="erp-specific-card erp-specific-card-wide">
+            <div class="erp-card-head">
+              <div>
+                <span class="small-label">Histórico real</span>
+                <strong>Tentativas de checkout</strong>
+              </div>
+              ${rowPill(`${formatCount(snapshot.checkout_attempts_total || 0)} tentativas`, attempts.length ? "pill-accent" : "pill")}
+            </div>
+            <div class="erp-history-list">
+              ${attempts.map((item) => `
+                <article class="erp-history-item">
+                  <strong>${escapeHtml(item.attempted_at_utc || "sem data")}</strong>
+                  <span>${escapeHtml(item.item_id || "item")} · ${escapeHtml(item.status || "status")}</span>
+                  <p class="muted-copy">${escapeHtml(item.detail || item.result?.message || "sem detalhe")}</p>
+                </article>
+              `).join("") || `<div class="erp-task-item">Nenhuma tentativa de checkout foi registrada ainda.</div>`}
+            </div>
+          </section>
+        </section>
+      `;
+    }
+
+    if (module.code === "MOVE") {
+      const pendingItems = Array.isArray(snapshot.pending_items) ? snapshot.pending_items : [];
+      const dependencies = Array.isArray(snapshot.dependencies) ? snapshot.dependencies : [];
+      const integrations = Array.isArray(snapshot.integrations) ? snapshot.integrations : [];
+      const operationalFeed = Array.isArray(snapshot.operational_feed) ? snapshot.operational_feed : [];
+      const failures = Array.isArray(snapshot.deployment_failures) ? snapshot.deployment_failures : [];
+      return `
+        <section class="erp-specific-panel">
+          <div class="erp-specific-head">
+            <div>
+              <span class="small-label">Runtime real do módulo</span>
+              <h4>MOVE operação e readiness</h4>
+            </div>
+            <div class="pill-row">
+              ${rowPill(snapshot.runtime_status || "missing", snapshot.runtime_available ? "pill-accent" : "pill-warn")}
+              ${rowPill(`${Math.round(snapshot.work_progress_percent || 0)}%`, "pill-navy")}
+            </div>
+          </div>
+          <div class="erp-specific-grid move">
+            ${insightCardMarkup("Runtime", snapshot.runtime_available ? "ativo" : "pendente", "estado do runtime público vinculado ao cockpit", rowPill(snapshot.public_url ? "url pública disponível" : "sem url pública", snapshot.public_url ? "pill-accent" : "pill-warn"))}
+            ${insightCardMarkup("Work status", escapeHtml(snapshot.work_status || "missing"), escapeHtml(snapshot.work_activity_description || snapshot.work_activity || "sem atividade registrada"), rowPill(`${Math.round(snapshot.work_progress_percent || 0)}% progresso`, "pill"))}
+            ${insightCardMarkup("Checklist", `${formatCount(snapshot.checklist_done || 0)}/${formatCount(snapshot.checklist_total || 0)}`, "itens do módulo MOVE concluídos", rowPill(`${formatCount(snapshot.checklist_pending || 0)} pendentes`, snapshot.checklist_pending ? "pill-warn" : "pill-accent"))}
+            ${insightCardMarkup("Telemetria", escapeHtml(snapshot.telemetry_mode || "fallback_runtime"), "fonte operacional atual do módulo", rowPill(snapshot.telemetry_source ? "feed ativo" : "sem feed", snapshot.telemetry_source ? "pill-accent" : "pill"))}
+          </div>
+          <div class="erp-specific-grid move">
+            <article class="erp-specific-card">
+              <span class="small-label">Pendências do módulo</span>
+              <div class="pill-row">${pendingItems.map((item) => rowPill(item, "pill-warn")).join("") || rowPill("Sem pendência aberta", "pill-accent")}</div>
+            </article>
+            <article class="erp-specific-card">
+              <span class="small-label">Dependências</span>
+              <div class="pill-row">${dependencies.map((item) => rowPill(item, "pill")).join("") || rowPill("Sem dependência", "pill-accent")}</div>
+            </article>
+            <article class="erp-specific-card">
+              <span class="small-label">Integrações</span>
+              <div class="pill-row">${integrations.map((item) => rowPill(item, "pill-navy")).join("") || rowPill("Sem integração", "pill")}</div>
+            </article>
+            <article class="erp-specific-card">
+              <span class="small-label">Falhas de deploy ligadas ao ambiente</span>
+              <div class="pill-row">${failures.map((item) => rowPill(item, "pill-danger")).join("") || rowPill("Sem falha crítica", "pill-accent")}</div>
+            </article>
+          </div>
+          <section class="erp-specific-card erp-specific-card-wide">
+            <div class="erp-card-head">
+              <div>
+                <span class="small-label">Feed operacional</span>
+                <strong>MOVE runtime feed</strong>
+              </div>
+              ${rowPill(snapshot.telemetry_mode === "fallback_runtime" ? "fallback runtime" : "telemetria dedicada", snapshot.telemetry_mode === "fallback_runtime" ? "pill-warn" : "pill-accent")}
+            </div>
+            <div class="erp-history-list">
+              ${operationalFeed.map((item) => `
+                <article class="erp-history-item">
+                  <strong>${escapeHtml(item.timestamp || "sem data")}</strong>
+                  <span>${escapeHtml(item.title || item.kind || "evento")}</span>
+                  <p class="muted-copy">${escapeHtml(item.detail || item.status || "sem detalhe")}</p>
+                </article>
+              `).join("") || `<div class="erp-task-item">Nenhum evento operacional disponível para o feed do MOVE.</div>`}
+            </div>
+          </section>
+        </section>
+      `;
+    }
+
+    return "";
+  }
+
+  function moduleChartSeries(module) {
+    const base = Math.max(module.checklist.total, 6);
+    const ready = Math.max(module.checklist.done, 2);
+    const pending = Math.max(module.checklist.pending, 1);
+    const integrations = Math.max(module.integrates_with.length, 1);
+    const dependencies = Math.max(module.depends_on.length, 1);
+    const domainBias = Math.max((module.number % 7) + 2, 2);
+    const values = [ready, pending, integrations, dependencies, domainBias, base];
+    const max = Math.max(...values, 1);
+    return values.map((value, index) => ({
+      label: ["Backlog", "Fila", "Links", "Deps", "Ritmo", "Meta"][index],
+      height: `${Math.max(24, Math.round((value / max) * 100))}%`,
+    }));
   }
 
   function moduleLedgerRows(module, businessSnapshot, openItems) {
@@ -4402,6 +5059,14 @@
     const erpTiles = moduleWorkspaceTiles(module, businessSnapshot);
     const formFields = moduleClassicFormFields(module);
     const ledgerRows = moduleLedgerRows(module, businessSnapshot, openItems);
+    const queueCards = moduleOperationsSnapshot(module, openItems);
+    const chartSeries = moduleChartSeries(module);
+    const workspaceSections = moduleWorkspaceSections(module);
+    const subdomainRoutes = moduleSubdomainRoutes(module);
+    const workspaceTabs = moduleDeepWorkspaceTabs(module);
+    const activeTab = activeModuleWorkspaceTab(module);
+    const workspaceActions = moduleWorkspaceActions(module);
+    const specificRuntimePanel = moduleSpecificRuntimePanel(module);
     const accent = moduleAccent(module);
     const erpWorkspaceBlock = `
       <section class="detail-block detail-block-wide erp-workspace-shell" id="${escapeHtml(sectionId(module, "erp"))}" style="--erp-accent:${escapeHtml(accent)}">
@@ -4414,8 +5079,11 @@
             </div>
           </div>
           <nav class="erp-sidebar-nav">
-            ${moduleWorkspaceMenu(module)
-              .map((item, index) => `<button type="button" class="erp-nav-item ${index === 0 ? "is-active" : ""}">${escapeHtml(item)}</button>`)
+            ${workspaceTabs
+              .map(
+                (item) =>
+                  `<button type="button" class="erp-nav-item ${item.key === activeTab ? "is-active" : ""}" data-workspace-tab="${escapeHtml(item.key)}" data-module-code="${escapeHtml(module.code)}">${escapeHtml(item.label)}</button>`,
+              )
               .join("")}
           </nav>
         </aside>
@@ -4427,112 +5095,189 @@
             </div>
             <div class="pill-row">
               ${rowPill("produção", "pill-accent")}
+              ${rowPill("sandbox espelhado", "pill")}
               ${rowPill(module.domain, "pill-navy")}
               ${rowPill(module.status_label, statusVariant(module.automation_status))}
             </div>
           </div>
-          <div class="erp-kpi-grid">
-            ${erpTiles
+          <div class="erp-status-ribbon">
+            <span>Subdomínio dedicado</span>
+            <strong>${escapeHtml(moduleWorkspaceByCode(module.code)?.subdomain || module.slug || module.code.toLowerCase())}</strong>
+            <span>${escapeHtml(module.subtitle)}</span>
+          </div>
+          <div class="erp-tab-strip">
+            ${workspaceTabs
               .map(
-                (tile) => `
-                  <article class="erp-kpi-card">
-                    <span class="small-label">${escapeHtml(tile.label)}</span>
-                    <strong>${escapeHtml(tile.value)}</strong>
-                    <span class="muted-copy">${escapeHtml(tile.meta)}</span>
-                  </article>
+                (tab) => `
+                  <button type="button" class="erp-tab-chip ${tab.key === activeTab ? "is-active" : ""}" data-workspace-tab="${escapeHtml(tab.key)}" data-module-code="${escapeHtml(module.code)}">
+                    <strong>${escapeHtml(tab.label)}</strong>
+                    <span>${escapeHtml(tab.description)}</span>
+                  </button>
                 `,
               )
               .join("")}
           </div>
-          <div class="erp-ops-grid">
-            <section class="erp-canvas-card">
+          <section class="erp-tab-panel ${activeTab === "overview" ? "is-active" : ""}" ${activeTab === "overview" ? "" : 'hidden'}>
+            ${specificRuntimePanel}
+            <div class="erp-kpi-grid">
+              ${erpTiles
+                .map(
+                  (tile) => `
+                    <article class="erp-kpi-card">
+                      <span class="small-label">${escapeHtml(tile.label)}</span>
+                      <strong>${escapeHtml(tile.value)}</strong>
+                      <span class="muted-copy">${escapeHtml(tile.meta)}</span>
+                    </article>
+                  `,
+                )
+                .join("")}
+            </div>
+            <div class="erp-ops-grid">
+              <section class="erp-canvas-card">
+                <div class="erp-card-head">
+                  <div>
+                    <span class="small-label">Cadastro operacional</span>
+                    <strong>Ficha mestre do módulo</strong>
+                  </div>
+                  ${rowPill(`Atualizado ${formatTimestamp(data.generated_at_utc)}`, "pill")}
+                </div>
+                <div class="erp-classic-form">
+                  <div class="erp-form-grid">
+                    ${formFields
+                      .map(
+                        ([label, value]) => `
+                          <label class="erp-field">
+                            <span>${escapeHtml(label)}</span>
+                            <input type="text" value="${escapeHtml(value)}" readonly />
+                          </label>
+                        `,
+                      )
+                      .join("")}
+                  </div>
+                  <div class="erp-form-actions">
+                    <button type="button" class="secondary-button" data-workspace-action="open-workspace" data-module-code="${escapeHtml(module.code)}">Abrir workspace</button>
+                    <button type="button" class="secondary-button" data-workspace-action="jump-docs" data-module-code="${escapeHtml(module.code)}">Docs</button>
+                    <button type="button" class="secondary-button" data-workspace-action="jump-ops" data-module-code="${escapeHtml(module.code)}">Operação</button>
+                    <button type="button" class="secondary-button" data-copy-path="${escapeHtml(module.paths.readme || module.paths.status || "")}">Copiar caminho</button>
+                  </div>
+                </div>
+              </section>
+              <section class="erp-canvas-card">
+                <div class="erp-card-head">
+                  <div>
+                    <span class="small-label">Painel gerencial</span>
+                    <strong>Indicadores e tarefas</strong>
+                  </div>
+                  ${rowPill(`${formatCount(openItems.length)} itens críticos`, openItems.length ? "pill-danger" : "pill-accent")}
+                </div>
+                <div class="erp-chart-panel">
+                  <div class="erp-chart-bars">
+                    ${chartSeries.map((item) => `<span style="height:${escapeHtml(item.height)}"></span>`).join("")}
+                  </div>
+                  <div class="erp-chart-legend">
+                    ${chartSeries.map((item) => `<small>${escapeHtml(item.label)}</small>`).join("")}
+                  </div>
+                  <div class="erp-task-list">
+                    ${openItems.slice(0, 4).map((item) => `<div class="erp-task-item">${escapeHtml(item.label)}</div>`).join("") || `<div class="erp-task-item">Sem pendência operacional aberta.</div>`}
+                  </div>
+                </div>
+              </section>
+            </div>
+          </section>
+          <section class="erp-tab-panel ${activeTab === "operations" ? "is-active" : ""}" ${activeTab === "operations" ? "" : 'hidden'}>
+            <div class="erp-queue-grid">
+              ${queueCards
+                .map(
+                  (card) => `
+                    <article class="erp-queue-card ${escapeHtml(card.tone)}">
+                      <span class="small-label">${escapeHtml(card.title)}</span>
+                      <strong>${escapeHtml(card.value)}</strong>
+                      <span class="muted-copy">${escapeHtml(card.meta)}</span>
+                    </article>
+                  `,
+                )
+                .join("")}
+            </div>
+            <div class="erp-domain-grid">
+              ${workspaceSections
+                .map(
+                  (section) => `
+                    <article class="erp-domain-card">
+                      <span class="small-label">${escapeHtml(section.title)}</span>
+                      <strong>${escapeHtml(module.code)} ${escapeHtml(section.title.toLowerCase())}</strong>
+                      <p class="muted-copy">${escapeHtml(section.text)}</p>
+                    </article>
+                  `,
+                )
+                .join("")}
+            </div>
+          </section>
+          <section class="erp-tab-panel ${activeTab === "integrations" ? "is-active" : ""}" ${activeTab === "integrations" ? "" : 'hidden'}>
+            <div class="erp-subdomain-grid">
+              ${subdomainRoutes
+                .map(
+                  (route) => `
+                    <article class="erp-subdomain-card">
+                      <span class="small-label">${escapeHtml(route.label)}</span>
+                      <strong>${escapeHtml(route.route)}</strong>
+                      <p class="muted-copy">${escapeHtml(route.description)}</p>
+                    </article>
+                  `,
+                )
+                .join("")}
+            </div>
+            <div class="erp-action-grid">
+              ${workspaceActions
+                .map(
+                  (item) => `
+                    <article class="erp-action-card ${escapeHtml(item.tone)}">
+                      <strong>${escapeHtml(item.label)}</strong>
+                      <p class="muted-copy">${escapeHtml(item.meta)}</p>
+                      <button type="button" class="secondary-button" data-workspace-action="${escapeHtml(item.action)}" data-module-code="${escapeHtml(module.code)}">${escapeHtml(item.label)}</button>
+                    </article>
+                  `,
+                )
+                .join("")}
+            </div>
+          </section>
+          <section class="erp-tab-panel ${activeTab === "governance" ? "is-active" : ""}" ${activeTab === "governance" ? "" : 'hidden'}>
+            <section class="erp-table-card">
               <div class="erp-card-head">
                 <div>
-                  <span class="small-label">Cadastro operacional</span>
-                  <strong>Ficha mestre do módulo</strong>
+                  <span class="small-label">Grade operacional</span>
+                  <strong>Registros do módulo</strong>
                 </div>
-                ${rowPill(`Atualizado ${formatTimestamp(data.generated_at_utc)}`, "pill")}
+                ${businessSnapshot ? rowPill(formatMoney(businessSnapshot.inventory_value_brl), "pill-accent") : rowPill("sem valor comercial", "pill")}
               </div>
-              <div class="erp-classic-form">
-                <div class="erp-form-grid">
-                  ${formFields
-                    .map(
-                      ([label, value]) => `
-                        <label class="erp-field">
-                          <span>${escapeHtml(label)}</span>
-                          <input type="text" value="${escapeHtml(value)}" readonly />
-                        </label>
-                      `,
-                    )
-                    .join("")}
-                </div>
-                <div class="erp-form-actions">
-                  <button type="button" class="secondary-button">Novo</button>
-                  <button type="button" class="secondary-button">Salvar</button>
-                  <button type="button" class="secondary-button">Alterar</button>
-                  <button type="button" class="secondary-button">Relatório</button>
-                </div>
-              </div>
-            </section>
-            <section class="erp-canvas-card">
-              <div class="erp-card-head">
-                <div>
-                  <span class="small-label">Painel gerencial</span>
-                  <strong>Indicadores e tarefas</strong>
-                </div>
-                ${rowPill(`${formatCount(openItems.length)} itens críticos`, openItems.length ? "pill-danger" : "pill-accent")}
-              </div>
-              <div class="erp-chart-panel">
-                <div class="erp-chart-bars">
-                  <span style="height:38%"></span>
-                  <span style="height:72%"></span>
-                  <span style="height:54%"></span>
-                  <span style="height:86%"></span>
-                  <span style="height:58%"></span>
-                  <span style="height:94%"></span>
-                </div>
-                <div class="erp-task-list">
-                  ${openItems.slice(0, 4).map((item) => `<div class="erp-task-item">${escapeHtml(item.label)}</div>`).join("") || `<div class="erp-task-item">Sem pendência operacional aberta.</div>`}
-                </div>
+              <div class="erp-table-wrap">
+                <table class="erp-data-table">
+                  <thead>
+                    <tr>
+                      <th>Código</th>
+                      <th>Descrição</th>
+                      <th>Operações</th>
+                      <th>Fila</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${ledgerRows
+                      .map(
+                        (row) => `
+                          <tr>
+                            <td>${escapeHtml(row.code)}</td>
+                            <td>${escapeHtml(row.description)}</td>
+                            <td>${escapeHtml(row.ops)}</td>
+                            <td>${escapeHtml(row.queue)}</td>
+                            <td>${escapeHtml(row.state)}</td>
+                          </tr>
+                        `,
+                      )
+                      .join("")}
+                  </tbody>
+                </table>
               </div>
             </section>
-          </div>
-          <section class="erp-table-card">
-            <div class="erp-card-head">
-              <div>
-                <span class="small-label">Grade operacional</span>
-                <strong>Registros do módulo</strong>
-              </div>
-              ${businessSnapshot ? rowPill(formatMoney(businessSnapshot.inventory_value_brl), "pill-accent") : rowPill("sem valor comercial", "pill")}
-            </div>
-            <div class="erp-table-wrap">
-              <table class="erp-data-table">
-                <thead>
-                  <tr>
-                    <th>Código</th>
-                    <th>Descrição</th>
-                    <th>Operações</th>
-                    <th>Fila</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${ledgerRows
-                    .map(
-                      (row) => `
-                        <tr>
-                          <td>${escapeHtml(row.code)}</td>
-                          <td>${escapeHtml(row.description)}</td>
-                          <td>${escapeHtml(row.ops)}</td>
-                          <td>${escapeHtml(row.queue)}</td>
-                          <td>${escapeHtml(row.state)}</td>
-                        </tr>
-                      `,
-                    )
-                    .join("")}
-                </tbody>
-              </table>
-            </div>
           </section>
         </div>
       </section>
@@ -4778,15 +5523,64 @@
     }
 
     const items = previewWorkspaces();
-    const tileMarkup = (workspace, index) => `
+    const desktopMetrics = items.slice(0, 6).map((workspace, index) => `
+      <article class="device-metric-card">
+        <div class="device-metric-icon" style="background:${workspacePreviewPalette(index)}">${escapeHtml(workspace.title.charAt(0))}</div>
+        <strong>${escapeHtml(workspace.title.replace("Painel ", ""))}</strong>
+        <span>${escapeHtml(workspace.copy.split(".")[0] || workspace.copy)}</span>
+      </article>
+    `).join("");
+    const desktopMenu = items.slice(0, 7).map((workspace, index) => `
+      <div class="device-sidebar-item ${index === 0 ? "is-active" : ""}">
+        <span class="device-sidebar-dot" style="background:${workspacePreviewPalette(index)}"></span>
+        <span>${escapeHtml(workspace.title.replace("Painel ", ""))}</span>
+      </div>
+    `).join("");
+
+    elements.desktopWorkspacePreview.innerHTML = `
+      <div class="device-dashboard-shell">
+        <aside class="device-sidebar">
+          <div class="device-sidebar-brand">VALLEY ERP</div>
+          ${desktopMenu}
+        </aside>
+        <div class="device-dashboard-main">
+          <div class="device-dashboard-toolbar">
+            <strong>Bem-vindo ao Valley Admin</strong>
+            <div class="device-toolbar-pills">
+              <span>Financeiro</span>
+              <span>Estoque</span>
+              <span>Checkout</span>
+            </div>
+          </div>
+          <div class="device-metric-grid">${desktopMetrics}</div>
+          <div class="device-dashboard-bottom">
+            <div class="device-chart-card">
+              <span>Receita vs. Operacao</span>
+              <div class="device-chart-bars">
+                <i style="height:42%"></i>
+                <i style="height:78%"></i>
+                <i style="height:58%"></i>
+                <i style="height:90%"></i>
+                <i style="height:66%"></i>
+                <i style="height:84%"></i>
+              </div>
+            </div>
+            <div class="device-table-card">
+              <span>Fila rapida</span>
+              <div class="device-table-row"><b>Revisao</b><em>124</em></div>
+              <div class="device-table-row"><b>Integracoes</b><em>07</em></div>
+              <div class="device-table-row"><b>Usuarios</b><em>2.4k</em></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+    elements.phoneWorkspacePreview.innerHTML = items.slice(0, 6).map((workspace, index) => `
       <article class="device-app-tile">
         <div class="device-app-icon" style="background:${workspacePreviewPalette(index)}">${escapeHtml(workspace.title.charAt(0))}</div>
         <span class="device-app-label">${escapeHtml(workspace.title.replace("Painel ", ""))}</span>
       </article>
-    `;
-
-    elements.desktopWorkspacePreview.innerHTML = items.map(tileMarkup).join("");
-    elements.phoneWorkspacePreview.innerHTML = items.slice(0, 6).map(tileMarkup).join("");
+    `).join("");
     elements.heroWorkspaceIcons.innerHTML = items.slice(0, 4).map((workspace, index) => `
       <article class="hero-workspace-chip">
         <div class="device-app-icon" style="background:${workspacePreviewPalette(index)}">${escapeHtml(workspace.title.charAt(0))}</div>
@@ -4820,6 +5614,100 @@
         renderAdminLaunchpad();
         renderCheckoutHealth();
       });
+  }
+
+  function openWorkspaceSurface(moduleCode) {
+    const workspace = moduleWorkspaceByCode(moduleCode);
+    if (!workspace) {
+      announce("Workspace do modulo indisponivel.");
+      return;
+    }
+
+    window.location.href = workspaceMirrorHref(workspace);
+  }
+
+  function runModuleWorkspaceAction(module, action) {
+    switch (action) {
+      case "open-workspace":
+        openWorkspaceSurface(module.code);
+        return;
+      case "jump-docs":
+        document.getElementById(sectionId(module, "docs"))?.scrollIntoView({ behavior: "smooth", block: "start" });
+        return;
+      case "jump-ops":
+        document.getElementById(sectionId(module, "ops"))?.scrollIntoView({ behavior: "smooth", block: "start" });
+        return;
+      case "jump-checkout":
+        document.getElementById("checkoutHealthPanel")?.scrollIntoView({ behavior: "smooth", block: "start" });
+        return;
+      case "save-integrations":
+      case "apply-integrations":
+        saveMarketplaceApiConfig().finally(() => {
+          loadModuleRuntimeSnapshots();
+        });
+        return;
+      case "reset-integrations":
+        resetMarketplaceApiDefaults();
+        announce("Configuracao de integracoes resetada para o baseline.");
+        return;
+      case "save-pricing":
+      case "apply-pricing":
+        saveImportedPricing().finally(() => {
+          loadModuleRuntimeSnapshots();
+        });
+        return;
+      case "reset-pricing":
+        resetImportedPricingDefaults();
+        announce("Desk de pricing resetado para o baseline local.");
+        return;
+      case "refresh-checkout":
+        loadCheckoutHealth();
+        loadModuleRuntimeSnapshots();
+        announce("Atualizando saude do checkout.");
+        return;
+      default:
+        announce("Acao do workspace ainda nao mapeada.");
+    }
+  }
+
+  function runStockTableAction(trigger) {
+    const action = String(trigger.dataset.stockAction || "").trim();
+    if (!action) {
+      return;
+    }
+
+    if (action === "filter-supplier") {
+      const supplierKey = String(trigger.dataset.supplierKey || "").trim();
+      const supplierName = String(trigger.dataset.supplierName || "").trim().toLowerCase();
+      if (supplierKey) {
+        updateImportedPricingFilter("supplierKey", supplierKey);
+      } else if (supplierName) {
+        const rows = materializeImportedPricingRows();
+        const match = rows.find((row) => String(row.supplier_name || "").trim().toLowerCase() === supplierName);
+        if (match?.supplier_key) {
+          updateImportedPricingFilter("supplierKey", match.supplier_key);
+        }
+      }
+      document.getElementById("importedPricingSection")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      announce("Fornecedor filtrado no desk de pricing.");
+      return;
+    }
+
+    if (action === "open-pricing") {
+      document.getElementById("importedPricingSection")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      announce("Desk de pricing aberto.");
+      return;
+    }
+
+    if (action === "open-review") {
+      document.getElementById("publicationReviewSection")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      announce("Fila de revisão aberta.");
+      return;
+    }
+
+    if (action === "copy-item") {
+      copyText(String(trigger.dataset.itemId || ""), "ID do item STOCK");
+    }
   }
 
   function renderCheckoutHealth() {
@@ -4939,6 +5827,7 @@
   bindEvents();
   render();
   loadCatalogSummary();
+  loadModuleRuntimeSnapshots();
   loadCheckoutHealth();
   loadMarketplaceApiConfig();
   loadImportedPricing();
