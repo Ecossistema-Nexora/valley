@@ -12,5 +12,6 @@
 6. Aplicar migrations do banco hibrido:
    - `python scripts/valley_db_orchestrator.py apply-postgres`
    - `python scripts/valley_db_orchestrator.py apply-mongo`
+   - Windows com bridge Docker quebrado: `.\scripts\apply_valley_db_via_wsl.ps1`
 7. Configurar Stripe webhooks.
 8. Validar `/healthz`, `/readyz`, jobs e admin.

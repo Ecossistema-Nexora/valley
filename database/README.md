@@ -165,6 +165,20 @@ Aplicar migrations no Compose. O comando abaixo ja executa `compose-up` antes de
 python scripts/valley_db_orchestrator.py apply-compose
 ```
 
+No Windows, se o `docker info` ou o wrapper `psql.cmd` falhar por bridge do Docker Desktop, use o entrypoint WSL:
+
+```powershell
+.\scripts\apply_valley_db_via_wsl.ps1
+```
+
+Esse script sobe `postgres` e `mongodb` pelo Ubuntu WSL, injeta wrappers temporarios de `psql` e `mongosh`, aplica PostgreSQL e MongoDB pelo mesmo manifesto oficial e gera o report no final.
+
+Se o volume local do PostgreSQL ficar preso em recovery, o mesmo entrypoint tambem cobre backup bruto e recriacao limpa do volume:
+
+```powershell
+.\scripts\apply_valley_db_via_wsl.ps1 -ResetPostgresVolume
+```
+
 Aplicar os seeds minimos do bloco expansion que cobre Tourism, Bio, Energy, News, Fitness, Gaming, Home e Space:
 
 ```bash
