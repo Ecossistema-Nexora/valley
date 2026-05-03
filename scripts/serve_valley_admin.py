@@ -571,6 +571,11 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
         parsed = urlsplit(self.path)
         route = self._normalize_public_route(parsed.path)
 
+        if route.startswith("/workspace/"):
+            self.path = "/index.html"
+            super().do_GET()
+            return
+
         if route in ("/", "/index.html") and parsed.query:
             params = parse_qs(parsed.query)
             if params.get("code") or params.get("error") or params.get("error_description"):

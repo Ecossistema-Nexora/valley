@@ -4,9 +4,9 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Valley Release Cockpit</title>
-    <link rel="stylesheet" href="./styles.css" />
-    <script src="./valley_admin_data.js"></script>
-    <script src="./app.js" defer></script>
+    <link rel="stylesheet" href="/styles.css" />
+    <script src="/valley_admin_data.js"></script>
+    <script src="/app.js" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#mainContent">Ir para o cockpit</a>
@@ -51,7 +51,7 @@
       <header class="hero">
         <div class="hero-copy">
           <div class="brand-lockup" aria-label="Valley">
-            <img src="./assets/logo-valley-official.png" alt="Logomarca oficial Valley" />
+            <img src="/assets/logo-valley-official.png" alt="Logomarca oficial Valley" />
             <div>
               <p class="brand-name">Valley</p>
               <p class="brand-subline">Super App Production Cockpit</p>
@@ -59,13 +59,41 @@
           </div>
           <p class="eyebrow">Valley Omniverse Release Mode</p>
           <h1 id="heroTitle">Cockpit de producao para MVP e 47 modulos</h1>
-          <p class="subcopy">
+          <p id="heroSubcopy" class="subcopy">
             Supervisao executiva, trilha tecnica e leitura operacional em uma unica superficie. O painel cruza MVP,
             registry, contracts, roadmap, migrations, status de implantacao e exposicao publica para acesso externo.
           </p>
           <div id="heroTags" class="hero-tags"></div>
+          <div id="heroWorkspaceIcons" class="hero-workspace-icons"></div>
         </div>
         <div class="hero-side">
+          <section class="showcase-panel" aria-label="Preview do cockpit em desktop e mobile">
+            <div id="heroBadge" class="hero-badge">SEM MENSALIDADE</div>
+            <div class="device-stage">
+              <div class="desktop-shell">
+                <div class="device-app-topbar">
+                  <span>Valley Admin</span>
+                  <div class="device-app-topbar-pills">
+                    <span>Produção</span>
+                    <span>Checkout</span>
+                    <span>Stock</span>
+                  </div>
+                </div>
+                <div id="desktopWorkspacePreview" class="device-app-grid"></div>
+              </div>
+              <div class="phone-shell">
+                <div class="phone-speaker"></div>
+                <div class="phone-screen">
+                  <div class="phone-app-header">
+                    <strong>Valley</strong>
+                    <span>Admin</span>
+                  </div>
+                  <div id="phoneWorkspacePreview" class="phone-app-grid"></div>
+                </div>
+              </div>
+            </div>
+          </section>
+
           <section class="glass-panel hero-status">
             <p class="panel-kicker">Control Fabric</p>
             <h2 id="registryName">Registry pendente</h2>
@@ -131,6 +159,18 @@
         <section id="workspaceFocusBanner" class="workspace-focus-banner" hidden aria-live="polite"></section>
         <div id="adminWorkspaceRegistry" class="workspace-registry-grid"></div>
         <div id="adminLaunchpadGrid" class="launchpad-grid"></div>
+      </section>
+
+      <section id="moduleWorkspaceDirectory" class="glass-panel launchpad-section" aria-label="Subdominios dedicados por modulo">
+        <div class="section-head">
+          <div>
+            <p class="panel-kicker">Module workspaces</p>
+            <h2>Subdominios dedicados por modulo</h2>
+          </div>
+          <p class="section-copy">Cada modulo ganha uma pagina espelhada com foco automatico, URL dedicada e contexto operacional em modo de producao.</p>
+        </div>
+        <div id="moduleWorkspaceSummary" class="integration-summary-grid"></div>
+        <div id="moduleWorkspaceGrid" class="module-workspace-grid"></div>
       </section>
 
       <section class="executive-grid" aria-label="Sinais executivos de release">

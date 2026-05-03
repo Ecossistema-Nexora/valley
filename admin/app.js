@@ -128,7 +128,7 @@
       ],
     },
   };
-  const ADMIN_WORKSPACES = [
+  const STATIC_ADMIN_WORKSPACES = [
     {
       key: "home",
       title: "Home Admin",
@@ -210,6 +210,7 @@
   ];
 
   const allModules = data.modules.slice().sort((left, right) => left.number - right.number);
+  const DYNAMIC_MODULE_WORKSPACES = buildModuleWorkspaces(allModules);
   const catalogState = {
     loading: true,
     summary: null,
@@ -285,6 +286,12 @@
     workspaceFocusBanner: document.getElementById("workspaceFocusBanner"),
     adminWorkspaceRegistry: document.getElementById("adminWorkspaceRegistry"),
     adminLaunchpadGrid: document.getElementById("adminLaunchpadGrid"),
+    moduleWorkspaceSummary: document.getElementById("moduleWorkspaceSummary"),
+    moduleWorkspaceGrid: document.getElementById("moduleWorkspaceGrid"),
+    heroWorkspaceIcons: document.getElementById("heroWorkspaceIcons"),
+    desktopWorkspacePreview: document.getElementById("desktopWorkspacePreview"),
+    phoneWorkspacePreview: document.getElementById("phoneWorkspacePreview"),
+    heroBadge: document.getElementById("heroBadge"),
     stockProviderGuides: document.getElementById("stockProviderGuides"),
     stockGuideSummary: document.getElementById("stockGuideSummary"),
     checkoutHealthPanel: document.getElementById("checkoutHealthPanel"),
@@ -322,7 +329,58 @@
     publicationReviewSummary: document.getElementById("publicationReviewSummary"),
     publicationReviewBoard: document.getElementById("publicationReviewBoard"),
     liveRegion: document.getElementById("liveRegion"),
+    heroTitle: document.getElementById("heroTitle"),
+    heroSubcopy: document.getElementById("heroSubcopy"),
   };
+
+  function adminWorkspaces() {
+    return [...STATIC_ADMIN_WORKSPACES, ...DYNAMIC_MODULE_WORKSPACES];
+  }
+
+  function slugToSubdomain(value) {
+    return String(value || "")
+      .toLowerCase()
+      .replace(/[^a-z0-9-]+/g, "-")
+      .replace(/^-+|-+$/g, "") || "modulo";
+  }
+
+  function buildModuleWorkspaces(modules) {
+    const reserved = new Set(STATIC_ADMIN_WORKSPACES.map((workspace) => workspace.subdomain));
+    const used = new Set();
+
+    return modules.map((module) => {
+      let subdomain = slugToSubdomain(module.slug || module.code);
+      if (reserved.has(subdomain) || used.has(subdomain)) {
+        subdomain = `${subdomain}-module`;
+      }
+      used.add(subdomain);
+      return {
+        key: `module-${module.code.toLowerCase()}`,
+        title: `${module.code} · ${module.name}`,
+        subdomain,
+        sectionId: "modulesWorkspace",
+        copy: `${module.subtitle} com cockpit dedicado, contexto de docs, checklist, contratos e trilha operacional.`,
+        moduleCode: module.code,
+        workspaceKind: "module",
+      };
+    });
+  }
+
+  function moduleWorkspaceByCode(code) {
+    return DYNAMIC_MODULE_WORKSPACES.find((workspace) => workspace.moduleCode === code) || null;
+  }
+
+  function activeWorkspace() {
+    return workspaceByKey(activeWorkspaceKey());
+  }
+
+  function activeModuleWorkspace() {
+    const workspace = activeWorkspace();
+    if (!workspace?.moduleCode) {
+      return null;
+    }
+    return allModules.find((module) => module.code === workspace.moduleCode) || null;
+  }
 
   function normalizeAggregateSummary(summary) {
     return {
@@ -2313,7 +2371,11 @@
   }
 
   function workspaceByKey(key) {
-    return ADMIN_WORKSPACES.find((workspace) => workspace.key === key) || null;
+    return adminWorkspaces().find((workspace) => workspace.key === key) || null;
+  }
+
+  function workspaceBySubdomain(subdomain) {
+    return adminWorkspaces().find((workspace) => workspace.subdomain === subdomain) || null;
   }
 
   function workspaceHostLabel(workspace) {
@@ -2341,7 +2403,7 @@
       return `${adminHost.protocol}//${workspace.subdomain}.${adminHost.host}/?workspace=${workspace.key}#${workspace.sectionId}`;
     }
 
-    return `${window.location.origin.replace(/\/$/, "")}/?workspace=${workspace.key}#${workspace.sectionId}`;
+    return `${window.location.origin.replace(/\/$/, "")}/workspace/${workspace.key}/#${workspace.sectionId}`;
   }
 
   function workspaceMirrorHref(workspace) {
@@ -2355,6 +2417,15 @@
       return explicit;
     }
 
+    const pathname = window.location.pathname.replace(/\/+$/, "");
+    const workspacePathMatch = pathname.match(/\/workspace\/([^/]+)$/i);
+    if (workspacePathMatch) {
+      const pathKey = decodeURIComponent(workspacePathMatch[1]).trim().toLowerCase();
+      if (workspaceByKey(pathKey)) {
+        return pathKey;
+      }
+    }
+
     const adminHost = activeAdminHost().hostname.toLowerCase();
     const currentHost = window.location.hostname.toLowerCase();
     if (currentHost === adminHost || currentHost === "localhost" || currentHost === "127.0.0.1") {
@@ -2363,8 +2434,9 @@
 
     if (currentHost.endsWith(`.${adminHost}`)) {
       const prefix = currentHost.slice(0, -1 * (`.${adminHost}`.length));
-      if (workspaceByKey(prefix)) {
-        return prefix;
+      const hostWorkspace = workspaceBySubdomain(prefix);
+      if (hostWorkspace) {
+        return hostWorkspace.key;
       }
     }
 
@@ -2466,7 +2538,7 @@
       return;
     }
 
-    elements.adminWorkspaceRegistry.innerHTML = ADMIN_WORKSPACES.map((workspace) => {
+    elements.adminWorkspaceRegistry.innerHTML = STATIC_ADMIN_WORKSPACES.map((workspace) => {
       const descriptor = workspaceDescriptor(workspace, config, pendingReview);
       return `
         <article class="workspace-registry-card">
@@ -2480,6 +2552,55 @@
           <div class="workspace-registry-meta">
             ${rowPill(workspaceHostLabel(workspace), "pill-navy")}
             ${rowPill(descriptor.detail, "pill")}
+          </div>
+          <code>${escapeHtml(workspaceHref(workspace))}</code>
+          <div class="link-row">
+            <a href="${escapeHtml(workspaceHref(workspace))}">Abrir subdominio</a>
+            <a href="${escapeHtml(workspaceMirrorHref(workspace))}">Espelho no cockpit</a>
+          </div>
+        </article>
+      `;
+    }).join("");
+  }
+
+  function renderModuleWorkspaceDirectory() {
+    if (!elements.moduleWorkspaceGrid || !elements.moduleWorkspaceSummary) {
+      return;
+    }
+
+    elements.moduleWorkspaceSummary.innerHTML = [
+      summaryTileMarkup("Workspaces de modulo", formatCount(DYNAMIC_MODULE_WORKSPACES.length), "um cockpit dedicado por modulo"),
+      summaryTileMarkup("Modo", "producao", "shell e navegação preparados para ambiente real"),
+      summaryTileMarkup("Docs rastreados", formatCount(allModules.filter((module) => module.paths.readme && module.paths.status && module.paths.contract).length), "readme, status e contract por modulo"),
+      summaryTileMarkup("Hibridos", formatCount(allModules.filter((module) => module.data_home === "postgres_mongo").length), "postgres + mongo no mesmo cockpit"),
+    ].join("");
+
+    elements.moduleWorkspaceGrid.innerHTML = DYNAMIC_MODULE_WORKSPACES.map((workspace) => {
+      const module = allModules.find((item) => item.code === workspace.moduleCode);
+      if (!module) {
+        return "";
+      }
+      const readiness = moduleReadiness(module);
+      const businessSnapshot = catalogModuleSnapshot(module.code);
+      return `
+        <article class="module-workspace-card">
+          <div class="module-row-top">
+            <div>
+              <h3>${escapeHtml(workspace.title)}</h3>
+              <p class="muted-copy">${escapeHtml(workspace.copy)}</p>
+            </div>
+            ${rowPill(module.status_label, statusVariant(module.automation_status))}
+          </div>
+          <div class="workspace-registry-meta">
+            ${rowPill(workspaceHostLabel(workspace), "pill-navy")}
+            ${rowPill(module.tier, "pill-accent")}
+            ${rowPill(module.domain, "pill")}
+          </div>
+          <div class="summary-grid compact-summary-grid">
+            ${summaryTileMarkup("Prontidao", formatPercent(readiness), `${formatCount(module.checklist.pending)} pendencias`)}
+            ${summaryTileMarkup("Data home", module.data_home, module.code)}
+            ${summaryTileMarkup("Integracoes", formatCount(module.integrates_with.length), "conexoes declaradas")}
+            ${summaryTileMarkup("Valor", businessSnapshot ? formatMoney(businessSnapshot.inventory_value_brl) : "n/d", businessSnapshot ? "snapshot comercial" : "sem resumo comercial")}
           </div>
           <code>${escapeHtml(workspaceHref(workspace))}</code>
           <div class="link-row">
@@ -2563,15 +2684,17 @@
       ? publicationRows.filter((row) => row.publication_status === "review" || row.publication_status === "do_not_publish").length
       : Number(importedPricingState.payload?.publication_summary?.review_total || 0) +
         Number(importedPricingState.payload?.publication_summary?.do_not_publish_total || 0);
+    const workspaceCount = adminWorkspaces().length;
 
     elements.adminLaunchpadSummary.innerHTML = [
-      summaryTileMarkup("Subdominios", formatCount(ADMIN_WORKSPACES.length), "home, checkout, stock, revisao e workspaces dedicados"),
+      summaryTileMarkup("Subdominios", formatCount(workspaceCount), "cockpit fixo + paginas dedicadas por modulo"),
       summaryTileMarkup("Providers STOCK", formatCount(providerReady), `${formatCount(productionReady)} com producao ligada`),
       summaryTileMarkup("Revisao de publicacao", formatCount(pendingReview), pendingReview ? "itens aguardando decisao comercial" : "sem fila de bloqueio"),
       summaryTileMarkup("Checkout", checkoutHealthState.payload?.checkout_ready ? "pronto" : "pendente", checkoutHealthState.payload?.preferred_environment || "unconfigured"),
     ].join("");
     renderWorkspaceFocusBanner(config, pendingReview);
     renderWorkspaceRegistry(config, pendingReview);
+    renderModuleWorkspaceDirectory();
 
     const cards = [
       {
@@ -2755,6 +2878,12 @@
   }
 
   function readHashSelection() {
+    const moduleWorkspace = activeModuleWorkspace();
+    if (moduleWorkspace) {
+      state.selectedCode = moduleWorkspace.code;
+      return;
+    }
+
     const code = window.location.hash.replace(/^#/, "").trim().toUpperCase();
 
     if (code && allModules.some((module) => module.code === code)) {
@@ -3473,6 +3602,11 @@
         return;
       }
 
+      if (trigger.dataset.commandText) {
+        copyText(trigger.dataset.commandText, "Comando do workspace");
+        return;
+      }
+
       const index = Number(trigger.dataset.copyCommand);
       copyText(data.admin_commands[index], `Comando ${index + 1}`);
     });
@@ -3570,7 +3704,10 @@
   }
 
   function filteredModules() {
-    return allModules.filter((module) => {
+    const moduleWorkspace = activeModuleWorkspace();
+    const source = moduleWorkspace ? allModules.filter((module) => module.code === moduleWorkspace.code) : allModules;
+
+    return source.filter((module) => {
       const searchable = [module.code, module.name, module.subtitle, module.description_ptbr, module.domain].join(" ").toLowerCase();
 
       return (
@@ -3590,6 +3727,25 @@
     const readiness = overallReadiness(modules);
     const hybridCount = modules.filter((module) => module.data_home === "postgres_mongo").length;
     const plannedCount = modules.filter((module) => module.automation_status === "planned").length;
+    const workspace = activeWorkspace();
+    const workspaceModule = activeModuleWorkspace();
+
+    document.body.classList.add("production-shell");
+    document.body.classList.toggle("workspace-mode", Boolean(workspace && workspace.key !== "home"));
+    document.body.classList.toggle("home-showcase", !workspace || workspace.key === "home");
+
+    if (elements.heroTitle && elements.heroSubcopy) {
+      if (workspaceModule) {
+        elements.heroTitle.textContent = `${workspaceModule.code} · ${workspaceModule.name} em modo de producao`;
+        elements.heroSubcopy.textContent = `${workspaceModule.subtitle}. Este subdominio dedicado centraliza docs, checklist, contratos, acoplamentos, leituras comerciais e trilha operacional do modulo ${workspaceModule.code}.`;
+      } else if (workspace && workspace.key !== "home") {
+        elements.heroTitle.textContent = `${workspace.title} em modo de producao`;
+        elements.heroSubcopy.textContent = `${workspace.copy} O cockpit permanece conectado ao manifesto, ao runtime publico e aos dashboards comerciais sem trocar de shell.`;
+      } else {
+        elements.heroTitle.textContent = "Cockpit de producao para MVP e 47 modulos";
+        elements.heroSubcopy.textContent = "Supervisao executiva, trilha tecnica e leitura operacional em uma unica superficie. O painel cruza MVP, registry, contracts, roadmap, migrations, status de implantacao e exposicao publica para acesso externo.";
+      }
+    }
 
     elements.registryName.textContent = data.registry_name || "Registry sem nome";
     elements.sourceLabel.textContent = `Fonte: ${data.source || "indisponivel"} | Linguagem: ${data.language_policy || "indisponivel"}`;
@@ -3600,6 +3756,7 @@
     elements.reportHealth.className = reportHealthClass(report);
 
     elements.heroTags.innerHTML = [
+      rowPill("modo producao", "pill-accent"),
       rowPill(`${formatCount(modules.length)} modulos visiveis`, "pill-navy"),
       rowPill(`${formatPercent(readiness)} prontidao media`, "pill-accent"),
       rowPill(`${formatCount(release.modules_completed)} modulos completos`, "pill-accent"),
@@ -3873,6 +4030,7 @@
     elements.releaseQueue.innerHTML = queue
       .map((module) => {
         const readiness = moduleReadiness(module);
+        const pendingCount = module.checklist?.pending ?? module.checklist_pending ?? 0;
 
         return `
           <article class="queue-item">
@@ -3886,7 +4044,7 @@
             <div class="pill-row">
               ${rowPill(module.data_home, "pill-navy")}
               ${rowPill(module.status_label, statusVariant(module.automation_status))}
-              ${rowPill(`${formatCount(module.checklist.pending)} pendencias`, module.checklist.pending ? "pill-warn" : "pill-accent")}
+              ${rowPill(`${formatCount(pendingCount)} pendencias`, pendingCount ? "pill-warn" : "pill-accent")}
             </div>
             ${progressMarkup(readiness)}
             <div class="pill-row">
@@ -3946,6 +4104,29 @@
   }
 
   function renderCommands() {
+    const workspace = activeWorkspace();
+    const workspaceModule = activeModuleWorkspace();
+
+    if (workspaceModule) {
+      const commands = [
+        "python scripts/valley_admin_builder.py build",
+        "python scripts/serve_valley_admin.py --host 127.0.0.1 --port 8085",
+        "python scripts/valley_db_orchestrator.py check",
+        `abrir workspace ${workspace?.subdomain}.${activeAdminHost().hostname}`,
+      ];
+      elements.commandList.innerHTML = commands
+        .map(
+          (command, index) => `
+            <article class="command-item">
+              <code>${escapeHtml(command)}</code>
+              <button class="ghost-button" type="button" data-copy-command="${index}" data-command-text="${escapeHtml(command)}">Copiar</button>
+            </article>
+          `,
+        )
+        .join("");
+      return;
+    }
+
     if (!data.admin_commands.length) {
       elements.commandList.innerHTML = `<div class="empty-state">Nenhum comando administrativo publicado.</div>`;
       return;
@@ -4075,6 +4256,97 @@
     `;
   }
 
+  function moduleAccent(module) {
+    const palette = {
+      PAY: "#0d9b4d",
+      STOCK: "#2563eb",
+      MARKETPLACE: "#7c3aed",
+      REPLY: "#1d4ed8",
+      FOOD: "#ea580c",
+      DELIVERY: "#0f766e",
+      SOCIAL: "#db2777",
+      SCHOOL: "#6d28d9",
+      HEALTH: "#059669",
+      LEGAL: "#334155",
+    };
+    return palette[module.code] || "#2563eb";
+  }
+
+  function moduleWorkspaceMenu(module) {
+    return [
+      "Painel",
+      "Cadastros",
+      "Operações",
+      "Financeiro",
+      "Relatórios",
+      "Aprovações",
+      "Integrações",
+      "Configurações",
+    ];
+  }
+
+  function moduleWorkspaceTiles(module, businessSnapshot) {
+    return [
+      {
+        label: "Pedidos",
+        value: businessSnapshot ? formatCount(businessSnapshot.items_total) : formatCount(module.checklist.total),
+        meta: "itens do módulo",
+      },
+      {
+        label: "Pendências",
+        value: formatCount(module.checklist.pending),
+        meta: "fila operacional",
+      },
+      {
+        label: "Integrações",
+        value: formatCount(module.integrates_with.length),
+        meta: "conexões ativas",
+      },
+      {
+        label: "Prontidão",
+        value: formatPercent(moduleReadiness(module)),
+        meta: "índice atual",
+      },
+    ];
+  }
+
+  function moduleClassicFormFields(module) {
+    return [
+      ["Código", String(module.number).padStart(3, "0")],
+      ["Descrição", module.name],
+      ["Plano / Núcleo", module.domain],
+      ["Data home", module.data_home],
+      ["Status", module.status_label],
+      ["Responsável", "Valley Admin"],
+    ];
+  }
+
+  function moduleLedgerRows(module, businessSnapshot, openItems) {
+    return [
+      {
+        code: "001",
+        description: `Fluxo principal do ${module.code}`,
+        ops: businessSnapshot ? formatCount(businessSnapshot.items_total) : formatCount(module.checklist.total),
+        queue: formatCount(module.checklist.pending),
+        state: module.status_label,
+      },
+      {
+        code: "002",
+        description: "Checklist de fechamento",
+        ops: formatCount(openItems.length),
+        queue: formatCount(openItems.length),
+        state: openItems.length ? "Em aberto" : "Concluído",
+      },
+      {
+        code: "003",
+        description: "Integrações declaradas",
+        ops: formatCount(module.integrates_with.length),
+        queue: formatCount(module.depends_on.length),
+        state: module.integrates_with.length ? "Ativo" : "Sem vínculo",
+      },
+    ];
+  }
+
   function renderDetail(modules) {
     if (!modules.length) {
       elements.detailTitle.textContent = "Nenhum modulo no filtro";
@@ -4118,6 +4390,7 @@
 
     const navItems = [
       { label: "Resumo", target: ids.summary },
+      { label: "Workspace ERP", target: sectionId(module, "erp") },
       { label: "Gestao", target: ids.management },
       { label: "Financeiro", target: ids.finance },
       { label: "Acoplamentos", target: ids.architecture },
@@ -4126,6 +4399,144 @@
       { label: "Operacao", target: ids.ops },
     ];
     const businessSnapshot = catalogModuleSnapshot(module.code);
+    const erpTiles = moduleWorkspaceTiles(module, businessSnapshot);
+    const formFields = moduleClassicFormFields(module);
+    const ledgerRows = moduleLedgerRows(module, businessSnapshot, openItems);
+    const accent = moduleAccent(module);
+    const erpWorkspaceBlock = `
+      <section class="detail-block detail-block-wide erp-workspace-shell" id="${escapeHtml(sectionId(module, "erp"))}" style="--erp-accent:${escapeHtml(accent)}">
+        <aside class="erp-sidebar">
+          <div class="erp-brand">
+            <div class="erp-brand-badge">${escapeHtml(module.code.charAt(0))}</div>
+            <div>
+              <strong>${escapeHtml(module.code)}</strong>
+              <span>${escapeHtml(module.name)}</span>
+            </div>
+          </div>
+          <nav class="erp-sidebar-nav">
+            ${moduleWorkspaceMenu(module)
+              .map((item, index) => `<button type="button" class="erp-nav-item ${index === 0 ? "is-active" : ""}">${escapeHtml(item)}</button>`)
+              .join("")}
+          </nav>
+        </aside>
+        <div class="erp-main">
+          <div class="erp-toolbar">
+            <div>
+              <span class="small-label">Workspace do módulo</span>
+              <h3>${escapeHtml(module.name)}</h3>
+            </div>
+            <div class="pill-row">
+              ${rowPill("produção", "pill-accent")}
+              ${rowPill(module.domain, "pill-navy")}
+              ${rowPill(module.status_label, statusVariant(module.automation_status))}
+            </div>
+          </div>
+          <div class="erp-kpi-grid">
+            ${erpTiles
+              .map(
+                (tile) => `
+                  <article class="erp-kpi-card">
+                    <span class="small-label">${escapeHtml(tile.label)}</span>
+                    <strong>${escapeHtml(tile.value)}</strong>
+                    <span class="muted-copy">${escapeHtml(tile.meta)}</span>
+                  </article>
+                `,
+              )
+              .join("")}
+          </div>
+          <div class="erp-ops-grid">
+            <section class="erp-canvas-card">
+              <div class="erp-card-head">
+                <div>
+                  <span class="small-label">Cadastro operacional</span>
+                  <strong>Ficha mestre do módulo</strong>
+                </div>
+                ${rowPill(`Atualizado ${formatTimestamp(data.generated_at_utc)}`, "pill")}
+              </div>
+              <div class="erp-classic-form">
+                <div class="erp-form-grid">
+                  ${formFields
+                    .map(
+                      ([label, value]) => `
+                        <label class="erp-field">
+                          <span>${escapeHtml(label)}</span>
+                          <input type="text" value="${escapeHtml(value)}" readonly />
+                        </label>
+                      `,
+                    )
+                    .join("")}
+                </div>
+                <div class="erp-form-actions">
+                  <button type="button" class="secondary-button">Novo</button>
+                  <button type="button" class="secondary-button">Salvar</button>
+                  <button type="button" class="secondary-button">Alterar</button>
+                  <button type="button" class="secondary-button">Relatório</button>
+                </div>
+              </div>
+            </section>
+            <section class="erp-canvas-card">
+              <div class="erp-card-head">
+                <div>
+                  <span class="small-label">Painel gerencial</span>
+                  <strong>Indicadores e tarefas</strong>
+                </div>
+                ${rowPill(`${formatCount(openItems.length)} itens críticos`, openItems.length ? "pill-danger" : "pill-accent")}
+              </div>
+              <div class="erp-chart-panel">
+                <div class="erp-chart-bars">
+                  <span style="height:38%"></span>
+                  <span style="height:72%"></span>
+                  <span style="height:54%"></span>
+                  <span style="height:86%"></span>
+                  <span style="height:58%"></span>
+                  <span style="height:94%"></span>
+                </div>
+                <div class="erp-task-list">
+                  ${openItems.slice(0, 4).map((item) => `<div class="erp-task-item">${escapeHtml(item.label)}</div>`).join("") || `<div class="erp-task-item">Sem pendência operacional aberta.</div>`}
+                </div>
+              </div>
+            </section>
+          </div>
+          <section class="erp-table-card">
+            <div class="erp-card-head">
+              <div>
+                <span class="small-label">Grade operacional</span>
+                <strong>Registros do módulo</strong>
+              </div>
+              ${businessSnapshot ? rowPill(formatMoney(businessSnapshot.inventory_value_brl), "pill-accent") : rowPill("sem valor comercial", "pill")}
+            </div>
+            <div class="erp-table-wrap">
+              <table class="erp-data-table">
+                <thead>
+                  <tr>
+                    <th>Código</th>
+                    <th>Descrição</th>
+                    <th>Operações</th>
+                    <th>Fila</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${ledgerRows
+                    .map(
+                      (row) => `
+                        <tr>
+                          <td>${escapeHtml(row.code)}</td>
+                          <td>${escapeHtml(row.description)}</td>
+                          <td>${escapeHtml(row.ops)}</td>
+                          <td>${escapeHtml(row.queue)}</td>
+                          <td>${escapeHtml(row.state)}</td>
+                        </tr>
+                      `,
+                    )
+                    .join("")}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+      </section>
+    `;
     const stockOpsBlock =
       module.code === "STOCK"
         ? `
@@ -4180,6 +4591,7 @@
 
     elements.detailContent.innerHTML = `
       <div class="detail-grid">
+        ${erpWorkspaceBlock}
         <section class="detail-block detail-block-wide" id="${escapeHtml(ids.summary)}">
           <h3>Decision snapshot</h3>
           <p class="muted-copy">${escapeHtml(module.description_ptbr)}</p>
@@ -4351,6 +4763,39 @@
     `;
   }
 
+  function workspacePreviewPalette(index) {
+    const palette = ["#3b82f6", "#0ea5e9", "#10b981", "#8b5cf6", "#f59e0b", "#22c55e", "#ef4444", "#f97316"];
+    return palette[index % palette.length];
+  }
+
+  function previewWorkspaces() {
+    return STATIC_ADMIN_WORKSPACES.filter((workspace) => workspace.key !== "home").slice(0, 8);
+  }
+
+  function renderHeroWorkspacePreview() {
+    if (!elements.desktopWorkspacePreview || !elements.phoneWorkspacePreview || !elements.heroWorkspaceIcons) {
+      return;
+    }
+
+    const items = previewWorkspaces();
+    const tileMarkup = (workspace, index) => `
+      <article class="device-app-tile">
+        <div class="device-app-icon" style="background:${workspacePreviewPalette(index)}">${escapeHtml(workspace.title.charAt(0))}</div>
+        <span class="device-app-label">${escapeHtml(workspace.title.replace("Painel ", ""))}</span>
+      </article>
+    `;
+
+    elements.desktopWorkspacePreview.innerHTML = items.map(tileMarkup).join("");
+    elements.phoneWorkspacePreview.innerHTML = items.slice(0, 6).map(tileMarkup).join("");
+    elements.heroWorkspaceIcons.innerHTML = items.slice(0, 4).map((workspace, index) => `
+      <article class="hero-workspace-chip">
+        <div class="device-app-icon" style="background:${workspacePreviewPalette(index)}">${escapeHtml(workspace.title.charAt(0))}</div>
+        <strong>${escapeHtml(workspace.title)}</strong>
+        <span class="muted-copy">${escapeHtml(workspace.copy)}</span>
+      </article>
+    `).join("");
+  }
+
   function loadCheckoutHealth() {
     checkoutHealthState.loading = true;
     checkoutHealthState.error = "";
@@ -4477,6 +4922,7 @@
     renderCatalogDrivenSections();
     renderFilterMeta(modules);
     renderCommands();
+    renderHeroWorkspacePreview();
     renderExternalAccess();
     renderAccessLinks();
     renderAdminLaunchpad();
