@@ -125,6 +125,7 @@ def bridge_status() -> dict[str, Any]:
     config = load_config()
     notification_policy = load_notification_policy()
     telegram_ready = bool(os.environ.get("VALLEY_TELEGRAM_TOKEN") and os.environ.get("VALLEY_TELEGRAM_CHAT_ID"))
+    whatsapp_enabled = bool(((config.get("channels") or {}).get("whatsapp") or {}).get("enabled"))
     whatsapp_mode = os.environ.get("VALLEY_WHATSAPP_MODE", "web").strip().lower()
     whatsapp_web_to = os.environ.get("VALLEY_WHATSAPP_WEB_TO") or os.environ.get("VALLEY_WHATSAPP_TO")
     whatsapp_api_ready = bool(
@@ -132,7 +133,7 @@ def bridge_status() -> dict[str, Any]:
         and os.environ.get("VALLEY_WHATSAPP_TOKEN")
         and os.environ.get("VALLEY_WHATSAPP_TO")
     )
-    whatsapp_ready = bool(whatsapp_web_to) if whatsapp_mode == "web" else whatsapp_api_ready
+    whatsapp_ready = (bool(whatsapp_web_to) if whatsapp_mode == "web" else whatsapp_api_ready) if whatsapp_enabled else False
     return {
         "generated_at_utc": utc_now(),
         "bridge": config["name"],
@@ -140,9 +141,12 @@ def bridge_status() -> dict[str, Any]:
         "notification_policy": notification_policy,
         "telegram_ready": telegram_ready,
         "whatsapp_ready": whatsapp_ready,
-        "whatsapp_mode": whatsapp_mode,
-        "whatsapp_login_method": "whatsapp_web_manual_login" if whatsapp_mode == "web" else "api",
-        "whatsapp_web_target_configured": bool(whatsapp_web_to),
+        "whatsapp_mode": whatsapp_mode if whatsapp_enabled else "disabled",
+        "whatsapp_enabled": whatsapp_enabled,
+        "whatsapp_login_method": (
+            "whatsapp_web_manual_login" if whatsapp_mode == "web" else "api"
+        ) if whatsapp_enabled else "disabled",
+        "whatsapp_web_target_configured": bool(whatsapp_web_to) if whatsapp_enabled else False,
         "telegram_queue": str(TELEGRAM_QUEUE.relative_to(ROOT)),
         "universal_queue": str(UNIVERSAL_QUEUE.relative_to(ROOT)),
         "safe_auto_approved_kinds": sorted(SAFE_KINDS),
@@ -733,7 +737,8 @@ def watch(interval_seconds: int) -> None:
     while True:
         try:
             poll_telegram_once()
-            poll_whatsapp_web_once()
+            if bridge_status().get("whatsapp_enabled"):
+                poll_whatsapp_web_once()
             pulse()
             detect_and_send_new_apk()
         except Exception as exc:  # noqa: BLE001 - bridge must keep running and report the fault.
@@ -787,9 +792,13 @@ def main() -> None:
         )
         watch(max(300, args.interval, policy_interval))
     elif args.command == "whatsapp-login":
+        if not bridge_status().get("whatsapp_enabled"):
+            raise SystemExit("WhatsApp desativado por configuração permanente.")
         command, env = whatsapp_driver_command("login")
         raise SystemExit(subprocess.call(command, cwd=ROOT, env=env))
     elif args.command == "whatsapp-status":
+        if not bridge_status().get("whatsapp_enabled"):
+            raise SystemExit("WhatsApp desativado por configuração permanente.")
         command, env = whatsapp_driver_command("status")
         raise SystemExit(subprocess.call(command, cwd=ROOT, env=env))
     elif args.command == "set-work-status":

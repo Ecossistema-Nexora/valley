@@ -48,6 +48,7 @@
   const MODULE_WORKSPACE_TAB_STORAGE_KEY = "valley.moduleWorkspaceTabs.v1";
   const PRIMARY_WORKSPACE_KEY = "stock";
   const PRODUCTION_MODE_LOCKED = true;
+  const ADMIN_AUTH_TOKEN_STORAGE_KEY = "valley.admin.auth.token.v1";
   const MARKETPLACE_API_PROVIDERS = [
     { key: "mercado_livre", label: "Mercado Livre", providerRole: "marketplace_price", baseUrl: "https://api.mercadolibre.com", siteCode: "MLB" },
     { key: "amazon", label: "Amazon", providerRole: "marketplace_price", baseUrl: "https://sellingpartnerapi-na.amazon.com", siteCode: "BR" },
@@ -265,12 +266,19 @@
     marketplaceApiConfig: null,
     marketplaceApiPayload: null,
     moduleWorkspaceTabs: loadModuleWorkspaceTabs(),
+    adminSession: null,
   };
   const workspaceFocusState = {
     appliedKey: "",
   };
 
   const elements = {
+    adminAuthGate: document.getElementById("adminAuthGate"),
+    adminAuthForm: document.getElementById("adminAuthForm"),
+    adminAuthIdentifier: document.getElementById("adminAuthIdentifier"),
+    adminAuthPassword: document.getElementById("adminAuthPassword"),
+    adminAuthSubmit: document.getElementById("adminAuthSubmit"),
+    adminAuthStatus: document.getElementById("adminAuthStatus"),
     registryName: document.getElementById("registryName"),
     sourceLabel: document.getElementById("sourceLabel"),
     generatedAt: document.getElementById("generatedAt"),
@@ -341,6 +349,158 @@
     heroTitle: document.getElementById("heroTitle"),
     heroSubcopy: document.getElementById("heroSubcopy"),
   };
+
+  let appBootstrapped = false;
+
+  function readAdminAuthToken() {
+    try {
+      return String(window.localStorage.getItem(ADMIN_AUTH_TOKEN_STORAGE_KEY) || "").trim();
+    } catch (_error) {
+      return "";
+    }
+  }
+
+  function writeAdminAuthToken(token) {
+    try {
+      if (token) {
+        window.localStorage.setItem(ADMIN_AUTH_TOKEN_STORAGE_KEY, String(token).trim());
+      } else {
+        window.localStorage.removeItem(ADMIN_AUTH_TOKEN_STORAGE_KEY);
+      }
+    } catch (_error) {
+      return;
+    }
+  }
+
+  function setAdminAuthStatus(message, tone = "muted") {
+    if (!elements.adminAuthStatus) {
+      return;
+    }
+    elements.adminAuthStatus.textContent = message;
+    elements.adminAuthStatus.dataset.tone = tone;
+  }
+
+  function showAdminAuthGate() {
+    if (!elements.adminAuthGate) {
+      return;
+    }
+    elements.adminAuthGate.classList.add("is-visible");
+    document.body.classList.add("admin-auth-locked");
+  }
+
+  function hideAdminAuthGate() {
+    if (!elements.adminAuthGate) {
+      return;
+    }
+    elements.adminAuthGate.classList.remove("is-visible");
+    document.body.classList.remove("admin-auth-locked");
+  }
+
+  async function adminAuthFetch(url, options = {}) {
+    const headers = new Headers(options.headers || {});
+    const token = readAdminAuthToken();
+    if (token) {
+      headers.set("Authorization", `Bearer ${token}`);
+      headers.set("X-Valley-Session", token);
+    }
+    return fetch(url, {
+      ...options,
+      headers,
+    });
+  }
+
+  async function restoreAdminSession() {
+    const token = readAdminAuthToken();
+    if (!token) {
+      return null;
+    }
+    try {
+      const response = await adminAuthFetch("/api/auth/session?scope=admin", {
+        headers: { Accept: "application/json" },
+      });
+      const payload = await response.json();
+      if (!response.ok || payload.status !== "ok" || !payload.session) {
+        writeAdminAuthToken("");
+        return null;
+      }
+      state.adminSession = payload.session;
+      if (payload.session.token) {
+        writeAdminAuthToken(payload.session.token);
+      }
+      return payload.session;
+    } catch (_error) {
+      writeAdminAuthToken("");
+      return null;
+    }
+  }
+
+  async function submitAdminLogin(event) {
+    event?.preventDefault?.();
+    const identifier = String(elements.adminAuthIdentifier?.value || "").trim();
+    const password = String(elements.adminAuthPassword?.value || "");
+    if (!identifier || !password) {
+      setAdminAuthStatus("Informe usuário e senha válidos.", "danger");
+      return;
+    }
+    if (elements.adminAuthSubmit) {
+      elements.adminAuthSubmit.disabled = true;
+    }
+    setAdminAuthStatus("Validando credenciais administrativas...", "muted");
+    try {
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          identifier,
+          password,
+          scope: "admin",
+        }),
+      });
+      const payload = await response.json();
+      if (!response.ok || payload.status !== "ok" || !payload.session) {
+        setAdminAuthStatus(payload.detail || payload.message || "Credenciais inválidas.", "danger");
+        return;
+      }
+      state.adminSession = payload.session;
+      writeAdminAuthToken(payload.session.token || "");
+      if (elements.adminAuthPassword) {
+        elements.adminAuthPassword.value = "";
+      }
+      setAdminAuthStatus(`Sessão ativa para ${payload.session.user?.display_name || identifier}.`, "success");
+      hideAdminAuthGate();
+      bootstrapAdminApp();
+    } catch (_error) {
+      setAdminAuthStatus("Não foi possível validar a sessão no backend do Valley.", "danger");
+    } finally {
+      if (elements.adminAuthSubmit) {
+        elements.adminAuthSubmit.disabled = false;
+      }
+    }
+  }
+
+  function bindAdminAuthForm() {
+    if (!elements.adminAuthForm || elements.adminAuthForm.dataset.bound === "1") {
+      return;
+    }
+    elements.adminAuthForm.dataset.bound = "1";
+    elements.adminAuthForm.addEventListener("submit", submitAdminLogin);
+  }
+
+  async function bootstrapAdminGate() {
+    bindAdminAuthForm();
+    setAdminAuthStatus("Validando sessão administrativa...", "muted");
+    const session = await restoreAdminSession();
+    if (!session) {
+      showAdminAuthGate();
+      setAdminAuthStatus("Entre com uma credencial administrativa válida para liberar o painel.", "muted");
+      return;
+    }
+    hideAdminAuthGate();
+    bootstrapAdminApp();
+  }
 
   function loadModuleWorkspaceTabs() {
     try {
@@ -5822,13 +5982,22 @@
     scheduleWorkspaceFocus();
   }
 
-  readHashSelection();
-  populateFilters();
-  bindEvents();
-  render();
-  loadCatalogSummary();
-  loadModuleRuntimeSnapshots();
-  loadCheckoutHealth();
-  loadMarketplaceApiConfig();
-  loadImportedPricing();
+  function bootstrapAdminApp() {
+    if (appBootstrapped) {
+      render();
+      return;
+    }
+    appBootstrapped = true;
+    readHashSelection();
+    populateFilters();
+    bindEvents();
+    render();
+    loadCatalogSummary();
+    loadModuleRuntimeSnapshots();
+    loadCheckoutHealth();
+    loadMarketplaceApiConfig();
+    loadImportedPricing();
+  }
+
+  bootstrapAdminGate();
 })();

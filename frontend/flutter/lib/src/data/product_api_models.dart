@@ -138,6 +138,26 @@ class ProductItem {
   bool get hasVideo =>
       videoUrl.trim().isNotEmpty || mediaPath.trim().isNotEmpty;
 
+  String get titlePtBr =>
+      _firstReadableString(<Object?>[
+        raw['title_short_pt_br'],
+        raw['title_resumo_pt_br'],
+        raw['title_normalized_pt_br'],
+        raw['title_pt_br'],
+        title,
+      ]);
+
+  String get shortTitlePtBr => _truncateLabel(titlePtBr, 68);
+
+  String get descriptionPtBr =>
+      _firstReadableString(<Object?>[
+        raw['description_short_pt_br'],
+        raw['description_resumo_pt_br'],
+        raw['description_normalized_pt_br'],
+        raw['description_pt_br'],
+        description,
+      ]);
+
   bool get checkoutReady =>
       raw['checkout_ready'] == true ||
       ctaPath.contains('/api/actions/checkout');
@@ -205,6 +225,27 @@ class ProductItem {
   bool get supplierInternal =>
       (raw['supplier_visibility'] as String? ?? '') == 'internal';
 
+  String _firstReadableString(List<Object?> values) {
+    for (final Object? candidate in values) {
+      final String normalized = candidate?.toString().replaceAll(RegExp(r'\s+'), ' ').trim() ?? '';
+      if (normalized.isNotEmpty) {
+        return normalized;
+      }
+    }
+    return '';
+  }
+
+  String _truncateLabel(String value, int maxLength) {
+    final String normalized = value.replaceAll(RegExp(r'\s+'), ' ').trim();
+    if (normalized.length <= maxLength) {
+      return normalized;
+    }
+    final String slice = normalized.substring(0, maxLength - 1);
+    final int lastSpace = slice.lastIndexOf(' ');
+    final String shortened = lastSpace > 18 ? slice.substring(0, lastSpace) : slice;
+    return '${shortened.trim()}…';
+  }
+
   String _humanizeProvider(String value) {
     final List<String> parts = value
         .split(RegExp(r'[_\-\s]+'))
@@ -221,6 +262,100 @@ class ProductItem {
         )
         .join(' ');
   }
+}
+
+class ProductAuthUser {
+  const ProductAuthUser({
+    required this.userId,
+    required this.fullName,
+    required this.displayName,
+    required this.email,
+    required this.primaryRole,
+    required this.userKind,
+    required this.accountStatus,
+    required this.permissions,
+    required this.isAdmin,
+    required this.merchantSlug,
+    required this.merchantCode,
+  });
+
+  factory ProductAuthUser.fromJson(Map<String, dynamic> json) {
+    return ProductAuthUser(
+      userId: json['user_id'] as String? ?? '',
+      fullName: json['full_name'] as String? ?? '',
+      displayName: json['display_name'] as String? ?? '',
+      email: json['email'] as String? ?? '',
+      primaryRole: json['primary_role'] as String? ?? 'CUSTOMER',
+      userKind: json['user_kind'] as String? ?? 'PF',
+      accountStatus: json['account_status'] as String? ?? 'ACTIVE',
+      permissions: (json['permissions'] as List<dynamic>? ?? const <dynamic>[])
+          .map((dynamic item) => item.toString())
+          .toList(growable: false),
+      isAdmin: json['is_admin'] == true,
+      merchantSlug: json['merchant_slug'] as String? ?? '',
+      merchantCode: json['merchant_code'] as String? ?? '',
+    );
+  }
+
+  final String userId;
+  final String fullName;
+  final String displayName;
+  final String email;
+  final String primaryRole;
+  final String userKind;
+  final String accountStatus;
+  final List<String> permissions;
+  final bool isAdmin;
+  final String merchantSlug;
+  final String merchantCode;
+}
+
+class ProductAuthSession {
+  const ProductAuthSession({
+    required this.token,
+    required this.sessionId,
+    required this.expiresAt,
+    required this.expiresInSeconds,
+    required this.scope,
+    required this.user,
+  });
+
+  factory ProductAuthSession.fromJson(Map<String, dynamic> json) {
+    return ProductAuthSession(
+      token: json['token'] as String? ?? '',
+      sessionId: json['session_id'] as String? ?? '',
+      expiresAt: json['expires_at'] as String? ?? '',
+      expiresInSeconds: (json['expires_in_seconds'] as num?)?.toInt() ?? 0,
+      scope: json['scope'] as String? ?? 'product',
+      user: ProductAuthUser.fromJson(
+        (json['user'] as Map<dynamic, dynamic>? ?? const <dynamic, dynamic>{})
+            .cast<String, dynamic>(),
+      ),
+    );
+  }
+
+  final String token;
+  final String sessionId;
+  final String expiresAt;
+  final int expiresInSeconds;
+  final String scope;
+  final ProductAuthUser user;
+}
+
+class ProductAuthResult {
+  const ProductAuthResult({
+    required this.ok,
+    required this.status,
+    required this.message,
+    required this.session,
+    required this.detail,
+  });
+
+  final bool ok;
+  final String status;
+  final String message;
+  final ProductAuthSession? session;
+  final String detail;
 }
 
 class ProductShellData {

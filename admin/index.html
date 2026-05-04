@@ -10,6 +10,42 @@
   </head>
   <body>
     <a class="skip-link" href="#mainContent">Ir para o painel</a>
+    <section id="adminAuthGate" class="admin-auth-gate" aria-live="polite">
+      <div class="admin-auth-card">
+        <p class="panel-kicker">Acesso administrativo</p>
+        <h1>Login do painel Valley</h1>
+        <p class="muted-copy">
+          Use uma credencial administrativa válida para liberar workspaces, integrações reais e comandos operacionais.
+        </p>
+        <form id="adminAuthForm" class="admin-auth-form">
+          <label>
+            <span>Usuário</span>
+            <input
+              id="adminAuthIdentifier"
+              name="identifier"
+              type="text"
+              autocomplete="username"
+              value="@anderson"
+              placeholder="@anderson"
+              required
+            />
+          </label>
+          <label>
+            <span>Senha</span>
+            <input
+              id="adminAuthPassword"
+              name="password"
+              type="password"
+              autocomplete="current-password"
+              placeholder="Senha administrativa"
+              required
+            />
+          </label>
+          <button id="adminAuthSubmit" type="submit">Entrar no admin</button>
+        </form>
+        <p id="adminAuthStatus" class="admin-auth-status">Validação de sessão em andamento.</p>
+      </div>
+    </section>
     <div class="shell">
       <aside class="control-dock left-dock" aria-label="Navegacao principal">
         <div class="dock-card">

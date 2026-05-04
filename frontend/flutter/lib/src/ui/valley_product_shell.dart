@@ -59,6 +59,7 @@ class ValleyProductShell extends StatefulWidget {
 
 class _ValleyProductShellState extends State<ValleyProductShell> {
   static bool get _helenaEnabled => false;
+  static bool get _moduleDockEnabled => false;
   static const Set<String> _activeMvpModuleIds = <String>{
     'MARKETPLACE',
     'STOCK',
@@ -87,6 +88,9 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
   String _helenaMessage =
       'Helena pronta para acompanhar sua jornada com calma.';
   String _helenaTranscript = 'Toque no microfone se quiser falar comigo.';
+  ProductAuthSession? _authSession;
+  bool _authBusy = false;
+  String _authFeedback = '';
 
   @override
   void initState() {
@@ -100,6 +104,24 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
       _selectedModuleId = 'MARKETPLACE';
     } else if (_data.modules.isNotEmpty) {
       _selectedModuleId = _data.modules.first.id;
+    }
+    _restoreAuthSession();
+  }
+
+  Future<void> _restoreAuthSession() async {
+    try {
+      final ProductAuthResult result = await widget.repository.restoreSession(
+        baseUrl: _data.baseUrl,
+      );
+      if (!mounted || !result.ok || result.session == null) {
+        return;
+      }
+      setState(() {
+        _authSession = result.session;
+        _authFeedback = '';
+      });
+    } catch (_) {
+      // Mantemos o shell navegável mesmo sem sessão restaurada.
     }
   }
 
@@ -573,6 +595,125 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
     );
   }
 
+  Future<void> _submitLogin({
+    required String identifier,
+    required String password,
+  }) async {
+    final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
+    setState(() {
+      _authBusy = true;
+      _authFeedback = '';
+    });
+    try {
+      final ProductAuthResult result = await widget.repository.login(
+        baseUrl: _data.baseUrl,
+        identifier: identifier,
+        password: password,
+      );
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _authSession = result.session;
+        _authFeedback = result.message;
+      });
+      messenger.showSnackBar(
+        SnackBar(
+          behavior: SnackBarBehavior.floating,
+          content: Text(result.message),
+          backgroundColor: result.ok
+              ? ValleyBrandColors.success
+              : ValleyBrandColors.danger,
+        ),
+      );
+      if (result.ok && _selectedItem != null && _surface == 'identity') {
+        _openCheckout(_selectedItem!);
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _authBusy = false;
+        });
+      }
+    }
+  }
+
+  Future<void> _submitRegister({
+    required String fullName,
+    required String displayName,
+    required String email,
+    required String password,
+    required String role,
+  }) async {
+    final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
+    setState(() {
+      _authBusy = true;
+      _authFeedback = '';
+    });
+    try {
+      final ProductAuthResult registerResult = await widget.repository.register(
+        baseUrl: _data.baseUrl,
+        fullName: fullName,
+        displayName: displayName,
+        email: email,
+        password: password,
+        role: role,
+      );
+      if (!mounted) {
+        return;
+      }
+      if (!registerResult.ok) {
+        setState(() {
+          _authFeedback = registerResult.message;
+        });
+        messenger.showSnackBar(
+          SnackBar(
+            behavior: SnackBarBehavior.floating,
+            content: Text(registerResult.message),
+            backgroundColor: ValleyBrandColors.danger,
+          ),
+        );
+        return;
+      }
+      await _submitLogin(identifier: email, password: password);
+    } finally {
+      if (mounted) {
+        setState(() {
+          _authBusy = false;
+        });
+      }
+    }
+  }
+
+  Future<void> _logoutAuth() async {
+    final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
+    setState(() {
+      _authBusy = true;
+    });
+    try {
+      await widget.repository.logout(baseUrl: _data.baseUrl);
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _authSession = null;
+        _authFeedback = 'Sessão encerrada no dispositivo.';
+      });
+      messenger.showSnackBar(
+        const SnackBar(
+          behavior: SnackBarBehavior.floating,
+          content: Text('Sessão encerrada.'),
+        ),
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          _authBusy = false;
+        });
+      }
+    }
+  }
+
   void _openNotifications() {
     if (_surface == 'notifications') {
       return;
@@ -642,6 +783,10 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
   }
 
   void _confirmPreparedOrder(ProductItem item) {
+    if (_authSession == null) {
+      _openIdentity(returnItem: item);
+      return;
+    }
     if (item.ctaPath.isNotEmpty) {
       _runItemAction(item.ctaPath);
       _setHelenaMood('focus', 'Abrindo o pagamento seguro para ${item.title}.');
@@ -809,6 +954,7 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
     if (_surface == 'checkout' && _selectedItem != null) {
       return _CheckoutScreen(
         item: _selectedItem!,
+        authRequired: _authSession == null,
         onConfirm: () => _confirmPreparedOrder(_selectedItem!),
         onIdentity: () => _openIdentity(returnItem: _selectedItem),
         onCancel: () => _addToCart(_selectedItem!),
@@ -835,6 +981,28 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
         onConfirm: _selectedItem == null
             ? null
             : () => _openCheckout(_selectedItem!),
+        authSession: _authSession,
+        authBusy: _authBusy,
+        feedback: _authFeedback,
+        onLogin: (String identifier, String password) => _submitLogin(
+          identifier: identifier,
+          password: password,
+        ),
+        onRegister:
+            (
+              String fullName,
+              String displayName,
+              String email,
+              String password,
+              String role,
+            ) => _submitRegister(
+              fullName: fullName,
+              displayName: displayName,
+              email: email,
+              password: password,
+              role: role,
+            ),
+        onLogout: _authSession == null ? null : _logoutAuth,
       );
     }
     if (_surface == 'notifications') {
@@ -1371,6 +1539,8 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
                               _TopBar(
                                 busy: _busy,
                                 cartCount: _cartItems.length,
+                                accountLabel: _authSession?.user.displayName ?? '',
+                                accountSigned: _authSession != null,
                                 onSearchChanged: (String value) =>
                                     setState(() => _query = value),
                                 onCart: () => _openSurface('cart'),
@@ -1470,18 +1640,19 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
                       ),
                     ),
                   ),
-                Positioned(
-                  left: compact ? 20 : (wide ? 112 : 18),
-                  right: compact ? null : 18,
-                  bottom: compact ? 18 : 14,
-                  child: _FloatingModuleDock(
-                    modules: _data.modules,
-                    selectedModuleId: _selectedModuleId,
-                    onOpenModule: _showModule,
-                    onOpenIdentity: () => _openIdentity(),
-                    onOpenSettings: () => _openSurface('notifications'),
+                if (_moduleDockEnabled)
+                  Positioned(
+                    left: compact ? 20 : (wide ? 112 : 18),
+                    right: compact ? null : 18,
+                    bottom: compact ? 18 : 14,
+                    child: _FloatingModuleDock(
+                      modules: _data.modules,
+                      selectedModuleId: _selectedModuleId,
+                      onOpenModule: _showModule,
+                      onOpenIdentity: () => _openIdentity(),
+                      onOpenSettings: () => _openSurface('notifications'),
+                    ),
                   ),
-                ),
                 if (wide)
                   Positioned(
                     left: 20,
@@ -1496,7 +1667,7 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
             ),
           ),
         ),
-        bottomNavigationBar: wide
+        bottomNavigationBar: wide || !_moduleDockEnabled
             ? null
             : _BottomGlassNav(index: _navIndex, onChanged: _handlePrimaryNav),
       ),
@@ -1549,6 +1720,8 @@ class _TopBar extends StatelessWidget {
   const _TopBar({
     required this.busy,
     required this.cartCount,
+    required this.accountLabel,
+    required this.accountSigned,
     required this.onSearchChanged,
     required this.onCart,
     required this.onNotifications,
@@ -1557,6 +1730,8 @@ class _TopBar extends StatelessWidget {
 
   final bool busy;
   final int cartCount;
+  final String accountLabel;
+  final bool accountSigned;
   final ValueChanged<String> onSearchChanged;
   final VoidCallback onCart;
   final VoidCallback onNotifications;
@@ -1630,7 +1805,10 @@ class _TopBar extends StatelessWidget {
         const SizedBox(width: 10),
         _TopBarIconButton(
           icon: Icons.verified_user_rounded,
-          tooltip: 'Identidade',
+          tooltip: accountSigned
+              ? 'Conta ativa: ${accountLabel.isEmpty ? "Valley" : accountLabel}'
+              : 'Entrar ou criar conta',
+          badge: accountSigned ? 'ON' : null,
           onTap: onIdentity,
         ),
         if (!compact)
@@ -3773,7 +3951,7 @@ class _StockCard extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              item.title,
+              item.shortTitlePtBr,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: theme.textTheme.titleLarge?.copyWith(
@@ -3782,7 +3960,7 @@ class _StockCard extends StatelessWidget {
             ),
             const SizedBox(height: 6),
             Text(
-              item.modelName,
+              item.taxonomyLeaf,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: theme.textTheme.bodyMedium?.copyWith(
@@ -3791,7 +3969,7 @@ class _StockCard extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              item.description,
+              item.descriptionPtBr,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: theme.textTheme.bodyMedium?.copyWith(
@@ -4134,7 +4312,7 @@ class _ProductDetailScreen extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           Text(
-            item.title,
+            item.titlePtBr,
             style: theme.textTheme.headlineMedium?.copyWith(
               fontWeight: FontWeight.w900,
             ),
@@ -4148,7 +4326,7 @@ class _ProductDetailScreen extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            item.description,
+            item.descriptionPtBr,
             maxLines: 5,
             overflow: TextOverflow.ellipsis,
             style: theme.textTheme.bodyLarge?.copyWith(
@@ -4309,7 +4487,7 @@ class _ProductDetailScreen extends StatelessWidget {
           ),
           const SizedBox(height: 14),
           Text(
-            item.description,
+            item.descriptionPtBr,
             style: theme.textTheme.bodyLarge?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,
               height: 1.5,
@@ -4396,12 +4574,14 @@ class _ProductDetailScreen extends StatelessWidget {
 class _CheckoutScreen extends StatelessWidget {
   const _CheckoutScreen({
     required this.item,
+    required this.authRequired,
     required this.onConfirm,
     required this.onIdentity,
     required this.onCancel,
   });
 
   final ProductItem item;
+  final bool authRequired;
   final VoidCallback onConfirm;
   final VoidCallback onIdentity;
   final VoidCallback onCancel;
@@ -4530,8 +4710,16 @@ class _CheckoutScreen extends StatelessWidget {
                 children: <Widget>[
                   FilledButton.icon(
                     onPressed: onConfirm,
-                    icon: const Icon(Icons.lock_rounded),
-                    label: const Text('Ir para pagamento seguro'),
+                    icon: Icon(
+                      authRequired
+                          ? Icons.login_rounded
+                          : Icons.lock_rounded,
+                    ),
+                    label: Text(
+                      authRequired
+                          ? 'Entrar para pagar'
+                          : 'Ir para pagamento seguro',
+                    ),
                   ),
                   OutlinedButton.icon(
                     onPressed: onCancel,
@@ -5108,14 +5296,39 @@ class _ReceiptLine extends StatelessWidget {
   }
 }
 
+typedef _AuthLoginHandler = Future<void> Function(
+  String identifier,
+  String password,
+);
+
+typedef _AuthRegisterHandler = Future<void> Function(
+  String fullName,
+  String displayName,
+  String email,
+  String password,
+  String role,
+);
+
 class _IdentityTrustScreen extends StatelessWidget {
   const _IdentityTrustScreen({
     required this.pendingItem,
     required this.onConfirm,
+    required this.authSession,
+    required this.authBusy,
+    required this.feedback,
+    required this.onLogin,
+    required this.onRegister,
+    required this.onLogout,
   });
 
   final ProductItem? pendingItem;
   final VoidCallback? onConfirm;
+  final ProductAuthSession? authSession;
+  final bool authBusy;
+  final String feedback;
+  final _AuthLoginHandler onLogin;
+  final _AuthRegisterHandler onRegister;
+  final VoidCallback? onLogout;
 
   @override
   Widget build(BuildContext context) {
@@ -5131,63 +5344,94 @@ class _IdentityTrustScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                'Identidade e confiança',
+                authSession == null ? 'Entrar ou criar conta' : 'Conta e confiança',
                 style: theme.textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.w900,
                 ),
               ),
               const SizedBox(height: 8),
               Text(
-                'Face ID, Voice ID e Identity Score aparecem como camada de segurança do MVP, sem criar outro cadastro.',
+                authSession == null
+                    ? 'O mesmo fluxo serve para web e app. Faça login com email e senha para liberar checkout, área do cliente e trilha operacional.'
+                    : 'Sessão ativa com identidade validada. Checkout, recibo e área do cliente passam a operar com vínculo real ao usuário.',
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: theme.colorScheme.onSurfaceVariant,
                 ),
               ),
               const SizedBox(height: 20),
-              Wrap(
-                spacing: 12,
-                runSpacing: 12,
-                children: <Widget>[
-                  _IdentityMetric(
-                    icon: Icons.face_retouching_natural_rounded,
-                    label: 'Face ID',
-                    value: 'Ativo',
-                    color: ValleyBrandColors.cyan,
+              if (authSession == null)
+                _AuthAccessPanel(
+                  busy: authBusy,
+                  feedback: feedback,
+                  onLogin: onLogin,
+                  onRegister: onRegister,
+                )
+              else
+                Wrap(
+                  spacing: 12,
+                  runSpacing: 12,
+                  children: <Widget>[
+                    _IdentityMetric(
+                      icon: Icons.person_rounded,
+                      label: 'Conta',
+                      value: authSession!.user.displayName,
+                      color: ValleyBrandColors.cyan,
+                    ),
+                    _IdentityMetric(
+                      icon: Icons.badge_rounded,
+                      label: 'Perfil',
+                      value: authSession!.user.primaryRole,
+                      color: ValleyBrandColors.violet,
+                    ),
+                    _IdentityMetric(
+                      icon: Icons.shield_rounded,
+                      label: 'Score',
+                      value: authSession!.user.isAdmin ? '99' : '92',
+                      color: ValleyBrandColors.success,
+                    ),
+                  ],
+                ),
+              if (authSession != null) ...<Widget>[
+                const SizedBox(height: 16),
+                Text(
+                  '${authSession!.user.email} • sessão ativa até ${authSession!.expiresAt.replaceFirst("T", " ").replaceFirst("Z", " UTC")}',
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
                   ),
-                  _IdentityMetric(
-                    icon: Icons.graphic_eq_rounded,
-                    label: 'Voice ID',
-                    value: 'Leve',
-                    color: ValleyBrandColors.violet,
-                  ),
-                  _IdentityMetric(
-                    icon: Icons.shield_rounded,
-                    label: 'Score',
-                    value: '92',
-                    color: ValleyBrandColors.success,
-                  ),
-                ],
-              ),
+                ),
+                const SizedBox(height: 14),
+                OutlinedButton.icon(
+                  onPressed: authBusy ? null : onLogout,
+                  icon: const Icon(Icons.logout_rounded),
+                  label: const Text('Encerrar sessão'),
+                ),
+              ],
               if (pendingItem != null) ...<Widget>[
                 const SizedBox(height: 20),
                 Text(
-                  'Operação sensível',
+                  authSession == null
+                      ? 'Entre para continuar o checkout'
+                      : 'Operação sensível',
                   style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w900,
                   ),
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  pendingItem!.title,
+                  pendingItem!.titlePtBr,
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: theme.colorScheme.onSurfaceVariant,
                   ),
                 ),
                 const SizedBox(height: 16),
                 FilledButton.icon(
-                  onPressed: onConfirm,
+                  onPressed: authSession == null ? null : onConfirm,
                   icon: const Icon(Icons.lock_open_rounded),
-                  label: const Text('Confirmar operação'),
+                  label: Text(
+                    authSession == null
+                        ? 'Liberado após login'
+                        : 'Continuar checkout',
+                  ),
                 ),
               ],
             ],
@@ -5216,6 +5460,282 @@ class _IdentityTrustScreen extends StatelessWidget {
           ],
         ),
       ],
+    );
+  }
+}
+
+class _AuthAccessPanel extends StatefulWidget {
+  const _AuthAccessPanel({
+    required this.busy,
+    required this.feedback,
+    required this.onLogin,
+    required this.onRegister,
+  });
+
+  final bool busy;
+  final String feedback;
+  final _AuthLoginHandler onLogin;
+  final _AuthRegisterHandler onRegister;
+
+  @override
+  State<_AuthAccessPanel> createState() => _AuthAccessPanelState();
+}
+
+class _AuthAccessPanelState extends State<_AuthAccessPanel> {
+  late final TextEditingController _loginIdentifierController;
+  late final TextEditingController _loginPasswordController;
+  late final TextEditingController _registerFullNameController;
+  late final TextEditingController _registerDisplayNameController;
+  late final TextEditingController _registerEmailController;
+  late final TextEditingController _registerPasswordController;
+  String _role = 'CUSTOMER';
+
+  @override
+  void initState() {
+    super.initState();
+    _loginIdentifierController = TextEditingController();
+    _loginPasswordController = TextEditingController();
+    _registerFullNameController = TextEditingController();
+    _registerDisplayNameController = TextEditingController();
+    _registerEmailController = TextEditingController();
+    _registerPasswordController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _loginIdentifierController.dispose();
+    _loginPasswordController.dispose();
+    _registerFullNameController.dispose();
+    _registerDisplayNameController.dispose();
+    _registerEmailController.dispose();
+    _registerPasswordController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    return DefaultTabController(
+      length: 2,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Container(
+            decoration: BoxDecoration(
+              color: _softContainerColor(context, lightAlpha: 0.96, darkAlpha: 0.06),
+              borderRadius: BorderRadius.circular(18),
+            ),
+            child: const TabBar(
+              tabs: <Widget>[
+                Tab(text: 'Entrar'),
+                Tab(text: 'Criar conta'),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+          SizedBox(
+            height: 360,
+            child: TabBarView(
+              children: <Widget>[
+                _AuthFormCard(
+                  title: 'Login Valley',
+                  subtitle: 'Use seu email e senha para liberar checkout e área do cliente.',
+                  busy: widget.busy,
+                  feedback: widget.feedback,
+                  fields: <Widget>[
+                    _AuthTextField(
+                      controller: _loginIdentifierController,
+                      label: 'Email',
+                      hintText: 'voce@empresa.com',
+                    ),
+                    const SizedBox(height: 12),
+                    _AuthTextField(
+                      controller: _loginPasswordController,
+                      label: 'Senha',
+                      hintText: 'Sua senha',
+                      obscureText: true,
+                    ),
+                  ],
+                  actionLabel: 'Entrar agora',
+                  onSubmit: () => widget.onLogin(
+                    _loginIdentifierController.text,
+                    _loginPasswordController.text,
+                  ),
+                ),
+                _AuthFormCard(
+                  title: 'Nova conta',
+                  subtitle: 'Crie uma conta de comprador ou lojista com sessão persistente.',
+                  busy: widget.busy,
+                  feedback: widget.feedback,
+                  fields: <Widget>[
+                    _AuthTextField(
+                      controller: _registerFullNameController,
+                      label: 'Nome completo',
+                      hintText: 'Seu nome',
+                    ),
+                    const SizedBox(height: 12),
+                    _AuthTextField(
+                      controller: _registerDisplayNameController,
+                      label: 'Nome público',
+                      hintText: 'Como deseja aparecer',
+                    ),
+                    const SizedBox(height: 12),
+                    _AuthTextField(
+                      controller: _registerEmailController,
+                      label: 'Email',
+                      hintText: 'voce@empresa.com',
+                    ),
+                    const SizedBox(height: 12),
+                    _AuthTextField(
+                      controller: _registerPasswordController,
+                      label: 'Senha',
+                      hintText: 'Ao menos 8 caracteres',
+                      obscureText: true,
+                    ),
+                    const SizedBox(height: 12),
+                    DropdownButtonFormField<String>(
+                      initialValue: _role,
+                      decoration: const InputDecoration(
+                        labelText: 'Perfil',
+                      ),
+                      items: const <DropdownMenuItem<String>>[
+                        DropdownMenuItem(
+                          value: 'CUSTOMER',
+                          child: Text('Comprador'),
+                        ),
+                        DropdownMenuItem(
+                          value: 'MERCHANT',
+                          child: Text('Lojista'),
+                        ),
+                      ],
+                      onChanged: widget.busy
+                          ? null
+                          : (String? value) {
+                              setState(() {
+                                _role = value ?? 'CUSTOMER';
+                              });
+                            },
+                    ),
+                  ],
+                  actionLabel: 'Criar conta',
+                  onSubmit: () => widget.onRegister(
+                    _registerFullNameController.text,
+                    _registerDisplayNameController.text,
+                    _registerEmailController.text,
+                    _registerPasswordController.text,
+                    _role,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            'Somente módulos ativos do MVP aparecem no APK. O restante continua fora da navegação até o lançamento real.',
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _AuthFormCard extends StatelessWidget {
+  const _AuthFormCard({
+    required this.title,
+    required this.subtitle,
+    required this.busy,
+    required this.feedback,
+    required this.fields,
+    required this.actionLabel,
+    required this.onSubmit,
+  });
+
+  final String title;
+  final String subtitle;
+  final bool busy;
+  final String feedback;
+  final List<Widget> fields;
+  final String actionLabel;
+  final Future<void> Function() onSubmit;
+
+  @override
+  Widget build(BuildContext context) {
+    return ValleyPanel(
+      radius: 24,
+      padding: const EdgeInsets.all(18),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            title,
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            subtitle,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+          ),
+          const SizedBox(height: 16),
+          ...fields,
+          if (feedback.trim().isNotEmpty) ...<Widget>[
+            const SizedBox(height: 12),
+            Text(
+              feedback,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ],
+          const Spacer(),
+          SizedBox(
+            width: double.infinity,
+            child: FilledButton.icon(
+              onPressed: busy ? null : () => onSubmit(),
+              icon: busy
+                  ? const SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : const Icon(Icons.lock_open_rounded),
+              label: Text(actionLabel),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _AuthTextField extends StatelessWidget {
+  const _AuthTextField({
+    required this.controller,
+    required this.label,
+    required this.hintText,
+    this.obscureText = false,
+  });
+
+  final TextEditingController controller;
+  final String label;
+  final String hintText;
+  final bool obscureText;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: controller,
+      obscureText: obscureText,
+      decoration: InputDecoration(
+        labelText: label,
+        hintText: hintText,
+      ),
     );
   }
 }
@@ -8305,6 +8825,139 @@ class _FieldChip extends StatelessWidget {
   }
 }
 
+void _openGalleryLightbox(
+  BuildContext context, {
+  required List<String> imageUrls,
+  required int initialIndex,
+}) {
+  if (imageUrls.isEmpty) {
+    return;
+  }
+  showDialog<void>(
+    context: context,
+    barrierColor: Colors.black.withValues(alpha: 0.88),
+    builder: (BuildContext dialogContext) {
+      return Dialog(
+        backgroundColor: Colors.transparent,
+        insetPadding: const EdgeInsets.all(18),
+        child: _GalleryLightbox(
+          imageUrls: imageUrls,
+          initialIndex: initialIndex,
+        ),
+      );
+    },
+  );
+}
+
+class _GalleryLightbox extends StatefulWidget {
+  const _GalleryLightbox({
+    required this.imageUrls,
+    required this.initialIndex,
+  });
+
+  final List<String> imageUrls;
+  final int initialIndex;
+
+  @override
+  State<_GalleryLightbox> createState() => _GalleryLightboxState();
+}
+
+class _GalleryLightboxState extends State<_GalleryLightbox> {
+  late final PageController _controller;
+  late int _currentIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentIndex = widget.initialIndex.clamp(0, widget.imageUrls.length - 1);
+    _controller = PageController(initialPage: _currentIndex);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(32),
+      child: Container(
+        color: const Color(0xFF07111D),
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.08),
+                    borderRadius: BorderRadius.circular(999),
+                  ),
+                  child: Text(
+                    'Imagem ${_currentIndex + 1}/${widget.imageUrls.length}',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ),
+                const Spacer(),
+                IconButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  icon: const Icon(Icons.close_rounded, color: Colors.white),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Expanded(
+              child: PageView.builder(
+                controller: _controller,
+                itemCount: widget.imageUrls.length,
+                onPageChanged: (int index) {
+                  setState(() {
+                    _currentIndex = index;
+                  });
+                },
+                itemBuilder: (BuildContext context, int index) {
+                  return InteractiveViewer(
+                    minScale: 1,
+                    maxScale: 4.5,
+                    child: Center(
+                      child: Image.network(
+                        widget.imageUrls[index],
+                        fit: BoxFit.contain,
+                        errorBuilder:
+                            (
+                              BuildContext context,
+                              Object error,
+                              StackTrace? stackTrace,
+                            ) {
+                              return const SizedBox.shrink();
+                            },
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 12),
+            const Text(
+              'Arraste para navegar e use gesto de pinça para ampliar.',
+              style: TextStyle(
+                color: Colors.white70,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _ProductGalleryCarousel extends StatefulWidget {
   const _ProductGalleryCarousel({
     required this.imageUrls,
@@ -8363,24 +9016,54 @@ class _ProductGalleryCarouselState extends State<_ProductGalleryCarousel> {
             });
           },
           itemBuilder: (BuildContext context, int index) {
-            return Container(
-              color: widget.emptyColor,
-              alignment: Alignment.center,
-              padding: widget.imagePadding,
-              child: Image.network(
-                images[index],
-                fit: widget.fit,
-                errorBuilder:
-                    (
-                      BuildContext context,
-                      Object error,
-                      StackTrace? stackTrace,
-                    ) {
-                      return ColoredBox(color: widget.emptyColor);
-                    },
+            return GestureDetector(
+              onTap: () => _openGalleryLightbox(
+                context,
+                imageUrls: images,
+                initialIndex: index,
+              ),
+              child: Container(
+                color: widget.emptyColor,
+                alignment: Alignment.center,
+                padding: widget.imagePadding,
+                child: Image.network(
+                  images[index],
+                  fit: widget.fit,
+                  errorBuilder:
+                      (
+                        BuildContext context,
+                        Object error,
+                        StackTrace? stackTrace,
+                      ) {
+                        return ColoredBox(color: widget.emptyColor);
+                      },
+                ),
               ),
             );
           },
+        ),
+        Positioned(
+          left: widget.compact ? 12 : 18,
+          bottom: widget.compact ? 12 : 18,
+          child: Container(
+            padding: EdgeInsets.symmetric(
+              horizontal: widget.compact ? 8 : 10,
+              vertical: widget.compact ? 5 : 6,
+            ),
+            decoration: BoxDecoration(
+              color: const Color(0xC20E1323),
+              borderRadius: BorderRadius.circular(999),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
+            ),
+            child: Text(
+              'Toque para ampliar',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+                fontSize: widget.compact ? 9 : 10,
+              ),
+            ),
+          ),
         ),
         if (images.length > 1)
           Positioned(
@@ -8603,21 +9286,35 @@ class _ProductMediaStageState extends State<_ProductMediaStage> {
   }
 
   Widget _buildImageStage(BuildContext context, _ProductMediaEntry entry) {
-    return Container(
-      key: ValueKey<String>('image:${entry.previewUrl}'),
-      color: _mediaStageColor(context),
-      padding: const EdgeInsets.all(28),
-      alignment: Alignment.center,
-      child: entry.previewUrl.isEmpty
-          ? const SizedBox.shrink()
-          : Image.network(
-              entry.previewUrl,
-              fit: BoxFit.contain,
-              errorBuilder:
-                  (BuildContext context, Object error, StackTrace? stackTrace) {
-                    return const SizedBox.shrink();
-                  },
-            ),
+    final int initialIndex = widget.item.mediaGallery.indexOf(entry.previewUrl);
+    return GestureDetector(
+      onTap: entry.previewUrl.isEmpty
+          ? null
+          : () => _openGalleryLightbox(
+                context,
+                imageUrls: widget.item.mediaGallery,
+                initialIndex: initialIndex < 0 ? 0 : initialIndex,
+              ),
+      child: Container(
+        key: ValueKey<String>('image:${entry.previewUrl}'),
+        color: _mediaStageColor(context),
+        padding: const EdgeInsets.all(28),
+        alignment: Alignment.center,
+        child: entry.previewUrl.isEmpty
+            ? const SizedBox.shrink()
+            : Image.network(
+                entry.previewUrl,
+                fit: BoxFit.contain,
+                errorBuilder:
+                    (
+                      BuildContext context,
+                      Object error,
+                      StackTrace? stackTrace,
+                    ) {
+                      return const SizedBox.shrink();
+                    },
+              ),
+      ),
     );
   }
 
@@ -8696,7 +9393,7 @@ class _ProductMediaStageState extends State<_ProductMediaStage> {
               label: Text(
                 widget.onPlay == null
                     ? 'Vídeo catalogado'
-                    : 'Abrir demonstração',
+                    : 'Abrir vídeo externo',
               ),
             ),
           ),
@@ -8705,7 +9402,9 @@ class _ProductMediaStageState extends State<_ProductMediaStage> {
             right: 20,
             bottom: 18,
             child: Text(
-              'A mídia principal prioriza vídeo quando o catálogo publica demonstração.',
+              widget.onPlay == null
+                  ? 'O catálogo sinalizou vídeo, mas a origem ainda não publicou uma URL direta.'
+                  : 'A mídia principal prioriza vídeo externo quando a origem publica uma demonstração válida.',
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: Colors.white.withValues(alpha: 0.86),
               ),

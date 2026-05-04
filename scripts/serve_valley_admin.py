@@ -17,6 +17,7 @@ import sys
 import threading
 import time
 import unicodedata
+import uuid
 from collections import defaultdict
 from datetime import datetime, timezone
 from functools import partial
@@ -77,10 +78,15 @@ STOCK_SYNC_EVENTS_PATH = RUNTIME_DIR / "valley-stock-sync-events.jsonl"
 PRODUCT_CATALOG_PATH = ROOT / "frontend" / "flutter" / "assets" / "data" / "valley_product_catalog.json"
 PRODUCT_INTERACTIONS_PATH = RUNTIME_DIR / "valley-product-interactions.jsonl"
 MOVE_TELEMETRY_PATH = RUNTIME_DIR / "move-telemetry.jsonl"
+USER_AUTH_RUNTIME_PATH = RUNTIME_DIR / "valley-user-auth-runtime.json"
+USER_AUTH_EVENTS_PATH = RUNTIME_DIR / "valley-user-auth-events.jsonl"
 PRODUCT_MVP_MODULES = {"STOCK", "MARKETPLACE", "CHAT"}
 PRODUCT_LIST_LIMIT = 80
 MARKETPLACE_RUNTIME_PROVIDERS = {"mercado_livre", "amazon", "magalu", "shopee"}
 SUPPLIER_RUNTIME_PROVIDERS = {"cjdropshipping", "aliexpress", "alibaba"}
+AUTH_SESSION_TTL_SECONDS = 60 * 60 * 24 * 30
+AUTH_LOGIN_LOCK_THRESHOLD = 5
+AUTH_LOGIN_LOCK_SECONDS = 15 * 60
 STOCK_INTERNAL_FIELDS = {
     "supplier_name",
     "supplier_type",
@@ -118,6 +124,10 @@ CATALOG_SYNC_MANAGER: "CatalogSyncManager | None" = None
 
 def utc_now_iso() -> str:
     return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+
+
+def utc_now_datetime() -> datetime:
+    return datetime.now(timezone.utc)
 
 
 def load_json_file(path: Path | None) -> dict[str, Any] | None:
@@ -186,6 +196,55 @@ def load_env_file(path: Path | None) -> dict[str, str]:
         if key and value:
             values[key] = value
     return values
+
+
+def parse_iso_datetime(value: Any) -> datetime | None:
+    text = str(value or "").strip()
+    if not text:
+        return None
+    try:
+        return datetime.fromisoformat(text.replace("Z", "+00:00")).astimezone(timezone.utc)
+    except ValueError:
+        return None
+
+
+def sha256_hex(value: str) -> str:
+    return hashlib.sha256(value.encode("utf-8")).hexdigest()
+
+
+def pbkdf2_hash_password(password: str, *, salt: bytes | None = None, iterations: int = 310_000) -> str:
+    effective_salt = salt or os.urandom(16)
+    derived = hashlib.pbkdf2_hmac(
+        "sha256",
+        password.encode("utf-8"),
+        effective_salt,
+        iterations,
+    )
+    return "pbkdf2_sha256${}${}${}".format(
+        iterations,
+        base64.urlsafe_b64encode(effective_salt).decode("ascii").rstrip("="),
+        base64.urlsafe_b64encode(derived).decode("ascii").rstrip("="),
+    )
+
+
+def pbkdf2_verify_password(password: str, encoded: str) -> bool:
+    try:
+        algo, iterations_text, salt_text, hash_text = str(encoded or "").split("$", 3)
+        if algo != "pbkdf2_sha256":
+            return False
+        padding = "=" * (-len(salt_text) % 4)
+        salt = base64.urlsafe_b64decode(salt_text + padding)
+        expected_padding = "=" * (-len(hash_text) % 4)
+        expected = base64.urlsafe_b64decode(hash_text + expected_padding)
+        actual = hashlib.pbkdf2_hmac(
+            "sha256",
+            password.encode("utf-8"),
+            salt,
+            int(iterations_text),
+        )
+        return hmac.compare_digest(actual, expected)
+    except (TypeError, ValueError, base64.binascii.Error):
+        return False
 
 
 def base64url_sha256(value: str) -> str:
@@ -587,7 +646,7 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
         self.send_header("X-Content-Type-Options", "nosniff")
         self.send_header("Access-Control-Allow-Origin", "*")
         self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-        self.send_header("Access-Control-Allow-Headers", "Content-Type")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Valley-Session")
         super().end_headers()
 
     def do_OPTIONS(self) -> None:  # noqa: N802
@@ -612,6 +671,13 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
 
         if route in ("/health", "/healthz", "/readyz", "/meta/runtime", "/api/runtime"):
             self._write_json(HTTPStatus.OK, self._runtime_payload())
+            return
+
+        if route == "/api/auth/session":
+            self._write_json(
+                HTTPStatus.OK,
+                self._auth_session_payload(parse_qs(parsed.query)),
+            )
             return
 
         if route == "/api/product-shell":
@@ -780,6 +846,18 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 HTTPStatus.OK,
                 self._run_bridge_command("pulse", action="pulse-telegram"),
             )
+            return
+
+        if route == "/api/auth/register":
+            self._write_json(*self._auth_register_response())
+            return
+
+        if route == "/api/auth/login":
+            self._write_json(*self._auth_login_response())
+            return
+
+        if route == "/api/auth/logout":
+            self._write_json(*self._auth_logout_response())
             return
 
         if route == "/api/actions/poll-bridge":
@@ -978,6 +1056,431 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
         if route.startswith("/product/api/"):
             return route.removeprefix("/product")
         return route
+
+    def _auth_runtime_payload(self) -> dict[str, Any]:
+        payload = load_json_file(USER_AUTH_RUNTIME_PATH) or {}
+        if not isinstance(payload, dict):
+            payload = {}
+        users = payload.get("users") if isinstance(payload.get("users"), list) else []
+        sessions = payload.get("sessions") if isinstance(payload.get("sessions"), list) else []
+        return {
+            "version": payload.get("version") or "v1",
+            "users": users,
+            "sessions": sessions,
+        }
+
+    def _write_auth_runtime_payload(self, payload: dict[str, Any]) -> None:
+        normalized = {
+            "version": str(payload.get("version") or "v1"),
+            "users": payload.get("users") if isinstance(payload.get("users"), list) else [],
+            "sessions": payload.get("sessions") if isinstance(payload.get("sessions"), list) else [],
+        }
+        write_json_file(USER_AUTH_RUNTIME_PATH, normalized)
+
+    def _append_auth_event(self, kind: str, payload: dict[str, Any]) -> None:
+        self._append_jsonl(
+            USER_AUTH_EVENTS_PATH,
+            {
+                "kind": kind,
+                "occurred_at_utc": utc_now_iso(),
+                **payload,
+            },
+        )
+
+    def _normalize_auth_identifier(self, value: Any) -> str:
+        return str(value or "").strip().lower()
+
+    def _slugify(self, value: Any) -> str:
+        normalized = unicodedata.normalize("NFKD", str(value or "").strip().lower())
+        ascii_only = normalized.encode("ascii", "ignore").decode("ascii")
+        slug = re.sub(r"[^a-z0-9]+", "-", ascii_only).strip("-")
+        return slug or "valley"
+
+    def _auth_session_token_from_request(self) -> str:
+        auth_header = str(self.headers.get("Authorization") or "").strip()
+        if auth_header.lower().startswith("bearer "):
+            return auth_header[7:].strip()
+        return str(self.headers.get("X-Valley-Session") or "").strip()
+
+    def _user_has_admin_access(self, user: dict[str, Any]) -> bool:
+        role = str(user.get("primary_role") or "").strip().upper()
+        permissions = user.get("permissions")
+        if isinstance(permissions, list) and "*" in permissions:
+            return True
+        return role in {"ADMIN", "SUPER_ADMIN", "OPS", "OPERATOR"}
+
+    def _auth_public_user(self, user: dict[str, Any]) -> dict[str, Any]:
+        merchant_profile = user.get("merchant_profile") if isinstance(user.get("merchant_profile"), dict) else None
+        return {
+            "user_id": str(user.get("user_id") or ""),
+            "full_name": str(user.get("full_name") or ""),
+            "display_name": str(user.get("display_name") or user.get("full_name") or ""),
+            "email": str(user.get("email") or ""),
+            "primary_role": str(user.get("primary_role") or "CUSTOMER"),
+            "user_kind": str(user.get("user_kind") or "PF"),
+            "account_status": str(user.get("account_status") or "ACTIVE"),
+            "module_tier": str(user.get("module_tier") or "PRODUCT"),
+            "permissions": user.get("permissions") if isinstance(user.get("permissions"), list) else [],
+            "is_admin": self._user_has_admin_access(user),
+            "merchant_slug": str(merchant_profile.get("slug") or "") if merchant_profile else "",
+            "merchant_code": str(merchant_profile.get("merchant_code") or "") if merchant_profile else "",
+        }
+
+    def _auth_public_session(self, session: dict[str, Any], user: dict[str, Any], token: str = "") -> dict[str, Any]:
+        expires_at = str(session.get("expires_at") or "")
+        expires_dt = parse_iso_datetime(expires_at)
+        return {
+            "token": token,
+            "session_id": str(session.get("session_id") or ""),
+            "expires_at": expires_at,
+            "expires_in_seconds": max(int((expires_dt - utc_now_datetime()).total_seconds()), 0)
+            if expires_dt is not None
+            else 0,
+            "scope": str(session.get("scope") or "product"),
+            "user": self._auth_public_user(user),
+            "contract_tables": [
+                "users",
+                "auth_identities",
+                "auth_sessions",
+                "user_profiles",
+                "merchant_profiles",
+            ],
+        }
+
+    def _find_auth_user_by_identifier(
+        self,
+        users: list[dict[str, Any]],
+        identifier: str,
+    ) -> tuple[dict[str, Any] | None, dict[str, Any] | None]:
+        normalized = self._normalize_auth_identifier(identifier)
+        for user in users:
+            if not isinstance(user, dict):
+                continue
+            identity = user.get("identity")
+            if not isinstance(identity, dict):
+                continue
+            if self._normalize_auth_identifier(identity.get("login_identifier_normalized")) == normalized:
+                return user, identity
+        return None, None
+
+    def _resolve_active_auth_session(
+        self,
+        *,
+        scope: str = "product",
+    ) -> tuple[dict[str, Any] | None, dict[str, Any] | None]:
+        token = self._auth_session_token_from_request()
+        if not token:
+            return None, None
+
+        payload = self._auth_runtime_payload()
+        sessions = payload["sessions"]
+        users = payload["users"]
+        token_hash = sha256_hex(token)
+        now = utc_now_datetime()
+        touched = False
+        matched_session: dict[str, Any] | None = None
+        matched_user: dict[str, Any] | None = None
+        for session in sessions:
+            if not isinstance(session, dict):
+                continue
+            if str(session.get("session_token_hash") or "") != token_hash:
+                continue
+            if str(session.get("session_status") or "ACTIVE") != "ACTIVE":
+                continue
+            expires_at = parse_iso_datetime(session.get("expires_at"))
+            if expires_at is not None and expires_at <= now:
+                session["session_status"] = "EXPIRED"
+                touched = True
+                continue
+            user_id = str(session.get("user_id") or "")
+            for user in users:
+                if isinstance(user, dict) and str(user.get("user_id") or "") == user_id:
+                    matched_user = user
+                    break
+            if matched_user is None:
+                session["session_status"] = "REVOKED"
+                session["revoked_at"] = utc_now_iso()
+                session["revoke_reason"] = "user_missing"
+                touched = True
+                continue
+            if scope == "admin" and not self._user_has_admin_access(matched_user):
+                return None, None
+            session["last_seen_at"] = utc_now_iso()
+            touched = True
+            matched_session = session
+            break
+
+        if touched:
+            self._write_auth_runtime_payload(payload)
+        return matched_user, matched_session
+
+    def _auth_session_payload(self, query: dict[str, list[str]]) -> dict[str, Any]:
+        scope = str((query.get("scope") or ["product"])[0] or "product").strip().lower() or "product"
+        user, session = self._resolve_active_auth_session(scope=scope)
+        if user is None or session is None:
+            return {
+                "status": "anonymous",
+                "service": "valley-auth",
+                "scope": scope,
+            }
+        return {
+            "status": "ok",
+            "service": "valley-auth",
+            "scope": scope,
+            "session": self._auth_public_session(session, user),
+        }
+
+    def _auth_register_response(self) -> tuple[HTTPStatus, dict[str, Any]]:
+        payload = self._read_json_body()
+        if not isinstance(payload, dict):
+            return HTTPStatus.BAD_REQUEST, {
+                "status": "invalid_payload",
+                "service": "valley-auth",
+                "detail": "Expected JSON object.",
+            }
+
+        full_name = str(payload.get("full_name") or "").strip()
+        display_name = str(payload.get("display_name") or full_name).strip()
+        email = self._normalize_auth_identifier(payload.get("email"))
+        password = str(payload.get("password") or "")
+        role = str(payload.get("role") or "CUSTOMER").strip().upper()
+        if role not in {"CUSTOMER", "MERCHANT"}:
+            role = "CUSTOMER"
+
+        if len(full_name) < 3 or "@" not in email or len(password) < 8:
+            return HTTPStatus.BAD_REQUEST, {
+                "status": "validation_error",
+                "service": "valley-auth",
+                "detail": "Informe nome, email valido e senha com ao menos 8 caracteres.",
+            }
+
+        runtime = self._auth_runtime_payload()
+        users = runtime["users"]
+        existing_user, _ = self._find_auth_user_by_identifier(users, email)
+        if existing_user is not None:
+            return HTTPStatus.CONFLICT, {
+                "status": "identifier_exists",
+                "service": "valley-auth",
+                "detail": "Esse login ja esta cadastrado no Valley.",
+            }
+
+        user_id = str(uuid.uuid4())
+        identity_id = str(uuid.uuid4())
+        profile_id = str(uuid.uuid4())
+        created_at = utc_now_iso()
+        merchant_profile: dict[str, Any] | None = None
+        if role == "MERCHANT":
+            merchant_slug = self._slugify(display_name or full_name)
+            merchant_profile = {
+                "merchant_profile_id": str(uuid.uuid4()),
+                "merchant_user_id": user_id,
+                "profile_status": "ONBOARDING",
+                "merchant_code": f"MER-{merchant_slug[:18].upper()}",
+                "slug": merchant_slug,
+                "display_name": display_name or full_name,
+            }
+
+        user = {
+            "user_id": user_id,
+            "user_kind": "PJ" if role == "MERCHANT" else "PF",
+            "account_status": "ACTIVE",
+            "full_name": full_name,
+            "display_name": display_name or full_name,
+            "email": email,
+            "document_country": "BR",
+            "document_type": "EMAIL_LOGIN",
+            "document_number": email,
+            "primary_role": role,
+            "module_tier": "PRODUCT",
+            "permissions": [],
+            "created_at": created_at,
+            "updated_at": created_at,
+            "identity": {
+                "identity_id": identity_id,
+                "identity_type": "EMAIL_PASSWORD",
+                "identity_status": "ACTIVE",
+                "login_identifier": email,
+                "login_identifier_normalized": email,
+                "email": email,
+                "password_hash": pbkdf2_hash_password(password),
+                "password_algo": "pbkdf2_sha256_310000",
+                "failed_login_count": 0,
+                "locked_until": None,
+                "verified_at": created_at,
+                "last_authenticated_at": created_at,
+            },
+            "profile": {
+                "user_profile_id": profile_id,
+                "profile_status": "ACTIVE",
+                "username": self._slugify(display_name or full_name),
+                "display_handle": display_name or full_name,
+                "preferences_json": {},
+                "onboarding_completed_at": None,
+            },
+            "merchant_profile": merchant_profile,
+        }
+        users.append(user)
+        runtime["users"] = users
+        self._write_auth_runtime_payload(runtime)
+        self._append_auth_event(
+            "register",
+            {
+                "user_id": user_id,
+                "identifier": email,
+                "primary_role": role,
+            },
+        )
+        return HTTPStatus.CREATED, {
+            "status": "ok",
+            "service": "valley-auth",
+            "message": "Conta criada com sucesso.",
+            "user": self._auth_public_user(user),
+        }
+
+    def _auth_login_response(self) -> tuple[HTTPStatus, dict[str, Any]]:
+        payload = self._read_json_body()
+        if not isinstance(payload, dict):
+            return HTTPStatus.BAD_REQUEST, {
+                "status": "invalid_payload",
+                "service": "valley-auth",
+                "detail": "Expected JSON object.",
+            }
+
+        identifier = self._normalize_auth_identifier(payload.get("identifier") or payload.get("email"))
+        password = str(payload.get("password") or "")
+        scope = str(payload.get("scope") or "product").strip().lower() or "product"
+        runtime = self._auth_runtime_payload()
+        users = runtime["users"]
+        sessions = runtime["sessions"]
+        user, identity = self._find_auth_user_by_identifier(users, identifier)
+
+        if user is None or identity is None or not password:
+            self._append_auth_event("login_failed", {"identifier": identifier, "scope": scope, "reason": "not_found"})
+            return HTTPStatus.UNAUTHORIZED, {
+                "status": "invalid_credentials",
+                "service": "valley-auth",
+                "detail": "Login ou senha invalidos.",
+            }
+
+        now = utc_now_datetime()
+        locked_until = parse_iso_datetime(identity.get("locked_until"))
+        if locked_until is not None and locked_until > now:
+            return HTTPStatus.LOCKED, {
+                "status": "locked",
+                "service": "valley-auth",
+                "detail": "Login temporariamente bloqueado por tentativas invalidas.",
+                "locked_until": identity.get("locked_until"),
+            }
+
+        if not pbkdf2_verify_password(password, str(identity.get("password_hash") or "")):
+            attempts = int(identity.get("failed_login_count") or 0) + 1
+            identity["failed_login_count"] = attempts
+            if attempts >= AUTH_LOGIN_LOCK_THRESHOLD:
+                identity["locked_until"] = datetime.fromtimestamp(
+                    now.timestamp() + AUTH_LOGIN_LOCK_SECONDS,
+                    tz=timezone.utc,
+                ).isoformat().replace("+00:00", "Z")
+            user["updated_at"] = utc_now_iso()
+            self._write_auth_runtime_payload(runtime)
+            self._append_auth_event("login_failed", {"identifier": identifier, "scope": scope, "reason": "password"})
+            return HTTPStatus.UNAUTHORIZED, {
+                "status": "invalid_credentials",
+                "service": "valley-auth",
+                "detail": "Login ou senha invalidos.",
+            }
+
+        if scope == "admin" and not self._user_has_admin_access(user):
+            self._append_auth_event("login_failed", {"identifier": identifier, "scope": scope, "reason": "forbidden"})
+            return HTTPStatus.FORBIDDEN, {
+                "status": "forbidden",
+                "service": "valley-auth",
+                "detail": "Esse usuario nao possui acesso ao admin.",
+            }
+
+        token = secrets.token_urlsafe(48)
+        issued_at = utc_now_iso()
+        expires_at = datetime.fromtimestamp(
+            now.timestamp() + AUTH_SESSION_TTL_SECONDS,
+            tz=timezone.utc,
+        ).isoformat().replace("+00:00", "Z")
+
+        identity["failed_login_count"] = 0
+        identity["locked_until"] = None
+        identity["last_authenticated_at"] = issued_at
+        user["updated_at"] = issued_at
+
+        session = {
+            "session_id": str(uuid.uuid4()),
+            "user_id": str(user.get("user_id") or ""),
+            "identity_id": str(identity.get("identity_id") or ""),
+            "session_status": "ACTIVE",
+            "session_token_hash": sha256_hex(token),
+            "scope": scope,
+            "created_at": issued_at,
+            "updated_at": issued_at,
+            "last_seen_at": issued_at,
+            "expires_at": expires_at,
+            "metadata_json": {
+                "user_agent": str(self.headers.get("User-Agent") or ""),
+                "ip_address": str(self.headers.get("X-Forwarded-For") or self.client_address[0] or ""),
+            },
+        }
+        sessions.append(session)
+        runtime["sessions"] = sessions
+        self._write_auth_runtime_payload(runtime)
+        self._append_auth_event(
+            "login_succeeded",
+            {
+                "user_id": user.get("user_id"),
+                "identifier": identifier,
+                "scope": scope,
+                "session_id": session["session_id"],
+            },
+        )
+        return HTTPStatus.OK, {
+            "status": "ok",
+            "service": "valley-auth",
+            "message": "Sessao autenticada com sucesso.",
+            "session": self._auth_public_session(session, user, token),
+        }
+
+    def _auth_logout_response(self) -> tuple[HTTPStatus, dict[str, Any]]:
+        runtime = self._auth_runtime_payload()
+        token = self._auth_session_token_from_request()
+        if not token:
+            return HTTPStatus.OK, {
+                "status": "ok",
+                "service": "valley-auth",
+                "message": "Sessao local encerrada.",
+            }
+
+        token_hash = sha256_hex(token)
+        revoked = False
+        for session in runtime["sessions"]:
+            if not isinstance(session, dict):
+                continue
+            if str(session.get("session_token_hash") or "") != token_hash:
+                continue
+            session["session_status"] = "REVOKED"
+            session["revoked_at"] = utc_now_iso()
+            session["revoke_reason"] = "logout"
+            session["updated_at"] = utc_now_iso()
+            revoked = True
+            self._append_auth_event(
+                "logout",
+                {
+                    "user_id": session.get("user_id"),
+                    "session_id": session.get("session_id"),
+                },
+            )
+            break
+        if revoked:
+            self._write_auth_runtime_payload(runtime)
+        return HTTPStatus.OK, {
+            "status": "ok",
+            "service": "valley-auth",
+            "message": "Sessao encerrada.",
+        }
 
     def _bridge_status_payload(self) -> dict[str, Any]:
         return load_json_file(BRIDGE_STATUS_PATH) or {
@@ -1406,8 +1909,27 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
         return normalized.startswith("http://") or normalized.startswith("https://")
 
     def _derive_media_url(self, item: dict[str, Any]) -> str:
-        video_url = self._first_string_value(item.get("video_url"))
-        return video_url if self._is_http_url(video_url) else ""
+        for candidate in (
+            item.get("video_url"),
+            item.get("video_external_url"),
+            item.get("external_video_url"),
+            item.get("media_url"),
+            item.get("demo_video_url"),
+        ):
+            video_url = self._first_string_value(candidate)
+            if self._is_http_url(video_url):
+                return video_url
+
+        source_permalink = str(item.get("source_permalink") or "").strip()
+        if (
+            self._is_http_url(source_permalink)
+            and (
+                str(item.get("video_url") or "").strip()
+                or int(item.get("video_count") or 0) > 0
+            )
+        ):
+            return source_permalink
+        return ""
 
     def _derive_checkout_url(self, item: dict[str, Any]) -> str:
         source_permalink = str(item.get("source_permalink") or "").strip()
@@ -4361,11 +4883,17 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
     def _checkout_payload(self, query: dict[str, list[str]]) -> dict[str, Any]:
         item_id = (query.get("item_id") or [""])[0]
         item = self._find_catalog_item(item_id)
+        auth_user, auth_session = self._resolve_active_auth_session(scope="product")
         attempt = {
             "provider": "mercado_pago",
             "attempted_at_utc": utc_now_iso(),
             "item_id": item_id,
             "module": "PAY",
+            "user_context": {
+                "user_id": str((auth_user or {}).get("user_id") or ""),
+                "session_id": str((auth_session or {}).get("session_id") or ""),
+                "role": str((auth_user or {}).get("primary_role") or ""),
+            },
         }
         if item is None:
             result = {

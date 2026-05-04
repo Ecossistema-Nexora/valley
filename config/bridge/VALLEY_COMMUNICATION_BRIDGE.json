@@ -10,7 +10,7 @@
       "env_chat_id": "VALLEY_TELEGRAM_CHAT_ID"
     },
     "whatsapp": {
-      "enabled": true,
+      "enabled": false,
       "mode": "web",
       "login_method": "whatsapp_web_phone_or_qr",
       "order_queue": "ordem_universal.md",

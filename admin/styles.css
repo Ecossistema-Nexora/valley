@@ -2779,3 +2779,107 @@ kbd {
     grid-column: auto;
   }
 }
+.admin-auth-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background:
+    radial-gradient(circle at top, rgba(38, 160, 218, 0.24), transparent 42%),
+    linear-gradient(160deg, rgba(6, 13, 27, 0.98), rgba(5, 9, 18, 0.96));
+}
+
+body.admin-auth-locked {
+  overflow: hidden;
+}
+
+body.admin-auth-locked .shell {
+  filter: blur(14px);
+  pointer-events: none;
+  user-select: none;
+}
+
+.admin-auth-gate.is-visible {
+  display: flex;
+}
+
+.admin-auth-card {
+  width: min(460px, 100%);
+  padding: 32px;
+  border-radius: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(10, 18, 34, 0.92);
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.42);
+}
+
+.admin-auth-card h1 {
+  margin: 10px 0 8px;
+}
+
+.admin-auth-form {
+  display: grid;
+  gap: 16px;
+  margin-top: 22px;
+}
+
+.admin-auth-form label {
+  display: grid;
+  gap: 8px;
+}
+
+.admin-auth-form span {
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.admin-auth-form input {
+  width: 100%;
+  min-height: 52px;
+  padding: 0 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  font: inherit;
+}
+
+.admin-auth-form input:focus {
+  outline: none;
+  border-color: rgba(38, 160, 218, 0.65);
+  box-shadow: 0 0 0 3px rgba(38, 160, 218, 0.18);
+}
+
+.admin-auth-form button {
+  min-height: 54px;
+  border: none;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #2fd3c7, #3a9bff);
+  color: #051322;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.admin-auth-form button[disabled] {
+  cursor: wait;
+  opacity: 0.72;
+}
+
+.admin-auth-status {
+  margin-top: 14px;
+  min-height: 1.4em;
+}
+
+.admin-auth-status[data-tone="danger"] {
+  color: #ff9b8b;
+}
+
+.admin-auth-status[data-tone="success"] {
+  color: #71f0cf;
+}
