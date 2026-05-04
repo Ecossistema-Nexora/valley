@@ -42,6 +42,36 @@ Para validar sem gravar:
 python scripts/bootstrap_supplier_credentials.py --dry-run
 ```
 
+Para abrir a tela local no Google Chrome e preencher credenciais sem expor
+segredos no chat ou no terminal:
+
+```powershell
+python scripts/open_supplier_credentials_chrome.py
+```
+
+Essa tela aceita login/senha operacional e tambem as credenciais oficiais de
+API/OAuth para fechar fornecedores que nao podem ser ativados apenas com login:
+
+```env
+AMAZON_CLIENT_ID=
+AMAZON_CLIENT_SECRET=
+AMAZON_ACCESS_TOKEN=
+AMAZON_REFRESH_TOKEN=
+AMAZON_SELLER_ID=
+
+ALIBABA_CLIENT_ID=
+ALIBABA_CLIENT_SECRET=
+ALIBABA_ACCESS_TOKEN=
+ALIBABA_REFRESH_TOKEN=
+ALIBABA_SELLER_ID=
+
+SHOPEE_CLIENT_ID=
+SHOPEE_CLIENT_SECRET=
+SHOPEE_ACCESS_TOKEN=
+SHOPEE_REFRESH_TOKEN=
+SHOPEE_SELLER_ID=
+```
+
 O script nao imprime valores sensiveis. Ele apenas informa quais provedores
 foram configurados ou ficaram pendentes.
 

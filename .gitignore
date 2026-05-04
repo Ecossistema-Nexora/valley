@@ -3,6 +3,7 @@
 !.env.example
 .codex/environments/
 tmp/runtime/
+tmp/chrome-valley-supplier-setup/
 tmp/db-deploy-runtime/
 tmp/node-playwright/
 tmp/pdfs/
