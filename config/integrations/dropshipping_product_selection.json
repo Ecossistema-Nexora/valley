@@ -1,0 +1,60 @@
+{
+  "version": "1.0.0",
+  "source_providers": [
+    "cjdropshipping",
+    "aliexpress",
+    "alibaba"
+  ],
+  "benchmark_providers": [
+    "mercado_livre",
+    "shopee",
+    "magalu",
+    "amazon",
+    "aliexpress"
+  ],
+  "commercial_rules": {
+    "target_country": "BR",
+    "min_margin_pct": 22,
+    "min_estimated_profit_brl": 18,
+    "max_price_brl": 900,
+    "min_stock": 10,
+    "min_source_score": 35,
+    "min_benchmark_samples": 1,
+    "min_marketplace_advantage_pct": 12,
+    "allow_insufficient_benchmark_data": false,
+    "blocked_terms": [
+      "arma",
+      "airsoft",
+      "municao",
+      "remedio",
+      "medicamento",
+      "anvisa",
+      "cigarro",
+      "vape",
+      "replica",
+      "falsificado",
+      "adulto"
+    ],
+    "preferred_terms_ptbr": [
+      "casa",
+      "cozinha",
+      "organizador",
+      "pet",
+      "beleza",
+      "acessorio",
+      "celular",
+      "carro",
+      "bike",
+      "led",
+      "fitness",
+      "infantil",
+      "ferramenta",
+      "jardim"
+    ]
+  },
+  "official_api_policy": {
+    "allow_scraping": false,
+    "insufficient_data_status": "dados_insuficientes",
+    "notes": "Comparacoes e importacoes devem usar APIs oficiais, feeds autorizados, webhooks ou conectores homologados. Quando credencial, escopo ou endpoint oficial estiver ausente, registrar limitacao e nao inferir dados via scraping."
+  }
+}

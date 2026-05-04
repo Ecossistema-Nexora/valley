@@ -31,6 +31,8 @@ TEMPLATE_PATH = ROOT / "config" / "integrations" / "marketplace_api_integrations
 INTEGRATIONS_PATH = RUNTIME_DIR / "valley-admin-integrations.json"
 SECRETS_PATH = RUNTIME_DIR / "valley-provider-secrets.json"
 STATUS_PATH = RUNTIME_DIR / "valley-dropshipping-integration-status.json"
+DROPSHIPPING_SOURCE_KEYS = {"cjdropshipping", "aliexpress", "alibaba"}
+MARKETPLACE_BENCHMARK_KEYS = {"mercado_livre", "shopee", "magalu", "amazon", "aliexpress"}
 
 
 @dataclass(frozen=True)
@@ -389,7 +391,6 @@ def repair_integrations(
         merged.update(current)
         for enforced_key in (
             "enabled",
-            "importCatalog",
             "syncOrders",
             "syncInventory",
             "syncPricing",
@@ -406,6 +407,16 @@ def repair_integrations(
             "passwordRef",
         ):
             merged[enforced_key] = base[enforced_key]
+        merged["importCatalog"] = provider.key in DROPSHIPPING_SOURCE_KEYS
+        merged["providerUse"] = (
+            "source_and_benchmark"
+            if provider.key in DROPSHIPPING_SOURCE_KEYS and provider.key in MARKETPLACE_BENCHMARK_KEYS
+            else "source"
+            if provider.key in DROPSHIPPING_SOURCE_KEYS
+            else "benchmark"
+            if provider.key in MARKETPLACE_BENCHMARK_KEYS
+            else "integration"
+        )
         for safe_ref_key in (
             "secretRef",
             "accessTokenRef",
@@ -434,9 +445,18 @@ def repair_integrations(
         if webhook_url:
             merged["webhookUrl"] = webhook_url
 
-        merged["notes"] = (
-            "Integração reparada automaticamente com política segura, refs de runtime e superfície pública alinhada."
-        )
+        if provider.key in DROPSHIPPING_SOURCE_KEYS:
+            merged["notes"] = (
+                "Fornecedor de origem para dropshipping reparado com política segura, refs de runtime e superfície pública alinhada."
+            )
+        elif provider.key in MARKETPLACE_BENCHMARK_KEYS:
+            merged["notes"] = (
+                "Marketplace mantido apenas para comparação autorizada; não é fornecedor de dropshipping."
+            )
+        else:
+            merged["notes"] = (
+                "Integração reparada automaticamente com política segura, refs de runtime e superfície pública alinhada."
+            )
         by_key[provider.key] = merged
 
     ordered_keys = [item.get("key") for item in integrations if isinstance(item, dict)]
@@ -465,14 +485,24 @@ def provider_status(
     has_operator_login = bool(provider_secrets.get("username") and provider_secrets.get("password"))
     runtime_evidence = [path.name for path in provider.runtime_paths if path.exists()]
 
+    provider_use = (
+        "source_and_benchmark"
+        if provider.key in DROPSHIPPING_SOURCE_KEYS and provider.key in MARKETPLACE_BENCHMARK_KEYS
+        else "source"
+        if provider.key in DROPSHIPPING_SOURCE_KEYS
+        else "benchmark"
+        if provider.key in MARKETPLACE_BENCHMARK_KEYS
+        else "integration"
+    )
+
     if has_token:
-        status = "active"
+        status = "active" if provider.key in DROPSHIPPING_SOURCE_KEYS else "benchmark_ready"
         pending: list[str] = []
     elif provider.can_use_operator_login and has_operator_login:
-        status = "operator_login_ready"
+        status = "operator_login_ready" if provider.key in DROPSHIPPING_SOURCE_KEYS else "benchmark_operator_login_ready"
         pending = ["official_api_or_oauth_token"]
     else:
-        status = "external_auth_pending"
+        status = "external_auth_pending" if provider.key in DROPSHIPPING_SOURCE_KEYS else "benchmark_auth_pending"
         pending = ["credentials_or_oauth_token"]
 
     if not integration.get("enabled"):
@@ -484,6 +514,7 @@ def provider_status(
         "key": provider.key,
         "label": provider.label,
         "role": provider.role,
+        "providerUse": provider_use,
         "status": status,
         "enabled": bool(integration.get("enabled")),
         "importCatalog": bool(integration.get("importCatalog")),
@@ -522,17 +553,23 @@ def build_status(integrations: list[dict[str, Any]], secrets: dict[str, Any], re
             )
         )
 
-    active = [item["key"] for item in providers_status if item["status"] == "active"]
-    ready = [item["key"] for item in providers_status if item["status"] == "operator_login_ready"]
-    pending = [item["key"] for item in providers_status if item["pending"]]
+    source_active = [item["key"] for item in providers_status if item["providerUse"] in {"source", "source_and_benchmark"} and item["status"] == "active"]
+    ready = [item["key"] for item in providers_status if item["providerUse"] in {"source", "source_and_benchmark"} and item["status"] == "operator_login_ready"]
+    source_pending = [item["key"] for item in providers_status if item["providerUse"] in {"source", "source_and_benchmark"} and item["pending"]]
+    benchmark_ready = [item["key"] for item in providers_status if item["providerUse"] in {"benchmark", "source_and_benchmark"} and item["status"] in {"active", "benchmark_ready"}]
+    benchmark_pending = [item["key"] for item in providers_status if item["providerUse"] in {"benchmark", "source_and_benchmark"} and item["pending"]]
     return {
         "status": "ok",
         "generated_at_utc": utc_now_iso(),
         "scope": "dropshipping",
         "summary": {
-            "active": active,
+            "source_active": source_active,
+            "source_providers": sorted(DROPSHIPPING_SOURCE_KEYS),
             "operator_login_ready": ready,
-            "pending": pending,
+            "source_pending": source_pending,
+            "benchmark_ready": benchmark_ready,
+            "benchmark_providers": sorted(MARKETPLACE_BENCHMARK_KEYS),
+            "benchmark_pending": benchmark_pending,
             "providers_total": len(providers_status),
         },
         "repairedSources": repaired_sources,
