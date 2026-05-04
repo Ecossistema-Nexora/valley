@@ -35,6 +35,8 @@ RUNTIME_DIR = ROOT / "tmp" / "runtime"
 CONFIG_PATH = ROOT / "config" / "integrations" / "dropshipping_product_selection.json"
 INTEGRATIONS_PATH = RUNTIME_DIR / "valley-admin-integrations.json"
 SECRETS_PATH = RUNTIME_DIR / "valley-provider-secrets.json"
+ENV_PATH = ROOT / ".env"
+CODEX_CLOUD_ENV_PATH = RUNTIME_DIR / "codex-cloud-secrets.env"
 STOCK_RUNTIME_PATH = RUNTIME_DIR / "valley-stock-real-catalog.json"
 CATEGORIES_PATH = RUNTIME_DIR / "valley-dropshipping-source-categories.json"
 CANDIDATES_PATH = RUNTIME_DIR / "valley-dropshipping-product-candidates.json"
@@ -251,6 +253,29 @@ def load_json(path: Path, fallback: Any) -> Any:
         return fallback
 
 
+def parse_env_file(path: Path) -> dict[str, str]:
+    if not path.exists():
+        return {}
+    values: dict[str, str] = {}
+    for raw_line in path.read_text(encoding="utf-8", errors="replace").splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        value = value.strip()
+        if (value.startswith('"') and value.endswith('"')) or (value.startswith("'") and value.endswith("'")):
+            value = value[1:-1]
+        values[key.strip()] = value
+    return values
+
+
+def runtime_env_values() -> dict[str, str]:
+    values = parse_env_file(ENV_PATH)
+    values.update(parse_env_file(CODEX_CLOUD_ENV_PATH))
+    values.update({key: value for key, value in os.environ.items() if value})
+    return values
+
+
 def write_json(path: Path, payload: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
@@ -290,10 +315,39 @@ def provider_auth(provider_key: str, integrations: list[dict[str, Any]], secrets
         {},
     )
     provider_secrets = secrets.get(provider_key) if isinstance(secrets, dict) else {}
+    merged_secrets = dict(provider_secrets if isinstance(provider_secrets, dict) else {})
+    env_values = runtime_env_values()
+    prefixes = {
+        "cjdropshipping": ("CJDROPSHIPPING", "CJ"),
+        "aliexpress": ("ALIEXPRESS",),
+        "alibaba": ("ALIBABA",),
+        "mercado_livre": ("MERCADOLIVRE", "MERCADO_LIVRE"),
+        "shopee": ("SHOPEE", "SHOPPE"),
+        "magalu": ("MAGALU",),
+        "amazon": ("AMAZON",),
+    }.get(provider_key, (provider_key.upper(),))
+    alias_map = {
+        "CLIENT_ID": ("clientId", "client_id"),
+        "CLIENT_SECRET": ("clientSecret", "client_secret"),
+        "ACCESS_TOKEN": ("accessToken", "access_token"),
+        "REFRESH_TOKEN": ("refreshToken", "refresh_token"),
+        "SELLER_ID": ("sellerId", "seller_id"),
+        "OPEN_ID": ("openId", "open_id"),
+    }
+    for suffix, secret_keys in alias_map.items():
+        value = ""
+        for prefix in prefixes:
+            value = str(env_values.get(f"{prefix}_{suffix}") or env_values.get(f"VALLEY_{prefix}_{suffix}") or "").strip()
+            if value:
+                break
+        if not value:
+            continue
+        for secret_key in secret_keys:
+            merged_secrets.setdefault(secret_key, value)
     return ProviderAuth(
         key=provider_key,
         integration=integration if isinstance(integration, dict) else {},
-        secrets=provider_secrets if isinstance(provider_secrets, dict) else {},
+        secrets=merged_secrets,
     )
 
 
@@ -376,36 +430,45 @@ def insufficient(provider: str, capability: str, reason: str) -> dict[str, Any]:
     }
 
 
-def env_flag(name: str) -> bool:
-    return str(os.environ.get(name) or "").strip().lower() in {"1", "true", "yes", "on"}
+def env_flag(name: str, default: bool = True) -> bool:
+    values = runtime_env_values()
+    if name not in values:
+        return default
+    return str(values.get(name) or "").strip().lower() in {"1", "true", "yes", "on"}
+
+
+def target_category_scope() -> list[dict[str, Any]]:
+    config = load_json(CONFIG_PATH, {})
+    scope = config.get("target_category_scope") if isinstance(config, dict) else []
+    if not isinstance(scope, list):
+        return []
+    return [item for item in scope if isinstance(item, dict)]
 
 
 def mock_categories(provider: str, limit: int) -> list[dict[str, Any]]:
-    samples = {
-        "cjdropshipping": [
-            ("cj-home", "Home Improvement > Kitchen Storage", "Casa > Cozinha > Organizadores"),
-            ("cj-pet", "Pet Supplies > Feeding", "Pet Shop > Alimentacao"),
-            ("cj-auto", "Automobiles > Interior Accessories", "Auto > Acessorios Internos"),
-        ],
-        "aliexpress": [
-            ("ae-phone", "Phones & Telecommunications > Mobile Phone Accessories", "Celulares > Acessorios"),
-            ("ae-led", "Lights & Lighting > LED Lighting", "Casa > Iluminacao LED"),
-        ],
-        "alibaba": [
-            ("ab-pack", "Packaging & Printing > Packaging Bags", "Comercio Local > Embalagens"),
-            ("ab-tools", "Tools > Hand Tools", "Ferramentas > Manuais"),
-        ],
-    }
+    prefix = {"cjdropshipping": "cj", "aliexpress": "ae", "alibaba": "ab"}.get(provider, provider[:2])
+    scope = sorted(target_category_scope(), key=lambda item: -safe_int(item.get("priority")))
+    if not scope:
+        scope = [
+            {
+                "internal_category_path": "Casa > Cozinha > Organizadores",
+                "google_product_category_id": "638",
+                "google_product_category_path": "Home & Garden > Kitchen & Dining > Kitchen Storage & Organization",
+            }
+        ]
     rows = [
         {
             "provider": provider,
-            "category_id": category_id,
-            "category_name": internal_path.split(" > ")[-1],
-            "category_path": original_path,
-            "internal_category_path": internal_path,
-            "source": "mock",
+            "category_id": f"{prefix}-{index + 1:03d}",
+            "category_name": str(item.get("internal_category_path") or "").split(" > ")[-1],
+            "category_path": str(item.get("google_product_category_path") or item.get("internal_category_path") or ""),
+            "internal_category_path": str(item.get("internal_category_path") or ""),
+            "google_product_category_id": str(item.get("google_product_category_id") or ""),
+            "google_product_category_path": str(item.get("google_product_category_path") or ""),
+            "priority": safe_int(item.get("priority")),
+            "source": "configured_target_scope",
         }
-        for category_id, original_path, internal_path in samples.get(provider, [])
+        for index, item in enumerate(scope)
     ]
     return rows[:limit] if limit > 0 else rows
 
@@ -554,6 +617,9 @@ def import_cj_categories(auth: ProviderAuth, limit: int) -> tuple[list[dict[str,
         if fallback:
             categories = fallback[:limit] if limit > 0 else fallback
             errors.append(insufficient("cjdropshipping", "categories", "API de categorias indisponivel; usando categorias ja importadas no runtime."))
+        else:
+            categories = mock_categories("cjdropshipping", limit)
+            errors.append(insufficient("cjdropshipping", "categories", "API de categorias indisponivel; usando escopo real de categorias alvo configurado."))
     return categories, errors
 
 
@@ -709,6 +775,16 @@ def import_unsupported_source(provider: str, auth: ProviderAuth) -> tuple[list[d
     if not bearer(auth) and not refresh_token(auth):
         return [], [insufficient(provider, "source_import", "Credenciais oficiais ausentes para importar categorias e produtos por API autorizada.")]
     return [], [insufficient(provider, "source_import", "Credencial existe, mas o conector oficial de categoria/produto ainda nao esta implementado neste runtime.")]
+
+
+def import_unsupported_categories(provider: str, auth: ProviderAuth, limit: int) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    categories = mock_categories(provider, limit)
+    reason = (
+        "Credenciais oficiais ausentes para consultar categorias por API autorizada."
+        if not bearer(auth) and not refresh_token(auth)
+        else "Credencial existe, mas o conector oficial de categorias ainda nao esta implementado neste runtime."
+    )
+    return categories, [insufficient(provider, "categories", reason)]
 
 
 def estimate_brl_prices(candidates: list[dict[str, Any]], usd_brl_rate: float = 5.25) -> None:
@@ -973,9 +1049,9 @@ def run_selection(max_categories: int, max_products_per_category: int, max_candi
         else:
             flag = f"VALLEY_DROPSHIPPING_ENABLE_REAL_{provider.upper()}"
             if env_flag(flag):
-                categories = categories_from_existing_stock(provider)
-                if categories:
-                    all_categories.extend(categories[:max_categories] if max_categories > 0 else categories)
+                categories, errors = import_unsupported_categories(provider, auth, max_categories)
+                all_categories.extend(categories)
+                limitations.extend(errors)
                 products, errors = import_unsupported_source(provider, auth)
                 limitations.extend(errors)
                 candidates.extend(products)

@@ -56,5 +56,27 @@
     "allow_scraping": false,
     "insufficient_data_status": "dados_insuficientes",
     "notes": "Comparacoes e importacoes devem usar APIs oficiais, feeds autorizados, webhooks ou conectores homologados. Quando credencial, escopo ou endpoint oficial estiver ausente, registrar limitacao e nao inferir dados via scraping."
-  }
+  },
+  "target_category_scope": [
+    {"internal_category_path": "Casa > Cozinha > Organizadores", "google_product_category_id": "638", "google_product_category_path": "Home & Garden > Kitchen & Dining > Kitchen Storage & Organization", "priority": 100},
+    {"internal_category_path": "Casa > Limpeza > Utensilios", "google_product_category_id": "623", "google_product_category_path": "Home & Garden > Household Supplies > Household Cleaning Supplies", "priority": 94},
+    {"internal_category_path": "Casa > Banheiro > Acessorios", "google_product_category_id": "574", "google_product_category_path": "Home & Garden > Bathroom Accessories", "priority": 88},
+    {"internal_category_path": "Casa > Iluminacao LED", "google_product_category_id": "594", "google_product_category_path": "Home & Garden > Lighting", "priority": 84},
+    {"internal_category_path": "Pet Shop > Alimentacao", "google_product_category_id": "2", "google_product_category_path": "Animals & Pet Supplies > Pet Supplies", "priority": 92},
+    {"internal_category_path": "Pet Shop > Brinquedos e Acessorios", "google_product_category_id": "5013", "google_product_category_path": "Animals & Pet Supplies > Pet Supplies > Pet Toys", "priority": 90},
+    {"internal_category_path": "Celulares > Capas e Peliculas", "google_product_category_id": "5468", "google_product_category_path": "Electronics > Communications > Telephony > Mobile Phone Accessories > Mobile Phone Cases", "priority": 82},
+    {"internal_category_path": "Celulares > Cabos e Carregadores", "google_product_category_id": "264", "google_product_category_path": "Electronics > Electronics Accessories > Power > Chargers", "priority": 80},
+    {"internal_category_path": "Audio > Fones Bluetooth", "google_product_category_id": "543626", "google_product_category_path": "Electronics > Audio > Audio Components > Headphones & Headsets > Headphones", "priority": 76},
+    {"internal_category_path": "Auto > Acessorios Internos", "google_product_category_id": "8237", "google_product_category_path": "Vehicles & Parts > Vehicle Parts & Accessories > Vehicle Interior Accessories", "priority": 78},
+    {"internal_category_path": "Auto > Organizadores e Suportes", "google_product_category_id": "8237", "google_product_category_path": "Vehicles & Parts > Vehicle Parts & Accessories > Vehicle Interior Accessories", "priority": 76},
+    {"internal_category_path": "Bike > Acessorios", "google_product_category_id": "3214", "google_product_category_path": "Sporting Goods > Outdoor Recreation > Cycling > Bicycle Accessories", "priority": 74},
+    {"internal_category_path": "Fitness > Acessorios de Treino", "google_product_category_id": "499713", "google_product_category_path": "Sporting Goods > Exercise & Fitness > Fitness Accessories", "priority": 72},
+    {"internal_category_path": "Beleza > Organizadores e Ferramentas", "google_product_category_id": "469", "google_product_category_path": "Health & Beauty > Personal Care > Cosmetics", "priority": 70},
+    {"internal_category_path": "Moda > Feminino > Blusas e Moletons", "google_product_category_id": "212", "google_product_category_path": "Apparel & Accessories > Clothing > Shirts & Tops", "priority": 64},
+    {"internal_category_path": "Moda > Acessorios", "google_product_category_id": "166", "google_product_category_path": "Apparel & Accessories", "priority": 62},
+    {"internal_category_path": "Infantil > Brinquedos Educativos", "google_product_category_id": "1262", "google_product_category_path": "Toys & Games > Toys > Educational Toys", "priority": 60},
+    {"internal_category_path": "Ferramentas > Manuais", "google_product_category_id": "1167", "google_product_category_path": "Hardware > Tools", "priority": 68},
+    {"internal_category_path": "Jardim > Irrigacao e Organizacao", "google_product_category_id": "2962", "google_product_category_path": "Home & Garden > Lawn & Garden", "priority": 66},
+    {"internal_category_path": "Comercio Local > Embalagens", "google_product_category_id": "2636", "google_product_category_path": "Business & Industrial > Packaging Materials", "priority": 86}
+  ]
 }
