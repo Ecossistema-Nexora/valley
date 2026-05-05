@@ -159,7 +159,17 @@
       </header>
 
       <main id="mainContent" class="app-main">
-      <section id="homeDashboard" class="analytics-grid" aria-label="Visao geral do release">
+      <section class="glass-panel admin-surface-shell" aria-label="Abas do painel admin">
+        <div class="section-head">
+          <div>
+            <p class="panel-kicker">Admin surfaces</p>
+            <h2>Abas operacionais do painel</h2>
+          </div>
+          <p class="section-copy">Cada frente do admin fica isolada em uma aba real para reduzir mistura entre operação, catálogo, finanças e módulos.</p>
+        </div>
+        <div id="adminSurfaceTabs" class="admin-surface-tabs" role="tablist" aria-label="Abas do painel admin"></div>
+      </section>
+      <section id="homeDashboard" class="analytics-grid" aria-label="Visao geral do release" data-admin-pane="overview">
         <section class="glass-panel">
           <div class="section-head">
             <div>
@@ -183,7 +193,7 @@
         </section>
       </section>
 
-      <section id="adminLaunchpadSection" class="glass-panel launchpad-section" aria-label="Home do painel administrador">
+      <section id="adminLaunchpadSection" class="glass-panel launchpad-section" aria-label="Home do painel administrador" data-admin-pane="overview">
         <div class="section-head">
           <div>
             <p class="panel-kicker">Admin launchpad</p>
@@ -197,7 +207,7 @@
         <div id="adminLaunchpadGrid" class="launchpad-grid"></div>
       </section>
 
-      <section id="moduleWorkspaceDirectory" class="glass-panel launchpad-section" aria-label="Subdominios dedicados por modulo">
+      <section id="moduleWorkspaceDirectory" class="glass-panel launchpad-section" aria-label="Subdominios dedicados por modulo" data-admin-pane="overview">
         <div class="section-head">
           <div>
             <p class="panel-kicker">Module workspaces</p>
@@ -209,7 +219,7 @@
         <div id="moduleWorkspaceGrid" class="module-workspace-grid"></div>
       </section>
 
-      <section class="executive-grid" aria-label="Sinais executivos de release">
+      <section class="executive-grid" aria-label="Sinais executivos de release" data-admin-pane="overview">
         <section class="glass-panel">
           <div class="section-head">
             <div>
@@ -255,7 +265,7 @@
         </section>
       </section>
 
-      <section id="financialDashboard" class="business-grid" aria-label="Painel financeiro e comercial">
+      <section id="financialDashboard" class="business-grid" aria-label="Painel financeiro e comercial" data-admin-pane="finance">
         <section class="glass-panel">
           <div class="section-head">
             <div>
@@ -279,7 +289,7 @@
         </section>
       </section>
 
-      <section id="performanceDashboard" class="business-grid" aria-label="Desempenho por modulo e stock">
+      <section id="performanceDashboard" class="business-grid" aria-label="Desempenho por modulo e stock" data-admin-pane="performance">
         <section class="glass-panel">
           <div class="section-head">
             <div>
@@ -303,7 +313,7 @@
         </section>
       </section>
 
-      <section id="settingsSection" class="glass-panel marketplace-api-section" aria-label="Integracoes de marketplaces">
+      <section id="settingsSection" class="glass-panel marketplace-api-section" aria-label="Integracoes de marketplaces" data-admin-pane="integrations">
         <div class="section-head">
           <div>
             <p class="panel-kicker">Commerce APIs</p>
@@ -323,7 +333,7 @@
         <p class="microcopy">Use referencia de segredo ou vault no campo Secret Ref. Consultas externas do dropshipping devem usar APIs oficiais; scraping fica como fallback controlado e IA externa fica bloqueada por padrao.</p>
       </section>
 
-      <section id="stockIntegrations" class="glass-panel stock-guides-section" aria-label="Playbooks de integracao do modulo stock">
+      <section id="stockIntegrations" class="glass-panel stock-guides-section" aria-label="Playbooks de integracao do modulo stock" data-admin-pane="integrations">
         <div class="section-head">
           <div>
             <p class="panel-kicker">Stock integration desk</p>
@@ -335,7 +345,7 @@
         <div id="stockProviderGuides" class="provider-guide-grid"></div>
       </section>
 
-      <section id="importedPricingSection" class="glass-panel imported-pricing-section" aria-label="Gestao de produtos importados">
+      <section id="importedPricingSection" class="glass-panel imported-pricing-section" aria-label="Gestao de produtos importados" data-admin-pane="catalog">
         <div class="section-head">
           <div>
             <p class="panel-kicker">Imported pricing desk</p>
@@ -356,19 +366,19 @@
         <p class="microcopy">O custo base vem do catálogo importado. A mesa calcula preço sugerido, taxas e faturamento líquido estimado por SKU e por fornecedor.</p>
       </section>
 
-      <section id="publicationReviewSection" class="glass-panel publication-review-section" aria-label="Fila exclusiva de revisao de publicacao">
+      <section id="publicationReviewSection" class="glass-panel publication-review-section" aria-label="Fila exclusiva de revisao de publicacao" data-admin-pane="catalog">
         <div class="section-head">
           <div>
             <p class="panel-kicker">Publication review</p>
             <h2>Itens nao publicados ou em revisao</h2>
           </div>
-          <p class="section-copy">Fila exclusiva para produtos bloqueados por preço, liquidez, estoque, duplicidade ou falta de benchmark em marketplace.</p>
+          <p class="section-copy">Fila exclusiva para produtos bloqueados por preco, liquidez, estoque, duplicidade ou configuracao comercial pendente.</p>
         </div>
         <div id="publicationReviewSummary" class="integration-summary-grid"></div>
         <div id="publicationReviewBoard" class="publication-review-board"></div>
       </section>
 
-      <section class="intelligence-grid" aria-label="Matrizes operacionais">
+      <section class="intelligence-grid" aria-label="Matrizes operacionais" data-admin-pane="overview">
         <section class="glass-panel">
           <div class="section-head">
             <div>
@@ -400,7 +410,7 @@
         </section>
       </section>
 
-      <section class="glass-panel domain-section" aria-label="Cobertura por dominio">
+      <section class="glass-panel domain-section" aria-label="Cobertura por dominio" data-admin-pane="overview">
         <div class="section-head">
           <div>
             <p class="panel-kicker">Domain spread</p>
@@ -411,7 +421,7 @@
         <div id="domainBoard" class="domain-board"></div>
       </section>
 
-      <section id="modulesWorkspace" class="workspace" aria-label="Cockpit operacional">
+      <section id="modulesWorkspace" class="workspace" aria-label="Cockpit operacional" data-admin-pane="modules">
         <aside class="rail glass-panel" aria-label="Filtros e operacao">
           <div class="rail-block">
             <label class="field">

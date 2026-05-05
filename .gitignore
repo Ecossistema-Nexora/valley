@@ -2,6 +2,7 @@
 .env.*
 !.env.example
 .codex/environments/
+.superdesign/
 tmp/runtime/
 tmp/chrome-valley-supplier-setup/
 tmp/db-deploy-runtime/

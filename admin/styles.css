@@ -218,6 +218,50 @@ pre {
   gap: 20px;
 }
 
+.admin-surface-shell {
+  padding: 22px;
+}
+
+.admin-surface-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.admin-surface-tab {
+  display: grid;
+  gap: 4px;
+  min-width: 168px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.76);
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+}
+
+.admin-surface-tab strong {
+  font-size: 14px;
+  line-height: 1.15;
+}
+
+.admin-surface-tab span {
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--ink-soft);
+}
+
+.admin-surface-tab.is-active {
+  border-color: rgba(32, 200, 243, 0.38);
+  background: linear-gradient(180deg, rgba(232, 248, 255, 0.96), rgba(255, 255, 255, 0.98));
+  box-shadow: 0 18px 36px rgba(32, 200, 243, 0.12);
+}
+
+[data-admin-pane][hidden] {
+  display: none !important;
+}
+
 .hero {
   display: grid;
   grid-template-columns: minmax(0, 1.45fr) minmax(320px, 0.95fr);

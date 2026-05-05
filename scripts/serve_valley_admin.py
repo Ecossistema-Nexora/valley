@@ -2495,7 +2495,7 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             "duplicate_loser": "Outro fornecedor venceu a disputa por menor custo e maior liquidez.",
             "low_liquidity": "Liquidez abaixo do piso operacional definido para publicação.",
             "no_margin": "A precificação atual não gera margem líquida positiva.",
-            "no_market_benchmark": "Não existe benchmark confiável em marketplace para validar vantagem de varejo.",
+            "no_market_benchmark": "Sem benchmark homologado; a decisao segue por margem liquida, liquidez e integridade operacional.",
             "no_stock": "Fornecedor sem estoque confirmado para esta oferta.",
             "production_mode_disabled": "Modo de produção desligado para este fornecedor.",
             "retail_price_not_advantageous": "O preço sugerido não fica abaixo do varejo de marketplace.",
@@ -2776,9 +2776,7 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 if supplier_winner is not None and len(supplier_rows) > 1 and row.get("id") != supplier_winner.get("id"):
                     blocking_codes.append("duplicate_loser")
                 if row.get("require_retail_advantage"):
-                    if benchmark is None:
-                        review_codes.append("no_market_benchmark")
-                    elif price_gap is not None and price_gap <= 0:
+                    if price_gap is not None and price_gap <= 0:
                         blocking_codes.append("retail_price_not_advantageous")
 
                 reason_codes = list(dict.fromkeys(blocking_codes + review_codes))

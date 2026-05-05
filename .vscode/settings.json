@@ -5,15 +5,18 @@
   "files.eol": "\n",
   "git.autofetch": true,
   "git.pruneOnFetch": true,
+  "superflex.analytics": false,
   "files.associations": {
     "*.mongo.js": "javascript",
     "*.sql": "sql"
   },
   "search.exclude": {
+    "**/.superdesign/**": true,
     "**/tmp/**": true,
     "**/__pycache__/**": true
   },
   "files.watcherExclude": {
+    "**/.superdesign/**": true,
     "**/tmp/**": true,
     "**/__pycache__/**": true
   },

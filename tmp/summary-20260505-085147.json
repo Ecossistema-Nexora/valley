@@ -1,0 +1,4 @@
+{
+  "summary": "Configurada de forma persistente a extensao oficial aquilalabs.superflex no workspace do VALLEY. O repo agora recomenda a extensao no VS Code/Cursor, desativa analytics do Superflex no settings do workspace, atualiza a regra de handoff visual para cobrir saidas do Superflex e documenta o fluxo completo de instalacao, login, Figma, atalhos e uso com Codex em docs/tooling/superflex_codex_setup.md. O plano obrigatorio foi registrado em PLANOS/v003 e indexado em PLANOS/INDEX.md.",
+  "current_status": "Workspace com configuracao persistente para SuperDesign e Superflex, ambos alinhados ao handoff para Codex. Nenhum segredo foi versionado; login e conexao Figma do Superflex seguem interativos no editor."
+}

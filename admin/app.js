@@ -46,6 +46,56 @@
 
   const MARKETPLACE_API_STORAGE_KEY = "valley.marketplaceApiIntegrations.v1";
   const MODULE_WORKSPACE_TAB_STORAGE_KEY = "valley.moduleWorkspaceTabs.v1";
+  const ADMIN_SURFACE_TAB_STORAGE_KEY = "valley.adminSurfaceTab.v1";
+  const ADMIN_SURFACE_TABS = [
+    {
+      key: "overview",
+      label: "Visao geral",
+      description: "Launchpad, runtime, score executivo e mapa do release.",
+      sectionIds: [
+        "homeDashboard",
+        "adminLaunchpadSection",
+        "moduleWorkspaceDirectory",
+        "financialDashboard",
+        "performanceDashboard",
+        "settingsSection",
+        "stockIntegrations",
+        "importedPricingSection",
+        "publicationReviewSection",
+        "modulesWorkspace",
+      ],
+    },
+    {
+      key: "finance",
+      label: "Financeiro",
+      description: "Receita, checkout e sinais de monetizacao.",
+      sectionIds: ["financialDashboard"],
+    },
+    {
+      key: "performance",
+      label: "Desempenho",
+      description: "Resultados por modulo e inteligencia do STOCK.",
+      sectionIds: ["performanceDashboard"],
+    },
+    {
+      key: "integrations",
+      label: "Integracoes",
+      description: "APIs, fornecedores e playbooks de ativacao.",
+      sectionIds: ["settingsSection", "stockIntegrations"],
+    },
+    {
+      key: "catalog",
+      label: "Catalogo",
+      description: "Importados, pricing e fila de publicacao.",
+      sectionIds: ["importedPricingSection", "publicationReviewSection"],
+    },
+    {
+      key: "modules",
+      label: "Modulos",
+      description: "Lista, filtros e cockpit detalhado por modulo.",
+      sectionIds: ["modulesWorkspace"],
+    },
+  ];
   const PRIMARY_WORKSPACE_KEY = "stock";
   const PRODUCTION_MODE_LOCKED = true;
   const ADMIN_AUTH_TOKEN_STORAGE_KEY = "valley.admin.auth.token.v1";
@@ -266,6 +316,7 @@
     marketplaceApiConfig: null,
     marketplaceApiPayload: null,
     moduleWorkspaceTabs: loadModuleWorkspaceTabs(),
+    activeAdminSurfaceTab: loadAdminSurfaceTab(),
     adminSession: null,
   };
   const workspaceFocusState = {
@@ -348,6 +399,8 @@
     liveRegion: document.getElementById("liveRegion"),
     heroTitle: document.getElementById("heroTitle"),
     heroSubcopy: document.getElementById("heroSubcopy"),
+    adminSurfaceTabs: document.getElementById("adminSurfaceTabs"),
+    mainContent: document.getElementById("mainContent"),
   };
 
   let appBootstrapped = false;
@@ -378,6 +431,67 @@
     }
     elements.adminAuthStatus.textContent = message;
     elements.adminAuthStatus.dataset.tone = tone;
+  }
+
+  function loadAdminSurfaceTab() {
+    try {
+      const saved = String(window.localStorage.getItem(ADMIN_SURFACE_TAB_STORAGE_KEY) || "").trim().toLowerCase();
+      return ADMIN_SURFACE_TABS.some((tab) => tab.key === saved) ? saved : "overview";
+    } catch (_error) {
+      return "overview";
+    }
+  }
+
+  function persistAdminSurfaceTab() {
+    try {
+      window.localStorage.setItem(ADMIN_SURFACE_TAB_STORAGE_KEY, state.activeAdminSurfaceTab);
+    } catch (_error) {
+      return;
+    }
+  }
+
+  function adminSurfaceTabByKey(key) {
+    return ADMIN_SURFACE_TABS.find((tab) => tab.key === key) || ADMIN_SURFACE_TABS[0];
+  }
+
+  function adminSurfaceTabForSection(sectionId) {
+    return ADMIN_SURFACE_TABS.find((tab) => tab.sectionIds.includes(sectionId)) || ADMIN_SURFACE_TABS[0];
+  }
+
+  function setActiveAdminSurfaceTab(tabKey, { preserveScroll = false } = {}) {
+    const next = adminSurfaceTabByKey(tabKey)?.key || "overview";
+    state.activeAdminSurfaceTab = next;
+    persistAdminSurfaceTab();
+    applyAdminSurfaceTabVisibility();
+    renderAdminSurfaceTabs();
+    if (!preserveScroll) {
+      elements.mainContent?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }
+
+  function renderAdminSurfaceTabs() {
+    if (!elements.adminSurfaceTabs) {
+      return;
+    }
+    elements.adminSurfaceTabs.innerHTML = ADMIN_SURFACE_TABS.map((tab) => `
+      <button
+        type="button"
+        class="admin-surface-tab ${tab.key === state.activeAdminSurfaceTab ? "is-active" : ""}"
+        data-admin-surface-tab="${escapeHtml(tab.key)}"
+        role="tab"
+        aria-selected="${tab.key === state.activeAdminSurfaceTab ? "true" : "false"}"
+      >
+        <strong>${escapeHtml(tab.label)}</strong>
+        <span>${escapeHtml(tab.description)}</span>
+      </button>
+    `).join("");
+  }
+
+  function applyAdminSurfaceTabVisibility() {
+    document.querySelectorAll("[data-admin-pane]").forEach((section) => {
+      const pane = String(section.getAttribute("data-admin-pane") || "").trim();
+      section.hidden = pane !== state.activeAdminSurfaceTab;
+    });
   }
 
   function showAdminAuthGate() {
@@ -1678,9 +1792,7 @@
       addReason(blockingCodes, reasons, "duplicate_loser", "Outro fornecedor venceu a disputa por menor custo e maior liquidez.");
     }
     if (row.require_retail_advantage) {
-      if (benchmarkGap === null) {
-        addReason(reviewCodes, reasons, "no_market_benchmark", "Nao existe benchmark confiavel em marketplace para validar vantagem de varejo.");
-      } else if (benchmarkGap <= 0) {
+      if (benchmarkGap !== null && benchmarkGap <= 0) {
         addReason(blockingCodes, reasons, "retail_price_not_advantageous", "O preco sugerido nao fica abaixo do varejo de marketplace.");
       }
     }
@@ -2387,7 +2499,7 @@
     elements.publicationReviewSummary.innerHTML = [
       summaryTileMarkup("Itens na fila", formatCount(reviewRows.length), reviewRows.length ? "bloqueios e revisoes comerciais ativas" : "nenhum item fora da politica"),
       summaryTileMarkup("Nao publicar", formatCount(blocked), blocked ? "preco, margem, duplicidade ou estoque bloqueando a oferta" : "sem bloqueios fatais"),
-      summaryTileMarkup("Revisao", formatCount(review), review ? "falta benchmark, liquidez ou configuracao complementar" : "sem revisoes abertas"),
+      summaryTileMarkup("Revisao", formatCount(review), review ? "liquidez ou configuracao complementar pendente" : "sem revisoes abertas"),
       summaryTileMarkup("Motivos dominantes", formatCount(topReasons.size), topReasonsList || "sem recorrencia no filtro atual"),
     ].join("");
 
@@ -3100,13 +3212,26 @@
     const moduleWorkspace = activeModuleWorkspace();
     if (moduleWorkspace) {
       state.selectedCode = moduleWorkspace.code;
+      state.activeAdminSurfaceTab = "modules";
       return;
     }
 
-    const code = window.location.hash.replace(/^#/, "").trim().toUpperCase();
+    const rawHash = window.location.hash.replace(/^#/, "").trim();
+    const code = rawHash.toUpperCase();
 
     if (code && allModules.some((module) => module.code === code)) {
       state.selectedCode = code;
+      state.activeAdminSurfaceTab = "modules";
+      return;
+    }
+
+    if (rawHash) {
+      const sectionTarget = document.getElementById(rawHash);
+      const pane = sectionTarget?.getAttribute("data-admin-pane");
+      if (pane && ADMIN_SURFACE_TABS.some((tab) => tab.key === pane)) {
+        state.activeAdminSurfaceTab = pane;
+        persistAdminSurfaceTab();
+      }
       return;
     }
 
@@ -3624,6 +3749,15 @@
   }
 
   function bindEvents() {
+    elements.adminSurfaceTabs?.addEventListener("click", (event) => {
+      const trigger = event.target.closest("[data-admin-surface-tab]");
+      if (!trigger) {
+        return;
+      }
+      setActiveAdminSurfaceTab(trigger.dataset.adminSurfaceTab);
+      announce(`Aba ${trigger.textContent.trim()} aberta.`);
+    });
+
     elements.searchInput.addEventListener("input", (event) => {
       state.search = event.target.value.trim().toLowerCase();
       render();
@@ -3892,6 +4026,25 @@
       }
 
       copyText(trigger.dataset.copyPath, "Caminho do arquivo");
+    });
+
+    document.body.addEventListener("click", (event) => {
+      const link = event.target.closest('a[href^="#"]');
+      if (!link) {
+        return;
+      }
+      const sectionId = String(link.getAttribute("href") || "").replace(/^#/, "").trim();
+      if (!sectionId) {
+        return;
+      }
+      const target = document.getElementById(sectionId);
+      if (!target) {
+        return;
+      }
+      const pane = target.getAttribute("data-admin-pane");
+      if (pane && pane !== state.activeAdminSurfaceTab) {
+        setActiveAdminSurfaceTab(pane, { preserveScroll: true });
+      }
     });
 
     window.addEventListener("hashchange", () => {
@@ -5955,6 +6108,9 @@
 
   function render() {
     const modules = filteredModules();
+
+    renderAdminSurfaceTabs();
+    applyAdminSurfaceTabVisibility();
 
     renderTopbar(modules);
     renderMetrics(modules);

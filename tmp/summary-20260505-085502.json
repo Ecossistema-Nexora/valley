@@ -1,0 +1,4 @@
+{
+  "summary": "A fila de publicacao do STOCK foi corrigida para parar de exigir benchmark externo de marketplace como gate universal de vantagem de varejo. O admin agora so usa benchmark quando ele existe e mostra que o preco Valley perdeu competitividade; ausencia de benchmark nao derruba mais o item para revisao por si so. Tambem foram atualizados os textos da interface e registrado o ajuste em PLANOS/v004.",
+  "current_status": "Workspace com regra de publicacao mais coerente com o motor de curadoria: margem liquida, liquidez, estoque e integridade operacional continuam governando a aprovacao; benchmark externo virou evidencia complementar, nao dependencia obrigatoria."
+}

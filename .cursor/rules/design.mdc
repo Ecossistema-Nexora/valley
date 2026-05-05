@@ -1,0 +1,49 @@
+---
+description: Valley design handoff for SuperDesign and Cursor
+alwaysApply: false
+---
+
+# Valley Design Handoff
+
+Use this rule when SuperDesign or Superflex is generating concepts, or when Preview.js is being used to inspect compatible web components before handoff to Codex.
+
+## Product Constraints
+
+- Respect the Valley brand and avoid generic SaaS output.
+- Prefer a bold, intentional visual direction over safe defaults.
+- Do not default to purple-heavy palettes or flat white screens.
+- Target responsive Flutter surfaces for Web and Android.
+- Keep the home experience modular, user-selectable, and grounded in real module context.
+- Do not show finance or IoT-style indicators on the home surface when PAY is inactive.
+- Avoid dead buttons. Every visible action should map to a real flow, route, or explicit placeholder state.
+
+## Helena Constraints
+
+- Helena stays circular and keeps the Valley star identity.
+- Helena can be draggable.
+- Helena uses softer pt-BR copy.
+- Do not announce module changes through Helena unless explicitly requested.
+
+## Output Format
+
+When generating a screen, component, or flow, structure the result so it can be implemented directly:
+
+1. Goal of the screen
+2. Layout breakdown
+3. Component list
+4. Motion and transitions
+5. Color and typography direction
+6. Responsive behavior
+7. Empty, loading, error, and success states
+8. Codex implementation handoff for Flutter
+
+## Codex Handoff
+
+The implementation handoff should be concrete and repository-oriented:
+
+- Reference Flutter widgets, routes, and data dependencies explicitly.
+- Prefer modular sections over one giant screen widget.
+- Preserve existing design system and project structure when editing an existing surface.
+- If a new visual pattern is introduced, define reusable tokens first.
+- If Superflex produces React, Next.js, Vue, or HTML-oriented output, convert that output into Valley-oriented structure notes before implementation instead of copying framework-specific code blindly into Flutter surfaces.
+- If Preview.js is used, treat it as an inspection tool for compatible JS component projects only. Do not use Preview.js output as evidence that a Flutter surface is already implemented.
