@@ -81,6 +81,33 @@ MOVE_TELEMETRY_PATH = RUNTIME_DIR / "move-telemetry.jsonl"
 USER_AUTH_RUNTIME_PATH = RUNTIME_DIR / "valley-user-auth-runtime.json"
 USER_AUTH_EVENTS_PATH = RUNTIME_DIR / "valley-user-auth-events.jsonl"
 PRODUCT_MVP_MODULES = {"STOCK", "MARKETPLACE", "CHAT", "PAY"}
+PRODUCT_MVP_MODULE_ORDER = ("MARKETPLACE", "STOCK", "CHAT", "PAY")
+PRODUCT_MVP_MODULE_META = {
+    "MARKETPLACE": {
+        "label": "Marketplace",
+        "subtitle": "Catalogo comercial com oferta, seller e conversao pronta para producao.",
+        "badge": "LIVE",
+        "headline": "Vitrine de venda com oferta, prova social e seller ativo.",
+    },
+    "STOCK": {
+        "label": "Stock",
+        "subtitle": "Catalogo sincronizado com fornecedores e margem operacional controlada.",
+        "badge": "SYNC",
+        "headline": "Dropshipping e estoque sincronizados com operacao ativa.",
+    },
+    "CHAT": {
+        "label": "Chat",
+        "subtitle": "Atendimento e negociacao centralizados em tempo real.",
+        "badge": "ON",
+        "headline": "Relacionamento comercial, suporte e retencao no mesmo fluxo.",
+    },
+    "PAY": {
+        "label": "Checkout",
+        "subtitle": "Camada de checkout e pagamento preparada para jornada de compra real.",
+        "badge": "PAY",
+        "headline": "Checkout pronto para confirmar pedido com retorno controlado.",
+    },
+}
 PRODUCT_LIST_LIMIT = 80
 MARKETPLACE_RUNTIME_PROVIDERS = {"mercado_livre", "amazon", "magalu", "shopee"}
 SUPPLIER_RUNTIME_PROVIDERS = {"cjdropshipping", "aliexpress", "alibaba"}
@@ -1684,11 +1711,49 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
         }
         if isinstance(catalog, dict):
             payload.update(catalog)
+            modules = payload.get("modules")
+            if not isinstance(modules, list) or not modules:
+                payload["modules"] = self._fallback_product_modules_payload()
+            module_screens = payload.get("module_screens")
+            if not isinstance(module_screens, list) or not module_screens:
+                payload["module_screens"] = self._fallback_product_module_screens_payload()
             payload["public_runtime"] = self._product_public_runtime_payload()
             payload["status"] = "ok"
             payload["service"] = "valley-product"
             payload = self._compact_product_shell_payload(payload)
         return payload
+
+    def _fallback_product_modules_payload(self) -> list[dict[str, Any]]:
+        modules = []
+        for module_id in PRODUCT_MVP_MODULE_ORDER:
+            if module_id not in PRODUCT_MVP_MODULES:
+                continue
+            meta = PRODUCT_MVP_MODULE_META.get(module_id, {})
+            modules.append(
+                {
+                    "id": module_id,
+                    "label": str(meta.get("label") or module_id.title()),
+                    "subtitle": str(meta.get("subtitle") or ""),
+                    "badge": str(meta.get("badge") or "LIVE"),
+                }
+            )
+        return modules
+
+    def _fallback_product_module_screens_payload(self) -> list[dict[str, Any]]:
+        screens = []
+        for module_id in PRODUCT_MVP_MODULE_ORDER:
+            if module_id not in PRODUCT_MVP_MODULES:
+                continue
+            meta = PRODUCT_MVP_MODULE_META.get(module_id, {})
+            screens.append(
+                {
+                    "module_id": module_id,
+                    "title": str(meta.get("label") or module_id.title()),
+                    "headline": str(meta.get("headline") or ""),
+                    "summary": str(meta.get("subtitle") or ""),
+                }
+            )
+        return screens
 
     def _admin_data_payload(self) -> dict[str, Any]:
         payload = load_json_file(self.data_path) or {}

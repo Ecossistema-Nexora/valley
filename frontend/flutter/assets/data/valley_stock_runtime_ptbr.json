@@ -1,7 +1,7 @@
 {
   "status": "ok",
   "service": "valley-stock-real-catalog",
-  "generated_at_utc": "2026-05-05T09:48:06.476220Z",
+  "generated_at_utc": "2026-05-05T10:04:08.842763Z",
   "provider": "multi_provider_catalog",
   "providers_active": [
     "alibaba",
@@ -8156,7 +8156,7 @@
     "aliexpress autenticado/configurado, mas ainda sem coletor oficial no importador do STOCK."
   ],
   "provider_errors": {
-    "cjdropshipping": "429 /product/listV2: {\"code\":1600200,\"result\":false,\"message\":\"Too Many Requests, Sorry, you have reached the daily request limit (1000 times/day). Number of requests made: 1000. Please try again tomorrow. Please email to developer@cjdropshipping.com for further assistance. Alternatively, you may submit the same details through the website chat to request account activation support from a sales representative. Please include: 1. an integration demo showing your CJ API application scenario from product query to pushing orders to CJ Store Orders (a Google Drive link is acceptable); 2. a backend screenshot clearly showing your store name; 3. your CJdropshipping user ID (e.g. CJXXXXXXX), with email verified and a WhatsApp number bound; 4. your API application scenario and the applicant identity information (company registration details, or personal identity information if you are an individual developer).\",\"data\":null,\"requestId\":\"a72bc0911dc64060bbe6e0e591fadef0\",\"success\":false}"
+    "cjdropshipping": "429 /product/listV2: {\"code\":1600200,\"result\":false,\"message\":\"Too Many Requests, Sorry, you have reached the daily request limit (1000 times/day). Number of requests made: 1000. Please try again tomorrow. Please email to developer@cjdropshipping.com for further assistance. Alternatively, you may submit the same details through the website chat to request account activation support from a sales representative. Please include: 1. an integration demo showing your CJ API application scenario from product query to pushing orders to CJ Store Orders (a Google Drive link is acceptable); 2. a backend screenshot clearly showing your store name; 3. your CJdropshipping user ID (e.g. CJXXXXXXX), with email verified and a WhatsApp number bound; 4. your API application scenario and the applicant identity information (company registration details, or personal identity information if you are an individual developer).\",\"data\":null,\"requestId\":\"288b9a4e76c14f13b993143819067ecf\",\"success\":false}"
   },
   "items_total": 630,
   "categories_total": 7,
@@ -8185,7 +8185,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Earphones & Headphones. 2 unidades em estoque. 5421 listagens sincronizadas.",
+      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Fones de Ouvido e Fones de Ouvido. 2 unidades em estoque. 5421 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/15942240/2435993274459.jpg"
       ],
@@ -8274,7 +8274,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Earphones & Headphones. 283505 unidades em estoque. 4340 listagens sincronizadas.",
+      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Fones de Ouvido e Fones de Ouvido. 283505 unidades em estoque. 4340 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/d0d425f5-ee88-4aea-81b2-9dafbb689cf2.jpg"
       ],
@@ -8362,7 +8362,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Earphones & Headphones. 24728 unidades em estoque. 3692 listagens sincronizadas.",
+      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Fones de Ouvido 24728 unidades em estoque 3692 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/14b5d448-2179-4279-a0eb-ca113271f778.jpg"
       ],
@@ -8450,7 +8450,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Earphones & Headphones. 60000 unidades em estoque. 2967 listagens sincronizadas.",
+      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Fones de Ouvido e Fones de Ouvido. 60000 unidades em estoque. 2967 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/203207/386132459951.jpg"
       ],
@@ -8538,7 +8538,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Earphones & Headphones. 43018 unidades em estoque. 2919 listagens sincronizadas.",
+      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Fones de Ouvido e Fones de Ouvido. 43018 unidades em estoque. 2919 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/cb09e5f1-69e2-4ea8-9085-54e0a5b113b7.jpg"
       ],
@@ -8626,7 +8626,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Earphones & Headphones. 13358 unidades em estoque. 2726 listagens sincronizadas.",
+      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Fones de ouvido. 13358 unidades em estoque. 2726 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/20200830/1643452044629.jpg?cid=2507310901531929500"
       ],
@@ -8714,7 +8714,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Earphones & Headphones. 47545 unidades em estoque. 1916 listagens sincronizadas.",
+      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Fones de Ouvido e Fones de Ouvido. 47545 unidades em estoque. 1916 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/580771dd-9a82-43c1-8bbd-f0f7fd853985.jpg"
       ],
@@ -8890,7 +8890,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Earphones & Headphones. 164580 unidades em estoque. 1629 listagens sincronizadas.",
+      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Fones de Ouvido e Fones de Ouvido. 164580 unidades em estoque. 1629 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/8cdbc812-0860-4d1b-bc54-e0c7cd340e87.jpg"
       ],
@@ -8978,7 +8978,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Earphones & Headphones. 50414 unidades em estoque. 1305 listagens sincronizadas.",
+      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Fones de Ouvido e Fones de Ouvido. 50414 unidades em estoque. 1305 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/20200623/8729048594801.jpg"
       ],
@@ -9066,7 +9066,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Earphones & Headphones. 46159 unidades em estoque. 1186 listagens sincronizadas.",
+      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Fones de Ouvido e Fones de Ouvido. 46159 unidades em estoque. 1186 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/5ab9b98b-b15a-4803-9826-cf0b488d7258.jpg"
       ],
@@ -9154,7 +9154,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Earphones & Headphones. 12372 unidades em estoque. 1154 listagens sincronizadas.",
+      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Fones de ouvido. 12372 unidades em estoque. 1154 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/0e2a4f03-81d7-4c8d-966e-144e24aca6de.jpg"
       ],
@@ -9419,7 +9419,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Earphones & Headphones. 24684 unidades em estoque. 963 listagens sincronizadas.",
+      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Fones de Ouvido 24684 unidades em estoque 963 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/20190820/406650030884.png"
       ],
@@ -9507,7 +9507,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Earphones & Headphones. 1 unidades em estoque. 793 listagens sincronizadas.",
+      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Fones de Ouvido e Fones de Ouvido. 1 unidades em estoque. 793 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/1622687070561.jpg"
       ],
@@ -9595,7 +9595,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Earphones & Headphones. 35467 unidades em estoque. 748 listagens sincronizadas.",
+      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Fones de Ouvido e Fones de Ouvido. 35467 unidades em estoque. 748 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/89b47f51-0fc7-41b4-b4bb-581f3257b739.jpg"
       ],
@@ -9684,7 +9684,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Earphones & Headphones. 2 unidades em estoque. 745 listagens sincronizadas.",
+      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Fones de ouvido. 2 unidades em estoque. 745 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/1615254075761.jpg"
       ],
@@ -9772,7 +9772,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Earphones & Headphones. 70643 unidades em estoque. 736 listagens sincronizadas.",
+      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Fones de Ouvido e Fones de Ouvido. 70643 unidades em estoque. 736 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/e64f7a63-0063-46d6-baa1-7ff00d2ebd2b.jpg"
       ],
@@ -9860,7 +9860,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Earphones & Headphones. 35288 unidades em estoque. 698 listagens sincronizadas.",
+      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Fones de Ouvido e Fones de Ouvido. 35288 unidades em estoque. 698 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/20200211/2430513179770.jpg"
       ],
@@ -10036,7 +10036,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Earphones & Headphones. 62272 unidades em estoque. 665 listagens sincronizadas.",
+      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Fones de Ouvido e Fones de Ouvido. 62272 unidades em estoque. 665 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/20180919/1305926197067.png"
       ],
@@ -10124,7 +10124,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Earphones & Headphones. 27704 unidades em estoque. 625 listagens sincronizadas.",
+      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Fones de Ouvido e Fones de Ouvido. 27704 unidades em estoque. 625 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/1621834905898.jpg"
       ],
@@ -10300,7 +10300,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Earphones & Headphones. 10724 unidades em estoque. 614 listagens sincronizadas.",
+      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Fones de Ouvido e Fones de Ouvido. 10724 unidades em estoque. 614 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/20200612/212141328142.jpg"
       ],
@@ -10564,7 +10564,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Earphones & Headphones. 83778 unidades em estoque. 521 listagens sincronizadas.",
+      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Fones de Ouvido e Fones de Ouvido. 83778 unidades em estoque. 521 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/387e0225-712b-4c34-891d-6a0352b6c2f8.jpg"
       ],
@@ -11004,7 +11004,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Earphones & Headphones. 37841 unidades em estoque. 472 listagens sincronizadas.",
+      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Fones de Ouvido e Fones de Ouvido. 37841 unidades em estoque. 472 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/3be5c3a8-57b6-4b7c-af80-3bb50bccc14a.jpg"
       ],
@@ -11796,7 +11796,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Earphones & Headphones. 2 unidades em estoque. 336 listagens sincronizadas.",
+      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Fones de Ouvido e Fones de Ouvido. 2 unidades em estoque. 336 listagens sincronizadas.",
       "gallery_urls": [
         "https://oss-cf.cjdropshipping.com/product/2024/06/03/06/56d58bb5-7571-4ae7-9ea6-2ca0f7ae427f_fine.jpeg"
       ],
@@ -11972,7 +11972,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Earphones & Headphones. 23201 unidades em estoque. 316 listagens sincronizadas.",
+      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Fones de ouvido. 23201 unidades em estoque. 316 listagens sincronizadas.",
       "gallery_urls": [
         "https://oss-cf.cjdropshipping.com/product/2025/09/23/07/bdd9663c-5dbd-4591-a367-67d7c752ce22.jpg"
       ],
@@ -13205,7 +13205,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Earphones & Headphones. 40653 unidades em estoque. 199 listagens sincronizadas.",
+      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Fones de Ouvido e Fones de Ouvido. 40653 unidades em estoque. 199 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/f627795d-3ad4-481b-89fd-c1a8f4d3042c.jpg"
       ],
@@ -14261,7 +14261,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Earphones & Headphones. 230 unidades em estoque. 139 listagens sincronizadas.",
+      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Fones de Ouvido e Fones de Ouvido. 230 unidades em estoque. 139 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/d886a511-4942-4132-a023-0269048f3db5.png"
       ],
@@ -15141,7 +15141,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Earphones & Headphones. 80371 unidades em estoque. 119 listagens sincronizadas.",
+      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Fones de Ouvido & Fones de Ouvido. 80371 unidades em estoque. 119 listagens sincronizadas.",
       "gallery_urls": [
         "https://oss-cf.cjdropshipping.com/product/2025/12/21/09/73491f20-f10b-403b-81a5-45bab3239125_trans.jpeg"
       ],
@@ -16901,7 +16901,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Earphones & Headphones. 17734 unidades em estoque. 78 listagens sincronizadas.",
+      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Fones de Ouvido e Fones de Ouvido. 17734 unidades em estoque. 78 listagens sincronizadas.",
       "gallery_urls": [
         "https://oss-cf.cjdropshipping.com/product/2025/12/26/06/ef8ab3c5-f024-481c-ba75-91981d19694b_trans.jpeg"
       ],
@@ -16989,7 +16989,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Earphones & Headphones. 21239 unidades em estoque. 77 listagens sincronizadas.",
+      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Fones de ouvido. 21239 unidades em estoque. 77 listagens sincronizadas.",
       "gallery_urls": [
         "https://oss-cf.cjdropshipping.com/product/2026/01/01/08/6c876bad-b1e0-4d44-9c62-e7c1d9daadb1_trans.jpeg"
       ],
@@ -17165,7 +17165,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Earphones & Headphones. 5751 unidades em estoque. 75 listagens sincronizadas.",
+      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Fones de Ouvido e Fones de Ouvido. 5751 unidades em estoque. 75 listagens sincronizadas.",
       "gallery_urls": [
         "https://oss-cf.cjdropshipping.com/product/2025/12/25/06/5ff51a04-55b0-47d7-b87a-ce81e102caec.jpg"
       ],
@@ -17869,7 +17869,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Earphones & Headphones. 19429 unidades em estoque. 56 listagens sincronizadas.",
+      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Fones de Ouvido e Fones de Ouvido. 19429 unidades em estoque. 56 listagens sincronizadas.",
       "gallery_urls": [
         "https://oss-cf.cjdropshipping.com/product/2026/03/04/03/0e37f640-293d-4cb9-af52-cdde7b9ba71f_trans.jpeg"
       ],
@@ -19277,7 +19277,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Earphones & Headphones. 27147 unidades em estoque. 33 listagens sincronizadas.",
+      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Fones de Ouvido e Fones de Ouvido. 27147 unidades em estoque. 33 listagens sincronizadas.",
       "gallery_urls": [
         "https://oss-cf.cjdropshipping.com/product/2026/01/19/07/aabff0f2-6ef0-42df-8650-48249081d0d7_trans.jpeg"
       ],
@@ -19365,7 +19365,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Earphones & Headphones. 19496 unidades em estoque. 32 listagens sincronizadas.",
+      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Fones de Ouvido e Fones de Ouvido. 19496 unidades em estoque. 32 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/quick/product/034ac5de-47eb-4a1e-871c-48dd2dacc244.jpg"
       ],
@@ -19981,7 +19981,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Earphones & Headphones. 21785 unidades em estoque. 25 listagens sincronizadas.",
+      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Fones de ouvido. 21785 unidades em estoque. 25 listagens sincronizadas.",
       "gallery_urls": [
         "https://oss-cf.cjdropshipping.com/product/2026/01/19/06/3d713c74-44a3-4375-9c81-721da93ac444_trans.jpeg"
       ],
@@ -20069,7 +20069,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Earphones & Headphones. 20363 unidades em estoque. 25 listagens sincronizadas.",
+      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Fones de ouvido. 20363 unidades em estoque. 25 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/quick/product/a9de17c8-ddd0-4a62-988b-4bd01e1a211c.jpg"
       ],
@@ -20157,7 +20157,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Earphones & Headphones. 15191 unidades em estoque. 24 listagens sincronizadas.",
+      "description": "Curadoria Valley para audio com estoque sincronizado via CJ. Categoria fonte: Fones de ouvido. 15191 unidades em estoque. 24 listagens sincronizadas.",
       "gallery_urls": [
         "https://oss-cf.cjdropshipping.com/product/2026/01/26/06/f7256cf1-ef56-48ec-96ab-139e65353300.jpg"
       ],
@@ -43318,7 +43318,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para smart living com estoque sincronizado via CJ. Categoria fonte: Surveillance Products. 23953 unidades em estoque. 4019 listagens sincronizadas.",
+      "description": "Curadoria Valley para smart living com estoque sincronizado via CJ. Categoria fonte: Produtos de Vigilância. 23953 unidades em estoque. 4019 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/15096384/3702915589_1056000276.400x400.jpg"
       ],
@@ -43406,7 +43406,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para smart living com estoque sincronizado via CJ. Categoria fonte: Surveillance Products. 146429 unidades em estoque. 2337 listagens sincronizadas.",
+      "description": "Curadoria Valley para smart living com estoque sincronizado via CJ. Categoria fonte: Produtos de Vigilância. 146429 unidades em estoque. 2337 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/15948288/1359135284748.jpg"
       ],
@@ -43494,7 +43494,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para smart living com estoque sincronizado via CJ. Categoria fonte: Surveillance Products. 200000 unidades em estoque. 2140 listagens sincronizadas.",
+      "description": "Curadoria Valley para smart living com estoque sincronizado via CJ. Categoria fonte: Produtos de Vigilância. 200000 unidades em estoque. 2140 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/20200916/2194574152275.jpg"
       ],
@@ -43582,7 +43582,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para smart living com estoque sincronizado via CJ. Categoria fonte: Digital Cameras. 55758 unidades em estoque. 1906 listagens sincronizadas.",
+      "description": "Curadoria Valley para smart living com estoque sincronizado via CJ. Categoria fonte: Câmeras Digitais. 55758 unidades em estoque. 1906 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/c2286afb-7632-4f3c-bc53-07eafd7b4bd1.jpg"
       ],
@@ -43758,7 +43758,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para smart living com estoque sincronizado via CJ. Categoria fonte: Camera Drones. 3 unidades em estoque. 1444 listagens sincronizadas.",
+      "description": "Curadoria Valley para smart living com estoque sincronizado via CJ. Categoria fonte: câmera Drones. 3 unidades em estoque. 1444 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/1618135125962.jpg"
       ],
@@ -44375,7 +44375,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para smart living com estoque sincronizado via CJ. Categoria fonte: Camcorders. 640000 unidades em estoque. 627 listagens sincronizadas.",
+      "description": "Curadoria Valley para smart living com estoque sincronizado via CJ. Categoria fonte: Filmadoras. 640000 unidades em estoque. 627 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/1620899983271.jpg"
       ],
@@ -44463,7 +44463,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para smart living com estoque sincronizado via CJ. Categoria fonte: Vehicle Camera. 200000 unidades em estoque. 590 listagens sincronizadas.",
+      "description": "Curadoria Valley para smart living com estoque sincronizado via CJ. Categoria fonte: Câmera Veicular. 200000 unidades em estoque. 590 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/20210121/3468258342239.jpg"
       ],
@@ -44903,7 +44903,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para smart living com estoque sincronizado via CJ. Categoria fonte: Vehicle Camera. 132326 unidades em estoque. 434 listagens sincronizadas.",
+      "description": "Curadoria Valley para smart living com estoque sincronizado via CJ. Categoria fonte: Câmera Veicular. 132326 unidades em estoque. 434 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/1618558015613.jpg"
       ],
@@ -46312,7 +46312,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para smart living com estoque sincronizado via CJ. Categoria fonte: Surveillance Products. 98 unidades em estoque. 163 listagens sincronizadas.",
+      "description": "Curadoria Valley para smart living com estoque sincronizado via CJ. Categoria fonte: Produtos de Vigilância. 98 unidades em estoque. 163 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/63e88f03-998c-4b0c-a4c5-46389abceb58.jpg"
       ],
@@ -46400,7 +46400,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para smart living com estoque sincronizado via CJ. Categoria fonte: Surveillance Products. 98 unidades em estoque. 132 listagens sincronizadas.",
+      "description": "Curadoria Valley para smart living com estoque sincronizado via CJ. Categoria fonte: Produtos de Vigilância. 98 unidades em estoque. 132 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/d4dbb84b-8b20-46c9-a408-64835b4c67db.jpg"
       ],
@@ -46488,7 +46488,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para smart living com estoque sincronizado via CJ. Categoria fonte: Surveillance Products. 230 unidades em estoque. 130 listagens sincronizadas.",
+      "description": "Curadoria Valley para smart living com estoque sincronizado via CJ. Categoria fonte: Produtos de Vigilância. 230 unidades em estoque. 130 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/5a58af6e-affe-49ee-a588-286fb919c0b3.png"
       ],
@@ -46840,7 +46840,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para smart living com estoque sincronizado via CJ. Categoria fonte: Surveillance Products. 100 unidades em estoque. 114 listagens sincronizadas.",
+      "description": "Curadoria Valley para smart living com estoque sincronizado via CJ. Categoria fonte: Produtos de Vigilância. 100 unidades em estoque. 114 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/6808d5c6-2c67-4d5e-baf7-cc888386f137.jpg"
       ],
@@ -46928,7 +46928,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para smart living com estoque sincronizado via CJ. Categoria fonte: Surveillance Products. 100 unidades em estoque. 108 listagens sincronizadas.",
+      "description": "Curadoria Valley para smart living com estoque sincronizado via CJ. Categoria fonte: Produtos de Vigilância. 100 unidades em estoque. 108 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/c9f95198-6add-4c6a-9cac-334cfd63d782.jpg"
       ],
@@ -47016,7 +47016,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para smart living com estoque sincronizado via CJ. Categoria fonte: Surveillance Products. 100 unidades em estoque. 103 listagens sincronizadas.",
+      "description": "Curadoria Valley para smart living com estoque sincronizado via CJ. Categoria fonte: Produtos de Vigilância. 100 unidades em estoque. 103 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/b463a6c3-2979-423b-86b3-48321313ce60.jpg"
       ],
@@ -47280,7 +47280,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para smart living com estoque sincronizado via CJ. Categoria fonte: Surveillance Products. 100 unidades em estoque. 85 listagens sincronizadas.",
+      "description": "Curadoria Valley para smart living com estoque sincronizado via CJ. Categoria fonte: Produtos de Vigilância. 100 unidades em estoque. 85 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/877ea7ce-3313-4127-9818-63bdd6bbe330.jpg"
       ],
@@ -47456,7 +47456,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para smart living com estoque sincronizado via CJ. Categoria fonte: Surveillance Products. 100 unidades em estoque. 81 listagens sincronizadas.",
+      "description": "Curadoria Valley para smart living com estoque sincronizado via CJ. Categoria fonte: Produtos de Vigilância. 100 unidades em estoque. 81 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/831c92de-c2d9-4000-9c81-d40e88d544bc.jpg"
       ],
@@ -48160,7 +48160,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para smart living com estoque sincronizado via CJ. Categoria fonte: Surveillance Products. 100 unidades em estoque. 53 listagens sincronizadas.",
+      "description": "Curadoria Valley para smart living com estoque sincronizado via CJ. Categoria fonte: Produtos de Vigilância. 100 unidades em estoque. 53 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/244c29e1-6118-410e-8776-aa7dec6f7401.jpg"
       ],
@@ -49392,7 +49392,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para smart living com estoque sincronizado via CJ. Categoria fonte: Camcorders. 1 unidades em estoque. 34 listagens sincronizadas.",
+      "description": "Curadoria Valley para smart living com estoque sincronizado via CJ. Categoria fonte: Filmadoras. 1 unidades em estoque. 34 listagens sincronizadas.",
       "gallery_urls": [
         "https://oss-cf.cjdropshipping.com/product/2024/10/05/09/3bdaec88-8d4f-4b09-ab52-d4098d377fb7_trans.jpeg"
       ],
@@ -49480,7 +49480,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para smart living com estoque sincronizado via CJ. Categoria fonte: Surveillance Products. 115 unidades em estoque. 33 listagens sincronizadas.",
+      "description": "Curadoria Valley para smart living com estoque sincronizado via CJ. Categoria fonte: Produtos de Vigilância. 115 unidades em estoque. 33 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/259e3e57-6bee-4de4-aa5f-89ee20b2879c.jpg"
       ],
@@ -49656,7 +49656,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para smart living com estoque sincronizado via CJ. Categoria fonte: Camcorders. 1 unidades em estoque. 31 listagens sincronizadas.",
+      "description": "Curadoria Valley para smart living com estoque sincronizado via CJ. Categoria fonte: Filmadoras. 1 unidades em estoque. 31 listagens sincronizadas.",
       "gallery_urls": [
         "https://oss-cf.cjdropshipping.com/product/2025/04/17/02/22273648-502c-4f4f-b3c2-edd5c6a9e752_trans.jpeg"
       ],
@@ -49744,7 +49744,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para smart living com estoque sincronizado via CJ. Categoria fonte: Surveillance Products. 53946 unidades em estoque. 30 listagens sincronizadas.",
+      "description": "Curadoria Valley para smart living com estoque sincronizado via CJ. Categoria fonte: Produtos de Vigilância. 53946 unidades em estoque. 30 listagens sincronizadas.",
       "gallery_urls": [
         "https://oss-cf.cjdropshipping.com/product/2025/06/05/09/077f0976-e411-47c2-97de-a688091657f2_trans.jpeg"
       ],
@@ -49920,7 +49920,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Curadoria Valley para smart living com estoque sincronizado via CJ. Categoria fonte: Camcorders. 10477 unidades em estoque. 24 listagens sincronizadas.",
+      "description": "Curadoria Valley para smart living com estoque sincronizado via CJ. Categoria fonte: Filmadoras. 10477 unidades em estoque. 24 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/af0bec80-72dc-46b6-a57f-fc24c37a921e.png"
       ],
@@ -58000,7 +58000,7 @@
     {
       "id": "5500b77c-efe2-5f36-9118-3bfdfcd5db57",
       "module_id": "STOCK",
-      "title": "Heying Smart Bracelet Men's Sports Watch",
+      "title": "Heying Smart Bracelet masculino's esportivo relógio",
       "brand": "Valley Motion",
       "category": "Wearables",
       "price_brl": 272.53,
@@ -61960,7 +61960,7 @@
     {
       "id": "4cba7af8-6deb-5566-aaed-4c2b9a1a5dbf",
       "module_id": "STOCK",
-      "title": "Smart Watch GT3 Bluetooth Calling Sports",
+      "title": "relógio inteligente GT3 Bluetooth Calling esportivo",
       "brand": "Valley Motion",
       "category": "Wearables",
       "price_brl": 105.17,
@@ -63632,5 +63632,5 @@
   ],
   "translation_locale": "pt-BR",
   "translation_engine": "google-translate-public",
-  "translation_generated_at_utc": "2026-05-05T09:48:11.622162Z"
+  "translation_generated_at_utc": "2026-05-05T10:17:42.931572Z"
 }
