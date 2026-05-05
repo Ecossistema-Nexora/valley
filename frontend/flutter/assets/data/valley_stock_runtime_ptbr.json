@@ -1,7 +1,7 @@
 {
   "status": "ok",
   "service": "valley-stock-real-catalog",
-  "generated_at_utc": "2026-05-05T20:02:19.635434Z",
+  "generated_at_utc": "2026-05-05T20:47:46.264826Z",
   "provider": "multi_provider_catalog",
   "providers_active": [
     "alibaba",
@@ -8156,7 +8156,7 @@
     "aliexpress autenticado/configurado, mas ainda sem coletor oficial no importador do STOCK."
   ],
   "provider_errors": {
-    "cjdropshipping": "429 /product/listV2: {\"code\":1600200,\"result\":false,\"message\":\"Too Many Requests, Sorry, you have reached the daily request limit (1000 times/day). Number of requests made: 1000. Please try again tomorrow. Please email to developer@cjdropshipping.com for further assistance. Alternatively, you may submit the same details through the website chat to request account activation support from a sales representative. Please include: 1. an integration demo showing your CJ API application scenario from product query to pushing orders to CJ Store Orders (a Google Drive link is acceptable); 2. a backend screenshot clearly showing your store name; 3. your CJdropshipping user ID (e.g. CJXXXXXXX), with email verified and a WhatsApp number bound; 4. your API application scenario and the applicant identity information (company registration details, or personal identity information if you are an individual developer).\",\"data\":null,\"requestId\":\"c65bd7ba84f54c5b9069372a40d65195\",\"success\":false}"
+    "cjdropshipping": "429 /product/listV2: {\"code\":1600200,\"result\":false,\"message\":\"Too Many Requests, Sorry, you have reached the daily request limit (1000 times/day). Number of requests made: 1000. Please try again tomorrow. Please email to developer@cjdropshipping.com for further assistance. Alternatively, you may submit the same details through the website chat to request account activation support from a sales representative. Please include: 1. an integration demo showing your CJ API application scenario from product query to pushing orders to CJ Store Orders (a Google Drive link is acceptable); 2. a backend screenshot clearly showing your store name; 3. your CJdropshipping user ID (e.g. CJXXXXXXX), with email verified and a WhatsApp number bound; 4. your API application scenario and the applicant identity information (company registration details, or personal identity information if you are an individual developer).\",\"data\":null,\"requestId\":\"b0db41c1edeb42e68c451e3bcfa209e8\",\"success\":false}"
   },
   "items_total": 630,
   "categories_total": 7,
@@ -63632,5 +63632,5 @@
   ],
   "translation_locale": "pt-BR",
   "translation_engine": "google-translate-public",
-  "translation_generated_at_utc": "2026-05-05T20:16:23.038079Z"
+  "translation_generated_at_utc": "2026-05-05T21:01:14.049848Z"
 }
