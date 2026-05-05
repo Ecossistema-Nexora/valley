@@ -10,10 +10,10 @@
   "included_modules": [
     "STOCK",
     "MARKETPLACE",
-    "CHAT"
+    "CHAT",
+    "PAY"
   ],
   "excluded_modules": [
-    "PAY",
     "PLUG",
     "DOCS",
     "BUSINESS",

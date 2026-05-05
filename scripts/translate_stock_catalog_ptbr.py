@@ -29,6 +29,7 @@ from import_real_stock_catalog import (
 TRANSLATED_STOCK_PATH = RUNTIME_DIR / "valley-stock-real-catalog-ptbr.json"
 TRANSLATION_CACHE_PATH = RUNTIME_DIR / "valley-stock-translation-cache.json"
 TRANSLATION_STATUS_PATH = RUNTIME_DIR / "valley-stock-translation-status.json"
+PRICING_RUNTIME_PATH = RUNTIME_DIR / "valley-admin-imported-products-pricing.json"
 BUNDLED_STOCK_RUNTIME_ASSET_PATH = (
     RUNTIME_DIR.parents[1]
     / "frontend"
@@ -489,11 +490,45 @@ def update_public_preview(translated_runtime: dict[str, Any]) -> None:
         if isinstance(item, dict) and str(item.get("module_id") or "") != "STOCK"
     ]
     stock_items = [
-        sanitize_public_stock_item(item)
+        item
         for item in translated_runtime.get("items", [])
         if isinstance(item, dict) and item.get("module_id") == "STOCK"
     ]
-    preview_items = round_robin_preview(stock_items, PREVIEW_LIMIT)
+    pricing_runtime = load_json(PRICING_RUNTIME_PATH, {})
+    pricing_items = pricing_runtime.get("items") if isinstance(pricing_runtime, dict) else None
+    pricing_index = {}
+    if isinstance(pricing_items, list):
+        pricing_index = {
+            str(item.get("id") or ""): item
+            for item in pricing_items
+            if isinstance(item, dict)
+        }
+    curated_stock_items = []
+    for item in stock_items:
+        pricing_row = pricing_index.get(str(item.get("id") or ""))
+        publication_status = str((pricing_row or {}).get("publication_status") or "").strip().lower()
+        if publication_status == "do_not_publish":
+            continue
+        merged = dict(item)
+        if pricing_row:
+            merged["publication_status"] = publication_status
+            merged["estimated_net_revenue_brl"] = pricing_row.get("estimated_net_revenue_brl")
+            merged["liquidity_score"] = pricing_row.get("liquidity_score")
+        curated_stock_items.append(merged)
+    if curated_stock_items:
+        stock_items = curated_stock_items
+    stock_items.sort(
+        key=lambda item: (
+            0 if str(item.get("publication_status") or "") == "approved" else 1,
+            -float(item.get("estimated_net_revenue_brl") or 0.0),
+            -float(item.get("liquidity_score") or 0.0),
+            str(item.get("title") or ""),
+        )
+    )
+    preview_items = round_robin_preview(
+        [sanitize_public_stock_item(item) for item in stock_items],
+        PREVIEW_LIMIT,
+    )
     catalog["items"] = preview_items + non_stock_items
     summary = catalog.get("summary") if isinstance(catalog.get("summary"), dict) else {}
     summary["products"] = len(stock_items) + len(non_stock_items)

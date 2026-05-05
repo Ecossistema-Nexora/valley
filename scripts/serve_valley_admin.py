@@ -80,7 +80,7 @@ PRODUCT_INTERACTIONS_PATH = RUNTIME_DIR / "valley-product-interactions.jsonl"
 MOVE_TELEMETRY_PATH = RUNTIME_DIR / "move-telemetry.jsonl"
 USER_AUTH_RUNTIME_PATH = RUNTIME_DIR / "valley-user-auth-runtime.json"
 USER_AUTH_EVENTS_PATH = RUNTIME_DIR / "valley-user-auth-events.jsonl"
-PRODUCT_MVP_MODULES = {"STOCK", "MARKETPLACE", "CHAT"}
+PRODUCT_MVP_MODULES = {"STOCK", "MARKETPLACE", "CHAT", "PAY"}
 PRODUCT_LIST_LIMIT = 80
 MARKETPLACE_RUNTIME_PROVIDERS = {"mercado_livre", "amazon", "magalu", "shopee"}
 SUPPLIER_RUNTIME_PROVIDERS = {"cjdropshipping", "aliexpress", "alibaba"}
@@ -258,6 +258,54 @@ def hmac_sha256_upper(secret: str, message: str) -> str:
         message.encode("utf-8"),
         hashlib.sha256,
     ).hexdigest().upper()
+
+
+DEFAULT_AUTH_USERS: tuple[dict[str, Any], ...] = (
+    {
+        "full_name": "Anderson",
+        "display_name": "Anderson",
+        "email": "anderson@valley.local",
+        "login_identifier": "@anderson",
+        "document_type": "ADMIN_LOGIN",
+        "document_number": "@anderson",
+        "primary_role": "SUPER_ADMIN",
+        "user_kind": "ADMIN",
+        "module_tier": "ADMIN",
+        "permissions": ["*"],
+        "password_hash": "pbkdf2_sha256$310000$9OM3YOMyfDQLIwdql-t5GA$tBjy-Vot7Dmw5BTb89PSQIkIHDhRMB9XyCN6K14bOig",
+        "password_algo": "pbkdf2_sha256_310000",
+    },
+    {
+        "full_name": "Cliente Valley Teste",
+        "display_name": "Cliente Teste",
+        "email": "cliente.teste@valley.local",
+        "login_identifier": "cliente.teste@valley.local",
+        "document_type": "EMAIL_LOGIN",
+        "document_number": "cliente.teste@valley.local",
+        "primary_role": "CUSTOMER",
+        "user_kind": "PF",
+        "module_tier": "PRODUCT",
+        "permissions": [],
+        "password_hash": "pbkdf2_sha256$310000$n4djOXIX4PuSiP0FuM8d2Q$bY00eA76hH8B0Q_vmsgxbJD4-9fKZn1ldF3gCDutrp4",
+        "password_algo": "pbkdf2_sha256_310000",
+    },
+    {
+        "full_name": "Lojista Valley Demo",
+        "display_name": "Lojista Demo",
+        "email": "lojista.demo@valley.local",
+        "login_identifier": "lojista.demo@valley.local",
+        "document_type": "EMAIL_LOGIN",
+        "document_number": "lojista.demo@valley.local",
+        "primary_role": "MERCHANT",
+        "user_kind": "PJ",
+        "module_tier": "PRODUCT",
+        "permissions": [],
+        "merchant_slug": "lojista-demo",
+        "merchant_code": "MER-LOJISTA-DEMO",
+        "password_hash": "pbkdf2_sha256$310000$qrEtzftN633HfFPUZSR-vA$rnU42H1UqyIYimIJKrRhzTCVLgSxW2qaqvG3q0bhesY",
+        "password_algo": "pbkdf2_sha256_310000",
+    },
+)
 
 
 def top_md5_upper(secret: str, params: dict[str, Any]) -> str:
@@ -1063,11 +1111,96 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             payload = {}
         users = payload.get("users") if isinstance(payload.get("users"), list) else []
         sessions = payload.get("sessions") if isinstance(payload.get("sessions"), list) else []
-        return {
+        normalized = {
             "version": payload.get("version") or "v1",
             "users": users,
             "sessions": sessions,
         }
+        return self._seed_default_auth_users(normalized)
+
+    def _build_default_auth_user(self, definition: dict[str, Any]) -> dict[str, Any]:
+        login_identifier = self._normalize_auth_identifier(definition.get("login_identifier"))
+        email = self._normalize_auth_identifier(definition.get("email"))
+        created_at = utc_now_iso()
+        seed_namespace = f"valley-auth-default::{login_identifier}"
+        user_id = str(uuid.uuid5(uuid.NAMESPACE_URL, f"{seed_namespace}::user"))
+        identity_id = str(uuid.uuid5(uuid.NAMESPACE_URL, f"{seed_namespace}::identity"))
+        profile_id = str(uuid.uuid5(uuid.NAMESPACE_URL, f"{seed_namespace}::profile"))
+        merchant_slug = str(definition.get("merchant_slug") or self._slugify(definition.get("display_name") or definition.get("full_name")))
+        merchant_profile = None
+        if str(definition.get("primary_role") or "").upper() == "MERCHANT":
+            merchant_profile = {
+                "merchant_profile_id": str(uuid.uuid5(uuid.NAMESPACE_URL, f"{seed_namespace}::merchant")),
+                "merchant_user_id": user_id,
+                "profile_status": "ACTIVE",
+                "merchant_code": str(definition.get("merchant_code") or f"MER-{merchant_slug[:18].upper()}"),
+                "slug": merchant_slug,
+                "display_name": str(definition.get("display_name") or definition.get("full_name") or ""),
+            }
+        return {
+            "user_id": user_id,
+            "user_kind": str(definition.get("user_kind") or "PF"),
+            "account_status": "ACTIVE",
+            "full_name": str(definition.get("full_name") or ""),
+            "display_name": str(definition.get("display_name") or definition.get("full_name") or ""),
+            "email": email,
+            "document_country": "BR",
+            "document_type": str(definition.get("document_type") or "EMAIL_LOGIN"),
+            "document_number": str(definition.get("document_number") or email),
+            "primary_role": str(definition.get("primary_role") or "CUSTOMER"),
+            "module_tier": str(definition.get("module_tier") or "PRODUCT"),
+            "permissions": definition.get("permissions") if isinstance(definition.get("permissions"), list) else [],
+            "created_at": created_at,
+            "updated_at": created_at,
+            "identity": {
+                "identity_id": identity_id,
+                "identity_type": "EMAIL_PASSWORD",
+                "identity_status": "ACTIVE",
+                "login_identifier": login_identifier,
+                "login_identifier_normalized": login_identifier,
+                "email": email,
+                "password_hash": str(definition.get("password_hash") or ""),
+                "password_algo": str(definition.get("password_algo") or "pbkdf2_sha256_310000"),
+                "failed_login_count": 0,
+                "locked_until": None,
+                "verified_at": created_at,
+                "last_authenticated_at": None,
+            },
+            "profile": {
+                "user_profile_id": profile_id,
+                "profile_status": "ACTIVE",
+                "username": self._slugify(definition.get("display_name") or definition.get("full_name")),
+                "display_handle": str(definition.get("display_name") or definition.get("full_name") or ""),
+                "preferences_json": {},
+                "onboarding_completed_at": created_at if merchant_profile is None else None,
+            },
+            "merchant_profile": merchant_profile,
+        }
+
+    def _seed_default_auth_users(self, payload: dict[str, Any]) -> dict[str, Any]:
+        users = payload.get("users") if isinstance(payload.get("users"), list) else []
+        sessions = payload.get("sessions") if isinstance(payload.get("sessions"), list) else []
+        normalized_users = [user for user in users if isinstance(user, dict)]
+        existing_identifiers = {
+            self._normalize_auth_identifier(((user.get("identity") or {}).get("login_identifier_normalized")))
+            for user in normalized_users
+            if isinstance(user.get("identity"), dict)
+        }
+        changed = False
+        for definition in DEFAULT_AUTH_USERS:
+            identifier = self._normalize_auth_identifier(definition.get("login_identifier"))
+            if identifier and identifier not in existing_identifiers:
+                normalized_users.append(self._build_default_auth_user(definition))
+                existing_identifiers.add(identifier)
+                changed = True
+        normalized_payload = {
+            "version": str(payload.get("version") or "v1"),
+            "users": normalized_users,
+            "sessions": [session for session in sessions if isinstance(session, dict)],
+        }
+        if changed:
+            write_json_file(USER_AUTH_RUNTIME_PATH, normalized_payload)
+        return normalized_payload
 
     def _write_auth_runtime_payload(self, payload: dict[str, Any]) -> None:
         normalized = {

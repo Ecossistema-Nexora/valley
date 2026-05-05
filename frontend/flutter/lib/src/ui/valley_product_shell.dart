@@ -64,6 +64,7 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
     'MARKETPLACE',
     'STOCK',
     'CHAT',
+    'PAY',
   };
 
   late ProductShellData _data;
@@ -92,6 +93,82 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
   bool _authBusy = false;
   String _authFeedback = '';
 
+  List<_PrimaryNavItem> get _primaryNavItems {
+    final Set<String> moduleIds = _data.modules
+        .map((ProductModule module) => module.id)
+        .toSet();
+    final List<_PrimaryNavItem> items = <_PrimaryNavItem>[];
+    if (moduleIds.contains('MARKETPLACE')) {
+      items.add(
+        const _PrimaryNavItem(
+          icon: Icons.storefront_rounded,
+          label: 'Market',
+          moduleId: 'MARKETPLACE',
+        ),
+      );
+    }
+    if (moduleIds.contains('STOCK')) {
+      items.add(
+        const _PrimaryNavItem(
+          icon: Icons.inventory_2_rounded,
+          label: 'Stock',
+          moduleId: 'STOCK',
+        ),
+      );
+    }
+    if (moduleIds.contains('CHAT')) {
+      items.add(
+        const _PrimaryNavItem(
+          icon: Icons.forum_rounded,
+          label: 'Chat',
+          moduleId: 'CHAT',
+        ),
+      );
+    }
+    items.addAll(const <_PrimaryNavItem>[
+      _PrimaryNavItem(
+        icon: Icons.shopping_cart_checkout_rounded,
+        label: 'Checkout',
+        surface: 'checkout_nav',
+      ),
+      _PrimaryNavItem(
+        icon: Icons.person_rounded,
+        label: 'Perfil',
+        surface: 'profile',
+      ),
+    ]);
+    return items;
+  }
+
+  int _navIndexForModule(String moduleId) {
+    final int itemIndex = _primaryNavItems.indexWhere(
+      (_PrimaryNavItem item) => item.moduleId == moduleId,
+    );
+    return itemIndex >= 0 ? itemIndex : 0;
+  }
+
+  int _navIndexForSurfaceItem(String surface) {
+    final int itemIndex = _primaryNavItems.indexWhere(
+      (_PrimaryNavItem item) => item.surface == surface,
+    );
+    return itemIndex >= 0 ? itemIndex : 0;
+  }
+
+  int _navIndexForSurface(String surface) {
+    if (surface == 'chat') {
+      return _navIndexForModule('CHAT');
+    }
+    if (surface == 'checkout' ||
+        surface == 'confirmation' ||
+        surface == 'receipt') {
+      return _navIndexForSurfaceItem('checkout_nav');
+    }
+    if (surface == 'identity' || surface == 'client') {
+      return _navIndexForSurfaceItem('profile');
+    }
+    return 0;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -105,6 +182,7 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
     } else if (_data.modules.isNotEmpty) {
       _selectedModuleId = _data.modules.first.id;
     }
+    _navIndex = _navIndexForModule(_selectedModuleId);
     _restoreAuthSession();
   }
 
@@ -568,6 +646,7 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
       _surface = surface;
       _selectedItem = null;
       _selectedConversation = null;
+      _navIndex = _navIndexForSurface(surface);
     });
     if (announce) {
       _setHelenaMood(
@@ -587,12 +666,38 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
       _surface = 'identity';
       _selectedItem = returnItem;
       _selectedConversation = null;
-      _navIndex = 4;
+      _navIndex = _navIndexForSurface('identity');
     });
     _setHelenaMood(
       'focus',
       'Abrindo a camada de confiança para validar Face ID, Voice ID e score.',
     );
+  }
+
+  void _openCheckoutFromPrimaryNav() {
+    final ProductItem? item =
+        _selectedItem ??
+        (_cartItems.isNotEmpty ? _cartItems.first : null) ??
+        _data.items.cast<ProductItem?>().firstWhere(
+          (ProductItem? candidate) =>
+              candidate != null &&
+              (candidate.moduleId == 'MARKETPLACE' ||
+                  candidate.moduleId == 'STOCK'),
+          orElse: () => null,
+        );
+    if (item == null) {
+      _openSurface('home');
+      return;
+    }
+    _openCheckout(item);
+  }
+
+  void _openProfileFromPrimaryNav() {
+    if (_authSession == null) {
+      _openIdentity();
+      return;
+    }
+    _openSurface('client');
   }
 
   Future<void> _submitLogin({
@@ -859,13 +964,7 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
       _surface = 'home';
       _selectedItem = null;
       _selectedConversation = null;
-      if (moduleId == 'MARKETPLACE') {
-        _navIndex = 1;
-      } else if (moduleId == 'STOCK') {
-        _navIndex = 2;
-      } else if (moduleId == 'CHAT') {
-        _navIndex = 3;
-      }
+      _navIndex = _navIndexForModule(moduleId);
     });
     if (announce) {
       _setHelenaMood(mood, message ?? 'Módulo $moduleId ativo.');
@@ -984,10 +1083,8 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
         authSession: _authSession,
         authBusy: _authBusy,
         feedback: _authFeedback,
-        onLogin: (String identifier, String password) => _submitLogin(
-          identifier: identifier,
-          password: password,
-        ),
+        onLogin: (String identifier, String password) =>
+            _submitLogin(identifier: identifier, password: password),
         onRegister:
             (
               String fullName,
@@ -1539,7 +1636,8 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
                               _TopBar(
                                 busy: _busy,
                                 cartCount: _cartItems.length,
-                                accountLabel: _authSession?.user.displayName ?? '',
+                                accountLabel:
+                                    _authSession?.user.displayName ?? '',
                                 accountSigned: _authSession != null,
                                 onSearchChanged: (String value) =>
                                     setState(() => _query = value),
@@ -1659,6 +1757,7 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
                     top: 92,
                     bottom: 24,
                     child: _DesktopSideRail(
+                      items: _primaryNavItems,
                       index: _navIndex,
                       onChanged: _handlePrimaryNav,
                     ),
@@ -1667,28 +1766,38 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
             ),
           ),
         ),
-        bottomNavigationBar: wide || !_moduleDockEnabled
+        bottomNavigationBar: wide
             ? null
-            : _BottomGlassNav(index: _navIndex, onChanged: _handlePrimaryNav),
+            : _BottomGlassNav(
+                items: _primaryNavItems,
+                index: _navIndex,
+                onChanged: _handlePrimaryNav,
+              ),
       ),
     );
   }
 
   void _handlePrimaryNav(int value) {
+    if (value < 0 || value >= _primaryNavItems.length) {
+      return;
+    }
+    final _PrimaryNavItem item = _primaryNavItems[value];
     setState(() {
       _navIndex = value;
     });
-    if (value == 0) {
-      _openSurface('home');
-    } else if (value == 1) {
-      _showModule('MARKETPLACE');
-    } else if (value == 2) {
-      _showModule('STOCK');
-    } else if (value == 3) {
-      _openSurface('chat');
-    } else if (value == 4) {
-      _openSurface('client');
+    if (item.moduleId != null) {
+      _showModule(item.moduleId!, announce: false);
+      return;
     }
+    if (item.surface == 'checkout_nav') {
+      _openCheckoutFromPrimaryNav();
+      return;
+    }
+    if (item.surface == 'profile') {
+      _openProfileFromPrimaryNav();
+      return;
+    }
+    _openSurface(item.surface, announce: false);
   }
 }
 
@@ -1763,7 +1872,7 @@ class _TopBar extends StatelessWidget {
                 ),
                 const SizedBox(height: 3),
                 Text(
-                  'Marketplace, Stock, Chat e confiança em modo produto',
+                  'Marketplace, Stock, Chat, Checkout e Perfil em modo produto',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
@@ -3857,9 +3966,7 @@ class _StockCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: stageColor,
                   borderRadius: BorderRadius.circular(24),
-                  border: Border.all(
-                    color: _softBorderColor(context),
-                  ),
+                  border: Border.all(color: _softBorderColor(context)),
                 ),
                 child: Stack(
                   fit: StackFit.expand,
@@ -4448,10 +4555,7 @@ class _ProductDetailScreen extends StatelessWidget {
                 label: item.providerDisplayName,
               ),
               if (item.channelLabel.trim().isNotEmpty)
-                _MetaPill(
-                  icon: Icons.route_rounded,
-                  label: item.channelLabel,
-                ),
+                _MetaPill(icon: Icons.route_rounded, label: item.channelLabel),
             ],
           ),
           const SizedBox(height: 18),
@@ -4711,9 +4815,7 @@ class _CheckoutScreen extends StatelessWidget {
                   FilledButton.icon(
                     onPressed: onConfirm,
                     icon: Icon(
-                      authRequired
-                          ? Icons.login_rounded
-                          : Icons.lock_rounded,
+                      authRequired ? Icons.login_rounded : Icons.lock_rounded,
                     ),
                     label: Text(
                       authRequired
@@ -5296,18 +5398,17 @@ class _ReceiptLine extends StatelessWidget {
   }
 }
 
-typedef _AuthLoginHandler = Future<void> Function(
-  String identifier,
-  String password,
-);
+typedef _AuthLoginHandler =
+    Future<void> Function(String identifier, String password);
 
-typedef _AuthRegisterHandler = Future<void> Function(
-  String fullName,
-  String displayName,
-  String email,
-  String password,
-  String role,
-);
+typedef _AuthRegisterHandler =
+    Future<void> Function(
+      String fullName,
+      String displayName,
+      String email,
+      String password,
+      String role,
+    );
 
 class _IdentityTrustScreen extends StatelessWidget {
   const _IdentityTrustScreen({
@@ -5344,7 +5445,9 @@ class _IdentityTrustScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                authSession == null ? 'Entrar ou criar conta' : 'Conta e confiança',
+                authSession == null
+                    ? 'Entrar ou criar conta'
+                    : 'Conta e confiança',
                 style: theme.textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.w900,
                 ),
@@ -5437,28 +5540,6 @@ class _IdentityTrustScreen extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(height: 18),
-        Row(
-          children: const <Widget>[
-            Expanded(
-              child: _TrustExplanationCard(
-                title: 'Fatores positivos',
-                body:
-                    'Dispositivo recorrente, seller score alto e histórico sem disputa.',
-                icon: Icons.trending_up_rounded,
-              ),
-            ),
-            SizedBox(width: 14),
-            Expanded(
-              child: _TrustExplanationCard(
-                title: 'Pendências leves',
-                body:
-                    'Voice ID pode ser solicitado em aceite sensível ou revisão manual.',
-                icon: Icons.pending_actions_rounded,
-              ),
-            ),
-          ],
-        ),
       ],
     );
   }
@@ -5522,7 +5603,11 @@ class _AuthAccessPanelState extends State<_AuthAccessPanel> {
         children: <Widget>[
           Container(
             decoration: BoxDecoration(
-              color: _softContainerColor(context, lightAlpha: 0.96, darkAlpha: 0.06),
+              color: _softContainerColor(
+                context,
+                lightAlpha: 0.96,
+                darkAlpha: 0.06,
+              ),
               borderRadius: BorderRadius.circular(18),
             ),
             child: const TabBar(
@@ -5534,96 +5619,102 @@ class _AuthAccessPanelState extends State<_AuthAccessPanel> {
           ),
           const SizedBox(height: 16),
           SizedBox(
-            height: 360,
+            height: 520,
             child: TabBarView(
               children: <Widget>[
-                _AuthFormCard(
-                  title: 'Login Valley',
-                  subtitle: 'Use seu email e senha para liberar checkout e área do cliente.',
-                  busy: widget.busy,
-                  feedback: widget.feedback,
-                  fields: <Widget>[
-                    _AuthTextField(
-                      controller: _loginIdentifierController,
-                      label: 'Email',
-                      hintText: 'voce@empresa.com',
+                SingleChildScrollView(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: _AuthFormCard(
+                    title: 'Login Valley',
+                    subtitle:
+                        'Use seu email e senha para liberar checkout e área do cliente.',
+                    busy: widget.busy,
+                    feedback: widget.feedback,
+                    fields: <Widget>[
+                      _AuthTextField(
+                        controller: _loginIdentifierController,
+                        label: 'Email',
+                        hintText: 'voce@empresa.com',
+                      ),
+                      const SizedBox(height: 12),
+                      _AuthTextField(
+                        controller: _loginPasswordController,
+                        label: 'Senha',
+                        hintText: 'Sua senha',
+                        obscureText: true,
+                      ),
+                    ],
+                    actionLabel: 'Entrar agora',
+                    onSubmit: () => widget.onLogin(
+                      _loginIdentifierController.text,
+                      _loginPasswordController.text,
                     ),
-                    const SizedBox(height: 12),
-                    _AuthTextField(
-                      controller: _loginPasswordController,
-                      label: 'Senha',
-                      hintText: 'Sua senha',
-                      obscureText: true,
-                    ),
-                  ],
-                  actionLabel: 'Entrar agora',
-                  onSubmit: () => widget.onLogin(
-                    _loginIdentifierController.text,
-                    _loginPasswordController.text,
                   ),
                 ),
-                _AuthFormCard(
-                  title: 'Nova conta',
-                  subtitle: 'Crie uma conta de comprador ou lojista com sessão persistente.',
-                  busy: widget.busy,
-                  feedback: widget.feedback,
-                  fields: <Widget>[
-                    _AuthTextField(
-                      controller: _registerFullNameController,
-                      label: 'Nome completo',
-                      hintText: 'Seu nome',
-                    ),
-                    const SizedBox(height: 12),
-                    _AuthTextField(
-                      controller: _registerDisplayNameController,
-                      label: 'Nome público',
-                      hintText: 'Como deseja aparecer',
-                    ),
-                    const SizedBox(height: 12),
-                    _AuthTextField(
-                      controller: _registerEmailController,
-                      label: 'Email',
-                      hintText: 'voce@empresa.com',
-                    ),
-                    const SizedBox(height: 12),
-                    _AuthTextField(
-                      controller: _registerPasswordController,
-                      label: 'Senha',
-                      hintText: 'Ao menos 8 caracteres',
-                      obscureText: true,
-                    ),
-                    const SizedBox(height: 12),
-                    DropdownButtonFormField<String>(
-                      initialValue: _role,
-                      decoration: const InputDecoration(
-                        labelText: 'Perfil',
+                SingleChildScrollView(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: _AuthFormCard(
+                    title: 'Nova conta',
+                    subtitle:
+                        'Crie uma conta de comprador ou lojista com sessão persistente.',
+                    busy: widget.busy,
+                    feedback: widget.feedback,
+                    fields: <Widget>[
+                      _AuthTextField(
+                        controller: _registerFullNameController,
+                        label: 'Nome completo',
+                        hintText: 'Seu nome',
                       ),
-                      items: const <DropdownMenuItem<String>>[
-                        DropdownMenuItem(
-                          value: 'CUSTOMER',
-                          child: Text('Comprador'),
-                        ),
-                        DropdownMenuItem(
-                          value: 'MERCHANT',
-                          child: Text('Lojista'),
-                        ),
-                      ],
-                      onChanged: widget.busy
-                          ? null
-                          : (String? value) {
-                              setState(() {
-                                _role = value ?? 'CUSTOMER';
-                              });
-                            },
+                      const SizedBox(height: 12),
+                      _AuthTextField(
+                        controller: _registerDisplayNameController,
+                        label: 'Nome público',
+                        hintText: 'Como deseja aparecer',
+                      ),
+                      const SizedBox(height: 12),
+                      _AuthTextField(
+                        controller: _registerEmailController,
+                        label: 'Email',
+                        hintText: 'voce@empresa.com',
+                      ),
+                      const SizedBox(height: 12),
+                      _AuthTextField(
+                        controller: _registerPasswordController,
+                        label: 'Senha',
+                        hintText: 'Ao menos 8 caracteres',
+                        obscureText: true,
+                      ),
+                      const SizedBox(height: 12),
+                      DropdownButtonFormField<String>(
+                        initialValue: _role,
+                        decoration: const InputDecoration(labelText: 'Perfil'),
+                        items: const <DropdownMenuItem<String>>[
+                          DropdownMenuItem(
+                            value: 'CUSTOMER',
+                            child: Text('Comprador'),
+                          ),
+                          DropdownMenuItem(
+                            value: 'MERCHANT',
+                            child: Text('Lojista'),
+                          ),
+                        ],
+                        onChanged: widget.busy
+                            ? null
+                            : (String? value) {
+                                setState(() {
+                                  _role = value ?? 'CUSTOMER';
+                                });
+                              },
+                      ),
+                    ],
+                    actionLabel: 'Criar conta',
+                    onSubmit: () => widget.onRegister(
+                      _registerFullNameController.text,
+                      _registerDisplayNameController.text,
+                      _registerEmailController.text,
+                      _registerPasswordController.text,
+                      _role,
                     ),
-                  ],
-                  actionLabel: 'Criar conta',
-                  onSubmit: () => widget.onRegister(
-                    _registerFullNameController.text,
-                    _registerDisplayNameController.text,
-                    _registerEmailController.text,
-                    _registerPasswordController.text,
-                    _role,
                   ),
                 ),
               ],
@@ -5671,9 +5762,9 @@ class _AuthFormCard extends StatelessWidget {
         children: <Widget>[
           Text(
             title,
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.w800,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
           ),
           const SizedBox(height: 6),
           Text(
@@ -5693,7 +5784,7 @@ class _AuthFormCard extends StatelessWidget {
               ),
             ),
           ],
-          const Spacer(),
+          const SizedBox(height: 18),
           SizedBox(
             width: double.infinity,
             child: FilledButton.icon(
@@ -5732,10 +5823,7 @@ class _AuthTextField extends StatelessWidget {
     return TextField(
       controller: controller,
       obscureText: obscureText,
-      decoration: InputDecoration(
-        labelText: label,
-        hintText: hintText,
-      ),
+      decoration: InputDecoration(labelText: label, hintText: hintText),
     );
   }
 }
@@ -5779,47 +5867,6 @@ class _IdentityMetric extends StatelessWidget {
                   ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w900),
                 ),
               ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _TrustExplanationCard extends StatelessWidget {
-  const _TrustExplanationCard({
-    required this.title,
-    required this.body,
-    required this.icon,
-  });
-
-  final String title;
-  final String body;
-  final IconData icon;
-
-  @override
-  Widget build(BuildContext context) {
-    return ValleyPanel(
-      radius: 24,
-      padding: const EdgeInsets.all(18),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Icon(icon, color: ValleyBrandColors.cyan),
-          const SizedBox(height: 12),
-          Text(
-            title,
-            style: Theme.of(
-              context,
-            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w900),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            body,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-              height: 1.35,
             ),
           ),
         ],
@@ -8850,10 +8897,7 @@ void _openGalleryLightbox(
 }
 
 class _GalleryLightbox extends StatefulWidget {
-  const _GalleryLightbox({
-    required this.imageUrls,
-    required this.initialIndex,
-  });
+  const _GalleryLightbox({required this.imageUrls, required this.initialIndex});
 
   final List<String> imageUrls;
   final int initialIndex;
@@ -8891,7 +8935,10 @@ class _GalleryLightboxState extends State<_GalleryLightbox> {
             Row(
               children: <Widget>[
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.08),
                     borderRadius: BorderRadius.circular(999),
@@ -9291,10 +9338,10 @@ class _ProductMediaStageState extends State<_ProductMediaStage> {
       onTap: entry.previewUrl.isEmpty
           ? null
           : () => _openGalleryLightbox(
-                context,
-                imageUrls: widget.item.mediaGallery,
-                initialIndex: initialIndex < 0 ? 0 : initialIndex,
-              ),
+              context,
+              imageUrls: widget.item.mediaGallery,
+              initialIndex: initialIndex < 0 ? 0 : initialIndex,
+            ),
       child: Container(
         key: ValueKey<String>('image:${entry.previewUrl}'),
         color: _mediaStageColor(context),
@@ -9427,15 +9474,9 @@ class _MetaPill extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
-        color: _softContainerColor(
-          context,
-          lightAlpha: 0.96,
-          darkAlpha: 0.06,
-        ),
+        color: _softContainerColor(context, lightAlpha: 0.96, darkAlpha: 0.06),
         borderRadius: BorderRadius.circular(999),
-        border: Border.all(
-          color: _softBorderColor(context, darkAlpha: 0.10),
-        ),
+        border: Border.all(color: _softBorderColor(context, darkAlpha: 0.10)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -10162,21 +10203,18 @@ class _ClientAreaScreen extends StatelessWidget {
 }
 
 class _DesktopSideRail extends StatelessWidget {
-  const _DesktopSideRail({required this.index, required this.onChanged});
+  const _DesktopSideRail({
+    required this.items,
+    required this.index,
+    required this.onChanged,
+  });
 
+  final List<_PrimaryNavItem> items;
   final int index;
   final ValueChanged<int> onChanged;
 
   @override
   Widget build(BuildContext context) {
-    const List<_BottomItem> items = <_BottomItem>[
-      _BottomItem(Icons.home_max_rounded, 'Início'),
-      _BottomItem(Icons.storefront_rounded, 'Market'),
-      _BottomItem(Icons.inventory_2_rounded, 'Stock'),
-      _BottomItem(Icons.chat_bubble_rounded, 'Chat'),
-      _BottomItem(Icons.person_rounded, 'Cliente'),
-    ];
-
     return Container(
       width: 72,
       padding: const EdgeInsets.symmetric(vertical: 12),
@@ -10291,7 +10329,8 @@ class _FloatingModuleDock extends StatelessWidget {
           (ProductModule module) =>
               module.id == 'MARKETPLACE' ||
               module.id == 'STOCK' ||
-              module.id == 'CHAT',
+              module.id == 'CHAT' ||
+              module.id == 'PAY',
         )
         .toList();
 
@@ -10364,7 +10403,11 @@ class _FloatingModuleDock extends StatelessWidget {
                 for (final ProductModule module in visibleModules) ...<Widget>[
                   _DockPill(
                     icon: _moduleIcon(module.id),
-                    label: module.id == 'MARKETPLACE' ? 'Market' : module.id,
+                    label: module.id == 'MARKETPLACE'
+                        ? 'Market'
+                        : module.id == 'PAY'
+                        ? 'Checkout'
+                        : module.id,
                     selected: selectedModuleId == module.id,
                     color: module.id == 'STOCK'
                         ? ValleyBrandColors.cyan
@@ -10380,23 +10423,6 @@ class _FloatingModuleDock extends StatelessWidget {
                   color: ValleyBrandColors.success,
                   onTap: onOpenIdentity,
                 ),
-                const SizedBox(width: 8),
-                for (final String label in const <String>[
-                  'PLUG',
-                  'DOCS',
-                  'WMS',
-                ])
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8),
-                    child: _DockPill(
-                      icon: Icons.pending_rounded,
-                      label: label,
-                      selected: false,
-                      color: Colors.white.withValues(alpha: 0.44),
-                      onTap: onOpenSettings,
-                      disabled: true,
-                    ),
-                  ),
               ],
             ),
           ),
@@ -10413,7 +10439,6 @@ class _DockPill extends StatelessWidget {
     required this.selected,
     required this.color,
     required this.onTap,
-    this.disabled = false,
   });
 
   final IconData icon;
@@ -10421,12 +10446,11 @@ class _DockPill extends StatelessWidget {
   final bool selected;
   final Color color;
   final VoidCallback onTap;
-  final bool disabled;
 
   @override
   Widget build(BuildContext context) {
     return Tooltip(
-      message: disabled ? '$label em preparação' : label,
+      message: label,
       child: InkWell(
         borderRadius: BorderRadius.circular(999),
         onTap: onTap,
@@ -10436,7 +10460,7 @@ class _DockPill extends StatelessWidget {
           decoration: BoxDecoration(
             color: selected
                 ? color.withValues(alpha: 0.22)
-                : Colors.white.withValues(alpha: disabled ? 0.03 : 0.06),
+                : Colors.white.withValues(alpha: 0.06),
             borderRadius: BorderRadius.circular(999),
             border: Border.all(
               color: selected
@@ -10452,9 +10476,7 @@ class _DockPill extends StatelessWidget {
               Text(
                 label,
                 style: TextStyle(
-                  color: disabled
-                      ? Colors.white.withValues(alpha: 0.48)
-                      : Colors.white,
+                  color: Colors.white,
                   fontSize: 12,
                   fontWeight: FontWeight.w800,
                 ),
@@ -10481,21 +10503,18 @@ IconData _moduleIcon(String id) {
 }
 
 class _BottomGlassNav extends StatelessWidget {
-  const _BottomGlassNav({required this.index, required this.onChanged});
+  const _BottomGlassNav({
+    required this.items,
+    required this.index,
+    required this.onChanged,
+  });
 
+  final List<_PrimaryNavItem> items;
   final int index;
   final ValueChanged<int> onChanged;
 
   @override
   Widget build(BuildContext context) {
-    const List<_BottomItem> items = <_BottomItem>[
-      _BottomItem(Icons.home_max_rounded, 'Início'),
-      _BottomItem(Icons.storefront_rounded, 'Market'),
-      _BottomItem(Icons.inventory_2_rounded, 'Stock'),
-      _BottomItem(Icons.chat_bubble_rounded, 'Chat'),
-      _BottomItem(Icons.person_rounded, 'Cliente'),
-    ];
-
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
       child: Container(
@@ -10561,4 +10580,16 @@ class _BottomItem {
 
   final IconData icon;
   final String label;
+}
+
+class _PrimaryNavItem extends _BottomItem {
+  const _PrimaryNavItem({
+    required IconData icon,
+    required String label,
+    this.moduleId,
+    this.surface = 'home',
+  }) : super(icon, label);
+
+  final String? moduleId;
+  final String surface;
 }
