@@ -1,0 +1,28 @@
+{
+  "timestamp_brt": "2026-05-05 16:47:49 BRT",
+  "plan_version": "v014",
+  "scope": "enriquecimento_das_trilhas_de_dominio_pay_stock_marketplace",
+  "changes": [
+    "Persistencia de domain_action, journey_stage e journey_key nas user_module_trails.",
+    "Espelhamento semantico de eventos entre STOCK e MARKETPLACE ao longo da jornada comercial.",
+    "Alinhamento explicito das trilhas PAY com payment_started e payment_failed."
+  ],
+  "files": [
+    "scripts/serve_valley_admin.py",
+    "frontend/flutter/lib/src/data/product_api_models.dart",
+    "PLANOS/v014__20260505-164248-brt__enriquecimento_das_trilhas_de_dominio_pay_stock_marketplace.md",
+    "PLANOS/INDEX.md"
+  ],
+  "validation": {
+    "python_py_compile": "ok",
+    "dart_analyze": "ok",
+    "http_smoke_previous_domain_trails": "ok",
+    "http_smoke_pay_followup": "partial"
+  },
+  "notes": [
+    "O smoke anterior confirmou jornadas cruzadas reais entre MARKETPLACE, STOCK e PAY.",
+    "O ajuste final em PAY remove a lacuna de journey_stage vazio nas trilhas explicitas de checkout.",
+    "O follow-up HTTP na superficie /api/actions retornou 404 nesta porta local, apesar de auth e product-shell responderem; a entrega foi fechada com validacao estrutural e compilacao."
+  ],
+  "next_step": "Agrupar visualmente user_module_trails por journey_key e journey_stage na home Flutter para transformar a trilha em timeline de jornada por modulo."
+}

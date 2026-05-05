@@ -76,10 +76,14 @@ SHOPEE_NOTIFICATIONS_LATEST_PATH = RUNTIME_DIR / "valley-shopee-notification-lat
 STOCK_SYNC_STATE_PATH = RUNTIME_DIR / "valley-stock-sync-state.json"
 STOCK_SYNC_EVENTS_PATH = RUNTIME_DIR / "valley-stock-sync-events.jsonl"
 PRODUCT_CATALOG_PATH = ROOT / "frontend" / "flutter" / "assets" / "data" / "valley_product_catalog.json"
+MODULES_REGISTRY_PATH = ROOT / "frontend" / "flutter" / "assets" / "data" / "modules_v47.json"
+MVP_MANIFEST_PATH = ROOT / "frontend" / "flutter" / "assets" / "data" / "valley_mvp_manifest.v1.json"
 PRODUCT_INTERACTIONS_PATH = RUNTIME_DIR / "valley-product-interactions.jsonl"
+USER_MODULE_TRAILS_PATH = RUNTIME_DIR / "valley-user-module-trails.jsonl"
 MOVE_TELEMETRY_PATH = RUNTIME_DIR / "move-telemetry.jsonl"
 USER_AUTH_RUNTIME_PATH = RUNTIME_DIR / "valley-user-auth-runtime.json"
 USER_AUTH_EVENTS_PATH = RUNTIME_DIR / "valley-user-auth-events.jsonl"
+HOME_DEFAULT_VISIBLE_MODULES = ("PAY", "MARKETPLACE", "STOCK", "CHAT", "DOCS", "PLUG")
 PRODUCT_MVP_MODULES = {"STOCK", "MARKETPLACE", "CHAT", "PAY"}
 PRODUCT_MVP_MODULE_ORDER = ("MARKETPLACE", "STOCK", "CHAT", "PAY")
 PRODUCT_MVP_MODULE_META = {
@@ -755,6 +759,26 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             )
             return
 
+        if route == "/api/me/home":
+            auth_user, auth_session = self._resolve_active_auth_session(scope="product")
+            self._write_json(HTTPStatus.OK, self._me_home_payload(auth_user, auth_session))
+            return
+
+        if route == "/api/me/recent-actions":
+            auth_user, _ = self._resolve_active_auth_session(scope="product")
+            self._write_json(HTTPStatus.OK, self._me_recent_actions_payload(auth_user))
+            return
+
+        if route == "/api/me/recommendations":
+            auth_user, _ = self._resolve_active_auth_session(scope="product")
+            self._write_json(HTTPStatus.OK, self._me_recommendations_payload(auth_user))
+            return
+
+        if route == "/api/me/identity-score":
+            auth_user, _ = self._resolve_active_auth_session(scope="product")
+            self._write_json(HTTPStatus.OK, self._me_identity_score_payload(auth_user))
+            return
+
         if route == "/api/product-shell":
             self._write_json(HTTPStatus.OK, self._product_shell_payload())
             return
@@ -1105,6 +1129,19 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             {"status": "not_found", "route": route, "service": "valley-admin"},
         )
 
+    def do_PUT(self) -> None:  # noqa: N802
+        parsed = urlsplit(self.path)
+        route = self._normalize_public_route(parsed.path)
+
+        if route == "/api/me/home/preferences":
+            self._write_json(*self._me_home_preferences_response())
+            return
+
+        self._write_json(
+            HTTPStatus.NOT_FOUND,
+            {"status": "not_found", "route": route, "service": "valley-admin"},
+        )
+
     def log_message(self, format: str, *args) -> None:  # noqa: A003
         message = format % args
         print(f"[valley-admin] {self.address_string()} {message}")
@@ -1323,6 +1360,15 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 return user, identity
         return None, None
 
+    def _find_auth_user_by_id(self, users: list[dict[str, Any]], user_id: str) -> dict[str, Any] | None:
+        normalized_user_id = str(user_id or "").strip()
+        if not normalized_user_id:
+            return None
+        for user in users:
+            if isinstance(user, dict) and str(user.get("user_id") or "").strip() == normalized_user_id:
+                return user
+        return None
+
     def _resolve_active_auth_session(
         self,
         *,
@@ -1388,6 +1434,1139 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             "service": "valley-auth",
             "scope": scope,
             "session": self._auth_public_session(session, user),
+        }
+
+    def _available_home_module_codes(self) -> list[str]:
+        manifest = load_json_file(MVP_MANIFEST_PATH) or {}
+        included = manifest.get("included_modules") if isinstance(manifest.get("included_modules"), list) else []
+        excluded = {
+            str(item).strip().upper()
+            for item in (manifest.get("excluded_modules") if isinstance(manifest.get("excluded_modules"), list) else [])
+            if str(item).strip()
+        }
+        modules_payload = load_json_file(MODULES_REGISTRY_PATH) or {}
+        modules = modules_payload.get("modules") if isinstance(modules_payload.get("modules"), list) else []
+        order: list[str] = []
+        seen: set[str] = set()
+        for module in modules:
+            if not isinstance(module, dict):
+                continue
+            code = str(module.get("code") or "").strip().upper()
+            if not code or code in excluded:
+                continue
+            if included and code not in {str(item).strip().upper() for item in included}:
+                continue
+            if code not in seen:
+                seen.add(code)
+                order.append(code)
+        if order:
+            return order
+        return [code for code in HOME_DEFAULT_VISIBLE_MODULES if code]
+
+    def _default_home_preferences(self) -> dict[str, Any]:
+        available_codes = self._available_home_module_codes()
+        preferred: list[str] = []
+        for code in HOME_DEFAULT_VISIBLE_MODULES:
+            if code in available_codes and code not in preferred:
+                preferred.append(code)
+        if not preferred:
+            preferred = available_codes[: min(len(available_codes), 6)]
+        return {
+            "visible_module_codes": preferred,
+            "favorite_module_codes": preferred[: min(len(preferred), 4)],
+            "updated_at_utc": None,
+        }
+
+    def _home_preferences_from_user(self, user: dict[str, Any] | None) -> dict[str, Any]:
+        defaults = self._default_home_preferences()
+        available_codes = set(self._available_home_module_codes())
+        if user is None:
+            return defaults
+
+        profile = user.get("profile") if isinstance(user.get("profile"), dict) else {}
+        preferences = profile.get("preferences_json") if isinstance(profile.get("preferences_json"), dict) else {}
+        home_preferences = preferences.get("home") if isinstance(preferences.get("home"), dict) else {}
+
+        def _normalized_codes(raw: Any) -> list[str]:
+            if not isinstance(raw, list):
+                return []
+            normalized: list[str] = []
+            seen: set[str] = set()
+            for item in raw:
+                code = str(item or "").strip().upper()
+                if not code or code not in available_codes or code in seen:
+                    continue
+                seen.add(code)
+                normalized.append(code)
+            return normalized
+
+        visible_codes = _normalized_codes(home_preferences.get("visible_module_codes"))
+        favorite_codes = _normalized_codes(home_preferences.get("favorite_module_codes"))
+        if not visible_codes:
+            visible_codes = list(defaults["visible_module_codes"])
+        if not favorite_codes:
+            favorite_codes = visible_codes[: min(len(visible_codes), 4)]
+
+        return {
+            "visible_module_codes": visible_codes,
+            "favorite_module_codes": favorite_codes,
+            "updated_at_utc": home_preferences.get("updated_at_utc"),
+        }
+
+    def _persist_home_preferences(
+        self,
+        runtime: dict[str, Any],
+        user_id: str,
+        *,
+        visible_module_codes: list[str],
+        favorite_module_codes: list[str],
+    ) -> dict[str, Any] | None:
+        users = runtime.get("users") if isinstance(runtime.get("users"), list) else []
+        user = self._find_auth_user_by_id(users, user_id)
+        if user is None:
+            return None
+        profile = user.get("profile")
+        if not isinstance(profile, dict):
+            profile = {}
+            user["profile"] = profile
+        preferences = profile.get("preferences_json")
+        if not isinstance(preferences, dict):
+            preferences = {}
+            profile["preferences_json"] = preferences
+        payload = {
+            "visible_module_codes": visible_module_codes,
+            "favorite_module_codes": favorite_module_codes,
+            "updated_at_utc": utc_now_iso(),
+        }
+        preferences["home"] = payload
+        profile["preferences_json"] = preferences
+        user["updated_at"] = utc_now_iso()
+        self._write_auth_runtime_payload(runtime)
+        return payload
+
+    def _home_metric_cards(
+        self,
+        user: dict[str, Any] | None,
+        preferences: dict[str, Any],
+        recent_actions: list[dict[str, Any]],
+        identity_score: dict[str, Any],
+    ) -> list[dict[str, Any]]:
+        runtime_signals = self._domain_runtime_signals()
+        visible_codes = preferences.get("visible_module_codes") if isinstance(preferences.get("visible_module_codes"), list) else []
+        recommendations = self._recommendation_records(user)
+        checkout = runtime_signals["checkout"]
+        stock_sync = runtime_signals["stock_sync"]
+        public_runtime = runtime_signals["public_runtime"]
+        return [
+            {
+                "label": "Checkout",
+                "value": "PIX ativo" if checkout.get("checkout_ready") else str(checkout.get("status") or "offline").upper(),
+                "caption": "Mercado Pago pronto para uso." if checkout.get("checkout_ready") else str((checkout.get("validation") or {}).get("detail") or "Checkout ainda nao validado."),
+                "accent": "cyan",
+            },
+            {
+                "label": "Stock sync",
+                "value": str(stock_sync.get("status") or "idle").upper(),
+                "caption": str(((stock_sync.get("last_result") or {}).get("detail") or (stock_sync.get("queued_reason") or "Motor STOCK acompanhando o runtime.")))[:120],
+                "accent": "success",
+            },
+            {
+                "label": "Runtime publico",
+                "value": "LIVE" if str(public_runtime.get("provider_status") or "").strip().lower() == "healthy" else str(public_runtime.get("status") or "down").upper(),
+                "caption": f"{len(visible_codes)} modulos visiveis • {len(recent_actions)} eventos • {len(recommendations)} recomendacoes.",
+                "accent": "warning",
+            },
+        ]
+
+    def _append_product_interaction(
+        self,
+        *,
+        event: str,
+        item: dict[str, Any] | None,
+        detail: str,
+        status: str = "SUCCESS",
+        provider: str = "",
+    ) -> None:
+        auth_user, auth_session = self._resolve_active_auth_session(scope="product")
+        payload = {
+            "event": event,
+            "status": status,
+            "provider": provider,
+            "item_id": str((item or {}).get("id") or ""),
+            "title": str((item or {}).get("title") or ""),
+            "detail": detail,
+            "module_code": str((item or {}).get("module_id") or ""),
+            "amount_brl": (item or {}).get("price_brl"),
+            "created_at_utc": utc_now_iso(),
+            "user_id": str((auth_user or {}).get("user_id") or ""),
+            "session_id": str((auth_session or {}).get("session_id") or ""),
+        }
+        self._append_jsonl(PRODUCT_INTERACTIONS_PATH, payload)
+        module_code = str((item or {}).get("module_id") or "").strip().upper()
+        if module_code in {"PAY", "STOCK", "MARKETPLACE"}:
+            self._append_user_module_trail(
+                user=auth_user,
+                session=auth_session,
+                module_code=module_code,
+                kind=event,
+                domain_action=event,
+                journey_stage="discovery" if event == "product_interest" else "research" if event == "open_media" else "conversion" if event == "checkout_started" else "",
+                status=status,
+                headline=str((item or {}).get("title") or module_code),
+                detail=detail,
+                item=item,
+                provider=provider,
+            )
+        if module_code in {"STOCK", "MARKETPLACE"}:
+            self._append_commerce_domain_trails(
+                event=event,
+                item=item,
+                provider=provider,
+                pay_status=status,
+            )
+
+    def _append_user_module_trail(
+        self,
+        *,
+        user: dict[str, Any] | None,
+        session: dict[str, Any] | None,
+        module_code: str,
+        kind: str,
+        status: str,
+        headline: str,
+        detail: str,
+        item: dict[str, Any] | None = None,
+        provider: str = "",
+        metadata: dict[str, Any] | None = None,
+        domain_action: str = "",
+        journey_stage: str = "",
+        journey_key: str = "",
+    ) -> None:
+        user_id = str((user or {}).get("user_id") or "").strip()
+        if not user_id:
+            return
+        effective_item_id = str((item or {}).get("id") or "").strip()
+        effective_journey_key = str(journey_key or "").strip() or (
+            f"{str(module_code or '').strip().upper()}::{effective_item_id}"
+            if effective_item_id
+            else f"{str(module_code or '').strip().upper()}::{str(kind or '').strip()}"
+        )
+        payload = {
+            "trail_id": str(uuid.uuid4()),
+            "created_at_utc": utc_now_iso(),
+            "user_id": user_id,
+            "session_id": str((session or {}).get("session_id") or ""),
+            "role": str((user or {}).get("primary_role") or ""),
+            "module_code": str(module_code or "").strip().upper(),
+            "kind": str(kind or "").strip(),
+            "status": str(status or "INFO").strip().upper(),
+            "headline": str(headline or "").strip(),
+            "detail": str(detail or "").strip(),
+            "provider": str(provider or "").strip(),
+            "item_id": effective_item_id,
+            "item_title": str((item or {}).get("title") or ""),
+            "amount_brl": (item or {}).get("price_brl"),
+            "domain_action": str(domain_action or kind or "").strip(),
+            "journey_stage": str(journey_stage or "").strip(),
+            "journey_key": effective_journey_key,
+            "metadata": metadata if isinstance(metadata, dict) else {},
+        }
+        self._append_jsonl(USER_MODULE_TRAILS_PATH, payload)
+
+    def _append_commerce_domain_trails(
+        self,
+        *,
+        event: str,
+        item: dict[str, Any] | None,
+        provider: str = "",
+        pay_status: str = "SUCCESS",
+    ) -> None:
+        auth_user, auth_session = self._resolve_active_auth_session(scope="product")
+        if auth_user is None:
+            return
+
+        module_code = str((item or {}).get("module_id") or "").strip().upper()
+        item_title = str((item or {}).get("title") or module_code or "oferta").strip()
+        item_id = str((item or {}).get("id") or "").strip()
+        journey_key = f"commerce::{item_id}" if item_id else f"commerce::{module_code}::{event}"
+
+        if module_code == "STOCK":
+            if event == "product_interest":
+                self._append_user_module_trail(
+                    user=auth_user,
+                    session=auth_session,
+                    module_code="STOCK",
+                    kind="stock_offer_saved",
+                    domain_action="offer_saved",
+                    journey_stage="discovery",
+                    status="SUCCESS",
+                    headline="Oferta STOCK salva",
+                    detail=f"{item_title} entrou na trilha pessoal de avaliacao.",
+                    item=item,
+                    provider=provider,
+                    journey_key=journey_key,
+                )
+                self._append_user_module_trail(
+                    user=auth_user,
+                    session=auth_session,
+                    module_code="MARKETPLACE",
+                    kind="marketplace_offer_considered",
+                    domain_action="offer_considered",
+                    journey_stage="consideration",
+                    status="SUCCESS",
+                    headline="Oferta preparada para comparacao",
+                    detail=f"{item_title} foi marcado para retomada comercial.",
+                    item=item,
+                    provider=provider,
+                    journey_key=journey_key,
+                )
+            elif event == "open_media":
+                self._append_user_module_trail(
+                    user=auth_user,
+                    session=auth_session,
+                    module_code="STOCK",
+                    kind="stock_media_opened",
+                    domain_action="media_opened",
+                    journey_stage="research",
+                    status="SUCCESS",
+                    headline="Midia de fornecedor aberta",
+                    detail=f"{item_title} teve a midia aberta para validacao da oferta.",
+                    item=item,
+                    provider=provider,
+                    journey_key=journey_key,
+                )
+                self._append_user_module_trail(
+                    user=auth_user,
+                    session=auth_session,
+                    module_code="MARKETPLACE",
+                    kind="marketplace_offer_researched",
+                    domain_action="offer_researched",
+                    journey_stage="research",
+                    status="SUCCESS",
+                    headline="Oferta analisada no marketplace",
+                    detail=f"{item_title} entrou em analise visual e comercial.",
+                    item=item,
+                    provider=provider,
+                    journey_key=journey_key,
+                )
+            elif event == "checkout_started":
+                self._append_user_module_trail(
+                    user=auth_user,
+                    session=auth_session,
+                    module_code="STOCK",
+                    kind="stock_offer_reserved",
+                    domain_action="offer_reserved",
+                    journey_stage="conversion",
+                    status="SUCCESS" if pay_status == "SUCCESS" else pay_status,
+                    headline="Oferta STOCK reservada para compra",
+                    detail=f"{item_title} entrou em reserva operacional para fechamento.",
+                    item=item,
+                    provider=provider,
+                    journey_key=journey_key,
+                )
+                self._append_user_module_trail(
+                    user=auth_user,
+                    session=auth_session,
+                    module_code="MARKETPLACE",
+                    kind="marketplace_order_started",
+                    domain_action="order_started",
+                    journey_stage="conversion",
+                    status="SUCCESS" if pay_status == "SUCCESS" else pay_status,
+                    headline="Pedido iniciado no marketplace",
+                    detail=f"{item_title} entrou em jornada real de conversao.",
+                    item=item,
+                    provider=provider,
+                    journey_key=journey_key,
+                )
+        elif module_code == "MARKETPLACE":
+            if event == "product_interest":
+                self._append_user_module_trail(
+                    user=auth_user,
+                    session=auth_session,
+                    module_code="MARKETPLACE",
+                    kind="marketplace_offer_saved",
+                    domain_action="offer_saved",
+                    journey_stage="discovery",
+                    status="SUCCESS",
+                    headline="Oferta do marketplace salva",
+                    detail=f"{item_title} foi salva para retomada.",
+                    item=item,
+                    provider=provider,
+                    journey_key=journey_key,
+                )
+            elif event == "open_media":
+                self._append_user_module_trail(
+                    user=auth_user,
+                    session=auth_session,
+                    module_code="MARKETPLACE",
+                    kind="marketplace_offer_researched",
+                    domain_action="offer_researched",
+                    journey_stage="research",
+                    status="SUCCESS",
+                    headline="Oferta do marketplace analisada",
+                    detail=f"{item_title} teve material aberto para decisao de compra.",
+                    item=item,
+                    provider=provider,
+                    journey_key=journey_key,
+                )
+            elif event == "checkout_started":
+                self._append_user_module_trail(
+                    user=auth_user,
+                    session=auth_session,
+                    module_code="MARKETPLACE",
+                    kind="marketplace_order_started",
+                    domain_action="order_started",
+                    journey_stage="conversion",
+                    status="SUCCESS" if pay_status == "SUCCESS" else pay_status,
+                    headline="Pedido iniciado no marketplace",
+                    detail=f"{item_title} entrou em jornada de conversao.",
+                    item=item,
+                    provider=provider,
+                    journey_key=journey_key,
+                )
+
+    def _user_module_trails(
+        self,
+        user: dict[str, Any] | None,
+        *,
+        module_code: str | None = None,
+        limit: int = 12,
+    ) -> list[dict[str, Any]]:
+        user_id = str((user or {}).get("user_id") or "").strip()
+        if not user_id:
+            return []
+        wanted_module = str(module_code or "").strip().upper()
+        trails: list[dict[str, Any]] = []
+        for trail in load_jsonl_tail(USER_MODULE_TRAILS_PATH, limit=max(limit * 3, 24)):
+            if str(trail.get("user_id") or "").strip() != user_id:
+                continue
+            if wanted_module and str(trail.get("module_code") or "").strip().upper() != wanted_module:
+                continue
+            enriched_trail = dict(trail)
+            enriched_trail.update(self._trail_action_links(enriched_trail))
+            trails.append(enriched_trail)
+            if len(trails) >= limit:
+                break
+        return trails
+
+    def _trail_action_links(self, trail: dict[str, Any]) -> dict[str, Any]:
+        item_id = str(trail.get("item_id") or "").strip()
+        module_code = str(trail.get("module_code") or "").strip().upper()
+        domain_action = str(trail.get("domain_action") or "").strip().lower()
+        journey_stage = str(trail.get("journey_stage") or "").strip().lower()
+        kind = str(trail.get("kind") or "").strip().lower()
+        if not item_id:
+            return {
+                "primary_action_path": "",
+                "primary_action_label": "",
+                "checkout_path": "",
+                "media_path": "",
+                "interest_path": "",
+                "open_module_code": module_code,
+            }
+
+        runtime_item = self._find_catalog_item(item_id)
+        context_item = dict(runtime_item) if isinstance(runtime_item, dict) else {}
+        if not context_item:
+            context_item = {
+                "id": item_id,
+                "title": str(trail.get("item_title") or trail.get("headline") or ""),
+                "module_id": module_code,
+            }
+        media_url = self._derive_media_url(context_item)
+        checkout_url = self._derive_checkout_url(context_item)
+        mercadopago_ready = self._mercadopago_checkout_ready(context_item)
+        checkout_ready = mercadopago_ready or bool(checkout_url)
+
+        interest_path = f"/api/actions/product-interest?{urlencode({'item_id': item_id})}"
+        media_path = (
+            f"/api/actions/open-media?{urlencode({'item_id': item_id})}"
+            if media_url
+            else ""
+        )
+        checkout_path = (
+            f"/api/actions/checkout?{urlencode({'item_id': item_id})}"
+            if checkout_ready
+            else ""
+        )
+
+        primary_action_path = interest_path
+        primary_action_label = "Retomar oferta"
+        if (
+            "checkout" in kind
+            or domain_action.startswith("payment")
+            or domain_action.startswith("order_")
+            or domain_action == "offer_reserved"
+            or journey_stage in {"conversion", "failure"}
+        ) and checkout_path:
+            primary_action_path = checkout_path
+            primary_action_label = "Abrir checkout"
+        elif (
+            "media" in kind
+            or "media" in domain_action
+            or "research" in domain_action
+            or journey_stage == "research"
+        ) and media_path:
+            primary_action_path = media_path
+            primary_action_label = "Abrir midia"
+        elif journey_stage == "consideration":
+            primary_action_label = "Retomar comparacao"
+
+        return {
+            "primary_action_path": primary_action_path,
+            "primary_action_label": primary_action_label,
+            "checkout_path": checkout_path,
+            "media_path": media_path,
+            "interest_path": interest_path,
+            "open_module_code": module_code,
+        }
+
+    def _domain_runtime_signals(self) -> dict[str, Any]:
+        return {
+            "checkout": self._mercadopago_checkout_status_payload(force_refresh=False),
+            "stock_sync": self._stock_sync_status_payload(),
+            "bridge": self._bridge_status_payload(),
+            "work_status": self._work_status_payload(),
+            "public_runtime": self._product_public_runtime_payload(),
+            "move_events": load_jsonl_tail(MOVE_TELEMETRY_PATH, limit=8),
+            "checkout_attempts": load_jsonl_tail(MERCADOPAGO_CHECKOUT_ATTEMPTS_PATH, limit=12),
+            "release_summary": (
+                (load_json_file(self.data_path) or {}).get("release_summary")
+                if isinstance(load_json_file(self.data_path), dict)
+                else {}
+            ) or {},
+        }
+
+    def _role_profile_context(self, user: dict[str, Any] | None) -> dict[str, Any]:
+        role = str((user or {}).get("primary_role") or "GUEST").strip().upper() or "GUEST"
+        role_map = {
+            "CUSTOMER": {
+                "role_label": "Cliente",
+                "audience_key": "customer",
+                "focus_title": "Compra, pagamento e retomada",
+                "focus_caption": "A home prioriza checkout, vitrine e proximas acoes comerciais.",
+                "preferred_module_codes": ["PAY", "MARKETPLACE", "CHAT"],
+            },
+            "MERCHANT": {
+                "role_label": "Lojista",
+                "audience_key": "merchant",
+                "focus_title": "Venda, catalogo e operacao",
+                "focus_caption": "A home prioriza estoque, marketplace, checkout e performance comercial.",
+                "preferred_module_codes": ["STOCK", "MARKETPLACE", "PAY", "CHAT"],
+            },
+            "SUPER_ADMIN": {
+                "role_label": "Operacao",
+                "audience_key": "admin",
+                "focus_title": "Runtime, release e integracoes",
+                "focus_caption": "A home prioriza alertas do runtime, pendencias de release e saude operacional.",
+                "preferred_module_codes": ["STOCK", "PAY", "CHAT", "MOVE", "MARKETPLACE"],
+            },
+            "ADMIN": {
+                "role_label": "Operacao",
+                "audience_key": "admin",
+                "focus_title": "Runtime, release e integracoes",
+                "focus_caption": "A home prioriza alertas do runtime, pendencias de release e saude operacional.",
+                "preferred_module_codes": ["STOCK", "PAY", "CHAT", "MOVE", "MARKETPLACE"],
+            },
+            "OPS": {
+                "role_label": "Operacao",
+                "audience_key": "admin",
+                "focus_title": "Runtime, release e integracoes",
+                "focus_caption": "A home prioriza alertas do runtime, pendencias de release e saude operacional.",
+                "preferred_module_codes": ["STOCK", "PAY", "CHAT", "MOVE", "MARKETPLACE"],
+            },
+            "GUEST": {
+                "role_label": "Convidado",
+                "audience_key": "guest",
+                "focus_title": "Exploracao guiada",
+                "focus_caption": "A home mostra os sinais principais do ecossistema sem contexto de usuario persistido.",
+                "preferred_module_codes": ["PAY", "MARKETPLACE", "CHAT"],
+            },
+        }
+        payload = role_map.get(role) or role_map["CUSTOMER"]
+        return {
+            "role": role,
+            **payload,
+        }
+
+    def _module_signal_records(self, user: dict[str, Any] | None) -> list[dict[str, Any]]:
+        runtime_signals = self._domain_runtime_signals()
+        profile_context = self._role_profile_context(user)
+        audience_key = str(profile_context.get("audience_key") or "customer")
+        pay_trails = self._user_module_trails(user, module_code="PAY", limit=2)
+        stock_trails = self._user_module_trails(user, module_code="STOCK", limit=2)
+        marketplace_trails = self._user_module_trails(user, module_code="MARKETPLACE", limit=2)
+        checkout = runtime_signals["checkout"]
+        stock_sync = runtime_signals["stock_sync"]
+        bridge = runtime_signals["bridge"]
+        public_runtime = runtime_signals["public_runtime"]
+        move_events = runtime_signals["move_events"]
+        release_summary = runtime_signals["release_summary"] if isinstance(runtime_signals["release_summary"], dict) else {}
+        stock_last_result = stock_sync.get("last_result") if isinstance(stock_sync.get("last_result"), dict) else {}
+
+        signals = [
+            {
+                "module_code": "PAY",
+                "status": str((pay_trails[0].get("status") if pay_trails else ("positive" if checkout.get("checkout_ready") else "pending")) or "pending").lower(),
+                "headline": str((pay_trails[0].get("headline") if pay_trails else ("Checkout validado" if checkout.get("checkout_ready") else "Checkout exige revisao")) or "Checkout"),
+                "detail": str((pay_trails[0].get("detail") if pay_trails else ("PIX e pagamento pronto no runtime." if checkout.get("checkout_ready") else str((checkout.get("validation") or {}).get("detail") or "Checkout ainda nao validado."))) or ""),
+                "accent": "cyan",
+                "audiences": ["guest", "customer", "merchant", "admin"],
+            },
+            {
+                "module_code": "STOCK",
+                "status": str((stock_trails[0].get("status") if stock_trails else ("attention" if str(stock_last_result.get("status") or "").strip().lower() == "failed" else "positive" if str(stock_sync.get("status") or "").strip().lower() in {"queued", "running"} else "pending")) or "pending").lower(),
+                "headline": str((stock_trails[0].get("headline") if stock_trails else ("STOCK com alerta" if str(stock_last_result.get("status") or "").strip().lower() == "failed" else "STOCK ativo" if str(stock_sync.get("status") or "").strip().lower() in {"queued", "running"} else "STOCK sem atividade")) or ""),
+                "detail": str((stock_trails[0].get("detail") if stock_trails else (stock_last_result.get("detail") or stock_last_result.get("reason") or stock_sync.get("queued_reason") or stock_sync.get("status") or "Sem feed operacional recente.")) or ""),
+                "accent": "warning" if str(stock_last_result.get("status") or "").strip().lower() == "failed" else "success",
+                "audiences": ["merchant", "admin"],
+            },
+            {
+                "module_code": "MARKETPLACE",
+                "status": str((marketplace_trails[0].get("status") if marketplace_trails else ("positive" if str(public_runtime.get("provider_status") or "").strip().lower() == "healthy" else "pending")) or "pending").lower(),
+                "headline": str((marketplace_trails[0].get("headline") if marketplace_trails else ("Marketplace publico" if str(public_runtime.get("provider_status") or "").strip().lower() == "healthy" else "Marketplace exige runtime")) or ""),
+                "detail": str((marketplace_trails[0].get("detail") if marketplace_trails else (public_runtime.get("public_url") or f"{release_summary.get('checklist_items_pending') or 0} itens pendentes no release.")) or ""),
+                "accent": "success" if str(public_runtime.get("provider_status") or "").strip().lower() == "healthy" else "violet",
+                "audiences": ["guest", "customer", "merchant", "admin"],
+            },
+            {
+                "module_code": "CHAT",
+                "status": "positive" if bridge.get("telegram_ready") == True else "pending",
+                "headline": "Bridge pronto" if bridge.get("telegram_ready") == True else "Bridge parcial",
+                "detail": "Telegram pronto para status e entregas." if bridge.get("telegram_ready") == True else "Camada de assistente ainda sem bridge completo.",
+                "accent": "violet",
+                "audiences": ["guest", "customer", "merchant", "admin"],
+            },
+            {
+                "module_code": "MOVE",
+                "status": "positive" if move_events else "pending",
+                "headline": "MOVE com telemetry" if move_events else "MOVE sem telemetry recente",
+                "detail": f"{len(move_events)} eventos MOVE disponiveis para leitura operacional." if move_events else "Nenhum evento MOVE recente no runtime.",
+                "accent": "cyan",
+                "audiences": ["admin"],
+            },
+        ]
+        filtered = [signal for signal in signals if audience_key in signal["audiences"]]
+        preferred_codes = profile_context.get("preferred_module_codes") if isinstance(profile_context.get("preferred_module_codes"), list) else []
+        order = {str(code): index for index, code in enumerate(preferred_codes)}
+        filtered.sort(key=lambda item: order.get(str(item.get("module_code") or ""), 99))
+        return [
+            {
+                "module_code": str(item.get("module_code") or ""),
+                "status": str(item.get("status") or "pending"),
+                "headline": str(item.get("headline") or ""),
+                "detail": str(item.get("detail") or ""),
+                "accent": str(item.get("accent") or "cyan"),
+            }
+            for item in filtered
+        ]
+
+    def _recent_action_records(self, user: dict[str, Any] | None, *, limit: int = 6) -> list[dict[str, Any]]:
+        user_id = str((user or {}).get("user_id") or "").strip()
+        email = str((user or {}).get("email") or "").strip().lower()
+        actions: list[dict[str, Any]] = []
+        runtime_signals = self._domain_runtime_signals()
+        user_trails = self._user_module_trails(user, limit=8)
+        has_pay_user_trail = any(str(trail.get("module_code") or "").strip().upper() == "PAY" for trail in user_trails)
+
+        for event in load_jsonl_tail(USER_AUTH_EVENTS_PATH, limit=24):
+            if user is not None:
+                event_user_id = str(event.get("user_id") or "").strip()
+                event_identifier = str(event.get("identifier") or "").strip().lower()
+                if event_user_id != user_id and event_identifier != email:
+                    continue
+            kind = str(event.get("kind") or "").strip()
+            occurred_at = str(event.get("occurred_at_utc") or "")
+            title = {
+                "register": "Conta criada",
+                "login_succeeded": "Sessao iniciada",
+                "login_failed": "Tentativa de login recusada",
+                "logout": "Sessao encerrada",
+                "home_preferences_updated": "Preferencias da home atualizadas",
+            }.get(kind, "Evento de autenticacao")
+            status = "SUCCESS" if kind not in {"login_failed"} else "ATTENTION"
+            detail = str(event.get("primary_role") or event.get("reason") or event.get("scope") or "valley-auth")
+            actions.append(
+                {
+                    "id": f"auth::{kind}::{occurred_at}",
+                    "module_code": "AUTH",
+                    "status": status,
+                    "title": title,
+                    "detail": detail,
+                    "occurred_at_utc": occurred_at,
+                    "amount_label": occurred_at[11:16] if len(occurred_at) >= 16 else "",
+                }
+            )
+
+        for trail in user_trails:
+            occurred_at = str(trail.get("created_at_utc") or "")
+            amount_brl = trail.get("amount_brl")
+            amount_label = ""
+            if isinstance(amount_brl, (int, float)):
+                amount_label = f"R$ {amount_brl:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+            actions.append(
+                {
+                    "id": f"trail::{trail.get('trail_id') or occurred_at}",
+                    "module_code": str(trail.get("module_code") or ""),
+                    "status": str(trail.get("status") or "INFO").upper(),
+                    "title": str(trail.get("headline") or trail.get("item_title") or "Trilha operacional"),
+                    "detail": str(trail.get("detail") or ""),
+                    "occurred_at_utc": occurred_at,
+                    "amount_label": amount_label or (occurred_at[11:16] if len(occurred_at) >= 16 else ""),
+                }
+            )
+
+        if user is None:
+            for event in load_jsonl_tail(PRODUCT_INTERACTIONS_PATH, limit=24):
+                event_user_id = str(event.get("user_id") or "").strip()
+                if event_user_id:
+                    continue
+                kind = str(event.get("event") or "").strip()
+                occurred_at = str(event.get("created_at_utc") or "")
+                title = {
+                    "product_interest": "Produto salvo para retomada",
+                    "open_media": "Midia aberta",
+                    "checkout_started": "Checkout iniciado",
+                }.get(kind, str(event.get("title") or "Interacao comercial"))
+                detail = str(event.get("detail") or event.get("title") or "")
+                amount_brl = event.get("amount_brl")
+                amount_label = ""
+                if isinstance(amount_brl, (int, float)):
+                    amount_label = f"R$ {amount_brl:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+                actions.append(
+                    {
+                        "id": f"commerce::{kind}::{occurred_at}",
+                        "module_code": str(event.get("module_code") or ""),
+                        "status": str(event.get("status") or "ok").upper(),
+                        "title": title,
+                        "detail": detail,
+                        "occurred_at_utc": occurred_at,
+                        "amount_label": amount_label or (occurred_at[11:16] if len(occurred_at) >= 16 else ""),
+                    }
+                )
+
+        if user is None or not has_pay_user_trail:
+            for attempt in runtime_signals["checkout_attempts"]:
+                user_context = attempt.get("user_context") if isinstance(attempt.get("user_context"), dict) else {}
+                attempt_user_id = str(user_context.get("user_id") or "").strip()
+                if user is not None and attempt_user_id != user_id:
+                    continue
+                if user is None and attempt_user_id:
+                    continue
+                occurred_at = str(attempt.get("attempted_at_utc") or "")
+                actions.append(
+                    {
+                        "id": f"checkout::{attempt.get('provider')}::{occurred_at}",
+                        "module_code": "PAY",
+                        "status": "SUCCESS" if str(attempt.get("status") or "").strip().lower() == "ok" else "ATTENTION",
+                        "title": "Checkout Mercado Pago iniciado" if str(attempt.get("status") or "").strip().lower() == "ok" else "Tentativa de checkout com alerta",
+                        "detail": str(attempt.get("detail") or "Fluxo de checkout processado pelo runtime."),
+                        "occurred_at_utc": occurred_at,
+                        "amount_label": occurred_at[11:16] if len(occurred_at) >= 16 else "",
+                    }
+                )
+
+        stock_sync = runtime_signals["stock_sync"]
+        last_result = stock_sync.get("last_result") if isinstance(stock_sync.get("last_result"), dict) else {}
+        if last_result:
+            occurred_at = str(stock_sync.get("last_finished_at_utc") or stock_sync.get("generated_at_utc") or "")
+            actions.append(
+                {
+                    "id": f"stock::{last_result.get('status')}::{occurred_at}",
+                    "module_code": "STOCK",
+                    "status": "ATTENTION" if str(last_result.get("status") or "").strip().lower() == "failed" else "SUCCESS",
+                    "title": "Sincronizacao STOCK com alerta" if str(last_result.get("status") or "").strip().lower() == "failed" else "Sincronizacao STOCK concluida",
+                    "detail": str(last_result.get("detail") or last_result.get("reason") or stock_sync.get("queued_reason") or "Motor STOCK executado."),
+                    "occurred_at_utc": occurred_at,
+                    "amount_label": str(stock_sync.get("status") or "").upper(),
+                }
+            )
+
+        public_runtime = runtime_signals["public_runtime"]
+        if public_runtime:
+            occurred_at = str(public_runtime.get("generated_at") or public_runtime.get("generated_at_utc") or "")
+            actions.append(
+                {
+                    "id": f"runtime::{public_runtime.get('provider_status')}::{occurred_at}",
+                    "module_code": "MARKETPLACE",
+                    "status": "SUCCESS" if str(public_runtime.get("provider_status") or "").strip().lower() == "healthy" else "ATTENTION",
+                    "title": "Runtime publico do produto saudavel" if str(public_runtime.get("provider_status") or "").strip().lower() == "healthy" else "Runtime publico exige revisao",
+                    "detail": str(public_runtime.get("public_url") or public_runtime.get("status") or "Sem URL publica ativa."),
+                    "occurred_at_utc": occurred_at,
+                    "amount_label": str(public_runtime.get("provider") or "runtime"),
+                }
+            )
+
+        for move_event in runtime_signals["move_events"]:
+            occurred_at = str(move_event.get("timestamp") or "")
+            actions.append(
+                {
+                    "id": f"move::{move_event.get('kind')}::{occurred_at}",
+                    "module_code": "MOVE",
+                    "status": "SUCCESS" if str(move_event.get("status") or "").strip().lower() in {"ok", "success"} else "INFO",
+                    "title": str(move_event.get("title") or "Evento MOVE"),
+                    "detail": str(move_event.get("detail") or "Telemetria operacional registrada."),
+                    "occurred_at_utc": occurred_at,
+                    "amount_label": str(move_event.get("module") or "MOVE"),
+                }
+            )
+
+        actions.sort(key=lambda item: str(item.get("occurred_at_utc") or ""), reverse=True)
+        return actions[:limit]
+
+    def _recommendation_records(self, user: dict[str, Any] | None) -> list[dict[str, Any]]:
+        preferences = self._home_preferences_from_user(user)
+        visible_codes = set(preferences.get("visible_module_codes") if isinstance(preferences.get("visible_module_codes"), list) else [])
+        available_codes = self._available_home_module_codes()
+        recommendations: list[dict[str, Any]] = []
+        profile_context = self._role_profile_context(user)
+        audience_key = str(profile_context.get("audience_key") or "customer")
+        runtime_signals = self._domain_runtime_signals()
+        checkout = runtime_signals["checkout"]
+        stock_sync = runtime_signals["stock_sync"]
+        bridge = runtime_signals["bridge"]
+        public_runtime = runtime_signals["public_runtime"]
+        release_summary = runtime_signals["release_summary"] if isinstance(runtime_signals["release_summary"], dict) else {}
+
+        def add_recommendation(
+            recommendation_id: str,
+            *,
+            title: str,
+            subtitle: str,
+            module_code: str,
+            action_label: str,
+            reason: str,
+            priority: str,
+        ) -> None:
+            recommendations.append(
+                {
+                    "id": recommendation_id,
+                    "title": title,
+                    "subtitle": subtitle,
+                    "module_code": module_code,
+                    "action_label": action_label,
+                    "reason": reason,
+                    "priority": priority,
+                }
+            )
+
+        stock_last_result = stock_sync.get("last_result") if isinstance(stock_sync.get("last_result"), dict) else {}
+        if audience_key in {"merchant", "admin"} and str(stock_last_result.get("status") or "").strip().lower() == "failed":
+            add_recommendation(
+                "stock-sync-recovery",
+                title="Revisar motor STOCK",
+                subtitle=str(stock_last_result.get("detail") or stock_last_result.get("reason") or "A sincronizacao mais recente do STOCK falhou."),
+                module_code="STOCK",
+                action_label="Abrir STOCK",
+                reason="stock_runtime_attention",
+                priority="high",
+            )
+        elif audience_key in {"guest", "customer", "merchant"} and "MARKETPLACE" in available_codes and "MARKETPLACE" not in visible_codes:
+            add_recommendation(
+                "marketplace-visibility",
+                title="Trazer Marketplace para a home",
+                subtitle="Seller score, vitrine e pricing aparecem no primeiro scroll.",
+                module_code="MARKETPLACE",
+                action_label="Fixar modulo",
+                reason="commerce_activation",
+                priority="high",
+            )
+        if audience_key in {"guest", "customer", "merchant"} and "PAY" in available_codes and "PAY" not in visible_codes and checkout.get("checkout_ready"):
+            add_recommendation(
+                "pay-live",
+                title="Expor PAY na home",
+                subtitle="Checkout validado com PIX e carteira pronta para jornada comercial real.",
+                module_code="PAY",
+                action_label="Abrir carteira",
+                reason="checkout_ready",
+                priority="high",
+            )
+        if audience_key in {"guest", "customer", "merchant"} and "CHAT" in available_codes and "CHAT" not in visible_codes and bridge.get("telegram_ready") == True:
+            add_recommendation(
+                "helena-routine",
+                title="Usar Helena com bridge ativo",
+                subtitle="Telegram ja esta operacional e pode sustentar rotinas e acompanhamento.",
+                module_code="CHAT",
+                action_label="Abrir Helena",
+                reason="assistant_enablement",
+                priority="medium",
+            )
+        if audience_key == "admin" and public_runtime and str(public_runtime.get("provider_status") or "").strip().lower() == "healthy" and public_runtime.get("temporary") == True:
+            add_recommendation(
+                "runtime-persistence",
+                title="Substituir runtime publico temporario",
+                subtitle="O produto esta publico e saudavel, mas ainda usa quick tunnel temporario.",
+                module_code="MARKETPLACE",
+                action_label="Revisar runtime",
+                reason="public_runtime_temporary",
+                priority="medium",
+            )
+        pending = int(release_summary.get("checklist_items_pending") or 0)
+        if audience_key == "admin" and pending > 0:
+            add_recommendation(
+                "release-pending",
+                title="Atacar pendencias do release MVP",
+                subtitle=f"{pending} itens ainda estao pendentes no release summary operacional.",
+                module_code="REPLY",
+                action_label="Ver prioridades",
+                reason="release_pending",
+                priority="medium",
+            )
+        return recommendations[:3]
+
+    def _identity_score_record(self, user: dict[str, Any] | None) -> dict[str, Any]:
+        runtime_signals = self._domain_runtime_signals()
+        checkout = runtime_signals["checkout"]
+        stock_sync = runtime_signals["stock_sync"]
+        bridge = runtime_signals["bridge"]
+        public_runtime = runtime_signals["public_runtime"]
+        move_events = runtime_signals["move_events"]
+        score = 58
+        signals: list[dict[str, Any]] = []
+
+        if user is None:
+            if checkout.get("checkout_ready"):
+                score += 6
+            stock_last_result = stock_sync.get("last_result") if isinstance(stock_sync.get("last_result"), dict) else {}
+            if str(stock_last_result.get("status") or "").strip().lower() == "failed":
+                score -= 6
+            if str(public_runtime.get("provider_status") or "").strip().lower() == "healthy":
+                score += 4
+            if bridge.get("telegram_ready") == True:
+                score += 2
+            if move_events:
+                score += 1
+            score = max(0, min(score, 100))
+            return {
+                "score": score,
+                "level": "baseline",
+                "level_label": "Baseline",
+                "summary": "Score inicial combinando sinais reais do runtime com o estado anonimo da sessao.",
+                "signals": [
+                    {"name": "Sessao autenticada", "status": "pending", "detail": "Faça login para personalizar o score por usuario."},
+                    {"name": "Checkout validado", "status": "positive" if checkout.get("checkout_ready") else "pending", "detail": "Checkout real do runtime ja foi considerado no score base."},
+                    {"name": "Motor STOCK", "status": "attention" if str(stock_last_result.get("status") or "").strip().lower() == "failed" else "positive", "detail": str(stock_last_result.get("detail") or stock_sync.get("status") or "Sem alerta recente no STOCK.")},
+                    {"name": "Runtime publico", "status": "positive" if str(public_runtime.get("provider_status") or "").strip().lower() == "healthy" else "pending", "detail": "Saude da superficie publica considerada no score inicial."},
+                ],
+                "anonymous": True,
+            }
+
+        identity = user.get("identity") if isinstance(user.get("identity"), dict) else {}
+        merchant_profile = user.get("merchant_profile") if isinstance(user.get("merchant_profile"), dict) else {}
+        account_status = str(user.get("account_status") or "ACTIVE").upper()
+
+        if account_status == "ACTIVE":
+            score += 8
+            signals.append({"name": "Conta ativa", "status": "positive", "detail": "Conta principal liberada para operacao."})
+        else:
+            signals.append({"name": "Conta ativa", "status": "attention", "detail": f"Status atual: {account_status}."})
+
+        if str(identity.get("verified_at") or "").strip():
+            score += 10
+            signals.append({"name": "Identidade verificada", "status": "positive", "detail": "Identidade primaria com verificacao registrada."})
+        else:
+            signals.append({"name": "Identidade verificada", "status": "pending", "detail": "Verificacao ainda nao consolidada."})
+
+        if int(identity.get("failed_login_count") or 0) == 0:
+            score += 6
+            signals.append({"name": "Login seguro", "status": "positive", "detail": "Nenhuma falha recente de autenticacao."})
+        else:
+            signals.append({"name": "Login seguro", "status": "attention", "detail": "Existem falhas recentes de autenticacao."})
+
+        if str(identity.get("last_authenticated_at") or "").strip():
+            score += 6
+            signals.append({"name": "Recencia operacional", "status": "positive", "detail": "Usuario com autenticacao recente."})
+
+        if merchant_profile:
+            merchant_status = str(merchant_profile.get("profile_status") or "ACTIVE").upper()
+            score += 4 if merchant_status == "ACTIVE" else 2
+            signals.append({"name": "Contexto comercial", "status": "positive" if merchant_status == "ACTIVE" else "pending", "detail": f"Perfil merchant em {merchant_status}."})
+        else:
+            role = str(user.get("primary_role") or "CUSTOMER").upper()
+            if role in {"ADMIN", "SUPER_ADMIN", "OPS"}:
+                score += 4
+                signals.append({"name": "Perfil operacional", "status": "positive", "detail": "Usuario com acesso de operacao e visao do runtime."})
+
+        recent_actions = self._recent_action_records(user, limit=4)
+        if recent_actions:
+            score += min(len(recent_actions) * 2, 8)
+            signals.append({"name": "Historico operacional", "status": "positive", "detail": f"{len(recent_actions)} eventos recentes alimentando o score."})
+
+        if checkout.get("checkout_ready"):
+            score += 8
+            validation = checkout.get("validation") if isinstance(checkout.get("validation"), dict) else {}
+            signals.append({"name": "Checkout validado", "status": "positive", "detail": f"Mercado Pago pronto com {validation.get('payment_methods_total') or 0} meios consultados e PIX disponível."})
+        else:
+            signals.append({"name": "Checkout validado", "status": "pending", "detail": str((checkout.get("validation") or {}).get("detail") or "Checkout ainda nao validado no runtime.")})
+
+        stock_last_result = stock_sync.get("last_result") if isinstance(stock_sync.get("last_result"), dict) else {}
+        if str(stock_last_result.get("status") or "").strip().lower() == "failed":
+            score -= 10
+            signals.append({"name": "Motor STOCK", "status": "attention", "detail": str(stock_last_result.get("detail") or stock_last_result.get("reason") or "Ultima sincronizacao falhou.")})
+        elif str(stock_sync.get("status") or "").strip().lower() in {"queued", "running"}:
+            score += 2
+            signals.append({"name": "Motor STOCK", "status": "positive", "detail": f"Sincronizacao em andamento: {stock_sync.get('queued_reason') or stock_sync.get('status')}"})
+
+        if str(public_runtime.get("provider_status") or "").strip().lower() == "healthy":
+            score += 5
+            signals.append({"name": "Runtime publico", "status": "positive", "detail": "Superficie publica do produto esta saudavel e respondendo."})
+        else:
+            signals.append({"name": "Runtime publico", "status": "pending", "detail": "Nao ha runtime publico saudavel consolidado para o produto."})
+
+        if bridge.get("telegram_ready") == True:
+            score += 3
+            signals.append({"name": "Bridge operacional", "status": "positive", "detail": "Telegram bridge pronto para entrega de status e artefatos."})
+        else:
+            signals.append({"name": "Bridge operacional", "status": "pending", "detail": "Bridge ainda nao esta plenamente operacional."})
+
+        if move_events:
+            score += 2
+            signals.append({"name": "Telemetria MOVE", "status": "positive", "detail": f"{len(move_events)} eventos MOVE registrados no runtime."})
+
+        score = max(0, min(score, 100))
+        if score >= 85:
+            level = "high_trust"
+            level_label = "Alta confianca"
+        elif score >= 70:
+            level = "trusted"
+            level_label = "Confiavel"
+        else:
+            level = "baseline"
+            level_label = "Baseline"
+
+        return {
+            "score": score,
+            "level": level,
+            "level_label": level_label,
+            "summary": "Score composto por autenticacao, identidade, checkout, stock sync, runtime publico e atividade recente.",
+            "signals": signals,
+            "anonymous": False,
+        }
+
+    def _me_recent_actions_payload(self, user: dict[str, Any] | None) -> dict[str, Any]:
+        return {
+            "status": "ok",
+            "service": "valley-home",
+            "anonymous": user is None,
+            "recent_actions": self._recent_action_records(user),
+        }
+
+    def _me_recommendations_payload(self, user: dict[str, Any] | None) -> dict[str, Any]:
+        return {
+            "status": "ok",
+            "service": "valley-home",
+            "anonymous": user is None,
+            "recommendations": self._recommendation_records(user),
+        }
+
+    def _me_identity_score_payload(self, user: dict[str, Any] | None) -> dict[str, Any]:
+        return {
+            "status": "ok",
+            "service": "valley-home",
+            **self._identity_score_record(user),
+        }
+
+    def _me_home_payload(
+        self,
+        user: dict[str, Any] | None,
+        session: dict[str, Any] | None,
+    ) -> dict[str, Any]:
+        preferences = self._home_preferences_from_user(user)
+        recent_actions = self._recent_action_records(user)
+        identity_score = self._identity_score_record(user)
+        profile_context = self._role_profile_context(user)
+        module_signals = self._module_signal_records(user)
+        user_module_trails = self._user_module_trails(user, limit=8)
+        return {
+            "status": "ok",
+            "service": "valley-home",
+            "anonymous": user is None,
+            "persistable": user is not None and session is not None,
+            "fetched_at_utc": utc_now_iso(),
+            "user": self._auth_public_user(user) if user is not None else {
+                "display_name": "Convidado",
+                "primary_role": "GUEST",
+                "user_kind": "ANON",
+                "account_status": "ANONYMOUS",
+            },
+            "profile_context": profile_context,
+            "preferences": preferences,
+            "recent_actions": recent_actions,
+            "recommendations": self._recommendation_records(user),
+            "identity_score": identity_score,
+            "metrics": self._home_metric_cards(user, preferences, recent_actions, identity_score),
+            "module_signals": module_signals,
+            "user_module_trails": user_module_trails,
+        }
+
+    def _me_home_preferences_response(self) -> tuple[HTTPStatus, dict[str, Any]]:
+        auth_user, auth_session = self._resolve_active_auth_session(scope="product")
+        if auth_user is None or auth_session is None:
+            return HTTPStatus.UNAUTHORIZED, {
+                "status": "unauthorized",
+                "service": "valley-home",
+                "detail": "Sessao obrigatoria para persistir preferencias.",
+            }
+
+        payload = self._read_json_body()
+        if not isinstance(payload, dict):
+            return HTTPStatus.BAD_REQUEST, {
+                "status": "invalid_payload",
+                "service": "valley-home",
+                "detail": "Expected JSON object.",
+            }
+
+        available_codes = set(self._available_home_module_codes())
+
+        def _codes_from_payload(key: str) -> list[str]:
+            raw = payload.get(key)
+            if not isinstance(raw, list):
+                return []
+            normalized: list[str] = []
+            seen: set[str] = set()
+            for item in raw:
+                code = str(item or "").strip().upper()
+                if not code or code not in available_codes or code in seen:
+                    continue
+                seen.add(code)
+                normalized.append(code)
+            return normalized
+
+        visible_module_codes = _codes_from_payload("visible_module_codes")
+        favorite_module_codes = _codes_from_payload("favorite_module_codes")
+        defaults = self._default_home_preferences()
+        if not visible_module_codes:
+            visible_module_codes = list(defaults["visible_module_codes"])
+        if not favorite_module_codes:
+            favorite_module_codes = visible_module_codes[: min(len(visible_module_codes), 4)]
+
+        runtime = self._auth_runtime_payload()
+        persisted = self._persist_home_preferences(
+            runtime,
+            str(auth_user.get("user_id") or ""),
+            visible_module_codes=visible_module_codes,
+            favorite_module_codes=favorite_module_codes,
+        )
+        if persisted is None:
+            return HTTPStatus.NOT_FOUND, {
+                "status": "user_missing",
+                "service": "valley-home",
+                "detail": "Usuario da sessao nao encontrado para persistencia.",
+            }
+
+        self._append_auth_event(
+            "home_preferences_updated",
+            {
+                "user_id": str(auth_user.get("user_id") or ""),
+                "scope": "product",
+                "visible_modules_total": len(visible_module_codes),
+            },
+        )
+        return HTTPStatus.OK, {
+            "status": "ok",
+            "service": "valley-home",
+            "message": "Preferencias da home persistidas com sucesso.",
+            "preferences": persisted,
         }
 
     def _auth_register_response(self) -> tuple[HTTPStatus, dict[str, Any]]:
@@ -5036,15 +6215,11 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 "payload": {"message": "Item indisponivel."},
             }
 
-        event = {
-            "event": "product_interest",
-            "item_id": item_id,
-            "title": item.get("title"),
-            "created_at_utc": utc_now_iso(),
-        }
-        PRODUCT_INTERACTIONS_PATH.parent.mkdir(parents=True, exist_ok=True)
-        with PRODUCT_INTERACTIONS_PATH.open("a", encoding="utf-8") as handle:
-            handle.write(json.dumps(event, ensure_ascii=False) + "\n")
+        self._append_product_interaction(
+            event="product_interest",
+            item=item,
+            detail="Oferta salva para retomada comercial.",
+        )
 
         return {
             "status": "ok",
@@ -5067,6 +6242,11 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 },
             }
 
+        self._append_product_interaction(
+            event="open_media",
+            item=item,
+            detail="Midia da oferta aberta no fluxo comercial.",
+        )
         return {
             "status": "ok",
             "action": "open-media",
@@ -5105,6 +6285,19 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 "result": result["payload"],
             })
             self._append_jsonl(MERCADOPAGO_CHECKOUT_ATTEMPTS_PATH, attempt)
+            self._append_user_module_trail(
+                user=auth_user,
+                session=auth_session,
+                module_code="PAY",
+                kind="checkout_failed",
+                domain_action="payment_failed",
+                journey_stage="failure",
+                status="ATTENTION",
+                headline="Tentativa de checkout com item indisponivel",
+                detail="Item indisponivel para checkout.",
+                provider="mercado_pago",
+                journey_key=f"commerce::{item.get('id')}" if item and item.get("id") else "commerce::PAY::checkout_failed",
+            )
             return result
 
         if self._mercadopago_checkout_ready(item):
@@ -5126,6 +6319,27 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                     "result": result["payload"],
                 })
                 self._append_jsonl(MERCADOPAGO_CHECKOUT_ATTEMPTS_PATH, attempt)
+                self._append_user_module_trail(
+                    user=auth_user,
+                    session=auth_session,
+                    module_code="PAY",
+                    kind="checkout_started",
+                    domain_action="payment_started",
+                    journey_stage="conversion",
+                    status="SUCCESS",
+                    headline="Checkout Mercado Pago iniciado",
+                    detail="Preferencia Mercado Pago criada com sucesso.",
+                    item=item,
+                    provider="mercado_pago",
+                    metadata={"preference_id": mercadopago_result.get("preference_id")},
+                    journey_key=f"commerce::{item.get('id')}" if item and item.get("id") else "commerce::PAY::checkout_started",
+                )
+                self._append_product_interaction(
+                    event="checkout_started",
+                    item=item,
+                    detail="Checkout Mercado Pago iniciado com preferencia criada.",
+                    provider="mercado_pago",
+                )
                 return result
 
         checkout_url = self._derive_checkout_url(item)
@@ -5147,6 +6361,20 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 "result": result["payload"],
             })
             self._append_jsonl(MERCADOPAGO_CHECKOUT_ATTEMPTS_PATH, attempt)
+            self._append_user_module_trail(
+                user=auth_user,
+                session=auth_session,
+                module_code="PAY",
+                kind="checkout_failed",
+                domain_action="payment_failed",
+                journey_stage="failure",
+                status="ATTENTION",
+                headline="Checkout sem preferencia disponivel",
+                detail=result["payload"]["message"],
+                item=item,
+                provider="mercado_pago",
+                journey_key=f"commerce::{item.get('id')}" if item and item.get("id") else "commerce::PAY::checkout_failed",
+            )
             return result
 
         result = {
@@ -5164,6 +6392,26 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             "result": result["payload"],
         })
         self._append_jsonl(MERCADOPAGO_CHECKOUT_ATTEMPTS_PATH, attempt)
+        self._append_user_module_trail(
+            user=auth_user,
+            session=auth_session,
+            module_code="PAY",
+            kind="checkout_started",
+            domain_action="payment_started",
+            journey_stage="conversion",
+            status="SUCCESS",
+            headline="Checkout externo iniciado",
+            detail="Fallback de checkout externo utilizado.",
+            item=item,
+            provider="mercado_livre",
+            journey_key=f"commerce::{item.get('id')}" if item and item.get("id") else "commerce::PAY::checkout_started",
+        )
+        self._append_product_interaction(
+            event="checkout_started",
+            item=item,
+            detail="Checkout externo iniciado para a oferta.",
+            provider="mercado_livre",
+        )
         return result
 
     def _run_bridge_command(self, command: str, *, action: str) -> dict[str, Any]:

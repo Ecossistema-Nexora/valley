@@ -1,0 +1,4 @@
+{
+  "summary": "Foi criado o entrypoint canônico scripts/run_valley_compose_builder.ps1 para executar apply-compose e depois o builder Docker em ordem fixa, com falha explícita por etapa. As referências operacionais do repositório foram atualizadas para apontar para esse script em config/tooling.bootstrap.json, config/terminal-control-profile.json, scripts/valley_admin_builder.py e docs/deployment-order.md. O script foi validado sintaticamente e executado com sucesso no ambiente real.",
+  "current_status": "O VALLEY agora tem um fluxo canônico e versionado para compose + builder sem corrida de migration. O patch do tunnel público continua ativo e o runtime/admin permanecem saudáveis."
+}

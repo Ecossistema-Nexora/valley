@@ -1,0 +1,21 @@
+{
+  "timestamp_brt": "2026-05-05 16:52:07 BRT",
+  "plan_version": "v015",
+  "scope": "timeline_visual_por_jornada_na_home_flutter",
+  "changes": [
+    "Agrupamento de user_module_trails por journey_key com resumo por jornada.",
+    "Renderizacao de cards de timeline entre sinais por modulo e identity score.",
+    "Exibicao de modulos, estagios e eventos recentes da jornada dentro da home Flutter."
+  ],
+  "files": [
+    "frontend/flutter/lib/src/ui/valley_home_shell.dart",
+    "frontend/flutter/lib/src/data/product_api_models.dart",
+    "PLANOS/v015__20260505-165207-brt__timeline_visual_por_jornada_na_home_flutter.md",
+    "PLANOS/INDEX.md"
+  ],
+  "validation": {
+    "dart_format": "ok",
+    "dart_analyze": "ok"
+  },
+  "next_step": "Adicionar drilldown e CTA por jornada para abrir o modulo dominante da trilha em vez de depender apenas de sinais genericos."
+}

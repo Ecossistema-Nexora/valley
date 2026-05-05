@@ -397,3 +397,402 @@ class ProductActionResult {
   final String message;
   final String url;
 }
+
+class HomePreferences {
+  const HomePreferences({
+    required this.visibleModuleCodes,
+    required this.favoriteModuleCodes,
+    required this.updatedAtUtc,
+  });
+
+  factory HomePreferences.fromJson(Map<String, dynamic> json) {
+    return HomePreferences(
+      visibleModuleCodes:
+          (json['visible_module_codes'] as List<dynamic>? ?? const <dynamic>[])
+              .map((dynamic item) => item.toString())
+              .toList(growable: false),
+      favoriteModuleCodes:
+          (json['favorite_module_codes'] as List<dynamic>? ?? const <dynamic>[])
+              .map((dynamic item) => item.toString())
+              .toList(growable: false),
+      updatedAtUtc: json['updated_at_utc'] as String?,
+    );
+  }
+
+  final List<String> visibleModuleCodes;
+  final List<String> favoriteModuleCodes;
+  final String? updatedAtUtc;
+}
+
+class HomeRecentAction {
+  const HomeRecentAction({
+    required this.id,
+    required this.moduleCode,
+    required this.status,
+    required this.title,
+    required this.detail,
+    required this.occurredAtUtc,
+    required this.amountLabel,
+  });
+
+  factory HomeRecentAction.fromJson(Map<String, dynamic> json) {
+    return HomeRecentAction(
+      id: json['id'] as String? ?? '',
+      moduleCode: json['module_code'] as String? ?? '',
+      status: json['status'] as String? ?? 'INFO',
+      title: json['title'] as String? ?? '',
+      detail: json['detail'] as String? ?? '',
+      occurredAtUtc: json['occurred_at_utc'] as String? ?? '',
+      amountLabel: json['amount_label'] as String? ?? '',
+    );
+  }
+
+  final String id;
+  final String moduleCode;
+  final String status;
+  final String title;
+  final String detail;
+  final String occurredAtUtc;
+  final String amountLabel;
+}
+
+class HomeRecommendation {
+  const HomeRecommendation({
+    required this.id,
+    required this.title,
+    required this.subtitle,
+    required this.moduleCode,
+    required this.actionLabel,
+    required this.reason,
+    required this.priority,
+  });
+
+  factory HomeRecommendation.fromJson(Map<String, dynamic> json) {
+    return HomeRecommendation(
+      id: json['id'] as String? ?? '',
+      title: json['title'] as String? ?? '',
+      subtitle: json['subtitle'] as String? ?? '',
+      moduleCode: json['module_code'] as String? ?? '',
+      actionLabel: json['action_label'] as String? ?? '',
+      reason: json['reason'] as String? ?? '',
+      priority: json['priority'] as String? ?? 'medium',
+    );
+  }
+
+  final String id;
+  final String title;
+  final String subtitle;
+  final String moduleCode;
+  final String actionLabel;
+  final String reason;
+  final String priority;
+}
+
+class IdentitySignal {
+  const IdentitySignal({
+    required this.name,
+    required this.status,
+    required this.detail,
+  });
+
+  factory IdentitySignal.fromJson(Map<String, dynamic> json) {
+    return IdentitySignal(
+      name: json['name'] as String? ?? '',
+      status: json['status'] as String? ?? 'pending',
+      detail: json['detail'] as String? ?? '',
+    );
+  }
+
+  final String name;
+  final String status;
+  final String detail;
+}
+
+class IdentityScoreData {
+  const IdentityScoreData({
+    required this.score,
+    required this.level,
+    required this.levelLabel,
+    required this.summary,
+    required this.anonymous,
+    required this.signals,
+  });
+
+  factory IdentityScoreData.fromJson(Map<String, dynamic> json) {
+    return IdentityScoreData(
+      score: (json['score'] as num?)?.toInt() ?? 0,
+      level: json['level'] as String? ?? 'baseline',
+      levelLabel: json['level_label'] as String? ?? 'Baseline',
+      summary: json['summary'] as String? ?? '',
+      anonymous: json['anonymous'] == true,
+      signals:
+          (json['signals'] as List<dynamic>? ?? const <dynamic>[])
+              .map(
+                (dynamic item) => IdentitySignal.fromJson(
+                  (item as Map<dynamic, dynamic>).cast<String, dynamic>(),
+                ),
+              )
+              .toList(growable: false),
+    );
+  }
+
+  final int score;
+  final String level;
+  final String levelLabel;
+  final String summary;
+  final bool anonymous;
+  final List<IdentitySignal> signals;
+}
+
+class HomeMetricCard {
+  const HomeMetricCard({
+    required this.label,
+    required this.value,
+    required this.caption,
+    required this.accent,
+  });
+
+  factory HomeMetricCard.fromJson(Map<String, dynamic> json) {
+    return HomeMetricCard(
+      label: json['label'] as String? ?? '',
+      value: json['value'] as String? ?? '',
+      caption: json['caption'] as String? ?? '',
+      accent: json['accent'] as String? ?? 'cyan',
+    );
+  }
+
+  final String label;
+  final String value;
+  final String caption;
+  final String accent;
+}
+
+class HomeProfileContext {
+  const HomeProfileContext({
+    required this.role,
+    required this.roleLabel,
+    required this.audienceKey,
+    required this.focusTitle,
+    required this.focusCaption,
+    required this.preferredModuleCodes,
+  });
+
+  factory HomeProfileContext.fromJson(Map<String, dynamic> json) {
+    return HomeProfileContext(
+      role: json['role'] as String? ?? 'GUEST',
+      roleLabel: json['role_label'] as String? ?? 'Convidado',
+      audienceKey: json['audience_key'] as String? ?? 'guest',
+      focusTitle: json['focus_title'] as String? ?? '',
+      focusCaption: json['focus_caption'] as String? ?? '',
+      preferredModuleCodes:
+          (json['preferred_module_codes'] as List<dynamic>? ??
+                  const <dynamic>[])
+              .map((dynamic item) => item.toString())
+              .toList(growable: false),
+    );
+  }
+
+  final String role;
+  final String roleLabel;
+  final String audienceKey;
+  final String focusTitle;
+  final String focusCaption;
+  final List<String> preferredModuleCodes;
+}
+
+class HomeModuleSignal {
+  const HomeModuleSignal({
+    required this.moduleCode,
+    required this.status,
+    required this.headline,
+    required this.detail,
+    required this.accent,
+  });
+
+  factory HomeModuleSignal.fromJson(Map<String, dynamic> json) {
+    return HomeModuleSignal(
+      moduleCode: json['module_code'] as String? ?? '',
+      status: json['status'] as String? ?? 'pending',
+      headline: json['headline'] as String? ?? '',
+      detail: json['detail'] as String? ?? '',
+      accent: json['accent'] as String? ?? 'cyan',
+    );
+  }
+
+  final String moduleCode;
+  final String status;
+  final String headline;
+  final String detail;
+  final String accent;
+}
+
+class UserModuleTrail {
+  const UserModuleTrail({
+    required this.trailId,
+    required this.createdAtUtc,
+    required this.userId,
+    required this.sessionId,
+    required this.role,
+    required this.moduleCode,
+    required this.kind,
+    required this.status,
+    required this.headline,
+    required this.detail,
+    required this.provider,
+    required this.itemId,
+    required this.itemTitle,
+    required this.domainAction,
+    required this.journeyStage,
+    required this.journeyKey,
+    required this.primaryActionPath,
+    required this.primaryActionLabel,
+    required this.checkoutPath,
+    required this.mediaPath,
+    required this.interestPath,
+    required this.openModuleCode,
+  });
+
+  factory UserModuleTrail.fromJson(Map<String, dynamic> json) {
+    return UserModuleTrail(
+      trailId: json['trail_id'] as String? ?? '',
+      createdAtUtc: json['created_at_utc'] as String? ?? '',
+      userId: json['user_id'] as String? ?? '',
+      sessionId: json['session_id'] as String? ?? '',
+      role: json['role'] as String? ?? '',
+      moduleCode: json['module_code'] as String? ?? '',
+      kind: json['kind'] as String? ?? '',
+      status: json['status'] as String? ?? 'INFO',
+      headline: json['headline'] as String? ?? '',
+      detail: json['detail'] as String? ?? '',
+      provider: json['provider'] as String? ?? '',
+      itemId: json['item_id'] as String? ?? '',
+      itemTitle: json['item_title'] as String? ?? '',
+      domainAction: json['domain_action'] as String? ?? '',
+      journeyStage: json['journey_stage'] as String? ?? '',
+      journeyKey: json['journey_key'] as String? ?? '',
+      primaryActionPath: json['primary_action_path'] as String? ?? '',
+      primaryActionLabel: json['primary_action_label'] as String? ?? '',
+      checkoutPath: json['checkout_path'] as String? ?? '',
+      mediaPath: json['media_path'] as String? ?? '',
+      interestPath: json['interest_path'] as String? ?? '',
+      openModuleCode: json['open_module_code'] as String? ?? '',
+    );
+  }
+
+  final String trailId;
+  final String createdAtUtc;
+  final String userId;
+  final String sessionId;
+  final String role;
+  final String moduleCode;
+  final String kind;
+  final String status;
+  final String headline;
+  final String detail;
+  final String provider;
+  final String itemId;
+  final String itemTitle;
+  final String domainAction;
+  final String journeyStage;
+  final String journeyKey;
+  final String primaryActionPath;
+  final String primaryActionLabel;
+  final String checkoutPath;
+  final String mediaPath;
+  final String interestPath;
+  final String openModuleCode;
+}
+
+class ProductHomeData {
+  const ProductHomeData({
+    required this.ok,
+    required this.anonymous,
+    required this.persistable,
+    required this.fetchedAtUtc,
+    required this.profileContext,
+    required this.preferences,
+    required this.recentActions,
+    required this.recommendations,
+    required this.identityScore,
+    required this.metrics,
+    required this.moduleSignals,
+    required this.userModuleTrails,
+  });
+
+  factory ProductHomeData.fromJson(Map<String, dynamic> json) {
+    return ProductHomeData(
+      ok: (json['status'] as String? ?? '') == 'ok',
+      anonymous: json['anonymous'] == true,
+      persistable: json['persistable'] == true,
+      fetchedAtUtc: json['fetched_at_utc'] as String? ?? '',
+      profileContext: HomeProfileContext.fromJson(
+        (json['profile_context'] as Map<dynamic, dynamic>? ??
+                const <dynamic, dynamic>{})
+            .cast<String, dynamic>(),
+      ),
+      preferences: HomePreferences.fromJson(
+        (json['preferences'] as Map<dynamic, dynamic>? ??
+                const <dynamic, dynamic>{})
+            .cast<String, dynamic>(),
+      ),
+      recentActions:
+          (json['recent_actions'] as List<dynamic>? ?? const <dynamic>[])
+              .map(
+                (dynamic item) => HomeRecentAction.fromJson(
+                  (item as Map<dynamic, dynamic>).cast<String, dynamic>(),
+                ),
+              )
+              .toList(growable: false),
+      recommendations:
+          (json['recommendations'] as List<dynamic>? ?? const <dynamic>[])
+              .map(
+                (dynamic item) => HomeRecommendation.fromJson(
+                  (item as Map<dynamic, dynamic>).cast<String, dynamic>(),
+                ),
+              )
+              .toList(growable: false),
+      identityScore: IdentityScoreData.fromJson(
+        (json['identity_score'] as Map<dynamic, dynamic>? ??
+                const <dynamic, dynamic>{})
+            .cast<String, dynamic>(),
+      ),
+      metrics:
+          (json['metrics'] as List<dynamic>? ?? const <dynamic>[])
+              .map(
+                (dynamic item) => HomeMetricCard.fromJson(
+                  (item as Map<dynamic, dynamic>).cast<String, dynamic>(),
+                ),
+              )
+              .toList(growable: false),
+      moduleSignals:
+          (json['module_signals'] as List<dynamic>? ?? const <dynamic>[])
+              .map(
+                (dynamic item) => HomeModuleSignal.fromJson(
+                  (item as Map<dynamic, dynamic>).cast<String, dynamic>(),
+                ),
+              )
+              .toList(growable: false),
+      userModuleTrails:
+          (json['user_module_trails'] as List<dynamic>? ?? const <dynamic>[])
+              .map(
+                (dynamic item) => UserModuleTrail.fromJson(
+                  (item as Map<dynamic, dynamic>).cast<String, dynamic>(),
+                ),
+              )
+              .toList(growable: false),
+    );
+  }
+
+  final bool ok;
+  final bool anonymous;
+  final bool persistable;
+  final String fetchedAtUtc;
+  final HomeProfileContext profileContext;
+  final HomePreferences preferences;
+  final List<HomeRecentAction> recentActions;
+  final List<HomeRecommendation> recommendations;
+  final IdentityScoreData identityScore;
+  final List<HomeMetricCard> metrics;
+  final List<HomeModuleSignal> moduleSignals;
+  final List<UserModuleTrail> userModuleTrails;
+}

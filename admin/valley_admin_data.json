@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-05-05T13:24:13.704787+00:00",
+  "generated_at_utc": "2026-05-05T17:18:51.916716+00:00",
   "registry_name": "Valley Omniverse V47 - Registro Canonico de Modulos",
   "source": "Esquema Consolidado do Valley Omniverse v47.pdf",
   "language_policy": "pt-BR simples com termos tecnicos em ingles quando forem padroes",
@@ -1266,7 +1266,7 @@
   },
   "deployment_summary": {
     "available": true,
-    "generated_at_utc": "2026-05-05T13:24:11.840519+00:00",
+    "generated_at_utc": "2026-05-05T17:18:50.172868+00:00",
     "total_checks": 353,
     "failed_checks": 0,
     "top_failures": []
@@ -1296,8 +1296,7 @@
     "python scripts/valley_module_automation.py sync",
     "python scripts/valley_db_orchestrator.py check",
     "python scripts/valley_db_orchestrator.py report",
-    "python scripts/valley_db_orchestrator.py apply-compose",
-    "docker compose --profile builder run --rm --build builder"
+    "powershell -ExecutionPolicy Bypass -File scripts/run_valley_compose_builder.ps1"
   ],
   "modules": [
     {

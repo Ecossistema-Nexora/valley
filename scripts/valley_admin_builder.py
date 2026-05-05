@@ -499,8 +499,7 @@ def build_payload() -> dict[str, object]:
             'python scripts/valley_module_automation.py sync',
             'python scripts/valley_db_orchestrator.py check',
             'python scripts/valley_db_orchestrator.py report',
-            'python scripts/valley_db_orchestrator.py apply-compose',
-            'docker compose --profile builder run --rm --build builder',
+            'powershell -ExecutionPolicy Bypass -File scripts/run_valley_compose_builder.ps1',
         ],
         'modules': modules,
     }

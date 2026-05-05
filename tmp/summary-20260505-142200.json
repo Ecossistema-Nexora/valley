@@ -1,0 +1,4 @@
+{
+  "summary": "A evolução do MVP continuou pela trilha mais útil e segura: foram criadas as specs técnicas spec-first de Face ID e Voice ID em docs/specs/identity, e o plano do MVP foi desdobrado em backlog P0 por ownership técnico em docs/specs/valley-mvp-p0-ownership-backlog.md. O versionamento obrigatório foi registrado em PLANOS/v009 e o índice de planos foi atualizado.",
+  "current_status": "O workspace agora tem plano de entrega do MVP, specs biométricas de corte inicial e backlog executável alinhado ao squad do Codex. O próximo passo natural é sair da documentação e iniciar a implementação real dos contratos /me/* e da home Flutter integrada."
+}

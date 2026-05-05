@@ -10,7 +10,7 @@
     "avoid_shell_chains_when_noisy": true
   },
   "release_runtime": {
-    "database": "docker compose --profile builder run --rm --build builder",
+    "database": "powershell -ExecutionPolicy Bypass -File scripts/run_valley_compose_builder.ps1",
     "report": "python scripts/valley_db_orchestrator.py report",
     "module_sync": "python scripts/valley_module_automation.py sync"
   }

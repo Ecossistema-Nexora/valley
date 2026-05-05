@@ -72,7 +72,7 @@
       "required": false
     }
   ],
-  "canonical_builder_command": "docker compose --profile builder run --rm --build builder",
+  "canonical_builder_command": "powershell -ExecutionPolicy Bypass -File scripts/run_valley_compose_builder.ps1",
   "github_repository_binding": {
     "provider": "github",
     "owner": "Ecossistema-Nexora",

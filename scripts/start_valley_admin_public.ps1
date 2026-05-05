@@ -32,6 +32,28 @@ function Write-Step {
     Write-Output ("[valley-admin-public] {0}" -f $Message)
 }
 
+function Prepare-LogPath {
+    param([string]$Path)
+
+    $Directory = Split-Path -Parent $Path
+    if ($Directory) {
+        New-Item -ItemType Directory -Path $Directory -Force | Out-Null
+    }
+
+    try {
+        [System.IO.File]::WriteAllText($Path, '', [System.Text.UTF8Encoding]::new($false))
+        return $Path
+    } catch {
+        $BaseName = [System.IO.Path]::GetFileNameWithoutExtension($Path)
+        $Extension = [System.IO.Path]::GetExtension($Path)
+        $Suffix = Get-Date -Format 'yyyyMMdd-HHmmss'
+        $FallbackPath = Join-Path $Directory ("{0}.{1}{2}" -f $BaseName, $Suffix, $Extension)
+        [System.IO.File]::WriteAllText($FallbackPath, '', [System.Text.UTF8Encoding]::new($false))
+        Write-Step ("Log bloqueado em {0}; usando {1}" -f $Path, $FallbackPath)
+        return $FallbackPath
+    }
+}
+
 function Parse-EnvFile {
     param([string]$Path)
 
@@ -348,8 +370,8 @@ if (-not ($HealthPayload -and $HealthPayload.service -eq 'valley-admin')) {
     }
 
     Write-Step ("Subindo servidor HTTP local em {0}" -f $LocalBaseUrl)
-    [System.IO.File]::WriteAllText($ServeStdoutLog, '', [System.Text.UTF8Encoding]::new($false))
-    [System.IO.File]::WriteAllText($ServeStderrLog, '', [System.Text.UTF8Encoding]::new($false))
+    $ServeStdoutLog = Prepare-LogPath -Path $ServeStdoutLog
+    $ServeStderrLog = Prepare-LogPath -Path $ServeStderrLog
 
     $ServeArgs = @()
     $ServeArgs += $PythonLauncher.PrefixArgs
@@ -371,8 +393,8 @@ if (-not ($HealthPayload -and $HealthPayload.service -eq 'valley-admin')) {
 }
 
 Stop-StaleCloudflared
-[System.IO.File]::WriteAllText($CloudflareStdoutLog, '', [System.Text.UTF8Encoding]::new($false))
-[System.IO.File]::WriteAllText($CloudflareStderrLog, '', [System.Text.UTF8Encoding]::new($false))
+$CloudflareStdoutLog = Prepare-LogPath -Path $CloudflareStdoutLog
+$CloudflareStderrLog = Prepare-LogPath -Path $CloudflareStderrLog
 
 if (-not [string]::IsNullOrWhiteSpace($CloudflaredToken) -and -not [string]::IsNullOrWhiteSpace($PublicBaseUrl)) {
     Write-Step ("Subindo Cloudflare named tunnel para {0}" -f $PublicBaseUrl)

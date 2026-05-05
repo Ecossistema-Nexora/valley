@@ -1,0 +1,4 @@
+{
+  "summary": "Foi materializado no repo um plano objetivo de entrega do MVP Valley, com escopo central, backlog P0, critérios de aceite, sequência de execução, riscos e definição de pronto. O documento principal foi criado em docs/specs/valley-mvp-delivery-plan.md e o registro operacional obrigatório foi arquivado em PLANOS/v008, com atualização do índice cronológico.",
+  "current_status": "O workspace agora tem um plano persistente para o MVP demonstrável do Valley, centrado em home Flutter, APIs de personalização, Identity Score e specs biométricas spec-first. O próximo passo natural é desdobrar a execução por ownership técnico."
+}

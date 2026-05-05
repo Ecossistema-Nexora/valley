@@ -1,0 +1,20 @@
+{
+  "timestamp_brt": "2026-05-05 17:16:14 BRT",
+  "plan_version": "v017",
+  "scope": "eventos_da_timeline_com_acao_contextual",
+  "changes": [
+    "Handler contextual por evento adicionado no state da home Flutter.",
+    "Eventos da timeline passaram a resolver product-interest, open-media ou checkout a partir de item_id e journey context.",
+    "Fallback visual por sheet contextual mantido quando nao houver retorno utilizavel do runtime."
+  ],
+  "files": [
+    "frontend/flutter/lib/src/ui/valley_home_shell.dart",
+    "PLANOS/v017__20260505-171614-brt__eventos_da_timeline_com_acao_contextual.md",
+    "PLANOS/INDEX.md"
+  ],
+  "validation": {
+    "dart_format": "ok",
+    "dart_analyze": "ok"
+  },
+  "next_step": "Passar a expor deep links de oferta e acao por item direto no payload da home para eliminar heuristicas de endpoint no frontend."
+}

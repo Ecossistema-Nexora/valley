@@ -13,5 +13,6 @@
    - `python scripts/valley_db_orchestrator.py apply-postgres`
    - `python scripts/valley_db_orchestrator.py apply-mongo`
    - Windows com bridge Docker quebrado: `.\scripts\apply_valley_db_via_wsl.ps1`
+   - Runtime Compose local canonico: `powershell -ExecutionPolicy Bypass -File scripts/run_valley_compose_builder.ps1`
 7. Configurar Stripe webhooks.
 8. Validar `/healthz`, `/readyz`, jobs e admin.

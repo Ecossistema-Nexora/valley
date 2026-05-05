@@ -1,0 +1,20 @@
+{
+  "timestamp_brt": "2026-05-05 17:07:35 BRT",
+  "plan_version": "v016",
+  "scope": "drilldown_de_jornada_para_modulo_dominante",
+  "changes": [
+    "Heuristica de modulo dominante por journey stage adicionada na home Flutter.",
+    "Cards de jornada tornados clicaveis com CTA para abrir o modulo mais relevante da trilha.",
+    "Resumo textual do modulo dominante exibido dentro do card."
+  ],
+  "files": [
+    "frontend/flutter/lib/src/ui/valley_home_shell.dart",
+    "PLANOS/v016__20260505-170735-brt__drilldown_de_jornada_para_modulo_dominante.md",
+    "PLANOS/INDEX.md"
+  ],
+  "validation": {
+    "dart_format": "ok",
+    "dart_analyze": "ok"
+  },
+  "next_step": "Permitir drilldown por evento da timeline para abrir oferta, checkout ou acao contextual dentro do modulo dominante."
+}

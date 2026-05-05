@@ -288,6 +288,108 @@ class ProductApiRepository {
     }
   }
 
+  Future<ProductHomeData> loadHome({String baseUrl = ''}) async {
+    final String resolvedBaseUrl = await _resolveInteractiveBaseUrl(baseUrl);
+    final http.Response response = await http
+        .get(
+          Uri.parse('$resolvedBaseUrl/api/me/home'),
+          headers: await _defaultHeaders(),
+        )
+        .timeout(const Duration(seconds: 20));
+    final Map<String, dynamic> json =
+        (jsonDecode(utf8.decode(response.bodyBytes)) as Map<dynamic, dynamic>)
+            .cast<String, dynamic>();
+    return ProductHomeData.fromJson(json);
+  }
+
+  Future<List<HomeRecentAction>> loadRecentActions({String baseUrl = ''}) async {
+    final String resolvedBaseUrl = await _resolveInteractiveBaseUrl(baseUrl);
+    final http.Response response = await http
+        .get(
+          Uri.parse('$resolvedBaseUrl/api/me/recent-actions'),
+          headers: await _defaultHeaders(),
+        )
+        .timeout(const Duration(seconds: 20));
+    final Map<String, dynamic> json =
+        (jsonDecode(utf8.decode(response.bodyBytes)) as Map<dynamic, dynamic>)
+            .cast<String, dynamic>();
+    return (json['recent_actions'] as List<dynamic>? ?? const <dynamic>[])
+        .map(
+          (dynamic item) => HomeRecentAction.fromJson(
+            (item as Map<dynamic, dynamic>).cast<String, dynamic>(),
+          ),
+        )
+        .toList(growable: false);
+  }
+
+  Future<List<HomeRecommendation>> loadRecommendations({
+    String baseUrl = '',
+  }) async {
+    final String resolvedBaseUrl = await _resolveInteractiveBaseUrl(baseUrl);
+    final http.Response response = await http
+        .get(
+          Uri.parse('$resolvedBaseUrl/api/me/recommendations'),
+          headers: await _defaultHeaders(),
+        )
+        .timeout(const Duration(seconds: 20));
+    final Map<String, dynamic> json =
+        (jsonDecode(utf8.decode(response.bodyBytes)) as Map<dynamic, dynamic>)
+            .cast<String, dynamic>();
+    return (json['recommendations'] as List<dynamic>? ?? const <dynamic>[])
+        .map(
+          (dynamic item) => HomeRecommendation.fromJson(
+            (item as Map<dynamic, dynamic>).cast<String, dynamic>(),
+          ),
+        )
+        .toList(growable: false);
+  }
+
+  Future<IdentityScoreData> loadIdentityScore({String baseUrl = ''}) async {
+    final String resolvedBaseUrl = await _resolveInteractiveBaseUrl(baseUrl);
+    final http.Response response = await http
+        .get(
+          Uri.parse('$resolvedBaseUrl/api/me/identity-score'),
+          headers: await _defaultHeaders(),
+        )
+        .timeout(const Duration(seconds: 20));
+    final Map<String, dynamic> json =
+        (jsonDecode(utf8.decode(response.bodyBytes)) as Map<dynamic, dynamic>)
+            .cast<String, dynamic>();
+    return IdentityScoreData.fromJson(json);
+  }
+
+  Future<HomePreferences> saveHomePreferences({
+    String baseUrl = '',
+    required List<String> visibleModuleCodes,
+    List<String> favoriteModuleCodes = const <String>[],
+  }) async {
+    final String resolvedBaseUrl = await _resolveInteractiveBaseUrl(baseUrl);
+    final http.Response response = await http
+        .put(
+          Uri.parse('$resolvedBaseUrl/api/me/home/preferences'),
+          headers: await _defaultHeaders(),
+          body: jsonEncode(<String, dynamic>{
+            'visible_module_codes': visibleModuleCodes,
+            'favorite_module_codes': favoriteModuleCodes,
+          }),
+        )
+        .timeout(const Duration(seconds: 20));
+    final Map<String, dynamic> json =
+        (jsonDecode(utf8.decode(response.bodyBytes)) as Map<dynamic, dynamic>)
+            .cast<String, dynamic>();
+    if (response.statusCode < 200 || response.statusCode >= 300) {
+      throw StateError(
+        json['detail'] as String? ??
+            'Falha ao persistir preferências da home no servidor.',
+      );
+    }
+    return HomePreferences.fromJson(
+      (json['preferences'] as Map<dynamic, dynamic>? ??
+              const <dynamic, dynamic>{})
+          .cast<String, dynamic>(),
+    );
+  }
+
   Future<void> clearSession() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove(_sessionTokenKey);

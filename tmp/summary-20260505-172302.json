@@ -1,0 +1,23 @@
+{
+  "timestamp_brt": "2026-05-05 17:23:02 BRT",
+  "plan_version": "v018",
+  "scope": "deep_links_explicitos_no_payload_da_home",
+  "changes": [
+    "Backend passou a enriquecer user_module_trails com primary_action_path, primary_action_label, checkout_path, media_path, interest_path e open_module_code.",
+    "Contrato Dart de UserModuleTrail foi ampliado para consumir os deep links assinados pelo backend.",
+    "Flutter removeu a heuristica local de endpoint e passou a usar trail.primaryActionPath no handler contextual."
+  ],
+  "files": [
+    "scripts/serve_valley_admin.py",
+    "frontend/flutter/lib/src/data/product_api_models.dart",
+    "frontend/flutter/lib/src/ui/valley_home_shell.dart",
+    "PLANOS/v018__20260505-172302-brt__deep_links_explicitos_no_payload_da_home.md",
+    "PLANOS/INDEX.md"
+  ],
+  "validation": {
+    "python_py_compile": "ok",
+    "dart_analyze": "ok",
+    "http_smoke_home_payload": "ok"
+  },
+  "next_step": "Expor deep links explicitos tambem em recommendations e recent_actions para unificar toda a navegacao contextual da home."
+}

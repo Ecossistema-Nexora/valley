@@ -4,6 +4,8 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:valley_super_app/src/data/product_api_models.dart';
+import 'package:valley_super_app/src/data/product_api_repository.dart';
 import 'package:valley_super_app/src/data/valley_models.dart';
 import 'package:valley_super_app/src/ui/ui_components.dart';
 import 'package:valley_super_app/valley_brand_theme.dart';
@@ -104,10 +106,177 @@ Color _moduleAccentFor(ModuleRecord module) {
   }
 }
 
+Color _homeMetricAccent(String accent) {
+  switch (accent) {
+    case 'success':
+      return ValleyBrandColors.success;
+    case 'warning':
+      return ValleyBrandColors.warning;
+    case 'violet':
+      return ValleyBrandColors.violet;
+    default:
+      return ValleyBrandColors.cyan;
+  }
+}
+
+Color _homeSignalAccent(String accent) => _homeMetricAccent(accent);
+
+Color _journeyStageColor(String stage) {
+  switch (stage) {
+    case 'conversion':
+      return ValleyBrandColors.success;
+    case 'research':
+      return ValleyBrandColors.cyan;
+    case 'consideration':
+      return ValleyBrandColors.violet;
+    case 'failure':
+      return ValleyBrandColors.warning;
+    case 'discovery':
+    default:
+      return ValleyBrandColors.lilac;
+  }
+}
+
+String _journeyStageLabel(String stage) {
+  switch (stage) {
+    case 'conversion':
+      return 'conversao';
+    case 'research':
+      return 'analise';
+    case 'consideration':
+      return 'consideracao';
+    case 'failure':
+      return 'falha';
+    case 'discovery':
+      return 'descoberta';
+    default:
+      return stage.trim().isEmpty ? 'evento' : stage;
+  }
+}
+
+class _JourneyGroup {
+  const _JourneyGroup({required this.journeyKey, required this.trails});
+
+  final String journeyKey;
+  final List<UserModuleTrail> trails;
+
+  UserModuleTrail get latest => trails.first;
+
+  List<UserModuleTrail> get timeline {
+    final List<UserModuleTrail> ordered = List<UserModuleTrail>.from(trails);
+    ordered.sort(
+      (UserModuleTrail a, UserModuleTrail b) =>
+          a.createdAtUtc.compareTo(b.createdAtUtc),
+    );
+    return ordered;
+  }
+
+  List<String> get moduleCodes {
+    final Set<String> seen = <String>{};
+    final List<String> ordered = <String>[];
+    for (final UserModuleTrail trail in timeline) {
+      final String code = trail.moduleCode.trim().toUpperCase();
+      if (code.isEmpty || !seen.add(code)) {
+        continue;
+      }
+      ordered.add(code);
+    }
+    return ordered;
+  }
+
+  List<String> get stages {
+    final Set<String> seen = <String>{};
+    final List<String> ordered = <String>[];
+    for (final UserModuleTrail trail in timeline) {
+      final String stage = trail.journeyStage.trim().toLowerCase();
+      if (stage.isEmpty || !seen.add(stage)) {
+        continue;
+      }
+      ordered.add(stage);
+    }
+    return ordered;
+  }
+}
+
+List<_JourneyGroup> _groupJourneyTrails(List<UserModuleTrail> trails) {
+  final List<UserModuleTrail> sorted = List<UserModuleTrail>.from(trails)
+    ..sort(
+      (UserModuleTrail a, UserModuleTrail b) =>
+          b.createdAtUtc.compareTo(a.createdAtUtc),
+    );
+  final Map<String, List<UserModuleTrail>> grouped =
+      <String, List<UserModuleTrail>>{};
+  for (final UserModuleTrail trail in sorted) {
+    final String key = trail.journeyKey.trim().isNotEmpty
+        ? trail.journeyKey.trim()
+        : trail.trailId;
+    grouped.putIfAbsent(key, () => <UserModuleTrail>[]).add(trail);
+  }
+  final List<_JourneyGroup> journeys = grouped.entries
+      .map(
+        (MapEntry<String, List<UserModuleTrail>> entry) =>
+            _JourneyGroup(journeyKey: entry.key, trails: entry.value),
+      )
+      .toList(growable: false);
+  journeys.sort(
+    (_JourneyGroup a, _JourneyGroup b) =>
+        b.latest.createdAtUtc.compareTo(a.latest.createdAtUtc),
+  );
+  return journeys;
+}
+
+ModuleRecord? _resolveJourneyPrimaryModule(
+  _JourneyGroup journey,
+  List<ModuleRecord> catalogModules,
+) {
+  final Map<String, ModuleRecord> modulesByCode = <String, ModuleRecord>{
+    for (final ModuleRecord module in catalogModules) module.code: module,
+  };
+  final String latestStage = journey.latest.journeyStage.trim().toLowerCase();
+  final List<String> preferredCodes;
+  switch (latestStage) {
+    case 'conversion':
+      preferredCodes = const <String>['PAY', 'MARKETPLACE', 'STOCK'];
+      break;
+    case 'research':
+      preferredCodes = const <String>['MARKETPLACE', 'STOCK', 'PAY'];
+      break;
+    case 'consideration':
+      preferredCodes = const <String>['MARKETPLACE', 'STOCK', 'PAY'];
+      break;
+    case 'failure':
+      preferredCodes = const <String>['PAY', 'STOCK', 'MARKETPLACE'];
+      break;
+    case 'discovery':
+    default:
+      preferredCodes = const <String>['STOCK', 'MARKETPLACE', 'PAY'];
+      break;
+  }
+
+  for (final String code in preferredCodes) {
+    if (journey.moduleCodes.contains(code) && modulesByCode.containsKey(code)) {
+      return modulesByCode[code];
+    }
+  }
+
+  for (final UserModuleTrail trail in journey.timeline.reversed) {
+    final ModuleRecord? module = modulesByCode[trail.moduleCode];
+    if (module != null) {
+      return module;
+    }
+  }
+  return null;
+}
+
 class ValleyHomeShell extends StatefulWidget {
-  const ValleyHomeShell({super.key, required this.data});
+  const ValleyHomeShell({
+    super.key,
+    required this.data,
+    this.repository = const ProductApiRepository(),
+  });
 
   final ValleyAppData data;
+  final ProductApiRepository repository;
 
   @override
   State<ValleyHomeShell> createState() => _ValleyHomeShellState();
@@ -120,6 +289,9 @@ class _ValleyHomeShellState extends State<ValleyHomeShell> {
   String? _selectedDockModuleCode;
   late final TextEditingController _searchController;
   String _searchQuery = '';
+  ProductHomeData? _remoteHomeData;
+  bool _remoteHomeLoading = false;
+  String _remoteHomeStatus = '';
 
   static const List<_Destination> _destinations = <_Destination>[
     _Destination(
@@ -160,6 +332,7 @@ class _ValleyHomeShellState extends State<ValleyHomeShell> {
     _searchController = TextEditingController();
     _homeModuleCodes = _defaultHomeModuleCodes();
     unawaited(_loadHomeModulePreferences());
+    unawaited(_loadRemoteHomeData());
   }
 
   @override
@@ -212,6 +385,80 @@ class _ValleyHomeShellState extends State<ValleyHomeShell> {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     final List<String> sortedCodes = _homeModuleCodes.toList()..sort();
     await preferences.setStringList(_homeModulePrefsKey, sortedCodes);
+    try {
+      final HomePreferences remotePreferences = await widget.repository
+          .saveHomePreferences(
+            visibleModuleCodes: sortedCodes,
+            favoriteModuleCodes: sortedCodes.take(4).toList(growable: false),
+          );
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        final ProductHomeData? current = _remoteHomeData;
+        if (current != null) {
+          _remoteHomeData = ProductHomeData(
+            ok: current.ok,
+            anonymous: current.anonymous,
+            persistable: current.persistable,
+            fetchedAtUtc: current.fetchedAtUtc,
+            profileContext: current.profileContext,
+            preferences: remotePreferences,
+            recentActions: current.recentActions,
+            recommendations: current.recommendations,
+            identityScore: current.identityScore,
+            metrics: current.metrics,
+            moduleSignals: current.moduleSignals,
+            userModuleTrails: current.userModuleTrails,
+          );
+        }
+        _remoteHomeStatus = '';
+      });
+    } catch (_) {
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _remoteHomeStatus =
+            'Persistencia remota indisponivel; fallback local mantido.';
+      });
+    }
+  }
+
+  Future<void> _loadRemoteHomeData() async {
+    setState(() {
+      _remoteHomeLoading = true;
+      _remoteHomeStatus = '';
+    });
+    try {
+      final ProductHomeData remoteHome = await widget.repository.loadHome();
+      final Set<String> validCodes = widget.data.modules
+          .map((ModuleRecord module) => module.code)
+          .toSet();
+      final Set<String> remoteCodes = remoteHome.preferences.visibleModuleCodes
+          .where((String code) => validCodes.contains(code))
+          .toSet();
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _remoteHomeData = remoteHome;
+        if (remoteCodes.isNotEmpty) {
+          _homeModuleCodes = remoteCodes;
+        }
+        _modulePreferencesReady = true;
+        _remoteHomeLoading = false;
+      });
+    } catch (_) {
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _remoteHomeLoading = false;
+        _remoteHomeStatus =
+            'API /me/* indisponivel; home segue com cache local.';
+      });
+    }
   }
 
   void _toggleHomeModule(ModuleRecord module, bool selected) {
@@ -250,6 +497,198 @@ class _ValleyHomeShellState extends State<ValleyHomeShell> {
         ),
       );
     }
+  }
+
+  ModuleRecord? _findModuleByCode(String code) {
+    for (final ModuleRecord module in widget.data.modules) {
+      if (module.code == code) {
+        return module;
+      }
+    }
+    return null;
+  }
+
+  Future<void> _showJourneyRuntimeResult({
+    required String title,
+    required String message,
+    required String url,
+  }) async {
+    if (!mounted) {
+      return;
+    }
+    await showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      backgroundColor: Colors.transparent,
+      builder: (BuildContext modalContext) {
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+            child: ValleyPanel(
+              glowColor: ValleyBrandColors.success,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  const SignalChip(
+                    label: 'acao concluida',
+                    color: ValleyBrandColors.success,
+                  ),
+                  const SizedBox(height: 18),
+                  Text(
+                    title,
+                    style: Theme.of(modalContext).textTheme.headlineSmall,
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    message,
+                    style: Theme.of(modalContext).textTheme.bodyLarge?.copyWith(
+                      color: Theme.of(
+                        modalContext,
+                      ).colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                  if (url.trim().isNotEmpty) ...<Widget>[
+                    const SizedBox(height: 14),
+                    SelectableText(
+                      url,
+                      style: Theme.of(modalContext).textTheme.bodyMedium
+                          ?.copyWith(color: ValleyBrandColors.cyan),
+                    ),
+                  ],
+                  const SizedBox(height: 18),
+                  FilledButton(
+                    onPressed: () => Navigator.of(modalContext).pop(),
+                    child: const Text('Fechar'),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _showJourneyEventSheet(
+    UserModuleTrail trail, {
+    required ModuleRecord? primaryModule,
+  }) async {
+    if (!mounted) {
+      return;
+    }
+    await showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      backgroundColor: Colors.transparent,
+      builder: (BuildContext modalContext) {
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+            child: ValleyPanel(
+              glowColor: _journeyStageColor(trail.journeyStage.toLowerCase()),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      SignalChip(
+                        label: trail.moduleCode,
+                        color: _journeyStageColor(
+                          trail.journeyStage.toLowerCase(),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      SignalChip(
+                        label: _journeyStageLabel(
+                          trail.journeyStage.toLowerCase(),
+                        ),
+                        color: ValleyBrandColors.cyan,
+                        outlined: true,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 18),
+                  Text(
+                    trail.headline,
+                    style: Theme.of(modalContext).textTheme.headlineSmall,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    trail.detail,
+                    style: Theme.of(modalContext).textTheme.bodyLarge?.copyWith(
+                      color: Theme.of(
+                        modalContext,
+                      ).colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                  if (trail.itemTitle.trim().isNotEmpty) ...<Widget>[
+                    const SizedBox(height: 12),
+                    Text(
+                      'Oferta: ${trail.itemTitle}',
+                      style: Theme.of(modalContext).textTheme.labelLarge
+                          ?.copyWith(color: ValleyBrandColors.cyan),
+                    ),
+                  ],
+                  const SizedBox(height: 18),
+                  Wrap(
+                    spacing: 12,
+                    runSpacing: 12,
+                    children: <Widget>[
+                      if (primaryModule != null)
+                        FilledButton(
+                          onPressed: () {
+                            Navigator.of(modalContext).pop();
+                            _openModule(primaryModule);
+                          },
+                          child: Text('Abrir ${primaryModule.code}'),
+                        ),
+                      OutlinedButton(
+                        onPressed: () => Navigator.of(modalContext).pop(),
+                        child: const Text('Fechar'),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _handleJourneyEventTap(
+    UserModuleTrail trail,
+    ModuleRecord? primaryModule,
+  ) async {
+    final String actionPath = trail.primaryActionPath.trim();
+    if (actionPath.isNotEmpty) {
+      try {
+        final ProductActionResult result = await widget.repository.invokePath(
+          baseUrl: '',
+          path: actionPath,
+        );
+        if (!mounted) {
+          return;
+        }
+        if (result.ok) {
+          await _showJourneyRuntimeResult(
+            title: trail.headline,
+            message: result.message,
+            url: result.url,
+          );
+          return;
+        }
+      } catch (_) {}
+    }
+
+    final ModuleRecord? fallbackModule =
+        primaryModule ??
+        _findModuleByCode(trail.openModuleCode) ??
+        _findModuleByCode(trail.moduleCode);
+    await _showJourneyEventSheet(trail, primaryModule: fallbackModule);
   }
 
   void _handleSearchChanged(String value) {
@@ -385,8 +824,12 @@ class _ValleyHomeShellState extends State<ValleyHomeShell> {
           searchQuery: _searchQuery,
           homeModuleCodes: _homeModuleCodes,
           preferencesReady: _modulePreferencesReady,
+          remoteHomeData: _remoteHomeData,
+          remoteHomeLoading: _remoteHomeLoading,
+          remoteHomeStatus: _remoteHomeStatus,
           onNavigate: _navigate,
           onOpenModule: _openModule,
+          onOpenJourneyEvent: _handleJourneyEventTap,
           onToggleHomeModule: _toggleHomeModule,
         );
       case 1:
@@ -406,8 +849,12 @@ class _ValleyHomeShellState extends State<ValleyHomeShell> {
           searchQuery: _searchQuery,
           homeModuleCodes: _homeModuleCodes,
           preferencesReady: _modulePreferencesReady,
+          remoteHomeData: _remoteHomeData,
+          remoteHomeLoading: _remoteHomeLoading,
+          remoteHomeStatus: _remoteHomeStatus,
           onNavigate: _navigate,
           onOpenModule: _openModule,
+          onOpenJourneyEvent: _handleJourneyEventTap,
           onToggleHomeModule: _toggleHomeModule,
         );
     }
@@ -666,18 +1113,20 @@ class _CommandTopBar extends StatelessWidget {
                       children: <Widget>[
                         Text(
                           title,
-                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.w900,
-                          ),
+                          style: Theme.of(context).textTheme.titleLarge
+                              ?.copyWith(fontWeight: FontWeight.w900),
                         ),
                         const SizedBox(height: 4),
                         Text(
                           searchActive
                               ? '$resultCount resultados prontos para abrir'
                               : 'Experiencia premium, modular e pronta para uso.',
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurfaceVariant,
+                              ),
                         ),
                       ],
                     ),
@@ -713,10 +1162,7 @@ class _CommandTopBar extends StatelessWidget {
                     label: 'Alertas',
                   ),
                   const SizedBox(width: 8),
-                  _TopBarIconButton(
-                    icon: Icons.tune_rounded,
-                    label: 'Atalhos',
-                  ),
+                  _TopBarIconButton(icon: Icons.tune_rounded, label: 'Atalhos'),
                   const SizedBox(width: 8),
                   const _ProfileBadge(),
                 ],
@@ -839,9 +1285,9 @@ class _ProfileBadge extends StatelessWidget {
             children: <Widget>[
               Text(
                 'Anderson',
-                style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                  fontWeight: FontWeight.w800,
-                ),
+                style: Theme.of(
+                  context,
+                ).textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w800),
               ),
               Text(
                 'Produto ativo',
@@ -909,8 +1355,12 @@ class _OverviewPage extends StatelessWidget {
     required this.searchQuery,
     required this.homeModuleCodes,
     required this.preferencesReady,
+    required this.remoteHomeData,
+    required this.remoteHomeLoading,
+    required this.remoteHomeStatus,
     required this.onNavigate,
     required this.onOpenModule,
+    required this.onOpenJourneyEvent,
     required this.onToggleHomeModule,
   });
 
@@ -919,8 +1369,16 @@ class _OverviewPage extends StatelessWidget {
   final String searchQuery;
   final Set<String> homeModuleCodes;
   final bool preferencesReady;
+  final ProductHomeData? remoteHomeData;
+  final bool remoteHomeLoading;
+  final String remoteHomeStatus;
   final ValueChanged<int> onNavigate;
   final ValueChanged<ModuleRecord> onOpenModule;
+  final Future<void> Function(
+    UserModuleTrail trail,
+    ModuleRecord? primaryModule,
+  )
+  onOpenJourneyEvent;
   final void Function(ModuleRecord module, bool selected) onToggleHomeModule;
 
   @override
@@ -935,6 +1393,21 @@ class _OverviewPage extends StatelessWidget {
           ..sort(
             (ModuleRecord a, ModuleRecord b) => a.number.compareTo(b.number),
           );
+    final List<HomeMetricCard> metrics =
+        remoteHomeData?.metrics ?? const <HomeMetricCard>[];
+    final List<HomeRecommendation> recommendations =
+        remoteHomeData?.recommendations ?? const <HomeRecommendation>[];
+    final List<HomeRecentAction> recentActions =
+        remoteHomeData?.recentActions ?? const <HomeRecentAction>[];
+    final IdentityScoreData? identityScore = remoteHomeData?.identityScore;
+    final HomeProfileContext? profileContext = remoteHomeData?.profileContext;
+    final List<HomeModuleSignal> moduleSignals =
+        remoteHomeData?.moduleSignals ?? const <HomeModuleSignal>[];
+    final List<UserModuleTrail> userModuleTrails =
+        remoteHomeData?.userModuleTrails ?? const <UserModuleTrail>[];
+    final List<_JourneyGroup> journeyGroups = _groupJourneyTrails(
+      userModuleTrails,
+    );
     return _PageFrame(
       child: FadeSlideIn(
         child: Column(
@@ -954,12 +1427,12 @@ class _OverviewPage extends StatelessWidget {
               title: searchActive
                   ? 'Resultados para "$searchQuery"'
                   : 'Escolha quais modulos aparecem na tela inicial',
-              caption:
-                  searchActive
-                      ? 'A busca reduz ruido visual e destaca os modulos mais relevantes para a sua proxima acao.'
-                      : 'A selecao fica salva no aparelho e o dock inferior mantem acesso rapido a todo o ecossistema.',
+              caption: searchActive
+                  ? 'A busca reduz ruido visual e destaca os modulos mais relevantes para a sua proxima acao.'
+                  : 'A selecao fica salva no aparelho e o dock inferior mantem acesso rapido a todo o ecossistema.',
               trailing: SignalChip(
-                label: '${homeModules.length}/${catalogModules.length} visiveis',
+                label:
+                    '${homeModules.length}/${catalogModules.length} visiveis',
                 color: preferencesReady
                     ? ValleyBrandColors.success
                     : ValleyBrandColors.warning,
@@ -976,6 +1449,533 @@ class _OverviewPage extends StatelessWidget {
               onToggleHomeModule: onToggleHomeModule,
             ),
             const SizedBox(height: 32),
+            SectionHeader(
+              kicker: 'Home API',
+              title: 'Sinais personalizados da camada /me/*',
+              caption: remoteHomeLoading
+                  ? 'Sincronizando score, recomendacoes e acoes recentes do backend.'
+                  : remoteHomeStatus.isNotEmpty
+                  ? remoteHomeStatus
+                  : remoteHomeData?.persistable == true
+                  ? 'Preferencias, recomendacoes e identidade agora saem da API autenticada.'
+                  : 'Sem sessao autenticada, a home usa dados basicos e fallback local.',
+              trailing: SignalChip(
+                label: remoteHomeLoading
+                    ? 'syncing'
+                    : remoteHomeData?.persistable == true
+                    ? 'api live'
+                    : 'local fallback',
+                color: remoteHomeLoading
+                    ? ValleyBrandColors.warning
+                    : remoteHomeData?.persistable == true
+                    ? ValleyBrandColors.success
+                    : ValleyBrandColors.cyan,
+              ),
+            ),
+            const SizedBox(height: 18),
+            if (profileContext != null) ...<Widget>[
+              ValleyPanel(
+                glowColor: ValleyBrandColors.violet,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        SignalChip(
+                          label: profileContext.roleLabel,
+                          color: ValleyBrandColors.violet,
+                        ),
+                        const SizedBox(width: 10),
+                        SignalChip(
+                          label: profileContext.audienceKey,
+                          color: ValleyBrandColors.cyan,
+                          outlined: true,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 14),
+                    Text(
+                      profileContext.focusTitle,
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      profileContext.focusCaption,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                    if (profileContext
+                        .preferredModuleCodes
+                        .isNotEmpty) ...<Widget>[
+                      const SizedBox(height: 14),
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: profileContext.preferredModuleCodes
+                            .take(5)
+                            .map(
+                              (String code) => SignalChip(
+                                label: code,
+                                color: ValleyBrandColors.success,
+                                outlined: true,
+                              ),
+                            )
+                            .toList(),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+              const SizedBox(height: 24),
+            ],
+            Wrap(
+              spacing: 16,
+              runSpacing: 16,
+              children:
+                  (metrics.isNotEmpty
+                          ? metrics.take(3).toList(growable: false)
+                          : <HomeMetricCard>[
+                              const HomeMetricCard(
+                                label: 'Modulos visiveis',
+                                value: '0',
+                                caption:
+                                    'A home segue operacional mesmo sem API.',
+                                accent: 'cyan',
+                              ),
+                              const HomeMetricCard(
+                                label: 'Acoes recentes',
+                                value: '0',
+                                caption:
+                                    'Eventos reais entram quando a sessao e o backend estiverem ativos.',
+                                accent: 'success',
+                              ),
+                              const HomeMetricCard(
+                                label: 'Identity score',
+                                value: '58',
+                                caption:
+                                    'Score base local ate a autenticacao do usuario.',
+                                accent: 'warning',
+                              ),
+                            ])
+                      .map(
+                        (HomeMetricCard metric) => SizedBox(
+                          width: 320,
+                          child: MetricTile(
+                            label: metric.label,
+                            value: metric.value,
+                            caption: metric.caption,
+                            accent: _homeMetricAccent(metric.accent),
+                          ),
+                        ),
+                      )
+                      .toList(),
+            ),
+            const SizedBox(height: 30),
+            if (moduleSignals.isNotEmpty) ...<Widget>[
+              SectionHeader(
+                kicker: 'Por modulo',
+                title: 'Sinais operacionais por superficie',
+                caption:
+                    'A home agora mostra o recorte do runtime por modulo e por perfil, em vez de um feed unico sem contexto.',
+              ),
+              const SizedBox(height: 18),
+              Wrap(
+                spacing: 16,
+                runSpacing: 16,
+                children: moduleSignals
+                    .take(4)
+                    .map(
+                      (HomeModuleSignal signal) => SizedBox(
+                        width: 320,
+                        child: ValleyPanel(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Row(
+                                children: <Widget>[
+                                  SignalChip(
+                                    label: signal.moduleCode,
+                                    color: _homeSignalAccent(signal.accent),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  SignalChip(
+                                    label: signal.status,
+                                    color: signal.status == 'positive'
+                                        ? ValleyBrandColors.success
+                                        : signal.status == 'attention'
+                                        ? ValleyBrandColors.warning
+                                        : ValleyBrandColors.violet,
+                                    outlined: signal.status != 'positive',
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 14),
+                              Text(
+                                signal.headline,
+                                style: Theme.of(context).textTheme.titleMedium
+                                    ?.copyWith(fontWeight: FontWeight.w700),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                signal.detail,
+                                style: Theme.of(context).textTheme.bodyMedium
+                                    ?.copyWith(
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.onSurfaceVariant,
+                                    ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    )
+                    .toList(),
+              ),
+              const SizedBox(height: 30),
+            ],
+            if (journeyGroups.isNotEmpty) ...<Widget>[
+              SectionHeader(
+                kicker: 'Por jornada',
+                title: 'Timeline comercial por objetivo',
+                caption:
+                    'A home agrupa eventos reais por journey key, mostrando como STOCK, MARKETPLACE e PAY se conectam na mesma trilha do usuario.',
+              ),
+              const SizedBox(height: 18),
+              Wrap(
+                spacing: 16,
+                runSpacing: 16,
+                children: journeyGroups.take(3).map((_JourneyGroup journey) {
+                  final ModuleRecord? primaryModule =
+                      _resolveJourneyPrimaryModule(journey, catalogModules);
+                  final String stage = journey.latest.journeyStage
+                      .toLowerCase();
+                  final Color stageColor = _journeyStageColor(stage);
+                  return SizedBox(
+                    width: 420,
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(30),
+                        onTap: primaryModule == null
+                            ? null
+                            : () => onOpenModule(primaryModule),
+                        child: ValleyPanel(
+                          glowColor: stageColor,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Row(
+                                children: <Widget>[
+                                  SignalChip(
+                                    label: journey.latest.moduleCode,
+                                    color: stageColor,
+                                  ),
+                                  const SizedBox(width: 10),
+                                  SignalChip(
+                                    label: _journeyStageLabel(stage),
+                                    color: stageColor,
+                                    outlined: true,
+                                  ),
+                                  const Spacer(),
+                                  if (primaryModule != null)
+                                    SignalChip(
+                                      label:
+                                          'abrir ${primaryModule.code.toLowerCase()}',
+                                      color: ValleyBrandColors.success,
+                                    ),
+                                ],
+                              ),
+                              const SizedBox(height: 14),
+                              Text(
+                                journey.latest.itemTitle.trim().isNotEmpty
+                                    ? journey.latest.itemTitle
+                                    : journey.latest.headline,
+                                style: Theme.of(context).textTheme.titleMedium
+                                    ?.copyWith(fontWeight: FontWeight.w700),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                journey.latest.detail,
+                                style: Theme.of(context).textTheme.bodyMedium
+                                    ?.copyWith(
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.onSurfaceVariant,
+                                    ),
+                              ),
+                              if (primaryModule != null) ...<Widget>[
+                                const SizedBox(height: 12),
+                                Text(
+                                  'Modulo dominante: ${primaryModule.name}',
+                                  style: Theme.of(context).textTheme.labelLarge
+                                      ?.copyWith(
+                                        color: ValleyBrandColors.cyan,
+                                        fontWeight: FontWeight.w800,
+                                      ),
+                                ),
+                              ],
+                              const SizedBox(height: 14),
+                              Wrap(
+                                spacing: 8,
+                                runSpacing: 8,
+                                children: journey.moduleCodes
+                                    .map(
+                                      (String code) => SignalChip(
+                                        label: code,
+                                        color: ValleyBrandColors.cyan,
+                                        outlined: true,
+                                      ),
+                                    )
+                                    .toList(),
+                              ),
+                              if (journey.stages.isNotEmpty) ...<Widget>[
+                                const SizedBox(height: 12),
+                                Wrap(
+                                  spacing: 8,
+                                  runSpacing: 8,
+                                  children: journey.stages
+                                      .map(
+                                        (String itemStage) => SignalChip(
+                                          label: _journeyStageLabel(itemStage),
+                                          color: _journeyStageColor(itemStage),
+                                          outlined: itemStage != stage,
+                                        ),
+                                      )
+                                      .toList(),
+                                ),
+                              ],
+                              const SizedBox(height: 18),
+                              Column(
+                                children: journey.timeline.reversed
+                                    .take(3)
+                                    .map(
+                                      (UserModuleTrail trail) => Padding(
+                                        padding: const EdgeInsets.only(
+                                          bottom: 12,
+                                        ),
+                                        child: Material(
+                                          color: Colors.transparent,
+                                          child: InkWell(
+                                            borderRadius: BorderRadius.circular(
+                                              18,
+                                            ),
+                                            onTap: () => unawaited(
+                                              onOpenJourneyEvent(
+                                                trail,
+                                                primaryModule,
+                                              ),
+                                            ),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                    horizontal: 4,
+                                                    vertical: 6,
+                                                  ),
+                                              child: Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: <Widget>[
+                                                  Container(
+                                                    width: 10,
+                                                    height: 10,
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                          top: 6,
+                                                        ),
+                                                    decoration: BoxDecoration(
+                                                      color: _journeyStageColor(
+                                                        trail.journeyStage
+                                                            .toLowerCase(),
+                                                      ),
+                                                      shape: BoxShape.circle,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(width: 12),
+                                                  Expanded(
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: <Widget>[
+                                                        Text(
+                                                          '${trail.moduleCode} • ${trail.headline}',
+                                                          style: Theme.of(context)
+                                                              .textTheme
+                                                              .labelLarge
+                                                              ?.copyWith(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700,
+                                                              ),
+                                                        ),
+                                                        const SizedBox(
+                                                          height: 4,
+                                                        ),
+                                                        Text(
+                                                          trail.detail,
+                                                          style: Theme.of(context)
+                                                              .textTheme
+                                                              .bodySmall
+                                                              ?.copyWith(
+                                                                color: Theme.of(context)
+                                                                    .colorScheme
+                                                                    .onSurfaceVariant,
+                                                              ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  const SizedBox(width: 10),
+                                                  Icon(
+                                                    Icons.open_in_new_rounded,
+                                                    size: 18,
+                                                    color:
+                                                        ValleyBrandColors.cyan,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                    .toList(),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+              const SizedBox(height: 30),
+            ],
+            if (identityScore != null) ...<Widget>[
+              ValleyPanel(
+                glowColor: ValleyBrandColors.cyan,
+                child: LayoutBuilder(
+                  builder: (BuildContext context, BoxConstraints constraints) {
+                    final bool stacked = constraints.maxWidth < 860;
+                    return _ResponsiveSplit(
+                      stacked: stacked,
+                      gap: 24,
+                      leading: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            'Identity score',
+                            style: Theme.of(context).textTheme.labelLarge
+                                ?.copyWith(color: ValleyBrandColors.cyan),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            '${identityScore.score}/100',
+                            style: Theme.of(context).textTheme.displaySmall,
+                          ),
+                          const SizedBox(height: 10),
+                          AnimatedReadinessBar(
+                            value: identityScore.score.toDouble(),
+                            color: ValleyBrandColors.cyan,
+                            height: 10,
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            identityScore.summary,
+                            style: Theme.of(context).textTheme.bodyMedium
+                                ?.copyWith(
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurfaceVariant,
+                                ),
+                          ),
+                        ],
+                      ),
+                      trailing: Wrap(
+                        spacing: 10,
+                        runSpacing: 10,
+                        children: identityScore.signals
+                            .take(4)
+                            .map(
+                              (IdentitySignal signal) => SignalChip(
+                                label: signal.name,
+                                color: signal.status == 'positive'
+                                    ? ValleyBrandColors.success
+                                    : signal.status == 'attention'
+                                    ? ValleyBrandColors.warning
+                                    : ValleyBrandColors.violet,
+                                outlined: signal.status != 'positive',
+                              ),
+                            )
+                            .toList(),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(height: 30),
+            ],
+            if (recommendations.isNotEmpty) ...<Widget>[
+              SectionHeader(
+                kicker: 'Recomendacoes',
+                title: 'Proximas acoes sugeridas',
+                caption:
+                    'A home recomenda a proxima melhor acao com base em modulos visiveis, identidade e operacao recente.',
+              ),
+              const SizedBox(height: 18),
+              Wrap(
+                spacing: 16,
+                runSpacing: 16,
+                children: recommendations
+                    .take(3)
+                    .map(
+                      (HomeRecommendation recommendation) => SizedBox(
+                        width: 320,
+                        child: ValleyPanel(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              SignalChip(
+                                label: recommendation.priority,
+                                color: recommendation.priority == 'high'
+                                    ? ValleyBrandColors.warning
+                                    : ValleyBrandColors.violet,
+                              ),
+                              const SizedBox(height: 14),
+                              Text(
+                                recommendation.title,
+                                style: Theme.of(context).textTheme.titleMedium
+                                    ?.copyWith(fontWeight: FontWeight.w700),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                recommendation.subtitle,
+                                style: Theme.of(context).textTheme.bodyMedium
+                                    ?.copyWith(
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.onSurfaceVariant,
+                                    ),
+                              ),
+                              const SizedBox(height: 14),
+                              Text(
+                                '${recommendation.actionLabel} • ${recommendation.moduleCode}',
+                                style: Theme.of(context).textTheme.labelLarge
+                                    ?.copyWith(color: ValleyBrandColors.cyan),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    )
+                    .toList(),
+              ),
+              const SizedBox(height: 30),
+            ],
             SectionHeader(
               kicker: 'Jornadas',
               title: 'Servicos conectados por objetivo',
@@ -1058,6 +2058,28 @@ class _OverviewPage extends StatelessWidget {
               }).toList(),
             ),
             const SizedBox(height: 16),
+            if (recentActions.isNotEmpty) ...<Widget>[
+              SectionHeader(
+                kicker: 'Recentes',
+                title: 'Acoes recentes da conta',
+                caption:
+                    'Feed sintetizado de autenticacao, interacoes comerciais e checkpoints operacionais.',
+              ),
+              const SizedBox(height: 18),
+              ...recentActions
+                  .take(4)
+                  .map(
+                    (HomeRecentAction action) => _LedgerEventRow(
+                      status: action.status,
+                      title: action.moduleCode.trim().isEmpty
+                          ? action.title
+                          : '${action.moduleCode} • ${action.title}',
+                      detail: action.detail,
+                      amount: action.amountLabel,
+                    ),
+                  ),
+              const SizedBox(height: 20),
+            ],
             SectionHeader(
               kicker: 'Essenciais',
               title: 'Atalhos comerciais',
@@ -2722,20 +3744,20 @@ class _HomeModuleComposer extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                Text(
-                  'Personalizar home',
+                  Text(
+                    'Personalizar home',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.w800,
                     ),
                   ),
                   const SizedBox(height: 8),
-                Text(
-                  searchQuery.isNotEmpty
-                      ? 'O seletor acompanha a busca atual para voce editar apenas os modulos mais relevantes neste momento.'
-                      : 'Todos os modulos continuam no dock; estes chips controlam apenas o que aparece no corpo da home.',
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
+                  Text(
+                    searchQuery.isNotEmpty
+                        ? 'O seletor acompanha a busca atual para voce editar apenas os modulos mais relevantes neste momento.'
+                        : 'Todos os modulos continuam no dock; estes chips controlam apenas o que aparece no corpo da home.',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
                   ),
                   const SizedBox(height: 16),
                   Wrap(
