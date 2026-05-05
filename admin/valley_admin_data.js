@@ -1,5 +1,5 @@
 window.VALLEY_ADMIN_DATA = {
-  "generated_at_utc": "2026-05-02T00:48:30.723104+00:00",
+  "generated_at_utc": "2026-05-05T13:24:13.704787+00:00",
   "registry_name": "Valley Omniverse V47 - Registro Canonico de Modulos",
   "source": "Esquema Consolidado do Valley Omniverse v47.pdf",
   "language_policy": "pt-BR simples com termos tecnicos em ingles quando forem padroes",
@@ -474,7 +474,7 @@ window.VALLEY_ADMIN_DATA = {
     }
   },
   "database_summary": {
-    "postgres_migrations": 34,
+    "postgres_migrations": 36,
     "mongodb_scripts": 5,
     "postgres_items": [
       {
@@ -1117,6 +1117,69 @@ window.VALLEY_ADMIN_DATA = {
           "column:transactions.processor_transaction_id",
           "column:equity_ledger.metadata_json"
         ]
+      },
+      {
+        "id": "035",
+        "path": "database/postgres/035_v47_phase1_commerce_identity_engagement.sql",
+        "purpose_ptbr": "Fecha a Fase 1 comercial focada com auth, perfis, home, checkout, chat comprador-lojista, carrinho, favoritos, reviews e SAC sobre Financeiro, Stock, Marketplace e Dropshipping.",
+        "requires": [
+          "004",
+          "005",
+          "008",
+          "010",
+          "033",
+          "034"
+        ],
+        "provides": [
+          "auth_identities",
+          "auth_sessions",
+          "auth_login_events",
+          "user_profiles",
+          "merchant_profiles",
+          "home_surface_preferences",
+          "checkout_provider_configs",
+          "checkout_payment_intents",
+          "checkout_webhook_events",
+          "commerce_chat_threads",
+          "shopping_carts",
+          "shopping_cart_items",
+          "user_favorites",
+          "marketplace_item_reviews",
+          "support_tickets",
+          "support_ticket_messages"
+        ]
+      },
+      {
+        "id": "036",
+        "path": "database/postgres/036_v47_dropshipping_curation_engine.sql",
+        "purpose_ptbr": "Cria a curadoria automatica de produtos para comercio local com categorias de fornecedores, mapeamento Google, normalizacao, pricing, compliance, comparacao com marketplaces, aprovados/rejeitados e jobs auditaveis.",
+        "requires": [
+          "001",
+          "008",
+          "033",
+          "035"
+        ],
+        "provides": [
+          "curation_suppliers",
+          "curation_supplier_categories",
+          "curation_internal_categories",
+          "curation_google_categories",
+          "curation_category_mapping",
+          "curation_products_raw",
+          "curation_products_normalized",
+          "curation_compliance_rules",
+          "curation_marketplace_price_snapshots",
+          "curation_product_comparison_results",
+          "curation_approved_products",
+          "curation_rejected_products",
+          "curation_sync_jobs",
+          "curation_sync_job_logs",
+          "curation_api_checkpoints",
+          "curation_api_cache_entries",
+          "curation_rate_limit_events",
+          "curation_quota_escalation_reports",
+          "curation_pricing_rules"
+        ]
       }
     ],
     "mongodb_items": [
@@ -1203,13 +1266,10 @@ window.VALLEY_ADMIN_DATA = {
   },
   "deployment_summary": {
     "available": true,
-    "generated_at_utc": "2026-05-02T00:48:30.210949+00:00",
-    "total_checks": 339,
-    "failed_checks": 2,
-    "top_failures": [
-      "`tool.docker_daemon`: docker info nao respondeu em 30s; iniciar Docker Desktop ou verificar o engine.",
-      "`tool.docker_compose`: comando excedeu 10s e foi interrompido"
-    ]
+    "generated_at_utc": "2026-05-05T13:24:11.840519+00:00",
+    "total_checks": 353,
+    "failed_checks": 0,
+    "top_failures": []
   },
   "public_access": {
     "path": "../output/deployment/VALLEY_EXTERNAL_ACCESS.md",
