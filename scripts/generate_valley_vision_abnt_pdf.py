@@ -279,7 +279,7 @@ def build_table(rows: list[list[str]], styles: Styles) -> Table:
 def add_cover(story: list, styles: Styles) -> None:
     year = str(dt.datetime.now().year)
     story.append(Spacer(1, 3.2 * cm))
-    story.append(Paragraph("NEXORA", styles.cover_org))
+    story.append(Paragraph("VALLEY", styles.cover_org))
     story.append(Paragraph("Ecossistema Valley", styles.cover_org))
     story.append(Spacer(1, 6.0 * cm))
     story.append(Paragraph("VALLEY VISION", styles.cover_title))
@@ -400,7 +400,7 @@ def main() -> None:
         topMargin=TOP_MARGIN,
         bottomMargin=BOTTOM_MARGIN,
         title="Valley Vision",
-        author="Nexora",
+        author="Valley",
         subject="Documento tecnico institucional",
     )
     document.build(story, onFirstPage=lambda canvas, doc: None, onLaterPages=draw_later_page)

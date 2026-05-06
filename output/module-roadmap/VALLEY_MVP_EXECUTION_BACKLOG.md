@@ -222,7 +222,7 @@ Frente transversal do MVP. Nao cria um novo modulo; usa o nucleo de identidade, 
 - Tier: `core`
 - Fase atual: `VALIDATE`
 - Data home: `postgres_mongo`
-- Objetivo: Mensageria com persona pessoal/profissional e retencao segura.
+- Objetivo: Mensageria com contexto Helena pessoal/profissional e retencao segura.
 - Backlog imediato:
   - fechar politica de retention
   - definir separacao pessoal x profissional

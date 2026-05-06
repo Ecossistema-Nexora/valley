@@ -1,27 +1,44 @@
 {
   "mcpServers": {
     "figma": {
-      "type": "http",
-      "url": "https://mcp.figma.com/mcp",
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://mcp.figma.com/mcp"],
       "note": "Official remote Figma MCP server. Requires OAuth on first connection."
     },
     "stitch": {
-      "type": "http",
-      "url": "https://stitch.googleapis.com/mcp",
-      "headers": {
-        "Accept": "application/json",
-        "X-Goog-Api-Key": "${STITCH_API_KEY}"
-      },
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://stitch.googleapis.com/mcp",
+        "--header", "Accept: application/json",
+        "--header", "X-Goog-Api-Key: ${STITCH_API_KEY}"
+      ],
       "note": "Official Stitch MCP server. Set STITCH_API_KEY locally or use the OAuth flow documented in config/VALLEY_FIRST_CONNECTION_CHECKLIST.md."
     },
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://mcp.context7.com/mcp/oauth"],
+      "note": "Official Context7 remote MCP server. OAuth endpoint avoids versioning CONTEXT7_API_KEY; use https://mcp.context7.com/mcp plus a local CONTEXT7_API_KEY header only in private client config if needed."
+    },
     "linear": {
-      "type": "http",
-      "url": "https://mcp.linear.app/mcp",
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://mcp.linear.app/mcp"],
       "note": "Official Linear MCP endpoint. Uses /mcp; the older /sse transport is deprecated."
     },
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@playwright/mcp@latest",
+        "--user-data-dir=tmp/runtime/playwright-mcp-profile",
+        "--output-dir=tmp/runtime/playwright-mcp"
+      ],
+      "note": "Official Playwright MCP server for browser automation and visual validation."
+    },
     "cloudflare-api": {
-      "type": "http",
-      "url": "https://mcp.cloudflare.com/mcp",
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://mcp.cloudflare.com/mcp"],
       "note": "Official Cloudflare API MCP server. Requires OAuth on first connection."
     }
   }

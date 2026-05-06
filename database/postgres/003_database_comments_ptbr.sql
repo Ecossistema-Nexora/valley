@@ -37,7 +37,7 @@ COMMENT ON COLUMN users.nationality IS 'Nacionalidade ISO alpha-2 quando aplicav
 COMMENT ON COLUMN users.tax_residence_country IS 'Pais de residencia fiscal para compliance e reporting.';
 COMMENT ON COLUMN users.risk_level IS 'Nivel simples de risco de 0 a 5 para KYC, fraude e operacao.';
 COMMENT ON COLUMN users.primary_role IS 'Papel principal usado por RBAC/ABAC e Web Admin.';
-COMMENT ON COLUMN users.nexus_external_ref IS 'Referencia externa do Nexus-ID ou provedor de identidade.';
+COMMENT ON COLUMN users.nexus_external_ref IS 'Referencia externa do Valley ID ou provedor de identidade.';
 COMMENT ON COLUMN users.led_card_default_id IS 'LED Card padrao do usuario, integrado a led_cards.led_card_id.';
 COMMENT ON COLUMN users.terms_accepted_at IS 'Timestamp de aceite dos termos de uso.';
 COMMENT ON COLUMN users.privacy_accepted_at IS 'Timestamp de aceite de privacidade e consentimento.';

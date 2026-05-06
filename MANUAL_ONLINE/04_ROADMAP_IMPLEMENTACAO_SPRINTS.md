@@ -26,7 +26,7 @@ Antes de ampliar o escopo para os 47 modulos em superficie de produto, o release
 - `MARKETPLACE` como motor de oferta: storefront, zona, listing, price-check e publish gate competitivo.
 - `SERVICES` como contratacao de trabalho real: provider profile, catalogo, booking, trilha append-only e integracao juridica/financeira.
 - `SOCIAL` como aquisicao e atribuicao: upload, feed, metricas, campanha e comissao ligada a order/transaction.
-- `CHAT` como retencao assistida: conversa, persona, memoria contextual e follow-up sem duplicar estado financeiro.
+- `CHAT` como retencao assistida: conversa, contexto Helena, memoria contextual e follow-up sem duplicar estado financeiro.
 
 Racional:
 

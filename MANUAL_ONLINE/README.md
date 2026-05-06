@@ -1,6 +1,6 @@
 # Manual Online - Valley Hybrid DB Bootstrap
 
-Este manual e a fonte viva da documentacao tecnica do banco hibrido Valley/Nexora.
+Este manual e a fonte viva da documentacao tecnica do banco hibrido Valley.
 
 Ele deve ser atualizado sempre que qualquer schema, regra de banco, indice, trigger, validator ou script operacional for alterado.
 
@@ -224,9 +224,9 @@ O trigger de supply impede que o total liquido de `MINT - BURN` ultrapasse `1_00
 
 ## Passo 3 - MongoDB para IA, Social e Telemetria
 
-`ai_memory` guarda memoria contextual da Persona AI.
+`ai_memory` guarda memoria contextual da contexto Helena AI.
 
-Ela integra cada memoria ao `user_id` relacional e registra escopo, persona, modulo de origem e consentimento.
+Ela integra cada memoria ao `user_id` relacional e registra escopo, contexto Helena, modulo de origem e consentimento.
 
 `social_videos` guarda metadados do feed social.
 

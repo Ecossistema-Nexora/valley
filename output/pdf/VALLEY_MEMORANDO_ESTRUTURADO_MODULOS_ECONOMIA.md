@@ -459,7 +459,7 @@ Principais custos: Mensageria, storage, sincronizacao e suporte.
 ### 39. ADVISOR - Valley Advisor
 Objetivo: Consultoria de IA com recomendacoes e consentimento de execucao.
 Mecanica: Insight > explicacao minima > proposta de acao > aceite > execucao assistida.
-Regras: Explainability, consentimento, boundary de persona e trilha de aceite.
+Regras: Explainability, consentimento, boundary de contexto Helena e trilha de aceite.
 Gamificacao popular: Funciona como copiloto que sugere o melhor proximo passo.
 Como a Valley lucra: Assinatura premium, seat B2B, fee consultivo e automacao paga.
 Principais custos: Tokens de IA, observabilidade, revisao humana e compliance.
@@ -531,7 +531,7 @@ Principais custos: Storage, transcoding, CDN, moderacao e suporte.
 Receita principalmente de assinatura premium, seat corporativo e automacao assistida. Custo de IA precisa ser limitado por plano, fila e politicas de uso.
 
 ### 46. CHAT - Valley Chat
-Objetivo: Mensageria com persona pessoal/profissional e retencao segura.
+Objetivo: Mensageria com contexto Helena pessoal/profissional e retencao segura.
 Mecanica: Conversa > persistencia > promocao controlada para memoria ou agenda.
 Regras: Separacao pessoal/profissional, retention e classificacao de sensibilidade.
 Gamificacao popular: Conversar vai montando contexto util sem virar bagunca.

@@ -21,7 +21,7 @@
       "data_home": "mongo",
       "primary_actors": [
         "usuario final",
-        "helena persona",
+        "Helena",
         "operador de produtividade"
       ],
       "postgres_entities": [],
@@ -134,7 +134,7 @@
         "known_fields": [
           "memory_id",
           "memory_scope",
-          "persona_mode",
+          "helena_context_mode",
           "source_module",
           "content_summary",
           "consent_scope",
@@ -151,7 +151,7 @@
         "purpose": "fila inteligente de execucao",
         "known_fields": [
           "agenda_item_id",
-          "owner_persona",
+          "owner_helena_context",
           "agenda_kind",
           "agenda_status",
           "source_module",
@@ -173,7 +173,7 @@
       "event_topic": "chat.message.persisted",
       "minimum_consent_scope": "SESSION",
       "cross_module_allowed": false,
-      "cross_persona_allowed": false,
+      "cross_helena_context_allowed": false,
       "explicit_user_confirmation_required": false,
       "notes": "resposta contextual de curta duracao sem memoria persistente cross-session"
     },
@@ -182,16 +182,16 @@
       "event_topic": "chat.context.promoted",
       "minimum_consent_scope": "PROFILE",
       "cross_module_allowed": false,
-      "cross_persona_allowed": false,
+      "cross_helena_context_allowed": false,
       "explicit_user_confirmation_required": false,
-      "notes": "promocao de contexto para memoria resumida dentro da mesma persona"
+      "notes": "promocao de contexto para memoria resumida dentro do mesmo contexto Helena"
     },
     {
       "capability": "agenda_memory_link",
       "event_topic": "agenda.memory.linked",
       "minimum_consent_scope": "PROFILE",
       "cross_module_allowed": true,
-      "cross_persona_allowed": false,
+      "cross_helena_context_allowed": false,
       "explicit_user_confirmation_required": false,
       "notes": "elevar para CROSS_MODULE quando a evidencia vier de outro modulo"
     },
@@ -200,7 +200,7 @@
       "event_topic": "advisor.insight.generated",
       "minimum_consent_scope": "PROFILE",
       "cross_module_allowed": true,
-      "cross_persona_allowed": false,
+      "cross_helena_context_allowed": false,
       "explicit_user_confirmation_required": false,
       "notes": "para evidencia cross-module, exigir no minimo CROSS_MODULE"
     },
@@ -209,7 +209,7 @@
       "event_topic": "advisor.action.proposed",
       "minimum_consent_scope": "CROSS_MODULE",
       "cross_module_allowed": true,
-      "cross_persona_allowed": false,
+      "cross_helena_context_allowed": false,
       "explicit_user_confirmation_required": false,
       "notes": "acao proposta que afeta financas, health ou mobility exige escopo elevado"
     },
@@ -218,7 +218,7 @@
       "event_topic": "advisor.consent.recorded",
       "minimum_consent_scope": "CROSS_MODULE",
       "cross_module_allowed": true,
-      "cross_persona_allowed": false,
+      "cross_helena_context_allowed": false,
       "explicit_user_confirmation_required": true,
       "notes": "execucao real depende de consentimento explicito, timestamp e trace_id"
     }
@@ -370,7 +370,7 @@
       "flow": "chat_context_review",
       "capabilities": [
         "auditar promocao de contexto",
-        "separar persona pessoal e profissional",
+        "separar contexto Helena pessoal e profissional",
         "avaliar retention"
       ]
     },

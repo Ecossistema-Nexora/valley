@@ -1,6 +1,6 @@
 // Valley Hybrid DB Bootstrap - LOG e IoT foundation v47.
 // Este arquivo cria collections de alto volume para tracking, devices e sensores sem mover logs brutos para PostgreSQL.
-// Execute com mongosh no banco Valley/Nexora alvo depois do script 001 de IA/Social/Telemetria.
+// Execute com mongosh no banco Valley alvo depois do script 001 de IA/Social/Telemetria.
 
 // UUID_PATTERN valida referencias logicas ao PostgreSQL public.users.user_id e a IDs relacionais expostos como string.
 const UUID_PATTERN = '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$';

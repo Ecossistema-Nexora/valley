@@ -1,5 +1,5 @@
 // Valley Hybrid DB Bootstrap - PASSO 3: MongoDB NoSQL Brain. Integra IA, Social, Influencer e Telemetria.
-// Execute com mongosh no banco Valley/Nexora alvo. This file is idempotent via createCollection/collMod.
+// Execute com mongosh no banco Valley alvo. This file is idempotent via createCollection/collMod.
 
 // UUID_PATTERN valida referencias vindas do PostgreSQL public.users.user_id em formato UUID tecnico.
 const UUID_PATTERN = '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$';
@@ -44,7 +44,7 @@ const aiMemoryValidator = {
     // bsonType object exige que cada documento seja um objeto MongoDB.
     bsonType: 'object',
     // required lista os campos minimos para rastrear memoria, consentimento e auditoria.
-    required: ['memory_id', 'user_id', 'memory_scope', 'persona_mode', 'source_module', 'content_summary', 'consent_scope', 'created_at', 'updated_at'],
+    required: ['memory_id', 'user_id', 'memory_scope', 'helena_context_mode', 'source_module', 'content_summary', 'consent_scope', 'created_at', 'updated_at'],
     // additionalProperties true permite evolucao controlada para novos modulos de IA sem migracao imediata.
     additionalProperties: true,
     // properties descreve campo por campo o contrato tecnico da memoria de IA.
@@ -55,8 +55,8 @@ const aiMemoryValidator = {
       user_id: { bsonType: 'string', pattern: UUID_PATTERN, description: 'FK logica para users.user_id.' },
       // memory_scope separa memoria curta, longa, preferencia e seguranca.
       memory_scope: { enum: ['SHORT_TERM', 'LONG_TERM', 'PREFERENCE', 'SAFETY', 'BUSINESS'], description: 'Escopo funcional da memoria.' },
-      // persona_mode identifica a persona tecnica usada pela IA.
-      persona_mode: { enum: ['PERSONAL', 'PROFESSIONAL', 'RIDER', 'MERCHANT', 'ADMIN'], description: 'Persona AI ativa.' },
+      // helena_context_mode identifica a contexto Helena tecnica usada pela IA.
+      helena_context_mode: { enum: ['PERSONAL', 'PROFESSIONAL', 'RIDER', 'MERCHANT', 'ADMIN'], description: 'contexto Helena AI ativa.' },
       // source_module registra qual modulo do Omniverse gerou a memoria.
       source_module: { bsonType: 'string', minLength: 2, maxLength: 80, description: 'Modulo de origem.' },
       // content_summary guarda resumo seguro, nao o dump bruto de conversa sensivel.
@@ -241,7 +241,7 @@ applyCollection('influencer_metrics', influencerMetricsValidator);
 // Aplica o contrato de logs de telemetria no MongoDB.
 applyCollection('telemetry_logs', telemetryLogsValidator);
 
-// Indice de memoria por usuario e atualizacao para leitura rapida pela Persona AI.
+// Indice de memoria por usuario e atualizacao para leitura rapida pela contexto Helena AI.
 db.ai_memory.createIndex({ user_id: 1, updated_at: -1 }, { name: 'ix_ai_memory_user_updated_at' });
 
 // Indice opcional de expiracao para memorias temporarias quando expires_at existir.

@@ -48,7 +48,7 @@ VIDEO_POOL = [
 BRANDS = [
     "Valley Motion",
     "Aurora One",
-    "Nexora Prime",
+    "Valley Prime",
     "Flux Home",
     "Linea Air",
     "Pulse Grid",
@@ -1039,7 +1039,7 @@ def build_demo_records() -> dict[str, object]:
                     "memory_id": memory_id,
                     "user_id": merchant_id,
                     "memory_scope": "BUSINESS",
-                    "persona_mode": "MERCHANT",
+                    "helena_context_mode": "MERCHANT",
                     "source_module": module_code,
                     "content_summary": (
                         f"Preferencia por jornadas ligadas a {module_copy['description'].lower()} "

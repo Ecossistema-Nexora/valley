@@ -8,4 +8,21 @@ Frontend layout policy:
 - Use Figma as the design inspection and handoff layer through the official Figma MCP/VS Code extension.
 - Do not commit Stitch, Figma, OAuth, or API secrets. Keep STITCH_API_KEY and related credentials local only.
 - Flutter implementation must preserve the Valley brand tokens, ship responsive Web + Android surfaces, and keep the home screen modular with user-selectable visible modules plus a full module dock for access.
+
+Mandatory MCP policy:
+- Treat MCP_DOCKER, context7, figma, linear, and playwright as required Valley workspace capabilities.
+- Keep MCP_DOCKER platform-managed; do not duplicate it as a repo-local endpoint.
+- Keep context7, figma, linear, and playwright declared in .mcp.json, .vscode/mcp.json, and this Codex config.
+- Keep OAuth tokens, API keys, browser storage state, and captured auth artifacts outside git.
+- Use context7 for current library documentation, Figma for design handoff, Linear for tracked product work, and Playwright for browser validation when those capabilities are relevant.
+
+Mandatory brand terminology:
+- Product and ecosystem name is Valley.
+- Assistant and AI-facing identity name is Helena.
+- Token/currency name is V-Coin.
+- Do not introduce product references to Nexora, persona, Nexus-ID, Nexora Pay, or $NEX.
+- The only accepted Nexora string is the technical GitHub repository owner in Ecossistema-Nexora/valley while that remains the canonical remote.
 """
+
+[features]
+experimental_use_rmcp_client = true

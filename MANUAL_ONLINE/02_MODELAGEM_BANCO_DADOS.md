@@ -14,7 +14,7 @@ Ele existe para explicar como as tabelas e colecoes ja criadas se encaixam como 
 - `UUID` e o identificador padrao.
 - `TIMESTAMPTZ` ou `date` padronizam o tempo operacional.
 - BRL usa `DECIMAL(18,4)`.
-- `$NEX` usa `DECIMAL(18,8)`.
+- `V-Coin` usa `DECIMAL(18,8)`.
 
 ## Cobertura Atual por Migration
 
@@ -272,7 +272,7 @@ Colecoes:
 
 Papel:
 
-- memoria contextual da persona
+- memoria contextual da contexto Helena
 - follow-up, lembrete, tarefa e evento de agenda
 
 ### Social e creator economy

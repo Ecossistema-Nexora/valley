@@ -186,7 +186,7 @@ const agendaItemsValidator = {
     properties: {
       agenda_item_id: { bsonType: 'string', pattern: UUID_PATTERN, description: 'UUID do item de agenda.' },
       user_id: { bsonType: 'string', pattern: UUID_PATTERN, description: 'Dono do item.' },
-      owner_persona: { enum: ['PERSONAL', 'PROFESSIONAL'], description: 'Persona que gerencia o item.' },
+      owner_helena_context: { enum: ['PERSONAL', 'PROFESSIONAL'], description: 'contexto Helena que gerencia o item.' },
       title: { bsonType: 'string', minLength: 1, maxLength: 240, description: 'Titulo curto do item.' },
       agenda_kind: { enum: ['REMINDER', 'TASK', 'EVENT', 'HEALTH_ROUTINE', 'PAYMENT', 'FOLLOW_UP'], description: 'Tipo do item.' },
       agenda_status: { enum: ['OPEN', 'SNOOZED', 'DONE', 'CANCELLED', 'ARCHIVED'], description: 'Status do item.' },

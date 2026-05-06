@@ -411,7 +411,7 @@
     },
     "AGENDA": {
       "current_phase": "VALIDATE",
-      "primary_actors": ["usuario final", "helena persona", "operador de produtividade"],
+      "primary_actors": ["usuario final", "Helena", "operador de produtividade"],
       "key_capabilities": ["agenda inteligente", "listas", "memoria operacional"],
       "postgres_entities": [],
       "mongo_collections": ["agenda_items", "ai_memory"],
@@ -500,11 +500,11 @@
     "CHAT": {
       "current_phase": "VALIDATE",
       "primary_actors": ["usuario pessoal", "usuario profissional", "motor de assistencia"],
-      "key_capabilities": ["conversa dual persona", "retencao segura", "ponte com agenda e advisor"],
+      "key_capabilities": ["conversa Helena dual", "retencao segura", "ponte com agenda e advisor"],
       "postgres_entities": ["chat_conversations", "users"],
       "mongo_collections": ["ai_memory", "agenda_items"],
       "event_topics": ["chat.conversation.opened", "chat.message.persisted", "chat.context.promoted"],
-      "compliance_tags": ["message_retention_policy", "persona_separation", "consent_audit"],
+      "compliance_tags": ["message_retention_policy", "helena_context_separation", "consent_audit"],
       "admin_surfaces": ["painel de conversas", "monitor de contexto", "fila de retencao"],
       "next_deliverables": ["fechar politica de retention", "definir separacao pessoal x profissional", "ligar contexto com advisor"]
     },

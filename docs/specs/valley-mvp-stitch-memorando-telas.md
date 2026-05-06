@@ -54,7 +54,7 @@ Eles podem aparecer no dock como modulos futuros ou desativados, mas o Stitch na
 
 ## Direcao Visual Obrigatoria
 
-Criar um cockpit modular premium para o Valley/Nexora:
+Criar um cockpit modular premium para o Valley:
 
 - base escura sofisticada com `Night` e `Cosmic`
 - acento principal em violeta para compra e decisao
@@ -955,7 +955,7 @@ Funcoes:
 
 - suporte ao usuario
 - canal de contexto para produto e pedido
-- interface de dupla persona
+- interface de contexto Helena dual
 
 Interconexoes:
 
@@ -1284,7 +1284,7 @@ Mobile:
 
 ## Prompt Mestre Para Colar No Stitch
 
-Crie um template visual completo para o MVP do Valley/Nexora, um super app premium em Flutter Web + Android. Nao crie landing page. A primeira tela deve ser o aplicativo em uso.
+Crie um template visual completo para o MVP do Valley, um super app premium em Flutter Web + Android. Nao crie landing page. A primeira tela deve ser o aplicativo em uso.
 
 O MVP ativo inclui Home/Command Center, Dock universal de modulos, Marketplace, Detalhe de Produto, Midia de Produto, Carrinho, Checkout preparado, Confirmacao, Recibo/Docs leve, Area do Cliente, Pedidos/Rastreio, Extrato, Stock, Importacao de Catalogo, Pricing/Margem/Estoque, WMS leve, Chat, Conversa, Feed Contextual, Identidade com Face ID/Voice ID/Identity Score, Perfil/Preferencias, Notificacoes, Helena overlay e estados de loading/vazio/sucesso/erro.
 

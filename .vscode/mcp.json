@@ -12,9 +12,23 @@
         "X-Goog-Api-Key": "${env:STITCH_API_KEY}"
       }
     },
+    "context7": {
+      "type": "http",
+      "url": "https://mcp.context7.com/mcp/oauth"
+    },
     "linear": {
       "type": "http",
       "url": "https://mcp.linear.app/mcp"
+    },
+    "playwright": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@playwright/mcp@latest",
+        "--user-data-dir=tmp/runtime/playwright-mcp-profile",
+        "--output-dir=tmp/runtime/playwright-mcp"
+      ]
     },
     "cloudflare-api": {
       "type": "http",

@@ -492,7 +492,7 @@
                   "primary_actor": {
                     "enum": [
                       "usuario final",
-                      "helena persona",
+                      "Helena",
                       "operador de produtividade"
                     ],
                     "type": "string"
@@ -617,7 +617,7 @@
                   "primary_actor": {
                     "enum": [
                       "usuario final",
-                      "helena persona",
+                      "Helena",
                       "operador de produtividade"
                     ],
                     "type": "string"
@@ -742,7 +742,7 @@
                   "primary_actor": {
                     "enum": [
                       "usuario final",
-                      "helena persona",
+                      "Helena",
                       "operador de produtividade"
                     ],
                     "type": "string"
@@ -787,7 +787,7 @@
         {
           "compliance_tags": [
             "message_retention_policy",
-            "persona_separation",
+            "helena_context_separation",
             "consent_audit"
           ],
           "consumer_surfaces": [
@@ -819,7 +819,7 @@
               "compliance_tags": {
                 "default": [
                   "message_retention_policy",
-                  "persona_separation",
+                  "helena_context_separation",
                   "consent_audit"
                 ],
                 "items": {
@@ -865,7 +865,7 @@
                 "properties": {
                   "capability": {
                     "enum": [
-                      "conversa dual persona",
+                      "conversa Helena dual",
                       "retencao segura",
                       "ponte com agenda e advisor"
                     ],
@@ -916,7 +916,7 @@
         {
           "compliance_tags": [
             "message_retention_policy",
-            "persona_separation",
+            "helena_context_separation",
             "consent_audit"
           ],
           "consumer_surfaces": [
@@ -948,7 +948,7 @@
               "compliance_tags": {
                 "default": [
                   "message_retention_policy",
-                  "persona_separation",
+                  "helena_context_separation",
                   "consent_audit"
                 ],
                 "items": {
@@ -994,7 +994,7 @@
                 "properties": {
                   "capability": {
                     "enum": [
-                      "conversa dual persona",
+                      "conversa Helena dual",
                       "retencao segura",
                       "ponte com agenda e advisor"
                     ],
@@ -1045,7 +1045,7 @@
         {
           "compliance_tags": [
             "message_retention_policy",
-            "persona_separation",
+            "helena_context_separation",
             "consent_audit"
           ],
           "consumer_surfaces": [
@@ -1077,7 +1077,7 @@
               "compliance_tags": {
                 "default": [
                   "message_retention_policy",
-                  "persona_separation",
+                  "helena_context_separation",
                   "consent_audit"
                 ],
                 "items": {
@@ -1123,7 +1123,7 @@
                 "properties": {
                   "capability": {
                     "enum": [
-                      "conversa dual persona",
+                      "conversa Helena dual",
                       "retencao segura",
                       "ponte com agenda e advisor"
                     ],

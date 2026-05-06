@@ -15,13 +15,13 @@ function applyValidator(collectionName, validator) {
 applyValidator('ai_memory', {
   $jsonSchema: {
     bsonType: 'object',
-    required: ['memory_id', 'user_id', 'memory_scope', 'persona_mode', 'source_module', 'content_summary', 'consent_scope', 'created_at', 'updated_at'],
+    required: ['memory_id', 'user_id', 'memory_scope', 'helena_context_mode', 'source_module', 'content_summary', 'consent_scope', 'created_at', 'updated_at'],
     additionalProperties: true,
     properties: {
       memory_id: { bsonType: 'string', pattern: UUID_PATTERN },
       user_id: { bsonType: 'string', pattern: UUID_PATTERN },
       memory_scope: { enum: ['SHORT_TERM', 'LONG_TERM', 'PREFERENCE', 'SAFETY', 'BUSINESS'] },
-      persona_mode: { enum: ['PERSONAL', 'PROFESSIONAL', 'RIDER', 'MERCHANT', 'ADMIN'] },
+      helena_context_mode: { enum: ['PERSONAL', 'PROFESSIONAL', 'RIDER', 'MERCHANT', 'ADMIN'] },
       source_module: { bsonType: 'string' },
       content_summary: { bsonType: 'string' },
       consent_scope: { enum: ['NONE', 'SESSION', 'PROFILE', 'CROSS_MODULE'] },

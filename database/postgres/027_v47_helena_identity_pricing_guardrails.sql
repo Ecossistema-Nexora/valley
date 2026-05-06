@@ -1,7 +1,7 @@
 BEGIN;
 
 -- Fecha lacunas extraidas do master spec da Helena:
--- origem natal no Nexus-ID e filtro operacional de competitividade Stock.
+-- origem natal no Valley ID e filtro operacional de competitividade Stock.
 
 ALTER TABLE users
     ADD COLUMN IF NOT EXISTS birth_city TEXT,

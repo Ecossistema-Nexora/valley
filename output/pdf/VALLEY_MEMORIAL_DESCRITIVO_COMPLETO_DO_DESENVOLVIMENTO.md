@@ -131,7 +131,7 @@ Wallet, marketplace, adquirencia, afiliacao, financas e ativos digitais ou patri
 Agenda inteligente, memoria operacional, chat e consultoria assistida Helena.
 - 38. AGENDA - Valley Agenda | fase VALIDATE | data home mongo | Agenda, listas inteligentes, memoria Helena e lembretes.
 - 39. ADVISOR - Valley Advisor | fase BUILD | data home postgres_mongo | Consultoria de IA com recomendacoes e consentimento de execucao.
-- 46. CHAT - Valley Chat | fase VALIDATE | data home postgres_mongo | Mensageria com persona pessoal/profissional e retencao segura.
+- 46. CHAT - Valley Chat | fase VALIDATE | data home postgres_mongo | Mensageria com contexto Helena pessoal/profissional e retencao segura.
 
 ### Media, Social and Growth
 Social, creators, ads, media, influenciadores e gamificacao.

@@ -112,10 +112,10 @@ SELECT
     conversation.participant2_id,
     COUNT(message.message_id) AS message_count,
     COUNT(*) FILTER (
-        WHERE message.persona = 'PERSONAL'::chat_persona_enum
+        WHERE message.helena_context = 'PERSONAL'::chat_helena_context_enum
     ) AS personal_message_count,
     COUNT(*) FILTER (
-        WHERE message.persona = 'PROFESSIONAL'::chat_persona_enum
+        WHERE message.helena_context = 'PROFESSIONAL'::chat_helena_context_enum
     ) AS professional_message_count,
     MIN(message.created_at) FILTER (
         WHERE message.message_id IS NOT NULL
@@ -123,8 +123,8 @@ SELECT
     MAX(message.created_at) FILTER (
         WHERE message.message_id IS NOT NULL
     ) AS last_message_at,
-    BOOL_OR(message.persona = 'PERSONAL'::chat_persona_enum) AS has_personal_context,
-    BOOL_OR(message.persona = 'PROFESSIONAL'::chat_persona_enum) AS has_professional_context
+    BOOL_OR(message.helena_context = 'PERSONAL'::chat_helena_context_enum) AS has_personal_context,
+    BOOL_OR(message.helena_context = 'PROFESSIONAL'::chat_helena_context_enum) AS has_professional_context
 FROM chat_conversations AS conversation
 LEFT JOIN chat_messages AS message
   ON message.conversation_id = conversation.conversation_id
@@ -289,7 +289,7 @@ COMMENT ON VIEW v_ai_memory_operations_event_contracts IS
     'Visao dos contratos de evento exportados do dominio ai_memory_operations.';
 
 COMMENT ON VIEW v_ai_memory_operations_chat_ops IS
-    'Operacao real das conversas, personas e cadencia de mensagens do dominio AI Memory.';
+    'Operacao real das conversas, contextos Helena e cadencia de mensagens do dominio AI Memory.';
 
 COMMENT ON VIEW v_ai_memory_operations_consent_queue IS
     'Fila de insights aguardando consentimento, com contexto de goal e ultimo contato.';

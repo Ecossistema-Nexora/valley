@@ -178,7 +178,7 @@ COMMENT ON COLUMN chat_conversations.created_at IS 'Timestamp de criacao da conv
 COMMENT ON COLUMN chat_messages.message_id IS 'Primary key UUID da mensagem.';
 COMMENT ON COLUMN chat_messages.conversation_id IS 'FK para chat_conversations.conversation_id.';
 COMMENT ON COLUMN chat_messages.sender_id IS 'FK para usuario remetente.';
-COMMENT ON COLUMN chat_messages.persona IS 'Persona usada no envio.';
+COMMENT ON COLUMN chat_messages.helena_context IS 'contexto Helena usado no envio.';
 COMMENT ON COLUMN chat_messages.content IS 'Conteudo textual da mensagem.';
 COMMENT ON COLUMN chat_messages.created_at IS 'Timestamp de envio da mensagem.';
 

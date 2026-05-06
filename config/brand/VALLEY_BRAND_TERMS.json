@@ -1,0 +1,33 @@
+{
+  "version": "v1",
+  "status": "mandatory",
+  "canonical_terms": {
+    "ecosystem": "Valley",
+    "assistant": "Helena",
+    "token": "V-Coin",
+    "identity": "Valley ID",
+    "wallet": "Valley Pay"
+  },
+  "forbidden_product_terms": [
+    "Nexora",
+    "NEXORA",
+    "nexora",
+    "persona",
+    "Persona",
+    "$NEX",
+    "Nexus-ID",
+    "Nexora Pay"
+  ],
+  "technical_exceptions": [
+    "Ecossistema-Nexora/valley",
+    "https://github.com/Ecossistema-Nexora/valley",
+    "https://github.com/Ecossistema-Nexora/valley.git"
+  ],
+  "rules": [
+    "Do not use Nexora as a product, ecosystem, brand, module, provider, company, or generated demo merchant name.",
+    "Do not use persona as a user-facing or contract-facing term; use Helena context or Helena boundary.",
+    "Do not use $NEX; use V-Coin for the token/currency reference.",
+    "Keep GitHub remote references unchanged while the canonical repository remains Ecossistema-Nexora/valley."
+  ],
+  "validation_script": "scripts/check_valley_brand_terms.ps1"
+}

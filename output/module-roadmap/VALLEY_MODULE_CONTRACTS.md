@@ -51,7 +51,7 @@ A matriz resume a fronteira tecnica dos 47 modulos para orientar desenvolvimento
 | 43 | `PLUG` | Valley Plug | `core` | `DATA_CONTRACT` | `postgres` | pci_boundary, mdr_audit, settlement_traceability |
 | 44 | `UP` | Valley Up | `core` | `DATA_CONTRACT` | `postgres_mongo` | attribution_audit, commission_traceability, anti_fraud |
 | 45 | `MEDIA` | Valley Media | `core` | `BUILD` | `postgres_mongo` | copyright_traceability, creator_payout_audit, brand_safety |
-| 46 | `CHAT` | Valley Chat | `core` | `VALIDATE` | `postgres_mongo` | message_retention_policy, persona_separation, consent_audit |
+| 46 | `CHAT` | Valley Chat | `core` | `VALIDATE` | `postgres_mongo` | message_retention_policy, helena_context_separation, consent_audit |
 | 47 | `DOCS` | Valley Docs | `foundation` | `DATA_CONTRACT` | `postgres` | document_immutability, signature_traceability, receipt_audit |
 
 ## Regra Comum

@@ -65,7 +65,7 @@ INSERT INTO module_catalog (
         'Valley Chat',
         'PF: usuarios finais',
         'PJ: atendimento e operacao',
-        'Mensageria com persona pessoal/profissional e retencao segura.',
+        'Mensageria com contexto Helena pessoal/profissional e retencao segura.',
         'Bundle de plataforma e automacoes premium',
         TRUE,
         'Valley Omniverse V47 - Registro Canonico de Modulos'

@@ -34,7 +34,7 @@ Dependencias minimas: AI. Integracoes previstas: ADVISOR, CHAT.
 ## Atores Primarios
 
 - usuario final
-- helena persona
+- Helena
 - operador de produtividade
 
 ## Capacidades-Chave
@@ -75,7 +75,7 @@ Dependencias minimas: AI. Integracoes previstas: ADVISOR, CHAT.
 1. Nao criar tabela duplicada de usuario; usar sempre `public.users`.
 2. Nao criar schema legado paralelo; manter objetos novos em `public` enquanto esta worktree exigir core-first.
 3. Usar `UUID` para chaves e referencias quando o dado for relacional.
-4. Usar `DECIMAL(18,4)` para BRL e `DECIMAL(18,8)` para `$NEX`.
+4. Usar `DECIMAL(18,4)` para BRL e `DECIMAL(18,8)` para `V-Coin`.
 5. Usar `TIMESTAMPTZ` para eventos com tempo operacional.
 6. Usar `append-only` quando o dado representar dinheiro, auditoria, certificado, receipt, regra versionada ou trilha legal.
 7. Atualizar Manual Online e PDF em qualquer mudanca de schema, script ou contrato.

@@ -22,7 +22,7 @@ Agenda, listas inteligentes, memoria Helena e lembretes.
 ## Atores Primarios
 
 - usuario final
-- helena persona
+- Helena
 - operador de produtividade
 
 ## Capacidades-Chave

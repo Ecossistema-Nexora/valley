@@ -9,7 +9,7 @@ O objetivo nao e redesenhar o que ja existe no repositorio, e sim:
 - consolidar o baseline tecnico real ja implantado;
 - fechar criterios de governanca para memoria, agenda, chat e consultoria assistida;
 - reduzir ambiguidade para as proximas migrations e contratos fisicos;
-- proteger a fronteira entre persona pessoal, persona profissional e uso cross-module da Helena.
+- proteger a fronteira entre o contexto Helena pessoal, o contexto Helena profissional e uso cross-module da Helena.
 
 ## 2. Baseline Observado No Repo
 
@@ -39,7 +39,7 @@ Estado atual observado:
 
 ### 3.1 Objetivos principais
 
-1. Fazer da Helena a camada de coordenacao pessoal/profissional do Valley, sem violar a separacao de persona.
+1. Fazer da Helena a camada de coordenacao pessoal/profissional do Valley, sem violar a separacao de contexto Helena.
 2. Tornar `ai_memory` uma memoria operacional util, auditavel e governada, nao um deposito difuso de texto.
 3. Fazer da `agenda_items` a fila canonica de acao, follow-up, lembrete e rotina inteligente.
 4. Fazer do `ADVISOR` um motor de recomendacao com explainability minima obrigatoria e consentimento rastreavel.
@@ -59,7 +59,7 @@ Estado atual observado:
 - `usuario final`: pessoa fisica usando Helena para agenda, memoria e assistencia pessoal.
 - `usuario profissional`: mesma identidade raiz, operando contexto de trabalho, negocio ou atendimento.
 - `usuario assistido`: usuario recebendo recomendacoes do Advisor.
-- `helena persona`: agente de assistencia que captura, resume e organiza contexto.
+- `Helena`: agente de assistencia que captura, resume e organiza contexto.
 
 ### 4.2 Atores operacionais
 
@@ -83,7 +83,7 @@ Nenhuma memoria, agenda, insight, conversa, evento promovido ou fluxo admin deve
 | PostgreSQL | `advisor_insights` | Registro operacional do insight e do status de execucao/consentimento |
 | PostgreSQL | `financial_goals` | Contexto financeiro estruturado usado por `ADVISOR` e `FINANCAS` |
 | PostgreSQL | `chat_conversations` | Envelope relacional da conversa entre dois usuarios |
-| PostgreSQL | `chat_messages` | Mensagens persistidas com persona `PERSONAL` ou `PROFESSIONAL` |
+| PostgreSQL | `chat_messages` | Mensagens persistidas com contexto Helena `PERSONAL` ou `PROFESSIONAL` |
 | MongoDB | `ai_memory` | Memoria operacional, preferencias, contexto resumido e sinais de seguranca controlados |
 | MongoDB | `agenda_items` | Fila inteligente de lembretes, tarefas, eventos, follow-ups e rotinas |
 
@@ -95,7 +95,7 @@ Mesmo antes de uma migration dedicada, a frente Helena passa a operar com as seg
 - `helena_explainability_packet`: pacote minimo de evidencia que explica por que um insight ou contexto foi promovido.
 - `helena_memory_promotion`: ato de converter conversa, evento ou agenda em memoria operacional persistente.
 - `helena_action_scope`: limite exato do que o Advisor pode recomendar, preparar ou executar por modulo.
-- `helena_persona_boundary`: fronteira entre pessoal e profissional que impede vazamento de contexto.
+- `helena_helena_context_boundary`: fronteira entre pessoal e profissional que impede vazamento de contexto.
 
 Enquanto nao houver tabela ou collection dedicada, estes contratos devem trafegar em `payload.details`, `ai_context`, `related_entities` ou documento controlado em `ai_memory`.
 
@@ -122,7 +122,7 @@ Os eventos canonicos do dominio continuam validos e passam a ter semantica opera
 | `agenda.item.created` | Item criado manualmente, por IA ou por modulo integrado | `agenda_items` |
 | `agenda.reminder.triggered` | Disparo real de lembrete, notificacao ou fila operacional | `agenda_items` |
 | `agenda.memory.linked` | Ligacao entre item de agenda e memoria operacional relevante | `agenda_items`, `ai_memory` |
-| `chat.conversation.opened` | Abertura de contexto conversacional com persona definida | `chat_conversations` |
+| `chat.conversation.opened` | Abertura de contexto conversacional com contexto Helena definido | `chat_conversations` |
 | `chat.message.persisted` | Persistencia de mensagem dentro da conversa | `chat_messages` e contexto de conversa |
 | `chat.context.promoted` | Promocao de conteudo conversacional para memoria ou agenda | `ai_memory`, `agenda_items`, referencia de conversa |
 
@@ -131,7 +131,7 @@ Os eventos canonicos do dominio continuam validos e passam a ter semantica opera
 - Todo evento Helena deve carregar `trace_id`.
 - Toda promocao de contexto deve referenciar origem: mensagem, insight, goal, item de agenda ou evento de modulo externo.
 - Eventos de `ADVISOR` nunca podem implicar execucao financeira, clinica ou de mobilidade sem consentimento valido.
-- Eventos de `CHAT` nao podem promover contexto para a persona oposta sem regra explicita de boundary.
+- Eventos de `CHAT` nao podem promover contexto para o contexto Helena oposto sem regra explicita de boundary.
 - Eventos de `AGENDA` devem preservar `source_module` para reconciliacao.
 
 ## 7. Politica De Consentimento
@@ -151,7 +151,7 @@ O enum atual do validator (`NONE`, `SESSION`, `PROFILE`, `CROSS_MODULE`) passa a
 | --- | --- |
 | `NONE` | Resposta imediata sem memoria persistente e sem promocao |
 | `SESSION` | Uso dentro da conversa ou sessao corrente, sem memoria duradoura cross-session |
-| `PROFILE` | Memoria duradoura dentro da mesma persona e do mesmo contexto principal |
+| `PROFILE` | Memoria duradoura dentro do mesmo contexto Helena e do mesmo contexto principal |
 | `CROSS_MODULE` | Uso por modulos integrados, com rastreabilidade e boundary explicito |
 
 ### 7.3 Regras obrigatorias por capability
@@ -165,10 +165,10 @@ O enum atual do validator (`NONE`, `SESSION`, `PROFILE`, `CROSS_MODULE`) passa a
 
 ### 7.4 Regras de boundary
 
-- Persona `PERSONAL` e `PROFESSIONAL` nao compartilham memoria por default.
-- O compartilhamento entre personas deve ser tratado como elevacao de escopo, nunca como comportamento implicito.
+- contexto Helena `PERSONAL` e `PROFESSIONAL` nao compartilham memoria por default.
+- O compartilhamento entre contextos Helena deve ser tratado como elevacao de escopo, nunca como comportamento implicito.
 - Conversa profissional pode ler preferencia global do usuario apenas se a preferencia estiver classificada como compartilhavel.
-- Conteudo clinico, financeiro sensivel e incidentes de seguranca nunca podem ser promovidos entre personas sem consentimento explicito adicional.
+- Conteudo clinico, financeiro sensivel e incidentes de seguranca nunca podem ser promovidos entre contextos Helena sem consentimento explicito adicional.
 
 ### 7.5 Acesso admin
 
@@ -240,7 +240,7 @@ Nao promover:
 - desabafo irrelevante sem efeito operacional;
 - conteudo redundante ja resumido;
 - informacao sensivel sem necessidade clara de continuidade;
-- mensagem que atravessa fronteira de persona sem consentimento;
+- mensagem que atravessa fronteira de contexto Helena sem consentimento;
 - detalhe clinico/financeiro bruto quando basta um resumo minimizado.
 
 ### 9.4 Estrutura minima recomendada para memoria promovida
@@ -252,7 +252,7 @@ Toda memoria promovida deveria carregar, ainda que em documento auxiliar:
 - `retention_class`
 - `confidence_band`
 - `consent_scope`
-- `persona_mode`
+- `helena_context_mode`
 - `evidence_refs`
 - `last_reaffirmed_at`
 
@@ -269,7 +269,7 @@ Tudo que sai de recomendacao e vira compromisso, lembrete, follow-up, rotina ou 
 Um item de agenda precisa ter, no minimo:
 
 - dono (`user_id`);
-- persona dona (`owner_persona`);
+- contexto Helena dona (`owner_helena_context`);
 - tipo (`agenda_kind`);
 - status (`agenda_status`);
 - origem (`source_module`);
@@ -354,7 +354,7 @@ Mesmo sem coluna dedicada em `advisor_insights`, a frente Helena passa a exigir 
 - por que o contexto foi promovido;
 - de qual trecho ou evento ele veio;
 - por quanto tempo ele deveria existir;
-- em qual persona ele e valido.
+- em qual contexto Helena ele e valido.
 
 ## 12. Fluxos Admin E Operacao
 
@@ -362,7 +362,7 @@ Mesmo sem coluna dedicada em `advisor_insights`, a frente Helena passa a exigir 
 
 Capacidades esperadas:
 
-- localizar memorias por `user_id`, persona, modulo e retention class;
+- localizar memorias por `user_id`, contexto Helena, modulo e retention class;
 - visualizar origem e motivo de promocao;
 - aplicar hold ou revogacao;
 - marcar memoria como incorreta, obsoleta ou contestada;
@@ -382,10 +382,10 @@ Capacidades esperadas:
 
 Capacidades esperadas:
 
-- inspecionar conversas por persona;
+- inspecionar conversas por contexto Helena;
 - visualizar promocoes de contexto disparadas;
 - separar retencao de conversa pessoal e profissional;
-- auditar boundary violations e tentativas de vazamento entre personas.
+- auditar boundary violations e tentativas de vazamento entre contextos Helena.
 
 ### 12.4 Painel de agenda
 
@@ -398,7 +398,7 @@ Capacidades esperadas:
 
 ## 13. Riscos Principais
 
-1. Vazamento entre persona pessoal e profissional por ausencia de boundary explicito em memoria e chat.
+1. Vazamento entre os contextos Helena pessoal e profissional por ausencia de boundary explicito em memoria e chat.
 2. Recomendacao cross-module sem prova suficiente de consentimento.
 3. Retencao excessiva de mensagem bruta de chat sem reducao para resumo minimizado.
 4. Explainability insuficiente em `advisor_insights`, gerando insight dificil de auditar ou defender.
@@ -428,13 +428,13 @@ Capacidades esperadas:
 
 ### 15.2 P1
 
-- Evoluir `chat_conversations` com classificacao de contexto, persona boundary e politica de retention.
+- Evoluir `chat_conversations` com classificacao de contexto, contexto Helena boundary e politica de retention.
 - Reservar contrato de hierarquia de listas da Agenda, mesmo que ainda sem collection dedicada.
 - Criar contrato de promocao de contexto para `chat.context.promoted` com origem e justificativa.
 
 ### 15.3 P2
 
-- Criar visoes operacionais de auditoria Helena por `user_id`, `trace_id`, persona e source module.
+- Criar visoes operacionais de auditoria Helena por `user_id`, `trace_id`, contexto Helena e source module.
 - Instrumentar dashboards admin para fila de aprovacao, console de memoria e fila de retention.
 - Planejar migracao do modelo de conversa para cenarios multi-participante, se o produto exigir.
 
@@ -444,6 +444,6 @@ Se esta especificacao for seguida, a frente Helena deixa de ser apenas um agrupa
 
 - memoria util e governada;
 - agenda realmente executavel;
-- chat seguro entre personas;
+- chat seguro entre contextos Helena;
 - advisor explicavel e consentido;
 - trilha clara para as proximas migrations fisicas.

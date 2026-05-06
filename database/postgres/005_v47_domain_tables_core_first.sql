@@ -11,7 +11,7 @@ CREATE TYPE insight_category_enum AS ENUM ('ENERGY', 'FINANCE', 'HEALTH', 'MOBIL
 CREATE TYPE financial_goal_status_enum AS ENUM ('ACTIVE', 'PAUSED', 'ACHIEVED', 'CANCELLED');
 CREATE TYPE teletherapy_session_status_enum AS ENUM ('SCHEDULED', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED');
 CREATE TYPE creator_upload_status_enum AS ENUM ('PENDING', 'PROCESSING', 'ACTIVE', 'DISABLED', 'FAILED');
-CREATE TYPE chat_persona_enum AS ENUM ('PERSONAL', 'PROFESSIONAL');
+CREATE TYPE chat_helena_context_enum AS ENUM ('PERSONAL', 'PROFESSIONAL');
 
 CREATE TABLE advisor_insights (
     insight_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -126,7 +126,7 @@ CREATE TABLE chat_messages (
     message_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     conversation_id UUID NOT NULL,
     sender_id UUID NOT NULL,
-    persona chat_persona_enum NOT NULL DEFAULT 'PERSONAL',
+    helena_context chat_helena_context_enum NOT NULL DEFAULT 'PERSONAL',
     content TEXT NOT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     CONSTRAINT fk_chat_messages_conversation
@@ -360,14 +360,14 @@ COMMENT ON TYPE insight_category_enum IS 'Categorias de insights do Advisor adap
 COMMENT ON TYPE financial_goal_status_enum IS 'Status de meta financeira no modulo Finance.';
 COMMENT ON TYPE teletherapy_session_status_enum IS 'Status de sessao de teleterapia ou telepsiquiatria.';
 COMMENT ON TYPE creator_upload_status_enum IS 'Status de upload de midia do Creator/Media.';
-COMMENT ON TYPE chat_persona_enum IS 'Persona usada em mensagens pessoais ou profissionais.';
+COMMENT ON TYPE chat_helena_context_enum IS 'contexto Helena usado em mensagens pessoais ou profissionais.';
 
 COMMENT ON TABLE advisor_insights IS 'Recomendacoes do Advisor ligadas ao usuario e consentimento de execucao.';
 COMMENT ON TABLE financial_goals IS 'Metas financeiras de PF/PJ com valores BRL e auto round-up.';
 COMMENT ON TABLE teletherapy_sessions IS 'Agenda de teleterapia com notas cifradas e politica de acesso sensivel.';
 COMMENT ON TABLE creator_uploads IS 'Uploads de conteudo do Creator/Media com status de processamento.';
 COMMENT ON TABLE chat_conversations IS 'Conversas entre dois usuarios com soft delete por deleted_at.';
-COMMENT ON TABLE chat_messages IS 'Mensagens de conversa com persona pessoal ou profissional.';
+COMMENT ON TABLE chat_messages IS 'Mensagens de conversa com contexto Helena pessoal ou profissional.';
 COMMENT ON TABLE business_invoices IS 'Notas fiscais/faturas emitidas por PJ e integradas a order/transaction.';
 COMMENT ON TABLE business_payrolls IS 'Execucoes de folha de pagamento para usuarios PJ.';
 COMMENT ON TABLE plug_transactions IS 'Transacoes presenciais Valley Plug integradas ao ledger financeiro.';

@@ -21,7 +21,7 @@ Escopo de comparacao:
 2. Todo dado relacional de identidade, dinheiro, contratos, pedidos, corrida e prova operacional deve permanecer em PostgreSQL.
 3. MongoDB deve concentrar memoria de IA, feed social, metricas de creators e telemetria/IoT.
 4. `UUID` segue como PK e ponte de referencia entre engines.
-5. BRL usa `DECIMAL(18,4)` e token $NEX usa `DECIMAL(18,8)`.
+5. BRL usa `DECIMAL(18,4)` e token V-Coin usa `DECIMAL(18,8)`.
 6. Ledgers financeiros, equity e trilhas juridicas/operacionais criticas precisam ser append-only.
 7. O catalogo de modulos, backlog e pacotes de dominio deve refletir os 47 modulos e os 9 dominios descritos na visao.
 8. O roadmap pede previsao de campos e relacoes para evolucao futura, evitando retrabalho no core.

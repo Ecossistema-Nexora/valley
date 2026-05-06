@@ -14,6 +14,7 @@
     "ms-ossdata.vscode-pgsql",
     "ms-python.python",
     "ms-python.vscode-pylance",
+    "ms-playwright.playwright",
     "ms-vscode.powershell",
     "ms-azuretools.vscode-docker",
     "ms-kubernetes-tools.vscode-kubernetes-tools",
@@ -41,6 +42,11 @@
     },
     {
       "name": "node",
+      "type": "command",
+      "required": true
+    },
+    {
+      "name": "npx",
       "type": "command",
       "required": true
     },

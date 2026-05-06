@@ -7,7 +7,7 @@ Ele descreve o modulo em linguagem simples e serve como ponto inicial para desen
 ## Identidade Tecnica
 
 - Codigo tecnico: `CHAT`
-- Subtitulo: `Mensageria com Dupla Persona`
+- Subtitulo: `Mensageria com Contexto Helena Dual`
 - Dominio: `ai_memory_operations`
 - Tier: `core`
 - Data home: `postgres_mongo`
@@ -17,7 +17,7 @@ Ele descreve o modulo em linguagem simples e serve como ponto inicial para desen
 
 ## Finalidade
 
-Mensageria com persona pessoal/profissional e retencao segura.
+Mensageria com contexto Helena pessoal/profissional e retencao segura.
 
 ## Atores Primarios
 
@@ -27,7 +27,7 @@ Mensageria com persona pessoal/profissional e retencao segura.
 
 ## Capacidades-Chave
 
-- conversa dual persona
+- conversa Helena dual
 - retencao segura
 - ponte com agenda e advisor
 
@@ -60,7 +60,7 @@ AGENDA, ADVISOR
 ## Compliance E Operacao
 
 - message_retention_policy
-- persona_separation
+- helena_context_separation
 - consent_audit
 
 ## Superficies Admin

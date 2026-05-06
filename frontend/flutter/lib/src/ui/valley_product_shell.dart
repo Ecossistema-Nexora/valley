@@ -1229,7 +1229,7 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
           secondaryIcon: Icons.dynamic_feed_rounded,
           tertiaryLabel: 'Extrato',
           tertiaryIcon: Icons.receipt_long_rounded,
-          insightTitle: 'Dupla persona ativa',
+          insightTitle: 'Contexto Helena dual ativo',
           insightBody:
               'Inbox, conversa premium e transições suaves para mídia, produto e histórico financeiro.',
         ),

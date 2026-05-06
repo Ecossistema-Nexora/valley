@@ -1,9 +1,27 @@
 {
-  "version": "v47",
+  "version": "v48",
   "purpose": "release-integrations",
+  "mandatory_policy": {
+    "status": "required",
+    "required_capabilities": [
+      "MCP_DOCKER",
+      "context7",
+      "figma",
+      "linear",
+      "playwright"
+    ],
+    "validation_script": "scripts/check_valley_mcp_config.ps1",
+    "secret_policy": "no_secrets_in_repo",
+    "notes": [
+      "MCP_DOCKER is platform-managed and must not be duplicated as a workspace endpoint.",
+      "context7, figma, linear and playwright must remain declared in repo-local MCP configuration.",
+      "OAuth tokens and API keys stay in the local MCP client, environment or secret manager."
+    ]
+  },
   "workspace_declarations": [
     ".mcp.json",
-    ".vscode/mcp.json"
+    ".vscode/mcp.json",
+    ".codex/config.toml"
   ],
   "network_overlay": {
     "provider": "tailscale",
@@ -39,6 +57,7 @@
       "mode": "platform-managed",
       "platform_name": "MCP_DOCKER",
       "auth": "platform_session",
+      "mandatory": true,
       "reason": "A automacao de containers deste projeto usa o conector provido pela plataforma do agente; nao ha endpoint repo-local para declarar."
     },
     "figma": {
@@ -46,9 +65,29 @@
       "transport": "http",
       "url": "https://mcp.figma.com/mcp",
       "auth": "oauth",
+      "mandatory": true,
       "declared_in": [
         ".mcp.json",
-        ".vscode/mcp.json"
+        ".vscode/mcp.json",
+        ".codex/config.toml"
+      ]
+    },
+    "context7": {
+      "mode": "workspace-declared",
+      "transport": "http",
+      "url": "https://mcp.context7.com/mcp/oauth",
+      "fallback_url": "https://mcp.context7.com/mcp",
+      "auth": "oauth_or_local_api_key",
+      "mandatory": true,
+      "declared_in": [
+        ".mcp.json",
+        ".vscode/mcp.json",
+        ".codex/config.toml"
+      ],
+      "secret_policy": "CONTEXT7_API_KEY local only when using the non-OAuth endpoint",
+      "notes": [
+        "Use /mcp/oauth for clients that support remote OAuth.",
+        "Use /mcp with CONTEXT7_API_KEY only in private local client configuration when OAuth is unavailable."
       ]
     },
     "stitch": {
@@ -68,13 +107,38 @@
       "transport": "http",
       "url": "https://mcp.linear.app/mcp",
       "auth": "oauth",
+      "mandatory": true,
       "declared_in": [
         ".mcp.json",
-        ".vscode/mcp.json"
+        ".vscode/mcp.json",
+        ".codex/config.toml"
       ],
       "notes": [
         "O endpoint oficial atual usa /mcp.",
         "O transporte /sse foi descontinuado."
+      ]
+    },
+    "playwright": {
+      "mode": "workspace-declared",
+      "transport": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@playwright/mcp@latest",
+        "--user-data-dir=tmp/runtime/playwright-mcp-profile",
+        "--output-dir=tmp/runtime/playwright-mcp"
+      ],
+      "auth": "none",
+      "mandatory": true,
+      "declared_in": [
+        ".mcp.json",
+        ".vscode/mcp.json",
+        ".codex/config.toml"
+      ],
+      "state_policy": "persistent_local_profile_under_ignored_tmp_runtime",
+      "notes": [
+        "Browser automation and visual validation must use Playwright MCP when a real browser check is needed.",
+        "Do not commit browser profiles, screenshots with secrets, storage state or captured auth artifacts."
       ]
     },
     "cloudflare-api": {

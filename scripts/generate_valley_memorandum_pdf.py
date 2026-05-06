@@ -358,7 +358,7 @@ MODULE_NOTES = {
     },
     "ADVISOR": {
         "mechanics": "Insight > explicacao minima > proposta de acao > aceite > execucao assistida.",
-        "rules": "Explainability, consentimento, boundary de persona e trilha de aceite.",
+        "rules": "Explainability, consentimento, boundary de contexto Helena e trilha de aceite.",
         "game": "Funciona como copiloto que sugere o melhor proximo passo.",
         "profit": "Assinatura premium, seat B2B, fee consultivo e automacao paga.",
         "cost": "Tokens de IA, observabilidade, revisao humana e compliance.",

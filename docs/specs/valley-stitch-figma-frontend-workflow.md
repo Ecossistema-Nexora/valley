@@ -33,7 +33,7 @@ Interaction thesis: entrada fade/slide, dock horizontal com destaque do modulo a
 ## Prompt base para Stitch
 
 ```text
-Design a sophisticated Flutter super-app home screen for Valley/Nexora.
+Design a sophisticated Flutter super-app home screen for Valley.
 The interface must be a premium modular command center with a dark cosmic fintech mood, glass dock, cyan/violet accents, and a flexible home composition.
 Users can select which modules appear on the home screen, while a persistent dock gives access to all 47 modules.
 Prioritize responsive web and Android layouts, strong hierarchy, compact operational copy, clear module states, and an elegant onboarding-ready first screen.
