@@ -1013,6 +1013,10 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             self._write_json(*self._assistant_enablement_action_response())
             return
 
+        if route == "/api/actions/stock-runtime-attention":
+            self._write_json(*self._stock_runtime_attention_action_response())
+            return
+
         if route == "/api/admin-integrations":
             payload = self._read_json_body()
             if not isinstance(payload, list):
@@ -2016,6 +2020,7 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             ("CHAT", "assistant_enablement"): "/api/actions/assistant-enablement",
             ("MARKETPLACE", "public_runtime_temporary"): "/api/actions/runtime-persistence",
             ("REPLY", "release_pending"): "/api/actions/release-pending",
+            ("STOCK", "stock_runtime_attention"): "/api/actions/stock-runtime-attention",
         }
         return operational_routes.get((normalized_module, normalized_reason), "")
 
@@ -2123,6 +2128,42 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 "url": "",
                 "telegram_ready": telegram_ready,
                 "whatsapp_ready": whatsapp_ready,
+                "generated_at_utc": generated_at,
+                "review_scope": "product",
+            },
+        }
+
+    def _stock_runtime_attention_action_response(self) -> tuple[HTTPStatus, dict[str, Any]]:
+        auth_user, auth_session = self._resolve_active_auth_session(scope="product")
+        if auth_user is None or auth_session is None:
+            return HTTPStatus.UNAUTHORIZED, {
+                "status": "unauthorized",
+                "service": "valley-stock-sync",
+                "detail": "Sessao autenticada obrigatoria para revisar o motor STOCK.",
+            }
+
+        stock_sync = self._stock_sync_status_payload()
+        last_result = stock_sync.get("last_result") if isinstance(stock_sync.get("last_result"), dict) else {}
+        status = str(stock_sync.get("status") or "idle").strip()
+        queued_reason = str(stock_sync.get("queued_reason") or "").strip()
+        last_status = str(last_result.get("status") or "").strip()
+        last_detail = str(last_result.get("detail") or last_result.get("reason") or "").strip()
+        generated_at = str(stock_sync.get("generated_at_utc") or stock_sync.get("generated_at") or "")
+        message = (
+            last_detail
+            if last_status.lower() == "failed" and last_detail
+            else f"Motor STOCK em estado {status}."
+        )
+        return HTTPStatus.OK, {
+            "status": "ok",
+            "action": "stock-runtime-attention",
+            "service": "valley-stock-sync",
+            "payload": {
+                "message": message,
+                "url": "",
+                "status": status,
+                "queued_reason": queued_reason,
+                "last_result": last_result,
                 "generated_at_utc": generated_at,
                 "review_scope": "product",
             },
