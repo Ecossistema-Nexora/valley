@@ -1,0 +1,20 @@
+{
+  "timestamp_brt": "2026-05-05 21:02:53 BRT",
+  "plan_version": "v026",
+  "scope": "endpoint_autenticado_public_runtime_temporary",
+  "changes": [
+    "Rota autenticada /api/actions/runtime-persistence adicionada ao backend.",
+    "Resolvedor operacional passou a mapear (MARKETPLACE, public_runtime_temporary) para a rota nova.",
+    "Public runtime temporary virou o segundo caso real liberado do mapa operacional de recomendacoes nao comerciais."
+  ],
+  "files": [
+    "scripts/serve_valley_admin.py",
+    "PLANOS/v026__20260505-210253-brt__endpoint_autenticado_public_runtime_temporary.md",
+    "PLANOS/INDEX.md"
+  ],
+  "validation": {
+    "python_py_compile": "ok",
+    "logic_probe_runtime_persistence_route": "ok"
+  },
+  "next_step": "Liberar novo motivo nao comercial apenas quando ele tambem tiver endpoint autenticado proprio e validado."
+}

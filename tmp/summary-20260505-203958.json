@@ -1,0 +1,20 @@
+{
+  "timestamp_brt": "2026-05-05 20:39:58 BRT",
+  "plan_version": "v020",
+  "scope": "action_path_itemizado_para_recomendacoes_pay_e_marketplace",
+  "changes": [
+    "Helper _latest_commerce_trail adicionado para localizar a jornada comercial dominante.",
+    "Helper _recommendation_action_path adicionado para derivar action_path itemizado por modulo recomendado.",
+    "Recomendacoes PAY e MARKETPLACE passaram a herdar action_path do item dominante quando nao ha trilha propria recente."
+  ],
+  "files": [
+    "scripts/serve_valley_admin.py",
+    "PLANOS/v020__20260505-203958-brt__action_path_itemizado_para_recomendacoes_pay_e_marketplace.md",
+    "PLANOS/INDEX.md"
+  ],
+  "validation": {
+    "python_py_compile": "ok",
+    "http_smoke_recommendations_dominant_trail": "ok"
+  },
+  "next_step": "Aplicar a mesma derivacao itemizada para recomendacoes operacionais adicionais quando houver contexto de item ou runtime dominante."
+}

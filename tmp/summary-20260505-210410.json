@@ -1,0 +1,20 @@
+{
+  "timestamp_brt": "2026-05-05 21:04:10 BRT",
+  "plan_version": "v025",
+  "scope": "endpoint_autenticado_release_pending",
+  "changes": [
+    "Rota autenticada /api/actions/release-pending adicionada ao backend.",
+    "Resolvedor operacional passou a mapear (REPLY, release_pending) para a rota nova.",
+    "Release pending virou o primeiro caso real liberado do mapa operacional de recomendacoes nao comerciais."
+  ],
+  "files": [
+    "scripts/serve_valley_admin.py",
+    "PLANOS/v025__20260505-210410-brt__endpoint_autenticado_release_pending.md",
+    "PLANOS/INDEX.md"
+  ],
+  "validation": {
+    "python_py_compile": "ok",
+    "logic_probe_release_pending_route": "ok"
+  },
+  "next_step": "So liberar novos motivos nao comerciais no mapa operacional quando cada um tiver endpoint autenticado proprio e validado."
+}

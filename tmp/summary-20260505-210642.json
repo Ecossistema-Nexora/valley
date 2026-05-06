@@ -1,0 +1,20 @@
+{
+  "timestamp_brt": "2026-05-05 21:06:42 BRT",
+  "plan_version": "v027",
+  "scope": "endpoint_autenticado_assistant_enablement",
+  "changes": [
+    "Rota autenticada /api/actions/assistant-enablement adicionada ao backend.",
+    "Resolvedor operacional passou a mapear (CHAT, assistant_enablement) para a rota nova.",
+    "Assistant enablement virou mais um caso real liberado do mapa operacional de recomendacoes nao comerciais."
+  ],
+  "files": [
+    "scripts/serve_valley_admin.py",
+    "PLANOS/v027__20260505-210642-brt__endpoint_autenticado_assistant_enablement.md",
+    "PLANOS/INDEX.md"
+  ],
+  "validation": {
+    "python_py_compile": "ok",
+    "logic_probe_assistant_enablement_route": "ok"
+  },
+  "next_step": "Liberar novo motivo nao comercial apenas quando ele tambem tiver endpoint autenticado proprio e validado."
+}

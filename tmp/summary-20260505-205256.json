@@ -1,0 +1,20 @@
+{
+  "timestamp_brt": "2026-05-05 20:52:56 BRT",
+  "plan_version": "v021",
+  "scope": "derivacao_itemizada_para_recomendacoes_operacionais_remanescentes",
+  "changes": [
+    "Recomendacao runtime-persistence passou a usar recommendation_action_path para MARKETPLACE.",
+    "Derivacao dominante foi confirmada para MARKETPLACE e PAY a partir de trilha comercial herdada.",
+    "Foram explicitadas as recomendacoes que continuam sem action_path itemizado por ausencia de contexto acionavel real."
+  ],
+  "files": [
+    "scripts/serve_valley_admin.py",
+    "PLANOS/v021__20260505-205256-brt__derivacao_itemizada_para_recomendacoes_operacionais_remanescentes.md",
+    "PLANOS/INDEX.md"
+  ],
+  "validation": {
+    "python_py_compile": "ok",
+    "logic_probe_recommendation_action_path": "ok"
+  },
+  "next_step": "Criar action_path real para recomendacoes nao comerciais apenas quando o backend expuser uma acao operacional autentica para elas."
+}

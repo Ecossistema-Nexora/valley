@@ -1,0 +1,20 @@
+{
+  "timestamp_brt": "2026-05-05 20:56:50 BRT",
+  "plan_version": "v023",
+  "scope": "resolvedor_operacional_explicito_para_recomendacoes_nao_comerciais",
+  "changes": [
+    "Resolvedor operacional dedicado foi extraido para recomendacoes nao comerciais.",
+    "Recommendation_action_path passou a encaminhar motivos nao comerciais para o resolvedor operacional explicito.",
+    "O mapa operacional foi mantido vazio por politica ate a existencia de endpoint autentico real."
+  ],
+  "files": [
+    "scripts/serve_valley_admin.py",
+    "PLANOS/v023__20260505-205650-brt__resolvedor_operacional_explicito_para_recomendacoes_nao_comerciais.md",
+    "PLANOS/INDEX.md"
+  ],
+  "validation": {
+    "python_py_compile": "ok",
+    "logic_probe_operational_resolver": "ok"
+  },
+  "next_step": "Adicionar rotas operacionais reais ao mapa apenas quando cada recomendacao nao comercial passar a ter endpoint autenticado proprio."
+}

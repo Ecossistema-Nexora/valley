@@ -1,0 +1,20 @@
+{
+  "timestamp_brt": "2026-05-05 20:54:37 BRT",
+  "plan_version": "v022",
+  "scope": "guarda_backend_para_action_path_nao_comercial",
+  "changes": [
+    "Recommendation_action_path passou a exigir motivo comercial explicito para devolver link itemizado.",
+    "Recomendacoes operacionais mantem open_module_code, mas nao recebem mais action_path inferido por trilha dominante.",
+    "A politica ficou centralizada no backend para evitar regressao futura no frontend."
+  ],
+  "files": [
+    "scripts/serve_valley_admin.py",
+    "PLANOS/v022__20260505-205437-brt__guarda_backend_para_action_path_nao_comercial.md",
+    "PLANOS/INDEX.md"
+  ],
+  "validation": {
+    "python_py_compile": "ok",
+    "logic_probe_guard": "ok"
+  },
+  "next_step": "Criar action_path para recomendacoes nao comerciais apenas quando existir endpoint operacional autentico no backend para cada caso."
+}

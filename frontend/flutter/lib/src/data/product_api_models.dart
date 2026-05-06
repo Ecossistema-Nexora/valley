@@ -138,25 +138,23 @@ class ProductItem {
   bool get hasVideo =>
       videoUrl.trim().isNotEmpty || mediaPath.trim().isNotEmpty;
 
-  String get titlePtBr =>
-      _firstReadableString(<Object?>[
-        raw['title_short_pt_br'],
-        raw['title_resumo_pt_br'],
-        raw['title_normalized_pt_br'],
-        raw['title_pt_br'],
-        title,
-      ]);
+  String get titlePtBr => _firstReadableString(<Object?>[
+    raw['title_short_pt_br'],
+    raw['title_resumo_pt_br'],
+    raw['title_normalized_pt_br'],
+    raw['title_pt_br'],
+    title,
+  ]);
 
   String get shortTitlePtBr => _truncateLabel(titlePtBr, 68);
 
-  String get descriptionPtBr =>
-      _firstReadableString(<Object?>[
-        raw['description_short_pt_br'],
-        raw['description_resumo_pt_br'],
-        raw['description_normalized_pt_br'],
-        raw['description_pt_br'],
-        description,
-      ]);
+  String get descriptionPtBr => _firstReadableString(<Object?>[
+    raw['description_short_pt_br'],
+    raw['description_resumo_pt_br'],
+    raw['description_normalized_pt_br'],
+    raw['description_pt_br'],
+    description,
+  ]);
 
   bool get checkoutReady =>
       raw['checkout_ready'] == true ||
@@ -227,7 +225,8 @@ class ProductItem {
 
   String _firstReadableString(List<Object?> values) {
     for (final Object? candidate in values) {
-      final String normalized = candidate?.toString().replaceAll(RegExp(r'\s+'), ' ').trim() ?? '';
+      final String normalized =
+          candidate?.toString().replaceAll(RegExp(r'\s+'), ' ').trim() ?? '';
       if (normalized.isNotEmpty) {
         return normalized;
       }
@@ -242,7 +241,9 @@ class ProductItem {
     }
     final String slice = normalized.substring(0, maxLength - 1);
     final int lastSpace = slice.lastIndexOf(' ');
-    final String shortened = lastSpace > 18 ? slice.substring(0, lastSpace) : slice;
+    final String shortened = lastSpace > 18
+        ? slice.substring(0, lastSpace)
+        : slice;
     return '${shortened.trim()}…';
   }
 
@@ -433,6 +434,8 @@ class HomeRecentAction {
     required this.detail,
     required this.occurredAtUtc,
     required this.amountLabel,
+    required this.actionPath,
+    required this.openModuleCode,
   });
 
   factory HomeRecentAction.fromJson(Map<String, dynamic> json) {
@@ -444,6 +447,8 @@ class HomeRecentAction {
       detail: json['detail'] as String? ?? '',
       occurredAtUtc: json['occurred_at_utc'] as String? ?? '',
       amountLabel: json['amount_label'] as String? ?? '',
+      actionPath: json['action_path'] as String? ?? '',
+      openModuleCode: json['open_module_code'] as String? ?? '',
     );
   }
 
@@ -454,6 +459,8 @@ class HomeRecentAction {
   final String detail;
   final String occurredAtUtc;
   final String amountLabel;
+  final String actionPath;
+  final String openModuleCode;
 }
 
 class HomeRecommendation {
@@ -465,6 +472,8 @@ class HomeRecommendation {
     required this.actionLabel,
     required this.reason,
     required this.priority,
+    required this.actionPath,
+    required this.openModuleCode,
   });
 
   factory HomeRecommendation.fromJson(Map<String, dynamic> json) {
@@ -476,6 +485,8 @@ class HomeRecommendation {
       actionLabel: json['action_label'] as String? ?? '',
       reason: json['reason'] as String? ?? '',
       priority: json['priority'] as String? ?? 'medium',
+      actionPath: json['action_path'] as String? ?? '',
+      openModuleCode: json['open_module_code'] as String? ?? '',
     );
   }
 
@@ -486,6 +497,8 @@ class HomeRecommendation {
   final String actionLabel;
   final String reason;
   final String priority;
+  final String actionPath;
+  final String openModuleCode;
 }
 
 class IdentitySignal {
@@ -525,14 +538,13 @@ class IdentityScoreData {
       levelLabel: json['level_label'] as String? ?? 'Baseline',
       summary: json['summary'] as String? ?? '',
       anonymous: json['anonymous'] == true,
-      signals:
-          (json['signals'] as List<dynamic>? ?? const <dynamic>[])
-              .map(
-                (dynamic item) => IdentitySignal.fromJson(
-                  (item as Map<dynamic, dynamic>).cast<String, dynamic>(),
-                ),
-              )
-              .toList(growable: false),
+      signals: (json['signals'] as List<dynamic>? ?? const <dynamic>[])
+          .map(
+            (dynamic item) => IdentitySignal.fromJson(
+              (item as Map<dynamic, dynamic>).cast<String, dynamic>(),
+            ),
+          )
+          .toList(growable: false),
     );
   }
 
@@ -756,14 +768,13 @@ class ProductHomeData {
                 const <dynamic, dynamic>{})
             .cast<String, dynamic>(),
       ),
-      metrics:
-          (json['metrics'] as List<dynamic>? ?? const <dynamic>[])
-              .map(
-                (dynamic item) => HomeMetricCard.fromJson(
-                  (item as Map<dynamic, dynamic>).cast<String, dynamic>(),
-                ),
-              )
-              .toList(growable: false),
+      metrics: (json['metrics'] as List<dynamic>? ?? const <dynamic>[])
+          .map(
+            (dynamic item) => HomeMetricCard.fromJson(
+              (item as Map<dynamic, dynamic>).cast<String, dynamic>(),
+            ),
+          )
+          .toList(growable: false),
       moduleSignals:
           (json['module_signals'] as List<dynamic>? ?? const <dynamic>[])
               .map(

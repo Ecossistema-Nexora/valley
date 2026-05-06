@@ -1,0 +1,25 @@
+{
+  "timestamp_brt": "2026-05-05 20:29:54 BRT",
+  "plan_version": "v019",
+  "scope": "deep_links_explicitos_em_recommendations_e_recent_actions",
+  "changes": [
+    "Backend passou a assinar action_path e open_module_code em recent_actions.",
+    "Backend passou a assinar action_path e open_module_code em recommendations.",
+    "Flutter tornou recommendations e recent_actions clicaveis com handler unico backend-first."
+  ],
+  "files": [
+    "scripts/serve_valley_admin.py",
+    "frontend/flutter/lib/src/data/product_api_models.dart",
+    "frontend/flutter/lib/src/ui/valley_home_shell.dart",
+    "PLANOS/v019__20260505-202954-brt__deep_links_explicitos_em_recommendations_e_recent_actions.md",
+    "PLANOS/INDEX.md"
+  ],
+  "validation": {
+    "python_py_compile": "ok",
+    "dart_format": "ok",
+    "dart_analyze": "ok",
+    "http_smoke_recent_actions": "ok",
+    "http_smoke_recommendations_shape": "ok"
+  },
+  "next_step": "Assinar action_path itemizado tambem nas recomendacoes que hoje entregam apenas open_module_code, especialmente PAY e MARKETPLACE quando houver item dominante."
+}

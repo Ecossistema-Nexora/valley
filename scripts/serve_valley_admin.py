@@ -1001,6 +1001,18 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             )
             return
 
+        if route == "/api/actions/release-pending":
+            self._write_json(*self._release_pending_action_response())
+            return
+
+        if route == "/api/actions/runtime-persistence":
+            self._write_json(*self._runtime_persistence_action_response())
+            return
+
+        if route == "/api/actions/assistant-enablement":
+            self._write_json(*self._assistant_enablement_action_response())
+            return
+
         if route == "/api/admin-integrations":
             payload = self._read_json_body()
             if not isinstance(payload, list):
@@ -1921,6 +1933,201 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             "open_module_code": module_code,
         }
 
+    def _module_open_code_for_home(self, module_code: str) -> str:
+        normalized = str(module_code or "").strip().upper()
+        return normalized
+
+    def _latest_trail_for_module(self, user: dict[str, Any] | None, module_code: str) -> dict[str, Any] | None:
+        trails = self._user_module_trails(user, module_code=module_code, limit=1)
+        return trails[0] if trails else None
+
+    def _latest_commerce_trail(
+        self,
+        user: dict[str, Any] | None,
+        *,
+        preferred_modules: tuple[str, ...] = ("PAY", "MARKETPLACE", "STOCK"),
+    ) -> dict[str, Any] | None:
+        preferred = {str(code or "").strip().upper() for code in preferred_modules if str(code or "").strip()}
+        for trail in self._user_module_trails(user, limit=12):
+            module_code = str(trail.get("module_code") or "").strip().upper()
+            if module_code not in preferred:
+                continue
+            if str(trail.get("item_id") or "").strip():
+                return trail
+        return None
+
+    def _recommendation_action_path(
+        self,
+        user: dict[str, Any] | None,
+        module_code: str,
+        *,
+        reason: str = "",
+        preferred_trail: dict[str, Any] | None = None,
+    ) -> str:
+        normalized_reason = str(reason or "").strip().lower()
+        if normalized_reason not in {"commerce_activation", "checkout_ready"}:
+            return self._recommendation_operational_action_path(
+                module_code=module_code,
+                reason=normalized_reason,
+            )
+        normalized_module = str(module_code or "").strip().upper()
+        trail = preferred_trail or self._latest_trail_for_module(user, normalized_module)
+        dominant_trail = trail or self._latest_commerce_trail(user)
+
+        if normalized_module == "PAY":
+            return str(
+                (trail or {}).get("checkout_path")
+                or (dominant_trail or {}).get("checkout_path")
+                or (trail or {}).get("primary_action_path")
+                or (dominant_trail or {}).get("primary_action_path")
+                or ""
+            )
+        if normalized_module == "MARKETPLACE":
+            return str(
+                (trail or {}).get("media_path")
+                or (trail or {}).get("interest_path")
+                or (dominant_trail or {}).get("media_path")
+                or (dominant_trail or {}).get("interest_path")
+                or (trail or {}).get("primary_action_path")
+                or (dominant_trail or {}).get("primary_action_path")
+                or ""
+            )
+        if normalized_module == "STOCK":
+            return str(
+                (trail or {}).get("interest_path")
+                or (trail or {}).get("primary_action_path")
+                or (dominant_trail or {}).get("interest_path")
+                or (dominant_trail or {}).get("primary_action_path")
+                or ""
+            )
+        return str((trail or {}).get("primary_action_path") or "")
+
+    def _recommendation_operational_action_path(
+        self,
+        *,
+        module_code: str,
+        reason: str,
+    ) -> str:
+        normalized_module = str(module_code or "").strip().upper()
+        normalized_reason = str(reason or "").strip().lower()
+        operational_routes: dict[tuple[str, str], str] = {
+            # Freeze this map until a real authenticated backend endpoint exists.
+            # Candidate future entries:
+            ("CHAT", "assistant_enablement"): "/api/actions/assistant-enablement",
+            ("MARKETPLACE", "public_runtime_temporary"): "/api/actions/runtime-persistence",
+            ("REPLY", "release_pending"): "/api/actions/release-pending",
+        }
+        return operational_routes.get((normalized_module, normalized_reason), "")
+
+    def _release_pending_action_response(self) -> tuple[HTTPStatus, dict[str, Any]]:
+        auth_user, auth_session = self._resolve_active_auth_session(scope="admin")
+        if auth_user is None or auth_session is None:
+            return HTTPStatus.UNAUTHORIZED, {
+                "status": "unauthorized",
+                "service": "valley-release",
+                "detail": "Sessao admin obrigatoria para ler pendencias de release.",
+            }
+
+        release_summary = self._domain_runtime_signals()["release_summary"]
+        if not isinstance(release_summary, dict):
+            release_summary = {}
+        pending = int(release_summary.get("checklist_items_pending") or 0)
+        total = int(release_summary.get("checklist_items_total") or 0)
+        release_version = str(release_summary.get("release_version") or "")
+        generated_at = str(release_summary.get("generated_at_utc") or release_summary.get("generated_at") or "")
+        message = (
+            f"{pending} itens pendentes no release"
+            + (f" de {total}" if total > 0 else "")
+            + (f" para {release_version}" if release_version else "")
+            + "."
+        )
+        return HTTPStatus.OK, {
+            "status": "ok",
+            "action": "release-pending",
+            "service": "valley-release",
+            "payload": {
+                "message": message,
+                "url": "",
+                "pending_total": pending,
+                "checklist_total": total,
+                "release_version": release_version,
+                "generated_at_utc": generated_at,
+                "review_scope": "admin",
+            },
+        }
+
+    def _runtime_persistence_action_response(self) -> tuple[HTTPStatus, dict[str, Any]]:
+        auth_user, auth_session = self._resolve_active_auth_session(scope="admin")
+        if auth_user is None or auth_session is None:
+            return HTTPStatus.UNAUTHORIZED, {
+                "status": "unauthorized",
+                "service": "valley-runtime",
+                "detail": "Sessao admin obrigatoria para revisar persistencia do runtime publico.",
+            }
+
+        public_runtime = self._product_public_runtime_payload()
+        if not isinstance(public_runtime, dict):
+            public_runtime = {}
+        public_url = str(public_runtime.get("public_url") or "").strip()
+        provider_status = str(public_runtime.get("provider_status") or public_runtime.get("status") or "").strip()
+        temporary = bool(public_runtime.get("temporary"))
+        provider = str(public_runtime.get("provider") or "").strip()
+        generated_at = str(public_runtime.get("generated_at") or public_runtime.get("generated_at_utc") or "")
+        message = (
+            "Runtime publico temporario detectado."
+            if temporary
+            else "Runtime publico ja esta persistente ou sem flag temporaria."
+        )
+        return HTTPStatus.OK, {
+            "status": "ok",
+            "action": "runtime-persistence",
+            "service": "valley-runtime",
+            "payload": {
+                "message": message,
+                "url": public_url,
+                "public_url": public_url,
+                "provider_status": provider_status,
+                "temporary": temporary,
+                "provider": provider,
+                "generated_at_utc": generated_at,
+                "review_scope": "admin",
+            },
+        }
+
+    def _assistant_enablement_action_response(self) -> tuple[HTTPStatus, dict[str, Any]]:
+        auth_user, auth_session = self._resolve_active_auth_session(scope="product")
+        if auth_user is None or auth_session is None:
+            return HTTPStatus.UNAUTHORIZED, {
+                "status": "unauthorized",
+                "service": "valley-bridge",
+                "detail": "Sessao autenticada obrigatoria para revisar a camada Helena/bridge.",
+            }
+
+        bridge = self._bridge_status_payload()
+        if not isinstance(bridge, dict):
+            bridge = {}
+        telegram_ready = bool(bridge.get("telegram_ready"))
+        whatsapp_ready = bool(bridge.get("whatsapp_ready"))
+        generated_at = str(bridge.get("generated_at_utc") or bridge.get("generated_at") or "")
+        message = (
+            "Helena pronta com bridge Telegram ativo."
+            if telegram_ready
+            else "Bridge da Helena ainda exige configuracao operacional."
+        )
+        return HTTPStatus.OK, {
+            "status": "ok",
+            "action": "assistant-enablement",
+            "service": "valley-bridge",
+            "payload": {
+                "message": message,
+                "url": "",
+                "telegram_ready": telegram_ready,
+                "whatsapp_ready": whatsapp_ready,
+                "generated_at_utc": generated_at,
+                "review_scope": "product",
+            },
+        }
+
     def _domain_runtime_signals(self) -> dict[str, Any]:
         return {
             "checkout": self._mercadopago_checkout_status_payload(force_refresh=False),
@@ -2095,6 +2302,8 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                     "detail": detail,
                     "occurred_at_utc": occurred_at,
                     "amount_label": occurred_at[11:16] if len(occurred_at) >= 16 else "",
+                    "action_path": "",
+                    "open_module_code": "",
                 }
             )
 
@@ -2113,6 +2322,8 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                     "detail": str(trail.get("detail") or ""),
                     "occurred_at_utc": occurred_at,
                     "amount_label": amount_label or (occurred_at[11:16] if len(occurred_at) >= 16 else ""),
+                    "action_path": str(trail.get("primary_action_path") or ""),
+                    "open_module_code": str(trail.get("open_module_code") or trail.get("module_code") or ""),
                 }
             )
 
@@ -2142,6 +2353,20 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                         "detail": detail,
                         "occurred_at_utc": occurred_at,
                         "amount_label": amount_label or (occurred_at[11:16] if len(occurred_at) >= 16 else ""),
+                        "action_path": (
+                            f"/api/actions/checkout?{urlencode({'item_id': str(event.get('item_id') or '')})}"
+                            if kind == "checkout_started" and str(event.get("item_id") or "").strip()
+                            else (
+                                f"/api/actions/open-media?{urlencode({'item_id': str(event.get('item_id') or '')})}"
+                                if kind == "open_media" and str(event.get("item_id") or "").strip()
+                                else (
+                                    f"/api/actions/product-interest?{urlencode({'item_id': str(event.get('item_id') or '')})}"
+                                    if str(event.get("item_id") or "").strip()
+                                    else ""
+                                )
+                            )
+                        ),
+                        "open_module_code": str(event.get("module_code") or ""),
                     }
                 )
 
@@ -2163,6 +2388,12 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                         "detail": str(attempt.get("detail") or "Fluxo de checkout processado pelo runtime."),
                         "occurred_at_utc": occurred_at,
                         "amount_label": occurred_at[11:16] if len(occurred_at) >= 16 else "",
+                        "action_path": (
+                            f"/api/actions/checkout?{urlencode({'item_id': str(attempt.get('item_id') or '')})}"
+                            if str(attempt.get("item_id") or "").strip()
+                            else ""
+                        ),
+                        "open_module_code": "PAY",
                     }
                 )
 
@@ -2179,6 +2410,8 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                     "detail": str(last_result.get("detail") or last_result.get("reason") or stock_sync.get("queued_reason") or "Motor STOCK executado."),
                     "occurred_at_utc": occurred_at,
                     "amount_label": str(stock_sync.get("status") or "").upper(),
+                    "action_path": "",
+                    "open_module_code": "STOCK",
                 }
             )
 
@@ -2194,6 +2427,8 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                     "detail": str(public_runtime.get("public_url") or public_runtime.get("status") or "Sem URL publica ativa."),
                     "occurred_at_utc": occurred_at,
                     "amount_label": str(public_runtime.get("provider") or "runtime"),
+                    "action_path": "",
+                    "open_module_code": "MARKETPLACE",
                 }
             )
 
@@ -2208,6 +2443,8 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                     "detail": str(move_event.get("detail") or "Telemetria operacional registrada."),
                     "occurred_at_utc": occurred_at,
                     "amount_label": str(move_event.get("module") or "MOVE"),
+                    "action_path": "",
+                    "open_module_code": "MOVE",
                 }
             )
 
@@ -2237,6 +2474,7 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             action_label: str,
             reason: str,
             priority: str,
+            action_path: str = "",
         ) -> None:
             recommendations.append(
                 {
@@ -2247,10 +2485,15 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                     "action_label": action_label,
                     "reason": reason,
                     "priority": priority,
+                    "action_path": action_path,
+                    "open_module_code": self._module_open_code_for_home(module_code),
                 }
             )
 
         stock_last_result = stock_sync.get("last_result") if isinstance(stock_sync.get("last_result"), dict) else {}
+        latest_stock_trail = self._latest_trail_for_module(user, "STOCK")
+        latest_marketplace_trail = self._latest_trail_for_module(user, "MARKETPLACE")
+        latest_pay_trail = self._latest_trail_for_module(user, "PAY")
         if audience_key in {"merchant", "admin"} and str(stock_last_result.get("status") or "").strip().lower() == "failed":
             add_recommendation(
                 "stock-sync-recovery",
@@ -2260,6 +2503,12 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 action_label="Abrir STOCK",
                 reason="stock_runtime_attention",
                 priority="high",
+                action_path=self._recommendation_action_path(
+                    user,
+                    "STOCK",
+                    reason="stock_runtime_attention",
+                    preferred_trail=latest_stock_trail,
+                ),
             )
         elif audience_key in {"guest", "customer", "merchant"} and "MARKETPLACE" in available_codes and "MARKETPLACE" not in visible_codes:
             add_recommendation(
@@ -2270,6 +2519,12 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 action_label="Fixar modulo",
                 reason="commerce_activation",
                 priority="high",
+                action_path=self._recommendation_action_path(
+                    user,
+                    "MARKETPLACE",
+                    reason="commerce_activation",
+                    preferred_trail=latest_marketplace_trail,
+                ),
             )
         if audience_key in {"guest", "customer", "merchant"} and "PAY" in available_codes and "PAY" not in visible_codes and checkout.get("checkout_ready"):
             add_recommendation(
@@ -2280,6 +2535,12 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 action_label="Abrir carteira",
                 reason="checkout_ready",
                 priority="high",
+                action_path=self._recommendation_action_path(
+                    user,
+                    "PAY",
+                    reason="checkout_ready",
+                    preferred_trail=latest_pay_trail,
+                ),
             )
         if audience_key in {"guest", "customer", "merchant"} and "CHAT" in available_codes and "CHAT" not in visible_codes and bridge.get("telegram_ready") == True:
             add_recommendation(
@@ -2300,6 +2561,12 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 action_label="Revisar runtime",
                 reason="public_runtime_temporary",
                 priority="medium",
+                action_path=self._recommendation_action_path(
+                    user,
+                    "MARKETPLACE",
+                    reason="public_runtime_temporary",
+                    preferred_trail=latest_marketplace_trail,
+                ),
             )
         pending = int(release_summary.get("checklist_items_pending") or 0)
         if audience_key == "admin" and pending > 0:

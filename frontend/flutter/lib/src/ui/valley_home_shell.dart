@@ -691,6 +691,41 @@ class _ValleyHomeShellState extends State<ValleyHomeShell> {
     await _showJourneyEventSheet(trail, primaryModule: fallbackModule);
   }
 
+  Future<void> _handleHomeActionTap({
+    required String title,
+    required String actionPath,
+    required String openModuleCode,
+    required String fallbackModuleCode,
+  }) async {
+    final String resolvedActionPath = actionPath.trim();
+    if (resolvedActionPath.isNotEmpty) {
+      try {
+        final ProductActionResult result = await widget.repository.invokePath(
+          baseUrl: '',
+          path: resolvedActionPath,
+        );
+        if (!mounted) {
+          return;
+        }
+        if (result.ok) {
+          await _showJourneyRuntimeResult(
+            title: title,
+            message: result.message,
+            url: result.url,
+          );
+          return;
+        }
+      } catch (_) {}
+    }
+
+    final ModuleRecord? module =
+        _findModuleByCode(openModuleCode) ??
+        _findModuleByCode(fallbackModuleCode);
+    if (module != null) {
+      _openModule(module);
+    }
+  }
+
   void _handleSearchChanged(String value) {
     setState(() {
       _searchQuery = value.trim();
@@ -830,6 +865,7 @@ class _ValleyHomeShellState extends State<ValleyHomeShell> {
           onNavigate: _navigate,
           onOpenModule: _openModule,
           onOpenJourneyEvent: _handleJourneyEventTap,
+          onOpenHomeAction: _handleHomeActionTap,
           onToggleHomeModule: _toggleHomeModule,
         );
       case 1:
@@ -855,6 +891,7 @@ class _ValleyHomeShellState extends State<ValleyHomeShell> {
           onNavigate: _navigate,
           onOpenModule: _openModule,
           onOpenJourneyEvent: _handleJourneyEventTap,
+          onOpenHomeAction: _handleHomeActionTap,
           onToggleHomeModule: _toggleHomeModule,
         );
     }
@@ -1361,6 +1398,7 @@ class _OverviewPage extends StatelessWidget {
     required this.onNavigate,
     required this.onOpenModule,
     required this.onOpenJourneyEvent,
+    required this.onOpenHomeAction,
     required this.onToggleHomeModule,
   });
 
@@ -1379,6 +1417,13 @@ class _OverviewPage extends StatelessWidget {
     ModuleRecord? primaryModule,
   )
   onOpenJourneyEvent;
+  final Future<void> Function({
+    required String title,
+    required String actionPath,
+    required String openModuleCode,
+    required String fallbackModuleCode,
+  })
+  onOpenHomeAction;
   final void Function(ModuleRecord module, bool selected) onToggleHomeModule;
 
   @override
@@ -1935,39 +1980,61 @@ class _OverviewPage extends StatelessWidget {
                     .map(
                       (HomeRecommendation recommendation) => SizedBox(
                         width: 320,
-                        child: ValleyPanel(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              SignalChip(
-                                label: recommendation.priority,
-                                color: recommendation.priority == 'high'
-                                    ? ValleyBrandColors.warning
-                                    : ValleyBrandColors.violet,
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(28),
+                            onTap: () => unawaited(
+                              onOpenHomeAction(
+                                title: recommendation.title,
+                                actionPath: recommendation.actionPath,
+                                openModuleCode: recommendation.openModuleCode,
+                                fallbackModuleCode: recommendation.moduleCode,
                               ),
-                              const SizedBox(height: 14),
-                              Text(
-                                recommendation.title,
-                                style: Theme.of(context).textTheme.titleMedium
-                                    ?.copyWith(fontWeight: FontWeight.w700),
+                            ),
+                            child: ValleyPanel(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  SignalChip(
+                                    label: recommendation.priority,
+                                    color: recommendation.priority == 'high'
+                                        ? ValleyBrandColors.warning
+                                        : ValleyBrandColors.violet,
+                                  ),
+                                  const SizedBox(height: 14),
+                                  Text(
+                                    recommendation.title,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium
+                                        ?.copyWith(fontWeight: FontWeight.w700),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    recommendation.subtitle,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.onSurfaceVariant,
+                                        ),
+                                  ),
+                                  const SizedBox(height: 14),
+                                  Text(
+                                    '${recommendation.actionLabel} • ${recommendation.moduleCode}',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelLarge
+                                        ?.copyWith(
+                                          color: ValleyBrandColors.cyan,
+                                        ),
+                                  ),
+                                ],
                               ),
-                              const SizedBox(height: 8),
-                              Text(
-                                recommendation.subtitle,
-                                style: Theme.of(context).textTheme.bodyMedium
-                                    ?.copyWith(
-                                      color: Theme.of(
-                                        context,
-                                      ).colorScheme.onSurfaceVariant,
-                                    ),
-                              ),
-                              const SizedBox(height: 14),
-                              Text(
-                                '${recommendation.actionLabel} • ${recommendation.moduleCode}',
-                                style: Theme.of(context).textTheme.labelLarge
-                                    ?.copyWith(color: ValleyBrandColors.cyan),
-                              ),
-                            ],
+                            ),
                           ),
                         ),
                       ),
@@ -2076,6 +2143,14 @@ class _OverviewPage extends StatelessWidget {
                           : '${action.moduleCode} • ${action.title}',
                       detail: action.detail,
                       amount: action.amountLabel,
+                      onTap: () => unawaited(
+                        onOpenHomeAction(
+                          title: action.title,
+                          actionPath: action.actionPath,
+                          openModuleCode: action.openModuleCode,
+                          fallbackModuleCode: action.moduleCode,
+                        ),
+                      ),
                     ),
                   ),
               const SizedBox(height: 20),
@@ -4266,59 +4341,67 @@ class _LedgerEventRow extends StatelessWidget {
     required this.title,
     required this.detail,
     required this.amount,
+    this.onTap,
   });
 
   final String status;
   final String title;
   final String detail;
   final String amount;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
-      child: ValleyPanel(
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            SignalChip(
-              label: status,
-              color: status == 'SETTLED'
-                  ? ValleyBrandColors.success
-                  : status == 'AUTHORIZED'
-                  ? ValleyBrandColors.cyan
-                  : ValleyBrandColors.warning,
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    title,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w700,
-                    ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(22),
+          onTap: onTap,
+          child: ValleyPanel(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                SignalChip(
+                  label: status,
+                  color: status == 'SETTLED'
+                      ? ValleyBrandColors.success
+                      : status == 'AUTHORIZED'
+                      ? ValleyBrandColors.cyan
+                      : ValleyBrandColors.warning,
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        title,
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(fontWeight: FontWeight.w700),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        detail,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 6),
-                  Text(
-                    detail,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
+                ),
+                const SizedBox(width: 12),
+                Text(
+                  amount,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w800,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            const SizedBox(width: 12),
-            Text(
-              amount,
-              style: Theme.of(
-                context,
-              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
-            ),
-          ],
+          ),
         ),
       ),
     );

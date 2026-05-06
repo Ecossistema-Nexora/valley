@@ -1,0 +1,19 @@
+{
+  "timestamp_brt": "2026-05-05 21:00:12 BRT",
+  "plan_version": "v024",
+  "scope": "congelamento_do_mapa_operacional_de_recomendacoes",
+  "changes": [
+    "Mapa operacional de recommendation action path mantido explicitamente vazio por politica.",
+    "Comentarios no backend passaram a listar somente candidatos futuros com necessidade de endpoint autenticado real.",
+    "Plano persistente registrou o congelamento para evitar preenchimento artificial em rodadas futuras."
+  ],
+  "files": [
+    "scripts/serve_valley_admin.py",
+    "PLANOS/v024__20260505-210012-brt__congelamento_do_mapa_operacional_de_recomendacoes.md",
+    "PLANOS/INDEX.md"
+  ],
+  "validation": {
+    "policy_freeze": "ok"
+  },
+  "next_step": "Adicionar cada rota operacional ao mapa apenas depois que o endpoint autenticado correspondente existir e estiver validado."
+}
