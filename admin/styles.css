@@ -1263,6 +1263,38 @@ body.production-shell .hero-copy {
   gap: 14px;
 }
 
+.launchpad-button {
+  display: grid;
+  min-height: 82px;
+  align-content: center;
+  gap: 8px;
+  padding: 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(21, 39, 31, 0.14);
+  background: var(--surface-strong);
+  color: var(--ink);
+  text-decoration: none;
+  box-shadow: 0 14px 24px rgba(21, 39, 31, 0.06);
+}
+
+.launchpad-button:hover {
+  transform: translateY(-1px);
+  border-color: rgba(32, 200, 243, 0.42);
+  box-shadow: 0 18px 28px rgba(21, 39, 31, 0.1);
+}
+
+.launchpad-button span {
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.launchpad-button small {
+  color: var(--ink-soft);
+  font-size: 12px;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
 .module-workspace-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));

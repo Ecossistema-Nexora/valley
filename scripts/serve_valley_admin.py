@@ -43,6 +43,7 @@ ADMIN_INTEGRATIONS_PATH = RUNTIME_DIR / "valley-admin-integrations.json"
 ADMIN_IMPORTED_PRODUCTS_PRICING_PATH = (
     RUNTIME_DIR / "valley-admin-imported-products-pricing.json"
 )
+STOCK_PUBLICATION_POLICY_PATH = ROOT / "config" / "stock_publication_policy.json"
 DROPSHIPPING_STATUS_PATH = RUNTIME_DIR / "valley-dropshipping-integration-status.json"
 CODEX_CLOUD_ENV_PATH = RUNTIME_DIR / "codex-cloud-secrets.env"
 MARKETPLACE_OAUTH_RUNTIME_PATH = RUNTIME_DIR / "valley-marketplace-oauth-runtime.json"
@@ -2451,7 +2452,7 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                     "detail": str(last_result.get("detail") or last_result.get("reason") or stock_sync.get("queued_reason") or "Motor STOCK executado."),
                     "occurred_at_utc": occurred_at,
                     "amount_label": str(stock_sync.get("status") or "").upper(),
-                    "action_path": "",
+                    "action_path": "/api/actions/stock-runtime-attention",
                     "open_module_code": "STOCK",
                 }
             )
@@ -2459,16 +2460,17 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
         public_runtime = runtime_signals["public_runtime"]
         if public_runtime:
             occurred_at = str(public_runtime.get("generated_at") or public_runtime.get("generated_at_utc") or "")
+            provider_status = str(public_runtime.get("provider_status") or "").strip().lower()
             actions.append(
                 {
                     "id": f"runtime::{public_runtime.get('provider_status')}::{occurred_at}",
                     "module_code": "MARKETPLACE",
-                    "status": "SUCCESS" if str(public_runtime.get("provider_status") or "").strip().lower() == "healthy" else "ATTENTION",
-                    "title": "Runtime publico do produto saudavel" if str(public_runtime.get("provider_status") or "").strip().lower() == "healthy" else "Runtime publico exige revisao",
+                    "status": "SUCCESS" if provider_status == "healthy" else "ATTENTION",
+                    "title": "Runtime publico do produto saudavel" if provider_status == "healthy" else "Runtime publico exige revisao",
                     "detail": str(public_runtime.get("public_url") or public_runtime.get("status") or "Sem URL publica ativa."),
                     "occurred_at_utc": occurred_at,
                     "amount_label": str(public_runtime.get("provider") or "runtime"),
-                    "action_path": "",
+                    "action_path": "/api/actions/runtime-persistence" if provider_status == "healthy" and public_runtime.get("temporary") == True else "",
                     "open_module_code": "MARKETPLACE",
                 }
             )
@@ -3261,6 +3263,25 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
         mercadopago_ready = self._mercadopago_checkout_ready(context_item)
         checkout_ready = mercadopago_ready or bool(checkout_url)
         provider_key = str(context_item.get("provider_key") or "").strip().lower()
+        publication_policy = load_json_file(STOCK_PUBLICATION_POLICY_PATH) or {}
+        auto_approve_imported_catalog = bool(
+            publication_policy.get("auto_approve_imported_catalog")
+        )
+        if auto_approve_imported_catalog:
+            sanitized["publication_status"] = "approved"
+            sanitized["publication_status_label"] = str(
+                publication_policy.get("publication_status_label")
+                or "Aprovado automaticamente"
+            )
+            sanitized["publication_reason_codes"] = [
+                str(publication_policy.get("reason_code") or "auto_approved_mvp_total_delivery")
+            ]
+            sanitized["publication_reasons"] = [
+                str(
+                    publication_policy.get("reason_label")
+                    or "Catalogo importado aprovado automaticamente nesta instancia MVP."
+                )
+            ]
         if item_id:
             sanitized["media_path"] = (
                 f"/api/actions/open-media?{urlencode({'item_id': item_id})}"
@@ -3976,6 +3997,7 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             "blockExternalAiLookup": True,
         }
         reason_labels = {
+            "auto_approved_mvp_total_delivery": "Aprovacao automatica desta instancia MVP: catalogo importado liberado sem fila manual e sem regra de preco menor que concorrencia.",
             "benchmark_reference": "Item usado como benchmark de varejo para homologar preço de importação.",
             "catalog_import_disabled": "Importação de catálogo está desligada para este fornecedor.",
             "category_import_disabled": "Importação de categorias está desligada para este fornecedor.",
@@ -3989,6 +4011,35 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             "sandbox_mode_disabled": "Modo sandbox desligado; manter homologação e produção ativas em paralelo.",
             "stock_module_disabled": "Módulo STOCK desativado para este fornecedor.",
         }
+        publication_policy = load_json_file(STOCK_PUBLICATION_POLICY_PATH) or {}
+        auto_approve_imported_catalog = bool(
+            publication_policy.get("auto_approve_imported_catalog")
+        )
+        ignore_retail_price_advantage = bool(
+            auto_approve_imported_catalog
+            or publication_policy.get("ignore_retail_price_advantage")
+        )
+        ignore_liquidity_check = bool(
+            auto_approve_imported_catalog
+            or publication_policy.get("ignore_liquidity_check")
+        )
+        ignore_duplicate_loser = bool(
+            auto_approve_imported_catalog
+            or publication_policy.get("ignore_duplicate_loser")
+        )
+        approve_marketplace_references = bool(
+            auto_approve_imported_catalog
+            or publication_policy.get("approve_marketplace_references")
+        )
+        auto_approval_reason_code = str(
+            publication_policy.get("reason_code") or "auto_approved_mvp_total_delivery"
+        )
+        auto_approval_reason_label = str(
+            publication_policy.get("reason_label")
+            or reason_labels["auto_approved_mvp_total_delivery"]
+        )
+        if auto_approval_reason_code:
+            reason_labels[auto_approval_reason_code] = auto_approval_reason_label
 
         supplier_rollup: dict[str, dict[str, Any]] = defaultdict(
             lambda: {
@@ -4020,6 +4071,10 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 **default_policy,
                 **provider_policies.get(provider_key, {}),
             }
+            if ignore_retail_price_advantage:
+                provider_policy["requireRetailAdvantage"] = False
+            if ignore_liquidity_check:
+                provider_policy["requireLiquidityCheck"] = False
             supplier_name = str(
                 raw_item.get("supplier_name")
                 or raw_item.get("merchant_name")
@@ -4258,11 +4313,20 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                     blocking_codes.append("no_stock")
                 if float(row.get("estimated_net_revenue_brl") or 0.0) <= 0:
                     blocking_codes.append("no_margin")
-                if row.get("require_liquidity_check") and float(row.get("liquidity_score") or 0.0) < 35.0:
+                if (
+                    row.get("require_liquidity_check")
+                    and not ignore_liquidity_check
+                    and float(row.get("liquidity_score") or 0.0) < 35.0
+                ):
                     review_codes.append("low_liquidity")
-                if supplier_winner is not None and len(supplier_rows) > 1 and row.get("id") != supplier_winner.get("id"):
+                if (
+                    supplier_winner is not None
+                    and len(supplier_rows) > 1
+                    and row.get("id") != supplier_winner.get("id")
+                    and not ignore_duplicate_loser
+                ):
                     blocking_codes.append("duplicate_loser")
-                if row.get("require_retail_advantage"):
+                if row.get("require_retail_advantage") and not ignore_retail_price_advantage:
                     if price_gap is not None and price_gap <= 0:
                         blocking_codes.append("retail_price_not_advantageous")
 
@@ -4270,7 +4334,16 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 row["publication_reason_codes"] = reason_codes
                 row["publication_reasons"] = [reason_labels[code] for code in reason_codes if code in reason_labels]
 
-                if blocking_codes:
+                if auto_approve_imported_catalog:
+                    row["publication_status"] = "approved"
+                    row["publication_status_label"] = str(
+                        publication_policy.get("publication_status_label")
+                        or "Aprovado automaticamente"
+                    )
+                    row["publication_reason_codes"] = [auto_approval_reason_code]
+                    row["publication_reasons"] = [auto_approval_reason_label]
+                    approved_total += 1
+                elif blocking_codes:
                     row["publication_status"] = "do_not_publish"
                     row["publication_status_label"] = "Nao publicar"
                     do_not_publish_total += 1
@@ -4290,11 +4363,22 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
 
         for row in response_items:
             if row.get("is_marketplace_reference"):
-                row["publication_status"] = "benchmark_reference"
-                row["publication_status_label"] = "Benchmark"
-                row["publication_reason_codes"] = ["benchmark_reference"]
-                row["publication_reasons"] = [reason_labels["benchmark_reference"]]
-                benchmark_reference_total += 1
+                if auto_approve_imported_catalog and approve_marketplace_references:
+                    row["publication_status"] = "approved"
+                    row["publication_status_label"] = str(
+                        publication_policy.get("publication_status_label")
+                        or "Aprovado automaticamente"
+                    )
+                    row["publication_reason_codes"] = [auto_approval_reason_code]
+                    row["publication_reasons"] = [auto_approval_reason_label]
+                    approved_total += 1
+                    supplier_rollup[str(row.get("supplier_key") or "")]["approved_total"] += 1
+                else:
+                    row["publication_status"] = "benchmark_reference"
+                    row["publication_status_label"] = "Benchmark"
+                    row["publication_reason_codes"] = ["benchmark_reference"]
+                    row["publication_reasons"] = [reason_labels["benchmark_reference"]]
+                    benchmark_reference_total += 1
 
         publication_status_order = {
             "do_not_publish": 0,
@@ -4379,6 +4463,16 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 "do_not_publish_total": do_not_publish_total,
                 "benchmark_reference_total": benchmark_reference_total,
                 "top_reasons": top_reasons,
+            },
+            "publication_policy": {
+                "source": "config/stock_publication_policy.json",
+                "version": str(publication_policy.get("version") or "runtime-default"),
+                "scope": str(publication_policy.get("scope") or ""),
+                "auto_approve_imported_catalog": auto_approve_imported_catalog,
+                "ignore_retail_price_advantage": ignore_retail_price_advantage,
+                "ignore_liquidity_check": ignore_liquidity_check,
+                "ignore_duplicate_loser": ignore_duplicate_loser,
+                "approve_marketplace_references": approve_marketplace_references,
             },
         }
 

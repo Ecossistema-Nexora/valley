@@ -1,0 +1,569 @@
+{
+  "generated_at_utc": "2026-05-07T04:39:32Z",
+  "zone_host": "admin.brasildesconto.com.br",
+  "target_host": "admin.brasildesconto.com.br",
+  "records_total": 56,
+  "records": [
+    {
+      "kind": "static_workspace",
+      "key": "stock",
+      "title": "Painel STOCK",
+      "module_code": "",
+      "name": "stock.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "static_workspace",
+      "key": "dropshipping",
+      "title": "Dropshipping",
+      "module_code": "",
+      "name": "dropshipping.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "static_workspace",
+      "key": "marketplace",
+      "title": "Marketplace",
+      "module_code": "",
+      "name": "marketplace.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "static_workspace",
+      "key": "review",
+      "title": "Revisao",
+      "module_code": "",
+      "name": "review.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "static_workspace",
+      "key": "finance",
+      "title": "Financeiro",
+      "module_code": "",
+      "name": "finance.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "static_workspace",
+      "key": "merchants",
+      "title": "Lojistas",
+      "module_code": "",
+      "name": "merchants.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "static_workspace",
+      "key": "users",
+      "title": "Usuarios",
+      "module_code": "",
+      "name": "users.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "static_workspace",
+      "key": "checkout",
+      "title": "Checkout",
+      "module_code": "",
+      "name": "checkout.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "static_workspace",
+      "key": "sandbox",
+      "title": "Sandbox e Flags",
+      "module_code": "",
+      "name": "sandbox.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "module_workspace",
+      "key": "module-reply",
+      "title": "REPLY - Valley REPLY",
+      "module_code": "REPLY",
+      "name": "01-reply.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "module_workspace",
+      "key": "module-stock",
+      "title": "STOCK - Valley Stock",
+      "module_code": "STOCK",
+      "name": "02-stock.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "module_workspace",
+      "key": "module-log",
+      "title": "LOG - Valley Log",
+      "module_code": "LOG",
+      "name": "03-log.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "module_workspace",
+      "key": "module-food",
+      "title": "FOOD - Valley Food",
+      "module_code": "FOOD",
+      "name": "04-food.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "module_workspace",
+      "key": "module-delivery",
+      "title": "DELIVERY - Valley Delivery",
+      "module_code": "DELIVERY",
+      "name": "05-delivery.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "module_workspace",
+      "key": "module-wms",
+      "title": "WMS - Valley WMS",
+      "module_code": "WMS",
+      "name": "06-wms.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "module_workspace",
+      "key": "module-marketplace",
+      "title": "MARKETPLACE - Valley Marketplace",
+      "module_code": "MARKETPLACE",
+      "name": "07-marketplace.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "module_workspace",
+      "key": "module-pay",
+      "title": "PAY - Valley Pay",
+      "module_code": "PAY",
+      "name": "08-pay.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "module_workspace",
+      "key": "module-fleet",
+      "title": "FLEET - Valley Fleet",
+      "module_code": "FLEET",
+      "name": "09-fleet.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "module_workspace",
+      "key": "module-services",
+      "title": "SERVICES - Valley Services",
+      "module_code": "SERVICES",
+      "name": "10-services.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "module_workspace",
+      "key": "module-digital",
+      "title": "DIGITAL - Valley Digital",
+      "module_code": "DIGITAL",
+      "name": "11-digital.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "module_workspace",
+      "key": "module-real_estate",
+      "title": "REAL_ESTATE - Valley Real Estate",
+      "module_code": "REAL_ESTATE",
+      "name": "12-real-estate.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "module_workspace",
+      "key": "module-health",
+      "title": "HEALTH - Valley Health",
+      "module_code": "HEALTH",
+      "name": "13-health.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "module_workspace",
+      "key": "module-edu",
+      "title": "EDU - Valley Edu",
+      "module_code": "EDU",
+      "name": "14-edu.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "module_workspace",
+      "key": "module-tech",
+      "title": "TECH - Valley Tech",
+      "module_code": "TECH",
+      "name": "15-tech.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "module_workspace",
+      "key": "module-jobs",
+      "title": "JOBS - Valley Jobs",
+      "module_code": "JOBS",
+      "name": "16-jobs.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "module_workspace",
+      "key": "module-news_podcast",
+      "title": "NEWS_PODCAST - Valley News & Podcast",
+      "module_code": "NEWS_PODCAST",
+      "name": "17-news-podcast.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "module_workspace",
+      "key": "module-ads",
+      "title": "ADS - Valley Ads",
+      "module_code": "ADS",
+      "name": "18-ads.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "module_workspace",
+      "key": "module-influencers",
+      "title": "INFLUENCERS - Valley Influencers",
+      "module_code": "INFLUENCERS",
+      "name": "19-influencers.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "module_workspace",
+      "key": "module-social",
+      "title": "SOCIAL - Valley Social",
+      "module_code": "SOCIAL",
+      "name": "20-social.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "module_workspace",
+      "key": "module-fitness",
+      "title": "FITNESS - Valley Fitness",
+      "module_code": "FITNESS",
+      "name": "21-fitness.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "module_workspace",
+      "key": "module-pharmacy",
+      "title": "PHARMACY - Valley Pharmacy",
+      "module_code": "PHARMACY",
+      "name": "22-pharmacy.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "module_workspace",
+      "key": "module-vet",
+      "title": "VET - Valley Vet",
+      "module_code": "VET",
+      "name": "23-vet.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "module_workspace",
+      "key": "module-tourism",
+      "title": "TOURISM - Valley Tourism",
+      "module_code": "TOURISM",
+      "name": "24-tourism.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "module_workspace",
+      "key": "module-events",
+      "title": "EVENTS - Valley Events",
+      "module_code": "EVENTS",
+      "name": "25-events.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "module_workspace",
+      "key": "module-mobility",
+      "title": "MOBILITY - Valley Mobility",
+      "module_code": "MOBILITY",
+      "name": "26-mobility.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "module_workspace",
+      "key": "module-security",
+      "title": "SECURITY - Valley Security",
+      "module_code": "SECURITY",
+      "name": "27-security.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "module_workspace",
+      "key": "module-gov",
+      "title": "GOV - Valley Gov",
+      "module_code": "GOV",
+      "name": "28-gov.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "module_workspace",
+      "key": "module-legal",
+      "title": "LEGAL - Valley Legal",
+      "module_code": "LEGAL",
+      "name": "29-legal.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "module_workspace",
+      "key": "module-charity",
+      "title": "CHARITY - Valley Charity",
+      "module_code": "CHARITY",
+      "name": "30-charity.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "module_workspace",
+      "key": "module-insurance",
+      "title": "INSURANCE - Valley Insurance",
+      "module_code": "INSURANCE",
+      "name": "31-insurance.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "module_workspace",
+      "key": "module-gaming",
+      "title": "GAMING - Valley Gaming",
+      "module_code": "GAMING",
+      "name": "32-gaming.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "module_workspace",
+      "key": "module-iot",
+      "title": "IOT - Valley IoT",
+      "module_code": "IOT",
+      "name": "33-iot.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "module_workspace",
+      "key": "module-bio",
+      "title": "BIO - Valley Bio",
+      "module_code": "BIO",
+      "name": "34-bio.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "module_workspace",
+      "key": "module-home",
+      "title": "HOME - Valley Home",
+      "module_code": "HOME",
+      "name": "35-home.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "module_workspace",
+      "key": "module-energy",
+      "title": "ENERGY - Valley Energy",
+      "module_code": "ENERGY",
+      "name": "36-energy.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "module_workspace",
+      "key": "module-space",
+      "title": "SPACE - Valley Space",
+      "module_code": "SPACE",
+      "name": "37-space.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "module_workspace",
+      "key": "module-agenda",
+      "title": "AGENDA - Valley Agenda",
+      "module_code": "AGENDA",
+      "name": "38-agenda.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "module_workspace",
+      "key": "module-advisor",
+      "title": "ADVISOR - Valley Advisor",
+      "module_code": "ADVISOR",
+      "name": "39-advisor.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "module_workspace",
+      "key": "module-financas",
+      "title": "FINANCAS - Valley Financas",
+      "module_code": "FINANCAS",
+      "name": "40-financas.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "module_workspace",
+      "key": "module-mente",
+      "title": "MENTE - Valley Mente",
+      "module_code": "MENTE",
+      "name": "41-mente.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "module_workspace",
+      "key": "module-business",
+      "title": "BUSINESS - Valley Business",
+      "module_code": "BUSINESS",
+      "name": "42-business.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "module_workspace",
+      "key": "module-plug",
+      "title": "PLUG - Valley Plug",
+      "module_code": "PLUG",
+      "name": "43-plug.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "module_workspace",
+      "key": "module-up",
+      "title": "UP - Valley Up",
+      "module_code": "UP",
+      "name": "44-up.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "module_workspace",
+      "key": "module-media",
+      "title": "MEDIA - Valley Media",
+      "module_code": "MEDIA",
+      "name": "45-media.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "module_workspace",
+      "key": "module-chat",
+      "title": "CHAT - Valley Chat",
+      "module_code": "CHAT",
+      "name": "46-chat.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    },
+    {
+      "kind": "module_workspace",
+      "key": "module-docs",
+      "title": "DOCS - Valley Docs",
+      "module_code": "DOCS",
+      "name": "47-docs.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "admin.brasildesconto.com.br",
+      "proxied": true
+    }
+  ],
+  "apply_status": "not_requested"
+}

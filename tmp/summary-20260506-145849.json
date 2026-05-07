@@ -1,0 +1,23 @@
+{
+  "timestamp_brt": "2026-05-06 14:58:49 BRT",
+  "plan_completed": "v031__20260506-145717-brt__action_path_autenticado_em_recent_actions_operacionais.md",
+  "next_natural_step": "Liberar action_path apenas para o proximo evento operacional da home quando existir endpoint autenticado proprio e validado.",
+  "changes": [
+    {
+      "file": "scripts/serve_valley_admin.py",
+      "summary": "Assina action_path em recent_actions para STOCK e para MARKETPLACE runtime quando ha endpoint operacional real."
+    },
+    {
+      "file": "PLANOS/INDEX.md",
+      "summary": "Registrou e concluiu o plano v031."
+    },
+    {
+      "file": "PLANOS/v031__20260506-145717-brt__action_path_autenticado_em_recent_actions_operacionais.md",
+      "summary": "Documentou a sequencia natural, evidencias e validacoes da entrega."
+    }
+  ],
+  "validations": [
+    "python -m py_compile scripts/serve_valley_admin.py",
+    "probe local de _recent_action_records(None, limit=10) confirmou action_path para MARKETPLACE e STOCK e manteve MOVE vazio"
+  ]
+}

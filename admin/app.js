@@ -51,19 +51,8 @@
     {
       key: "overview",
       label: "Visao geral",
-      description: "Launchpad, runtime, score executivo e mapa do release.",
-      sectionIds: [
-        "homeDashboard",
-        "adminLaunchpadSection",
-        "moduleWorkspaceDirectory",
-        "financialDashboard",
-        "performanceDashboard",
-        "settingsSection",
-        "stockIntegrations",
-        "importedPricingSection",
-        "publicationReviewSection",
-        "modulesWorkspace",
-      ],
+      description: "Home enxuta com botoes para areas e modulos independentes.",
+      sectionIds: ["adminLaunchpadSection"],
     },
     {
       key: "finance",
@@ -93,10 +82,10 @@
       key: "modules",
       label: "Modulos",
       description: "Lista, filtros e cockpit detalhado por modulo.",
-      sectionIds: ["modulesWorkspace"],
+      sectionIds: ["moduleWorkspaceDirectory", "modulesWorkspace"],
     },
   ];
-  const PRIMARY_WORKSPACE_KEY = "stock";
+  const PRIMARY_WORKSPACE_KEY = "home";
   const PRODUCTION_MODE_LOCKED = true;
   const ADMIN_AUTH_TOKEN_STORAGE_KEY = "valley.admin.auth.token.v1";
   const MARKETPLACE_API_PROVIDERS = [
@@ -3005,152 +2994,27 @@
       return;
     }
 
-    const config = readMarketplaceApiConfig();
-    const publicationRows = importedPricingState.payload ? materializeImportedPricingRows() : [];
-    const publicAdminUrl = activeAdminPublicUrl();
-    const publicProductUrl = activeProductPublicUrl();
-    const providerReady = config.filter((provider) => provider.enabled && provider.stockModuleEnabled !== false).length;
-    const productionReady = config.filter((provider) => provider.productionEnabled !== false).length;
-    const pendingReview = publicationRows.length
-      ? publicationRows.filter((row) => row.publication_status === "review" || row.publication_status === "do_not_publish").length
-      : Number(importedPricingState.payload?.publication_summary?.review_total || 0) +
-        Number(importedPricingState.payload?.publication_summary?.do_not_publish_total || 0);
-    const workspaceCount = adminWorkspaces().length;
-
-    elements.adminLaunchpadSummary.innerHTML = [
-      summaryTileMarkup("Subdominios", formatCount(workspaceCount), "producao fixa + paginas dedicadas por modulo"),
-      summaryTileMarkup("Providers STOCK", formatCount(providerReady), `${formatCount(productionReady)} com producao ligada`),
-      summaryTileMarkup("Revisao de publicacao", formatCount(pendingReview), pendingReview ? "itens aguardando decisao comercial" : "sem fila de bloqueio"),
-      summaryTileMarkup("Checkout", checkoutHealthState.payload?.checkout_ready ? "pronto" : "pendente", checkoutHealthState.payload?.preferred_environment || "unconfigured"),
-    ].join("");
-    renderWorkspaceFocusBanner(config, pendingReview);
-    renderWorkspaceRegistry(config, pendingReview);
+    elements.adminLaunchpadSummary.innerHTML = "";
+    elements.adminLaunchpadSummary.hidden = true;
+    if (elements.workspaceFocusBanner) {
+      elements.workspaceFocusBanner.hidden = true;
+      elements.workspaceFocusBanner.innerHTML = "";
+    }
+    if (elements.adminWorkspaceRegistry) {
+      elements.adminWorkspaceRegistry.hidden = true;
+      elements.adminWorkspaceRegistry.innerHTML = "";
+    }
     renderModuleWorkspaceDirectory();
 
-    const cards = [
-      {
-        title: "Nucleo Admin",
-        copy: "Governanca central em admin.brasildesconto.com.br com acesso aos workspaces de producao.",
-        href: workspaceHref(workspaceByKey("home")),
-        mirrorHref: workspaceMirrorHref(workspaceByKey("home")),
-        action: "Abrir home",
-        secondaryAction: "Abrir secao",
-        status: publicAdminUrl ? rowPill("publico", "pill-accent") : rowPill("local", "pill-navy"),
-        meta: ["Subdominio raiz", workspaceHostLabel(workspaceByKey("home"))],
-      },
-      {
-        title: "Painel STOCK",
-        copy: "Catálogo, checkout e vitrine pública do módulo STOCK com imagens em carrossel.",
-        href: workspaceHref(workspaceByKey("stock")),
-        mirrorHref: workspaceMirrorHref(workspaceByKey("stock")),
-        action: "Abrir stock",
-        secondaryAction: "Abrir secao",
-        status: publicProductUrl ? rowPill("publico", "pill-accent") : rowPill("local", "pill-navy"),
-        meta: ["Subdominio", workspaceHostLabel(workspaceByKey("stock"))],
-      },
-      {
-        title: "Marketplace",
-        copy: "Credenciais, webhooks, sellers, apps e escopos por marketplace.",
-        href: workspaceHref(workspaceByKey("marketplace")),
-        mirrorHref: workspaceMirrorHref(workspaceByKey("marketplace")),
-        action: "Abrir marketplace",
-        secondaryAction: "Abrir secao",
-        status: rowPill(`${formatCount(providerReady)} ativos`, "pill-accent"),
-        meta: ["Subdominio", workspaceHostLabel(workspaceByKey("marketplace"))],
-      },
-      {
-        title: "Dropshipping",
-        copy: "Produtos importados, categorias, margem, duplicidade e vencedor por liquidez/custo.",
-        href: workspaceHref(workspaceByKey("dropshipping")),
-        mirrorHref: workspaceMirrorHref(workspaceByKey("dropshipping")),
-        action: "Abrir dropshipping",
-        secondaryAction: "Abrir secao",
-        status: importedPricingState.payload?.items_total ? rowPill(`${formatCount(importedPricingState.payload.items_total)} itens`, "pill-accent") : rowPill("aguardando sync", "pill-warn"),
-        meta: ["Subdominio", workspaceHostLabel(workspaceByKey("dropshipping"))],
-      },
-      {
-        title: "Revisao de Publicacao",
-        copy: "Fila exclusiva de nao publicados e itens em revisao com motivo operacional.",
-        href: workspaceHref(workspaceByKey("review")),
-        mirrorHref: workspaceMirrorHref(workspaceByKey("review")),
-        action: "Abrir revisao",
-        secondaryAction: "Abrir secao",
-        status: pendingReview ? rowPill(`${formatCount(pendingReview)} pendentes`, "pill-danger") : rowPill("sem fila", "pill-accent"),
-        meta: ["Subdominio", workspaceHostLabel(workspaceByKey("review"))],
-      },
-      {
-        title: "Financeiro",
-        copy: "Resultados financeiros, margens estimadas e saude comercial do catalogo.",
-        href: workspaceHref(workspaceByKey("finance")),
-        mirrorHref: workspaceMirrorHref(workspaceByKey("finance")),
-        action: "Abrir financeiro",
-        secondaryAction: "Abrir secao",
-        status: rowPill("painel", "pill-navy"),
-        meta: ["Subdominio", workspaceHostLabel(workspaceByKey("finance"))],
-      },
-      {
-        title: "Lojistas",
-        copy: "Cadastro e gestão operacional de sellers e parceiros marketplace.",
-        href: workspaceHref(workspaceByKey("merchants")),
-        mirrorHref: workspaceMirrorHref(workspaceByKey("merchants")),
-        action: "Abrir lojistas",
-        secondaryAction: "Abrir secao",
-        status: rowPill("workspace", "pill"),
-        meta: ["Subdominio", workspaceHostLabel(workspaceByKey("merchants"))],
-      },
-      {
-        title: "Usuarios",
-        copy: "Cadastro de usuarios, flags de acesso e trilha de configuracao institucional.",
-        href: workspaceHref(workspaceByKey("users")),
-        mirrorHref: workspaceMirrorHref(workspaceByKey("users")),
-        action: "Abrir usuarios",
-        secondaryAction: "Abrir secao",
-        status: rowPill("workspace", "pill"),
-        meta: ["Subdominio", workspaceHostLabel(workspaceByKey("users"))],
-      },
-      {
-        title: "Checkout e Sandbox",
-        copy: "Mercado Pago, retorno, webhook e saude de sandbox/producao do checkout.",
-        href: workspaceHref(workspaceByKey("checkout")),
-        mirrorHref: workspaceMirrorHref(workspaceByKey("checkout")),
-        action: "Abrir checkout",
-        secondaryAction: "Abrir secao",
-        status: checkoutHealthState.payload?.checkout_ready ? rowPill("checkout pronto", "pill-accent") : rowPill("checkout pendente", "pill-warn"),
-        meta: ["Subdominio", workspaceHostLabel(workspaceByKey("checkout"))],
-      },
-      {
-        title: "Sandbox e Flags",
-        copy: "Ativacao/desativacao de regras, sandbox, producao e politicas do modulo STOCK.",
-        href: workspaceHref(workspaceByKey("sandbox")),
-        mirrorHref: workspaceMirrorHref(workspaceByKey("sandbox")),
-        action: "Abrir sandbox",
-        secondaryAction: "Abrir secao",
-        status: config.every((provider) => provider.sandboxEnabled !== false && provider.productionEnabled !== false)
-          ? rowPill("flags paralelas", "pill-accent")
-          : rowPill("ajustar flags", "pill-warn"),
-        meta: ["Subdominio", workspaceHostLabel(workspaceByKey("sandbox"))],
-      },
-    ];
+    const cards = adminWorkspaces().filter((workspace) => workspace.key !== "home");
 
     elements.adminLaunchpadGrid.innerHTML = cards
       .map(
-        (card) => `
-          <article class="launchpad-card">
-            <div class="module-row-top">
-              <div>
-                <h3>${escapeHtml(card.title)}</h3>
-                <p class="muted-copy">${escapeHtml(card.copy)}</p>
-              </div>
-              ${card.status}
-            </div>
-            <div class="launchpad-meta">
-              ${card.meta.map((item) => rowPill(item, "pill-navy")).join("")}
-            </div>
-            <div class="link-row">
-              <a href="${escapeHtml(card.href)}">${escapeHtml(card.action)}</a>
-              ${card.mirrorHref ? `<a href="${escapeHtml(card.mirrorHref)}">${escapeHtml(card.secondaryAction || "Abrir painel")}</a>` : ""}
-            </div>
-          </article>
+        (workspace) => `
+          <a class="launchpad-button" href="${escapeHtml(workspaceHref(workspace))}" aria-label="Abrir ${escapeHtml(workspace.title)}">
+            <span>${escapeHtml(workspace.title)}</span>
+            <small>${escapeHtml(workspaceHostLabel(workspace))}</small>
+          </a>
         `,
       )
       .join("");
@@ -4815,25 +4679,27 @@
     const workspace = moduleWorkspaceByCode(module.code);
     const subdomain = workspace?.subdomain || module.slug || module.code.toLowerCase();
     const code = module.code.toLowerCase();
+    const adminHost = activeAdminHost().hostname;
+    const baseHost = isLocalAdminHostname(adminHost) ? "admin.brasildesconto.com.br" : adminHost;
     return [
       {
         label: "workspace",
-        route: `${subdomain}.admin.valley.local`,
+        route: `${subdomain}.${baseHost}`,
         description: `cockpit principal de ${module.name.toLowerCase()}`,
       },
       {
         label: "ops",
-        route: `ops-${code}.valley.local`,
+        route: `ops-${code}.${baseHost}`,
         description: "operacao, filas, playbooks e monitoramento",
       },
       {
         label: "api",
-        route: `api-${code}.valley.local`,
+        route: `api-${code}.${baseHost}`,
         description: "integracoes, webhooks, credenciais e saude",
       },
       {
         label: "backoffice",
-        route: `backoffice-${code}.valley.local`,
+        route: `backoffice-${code}.${baseHost}`,
         description: "cadastros, permissoes, auditoria e fechamento",
       },
     ];

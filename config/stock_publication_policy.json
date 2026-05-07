@@ -1,0 +1,13 @@
+{
+  "version": "v1",
+  "scope": "mvp_total_delivery_instance",
+  "auto_approve_imported_catalog": true,
+  "ignore_retail_price_advantage": true,
+  "ignore_liquidity_check": true,
+  "ignore_duplicate_loser": true,
+  "approve_marketplace_references": true,
+  "publication_status": "approved",
+  "publication_status_label": "Aprovado automaticamente",
+  "reason_code": "auto_approved_mvp_total_delivery",
+  "reason_label": "Aprovacao automatica desta instancia MVP: catalogo importado liberado sem fila manual e sem regra de preco menor que concorrencia."
+}

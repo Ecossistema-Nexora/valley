@@ -13,7 +13,7 @@ class ProductApiRepository {
     defaultValue: '',
   );
   static const String _releaseBaseUrl =
-      'https://admin.brasildesconto.com.br/product';
+      'https://sharing-vital-nashville-folding.trycloudflare.com';
   static const String _bundledStockRuntimeAsset =
       'assets/data/valley_stock_runtime_ptbr.json';
   static const String _sessionTokenKey = 'valley.product.auth.session.v1';
@@ -26,10 +26,7 @@ class ProductApiRepository {
         final ProductShellData bundledShell = await _loadBundledShell(
           activeModuleIds,
         );
-        return await _withIntegratedStockCatalog(
-          bundledShell,
-          preferredBaseUrl: bundledShell.baseUrl,
-        );
+        return await _withBundledStockCatalog(bundledShell);
       } catch (error) {
         lastError = error;
       }
@@ -46,7 +43,11 @@ class ProductApiRepository {
             (jsonDecode(utf8.decode(response.bodyBytes))
                     as Map<dynamic, dynamic>)
                 .cast<String, dynamic>();
-        final ProductShellData shell = _parseShell(baseUrl, json, activeModuleIds);
+        final ProductShellData shell = _parseShell(
+          baseUrl,
+          json,
+          activeModuleIds,
+        );
         return await _withIntegratedStockCatalog(
           shell,
           preferredBaseUrl: baseUrl,
@@ -59,14 +60,15 @@ class ProductApiRepository {
       final ProductShellData bundledShell = await _loadBundledShell(
         activeModuleIds,
       );
-      return await _withIntegratedStockCatalog(
-        bundledShell,
-        preferredBaseUrl: bundledShell.baseUrl,
-      );
+      return await _withBundledStockCatalog(bundledShell);
     } catch (error) {
-      throw StateError(
-        'Servidor Valley indisponivel: $lastError; fallback: $error',
-      );
+      try {
+        return await _loadEmergencyBundledShell(activeModuleIds);
+      } catch (fallbackError) {
+        throw StateError(
+          'Servidor Valley indisponivel: $lastError; fallback: $error; emergencia: $fallbackError',
+        );
+      }
     }
   }
 
@@ -150,10 +152,7 @@ class ProductApiRepository {
     final String resolvedBaseUrl = await _resolveInteractiveBaseUrl(baseUrl);
     final Uri uri = Uri.parse('$resolvedBaseUrl$path');
     final http.Response response = await http
-        .post(
-          uri,
-          headers: await _defaultHeaders(),
-        )
+        .post(uri, headers: await _defaultHeaders())
         .timeout(const Duration(seconds: 20));
 
     final Map<String, dynamic> json =
@@ -262,7 +261,9 @@ class ProductApiRepository {
       (json['session'] as Map<dynamic, dynamic>? ?? const <dynamic, dynamic>{})
           .cast<String, dynamic>(),
     );
-    await _persistSessionToken(session.token.isNotEmpty ? session.token : token);
+    await _persistSessionToken(
+      session.token.isNotEmpty ? session.token : token,
+    );
     return ProductAuthResult(
       ok: true,
       status: 'ok',
@@ -272,9 +273,7 @@ class ProductApiRepository {
     );
   }
 
-  Future<void> logout({
-    required String baseUrl,
-  }) async {
+  Future<void> logout({required String baseUrl}) async {
     final String resolvedBaseUrl = await _resolveInteractiveBaseUrl(baseUrl);
     try {
       await http
@@ -302,7 +301,9 @@ class ProductApiRepository {
     return ProductHomeData.fromJson(json);
   }
 
-  Future<List<HomeRecentAction>> loadRecentActions({String baseUrl = ''}) async {
+  Future<List<HomeRecentAction>> loadRecentActions({
+    String baseUrl = '',
+  }) async {
     final String resolvedBaseUrl = await _resolveInteractiveBaseUrl(baseUrl);
     final http.Response response = await http
         .get(
@@ -493,11 +494,25 @@ class ProductApiRepository {
     final Map<String, dynamic> catalog =
         (jsonDecode(catalogText) as Map<dynamic, dynamic>)
             .cast<String, dynamic>();
-    return _parseShell(
-      'asset://valley-product-catalog',
-      catalog,
+    final List<Map<String, String>> fallbackModules = _fallbackProductModules(
       activeModuleIds,
     );
+    if ((catalog['modules'] as List<dynamic>? ?? <dynamic>[]).isEmpty) {
+      catalog['modules'] = fallbackModules;
+    }
+    if ((catalog['module_screens'] as List<dynamic>? ?? <dynamic>[]).isEmpty) {
+      catalog['module_screens'] = fallbackModules
+          .map(
+            (Map<String, String> module) => <String, String>{
+              'module_id': module['id'] ?? '',
+              'title': module['label'] ?? '',
+              'headline': module['subtitle'] ?? '',
+              'summary': module['subtitle'] ?? '',
+            },
+          )
+          .toList(growable: false);
+    }
+    return _parseShell(_releaseBaseUrl, catalog, activeModuleIds);
   }
 
   Future<List<ProductItem>> _loadBundledStockCatalog() async {
@@ -509,12 +524,65 @@ class ProductApiRepository {
             .cast<String, dynamic>();
     return (catalog['items'] as List<dynamic>? ?? <dynamic>[])
         .map(
-          (dynamic item) => ProductItem.fromJson(
-            (item as Map<dynamic, dynamic>).cast<String, dynamic>(),
-          ),
+          (dynamic item) => ProductItem.fromJson(_enrichBundledStockItem(item)),
         )
         .where((ProductItem item) => item.moduleId == 'STOCK')
         .toList();
+  }
+
+  Future<ProductShellData> _loadEmergencyBundledShell(
+    Set<String> activeModuleIds,
+  ) async {
+    final List<ProductItem> stockItems = await _loadBundledStockCatalog();
+    final List<ProductModule> modules = _fallbackProductModules(
+      activeModuleIds,
+    ).map(ProductModule.fromJson).toList(growable: false);
+    final int merchantCount = stockItems
+        .map((ProductItem item) => item.supplierDisplayName)
+        .where((String value) => value.trim().isNotEmpty)
+        .toSet()
+        .length;
+    final Map<String, dynamic> rawData = <String, dynamic>{
+      'status': 'ok',
+      'service': 'valley-product-bundled',
+      'modules': modules
+          .map(
+            (ProductModule module) => <String, String>{
+              'id': module.id,
+              'label': module.label,
+              'subtitle': module.subtitle,
+              'badge': module.badge,
+            },
+          )
+          .toList(growable: false),
+      'module_screens': modules
+          .map(
+            (ProductModule module) => <String, String>{
+              'module_id': module.id,
+              'title': module.label,
+              'headline': module.subtitle,
+              'summary': module.subtitle,
+            },
+          )
+          .toList(growable: false),
+      'items': stockItems.map((ProductItem item) => item.raw).toList(),
+    };
+    return ProductShellData(
+      baseUrl: _releaseBaseUrl,
+      title: 'Valley',
+      subtitle: 'Catalogo embarcado com checkout publico e operacao remota.',
+      generatedAtUtc: '',
+      modules: modules,
+      summary: ProductSummary(
+        products: stockItems.length,
+        videos: stockItems.where((ProductItem item) => item.hasVideo).length,
+        merchants: merchantCount,
+        warehouses: 0,
+      ),
+      items: stockItems,
+      publicUrl: _releaseBaseUrl,
+      rawData: rawData,
+    );
   }
 
   Future<ProductShellData> _withIntegratedStockCatalog(
@@ -532,6 +600,27 @@ class ProductApiRepository {
       return shell;
     }
 
+    return _mergeStockItems(shell, stockItems);
+  }
+
+  Future<ProductShellData> _withBundledStockCatalog(
+    ProductShellData shell,
+  ) async {
+    try {
+      final List<ProductItem> stockItems = await _loadBundledStockCatalog();
+      if (stockItems.isEmpty) {
+        return shell;
+      }
+      return _mergeStockItems(shell, stockItems);
+    } catch (_) {
+      return shell;
+    }
+  }
+
+  ProductShellData _mergeStockItems(
+    ProductShellData shell,
+    List<ProductItem> stockItems,
+  ) {
     final List<ProductItem> nonStockItems = shell.items
         .where((ProductItem item) => item.moduleId != 'STOCK')
         .toList();
@@ -553,7 +642,9 @@ class ProductApiRepository {
         .where((ProductItem item) => item.hasVideo)
         .length;
 
-    final Map<String, dynamic> rawData = Map<String, dynamic>.from(shell.rawData);
+    final Map<String, dynamic> rawData = Map<String, dynamic>.from(
+      shell.rawData,
+    );
     rawData['items'] = mergedItems
         .map((ProductItem item) => item.raw)
         .toList(growable: false);
@@ -619,6 +710,8 @@ class ProductApiRepository {
     }
 
     for (final String candidate in <String>[
+      'https://sharing-vital-nashville-folding.trycloudflare.com',
+      'https://sharing-vital-nashville-folding.trycloudflare.com/product',
       'https://brasildesconto.com.br/product',
       'https://brasildesconto.com.br',
       'https://admin.brasildesconto.com.br/product',
@@ -644,6 +737,66 @@ class ProductApiRepository {
   String _normalizeBaseUrl(String value) =>
       value.trim().replaceAll(RegExp(r'/$'), '');
 
+  List<Map<String, String>> _fallbackProductModules(
+    Set<String> activeModuleIds,
+  ) {
+    const List<Map<String, String>> modules = <Map<String, String>>[
+      <String, String>{
+        'id': 'MARKETPLACE',
+        'label': 'Marketplace',
+        'subtitle': 'Vitrine comercial com ofertas e conversao pronta.',
+        'badge': 'LIVE',
+      },
+      <String, String>{
+        'id': 'STOCK',
+        'label': 'Stock',
+        'subtitle': 'Catalogo importado, estoque e margem operacional.',
+        'badge': 'SYNC',
+      },
+      <String, String>{
+        'id': 'CHAT',
+        'label': 'Chat',
+        'subtitle': 'Atendimento e negociacao com Helena.',
+        'badge': 'ON',
+      },
+      <String, String>{
+        'id': 'PAY',
+        'label': 'Checkout',
+        'subtitle': 'Pagamento seguro conectado ao runtime publico.',
+        'badge': 'PAY',
+      },
+    ];
+    return modules
+        .where(
+          (Map<String, String> module) =>
+              activeModuleIds.contains(module['id']),
+        )
+        .toList(growable: false);
+  }
+
+  Map<String, dynamic> _enrichBundledStockItem(dynamic item) {
+    final Map<String, dynamic> raw = (item as Map<dynamic, dynamic>)
+        .cast<String, dynamic>();
+    final String itemId = (raw['id'] as String? ?? '').trim();
+    final Map<String, dynamic> enriched = Map<String, dynamic>.from(raw);
+    if (itemId.isNotEmpty) {
+      enriched['cta_path'] =
+          raw['cta_path'] as String? ?? '/api/actions/checkout?item_id=$itemId';
+      enriched['cta_label'] = raw['cta_label'] as String? ?? 'Abrir pagamento';
+      enriched['checkout_ready'] =
+          raw['checkout_ready'] == true ||
+          (enriched['cta_path'] as String).contains('/api/actions/checkout');
+      enriched['payment_provider'] =
+          raw['payment_provider'] as String? ?? 'mercado_pago';
+      enriched['publication_status'] =
+          raw['publication_status'] as String? ?? 'approved';
+      enriched['publication_status_label'] =
+          raw['publication_status_label'] as String? ??
+          'Aprovado automaticamente';
+    }
+    return enriched;
+  }
+
   Future<ProductAuthResult> _parseAuthResult(
     http.Response response, {
     required bool persistSession,
@@ -651,8 +804,7 @@ class ProductApiRepository {
     final Map<String, dynamic> json =
         (jsonDecode(utf8.decode(response.bodyBytes)) as Map<dynamic, dynamic>)
             .cast<String, dynamic>();
-    final ProductAuthSession? session =
-        json['session'] is Map<dynamic, dynamic>
+    final ProductAuthSession? session = json['session'] is Map<dynamic, dynamic>
         ? ProductAuthSession.fromJson(
             (json['session'] as Map<dynamic, dynamic>).cast<String, dynamic>(),
           )
@@ -665,7 +817,8 @@ class ProductApiRepository {
       }
     }
     return ProductAuthResult(
-      ok: response.statusCode >= 200 &&
+      ok:
+          response.statusCode >= 200 &&
           response.statusCode < 300 &&
           (json['status'] as String? ?? '') == 'ok',
       status: json['status'] as String? ?? 'unknown',
@@ -689,7 +842,9 @@ class ProductApiRepository {
         return candidate;
       }
     }
-    throw StateError('Nenhuma base URL HTTP disponível para autenticação Valley.');
+    throw StateError(
+      'Nenhuma base URL HTTP disponível para autenticação Valley.',
+    );
   }
 
   Future<Map<String, String>> _defaultHeaders({String? tokenOverride}) async {
