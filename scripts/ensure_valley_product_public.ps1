@@ -362,7 +362,14 @@ function Start-ProductRuntime {
         return
     }
 
-    throw "Nenhum runtime publico Cloudflare disponivel. Consulte $CloudflareErrLog"
+    $LocalhostRunScript = Join-Path $PSScriptRoot 'start_valley_localhost_run_public.ps1'
+    if (Test-Path -LiteralPath $LocalhostRunScript -PathType Leaf) {
+        Write-Step "Cloudflare indisponivel; acionando fallback persistente localhost.run."
+        & powershell -NoProfile -ExecutionPolicy Bypass -File $LocalhostRunScript
+        return
+    }
+
+    throw "Nenhum runtime publico disponivel. Consulte $CloudflareErrLog"
 }
 
 function Install-RuntimeTask {

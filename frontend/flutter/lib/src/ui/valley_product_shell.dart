@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -5,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:valley_super_app/src/data/product_api_models.dart';
 import 'package:valley_super_app/src/data/product_api_repository.dart';
@@ -92,6 +94,7 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
   ProductAuthSession? _authSession;
   bool _authBusy = false;
   String _authFeedback = '';
+  bool _useProfileDeliveryAddress = true;
 
   List<_PrimaryNavItem> get _primaryNavItems {
     final Set<String> moduleIds = _data.modules
@@ -546,17 +549,25 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
     }
   }
 
-  Future<void> _runItemAction(String path) async {
+  Future<void> _runItemAction(
+    String path, {
+    Map<String, dynamic> body = const <String, dynamic>{},
+  }) async {
     final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
     setState(() => _busy = true);
     try {
       final ProductActionResult result = await widget.repository.invokePath(
         baseUrl: _data.baseUrl,
         path: path,
+        body: body,
       );
       if (!mounted) {
         return;
       }
+      final String checkoutMessage =
+          result.ok && result.action == 'checkout' && _selectedItem != null
+          ? 'Parabéns pela compra de ${_selectedItem!.titlePtBr}. ${result.message}'
+          : result.message;
       if (result.url.isNotEmpty) {
         await launchUrl(
           Uri.parse(result.url),
@@ -566,13 +577,13 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
       messenger.showSnackBar(
         SnackBar(
           behavior: SnackBarBehavior.floating,
-          content: Text(result.message),
+          content: Text(checkoutMessage),
           backgroundColor: result.ok
               ? ValleyBrandColors.success
               : ValleyBrandColors.danger,
         ),
       );
-      _setHelenaMood(result.ok ? 'happy' : 'alert', result.message);
+      _setHelenaMood(result.ok ? 'happy' : 'alert', checkoutMessage);
     } finally {
       if (mounted) {
         setState(() => _busy = false);
@@ -744,11 +755,7 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
   }
 
   Future<void> _submitRegister({
-    required String fullName,
-    required String displayName,
-    required String email,
-    required String password,
-    required String role,
+    required Map<String, String> values,
   }) async {
     final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
     setState(() {
@@ -758,11 +765,22 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
     try {
       final ProductAuthResult registerResult = await widget.repository.register(
         baseUrl: _data.baseUrl,
-        fullName: fullName,
-        displayName: displayName,
-        email: email,
-        password: password,
-        role: role,
+        fullName: values['full_name'] ?? '',
+        displayName: values['display_name'] ?? '',
+        email: values['email'] ?? '',
+        password: values['password'] ?? '',
+        role: values['role'] ?? 'CUSTOMER',
+        cpf: values['cpf'] ?? '',
+        phone: values['phone'] ?? '',
+        defaultDeliveryAddress: <String, String>{
+          'postal_code': values['postal_code'] ?? '',
+          'street': values['street'] ?? '',
+          'number': values['number'] ?? '',
+          'complement': values['complement'] ?? '',
+          'neighborhood': values['neighborhood'] ?? '',
+          'city': values['city'] ?? '',
+          'state': values['state'] ?? '',
+        },
       );
       if (!mounted) {
         return;
@@ -780,7 +798,10 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
         );
         return;
       }
-      await _submitLogin(identifier: email, password: password);
+      await _submitLogin(
+        identifier: values['email'] ?? '',
+        password: values['password'] ?? '',
+      );
     } finally {
       if (mounted) {
         setState(() {
@@ -887,13 +908,30 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
     _setHelenaMood('happy', 'Checkout pronto para ${item.title}.');
   }
 
-  void _confirmPreparedOrder(ProductItem item) {
+  void _confirmPreparedOrder(
+    ProductItem item, {
+    Map<String, String> deliveryAddress = const <String, String>{},
+    bool useProfileAddress = true,
+  }) {
     if (_authSession == null) {
       _openIdentity(returnItem: item);
       return;
     }
     if (item.ctaPath.isNotEmpty) {
-      _runItemAction(item.ctaPath);
+      _runItemAction(
+        item.ctaPath,
+        body: <String, dynamic>{
+          'delivery_address_source': useProfileAddress
+              ? 'customer_profile'
+              : 'checkout_override',
+          'delivery_address': deliveryAddress,
+          'white_label': const <String, dynamic>{
+            'brand_name': 'Valley',
+            'shipping_label_logo': 'Valley',
+            'hide_original_supplier_name': true,
+          },
+        },
+      );
       _setHelenaMood('focus', 'Abrindo o pagamento seguro para ${item.title}.');
       return;
     }
@@ -919,6 +957,21 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
       _selectedConversation = null;
       _surface = 'receipt';
     });
+  }
+
+  Future<void> _shareOffer(ProductItem item) async {
+    final String offerUrl =
+        '${_data.baseUrl}/product?item_id=${Uri.encodeComponent(item.id)}';
+    final String description = item.descriptionPtBr.trim().isEmpty
+        ? item.titlePtBr
+        : item.descriptionPtBr;
+    await SharePlus.instance.share(
+      ShareParams(
+        text:
+            '${item.titlePtBr}\nR\$ ${item.priceBrl.toStringAsFixed(2)}\n$description\n$offerUrl',
+      subject: item.titlePtBr,
+      ),
+    );
   }
 
   void _openConversation(Map<String, dynamic> conversation) {
@@ -1038,6 +1091,7 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
             : () => _runItemAction(_selectedItem!.mediaPath),
         onAddToCart: () => _addToCart(_selectedItem!),
         onCheckout: () => _openCheckout(_selectedItem!),
+        onShare: () => _shareOffer(_selectedItem!),
         onChat: () => _openSurface('chat'),
       );
     }
@@ -1053,8 +1107,20 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
     if (_surface == 'checkout' && _selectedItem != null) {
       return _CheckoutScreen(
         item: _selectedItem!,
+        baseUrl: _data.baseUrl,
+        repository: widget.repository,
         authRequired: _authSession == null,
-        onConfirm: () => _confirmPreparedOrder(_selectedItem!),
+        authSession: _authSession,
+        useProfileAddress: _useProfileDeliveryAddress,
+        onUseProfileAddressChanged: (bool value) {
+          setState(() => _useProfileDeliveryAddress = value);
+        },
+        onConfirm: (Map<String, String> deliveryAddress, bool useProfile) =>
+            _confirmPreparedOrder(
+              _selectedItem!,
+              deliveryAddress: deliveryAddress,
+              useProfileAddress: useProfile,
+            ),
         onIdentity: () => _openIdentity(returnItem: _selectedItem),
         onCancel: () => _addToCart(_selectedItem!),
       );
@@ -1085,25 +1151,15 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
         feedback: _authFeedback,
         onLogin: (String identifier, String password) =>
             _submitLogin(identifier: identifier, password: password),
-        onRegister:
-            (
-              String fullName,
-              String displayName,
-              String email,
-              String password,
-              String role,
-            ) => _submitRegister(
-              fullName: fullName,
-              displayName: displayName,
-              email: email,
-              password: password,
-              role: role,
-            ),
+        onRegister: (Map<String, String> values) =>
+            _submitRegister(values: values),
         onLogout: _authSession == null ? null : _logoutAuth,
       );
     }
     if (_surface == 'notifications') {
       return _NotificationsScreen(
+        baseUrl: _data.baseUrl,
+        repository: widget.repository,
         items: _data.items,
         onOpenItem: _openItemDetail,
         onOpenStock: () => _showModule('STOCK'),
@@ -1142,6 +1198,8 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
     }
     if (_surface == 'client') {
       return _ClientAreaScreen(
+        baseUrl: _data.baseUrl,
+        repository: widget.repository,
         items: _data.items,
         onOpenItem: _openItemDetail,
         onOpenChat: () => _openSurface('chat'),
@@ -4367,6 +4425,7 @@ class _ProductDetailScreen extends StatelessWidget {
     required this.onPlay,
     required this.onAddToCart,
     required this.onCheckout,
+    required this.onShare,
     required this.onChat,
   });
 
@@ -4375,6 +4434,7 @@ class _ProductDetailScreen extends StatelessWidget {
   final VoidCallback? onPlay;
   final VoidCallback onAddToCart;
   final VoidCallback onCheckout;
+  final VoidCallback onShare;
   final VoidCallback onChat;
 
   @override
@@ -4480,6 +4540,11 @@ class _ProductDetailScreen extends StatelessWidget {
                 onPressed: onAddToCart,
                 icon: const Icon(Icons.add_shopping_cart_rounded),
                 label: const Text('Adicionar ao carrinho'),
+              ),
+              OutlinedButton.icon(
+                onPressed: onShare,
+                icon: const Icon(Icons.share_rounded),
+                label: const Text('Compartilhar oferta'),
               ),
               if (item.hasVideo)
                 OutlinedButton.icon(
@@ -4675,31 +4740,188 @@ class _ProductDetailScreen extends StatelessWidget {
   }
 }
 
-class _CheckoutScreen extends StatelessWidget {
+class _CheckoutScreen extends StatefulWidget {
   const _CheckoutScreen({
     required this.item,
+    required this.baseUrl,
+    required this.repository,
     required this.authRequired,
+    required this.authSession,
+    required this.useProfileAddress,
+    required this.onUseProfileAddressChanged,
     required this.onConfirm,
     required this.onIdentity,
     required this.onCancel,
   });
 
   final ProductItem item;
+  final String baseUrl;
+  final ProductApiRepository repository;
   final bool authRequired;
-  final VoidCallback onConfirm;
+  final ProductAuthSession? authSession;
+  final bool useProfileAddress;
+  final ValueChanged<bool> onUseProfileAddressChanged;
+  final void Function(Map<String, String> deliveryAddress, bool useProfile)
+  onConfirm;
   final VoidCallback onIdentity;
   final VoidCallback onCancel;
+
+  @override
+  State<_CheckoutScreen> createState() => _CheckoutScreenState();
+}
+
+class _CheckoutScreenState extends State<_CheckoutScreen> {
+  late bool _useProfileAddress;
+  late final TextEditingController _recipientController;
+  late final TextEditingController _postalCodeController;
+  late final TextEditingController _streetController;
+  late final TextEditingController _numberController;
+  late final TextEditingController _complementController;
+  late final TextEditingController _neighborhoodController;
+  late final TextEditingController _cityController;
+  late final TextEditingController _stateController;
+  Timer? _shippingQuoteTimer;
+  bool _shippingQuoteBusy = false;
+  Map<String, dynamic>? _shippingQuote;
+  String _lastShippingQuoteKey = '';
+
+  Map<String, String> get _profileAddress =>
+      widget.authSession?.user.defaultDeliveryAddress ?? const <String, String>{};
+
+  @override
+  void initState() {
+    super.initState();
+    _useProfileAddress = widget.useProfileAddress && _profileAddress.isNotEmpty;
+    _recipientController = TextEditingController(
+      text: _profileAddress['recipient_name'] ?? widget.authSession?.user.fullName ?? '',
+    );
+    _postalCodeController = TextEditingController(text: _profileAddress['postal_code'] ?? '');
+    _streetController = TextEditingController(text: _profileAddress['street'] ?? '');
+    _numberController = TextEditingController(text: _profileAddress['number'] ?? '');
+    _complementController = TextEditingController(text: _profileAddress['complement'] ?? '');
+    _neighborhoodController = TextEditingController(text: _profileAddress['neighborhood'] ?? '');
+    _cityController = TextEditingController(text: _profileAddress['city'] ?? '');
+    _stateController = TextEditingController(text: _profileAddress['state'] ?? '');
+    for (final TextEditingController controller in <TextEditingController>[
+      _recipientController,
+      _postalCodeController,
+      _streetController,
+      _numberController,
+      _complementController,
+      _neighborhoodController,
+      _cityController,
+      _stateController,
+    ]) {
+      controller.addListener(_scheduleShippingQuote);
+    }
+    WidgetsBinding.instance.addPostFrameCallback((_) => _scheduleShippingQuote());
+  }
+
+  @override
+  void dispose() {
+    _shippingQuoteTimer?.cancel();
+    _recipientController.dispose();
+    _postalCodeController.dispose();
+    _streetController.dispose();
+    _numberController.dispose();
+    _complementController.dispose();
+    _neighborhoodController.dispose();
+    _cityController.dispose();
+    _stateController.dispose();
+    super.dispose();
+  }
+
+  Map<String, String> _deliveryAddress() {
+    if (_useProfileAddress && _profileAddress.isNotEmpty) {
+      return Map<String, String>.from(_profileAddress);
+    }
+    return <String, String>{
+      'recipient_name': _recipientController.text,
+      'postal_code': _postalCodeController.text,
+      'street': _streetController.text,
+      'number': _numberController.text,
+      'complement': _complementController.text,
+      'neighborhood': _neighborhoodController.text,
+      'city': _cityController.text,
+      'state': _stateController.text,
+      'country': 'BR',
+    };
+  }
+
+  bool _deliveryAddressComplete(Map<String, String> address) {
+    for (final String key in <String>[
+      'recipient_name',
+      'postal_code',
+      'street',
+      'number',
+      'neighborhood',
+      'city',
+      'state',
+    ]) {
+      if ((address[key] ?? '').trim().isEmpty) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  void _scheduleShippingQuote() {
+    _shippingQuoteTimer?.cancel();
+    _shippingQuoteTimer = Timer(const Duration(milliseconds: 450), _refreshShippingQuote);
+  }
+
+  Future<void> _refreshShippingQuote() async {
+    final Map<String, String> address = _deliveryAddress();
+    final String quoteKey = '${widget.item.id}|${address.entries.map((MapEntry<String, String> entry) => '${entry.key}:${entry.value.trim()}').join('|')}';
+    if (!_deliveryAddressComplete(address) || quoteKey == _lastShippingQuoteKey) {
+      return;
+    }
+    _lastShippingQuoteKey = quoteKey;
+    if (mounted) {
+      setState(() => _shippingQuoteBusy = true);
+    }
+    try {
+      final ProductActionResult result = await widget.repository.invokePath(
+        baseUrl: widget.baseUrl,
+        path: '/api/actions/shipping-quote?item_id=${Uri.encodeComponent(widget.item.id)}',
+        body: <String, dynamic>{'delivery_address': address},
+      );
+      if (!mounted) {
+        return;
+      }
+      final Map<String, dynamic> quote =
+          (result.payload['shipping_quote'] as Map<dynamic, dynamic>? ?? <dynamic, dynamic>{})
+              .cast<String, dynamic>();
+      setState(() {
+        _shippingQuote = result.ok ? quote : null;
+        _shippingQuoteBusy = false;
+      });
+    } catch (_) {
+      if (mounted) {
+        setState(() => _shippingQuoteBusy = false);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final Map<String, dynamic> checkout =
-        (item.raw['checkout'] as Map<dynamic, dynamic>? ?? <dynamic, dynamic>{})
+        (widget.item.raw['checkout'] as Map<dynamic, dynamic>? ??
+                <dynamic, dynamic>{})
             .cast<String, dynamic>();
+    final Map<String, dynamic> shippingQuote = _shippingQuote ?? const <String, dynamic>{};
     final double shipping =
-        (checkout['shipping_brl'] as num?)?.toDouble() ?? 19.9;
+        (shippingQuote['shipping_passthrough_brl'] as num?)?.toDouble() ??
+        (checkout['shipping_brl'] as num?)?.toDouble() ??
+        19.9;
     final double service = (checkout['service_brl'] as num?)?.toDouble() ?? 4.9;
-    final double total = item.priceBrl + shipping + service;
+    final double total = widget.item.priceBrl + shipping + service;
+    final List<Map<String, dynamic>> shippingSuggestions =
+        (shippingQuote['suggestions'] as List<dynamic>? ?? const <dynamic>[])
+            .whereType<Map<dynamic, dynamic>>()
+            .map((Map<dynamic, dynamic> item) => item.cast<String, dynamic>())
+            .toList();
 
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
@@ -4708,13 +4930,37 @@ class _CheckoutScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             _CheckoutRow(
-              label: item.title,
-              value: 'R\$ ${item.priceBrl.toStringAsFixed(2)}',
+              label: widget.item.titlePtBr,
+              value: 'R\$ ${widget.item.priceBrl.toStringAsFixed(2)}',
             ),
             _CheckoutRow(
-              label: 'Entrega preparada',
+              label: _shippingQuote == null
+                  ? 'Frete fornecedor'
+                  : 'Frete fornecedor consultado',
               value: 'R\$ ${shipping.toStringAsFixed(2)}',
             ),
+            if (_shippingQuoteBusy)
+              const Padding(
+                padding: EdgeInsets.only(bottom: 12),
+                child: LinearProgressIndicator(minHeight: 3),
+              ),
+            if (_shippingQuote != null)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: Text(
+                  '${shippingQuote['supplier_name'] ?? widget.item.supplierDisplayName} • ${shippingQuote['eta'] ?? checkout['eta'] ?? 'prazo do fornecedor'}',
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ),
+            for (final Map<String, dynamic> suggestion in shippingSuggestions)
+              _TrustSignalRow(
+                icon: Icons.local_offer_rounded,
+                title: suggestion['title']?.toString() ?? 'Sugestão de frete',
+                body: suggestion['detail']?.toString() ??
+                    'O fornecedor recomenda ajustar a compra para reduzir o frete.',
+              ),
             _CheckoutRow(
               label: 'Servico Valley',
               value: 'R\$ ${service.toStringAsFixed(2)}',
@@ -4749,20 +4995,119 @@ class _CheckoutScreen extends StatelessWidget {
               ),
               const _TrustSignalRow(
                 icon: Icons.point_of_sale_rounded,
-                title: 'Plug preparado',
-                body: 'Captura visual pronta sem ativar Pay completo.',
+                title: 'Pagamento protegido',
+                body: 'O pagamento abre em ambiente seguro com retorno ao pedido.',
               ),
               const _TrustSignalRow(
                 icon: Icons.description_rounded,
-                title: 'Docs leve',
-                body: 'Recibo e checksum gerados na confirmação.',
+                title: 'Comprovante do pedido',
+                body: 'A confirmação mantém item, valor e entrega vinculados à conta.',
               ),
               const SizedBox(height: 10),
               OutlinedButton.icon(
-                onPressed: onIdentity,
+                onPressed: widget.onIdentity,
                 icon: const Icon(Icons.face_retouching_natural_rounded),
                 label: const Text('Ativar Face ID'),
               ),
+            ],
+          ),
+        );
+
+        final Widget addressPanel = ValleyPanel(
+          radius: 24,
+          padding: const EdgeInsets.all(18),
+          glowColor: ValleyBrandColors.cyan,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                'Endereço de entrega',
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+              const SizedBox(height: 10),
+              if (_profileAddress.isNotEmpty)
+                SwitchListTile.adaptive(
+                  contentPadding: EdgeInsets.zero,
+                  value: _useProfileAddress,
+                  onChanged: (bool value) {
+                    setState(() => _useProfileAddress = value);
+                    widget.onUseProfileAddressChanged(value);
+                    _scheduleShippingQuote();
+                  },
+                  title: const Text('Usar endereço do cadastro'),
+                  subtitle: Text(
+                    '${_profileAddress['street'] ?? ''}, ${_profileAddress['number'] ?? ''} - ${_profileAddress['city'] ?? ''}/${_profileAddress['state'] ?? ''}',
+                  ),
+                ),
+              if (!_useProfileAddress || _profileAddress.isEmpty) ...<Widget>[
+                _AuthTextField(
+                  controller: _recipientController,
+                  label: 'Nome do destinatário',
+                  hintText: 'Nome completo',
+                ),
+                const SizedBox(height: 10),
+                _AuthTextField(
+                  controller: _postalCodeController,
+                  label: 'CEP',
+                  hintText: '00000-000',
+                  keyboardType: TextInputType.number,
+                ),
+                const SizedBox(height: 10),
+                _AuthTextField(
+                  controller: _streetController,
+                  label: 'Endereço',
+                  hintText: 'Rua, avenida ou estrada',
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: _AuthTextField(
+                        controller: _numberController,
+                        label: 'Número',
+                        hintText: 'Número',
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: _AuthTextField(
+                        controller: _complementController,
+                        label: 'Complemento',
+                        hintText: 'Apto, bloco',
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                _AuthTextField(
+                  controller: _neighborhoodController,
+                  label: 'Bairro',
+                  hintText: 'Bairro',
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      flex: 3,
+                      child: _AuthTextField(
+                        controller: _cityController,
+                        label: 'Cidade',
+                        hintText: 'Cidade',
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: _AuthTextField(
+                        controller: _stateController,
+                        label: 'UF',
+                        hintText: 'SP',
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ],
           ),
         );
@@ -4773,6 +5118,8 @@ class _CheckoutScreen extends StatelessWidget {
                 children: <Widget>[
                   totals,
                   const SizedBox(height: 18),
+                  addressPanel,
+                  const SizedBox(height: 18),
                   trustPanel,
                 ],
               )
@@ -4780,6 +5127,8 @@ class _CheckoutScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Expanded(child: totals),
+                  const SizedBox(width: 20),
+                  Expanded(child: addressPanel),
                   const SizedBox(width: 20),
                   Expanded(child: trustPanel),
                 ],
@@ -4793,14 +5142,14 @@ class _CheckoutScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                checkout['headline']?.toString() ?? 'Checkout preparado',
+                widget.item.titlePtBr,
                 style: theme.textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.w800,
                 ),
               ),
               const SizedBox(height: 8),
               Text(
-                'Entrega prevista em ${checkout['eta']?.toString() ?? '2 dias'} • Ao seguir, o pagamento abre em ambiente seguro com retorno controlado ao Valley.',
+                'R\$ ${widget.item.priceBrl.toStringAsFixed(2)} • Entrega prevista em ${checkout['eta']?.toString() ?? '2 dias'}.',
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: theme.colorScheme.onSurfaceVariant,
                 ),
@@ -4813,18 +5162,23 @@ class _CheckoutScreen extends StatelessWidget {
                 runSpacing: 12,
                 children: <Widget>[
                   FilledButton.icon(
-                    onPressed: onConfirm,
+                    onPressed: () => widget.onConfirm(
+                      _deliveryAddress(),
+                      _useProfileAddress && _profileAddress.isNotEmpty,
+                    ),
                     icon: Icon(
-                      authRequired ? Icons.login_rounded : Icons.lock_rounded,
+                      widget.authRequired
+                          ? Icons.login_rounded
+                          : Icons.lock_rounded,
                     ),
                     label: Text(
-                      authRequired
+                      widget.authRequired
                           ? 'Entrar para pagar'
                           : 'Ir para pagamento seguro',
                     ),
                   ),
                   OutlinedButton.icon(
-                    onPressed: onCancel,
+                    onPressed: widget.onCancel,
                     icon: const Icon(Icons.shopping_bag_rounded),
                     label: const Text('Voltar ao carrinho'),
                   ),
@@ -5402,13 +5756,7 @@ typedef _AuthLoginHandler =
     Future<void> Function(String identifier, String password);
 
 typedef _AuthRegisterHandler =
-    Future<void> Function(
-      String fullName,
-      String displayName,
-      String email,
-      String password,
-      String role,
-    );
+    Future<void> Function(Map<String, String> values);
 
 class _IdentityTrustScreen extends StatelessWidget {
   const _IdentityTrustScreen({
@@ -5569,6 +5917,15 @@ class _AuthAccessPanelState extends State<_AuthAccessPanel> {
   late final TextEditingController _registerDisplayNameController;
   late final TextEditingController _registerEmailController;
   late final TextEditingController _registerPasswordController;
+  late final TextEditingController _registerCpfController;
+  late final TextEditingController _registerPhoneController;
+  late final TextEditingController _registerPostalCodeController;
+  late final TextEditingController _registerStreetController;
+  late final TextEditingController _registerNumberController;
+  late final TextEditingController _registerComplementController;
+  late final TextEditingController _registerNeighborhoodController;
+  late final TextEditingController _registerCityController;
+  late final TextEditingController _registerStateController;
   String _role = 'CUSTOMER';
 
   @override
@@ -5580,6 +5937,15 @@ class _AuthAccessPanelState extends State<_AuthAccessPanel> {
     _registerDisplayNameController = TextEditingController();
     _registerEmailController = TextEditingController();
     _registerPasswordController = TextEditingController();
+    _registerCpfController = TextEditingController();
+    _registerPhoneController = TextEditingController();
+    _registerPostalCodeController = TextEditingController();
+    _registerStreetController = TextEditingController();
+    _registerNumberController = TextEditingController();
+    _registerComplementController = TextEditingController();
+    _registerNeighborhoodController = TextEditingController();
+    _registerCityController = TextEditingController();
+    _registerStateController = TextEditingController();
   }
 
   @override
@@ -5590,6 +5956,15 @@ class _AuthAccessPanelState extends State<_AuthAccessPanel> {
     _registerDisplayNameController.dispose();
     _registerEmailController.dispose();
     _registerPasswordController.dispose();
+    _registerCpfController.dispose();
+    _registerPhoneController.dispose();
+    _registerPostalCodeController.dispose();
+    _registerStreetController.dispose();
+    _registerNumberController.dispose();
+    _registerComplementController.dispose();
+    _registerNeighborhoodController.dispose();
+    _registerCityController.dispose();
+    _registerStateController.dispose();
     super.dispose();
   }
 
@@ -5619,7 +5994,7 @@ class _AuthAccessPanelState extends State<_AuthAccessPanel> {
           ),
           const SizedBox(height: 16),
           SizedBox(
-            height: 520,
+            height: 760,
             child: TabBarView(
               children: <Widget>[
                 SingleChildScrollView(
@@ -5685,6 +6060,63 @@ class _AuthAccessPanelState extends State<_AuthAccessPanel> {
                         obscureText: true,
                       ),
                       const SizedBox(height: 12),
+                      _AuthTextField(
+                        controller: _registerCpfController,
+                        label: 'CPF',
+                        hintText: '000.000.000-00',
+                        keyboardType: TextInputType.number,
+                      ),
+                      const SizedBox(height: 12),
+                      _AuthTextField(
+                        controller: _registerPhoneController,
+                        label: 'Telefone',
+                        hintText: '(00) 00000-0000',
+                        keyboardType: TextInputType.phone,
+                      ),
+                      const SizedBox(height: 12),
+                      _AuthTextField(
+                        controller: _registerPostalCodeController,
+                        label: 'CEP',
+                        hintText: '00000-000',
+                        keyboardType: TextInputType.number,
+                      ),
+                      const SizedBox(height: 12),
+                      _AuthTextField(
+                        controller: _registerStreetController,
+                        label: 'Endereço',
+                        hintText: 'Rua, avenida ou estrada',
+                      ),
+                      const SizedBox(height: 12),
+                      _AuthTextField(
+                        controller: _registerNumberController,
+                        label: 'Número',
+                        hintText: 'Número',
+                      ),
+                      const SizedBox(height: 12),
+                      _AuthTextField(
+                        controller: _registerComplementController,
+                        label: 'Complemento',
+                        hintText: 'Apartamento, bloco ou referência',
+                      ),
+                      const SizedBox(height: 12),
+                      _AuthTextField(
+                        controller: _registerNeighborhoodController,
+                        label: 'Bairro',
+                        hintText: 'Bairro',
+                      ),
+                      const SizedBox(height: 12),
+                      _AuthTextField(
+                        controller: _registerCityController,
+                        label: 'Cidade',
+                        hintText: 'Cidade',
+                      ),
+                      const SizedBox(height: 12),
+                      _AuthTextField(
+                        controller: _registerStateController,
+                        label: 'UF',
+                        hintText: 'SP',
+                      ),
+                      const SizedBox(height: 12),
                       DropdownButtonFormField<String>(
                         initialValue: _role,
                         decoration: const InputDecoration(labelText: 'Perfil'),
@@ -5708,13 +6140,22 @@ class _AuthAccessPanelState extends State<_AuthAccessPanel> {
                       ),
                     ],
                     actionLabel: 'Criar conta',
-                    onSubmit: () => widget.onRegister(
-                      _registerFullNameController.text,
-                      _registerDisplayNameController.text,
-                      _registerEmailController.text,
-                      _registerPasswordController.text,
-                      _role,
-                    ),
+                    onSubmit: () => widget.onRegister(<String, String>{
+                      'full_name': _registerFullNameController.text,
+                      'display_name': _registerDisplayNameController.text,
+                      'email': _registerEmailController.text,
+                      'password': _registerPasswordController.text,
+                      'role': _role,
+                      'cpf': _registerCpfController.text,
+                      'phone': _registerPhoneController.text,
+                      'postal_code': _registerPostalCodeController.text,
+                      'street': _registerStreetController.text,
+                      'number': _registerNumberController.text,
+                      'complement': _registerComplementController.text,
+                      'neighborhood': _registerNeighborhoodController.text,
+                      'city': _registerCityController.text,
+                      'state': _registerStateController.text,
+                    }),
                   ),
                 ),
               ],
@@ -5811,18 +6252,21 @@ class _AuthTextField extends StatelessWidget {
     required this.label,
     required this.hintText,
     this.obscureText = false,
+    this.keyboardType,
   });
 
   final TextEditingController controller;
   final String label;
   final String hintText;
   final bool obscureText;
+  final TextInputType? keyboardType;
 
   @override
   Widget build(BuildContext context) {
     return TextField(
       controller: controller,
       obscureText: obscureText,
+      keyboardType: keyboardType,
       decoration: InputDecoration(labelText: label, hintText: hintText),
     );
   }
@@ -5877,6 +6321,8 @@ class _IdentityMetric extends StatelessWidget {
 
 class _NotificationsScreen extends StatelessWidget {
   const _NotificationsScreen({
+    required this.baseUrl,
+    required this.repository,
     required this.items,
     required this.onOpenItem,
     required this.onOpenStock,
@@ -5884,6 +6330,8 @@ class _NotificationsScreen extends StatelessWidget {
     required this.onOpenIdentity,
   });
 
+  final String baseUrl;
+  final ProductApiRepository repository;
   final List<ProductItem> items;
   final ValueChanged<ProductItem> onOpenItem;
   final VoidCallback onOpenStock;
@@ -5893,7 +6341,7 @@ class _NotificationsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ProductItem? firstItem = items.isEmpty ? null : items.first;
-    final List<_NotificationEntry> entries = <_NotificationEntry>[
+    final List<_NotificationEntry> fallbackEntries = <_NotificationEntry>[
       if (firstItem != null)
         _NotificationEntry(
           icon: Icons.local_offer_rounded,
@@ -5939,56 +6387,91 @@ class _NotificationsScreen extends StatelessWidget {
             ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w900),
           ),
           const SizedBox(height: 16),
-          for (final _NotificationEntry entry in entries)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 12),
-              child: InkWell(
-                borderRadius: BorderRadius.circular(22),
-                onTap: entry.onTap,
-                child: Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.05),
-                    borderRadius: BorderRadius.circular(22),
-                    border: Border.all(
-                      color: Colors.white.withValues(alpha: 0.08),
-                    ),
+          FutureBuilder<List<Map<String, dynamic>>>(
+            future: repository.loadNotifications(baseUrl: baseUrl),
+            builder: (
+              BuildContext context,
+              AsyncSnapshot<List<Map<String, dynamic>>> snapshot,
+            ) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const LinearProgressIndicator(minHeight: 3);
+              }
+              final List<_NotificationEntry> entries = <_NotificationEntry>[
+                for (final Map<String, dynamic> notification
+                    in snapshot.data ?? const <Map<String, dynamic>>[])
+                  _NotificationEntry(
+                    icon: Icons.local_shipping_rounded,
+                    title: notification['title']?.toString() ??
+                        'Atualização da entrega',
+                    body: notification['body']?.toString() ??
+                        'Sua encomenda teve uma nova atualização.',
+                    actionLabel: 'Ver compra',
+                    onTap: onOpenIdentity,
                   ),
-                  child: Row(
-                    children: <Widget>[
-                      Icon(entry.icon, color: ValleyBrandColors.cyan),
-                      const SizedBox(width: 14),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              entry.title,
-                              style: Theme.of(context).textTheme.titleMedium
-                                  ?.copyWith(fontWeight: FontWeight.w800),
+                ...fallbackEntries,
+              ];
+              return Column(
+                children: <Widget>[
+                  for (final _NotificationEntry entry in entries)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 12),
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(22),
+                        onTap: entry.onTap,
+                        child: Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.05),
+                            borderRadius: BorderRadius.circular(22),
+                            border: Border.all(
+                              color: Colors.white.withValues(alpha: 0.08),
                             ),
-                            const SizedBox(height: 4),
-                            Text(
-                              entry.body,
-                              style: Theme.of(context).textTheme.bodySmall
-                                  ?.copyWith(
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.onSurfaceVariant,
-                                  ),
-                            ),
-                          ],
+                          ),
+                          child: Row(
+                            children: <Widget>[
+                              Icon(entry.icon, color: ValleyBrandColors.cyan),
+                              const SizedBox(width: 14),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      entry.title,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium
+                                          ?.copyWith(
+                                            fontWeight: FontWeight.w800,
+                                          ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      entry.body,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall
+                                          ?.copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSurfaceVariant,
+                                          ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: entry.onTap,
+                                child: Text(entry.actionLabel),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                      TextButton(
-                        onPressed: entry.onTap,
-                        child: Text(entry.actionLabel),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+                    ),
+                ],
+              );
+            },
+          ),
         ],
       ),
     );
@@ -10007,21 +10490,44 @@ class _HelenaStarPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
-class _ClientAreaScreen extends StatelessWidget {
+class _ClientAreaScreen extends StatefulWidget {
   const _ClientAreaScreen({
+    required this.baseUrl,
+    required this.repository,
     required this.items,
     required this.onOpenItem,
     required this.onOpenChat,
   });
 
+  final String baseUrl;
+  final ProductApiRepository repository;
   final List<ProductItem> items;
   final ValueChanged<ProductItem> onOpenItem;
   final VoidCallback onOpenChat;
 
   @override
+  State<_ClientAreaScreen> createState() => _ClientAreaScreenState();
+}
+
+class _ClientAreaScreenState extends State<_ClientAreaScreen> {
+  late Future<List<ProductPurchase>> _purchasesFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _purchasesFuture = widget.repository.loadPurchases(baseUrl: widget.baseUrl);
+  }
+
+  void _refreshPurchases() {
+    setState(() {
+      _purchasesFuture = widget.repository.loadPurchases(baseUrl: widget.baseUrl);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final List<ProductItem> recentOrders = items.take(3).toList();
+    final List<ProductItem> recentOrders = widget.items.take(3).toList();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -10105,41 +10611,84 @@ class _ClientAreaScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(
-                    'Meus pedidos',
-                    style: theme.textTheme.titleLarge?.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w800,
-                    ),
+                  Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: Text(
+                          'Minhas compras',
+                          style: theme.textTheme.titleLarge?.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: _refreshPurchases,
+                        icon: const Icon(Icons.refresh_rounded),
+                        tooltip: 'Atualizar compras',
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 14),
-                  for (final ProductItem item in recentOrders)
-                    ListTile(
-                      contentPadding: EdgeInsets.zero,
-                      leading: ClipRRect(
-                        borderRadius: BorderRadius.circular(14),
-                        child: Image.network(
-                          item.imageUrl,
-                          width: 54,
-                          height: 54,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      title: Text(
-                        item.title,
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                      subtitle: Text(
-                        'Avalie para liberar Pepitas adicionais',
-                        style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.55),
-                        ),
-                      ),
-                      trailing: TextButton(
-                        onPressed: () => onOpenItem(item),
-                        child: const Text('Detalhes'),
+                  FutureBuilder<List<ProductPurchase>>(
+                    future: _purchasesFuture,
+                    builder: (BuildContext context, AsyncSnapshot<List<ProductPurchase>> snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const LinearProgressIndicator(minHeight: 3);
+                      }
+                      final List<ProductPurchase> purchases = snapshot.data ?? const <ProductPurchase>[];
+                      if (purchases.isEmpty) {
+                        return Text(
+                          'As compras confirmadas aparecerão aqui automaticamente com rastreio do fornecedor.',
+                          style: TextStyle(color: Colors.white.withValues(alpha: 0.62)),
+                        );
+                      }
+                      return Column(
+                        children: <Widget>[
+                          for (final ProductPurchase purchase in purchases)
+                            _PurchaseTrackingTile(purchase: purchase),
+                        ],
+                      );
+                    },
+                  ),
+                  if (recentOrders.isNotEmpty) ...<Widget>[
+                    const SizedBox(height: 18),
+                    Text(
+                      'Ofertas recentes',
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w800,
                       ),
                     ),
+                    const SizedBox(height: 8),
+                    for (final ProductItem item in recentOrders)
+                      ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        leading: ClipRRect(
+                          borderRadius: BorderRadius.circular(14),
+                          child: Image.network(
+                            item.imageUrl,
+                            width: 54,
+                            height: 54,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        title: Text(
+                          item.titlePtBr,
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                        subtitle: Text(
+                          'Abrir detalhes da oferta',
+                          style: TextStyle(
+                            color: Colors.white.withValues(alpha: 0.55),
+                          ),
+                        ),
+                        trailing: TextButton(
+                          onPressed: () => widget.onOpenItem(item),
+                          child: const Text('Detalhes'),
+                        ),
+                      ),
+                  ],
                 ],
               ),
             );
@@ -10168,7 +10717,7 @@ class _ClientAreaScreen extends StatelessWidget {
                     children: <Widget>[
                       Expanded(
                         child: ElevatedButton.icon(
-                          onPressed: onOpenChat,
+                          onPressed: widget.onOpenChat,
                           icon: const Icon(Icons.support_agent_rounded),
                           label: const Text('Abrir suporte'),
                         ),
@@ -10198,6 +10747,103 @@ class _ClientAreaScreen extends StatelessWidget {
           },
         ),
       ],
+    );
+  }
+}
+
+class _PurchaseTrackingTile extends StatelessWidget {
+  const _PurchaseTrackingTile({required this.purchase});
+
+  final ProductPurchase purchase;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.05),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              if (purchase.imageUrl.trim().isNotEmpty)
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Image.network(
+                    purchase.imageUrl,
+                    width: 52,
+                    height: 52,
+                    fit: BoxFit.cover,
+                  ),
+                )
+              else
+                const Icon(Icons.inventory_2_rounded, color: ValleyBrandColors.cyan),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      purchase.title,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.titleSmall?.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Rastreio ${purchase.trackingCode} • ${purchase.trackingEta}',
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: Colors.white.withValues(alpha: 0.62),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          _MetaPill(
+            icon: Icons.local_shipping_rounded,
+            label: purchase.trackingLabel,
+          ),
+          const SizedBox(height: 10),
+          for (final Map<String, dynamic> event
+              in purchase.trackingEvents.take(4))
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  const Icon(
+                    Icons.circle,
+                    size: 8,
+                    color: ValleyBrandColors.cyan,
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      '${event['label'] ?? 'Atualização'}: ${event['detail'] ?? ''}',
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: Colors.white.withValues(alpha: 0.68),
+                        height: 1.35,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+        ],
+      ),
     );
   }
 }

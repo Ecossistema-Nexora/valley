@@ -58,6 +58,7 @@ MERCADOPAGO_NOTIFICATIONS_PATH = RUNTIME_DIR / "valley-mercadopago-notifications
 MERCADOPAGO_NOTIFICATIONS_LATEST_PATH = RUNTIME_DIR / "valley-mercadopago-notification-latest.json"
 MERCADOPAGO_PREFERENCES_PATH = RUNTIME_DIR / "valley-mercadopago-preferences.jsonl"
 MERCADOPAGO_CHECKOUT_ATTEMPTS_PATH = RUNTIME_DIR / "valley-mercadopago-checkout-attempts.jsonl"
+SUPPLIER_ORDERS_PATH = RUNTIME_DIR / "valley-supplier-orders.jsonl"
 MERCADOPAGO_STATUS_PATH = RUNTIME_DIR / "valley-mercadopago-status.json"
 MERCADOLIVRE_NOTIFICATIONS_PATH = RUNTIME_DIR / "valley-mercadolivre-notifications.jsonl"
 MERCADOLIVRE_NOTIFICATIONS_LATEST_PATH = RUNTIME_DIR / "valley-mercadolivre-notification-latest.json"
@@ -780,6 +781,16 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             self._write_json(HTTPStatus.OK, self._me_identity_score_payload(auth_user))
             return
 
+        if route == "/api/me/purchases":
+            auth_user, auth_session = self._resolve_active_auth_session(scope="product")
+            self._write_json(HTTPStatus.OK, self._me_purchases_payload(auth_user, auth_session))
+            return
+
+        if route == "/api/me/notifications":
+            auth_user, auth_session = self._resolve_active_auth_session(scope="product")
+            self._write_json(HTTPStatus.OK, self._me_notifications_payload(auth_user, auth_session))
+            return
+
         if route == "/api/product-shell":
             self._write_json(HTTPStatus.OK, self._product_shell_payload())
             return
@@ -985,6 +996,13 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             self._write_json(
                 HTTPStatus.OK,
                 self._open_media_payload(query),
+            )
+            return
+
+        if route == "/api/actions/shipping-quote":
+            self._write_json(
+                HTTPStatus.OK,
+                self._shipping_quote_payload(query),
             )
             return
 
@@ -1325,11 +1343,22 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
 
     def _auth_public_user(self, user: dict[str, Any]) -> dict[str, Any]:
         merchant_profile = user.get("merchant_profile") if isinstance(user.get("merchant_profile"), dict) else None
+        profile = user.get("profile") if isinstance(user.get("profile"), dict) else {}
+        default_address = (
+            user.get("default_delivery_address")
+            if isinstance(user.get("default_delivery_address"), dict)
+            else profile.get("default_delivery_address")
+            if isinstance(profile.get("default_delivery_address"), dict)
+            else {}
+        )
         return {
             "user_id": str(user.get("user_id") or ""),
             "full_name": str(user.get("full_name") or ""),
             "display_name": str(user.get("display_name") or user.get("full_name") or ""),
             "email": str(user.get("email") or ""),
+            "cpf": str(user.get("document_number") or "") if str(user.get("document_type") or "").upper() == "CPF" else "",
+            "phone": str(profile.get("phone") or user.get("phone") or ""),
+            "default_delivery_address": default_address,
             "primary_role": str(user.get("primary_role") or "CUSTOMER"),
             "user_kind": str(user.get("user_kind") or "PF"),
             "account_status": str(user.get("account_status") or "ACTIVE"),
@@ -2893,6 +2922,19 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
         email = self._normalize_auth_identifier(payload.get("email"))
         password = str(payload.get("password") or "")
         role = str(payload.get("role") or "CUSTOMER").strip().upper()
+        cpf = re.sub(r"\D+", "", str(payload.get("cpf") or payload.get("document_number") or ""))
+        phone = re.sub(r"[^\d+]+", "", str(payload.get("phone") or ""))
+        default_delivery_address = {
+            "recipient_name": full_name,
+            "postal_code": re.sub(r"\D+", "", str(payload.get("postal_code") or "")),
+            "street": str(payload.get("street") or payload.get("address_line1") or "").strip(),
+            "number": str(payload.get("number") or "").strip(),
+            "complement": str(payload.get("complement") or "").strip(),
+            "neighborhood": str(payload.get("neighborhood") or "").strip(),
+            "city": str(payload.get("city") or "").strip(),
+            "state": str(payload.get("state") or "").strip().upper(),
+            "country": "BR",
+        }
         if role not in {"CUSTOMER", "MERCHANT"}:
             role = "CUSTOMER"
 
@@ -2901,6 +2943,13 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 "status": "validation_error",
                 "service": "valley-auth",
                 "detail": "Informe nome, email valido e senha com ao menos 8 caracteres.",
+            }
+        required_address_fields = ("postal_code", "street", "number", "neighborhood", "city", "state")
+        if len(cpf) != 11 or any(not default_delivery_address[field] for field in required_address_fields):
+            return HTTPStatus.BAD_REQUEST, {
+                "status": "validation_error",
+                "service": "valley-auth",
+                "detail": "Informe CPF e endereco completo de entrega.",
             }
 
         runtime = self._auth_runtime_payload()
@@ -2937,8 +2986,10 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             "display_name": display_name or full_name,
             "email": email,
             "document_country": "BR",
-            "document_type": "EMAIL_LOGIN",
-            "document_number": email,
+            "document_type": "CPF",
+            "document_number": cpf,
+            "phone": phone,
+            "default_delivery_address": default_delivery_address,
             "primary_role": role,
             "module_tier": "PRODUCT",
             "permissions": [],
@@ -2963,7 +3014,11 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 "profile_status": "ACTIVE",
                 "username": self._slugify(display_name or full_name),
                 "display_handle": display_name or full_name,
-                "preferences_json": {},
+                "phone": phone,
+                "default_delivery_address": default_delivery_address,
+                "preferences_json": {
+                    "default_delivery_address": default_delivery_address,
+                },
                 "onboarding_completed_at": None,
             },
             "merchant_profile": merchant_profile,
@@ -3652,6 +3707,221 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             if source_item_id.startswith("MLB"):
                 return f"https://lista.mercadolivre.com.br/{source_item_id}"
         return ""
+
+    def _normalize_delivery_address(self, value: Any, auth_user: dict[str, Any] | None = None) -> dict[str, str]:
+        delivery_address = value if isinstance(value, dict) else {}
+        return {
+            "recipient_name": str(delivery_address.get("recipient_name") or (auth_user or {}).get("full_name") or "").strip(),
+            "postal_code": re.sub(r"\D+", "", str(delivery_address.get("postal_code") or "")),
+            "street": str(delivery_address.get("street") or "").strip(),
+            "number": str(delivery_address.get("number") or "").strip(),
+            "complement": str(delivery_address.get("complement") or "").strip(),
+            "neighborhood": str(delivery_address.get("neighborhood") or "").strip(),
+            "city": str(delivery_address.get("city") or "").strip(),
+            "state": str(delivery_address.get("state") or "").strip().upper(),
+            "country": "BR",
+        }
+
+    def _delivery_address_complete(self, delivery_address: dict[str, str]) -> bool:
+        required_fields = ("recipient_name", "postal_code", "street", "number", "neighborhood", "city", "state")
+        return all(bool(str(delivery_address.get(field) or "").strip()) for field in required_fields)
+
+    def _base_shipping_cost_brl(self, item: dict[str, Any]) -> float:
+        checkout = item.get("checkout") if isinstance(item.get("checkout"), dict) else {}
+        for candidate in (
+            checkout.get("shipping_brl"),
+            item.get("shipping_brl"),
+            item.get("freight_brl"),
+            item.get("supplier_shipping_brl"),
+        ):
+            try:
+                value = float(candidate)
+            except (TypeError, ValueError):
+                continue
+            if value >= 0:
+                return round(value, 2)
+
+        provider_key = str(item.get("provider_key") or "").strip().lower()
+        if provider_key == "mercado_livre":
+            return 24.90
+        if provider_key == "cjdropshipping":
+            return 39.90
+        if provider_key in {"magalu", "aliexpress"}:
+            return 29.90
+        return 19.90
+
+    def _supplier_shipping_quote(self, item: dict[str, Any], delivery_address: dict[str, str]) -> dict[str, Any]:
+        provider_key = str(item.get("provider_key") or "catalog").strip().lower()
+        checkout = item.get("checkout") if isinstance(item.get("checkout"), dict) else {}
+        price_brl = round(float(item.get("price_brl") or 0), 2)
+        state = str(delivery_address.get("state") or "").upper()
+        postal_code = str(delivery_address.get("postal_code") or "")
+        base_shipping = self._base_shipping_cost_brl(item)
+        supplier_free_shipping = bool(item.get("shipping_free") or checkout.get("shipping_free"))
+        free_threshold = float(checkout.get("free_shipping_threshold_brl") or 0)
+        if free_threshold <= 0:
+            free_threshold = 199.0 if provider_key in {"mercado_livre", "magalu"} else 299.0
+
+        remote_states = {"AC", "AM", "AP", "PA", "RO", "RR", "TO"}
+        multiplier = 1.0
+        if state in remote_states:
+            multiplier = 1.35
+        elif state and state not in {"SP", "RJ", "MG", "ES", "PR", "SC", "RS"}:
+            multiplier = 1.18
+        if postal_code.startswith(("69", "68")):
+            multiplier = max(multiplier, 1.45)
+
+        shipping_cost = 0.0 if supplier_free_shipping or price_brl >= free_threshold else round(base_shipping * multiplier, 2)
+        amount_to_free = max(0.0, round(free_threshold - price_brl, 2))
+        eta = str(checkout.get("eta") or ("3 a 7 dias úteis" if provider_key == "cjdropshipping" else "2 a 5 dias úteis"))
+        suggestions: list[dict[str, Any]] = []
+        if shipping_cost > 0 and amount_to_free > 0:
+            suggestions.append(
+                {
+                    "type": "free_shipping_threshold",
+                    "title": "Adicionar itens para isencao de frete",
+                    "detail": f"O fornecedor recomenda completar R$ {amount_to_free:.2f} em produtos elegiveis para tentar frete gratis.",
+                    "amount_to_qualify_brl": amount_to_free,
+                }
+            )
+        if shipping_cost > 0 and state in remote_states:
+            suggestions.append(
+                {
+                    "type": "regional_consolidation",
+                    "title": "Consolidar envio",
+                    "detail": "Para este destino, o fornecedor recomenda consolidar itens no mesmo pedido para reduzir custo logistico por unidade.",
+                }
+            )
+
+        return {
+            "provider_key": provider_key,
+            "supplier_name": str(item.get("supplier_name") or provider_key or "Fornecedor integrado"),
+            "quote_source": "supplier_runtime_base",
+            "consulted_at_utc": utc_now_iso(),
+            "delivery_state": state,
+            "shipping_cost_brl": shipping_cost,
+            "shipping_passthrough_brl": shipping_cost,
+            "free_shipping_threshold_brl": round(free_threshold, 2),
+            "amount_to_free_shipping_brl": amount_to_free,
+            "eta": eta,
+            "suggestions": suggestions,
+            "policy": "Frete do fornecedor repassado integralmente ao comprador no checkout.",
+        }
+
+    def _shipping_quote_payload(self, query: dict[str, list[str]]) -> dict[str, Any]:
+        payload = self._read_json_body()
+        payload = payload if isinstance(payload, dict) else {}
+        item_id = (query.get("item_id") or [""])[0]
+        item = self._find_catalog_item(item_id)
+        auth_user, _auth_session = self._resolve_active_auth_session(scope="product")
+        delivery_address = self._normalize_delivery_address(payload.get("delivery_address"), auth_user)
+        if item is None:
+            return {"status": "failed", "action": "shipping-quote", "payload": {"message": "Item indisponivel para cotacao de frete."}}
+        if not self._delivery_address_complete(delivery_address):
+            return {"status": "failed", "action": "shipping-quote", "payload": {"message": "Informe endereco completo para consultar o frete do fornecedor."}}
+
+        quote = self._supplier_shipping_quote(item, delivery_address)
+        return {
+            "status": "ok",
+            "action": "shipping-quote",
+            "payload": {
+                "message": "Frete consultado na base do fornecedor.",
+                "delivery_address": delivery_address,
+                "shipping_quote": quote,
+            },
+        }
+
+    def _me_purchases_payload(
+        self,
+        auth_user: dict[str, Any] | None,
+        auth_session: dict[str, Any] | None,
+    ) -> dict[str, Any]:
+        user_id = str((auth_user or {}).get("user_id") or "")
+        session_id = str((auth_session or {}).get("session_id") or "")
+        orders = []
+        for order in load_jsonl_tail(SUPPLIER_ORDERS_PATH, limit=80):
+            if not isinstance(order, dict):
+                continue
+            user_context = order.get("user_context") if isinstance(order.get("user_context"), dict) else {}
+            if user_id and str(user_context.get("user_id") or "") not in {"", user_id}:
+                continue
+            if not user_id and session_id and str(user_context.get("session_id") or "") not in {"", session_id}:
+                continue
+            item = self._find_catalog_item(str(order.get("item_id") or "")) or {}
+            shipping_quote = order.get("shipping_quote") if isinstance(order.get("shipping_quote"), dict) else {}
+            tracking = order.get("tracking") if isinstance(order.get("tracking"), dict) else {}
+            if not tracking:
+                tracking = {
+                    "tracking_code": str(order.get("tracking_code") or f"VALLEY-{str(order.get('supplier_order_id') or '')[:8].upper()}"),
+                    "status": "payment_pending",
+                    "status_label": "Pedido criado",
+                    "eta": str(shipping_quote.get("eta") or "Prazo do fornecedor"),
+                    "events": [
+                        {
+                            "label": "Compra recebida",
+                            "detail": "Pedido criado no Valley e aguardando confirmacao do pagamento.",
+                            "occurred_at_utc": str(order.get("created_at_utc") or ""),
+                        }
+                    ],
+                }
+            orders.append(
+                {
+                    "purchase_id": str(order.get("supplier_order_id") or ""),
+                    "item_id": str(order.get("item_id") or ""),
+                    "title": str(item.get("title") or item.get("title_pt_br") or "Compra Valley"),
+                    "image_url": str(item.get("image_url") or ""),
+                    "price_brl": float(item.get("price_brl") or 0),
+                    "shipping_cost_brl": float(order.get("shipping_cost_brl") or shipping_quote.get("shipping_passthrough_brl") or 0),
+                    "provider_key": str(order.get("provider_key") or ""),
+                    "customer_visible_supplier_name": str(order.get("customer_visible_supplier_name") or "Valley"),
+                    "created_at_utc": str(order.get("created_at_utc") or ""),
+                    "status": str(order.get("status") or "payment_pending"),
+                    "ship_to": order.get("ship_to") if isinstance(order.get("ship_to"), dict) else {},
+                    "shipping_quote": shipping_quote,
+                    "tracking": tracking,
+                }
+            )
+        return {
+            "status": "ok",
+            "service": "valley-purchases",
+            "purchases": list(reversed(orders)),
+        }
+
+    def _me_notifications_payload(
+        self,
+        auth_user: dict[str, Any] | None,
+        auth_session: dict[str, Any] | None,
+    ) -> dict[str, Any]:
+        purchases = self._me_purchases_payload(auth_user, auth_session).get("purchases", [])
+        notifications: list[dict[str, Any]] = []
+        for purchase in purchases if isinstance(purchases, list) else []:
+            if not isinstance(purchase, dict):
+                continue
+            tracking = purchase.get("tracking") if isinstance(purchase.get("tracking"), dict) else {}
+            events = tracking.get("events") if isinstance(tracking.get("events"), list) else []
+            for event in events:
+                if not isinstance(event, dict):
+                    continue
+                notifications.append(
+                    {
+                        "notification_id": f"{purchase.get('purchase_id')}::{event.get('label')}::{event.get('occurred_at_utc')}",
+                        "kind": "delivery_status",
+                        "title": str(event.get("label") or tracking.get("status_label") or "Atualizacao da entrega"),
+                        "body": str(event.get("detail") or f"Sua compra {purchase.get('title')} teve uma atualizacao de entrega."),
+                        "purchase_id": str(purchase.get("purchase_id") or ""),
+                        "item_id": str(purchase.get("item_id") or ""),
+                        "tracking_code": str(tracking.get("tracking_code") or ""),
+                        "occurred_at_utc": str(event.get("occurred_at_utc") or purchase.get("created_at_utc") or ""),
+                        "status": str(tracking.get("status") or purchase.get("status") or ""),
+                        "read": False,
+                    }
+                )
+        notifications.sort(key=lambda item: str(item.get("occurred_at_utc") or ""), reverse=True)
+        return {
+            "status": "ok",
+            "service": "valley-notifications",
+            "notifications": notifications,
+        }
 
     def _compact_product_shell_payload(self, payload: dict[str, Any]) -> dict[str, Any]:
         """Mantem a API leve e alinhada ao MVP para mobile e tunel remoto."""
@@ -4765,6 +5035,10 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
         public_url = str(runtime.get("public_url") or "").strip()
         if public_url:
             return public_url.rstrip("/")
+        product_runtime = load_json_file(PRODUCT_PUBLIC_RUNTIME_PATH) or {}
+        product_public_url = str(product_runtime.get("public_url") or "").strip()
+        if product_public_url:
+            return re.sub(r"/product/?$", "", product_public_url.rstrip("/"))
         return "https://admin.brasildesconto.com.br"
 
     def _provider_secrets_payload(self) -> dict[str, Any]:
@@ -5281,7 +5555,12 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
 
-    def _create_mercadopago_preference(self, item: dict[str, Any]) -> dict[str, Any]:
+    def _create_mercadopago_preference(
+        self,
+        item: dict[str, Any],
+        *,
+        shipping_quote: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
         access_token = self._mercadopago_access_token()
         if not access_token:
             return {
@@ -5300,17 +5579,31 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 "detail": "Item sem identificador, título ou preço válido para checkout.",
             }
 
-        payload = {
-            "items": [
+        shipping_cost_brl = round(float((shipping_quote or {}).get("shipping_passthrough_brl") or 0), 2)
+        payload_items = [
+            {
+                "id": item_id,
+                "title": title,
+                "description": description or title,
+                "quantity": 1,
+                "currency_id": "BRL",
+                "unit_price": price_brl,
+            }
+        ]
+        if shipping_cost_brl > 0:
+            payload_items.append(
                 {
-                    "id": item_id,
-                    "title": title,
-                    "description": description or title,
+                    "id": f"{item_id}-shipping",
+                    "title": "Frete fornecedor Valley",
+                    "description": "Custo de frete consultado na base do fornecedor e repassado ao comprador.",
                     "quantity": 1,
                     "currency_id": "BRL",
-                    "unit_price": price_brl,
+                    "unit_price": shipping_cost_brl,
                 }
-            ],
+            )
+
+        payload = {
+            "items": payload_items,
             "external_reference": item_id,
             "statement_descriptor": "VALLEY",
             "auto_return": "approved",
@@ -5324,6 +5617,8 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 "item_id": item_id,
                 "module_id": str(item.get("module_id") or "STOCK"),
                 "surface": "valley_stock",
+                "shipping_cost_brl": shipping_cost_brl,
+                "shipping_quote_source": str((shipping_quote or {}).get("quote_source") or ""),
             },
         }
         if self._is_http_url(picture_url):
@@ -6659,14 +6954,37 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
         }
 
     def _checkout_payload(self, query: dict[str, list[str]]) -> dict[str, Any]:
+        payload = self._read_json_body()
+        payload = payload if isinstance(payload, dict) else {}
         item_id = (query.get("item_id") or [""])[0]
         item = self._find_catalog_item(item_id)
         auth_user, auth_session = self._resolve_active_auth_session(scope="product")
+        profile_address = (
+            auth_user.get("default_delivery_address")
+            if isinstance((auth_user or {}).get("default_delivery_address"), dict)
+            else {}
+        )
+        delivery_address = (
+            payload.get("delivery_address")
+            if isinstance(payload.get("delivery_address"), dict)
+            else {}
+        )
+        if not delivery_address and profile_address:
+            delivery_address = profile_address
+        delivery_address = self._normalize_delivery_address(delivery_address, auth_user)
         attempt = {
             "provider": "mercado_pago",
             "attempted_at_utc": utc_now_iso(),
             "item_id": item_id,
             "module": "PAY",
+            "delivery_address": delivery_address,
+            "delivery_address_source": str(payload.get("delivery_address_source") or "customer_profile"),
+            "white_label": {
+                "brand_name": "Valley",
+                "shipping_label_logo": "Valley",
+                "hide_original_supplier_name": True,
+                "supplier_branding_policy": "valley_only_when_provider_allows",
+            },
             "user_context": {
                 "user_id": str((auth_user or {}).get("user_id") or ""),
                 "session_id": str((auth_session or {}).get("session_id") or ""),
@@ -6702,25 +7020,83 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             )
             return result
 
+        if not self._delivery_address_complete(delivery_address):
+            result = {
+                "status": "failed",
+                "action": "checkout",
+                "payload": {
+                    "message": "Informe o endereco completo de entrega antes do pagamento.",
+                },
+            }
+            attempt.update({
+                "status": "failed",
+                "detail": result["payload"]["message"],
+                "result": result["payload"],
+            })
+            self._append_jsonl(MERCADOPAGO_CHECKOUT_ATTEMPTS_PATH, attempt)
+            return result
+
+        shipping_quote = self._supplier_shipping_quote(item, delivery_address)
+        supplier_order = {
+            "supplier_order_id": str(uuid.uuid4()),
+            "item_id": item_id,
+            "provider_key": str(item.get("provider_key") or ""),
+            "source_product_id": str(item.get("source_product_id") or item.get("source_item_id") or ""),
+            "quantity": 1,
+            "user_context": attempt["user_context"],
+            "ship_to": delivery_address,
+            "shipping_quote": shipping_quote,
+            "shipping_cost_brl": shipping_quote["shipping_passthrough_brl"],
+            "tracking": {
+                "tracking_code": f"VALLEY-{str(uuid.uuid4())[:8].upper()}",
+                "status": "payment_pending",
+                "status_label": "Pedido criado",
+                "eta": str(shipping_quote.get("eta") or "Prazo do fornecedor"),
+                "events": [
+                    {
+                        "label": "Compra recebida",
+                        "detail": "Pedido criado no Valley e aguardando confirmacao do pagamento.",
+                        "occurred_at_utc": utc_now_iso(),
+                    },
+                    {
+                        "label": "Aguardando coleta na origem",
+                        "detail": "Assim que o fornecedor informar coleta, saida da cidade de origem, chegada ao centro de distribuicao, rota de entrega ou entrega concluida, o Valley mostrara aqui e notificara o usuario.",
+                        "occurred_at_utc": utc_now_iso(),
+                    },
+                ],
+            },
+            "white_label": attempt["white_label"],
+            "customer_visible_supplier_name": "Valley",
+            "created_at_utc": utc_now_iso(),
+            "status": "payment_pending",
+        }
+
+        attempt["shipping_quote"] = shipping_quote
+        success_message = f"Parabens pela compra de {item.get('title') or 'sua oferta'}! O frete do fornecedor ja foi incluido no checkout."
         if self._mercadopago_checkout_ready(item):
-            mercadopago_result = self._create_mercadopago_preference(item)
+            mercadopago_result = self._create_mercadopago_preference(item, shipping_quote=shipping_quote)
             if mercadopago_result.get("status") == "ok":
                 result = {
                     "status": "ok",
                     "action": "checkout",
                     "payload": {
-                        "message": "Abrindo checkout seguro do Valley com Mercado Pago.",
+                        "message": success_message,
                         "url": mercadopago_result.get("url"),
                         "provider": "mercado_pago",
                         "preference_id": mercadopago_result.get("preference_id"),
+                        "delivery_address": delivery_address,
+                        "shipping_quote": shipping_quote,
+                        "supplier_order": supplier_order,
                     },
                 }
                 attempt.update({
                     "status": "ok",
                     "detail": "Preferencia Mercado Pago criada com sucesso.",
                     "result": result["payload"],
+                    "supplier_order": supplier_order,
                 })
                 self._append_jsonl(MERCADOPAGO_CHECKOUT_ATTEMPTS_PATH, attempt)
+                self._append_jsonl(SUPPLIER_ORDERS_PATH, supplier_order)
                 self._append_user_module_trail(
                     user=auth_user,
                     session=auth_session,
@@ -6748,7 +7124,7 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
         if not checkout_url:
             mercadopago_detail = ""
             if self._mercadopago_access_token():
-                mercadopago_result = self._create_mercadopago_preference(item)
+                mercadopago_result = self._create_mercadopago_preference(item, shipping_quote=shipping_quote)
                 mercadopago_detail = str(mercadopago_result.get("detail") or "").strip()
             result = {
                 "status": "failed",
@@ -6783,17 +7159,22 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             "status": "ok",
             "action": "checkout",
             "payload": {
-                "message": "Abrindo pagamento protegido da oferta.",
+                "message": success_message,
                 "url": checkout_url,
                 "provider": "mercado_livre",
+                "delivery_address": delivery_address,
+                "shipping_quote": shipping_quote,
+                "supplier_order": supplier_order,
             },
         }
         attempt.update({
             "status": "ok",
             "detail": "Fallback de checkout externo utilizado.",
             "result": result["payload"],
+            "supplier_order": supplier_order,
         })
         self._append_jsonl(MERCADOPAGO_CHECKOUT_ATTEMPTS_PATH, attempt)
+        self._append_jsonl(SUPPLIER_ORDERS_PATH, supplier_order)
         self._append_user_module_trail(
             user=auth_user,
             session=auth_session,

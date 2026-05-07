@@ -29,7 +29,7 @@ New-Item -ItemType Directory -Path $RuntimeDir -Force | Out-Null
 
 function Write-Step {
     param([string]$Message)
-    Write-Output ("[valley-admin-public] {0}" -f $Message)
+    Write-Host ("[valley-admin-public] {0}" -f $Message)
 }
 
 function Prepare-LogPath {
@@ -417,7 +417,7 @@ if (-not [string]::IsNullOrWhiteSpace($CloudflaredToken) -and -not [string]::IsN
         }
     } while ((Get-Date) -lt $Deadline)
 
-    throw "Cloudflare named tunnel nao respondeu em $PublicBaseUrl/healthz"
+    Write-Step ("Cloudflare named tunnel indisponivel em {0}; tentando Quick Tunnel." -f $PublicBaseUrl)
 }
 
 Write-Step ("Subindo Cloudflare Quick Tunnel -> {0}" -f $LocalBaseUrl)

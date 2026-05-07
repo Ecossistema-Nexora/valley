@@ -271,6 +271,9 @@ class ProductAuthUser {
     required this.fullName,
     required this.displayName,
     required this.email,
+    required this.cpf,
+    required this.phone,
+    required this.defaultDeliveryAddress,
     required this.primaryRole,
     required this.userKind,
     required this.accountStatus,
@@ -286,6 +289,15 @@ class ProductAuthUser {
       fullName: json['full_name'] as String? ?? '',
       displayName: json['display_name'] as String? ?? '',
       email: json['email'] as String? ?? '',
+      cpf: json['cpf'] as String? ?? '',
+      phone: json['phone'] as String? ?? '',
+      defaultDeliveryAddress:
+          (json['default_delivery_address'] as Map<dynamic, dynamic>? ??
+                  const <dynamic, dynamic>{})
+              .map(
+                (dynamic key, dynamic value) =>
+                    MapEntry(key.toString(), value.toString()),
+              ),
       primaryRole: json['primary_role'] as String? ?? 'CUSTOMER',
       userKind: json['user_kind'] as String? ?? 'PF',
       accountStatus: json['account_status'] as String? ?? 'ACTIVE',
@@ -302,6 +314,9 @@ class ProductAuthUser {
   final String fullName;
   final String displayName;
   final String email;
+  final String cpf;
+  final String phone;
+  final Map<String, String> defaultDeliveryAddress;
   final String primaryRole;
   final String userKind;
   final String accountStatus;
@@ -390,6 +405,7 @@ class ProductActionResult {
     required this.action,
     required this.message,
     required this.url,
+    required this.payload,
   });
 
   final bool ok;
@@ -397,6 +413,61 @@ class ProductActionResult {
   final String action;
   final String message;
   final String url;
+  final Map<String, dynamic> payload;
+}
+
+class ProductPurchase {
+  const ProductPurchase({
+    required this.purchaseId,
+    required this.itemId,
+    required this.title,
+    required this.imageUrl,
+    required this.priceBrl,
+    required this.shippingCostBrl,
+    required this.status,
+    required this.createdAtUtc,
+    required this.trackingCode,
+    required this.trackingLabel,
+    required this.trackingEta,
+    required this.trackingEvents,
+  });
+
+  factory ProductPurchase.fromJson(Map<String, dynamic> json) {
+    final Map<String, dynamic> tracking =
+        (json['tracking'] as Map<dynamic, dynamic>? ?? const <dynamic, dynamic>{})
+            .cast<String, dynamic>();
+    return ProductPurchase(
+      purchaseId: json['purchase_id'] as String? ?? '',
+      itemId: json['item_id'] as String? ?? '',
+      title: json['title'] as String? ?? 'Compra Valley',
+      imageUrl: json['image_url'] as String? ?? '',
+      priceBrl: (json['price_brl'] as num?)?.toDouble() ?? 0,
+      shippingCostBrl: (json['shipping_cost_brl'] as num?)?.toDouble() ?? 0,
+      status: json['status'] as String? ?? '',
+      createdAtUtc: json['created_at_utc'] as String? ?? '',
+      trackingCode: tracking['tracking_code'] as String? ?? '',
+      trackingLabel: tracking['status_label'] as String? ?? 'Pedido criado',
+      trackingEta: tracking['eta'] as String? ?? 'Prazo do fornecedor',
+      trackingEvents:
+          (tracking['events'] as List<dynamic>? ?? const <dynamic>[])
+              .whereType<Map<dynamic, dynamic>>()
+              .map((Map<dynamic, dynamic> item) => item.cast<String, dynamic>())
+              .toList(growable: false),
+    );
+  }
+
+  final String purchaseId;
+  final String itemId;
+  final String title;
+  final String imageUrl;
+  final double priceBrl;
+  final double shippingCostBrl;
+  final String status;
+  final String createdAtUtc;
+  final String trackingCode;
+  final String trackingLabel;
+  final String trackingEta;
+  final List<Map<String, dynamic>> trackingEvents;
 }
 
 class HomePreferences {

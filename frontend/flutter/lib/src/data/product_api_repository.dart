@@ -148,11 +148,12 @@ class ProductApiRepository {
   Future<ProductActionResult> invokePath({
     required String baseUrl,
     required String path,
+    Map<String, dynamic> body = const <String, dynamic>{},
   }) async {
     final String resolvedBaseUrl = await _resolveInteractiveBaseUrl(baseUrl);
     final Uri uri = Uri.parse('$resolvedBaseUrl$path');
     final http.Response response = await http
-        .post(uri, headers: await _defaultHeaders())
+        .post(uri, headers: await _defaultHeaders(), body: jsonEncode(body))
         .timeout(const Duration(seconds: 20));
 
     final Map<String, dynamic> json =
@@ -172,6 +173,7 @@ class ProductApiRepository {
       action: json['action'] as String? ?? '',
       message: payload['message'] as String? ?? status,
       url: payload['url'] as String? ?? '',
+      payload: payload,
     );
   }
 
@@ -182,6 +184,9 @@ class ProductApiRepository {
     required String email,
     required String password,
     required String role,
+    required String cpf,
+    required String phone,
+    required Map<String, String> defaultDeliveryAddress,
   }) async {
     final String resolvedBaseUrl = await _resolveInteractiveBaseUrl(baseUrl);
     final http.Response response = await http
@@ -194,6 +199,15 @@ class ProductApiRepository {
             'email': email,
             'password': password,
             'role': role,
+            'cpf': cpf,
+            'phone': phone,
+            'postal_code': defaultDeliveryAddress['postal_code'] ?? '',
+            'street': defaultDeliveryAddress['street'] ?? '',
+            'number': defaultDeliveryAddress['number'] ?? '',
+            'complement': defaultDeliveryAddress['complement'] ?? '',
+            'neighborhood': defaultDeliveryAddress['neighborhood'] ?? '',
+            'city': defaultDeliveryAddress['city'] ?? '',
+            'state': defaultDeliveryAddress['state'] ?? '',
           }),
         )
         .timeout(const Duration(seconds: 20));
@@ -357,6 +371,45 @@ class ProductApiRepository {
         (jsonDecode(utf8.decode(response.bodyBytes)) as Map<dynamic, dynamic>)
             .cast<String, dynamic>();
     return IdentityScoreData.fromJson(json);
+  }
+
+  Future<List<ProductPurchase>> loadPurchases({String baseUrl = ''}) async {
+    final String resolvedBaseUrl = await _resolveInteractiveBaseUrl(baseUrl);
+    final http.Response response = await http
+        .get(
+          Uri.parse('$resolvedBaseUrl/api/me/purchases'),
+          headers: await _defaultHeaders(),
+        )
+        .timeout(const Duration(seconds: 20));
+    final Map<String, dynamic> json =
+        (jsonDecode(utf8.decode(response.bodyBytes)) as Map<dynamic, dynamic>)
+            .cast<String, dynamic>();
+    return (json['purchases'] as List<dynamic>? ?? const <dynamic>[])
+        .whereType<Map<dynamic, dynamic>>()
+        .map(
+          (Map<dynamic, dynamic> item) =>
+              ProductPurchase.fromJson(item.cast<String, dynamic>()),
+        )
+        .toList(growable: false);
+  }
+
+  Future<List<Map<String, dynamic>>> loadNotifications({
+    String baseUrl = '',
+  }) async {
+    final String resolvedBaseUrl = await _resolveInteractiveBaseUrl(baseUrl);
+    final http.Response response = await http
+        .get(
+          Uri.parse('$resolvedBaseUrl/api/me/notifications'),
+          headers: await _defaultHeaders(),
+        )
+        .timeout(const Duration(seconds: 20));
+    final Map<String, dynamic> json =
+        (jsonDecode(utf8.decode(response.bodyBytes)) as Map<dynamic, dynamic>)
+            .cast<String, dynamic>();
+    return (json['notifications'] as List<dynamic>? ?? const <dynamic>[])
+        .whereType<Map<dynamic, dynamic>>()
+        .map((Map<dynamic, dynamic> item) => item.cast<String, dynamic>())
+        .toList(growable: false);
   }
 
   Future<HomePreferences> saveHomePreferences({
@@ -833,18 +886,30 @@ class ProductApiRepository {
 
   Future<String> _resolveInteractiveBaseUrl(String preferredBaseUrl) async {
     final String normalized = _normalizeBaseUrl(preferredBaseUrl);
-    if (normalized.startsWith('http')) {
+    if (normalized.startsWith('http') && !_isLocalBaseUrl(normalized)) {
       return normalized;
     }
     final List<String> candidates = await _candidateBaseUrls();
     for (final String candidate in candidates) {
-      if (candidate.startsWith('http')) {
+      if (candidate.startsWith('http') && !_isLocalBaseUrl(candidate)) {
         return candidate;
       }
+    }
+    if (normalized.startsWith('http')) {
+      return normalized;
     }
     throw StateError(
       'Nenhuma base URL HTTP disponível para autenticação Valley.',
     );
+  }
+
+  bool _isLocalBaseUrl(String value) {
+    final Uri? uri = Uri.tryParse(value);
+    final String host = uri?.host.toLowerCase() ?? '';
+    return host == 'localhost' ||
+        host == '127.0.0.1' ||
+        host == '10.0.2.2' ||
+        host.startsWith('192.168.');
   }
 
   Future<Map<String, String>> _defaultHeaders({String? tokenOverride}) async {
