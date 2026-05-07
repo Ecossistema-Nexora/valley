@@ -19,6 +19,7 @@ $TunnelOutLog = Join-Path $RuntimeDir 'valley-localhost-run.out.log'
 $TunnelErrLog = Join-Path $RuntimeDir 'valley-localhost-run.err.log'
 $ServeScript = Join-Path $RepoRoot 'scripts\serve_valley_admin.py'
 $TaskName = 'ValleyLocalhostRunPublicRuntime'
+$StartupShortcut = Join-Path ([Environment]::GetFolderPath('Startup')) 'ValleyLocalhostRunPublicRuntime.cmd'
 
 New-Item -ItemType Directory -Path $RuntimeDir -Force | Out-Null
 
@@ -213,6 +214,7 @@ function Write-ValleyPublicManifests {
         local_url = $LocalBaseUrl
         generated_at = $GeneratedAt
         task_name = $TaskName
+        startup_shortcut = $StartupShortcut
     }
 
     $AdminPayload | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath $AdminRuntimeManifest -Encoding UTF8
@@ -267,23 +269,33 @@ function Start-LocalhostRunTunnel {
 }
 
 function Install-RuntimeTask {
-    $Action = New-ScheduledTaskAction `
-        -Execute 'powershell.exe' `
-        -Argument ("-NoProfile -ExecutionPolicy Bypass -File `"{0}`"" -f $PSCommandPath)
-    $Trigger = New-ScheduledTaskTrigger -AtLogOn
-    $Settings = New-ScheduledTaskSettingsSet `
-        -AllowStartIfOnBatteries `
-        -DontStopIfGoingOnBatteries `
-        -RestartCount 999 `
-        -RestartInterval (New-TimeSpan -Minutes 1)
-    Register-ScheduledTask `
-        -TaskName $TaskName `
-        -Action $Action `
-        -Trigger $Trigger `
-        -Settings $Settings `
-        -Description 'Mantem o runtime publico Valley via localhost.run sem ngrok.' `
-        -Force | Out-Null
-    Write-Step ("Scheduled Task persistente instalado: {0}" -f $TaskName)
+    try {
+        $Action = New-ScheduledTaskAction `
+            -Execute 'powershell.exe' `
+            -Argument ("-NoProfile -ExecutionPolicy Bypass -File `"{0}`" -ReplaceStale" -f $PSCommandPath)
+        $Trigger = New-ScheduledTaskTrigger -AtLogOn
+        $Settings = New-ScheduledTaskSettingsSet `
+            -AllowStartIfOnBatteries `
+            -DontStopIfGoingOnBatteries `
+            -RestartCount 999 `
+            -RestartInterval (New-TimeSpan -Minutes 1)
+        Register-ScheduledTask `
+            -TaskName $TaskName `
+            -Action $Action `
+            -Trigger $Trigger `
+            -Settings $Settings `
+            -Description 'Mantem o runtime publico Valley via localhost.run sem ngrok.' `
+            -Force | Out-Null
+        Write-Step ("Scheduled Task persistente instalado: {0}" -f $TaskName)
+        return
+    } catch {
+        Write-Step ("Scheduled Task indisponivel neste usuario: {0}" -f $_.Exception.Message)
+    }
+
+    $StartupCommand = '@echo off' + [Environment]::NewLine +
+        ('powershell.exe -NoProfile -ExecutionPolicy Bypass -File "{0}" -ReplaceStale' -f $PSCommandPath) + [Environment]::NewLine
+    Set-Content -LiteralPath $StartupShortcut -Value $StartupCommand -Encoding ASCII
+    Write-Step ("Fallback persistente instalado no Startup: {0}" -f $StartupShortcut)
 }
 
 $Python = Resolve-CommandPath -Name 'python'

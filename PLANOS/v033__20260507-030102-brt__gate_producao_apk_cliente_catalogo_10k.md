@@ -33,12 +33,16 @@
 - `scripts/serve_valley_admin.py` expoe `GET /api/me/purchases` e `GET /api/me/notifications` para Minhas compras e notificacoes de alteracao de entrega.
 - `frontend/flutter/lib/src/ui/valley_product_shell.dart` mostra frete consultado, sugestoes de frete, mensagem de parabens pela compra, compartilhamento real, Minhas compras e notificacoes de rastreio.
 - Validacoes executadas: `python -m py_compile scripts\serve_valley_admin.py` e `dart analyze lib/src/data/product_api_models.dart lib/src/data/product_api_repository.dart lib/src/ui/valley_product_shell.dart` sem issues.
+- `scripts/start_valley_localhost_run_public.ps1` criado como rota publica gratuita via `localhost.run`, sem ngrok, gravando manifests persistentes em `tmp/runtime`.
+- Runtime publico ativo em `https://21c77166cdee10.lhr.life/product`; endpoints `healthz`, `api/product-shell`, `api/me/purchases` e `api/me/notifications` validados com HTTP 200.
+- `frontend/flutter/lib/src/data/product_api_repository.dart` aponta o fallback publico do APK para `https://21c77166cdee10.lhr.life` e mantem Tailscale como candidato adicional.
+- `docs/runtime/localhost_run_public_runtime.md` registra onde ficam conta, chave, dominio, logs, manifests e fallback de inicializacao.
 
 ## Bloqueios
 
-- Dominio fixo `https://admin.brasildesconto.com.br` respondeu `530` nesta sessao porque o token de named tunnel carregado esta invalido; o acesso remoto atual esta via Cloudflare Quick Tunnel.
+- Dominio fixo `https://admin.brasildesconto.com.br` respondeu `530` nesta sessao porque o token de named tunnel carregado esta invalido; o acesso remoto atual esta via `localhost.run`.
 - Catalogo 10k depende de execucao incremental e limites dos fornecedores; quando uma API limitar volume diario, o importador precisa continuar em ciclos ate completar a cobertura.
-- Cloudflare Quick Tunnel retornou `429 Too Many Requests` ao tentar renovar URL publica apos muitas tentativas; named tunnel retornou `Unauthorized: Invalid tunnel secret`. A URL publica antiga passou a responder `530`, entao APK externo ainda depende de tunnel valido ou dominio fixo com token correto.
+- Cloudflare Quick Tunnel retornou `429 Too Many Requests` ao tentar renovar URL publica apos muitas tentativas; named tunnel retornou `Unauthorized: Invalid tunnel secret`. A rota operacional foi migrada para `localhost.run`, com Tailscale mantido como alternativa de rede privada.
 
 ## Proxima Acao
 

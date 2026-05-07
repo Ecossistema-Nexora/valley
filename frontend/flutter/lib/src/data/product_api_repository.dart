@@ -13,7 +13,7 @@ class ProductApiRepository {
     defaultValue: '',
   );
   static const String _releaseBaseUrl =
-      'https://sharing-vital-nashville-folding.trycloudflare.com';
+      'https://21c77166cdee10.lhr.life';
   static const String _bundledStockRuntimeAsset =
       'assets/data/valley_stock_runtime_ptbr.json';
   static const String _sessionTokenKey = 'valley.product.auth.session.v1';
@@ -763,8 +763,10 @@ class ProductApiRepository {
     }
 
     for (final String candidate in <String>[
-      'https://sharing-vital-nashville-folding.trycloudflare.com',
-      'https://sharing-vital-nashville-folding.trycloudflare.com/product',
+      'https://21c77166cdee10.lhr.life',
+      'https://21c77166cdee10.lhr.life/product',
+      'http://valley-codex.tailb44596.ts.net:8085',
+      'http://valley-codex.tailb44596.ts.net:8085/product',
       'https://brasildesconto.com.br/product',
       'https://brasildesconto.com.br',
       'https://admin.brasildesconto.com.br/product',
