@@ -19,7 +19,7 @@
 - [ ] Remover textos de desenvolvimento/curadoria e ajustar produto/lista com titulo, descricao e valor reais do item.
 - [ ] Preparar payload white-label para fornecedor: marca Valley em etiqueta/embalagem quando API permitir e sem expor nome do fornecedor original ao cliente.
 - [ ] Alterar estrategia de importacao para catalogo 10k+: todas categorias disponiveis, paginacao incremental, cache e tratamento de rate limit.
-- [ ] Rebuildar APK ABI corrigido, validar e reenviar pelo Telegram com link publico.
+- [x] Rebuildar APK ABI corrigido, validar e reenviar pelo Telegram com link publico. Concluido em 2026-05-07 04:44:00 BRT.
 
 ## Evidencias Iniciais
 
@@ -37,6 +37,11 @@
 - Runtime publico ativo em `https://21c77166cdee10.lhr.life/product`; endpoints `healthz`, `api/product-shell`, `api/me/purchases` e `api/me/notifications` validados com HTTP 200.
 - `frontend/flutter/lib/src/data/product_api_repository.dart` aponta o fallback publico do APK para `https://21c77166cdee10.lhr.life` e mantem Tailscale como candidato adicional.
 - `docs/runtime/localhost_run_public_runtime.md` registra onde ficam conta, chave, dominio, logs, manifests e fallback de inicializacao.
+- APK Android `app-arm64-v8a-release.apk` gerado com `VALLEY_PRODUCT_API_BASE_URL=https://21c77166cdee10.lhr.life` e enviado pelo Telegram.
+- Link do painel web `https://21c77166cdee10.lhr.life/product` enviado pelo Telegram.
+- `docs/integrations/cj_api_quota_request_brief.md` criado com briefing para o ChatGPT elaborar o e-mail de aumento de quota da API CJDropshipping.
+- Incidente pos-envio: dominio anonimo `localhost.run` expirou com `no tunnel here`; runtime migrado para Tailscale IP estavel `http://100.109.240.100:8085`.
+- AndroidManifest liberado para cleartext em rede Tailscale privada e novo APK sera gerado com `VALLEY_PRODUCT_API_BASE_URL=http://100.109.240.100:8085`.
 
 ## Bloqueios
 

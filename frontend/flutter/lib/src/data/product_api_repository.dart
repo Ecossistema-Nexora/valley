@@ -13,7 +13,7 @@ class ProductApiRepository {
     defaultValue: '',
   );
   static const String _releaseBaseUrl =
-      'https://21c77166cdee10.lhr.life';
+      'http://100.109.240.100:8085';
   static const String _bundledStockRuntimeAsset =
       'assets/data/valley_stock_runtime_ptbr.json';
   static const String _sessionTokenKey = 'valley.product.auth.session.v1';
@@ -763,8 +763,8 @@ class ProductApiRepository {
     }
 
     for (final String candidate in <String>[
-      'https://21c77166cdee10.lhr.life',
-      'https://21c77166cdee10.lhr.life/product',
+      'http://100.109.240.100:8085',
+      'http://100.109.240.100:8085/product',
       'http://valley-codex.tailb44596.ts.net:8085',
       'http://valley-codex.tailb44596.ts.net:8085/product',
       'https://brasildesconto.com.br/product',

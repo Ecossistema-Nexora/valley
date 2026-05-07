@@ -1,6 +1,16 @@
-# Valley public runtime via localhost.run
+# Valley public runtime via localhost.run and Tailscale
 
-## Current route
+## Current stable route
+
+- Product URL: `http://100.109.240.100:8085/product`
+- API shell: `http://100.109.240.100:8085/api/product-shell`
+- Local API: `http://127.0.0.1:8085/api/product-shell`
+- Bootstrap script: `scripts/start_valley_tailscale_runtime.ps1`
+- Requirement: client device must be connected to the same Tailscale tailnet.
+
+Tailscale Funnel was attempted, but the account returned `your Tailscale account does not support getting TLS certs`. The stable route currently uses the private Tailscale IP instead of a public HTTPS Funnel URL.
+
+## Previous localhost.run route
 
 - Product URL: `https://21c77166cdee10.lhr.life/product`
 - API shell: `https://21c77166cdee10.lhr.life/api/product-shell`

@@ -1,21 +1,11 @@
 ﻿{
     "status":  "ok",
     "service":  "valley-admin-public",
-    "provider":  "localhost_run",
-    "public_url":  "https://21c77166cdee10.lhr.life",
+    "provider":  "tailscale",
+    "public_url":  "http://100.109.240.100:8085",
     "local_url":  "http://127.0.0.1:8085",
-    "generated_at_utc":  "2026-05-07T07:02:01Z",
-    "temporary":  true,
-    "permanence":  "persistent_localhost_run_watchdog",
+    "generated_at_utc":  "2026-05-07T07:52:29Z",
+    "temporary":  false,
     "provider_status":  "healthy",
-    "smoke_endpoints":  {
-                            "admin_data":  "https://21c77166cdee10.lhr.life/api/admin-data",
-                            "healthz":  "https://21c77166cdee10.lhr.life/healthz"
-                        },
-    "logs":  {
-                 "tunnel_stdout":  "C:\\Users\\ereta\\.codex\\worktrees\\VALLEY\\tmp\\runtime\\valley-localhost-run.out.log",
-                 "tunnel_stderr":  "C:\\Users\\ereta\\.codex\\worktrees\\VALLEY\\tmp\\runtime\\valley-localhost-run.err.log",
-                 "api_stdout":  "C:\\Users\\ereta\\.codex\\worktrees\\VALLEY\\tmp\\runtime\\valley-product-api.win.out.log",
-                 "api_stderr":  "C:\\Users\\ereta\\.codex\\worktrees\\VALLEY\\tmp\\runtime\\valley-product-api.win.err.log"
-             }
+    "requires_tailscale":  true
 }
