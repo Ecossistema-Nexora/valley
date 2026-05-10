@@ -114,15 +114,24 @@ function Resolve-PythonLauncher {
 function Resolve-CommandSource {
     param(
         [string]$Name,
-        [string]$InstallHint
+        [string]$InstallHint,
+        [string[]]$Candidates = @()
     )
 
     $Command = Get-Command $Name -ErrorAction SilentlyContinue | Select-Object -First 1
+    if ($Command) {
+        return $Command.Source
+    }
+
+    foreach ($Candidate in $Candidates) {
+        if ($Candidate -and (Test-Path -LiteralPath $Candidate -PathType Leaf)) {
+            return (Resolve-Path -LiteralPath $Candidate).Path
+        }
+    }
+
     if (-not $Command) {
         throw ("{0} nao encontrado no PATH.`n{1}" -f $Name, $InstallHint)
     }
-
-    return $Command.Source
 }
 
 function Test-JsonEndpoint {
@@ -354,7 +363,14 @@ if (-not (Test-Path -LiteralPath $AdminRoot)) {
 }
 
 $PythonLauncher = Resolve-PythonLauncher
-$Cloudflared = Resolve-CommandSource -Name 'cloudflared' -InstallHint "Instale o cloudflared e mantenha a CLI no PATH."
+$Cloudflared = Resolve-CommandSource `
+    -Name 'cloudflared' `
+    -InstallHint "Instale o cloudflared e mantenha a CLI no PATH." `
+    -Candidates @(
+        'C:\Program Files (x86)\cloudflared\cloudflared.exe',
+        'C:\Program Files\cloudflared\cloudflared.exe',
+        'C:\Windows\System32\cloudflared.exe'
+    )
 $LocalBaseUrl = 'http://{0}:{1}' -f $BindHost, $AdminPort
 $LocalHealthUrl = '{0}/healthz' -f $LocalBaseUrl
 

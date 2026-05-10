@@ -42,10 +42,17 @@
 - `docs/integrations/cj_api_quota_request_brief.md` criado com briefing para o ChatGPT elaborar o e-mail de aumento de quota da API CJDropshipping.
 - Incidente pos-envio: dominio anonimo `localhost.run` expirou com `no tunnel here`; runtime migrado para Tailscale IP estavel `http://100.109.240.100:8085`.
 - AndroidManifest liberado para cleartext em rede Tailscale privada e novo APK sera gerado com `VALLEY_PRODUCT_API_BASE_URL=http://100.109.240.100:8085`.
+- APK Android `app-arm64-v8a-release.apk` rebuildado em 2026-05-07 07:15 BRT com base Tailscale `http://100.109.240.100:8085` e reenviado pelo Telegram.
+- Link corrigido enviado pelo Telegram: `http://100.109.240.100:8085/product`; validacoes `healthz` e `api/product-shell` retornaram HTTP 200.
+- Diagnostico Cloudflare 1033 em 2026-05-07: `admin.brasildesconto.com.br` aponta para o CNAME `80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com`, tunnel Cloudflare `valley-admin` esta `down`, sem conexoes ativas desde 2026-05-06, e o token local retorna `Unauthorized: Invalid tunnel secret`.
+- A conta Cloudflare conectada ao Codex permite leitura de zona/DNS/tunnel, mas nao permitiu obter novo tunnel token (`Authentication error` no endpoint de token); por isso o dominio fixo segue bloqueado ate renovar o token do named tunnel no Cloudflare Zero Trust ou liberar permissao de escrita/token.
+- Criado `scripts/repair_valley_cloudflare_named_tunnel.ps1` para renovar automaticamente o token do tunnel quando existir `CLOUDFLARE_API_TOKEN`/`CF_API_TOKEN` com `Cloudflare Tunnel Write` ou `Cloudflare One Connector Write`.
+- Criado `docs/runtime/cloudflare_named_tunnel_repair.md` com o procedimento persistente para copiar o token via `Zero Trust > Networks > Tunnels > valley-admin > Add a replica` ou via API.
+- Execucao do reparador em 2026-05-08 registrou `tmp/runtime/valley-cloudflare-named-tunnel-repair.json` com status `blocked`: `CLOUDFLARE_API_TOKEN/CF_API_TOKEN ausente`.
 
 ## Bloqueios
 
-- Dominio fixo `https://admin.brasildesconto.com.br` respondeu `530` nesta sessao porque o token de named tunnel carregado esta invalido; o acesso remoto atual esta via `localhost.run`.
+- Dominio fixo `https://admin.brasildesconto.com.br` respondeu `530`/`1033` nesta sessao porque o token de named tunnel carregado esta invalido; o acesso remoto atual validado esta via Tailscale `http://100.109.240.100:8085/product`.
 - Catalogo 10k depende de execucao incremental e limites dos fornecedores; quando uma API limitar volume diario, o importador precisa continuar em ciclos ate completar a cobertura.
 - Cloudflare Quick Tunnel retornou `429 Too Many Requests` ao tentar renovar URL publica apos muitas tentativas; named tunnel retornou `Unauthorized: Invalid tunnel secret`. A rota operacional foi migrada para `localhost.run`, com Tailscale mantido como alternativa de rede privada.
 

@@ -1,11 +1,25 @@
-﻿{
+{
     "status":  "ok",
     "service":  "valley-admin-public",
-    "provider":  "tailscale",
-    "public_url":  "http://100.109.240.100:8085",
+    "provider":  "cloudflare_quick_tunnel",
+    "public_url":  "https://tion-venue-bare-nominations.trycloudflare.com",
     "local_url":  "http://127.0.0.1:8085",
-    "generated_at_utc":  "2026-05-07T07:52:29Z",
-    "temporary":  false,
+    "generated_at_utc":  "2026-05-07T10:54:12Z",
+    "temporary":  true,
+    "permanence":  "ephemeral_external",
     "provider_status":  "healthy",
-    "requires_tailscale":  true
+    "smoke_endpoints":  {
+                            "admin_data":  "https://tion-venue-bare-nominations.trycloudflare.com/api/admin-data",
+                            "healthz":  "https://tion-venue-bare-nominations.trycloudflare.com/healthz"
+                        },
+    "logs":  {
+                 "cloudflare_stdout":  "C:\\Users\\ereta\\.codex\\worktrees\\VALLEY\\tmp\\runtime\\valley-admin-cloudflare.out.log",
+                 "http_stdout":  "C:\\Users\\ereta\\.codex\\worktrees\\VALLEY\\tmp\\runtime\\valley-admin-http.out.log",
+                 "cloudflare_stderr":  "C:\\Users\\ereta\\.codex\\worktrees\\VALLEY\\tmp\\runtime\\valley-admin-cloudflare.err.log",
+                 "http_stderr":  "C:\\Users\\ereta\\.codex\\worktrees\\VALLEY\\tmp\\runtime\\valley-admin-http.err.log"
+             },
+    "cloudflare":  {
+                       "token_present":  true,
+                       "mode":  "quick"
+                   }
 }
