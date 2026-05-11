@@ -1,7 +1,7 @@
 {
   "status": "ok",
   "service": "valley-product",
-  "generated_at_utc": "2026-05-11T17:06:53.266055Z",
+  "generated_at_utc": "2026-05-11T18:05:33.302236Z",
   "title": "Valley Stock | Catalogo proprietario",
   "subtitle": "Seleção Valley com catálogo real multi-provedor, agrupado por categoria e taxonomia Google, com sincronização de estoque, preço e tracking sem exposição pública da origem operacional.",
   "public_runtime": {
@@ -4262,7 +4262,7 @@
     }
   ],
   "summary": {
-    "products": 1077
+    "products": 1089
   },
   "hero": {
     "title": "Valley Stock | Catalogo proprietario",
