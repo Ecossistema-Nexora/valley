@@ -1,5 +1,8 @@
 # VALLEY MVP EXECUTION PLAN
 
+> **Função:** Este documento serve como o roadmap estratégico e técnico para o lançamento inicial do Valley Omniverse.
+> **Integrações:** Conecta os objetivos de negócio (TPV, ARPU) à ativação técnica sequencial dos módulos de Core Financeiro, Operacional e Identidade.
+
 ## Objetivo
 
 Construir um MVP viavel focado em:

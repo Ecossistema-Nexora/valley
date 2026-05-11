@@ -5,13 +5,18 @@
 
 - Regra: cada item de checklist dos planos conta como uma etapa.
 - Atualize este indice depois de cada acao concluida com `python scripts\update_planos_progress.py`.
-- Etapas concluidas desde o primeiro plano do indice: `172/174`.
-- Produzido desde o Plano 1: `98.9%`.
-- Falta produzir para a conclusao final acumulada: `1.1%`.
+- Etapas concluidas desde o primeiro plano do indice: `185/186`.
+- Produzido desde o Plano 1: `99.5%`.
+- Falta produzir para a conclusao final acumulada: `0.5%`.
 <!-- progresso:fim -->
 
 | versao | criado_em_brt | arquivo | status | escopo | etapas | produzido | falta_produzir | ultima_atualizacao_brt |
 | --- | --- | --- | --- | --- | ---: | ---: | ---: | --- |
+| versao | criado_em_brt | arquivo | status | escopo | 0/0 | 0.0% | 100.0% | ultima_atualizacao_brt |
+| versao | criado_em_brt | arquivo | status | escopo | 0/0 | 0.0% | 100.0% | ultima_atualizacao_brt |
+| versao | criado_em_brt | arquivo | status | escopo | 0/0 | 0.0% | 100.0% | ultima_atualizacao_brt |
+| versao | criado_em_brt | arquivo | status | escopo | 0/0 | 0.0% | 100.0% | ultima_atualizacao_brt |
+| versao | criado_em_brt | arquivo | status | escopo | 0/0 | 0.0% | 100.0% | ultima_atualizacao_brt |
 | versao | criado_em_brt | arquivo | status | escopo | 0/0 | 0.0% | 100.0% | ultima_atualizacao_brt |
 | versao | criado_em_brt | arquivo | status | escopo | 0/0 | 0.0% | 100.0% | ultima_atualizacao_brt |
 | versao | criado_em_brt | arquivo | status | escopo | 0/0 | 0.0% | 100.0% | ultima_atualizacao_brt |
@@ -53,6 +58,7 @@
 | v029 | 2026-05-05 21:35:12 BRT | [v029__20260505-213512-brt__mcp_obrigatorio_persistente.md](./v029__20260505-213512-brt__mcp_obrigatorio_persistente.md) | concluido | Configuracao obrigatoria e persistente de MCP_DOCKER, context7, figma, linear e playwright | 6/6 | 100.0% | 0.0% | 2026-05-05 21:44:29 BRT |
 | v030 | 2026-05-05 21:45:00 BRT | [v030__20260505-214500-brt__nomenclatura_valley_helena_vcoin.md](./v030__20260505-214500-brt__nomenclatura_valley_helena_vcoin.md) | concluido | Nomenclatura canonica Valley, Helena e V-Coin com bloqueio das referencias antigas | 6/6 | 100.0% | 0.0% | 2026-05-05 22:08:02 BRT |
 | v031 | 2026-05-06 14:57:17 BRT | [v031__20260506-145717-brt__action_path_autenticado_em_recent_actions_operacionais.md](./v031__20260506-145717-brt__action_path_autenticado_em_recent_actions_operacionais.md) | concluido | Action path autenticado em recent_actions operacionais quando ja existir endpoint backend real | 4/4 | 100.0% | 0.0% | 2026-05-06 14:58:49 BRT |
-| v032 | 2026-05-07 01:27:35 BRT | [v032__20260507-012735-brt__retomada_gate_mvp_producao.md](./v032__20260507-012735-brt__retomada_gate_mvp_producao.md) | em_andamento | Retomada da sequencia exata para gate MVP Valley em modo de producao | 13/15 | 86.7% | 13.3% | 2026-05-07 01:43:00 BRT |
+| v032 | 2026-05-07 01:27:35 BRT | [v032__20260507-012735-brt__retomada_gate_mvp_producao.md](./v032__20260507-012735-brt__retomada_gate_mvp_producao.md) | em_andamento | Retomada da sequencia exata para gate MVP Valley em modo de producao | 14/15 | 93.3% | 6.7% | 2026-05-11 09:59:34 BRT |
+| v033 | 2026-05-07 03:01:02 BRT | [v033__20260507-030102-brt__gate_producao_apk_cliente_catalogo_10k.md](./v033__20260507-030102-brt__gate_producao_apk_cliente_catalogo_10k.md) | concluido | Gate de producao do APK cliente com checkout real, white-label e estrategia persistente de catalogo 10k | 12/12 | 100.0% | 0.0% | 2026-05-11 09:59:34 BRT |
 | v019 | 2026-05-05 17:52:38 BRT | [v019__20260505-175238-brt__passo_1_nucleo_relacional_nexora_v40.md](./v019__20260505-175238-brt__passo_1_nucleo_relacional_nexora_v40.md) | concluido | PASSO 1 do banco hibrido Nexora V40 com nucleo relacional de identidade, perfis, wallets e LED Cards | 0/0 | 100.0% | 0.0% | 2026-05-05 17:52:38 BRT |
 | v020 | 2026-05-05 17:55:49 BRT | [v020__20260505-175549-brt__passo_2_ledger_financeiro_smart_equity.md](./v020__20260505-175549-brt__passo_2_ledger_financeiro_smart_equity.md) | concluido | PASSO 2 do banco hibrido Nexora V40 com ledger financeiro, Smart Equity e orders mestre | 0/0 | 100.0% | 0.0% | 2026-05-05 17:55:49 BRT |

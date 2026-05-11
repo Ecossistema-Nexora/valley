@@ -12,6 +12,11 @@ import 'package:valley_super_app/valley_brand_theme.dart';
 
 const String _homeModulePrefsKey = 'valley.home.visible_modules.v1';
 
+/// Retorna o índice de destino da navegação inferior para um determinado código de módulo.
+///
+/// Este método mapeia códigos de módulos específicos para índices de destino
+/// na barra de navegação inferior, agrupando módulos relacionados sob um único destino.
+/// Se o código do módulo não corresponder a nenhum grupo predefinido, retorna 0 (Início).
 int _destinationIndexForModule(String code) {
   if (<String>{
     'PAY',
@@ -51,6 +56,11 @@ int _destinationIndexForModule(String code) {
   return 0;
 }
 
+/// Retorna o ícone apropriado para um módulo com base em seu código.
+///
+/// Este método associa um [IconData] a cada módulo, utilizando ícones
+/// que representam visualmente a funcionalidade principal do módulo.
+/// Para módulos sem um ícone específico, um ícone padrão é retornado.
 IconData _moduleIconFor(ModuleRecord module) {
   switch (module.code) {
     case 'PAY':
@@ -93,6 +103,11 @@ IconData _moduleIconFor(ModuleRecord module) {
   }
 }
 
+/// Retorna a cor de destaque para um módulo com base em seu nível (tier).
+///
+/// As cores são definidas para diferenciar visualmente os módulos por sua importância
+/// ou fase no ecossistema Valley (foundation, core, frontier).
+/// Módulos sem um tier específico recebem uma cor de sucesso padrão.
 Color _moduleAccentFor(ModuleRecord module) {
   switch (module.tier) {
     case 'foundation':
@@ -106,6 +121,11 @@ Color _moduleAccentFor(ModuleRecord module) {
   }
 }
 
+/// Retorna a cor de destaque para uma métrica da home com base em seu tipo.
+///
+/// Este método padroniza as cores de destaque para métricas,
+/// associando 'success', 'warning' e 'violet' a cores específicas da marca Valley.
+/// Qualquer outra string de destaque resulta na cor ciano padrão.
 Color _homeMetricAccent(String accent) {
   switch (accent) {
     case 'success':
@@ -119,8 +139,16 @@ Color _homeMetricAccent(String accent) {
   }
 }
 
+/// Retorna a cor de destaque para um sinal da home, delegando para [_homeMetricAccent].
+///
+/// Garante consistência na aplicação de cores para sinais e métricas.
 Color _homeSignalAccent(String accent) => _homeMetricAccent(accent);
 
+/// Retorna a cor de destaque para um estágio de jornada do usuário.
+///
+/// Cores são atribuídas a diferentes estágios da jornada (conversão, pesquisa, etc.)
+/// para facilitar a identificação visual do progresso ou estado de uma jornada.
+/// Estágios não mapeados recebem uma cor lilás padrão.
 Color _journeyStageColor(String stage) {
   switch (stage) {
     case 'conversion':
@@ -137,6 +165,11 @@ Color _journeyStageColor(String stage) {
   }
 }
 
+/// Retorna um rótulo legível para um estágio de jornada do usuário.
+///
+/// Converte os códigos internos dos estágios da jornada em termos mais amigáveis
+/// para exibição na interface do usuário.
+/// Estágios vazios ou não reconhecidos são rotulados como 'evento'.
 String _journeyStageLabel(String stage) {
   switch (stage) {
     case 'conversion':
@@ -154,12 +187,21 @@ String _journeyStageLabel(String stage) {
   }
 }
 
+/// Representa um grupo de trilhas de usuário relacionadas a uma jornada específica.
+///
+/// Agrupa múltiplas [UserModuleTrail] sob uma única chave de jornada,
+/// fornecendo acesso fácil à trilha mais recente, à linha do tempo completa,
+/// aos códigos de módulos envolvidos e aos estágios da jornada.
 class _JourneyGroup {
   const _JourneyGroup({required this.journeyKey, required this.trails});
 
+  /// A chave única que identifica esta jornada.
   final String journeyKey;
+
+  /// A lista de trilhas de módulos de usuário associadas a esta jornada.
   final List<UserModuleTrail> trails;
 
+  /// Retorna a trilha de módulo mais recente neste grupo.
   UserModuleTrail get latest => trails.first;
 
   List<UserModuleTrail> get timeline {
@@ -171,6 +213,7 @@ class _JourneyGroup {
     return ordered;
   }
 
+  /// Retorna uma lista ordenada dos códigos de módulos únicos envolvidos nesta jornada.
   List<String> get moduleCodes {
     final Set<String> seen = <String>{};
     final List<String> ordered = <String>[];
@@ -184,6 +227,7 @@ class _JourneyGroup {
     return ordered;
   }
 
+  /// Retorna uma lista ordenada dos estágios únicos da jornada presentes nas trilhas.
   List<String> get stages {
     final Set<String> seen = <String>{};
     final List<String> ordered = <String>[];
@@ -198,6 +242,11 @@ class _JourneyGroup {
   }
 }
 
+/// Agrupa uma lista de [UserModuleTrail] em [List<_JourneyGroup>].
+///
+/// As trilhas são agrupadas por sua [UserModuleTrail.journeyKey] e, em seguida,
+/// cada grupo é ordenado pela data de criação da trilha mais recente.
+/// Isso permite visualizar jornadas completas e seu progresso.
 List<_JourneyGroup> _groupJourneyTrails(List<UserModuleTrail> trails) {
   final List<UserModuleTrail> sorted = List<UserModuleTrail>.from(trails)
     ..sort(
@@ -225,6 +274,12 @@ List<_JourneyGroup> _groupJourneyTrails(List<UserModuleTrail> trails) {
   return journeys;
 }
 
+/// Resolve o módulo primário para uma [_JourneyGroup] com base no estágio mais recente.
+///
+/// Este método tenta identificar o módulo mais relevante para uma jornada,
+/// priorizando módulos específicos para cada estágio (conversão, pesquisa, etc.).
+/// Se nenhum módulo preferencial for encontrado, ele retorna o módulo da trilha
+/// mais antiga na linha do tempo da jornada.
 ModuleRecord? _resolveJourneyPrimaryModule(
   _JourneyGroup journey,
   List<ModuleRecord> catalogModules,
@@ -268,10 +323,17 @@ ModuleRecord? _resolveJourneyPrimaryModule(
   return null;
 }
 
+/// O shell principal da aplicação Valley Home, responsável pela navegação e
+/// exibição do conteúdo da home.
+///
+/// Gerencia o estado da navegação, preferências de módulos visíveis,
+/// e a carga de dados remotos da API de produto.
 class ValleyHomeShell extends StatefulWidget {
   const ValleyHomeShell({
     super.key,
     required this.data,
+    // O repositório de API para carregar e persistir dados da home.
+    // Pode ser substituído para testes.
     this.repository = const ProductApiRepository(),
   });
 
@@ -283,10 +345,19 @@ class ValleyHomeShell extends StatefulWidget {
 }
 
 class _ValleyHomeShellState extends State<ValleyHomeShell> {
+  /// Índice da aba de navegação atualmente selecionada.
   int _index = 0;
+
+  /// Conjunto de códigos de módulos visíveis na tela inicial.
   Set<String> _homeModuleCodes = <String>{};
+
+  /// Indica se as preferências de módulos foram carregadas.
   bool _modulePreferencesReady = false;
+
+  /// O código do módulo selecionado no dock de acesso rápido.
   String? _selectedDockModuleCode;
+
+  /// Controlador para o campo de busca.
   late final TextEditingController _searchController;
   String _searchQuery = '';
   ProductHomeData? _remoteHomeData;
@@ -294,6 +365,9 @@ class _ValleyHomeShellState extends State<ValleyHomeShell> {
   String _remoteHomeStatus = '';
 
   static const List<_Destination> _destinations = <_Destination>[
+    /// Define os destinos da barra de navegação inferior.
+    /// Cada destino representa uma seção principal da aplicação, agrupando
+    /// módulos relacionados e fornecendo um título e ícone.
     _Destination(
       label: 'Inicio',
       title: 'Valley Premium',
@@ -341,6 +415,11 @@ class _ValleyHomeShellState extends State<ValleyHomeShell> {
     super.dispose();
   }
 
+  /// Retorna o conjunto padrão de códigos de módulos para a tela inicial.
+  ///
+  /// Se houver módulos incluídos explicitamente nos dados da aplicação,
+  /// eles são usados. Caso contrário, os primeiros 12 módulos do catálogo
+  /// são selecionados como padrão.
   Set<String> _defaultHomeModuleCodes() {
     final Set<String> included = widget.data.includedModuleRecords
         .map((ModuleRecord module) => module.code)
@@ -355,6 +434,12 @@ class _ValleyHomeShellState extends State<ValleyHomeShell> {
         .toSet();
   }
 
+  /// Carrega as preferências de módulos visíveis da tela inicial.
+  ///
+  /// Tenta carregar as preferências salvas localmente via [SharedPreferences].
+  /// Se não houver preferências salvas ou se as salvas forem inválidas,
+  /// as preferências padrão são aplicadas.
+  /// Atualiza o estado da UI para refletir as preferências carregadas.
   Future<void> _loadHomeModulePreferences() async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     final List<String>? storedCodes = preferences.getStringList(
@@ -381,6 +466,12 @@ class _ValleyHomeShellState extends State<ValleyHomeShell> {
     });
   }
 
+  /// Salva as preferências de módulos visíveis da tela inicial.
+  ///
+  /// Persiste as preferências localmente via [SharedPreferences] e tenta
+  /// sincronizá-las com o backend através do [ProductApiRepository].
+  /// Em caso de falha na sincronização remota, um status de erro é exibido,
+  /// mas as preferências locais são mantidas.
   Future<void> _saveHomeModulePreferences() async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     final List<String> sortedCodes = _homeModuleCodes.toList()..sort();
@@ -425,6 +516,12 @@ class _ValleyHomeShellState extends State<ValleyHomeShell> {
     }
   }
 
+  /// Carrega dados remotos para a tela inicial.
+  ///
+  /// Faz uma chamada à API para obter dados personalizados da home,
+  /// incluindo preferências de módulos, recomendações e ações recentes.
+  /// Se a API estiver disponível e retornar dados, as preferências locais
+  /// podem ser sobrescritas pelas remotas.
   Future<void> _loadRemoteHomeData() async {
     setState(() {
       _remoteHomeLoading = true;
@@ -461,6 +558,11 @@ class _ValleyHomeShellState extends State<ValleyHomeShell> {
     }
   }
 
+  /// Alterna a visibilidade de um módulo na tela inicial.
+  ///
+  /// Adiciona ou remove o código do módulo do conjunto [_homeModuleCodes].
+  /// Garante que pelo menos um módulo esteja sempre visível.
+  /// Salva as preferências após a alteração.
   void _toggleHomeModule(ModuleRecord module, bool selected) {
     setState(() {
       if (selected) {
@@ -472,6 +574,11 @@ class _ValleyHomeShellState extends State<ValleyHomeShell> {
     unawaited(_saveHomeModulePreferences());
   }
 
+  /// Navega para um novo destino na barra de navegação inferior.
+  ///
+  /// Atualiza o índice de navegação e limpa o módulo selecionado no dock.
+  /// [index] O índice do destino a ser navegado.
+  ///
   void _navigate(int index) {
     setState(() {
       _index = index;
@@ -479,6 +586,11 @@ class _ValleyHomeShellState extends State<ValleyHomeShell> {
     });
   }
 
+  /// Abre a tela de detalhes de um módulo.
+  ///
+  /// Navega para o destino apropriado com base no código do módulo.
+  /// Se o destino for a página inicial (índice 0), exibe um `BottomSheet`
+  /// com os detalhes do módulo.
   void _openModule(ModuleRecord module) {
     final int destinationIndex = _destinationIndexForModule(module.code);
     setState(() {
@@ -499,6 +611,10 @@ class _ValleyHomeShellState extends State<ValleyHomeShell> {
     }
   }
 
+  /// Encontra um [ModuleRecord] pelo seu código.
+  ///
+  /// [code] O código do módulo a ser procurado.
+  /// Retorna o [ModuleRecord] correspondente ou `null` se não for encontrado.
   ModuleRecord? _findModuleByCode(String code) {
     for (final ModuleRecord module in widget.data.modules) {
       if (module.code == code) {
@@ -508,6 +624,12 @@ class _ValleyHomeShellState extends State<ValleyHomeShell> {
     return null;
   }
 
+  /// Exibe um `BottomSheet` com o resultado de uma ação de runtime de jornada.
+  ///
+  /// Utilizado para mostrar feedback ao usuário após a execução de uma ação,
+  /// incluindo um título, mensagem e, opcionalmente, uma URL.
+  /// [title] O título do resultado.
+  /// [message] A mensagem detalhada do resultado.
   Future<void> _showJourneyRuntimeResult({
     required String title,
     required String message,
@@ -570,6 +692,12 @@ class _ValleyHomeShellState extends State<ValleyHomeShell> {
     );
   }
 
+  /// Exibe um `BottomSheet` com os detalhes de um evento de jornada do usuário.
+  ///
+  /// Apresenta informações sobre uma [UserModuleTrail], incluindo o módulo,
+  /// estágio, título, detalhes e, opcionalmente, um módulo primário associado.
+  /// [trail] A trilha do módulo de usuário a ser exibida.
+  /// [primaryModule] O módulo principal associado à jornada, se houver.
   Future<void> _showJourneyEventSheet(
     UserModuleTrail trail, {
     required ModuleRecord? primaryModule,
@@ -659,6 +787,13 @@ class _ValleyHomeShellState extends State<ValleyHomeShell> {
     );
   }
 
+  /// Lida com o toque em um evento de jornada do usuário.
+  ///
+  /// Tenta invocar uma ação primária se [UserModuleTrail.primaryActionPath] estiver presente.
+  /// Se a ação for bem-sucedida, exibe o resultado. Caso contrário, ou se não houver
+  /// ação primária, exibe os detalhes do evento em um `BottomSheet`.
+  /// [trail] A trilha do módulo de usuário que foi tocada.
+  /// [primaryModule] O módulo principal associado à jornada.
   Future<void> _handleJourneyEventTap(
     UserModuleTrail trail,
     ModuleRecord? primaryModule,
@@ -691,6 +826,14 @@ class _ValleyHomeShellState extends State<ValleyHomeShell> {
     await _showJourneyEventSheet(trail, primaryModule: fallbackModule);
   }
 
+  /// Lida com o toque em uma ação da home.
+  ///
+  /// Tenta invocar uma ação através do [ProductApiRepository] usando [actionPath].
+  /// Se bem-sucedido, exibe o resultado. Caso contrário, ou se não houver
+  /// [actionPath], abre o módulo especificado por [openModuleCode] ou [fallbackModuleCode].
+  /// [title] O título da ação.
+  /// [actionPath] O caminho da API a ser invocado.
+  /// [openModuleCode] O código do módulo a ser aberto se a ação for bem-sucedida ou não houver actionPath.
   Future<void> _handleHomeActionTap({
     required String title,
     required String actionPath,
@@ -726,12 +869,19 @@ class _ValleyHomeShellState extends State<ValleyHomeShell> {
     }
   }
 
+  /// Atualiza a query de busca e o estado da UI.
+  ///
+  /// [value] O novo valor da query de busca.
   void _handleSearchChanged(String value) {
     setState(() {
       _searchQuery = value.trim();
     });
   }
 
+  /// Filtra a lista de módulos com base na query de busca atual.
+  ///
+  /// Retorna uma lista de [ModuleRecord] que correspondem à query de busca,
+  /// ordenados pelo número do módulo. Se a query estiver vazia, retorna todos os módulos.
   List<ModuleRecord> _filteredModules() {
     final String normalizedQuery = _searchQuery.toLowerCase().trim();
     final List<ModuleRecord> sortedModules = List<ModuleRecord>.from(
@@ -756,7 +906,10 @@ class _ValleyHomeShellState extends State<ValleyHomeShell> {
 
   @override
   Widget build(BuildContext context) {
+    // Determina se a tela é larga o suficiente para exibir a barra lateral do desktop.
     final bool wide = MediaQuery.sizeOf(context).width >= 1040;
+
+    // Filtra os módulos com base na query de busca.
     final List<ModuleRecord> filteredModules = _filteredModules();
     final Widget currentPage = _buildPage();
 
@@ -765,6 +918,7 @@ class _ValleyHomeShellState extends State<ValleyHomeShell> {
       bottomNavigationBar: wide
           ? null
           : NavigationBar(
+              // Barra de navegação inferior para telas compactas.
               selectedIndex: _index,
               onDestinationSelected: _navigate,
               destinations: _destinations
@@ -796,6 +950,7 @@ class _ValleyHomeShellState extends State<ValleyHomeShell> {
                 children: <Widget>[
                   if (wide)
                     _DesktopSidebar(
+                      // Barra lateral para telas largas.
                       data: widget.data,
                       currentIndex: _index,
                       destinations: _destinations,
@@ -804,6 +959,7 @@ class _ValleyHomeShellState extends State<ValleyHomeShell> {
                   Expanded(
                     child: Column(
                       children: <Widget>[
+                        // Barra superior de comandos e busca.
                         _CommandTopBar(
                           title: _destinations[_index].title,
                           searchController: _searchController,
@@ -820,6 +976,7 @@ class _ValleyHomeShellState extends State<ValleyHomeShell> {
                         Expanded(
                           child: AnimatedSwitcher(
                             duration: const Duration(milliseconds: 320),
+                            // Animação de transição entre as páginas.
                             switchInCurve: Curves.easeOutCubic,
                             switchOutCurve: Curves.easeInCubic,
                             child: KeyedSubtree(
@@ -837,6 +994,7 @@ class _ValleyHomeShellState extends State<ValleyHomeShell> {
                 left: wide ? 316 : 14,
                 right: 14,
                 bottom: wide ? 18 : 88,
+                // Dock de acesso rápido aos módulos.
                 child: _ModuleAccessDock(
                   modules: filteredModules,
                   selectedCode: _selectedDockModuleCode,
@@ -850,6 +1008,10 @@ class _ValleyHomeShellState extends State<ValleyHomeShell> {
     );
   }
 
+  /// Constrói a página atual com base no índice de navegação selecionado.
+  ///
+  /// Retorna um widget diferente para cada destino da navegação,
+  /// passando os dados necessários e callbacks para interações.
   Widget _buildPage() {
     switch (_index) {
       case 0:
@@ -898,6 +1060,10 @@ class _ValleyHomeShellState extends State<ValleyHomeShell> {
   }
 }
 
+/// Sidebar do desktop, exibida em telas largas.
+///
+/// Contém informações da marca Valley, um resumo da aplicação e os botões
+/// de navegação para as diferentes seções.
 class _DesktopSidebar extends StatelessWidget {
   const _DesktopSidebar({
     required this.data,
@@ -914,16 +1080,19 @@ class _DesktopSidebar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      // Define a largura da sidebar.
       width: 292,
       padding: const EdgeInsets.fromLTRB(20, 20, 20, 16),
       child: Column(
         children: <Widget>[
           ValleyPanel(
             padding: const EdgeInsets.all(20),
+            // Painel com informações da marca e descrição.
             glowColor: ValleyBrandColors.violet,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
+                // Logomarca do Valley.
                 const ValleyLogoMark(size: 60, borderRadius: 18),
                 const SizedBox(height: 20),
                 Text(
@@ -931,6 +1100,7 @@ class _DesktopSidebar extends StatelessWidget {
                   style: Theme.of(context).textTheme.headlineSmall,
                 ),
                 const SizedBox(height: 8),
+                // Descrição da aplicação.
                 Text(
                   'Pagamentos, comercio, identidade e Helena no mesmo ecossistema premium.',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -938,6 +1108,7 @@ class _DesktopSidebar extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 18),
+                // Chips de sinalização de status.
                 Wrap(
                   spacing: 8,
                   runSpacing: 8,
@@ -958,6 +1129,7 @@ class _DesktopSidebar extends StatelessWidget {
           const SizedBox(height: 18),
           Expanded(
             child: ValleyPanel(
+              // Painel para os botões de navegação.
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               child: Column(
                 children: <Widget>[
@@ -970,6 +1142,7 @@ class _DesktopSidebar extends StatelessWidget {
                     if (i != destinations.length - 1) const SizedBox(height: 8),
                   ],
                   const Spacer(),
+                  // Painel de "Experiência ativa".
                   ValleyPanel(
                     padding: const EdgeInsets.all(16),
                     glowColor: ValleyBrandColors.cyan,
@@ -1017,6 +1190,11 @@ class _DesktopSidebar extends StatelessWidget {
   }
 }
 
+/// Botão de navegação para a sidebar do desktop.
+///
+/// Exibe um ícone, rótulo e título do destino.
+/// O estilo muda quando o botão está selecionado para indicar o destino atual.
+/// [destination] O destino da navegação.
 class _SidebarButton extends StatelessWidget {
   const _SidebarButton({
     required this.destination,
@@ -1092,6 +1270,13 @@ class _SidebarButton extends StatelessWidget {
   }
 }
 
+/// Barra superior de comandos da aplicação.
+///
+/// Contém o título da página atual, um campo de busca, botões de ação rápida
+/// e um badge de perfil do usuário. Adapta seu layout para telas compactas.
+/// [title] O título da página atual.
+/// [searchController] Controlador para o campo de busca.
+/// [onSearchChanged] Callback para quando o texto da busca muda.
 class _CommandTopBar extends StatelessWidget {
   const _CommandTopBar({
     required this.title,
@@ -1116,6 +1301,7 @@ class _CommandTopBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool compact = MediaQuery.sizeOf(context).width < 920;
+    // Verifica se a busca está ativa para ajustar o texto de status.
     final bool searchActive = searchQuery.isNotEmpty;
 
     return Padding(
@@ -1137,6 +1323,7 @@ class _CommandTopBar extends StatelessWidget {
           children: <Widget>[
             _ResponsiveSplit(
               stacked: compact,
+              // Layout responsivo para o cabeçalho.
               gap: 16,
               leadingFlex: 6,
               trailingFlex: 7,
@@ -1144,6 +1331,7 @@ class _CommandTopBar extends StatelessWidget {
                 children: <Widget>[
                   const ValleyLogoMark(size: 52, borderRadius: 16),
                   const SizedBox(width: 14),
+                  // Título da página e descrição da busca.
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -1154,6 +1342,7 @@ class _CommandTopBar extends StatelessWidget {
                               ?.copyWith(fontWeight: FontWeight.w900),
                         ),
                         const SizedBox(height: 4),
+                        // Mensagem de status da busca ou descrição padrão.
                         Text(
                           searchActive
                               ? '$resultCount resultados prontos para abrir'
@@ -1171,6 +1360,7 @@ class _CommandTopBar extends StatelessWidget {
                 ],
               ),
               trailing: Row(
+                // Campo de busca e botões de ação.
                 children: <Widget>[
                   Expanded(
                     child: TextField(
@@ -1199,6 +1389,7 @@ class _CommandTopBar extends StatelessWidget {
                     label: 'Alertas',
                   ),
                   const SizedBox(width: 8),
+                  // Botão de atalhos.
                   _TopBarIconButton(icon: Icons.tune_rounded, label: 'Atalhos'),
                   const SizedBox(width: 8),
                   const _ProfileBadge(),
@@ -1206,6 +1397,7 @@ class _CommandTopBar extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 14),
+            // Chips de sinalização de status e ações rápidas.
             Wrap(
               spacing: 10,
               runSpacing: 10,
@@ -1251,6 +1443,10 @@ class _CommandTopBar extends StatelessWidget {
   }
 }
 
+/// Botão de ícone para a barra superior.
+///
+/// Exibe um ícone e um rótulo em um tooltip.
+/// [icon] O ícone a ser exibido.
 class _TopBarIconButton extends StatelessWidget {
   const _TopBarIconButton({required this.icon, required this.label});
 
@@ -1275,6 +1471,9 @@ class _TopBarIconButton extends StatelessWidget {
   }
 }
 
+/// Badge de perfil do usuário na barra superior.
+///
+/// Exibe as iniciais do usuário e seu status de produto.
 class _ProfileBadge extends StatelessWidget {
   const _ProfileBadge();
 
@@ -1340,6 +1539,11 @@ class _ProfileBadge extends StatelessWidget {
   }
 }
 
+/// Pill de ação rápida na barra superior.
+///
+/// Exibe um ícone e um rótulo, e executa um callback [onTap] quando tocado.
+/// [icon] O ícone a ser exibido.
+/// [label] O rótulo da ação.
 class _QuickActionPill extends StatelessWidget {
   const _QuickActionPill({
     required this.icon,
@@ -1385,6 +1589,12 @@ class _QuickActionPill extends StatelessWidget {
   }
 }
 
+/// Página de visão geral (Overview) da aplicação.
+///
+/// Exibe um hero com informações da marca, módulos da home, métricas,
+/// recomendações, sinais operacionais e jornadas do usuário.
+/// Permite a personalização dos módulos visíveis na home.
+/// [data] Os dados gerais da aplicação.
 class _OverviewPage extends StatelessWidget {
   const _OverviewPage({
     required this.data,
@@ -1429,6 +1639,7 @@ class _OverviewPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool searchActive = searchQuery.isNotEmpty;
+    // Filtra e ordena os módulos que devem aparecer na home.
     final List<ModuleRecord> homeModules =
         catalogModules
             .where(
@@ -1440,14 +1651,20 @@ class _OverviewPage extends StatelessWidget {
           );
     final List<HomeMetricCard> metrics =
         remoteHomeData?.metrics ?? const <HomeMetricCard>[];
+    // Lista de recomendações da API remota.
     final List<HomeRecommendation> recommendations =
         remoteHomeData?.recommendations ?? const <HomeRecommendation>[];
+    // Lista de ações recentes da API remota.
     final List<HomeRecentAction> recentActions =
         remoteHomeData?.recentActions ?? const <HomeRecentAction>[];
+    // Dados do score de identidade da API remota.
     final IdentityScoreData? identityScore = remoteHomeData?.identityScore;
+    // Contexto do perfil do usuário da API remota.
     final HomeProfileContext? profileContext = remoteHomeData?.profileContext;
+    // Sinais de módulos da API remota.
     final List<HomeModuleSignal> moduleSignals =
         remoteHomeData?.moduleSignals ?? const <HomeModuleSignal>[];
+    // Trilhas de jornada do usuário da API remota, agrupadas.
     final List<UserModuleTrail> userModuleTrails =
         remoteHomeData?.userModuleTrails ?? const <UserModuleTrail>[];
     final List<_JourneyGroup> journeyGroups = _groupJourneyTrails(
@@ -1460,6 +1677,7 @@ class _OverviewPage extends StatelessWidget {
           children: <Widget>[
             _OrbitalCommandHero(
               data: data,
+              // Seção de destaque com informações da marca e módulos principais.
               homeModules: homeModules,
               onNavigate: onNavigate,
               onOpenModule: onOpenModule,
@@ -1467,6 +1685,7 @@ class _OverviewPage extends StatelessWidget {
             const SizedBox(height: 20),
             _PremiumSignalRibbon(data: data),
             const SizedBox(height: 32),
+            // Cabeçalho da seção de módulos da home.
             SectionHeader(
               kicker: 'Home Modular',
               title: searchActive
@@ -1484,6 +1703,7 @@ class _OverviewPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 18),
+            // Componente para compor e exibir os módulos na home.
             _HomeModuleComposer(
               allModules: catalogModules,
               homeModules: homeModules,
@@ -1494,6 +1714,7 @@ class _OverviewPage extends StatelessWidget {
               onToggleHomeModule: onToggleHomeModule,
             ),
             const SizedBox(height: 32),
+            // Cabeçalho da seção de API da home.
             SectionHeader(
               kicker: 'Home API',
               title: 'Sinais personalizados da camada /me/*',
@@ -1518,6 +1739,7 @@ class _OverviewPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 18),
+            // Exibe o contexto do perfil do usuário se disponível.
             if (profileContext != null) ...<Widget>[
               ValleyPanel(
                 glowColor: ValleyBrandColors.violet,
@@ -1619,6 +1841,7 @@ class _OverviewPage extends StatelessWidget {
                       .toList(),
             ),
             const SizedBox(height: 30),
+            // Exibe sinais operacionais por módulo, se disponíveis.
             if (moduleSignals.isNotEmpty) ...<Widget>[
               SectionHeader(
                 kicker: 'Por modulo',
@@ -1683,6 +1906,7 @@ class _OverviewPage extends StatelessWidget {
               const SizedBox(height: 30),
             ],
             if (journeyGroups.isNotEmpty) ...<Widget>[
+              // Exibe a timeline comercial por objetivo (jornadas).
               SectionHeader(
                 kicker: 'Por jornada',
                 title: 'Timeline comercial por objetivo',
@@ -1901,6 +2125,7 @@ class _OverviewPage extends StatelessWidget {
               const SizedBox(height: 30),
             ],
             if (identityScore != null) ...<Widget>[
+              // Exibe o score de identidade do usuário.
               ValleyPanel(
                 glowColor: ValleyBrandColors.cyan,
                 child: LayoutBuilder(
@@ -1965,6 +2190,7 @@ class _OverviewPage extends StatelessWidget {
               const SizedBox(height: 30),
             ],
             if (recommendations.isNotEmpty) ...<Widget>[
+              // Exibe recomendações personalizadas.
               SectionHeader(
                 kicker: 'Recomendacoes',
                 title: 'Proximas acoes sugeridas',
@@ -2134,6 +2360,7 @@ class _OverviewPage extends StatelessWidget {
               ),
               const SizedBox(height: 18),
               ...recentActions
+                  // Exibe as ações recentes do usuário.
                   .take(4)
                   .map(
                     (HomeRecentAction action) => _LedgerEventRow(
@@ -2156,6 +2383,7 @@ class _OverviewPage extends StatelessWidget {
               const SizedBox(height: 20),
             ],
             SectionHeader(
+              // Cabeçalho da seção de atalhos comerciais.
               kicker: 'Essenciais',
               title: 'Atalhos comerciais',
               caption:
@@ -2163,6 +2391,7 @@ class _OverviewPage extends StatelessWidget {
             ),
             const SizedBox(height: 18),
             Wrap(
+              // Exibe os módulos essenciais para acesso rápido.
               spacing: 16,
               runSpacing: 16,
               children: data.includedModuleRecords
@@ -2187,6 +2416,10 @@ class _OverviewPage extends StatelessWidget {
   }
 }
 
+/// Página da carteira, exibindo informações financeiras e módulos relacionados.
+///
+/// Detalha o saldo Valley, fluxos de pagamento, métricas financeiras
+/// e um histórico de movimentações recentes.
 class _WalletPage extends StatelessWidget {
   const _WalletPage({required this.data});
 
@@ -2195,6 +2428,7 @@ class _WalletPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<ModuleRecord> modules = data.recordsForCodes(<String>[
+      // Módulos diretamente relacionados à funcionalidade da carteira.
       'PAY',
       'PLUG',
       'DOCS',
@@ -2206,6 +2440,7 @@ class _WalletPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             SectionHeader(
+              // Cabeçalho da seção da carteira.
               kicker: 'Carteira',
               title: 'Wallet, Plug e prova documental no mesmo fluxo',
               caption:
@@ -2216,6 +2451,7 @@ class _WalletPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 18),
+            // Painel principal com o saldo e descrição da carteira.
             ValleyPanel(
               glowColor: ValleyBrandColors.violet,
               background: LinearGradient(
@@ -2244,6 +2480,7 @@ class _WalletPage extends StatelessWidget {
                         const SizedBox(height: 12),
                         Text(
                           'R\$ 128.540,32',
+                          // Saldo fictício da carteira.
                           style: Theme.of(context).textTheme.displaySmall
                               ?.copyWith(color: ValleyBrandColors.snow),
                         ),
@@ -2258,6 +2495,7 @@ class _WalletPage extends StatelessWidget {
                               ),
                         ),
                         const SizedBox(height: 18),
+                        // Chips de sinalização de funcionalidades da carteira.
                         Wrap(
                           spacing: 10,
                           runSpacing: 10,
@@ -2281,6 +2519,7 @@ class _WalletPage extends StatelessWidget {
                       ],
                     ),
                     trailing: Column(
+                      // Detalhes adicionais sobre a carteira.
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         for (final Map<String, String> item
@@ -2325,6 +2564,7 @@ class _WalletPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 24),
+            // Métricas relacionadas à carteira.
             Wrap(
               spacing: 16,
               runSpacing: 16,
@@ -2364,6 +2604,7 @@ class _WalletPage extends StatelessWidget {
             ),
             const SizedBox(height: 30),
             SectionHeader(
+              // Cabeçalho da seção de fluxos de pagamento.
               kicker: 'Fluxos',
               title: 'Pagamentos com prova ponta a ponta',
               caption:
@@ -2371,6 +2612,7 @@ class _WalletPage extends StatelessWidget {
             ),
             const SizedBox(height: 18),
             Wrap(
+              // Tiles de linha do tempo para os fluxos de pagamento.
               spacing: 16,
               runSpacing: 16,
               children: const <Widget>[
@@ -2396,6 +2638,7 @@ class _WalletPage extends StatelessWidget {
             ),
             const SizedBox(height: 30),
             SectionHeader(
+              // Cabeçalho da seção de movimentações recentes.
               kicker: 'Historico',
               title: 'Movimentacoes recentes',
               caption:
@@ -2403,6 +2646,7 @@ class _WalletPage extends StatelessWidget {
             ),
             const SizedBox(height: 18),
             ...const <Widget>[
+              // Linhas de eventos do ledger.
               _LedgerEventRow(
                 status: 'SETTLED',
                 title: 'Pagamento marketplace + split seller',
@@ -2419,7 +2663,7 @@ class _WalletPage extends StatelessWidget {
               ),
               _LedgerEventRow(
                 status: 'ESCROW_HOLD',
-                title: 'Reserva para ordem de fornecedor',
+                title: 'Reserva para pedido de entrega',
                 detail:
                     'STOCK + MARKETPLACE | decisao de pricing e prova documental pendente',
                 amount: 'R\$ 8.320,40',
@@ -2432,6 +2676,10 @@ class _WalletPage extends StatelessWidget {
   }
 }
 
+/// Página do Marketplace, exibindo produtos, lojas e regras de pricing.
+///
+/// Detalha a experiência de compra, integrações comerciais e o ciclo
+/// de decisão do motor de pricing.
 class _MarketplacePage extends StatelessWidget {
   const _MarketplacePage({required this.data});
 
@@ -2440,6 +2688,7 @@ class _MarketplacePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final PhaseRecord commercePhase =
+        // Obtém a fase de comércio do manifesto.
         data.phaseByKey('phase_2_commerce') ?? data.manifest.phases[1];
     final StockMarketplaceModel model = commercePhase.stockMarketplaceModel!;
     final DropshippingBlueprint blueprint = model.blueprint;
@@ -2450,6 +2699,7 @@ class _MarketplacePage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             SectionHeader(
+              // Cabeçalho da seção do Marketplace.
               kicker: 'Marketplace',
               title: 'Marketplace Valley com STOCK, WMS e pricing controlado',
               caption:
@@ -2460,6 +2710,7 @@ class _MarketplacePage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 18),
+            // Painel principal com busca e regras de compra.
             ValleyPanel(
               glowColor: ValleyBrandColors.cyan,
               child: LayoutBuilder(
@@ -2471,6 +2722,7 @@ class _MarketplacePage extends StatelessWidget {
                     trailingFlex: 4,
                     gap: 24,
                     leading: Column(
+                      // Seção de busca e descrição do marketplace.
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
@@ -2486,6 +2738,7 @@ class _MarketplacePage extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 18),
+                        // Chips de superfícies essenciais.
                         Wrap(
                           spacing: 10,
                           runSpacing: 10,
@@ -2502,6 +2755,7 @@ class _MarketplacePage extends StatelessWidget {
                       ],
                     ),
                     trailing: ValleyPanel(
+                      // Painel com as regras de runtime da Helena.
                       padding: const EdgeInsets.all(18),
                       background: LinearGradient(
                         colors: <Color>[
@@ -2512,6 +2766,7 @@ class _MarketplacePage extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
+                          // Título das regras de compra.
                           Text(
                             'Regras da compra',
                             style: Theme.of(context).textTheme.titleMedium
@@ -2545,14 +2800,16 @@ class _MarketplacePage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 24),
+            // Cabeçalho da seção de ofertas.
             SectionHeader(
               kicker: 'Ofertas',
               title: 'Vitrine de ofertas',
               caption:
-                  'Produtos, fornecedores e checkout aparecem com linguagem clara para o usuario final.',
+                  'Produtos, lojas e checkout aparecem com linguagem clara para o usuario final.',
             ),
             const SizedBox(height: 18),
             Wrap(
+              // Tiles de módulos relacionados a ofertas.
               spacing: 16,
               runSpacing: 16,
               children: <Widget>[
@@ -2561,16 +2818,16 @@ class _MarketplacePage extends StatelessWidget {
                   child: HoverModuleTile(
                     code: 'STOCK',
                     title: 'Central de Dropshipping',
-                    subtitle: 'Fornecedor, custo, estoque e tracking',
+                    subtitle: 'Loja, estoque e rastreio',
                     caption:
-                        'Vincula item Valley a AliExpress, Alibaba e CJDropshipping sem improviso.',
+                        'Vincula item Valley a canais comerciais homologados sem expor a origem operacional ao cliente.',
                     onTap: () => _showModuleActionSheet(
                       context,
                       code: 'STOCK',
                       title: 'Central de Dropshipping',
-                      subtitle: 'Fornecedor, custo, estoque e tracking',
+                      subtitle: 'Loja, estoque e rastreio',
                       caption:
-                          'Centraliza custo, estoque, fornecedor e rastreio em uma unica experiencia.',
+                          'Centraliza disponibilidade, entrega e rastreio em uma unica experiencia.',
                     ),
                   ),
                 ),
@@ -2614,13 +2871,15 @@ class _MarketplacePage extends StatelessWidget {
             ),
             const SizedBox(height: 30),
             SectionHeader(
+              // Cabeçalho da seção de fontes e referências de preço.
               kicker: 'Fontes',
-              title: 'Provedores e referencias de preco',
+              title: 'Fontes comerciais e referencias de preco',
               caption:
                   'Referencias comerciais ajudam a manter oferta, margem e disponibilidade mais consistentes.',
             ),
             const SizedBox(height: 18),
             Wrap(
+              // Exibe os provedores de API e fontes de preço.
               spacing: 16,
               runSpacing: 16,
               children: model.adminApiIntegrations
@@ -2644,7 +2903,7 @@ class _MarketplacePage extends StatelessWidget {
                             const SizedBox(height: 14),
                             Text(
                               blueprint.supplierApis.contains(provider)
-                                  ? 'Fornecedor API'
+                                  ? 'Loja API'
                                   : 'Fonte de preco',
                               style: Theme.of(context).textTheme.titleMedium
                                   ?.copyWith(fontWeight: FontWeight.w700),
@@ -2652,7 +2911,7 @@ class _MarketplacePage extends StatelessWidget {
                             const SizedBox(height: 8),
                             Text(
                               blueprint.supplierApis.contains(provider)
-                                  ? 'Importacao, custo, pedido e tracking.'
+                                  ? 'Importacao, disponibilidade, pedido e rastreio.'
                                   : 'Benchmark competitivo para repricing e auto-pause.',
                               style: Theme.of(context).textTheme.bodyMedium
                                   ?.copyWith(
@@ -2670,6 +2929,7 @@ class _MarketplacePage extends StatelessWidget {
             ),
             const SizedBox(height: 30),
             SectionHeader(
+              // Cabeçalho da seção de pricing.
               kicker: 'Preco',
               title: 'Ciclo de decisao do pricing engine',
               caption:
@@ -2677,6 +2937,7 @@ class _MarketplacePage extends StatelessWidget {
             ),
             const SizedBox(height: 18),
             Column(
+              // Lista de capacidades requeridas pelo blueprint de dropshipping.
               children: blueprint.requiredCapabilities
                   .map(
                     (String item) => Padding(
@@ -2726,6 +2987,10 @@ class _MarketplacePage extends StatelessWidget {
   }
 }
 
+/// Página de Negócios, focada em ERP, compras e comprovantes.
+///
+/// Apresenta os módulos relacionados a operações empresariais,
+/// os objetivos da fase de ativação do core e os fluxos empresariais priorizados.
 class _BusinessPage extends StatelessWidget {
   const _BusinessPage({required this.data});
 
@@ -2749,6 +3014,7 @@ class _BusinessPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             SectionHeader(
+              // Cabeçalho da seção de Negócios.
               kicker: 'Negocios',
               title:
                   'ERP leve, compras, comprovacao e captura no mesmo backoffice',
@@ -2814,6 +3080,7 @@ class _BusinessPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 30),
+            // Cabeçalho da seção de rotinas empresariais.
             SectionHeader(
               kicker: 'Rotinas',
               title: 'Fluxos empresariais que a interface prioriza',
@@ -2822,6 +3089,7 @@ class _BusinessPage extends StatelessWidget {
             ),
             const SizedBox(height: 18),
             const Wrap(
+              // Tiles de agenda com tarefas e lembretes.
               spacing: 16,
               runSpacing: 16,
               children: <Widget>[
@@ -2861,6 +3129,10 @@ class _BusinessPage extends StatelessWidget {
   }
 }
 
+/// Página de Identidade, focada em segurança e autenticação.
+///
+/// Detalha o Identity Score, biometria (Face ID, Voice ID) e a importância
+/// da identidade forte em diversas jornadas.
 class _IdentityPage extends StatelessWidget {
   const _IdentityPage({required this.data});
 
@@ -2874,6 +3146,7 @@ class _IdentityPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             SectionHeader(
+              // Cabeçalho da seção de Identidade.
               kicker: 'Trust fabric',
               title:
                   'Face ID, Voice ID e Identity Score como camada transversal',
@@ -2891,6 +3164,7 @@ class _IdentityPage extends StatelessWidget {
                     gap: 24,
                     leading: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      // Exibição do score e sua descrição.
                       children: <Widget>[
                         Text(
                           'Identity score',
@@ -2921,6 +3195,7 @@ class _IdentityPage extends StatelessWidget {
                       ],
                     ),
                     trailing: Wrap(
+                      // Chips de sinalização de componentes de identidade.
                       spacing: 10,
                       runSpacing: 10,
                       children: const <Widget>[
@@ -2947,6 +3222,7 @@ class _IdentityPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 30),
+            // Cabeçalho da seção de proteção.
             SectionHeader(
               kicker: 'Protecao',
               title: 'Identidade forte em cada jornada',
@@ -2955,6 +3231,7 @@ class _IdentityPage extends StatelessWidget {
             ),
             const SizedBox(height: 18),
             Column(
+              // Lista de componentes de identidade transversal.
               children: data.manifest.identityComponents
                   .map(
                     (IdentityComponent component) => Padding(
@@ -3007,6 +3284,10 @@ class _IdentityPage extends StatelessWidget {
   }
 }
 
+/// Página da Helena (IA), exibindo funcionalidades de assistente, chat e agenda.
+///
+/// Detalha como a IA é utilizada de forma utilitária, com regras de uso
+/// e exemplos de interação.
 class _HelenaPage extends StatelessWidget {
   const _HelenaPage({required this.data});
 
@@ -3028,6 +3309,7 @@ class _HelenaPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             SectionHeader(
+              // Cabeçalho da seção da Helena.
               kicker: 'Helena',
               title:
                   'IA utilitaria, limitada por plano e orientada a produtividade',
@@ -3040,6 +3322,7 @@ class _HelenaPage extends StatelessWidget {
             ),
             const SizedBox(height: 18),
             Wrap(
+              // Tiles dos módulos relacionados a negócios.
               spacing: 16,
               runSpacing: 16,
               children: modules
@@ -3072,6 +3355,7 @@ class _HelenaPage extends StatelessWidget {
                   return _ResponsiveSplit(
                     stacked: stacked,
                     gap: 24,
+                    // Seção principal com o saldo e descrição.
                     leading: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
@@ -3081,7 +3365,7 @@ class _HelenaPage extends StatelessWidget {
                         ),
                         const SizedBox(height: 12),
                         Text(
-                          '“Sua carteira empresarial ja tem PIX P2P, comprovante Docs e seller score. A proxima acao recomendada e ativar o marketplace com fornecedores confiaveis e preco protegido.”',
+                          '“Sua carteira empresarial ja tem PIX P2P, comprovante Docs e seller score. A proxima acao recomendada e ativar o marketplace com lojas confiaveis e preco protegido.”',
                           style: Theme.of(context).textTheme.bodyLarge
                               ?.copyWith(
                                 color: Theme.of(
@@ -3093,6 +3377,7 @@ class _HelenaPage extends StatelessWidget {
                       ],
                     ),
                     trailing: ValleyPanel(
+                      // Painel com regras de compra.
                       padding: const EdgeInsets.all(18),
                       background: LinearGradient(
                         colors: <Color>[
@@ -3103,6 +3388,7 @@ class _HelenaPage extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
+                          // Título das preferências.
                           Text(
                             'Preferencias',
                             style: Theme.of(context).textTheme.titleMedium
@@ -3131,6 +3417,7 @@ class _HelenaPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 30),
+            // Cabeçalho da seção de agenda.
             SectionHeader(
               kicker: 'Agenda',
               title: 'Memoria util e recorrencia acionavel',
@@ -3139,15 +3426,16 @@ class _HelenaPage extends StatelessWidget {
             ),
             const SizedBox(height: 18),
             const Wrap(
+              // Tiles de linha do tempo para os fluxos empresariais.
               spacing: 16,
               runSpacing: 16,
               children: <Widget>[
                 SizedBox(
                   width: 320,
                   child: _AgendaTile(
-                    title: '09:00 • Conferir fornecedores',
+                    title: '09:00 • Conferir lojas',
                     body:
-                        'Revisar fornecedores principais e confirmar disponibilidade para ofertas ativas.',
+                        'Revisar lojas principais e confirmar disponibilidade para ofertas ativas.',
                   ),
                 ),
                 SizedBox(
@@ -3175,6 +3463,11 @@ class _HelenaPage extends StatelessWidget {
   }
 }
 
+/// Seção de destaque (hero) na página de visão geral.
+///
+/// Apresenta um título impactante, descrição, botões de ação rápida
+/// e uma visualização orbital dos módulos principais.
+/// [data] Os dados gerais da aplicação.
 class _OrbitalCommandHero extends StatelessWidget {
   const _OrbitalCommandHero({
     required this.data,
@@ -3191,6 +3484,7 @@ class _OrbitalCommandHero extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ValleyPanel(
+      // Painel com estilo visual diferenciado para o hero.
       padding: EdgeInsets.zero,
       radius: 34,
       glowColor: ValleyBrandColors.cyan,
@@ -3207,6 +3501,7 @@ class _OrbitalCommandHero extends StatelessWidget {
         borderRadius: BorderRadius.circular(34),
         child: Stack(
           children: <Widget>[
+            // Desenha o fundo orbital do hero.
             Positioned.fill(child: CustomPaint(painter: _HeroOrbitPainter())),
             Padding(
               padding: const EdgeInsets.all(26),
@@ -3219,6 +3514,7 @@ class _OrbitalCommandHero extends StatelessWidget {
                     trailingFlex: 5,
                     gap: 28,
                     leading: Column(
+                      // Conteúdo textual do hero.
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Wrap(
@@ -3228,6 +3524,7 @@ class _OrbitalCommandHero extends StatelessWidget {
                             const SignalChip(
                               label: 'modo premium',
                               color: ValleyBrandColors.cyan,
+                              // Sinaliza o modo premium da aplicação.
                             ),
                             SignalChip(
                               label: '${homeModules.length} modulos na home',
@@ -3240,6 +3537,7 @@ class _OrbitalCommandHero extends StatelessWidget {
                               outlined: true,
                             ),
                           ],
+                          // Chips de status e contagem de módulos.
                         ),
                         const SizedBox(height: 28),
                         ConstrainedBox(
@@ -3255,6 +3553,7 @@ class _OrbitalCommandHero extends StatelessWidget {
                                 ),
                           ),
                         ),
+                        // Título principal do hero.
                         const SizedBox(height: 18),
                         ConstrainedBox(
                           constraints: const BoxConstraints(maxWidth: 620),
@@ -3268,6 +3567,7 @@ class _OrbitalCommandHero extends StatelessWidget {
                                 ),
                           ),
                         ),
+                        // Descrição do hero.
                         const SizedBox(height: 24),
                         Wrap(
                           spacing: 12,
@@ -3275,10 +3575,12 @@ class _OrbitalCommandHero extends StatelessWidget {
                           children: <Widget>[
                             FilledButton.icon(
                               onPressed: () => onNavigate(2),
+                              // Botão para abrir a seção de comércio.
                               icon: const Icon(Icons.storefront_rounded),
                               label: const Text('Abrir comercio'),
                             ),
                             OutlinedButton.icon(
+                              // Botão para abrir a seção da Helena.
                               onPressed: () => onNavigate(5),
                               icon: const Icon(Icons.auto_awesome_rounded),
                               label: const Text('Abrir Helena'),
@@ -3286,6 +3588,7 @@ class _OrbitalCommandHero extends StatelessWidget {
                           ],
                         ),
                         const SizedBox(height: 24),
+                        // Faixa de briefing com princípios e foco.
                         _HeroBriefingStrip(
                           principle:
                               'Seu ecossistema fica organizado em modulos claros, com acesso rapido e superficie unica.',
@@ -3295,6 +3598,7 @@ class _OrbitalCommandHero extends StatelessWidget {
                       ],
                     ),
                     trailing: _OrbitModuleVisual(
+                      // Visualização orbital dos módulos.
                       modules: homeModules.isEmpty
                           ? data.includedModuleRecords
                           : homeModules,
@@ -3311,6 +3615,11 @@ class _OrbitalCommandHero extends StatelessWidget {
   }
 }
 
+/// Faixa de briefing exibida no hero da página inicial.
+///
+/// Contém informações sobre os princípios e o foco da experiência Valley.
+/// [principle] O princípio central da experiência.
+/// [focus] O foco principal da aplicação.
 class _HeroBriefingStrip extends StatelessWidget {
   const _HeroBriefingStrip({required this.principle, required this.focus});
 
@@ -3359,6 +3668,11 @@ class _HeroBriefingStrip extends StatelessWidget {
   }
 }
 
+/// Visualização orbital dos módulos na seção hero da página inicial.
+///
+/// Exibe os módulos em um layout circular, com o logo do Valley no centro.
+/// [modules] A lista de módulos a serem exibidos.
+/// [onOpenModule] Callback para abrir um módulo quando tocado.
 class _OrbitModuleVisual extends StatelessWidget {
   const _OrbitModuleVisual({required this.modules, required this.onOpenModule});
 
@@ -3368,6 +3682,7 @@ class _OrbitModuleVisual extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<ModuleRecord> visibleModules = modules.take(8).toList();
+    // Limita o número de módulos visíveis na órbita.
     return AspectRatio(
       aspectRatio: 1.05,
       child: LayoutBuilder(
@@ -3403,6 +3718,7 @@ class _OrbitModuleVisual extends StatelessWidget {
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  // Exibe o logo e o texto "ORBIT" no centro.
                   children: <Widget>[
                     const ValleyLogoMark(size: 64, borderRadius: 20),
                     const SizedBox(height: 10),
@@ -3417,6 +3733,7 @@ class _OrbitModuleVisual extends StatelessWidget {
                   ],
                 ),
               ),
+              // Posiciona cada módulo na órbita.
               for (int index = 0; index < visibleModules.length; index++)
                 _OrbitModuleNode(
                   module: visibleModules[index],
@@ -3434,6 +3751,12 @@ class _OrbitModuleVisual extends StatelessWidget {
   }
 }
 
+/// Representa um nó de módulo na visualização orbital.
+///
+/// Exibe o ícone e o código de um módulo em uma posição específica na órbita.
+/// [module] O registro do módulo a ser exibido.
+/// [angle] O ângulo em que o módulo deve ser posicionado.
+/// [radius] O raio da órbita.
 class _OrbitModuleNode extends StatelessWidget {
   const _OrbitModuleNode({
     required this.module,
@@ -3501,6 +3824,10 @@ class _OrbitModuleNode extends StatelessWidget {
   }
 }
 
+/// Faixa de sinalização premium exibida na página inicial.
+///
+/// Destaca métricas importantes da aplicação em um formato de "ribbon".
+/// [data] Os dados gerais da aplicação.
 class _PremiumSignalRibbon extends StatelessWidget {
   const _PremiumSignalRibbon({required this.data});
 
@@ -3525,6 +3852,7 @@ class _PremiumSignalRibbon extends StatelessWidget {
         spacing: 12,
         runSpacing: 12,
         children: <Widget>[
+          // Métricas individuais exibidas na faixa.
           _RibbonMetric(
             label: 'Modulos',
             value: '${data.modules.length}',
@@ -3551,6 +3879,12 @@ class _PremiumSignalRibbon extends StatelessWidget {
   }
 }
 
+/// Um tile de métrica individual para a faixa de sinalização premium.
+///
+/// Exibe um rótulo, valor e uma cor de destaque.
+/// [label] O rótulo da métrica.
+/// [value] O valor da métrica.
+/// [accent] A cor de destaque da métrica.
 class _RibbonMetric extends StatelessWidget {
   const _RibbonMetric({
     required this.label,
@@ -3612,6 +3946,9 @@ class _RibbonMetric extends StatelessWidget {
   }
 }
 
+/// Custom painter para desenhar o fundo orbital do hero.
+///
+/// Cria um efeito visual de linhas diagonais e um arco.
 class _HeroOrbitPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
@@ -3636,6 +3973,10 @@ class _HeroOrbitPainter extends CustomPainter {
   }
 
   @override
+  /// Retorna `false` pois o desenho não muda.
+  ///
+  /// [oldDelegate] O delegate anterior.
+  /// Retorna `true` se o delegate anterior era diferente e o desenho precisa ser refeito.
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
@@ -3643,6 +3984,10 @@ class _OrbitDialPainter extends CustomPainter {
   const _OrbitDialPainter({required this.count});
 
   final int count;
+
+  /// Custom painter para desenhar os anéis e linhas radiais da visualização orbital.
+  ///
+  /// [count] O número de linhas radiais a serem desenhadas.
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -3672,6 +4017,10 @@ class _OrbitDialPainter extends CustomPainter {
   }
 
   @override
+  /// Retorna `true` se o número de módulos mudou, indicando que o desenho precisa ser refeito.
+  ///
+  /// [oldDelegate] O delegate anterior.
+  /// Retorna `true` se o delegate anterior era diferente e o desenho precisa ser refeito.
   bool shouldRepaint(covariant _OrbitDialPainter oldDelegate) {
     return oldDelegate.count != count;
   }
@@ -3679,6 +4028,13 @@ class _OrbitDialPainter extends CustomPainter {
 
 class _HomeModuleComposer extends StatelessWidget {
   const _HomeModuleComposer({
+    // Lista de todos os módulos disponíveis.
+    // [homeModules] A lista de módulos atualmente selecionados para a home.
+    // [visibleCodes] O conjunto de códigos dos módulos visíveis.
+    // [preferencesReady] Indica se as preferências foram carregadas.
+    // [searchQuery] A query de busca atual.
+    // [onOpenModule] Callback para abrir um módulo.
+    // [onToggleHomeModule] Callback para alternar a visibilidade de um módulo.
     required this.allModules,
     required this.homeModules,
     required this.visibleCodes,
@@ -3714,6 +4070,7 @@ class _HomeModuleComposer extends StatelessWidget {
           final bool stacked = constraints.maxWidth < 900;
           return _ResponsiveSplit(
             stacked: stacked,
+            // Layout responsivo para a composição de módulos.
             leadingFlex: 7,
             trailingFlex: 5,
             gap: 22,
@@ -3728,6 +4085,7 @@ class _HomeModuleComposer extends StatelessWidget {
                         fontWeight: FontWeight.w800,
                       ),
                     ),
+                    // Título da seção "Na tela inicial".
                     const Spacer(),
                     SignalChip(
                       label: preferencesReady ? 'salvo' : 'sincronizando',
@@ -3736,6 +4094,7 @@ class _HomeModuleComposer extends StatelessWidget {
                           : ValleyBrandColors.warning,
                     ),
                   ],
+                  // Chip de status das preferências.
                 ),
                 const SizedBox(height: 14),
                 Text(
@@ -3747,6 +4106,7 @@ class _HomeModuleComposer extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 18),
+                // Exibe uma mensagem de aviso se nenhum módulo corresponder à busca.
                 if (homeModules.isEmpty)
                   ValleyPanel(
                     padding: const EdgeInsets.all(20),
@@ -3786,6 +4146,7 @@ class _HomeModuleComposer extends StatelessWidget {
                       ],
                     ),
                   )
+                // Exibe os módulos selecionados para a home.
                 else
                   Wrap(
                     spacing: 14,
@@ -3805,6 +4166,7 @@ class _HomeModuleComposer extends StatelessWidget {
               ],
             ),
             trailing: ValleyPanel(
+              // Painel para personalizar os módulos da home.
               padding: const EdgeInsets.all(18),
               radius: 22,
               glowColor: ValleyBrandColors.violet,
@@ -3818,6 +4180,7 @@ class _HomeModuleComposer extends StatelessWidget {
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                // Título e descrição da personalização da home.
                 children: <Widget>[
                   Text(
                     'Personalizar home',
@@ -3835,6 +4198,7 @@ class _HomeModuleComposer extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 16),
+                  // Chips de filtro para selecionar/desselecionar módulos.
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
@@ -3880,6 +4244,10 @@ class _HomeModuleComposer extends StatelessWidget {
   }
 }
 
+/// Tile para lançar um módulo diretamente da home.
+///
+/// Exibe informações detalhadas do módulo e permite abri-lo com um toque.
+/// [module] O registro do módulo a ser exibido.
 class _LaunchModuleTile extends StatefulWidget {
   const _LaunchModuleTile({required this.module, required this.onOpenModule});
 
@@ -3892,6 +4260,7 @@ class _LaunchModuleTile extends StatefulWidget {
 
 class _LaunchModuleTileState extends State<_LaunchModuleTile> {
   bool _hovered = false;
+  // Estado de hover para animação visual.
 
   @override
   Widget build(BuildContext context) {
@@ -3913,6 +4282,7 @@ class _LaunchModuleTileState extends State<_LaunchModuleTile> {
               curve: Curves.easeOutCubic,
               padding: const EdgeInsets.all(18),
               decoration: BoxDecoration(
+                // Estilo visual do tile, com gradiente e borda que reagem ao hover.
                 borderRadius: BorderRadius.circular(26),
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
@@ -3931,6 +4301,7 @@ class _LaunchModuleTileState extends State<_LaunchModuleTile> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Row(
+                    // Ícone e código do módulo.
                     children: <Widget>[
                       Container(
                         width: 46,
@@ -3959,6 +4330,7 @@ class _LaunchModuleTileState extends State<_LaunchModuleTile> {
                     ],
                   ),
                   const SizedBox(height: 16),
+                  // Nome e subtítulo do módulo.
                   Text(
                     widget.module.name,
                     maxLines: 1,
@@ -3977,6 +4349,7 @@ class _LaunchModuleTileState extends State<_LaunchModuleTile> {
                     ),
                   ),
                   const SizedBox(height: 14),
+                  // Descrição do módulo.
                   Text(
                     widget.module.description,
                     maxLines: 2,
@@ -3995,6 +4368,11 @@ class _LaunchModuleTileState extends State<_LaunchModuleTile> {
   }
 }
 
+/// Dock de acesso rápido aos módulos, flutuante na parte inferior da tela.
+///
+/// Exibe uma lista horizontal de pílulas de módulos, permitindo acesso rápido.
+/// [modules] A lista de módulos a serem exibidos no dock.
+/// [selectedCode] O código do módulo atualmente selecionado, para destaque visual.
 class _ModuleAccessDock extends StatelessWidget {
   const _ModuleAccessDock({
     required this.modules,
@@ -4011,6 +4389,7 @@ class _ModuleAccessDock extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(34),
       child: BackdropFilter(
+        // Efeito de desfoque para o dock.
         filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
         child: Container(
           padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
@@ -4036,6 +4415,7 @@ class _ModuleAccessDock extends StatelessWidget {
           ),
           child: Row(
             children: <Widget>[
+              // Ícone e rótulo do dock.
               const Icon(
                 Icons.grid_view_rounded,
                 color: ValleyBrandColors.cyan,
@@ -4051,11 +4431,13 @@ class _ModuleAccessDock extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 12),
+              // Separador visual.
               Container(
                 width: 1,
                 height: 28,
                 color: Colors.white.withValues(alpha: 0.16),
               ),
+              // Lista horizontal de pílulas de módulos.
               const SizedBox(width: 10),
               Expanded(
                 child: SingleChildScrollView(
@@ -4084,6 +4466,11 @@ class _ModuleAccessDock extends StatelessWidget {
   }
 }
 
+/// Pílula de módulo individual para o dock de acesso rápido.
+///
+/// Exibe o ícone e o código do módulo. O estilo muda quando o módulo está selecionado.
+/// [module] O registro do módulo a ser exibido.
+/// [selected] Indica se o módulo está atualmente selecionado.
 class _ModuleDockPill extends StatelessWidget {
   const _ModuleDockPill({
     required this.module,
@@ -4150,6 +4537,9 @@ class _ModuleDockPill extends StatelessWidget {
   }
 }
 
+/// Estrutura de layout para as páginas da aplicação.
+///
+/// Garante que o conteúdo seja rolavel e centralizado, com padding adequado.
 class _PageFrame extends StatelessWidget {
   const _PageFrame({required this.child});
 
@@ -4176,6 +4566,12 @@ class _PageFrame extends StatelessWidget {
   }
 }
 
+/// Widget que alterna entre layout de linha e coluna com base na largura disponível.
+///
+/// [stacked] Se `true`, os widgets `leading` e `trailing` são empilhados verticalmente.
+/// [leading] O widget principal.
+/// [trailing] O widget secundário.
+/// [gap] O espaçamento entre os widgets.
 class _ResponsiveSplit extends StatelessWidget {
   const _ResponsiveSplit({
     required this.stacked,
@@ -4217,6 +4613,12 @@ class _ResponsiveSplit extends StatelessWidget {
   }
 }
 
+/// Exibe um `BottomSheet` com informações detalhadas de um módulo.
+///
+/// Utilizado para apresentar o título, subtítulo e descrição de um módulo
+/// quando ele é aberto a partir da home ou do dock.
+/// [context] O contexto de construção.
+/// [code] O código do módulo.
 Future<void> _showModuleActionSheet(
   BuildContext context, {
   required String code,
@@ -4274,6 +4676,7 @@ Future<void> _showModuleActionSheet(
                   ),
                 ),
                 const SizedBox(height: 18),
+                // Tiles dos módulos relacionados à Helena.
                 Wrap(
                   spacing: 12,
                   runSpacing: 12,
@@ -4297,6 +4700,11 @@ Future<void> _showModuleActionSheet(
   );
 }
 
+/// Tile de linha do tempo para exibir etapas de um processo.
+///
+/// [step] O número ou identificador da etapa.
+/// [title] O título da etapa.
+/// [body] A descrição detalhada da etapa.
 class _TimelineTile extends StatelessWidget {
   const _TimelineTile({
     required this.step,
@@ -4335,6 +4743,13 @@ class _TimelineTile extends StatelessWidget {
   }
 }
 
+/// Linha de evento do ledger, exibindo uma transação ou ação recente.
+///
+/// [status] O status do evento (SETTLED, AUTHORIZED, ESCROW_HOLD).
+/// [title] O título do evento.
+/// [detail] Detalhes adicionais do evento.
+/// [amount] O valor monetário associado ao evento.
+/// [onTap] Callback opcional para quando o evento é tocado.
 class _LedgerEventRow extends StatelessWidget {
   const _LedgerEventRow({
     required this.status,
@@ -4408,6 +4823,10 @@ class _LedgerEventRow extends StatelessWidget {
   }
 }
 
+/// Tile de agenda, exibindo um compromisso ou lembrete.
+///
+/// [title] O título do item da agenda.
+/// [body] A descrição detalhada do item da agenda.
 class _AgendaTile extends StatelessWidget {
   const _AgendaTile({required this.title, required this.body});
 
@@ -4439,6 +4858,11 @@ class _AgendaTile extends StatelessWidget {
   }
 }
 
+/// Classe auxiliar que representa um destino de navegação.
+///
+/// Usada para definir os itens da barra de navegação inferior,
+/// incluindo um rótulo, título e ícone.
+/// [label] O rótulo curto para exibição na barra de navegação.
 class _Destination {
   const _Destination({
     required this.label,

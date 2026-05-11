@@ -12,8 +12,7 @@ class ProductApiRepository {
     'VALLEY_PRODUCT_API_BASE_URL',
     defaultValue: '',
   );
-  static const String _releaseBaseUrl =
-      'http://100.109.240.100:8085';
+  static const String _releaseBaseUrl = 'http://100.109.240.100:8085';
   static const String _bundledStockRuntimeAsset =
       'assets/data/valley_stock_runtime_ptbr.json';
   static const String _sessionTokenKey = 'valley.product.auth.session.v1';
@@ -591,7 +590,7 @@ class ProductApiRepository {
       activeModuleIds,
     ).map(ProductModule.fromJson).toList(growable: false);
     final int merchantCount = stockItems
-        .map((ProductItem item) => item.supplierDisplayName)
+        .map((ProductItem item) => item.customerVisibleSupplierName)
         .where((String value) => value.trim().isNotEmpty)
         .toSet()
         .length;
@@ -684,9 +683,9 @@ class ProductApiRepository {
 
     final int merchantCount = mergedItems
         .map(
-          (ProductItem item) => item.supplierDisplayName.trim().isEmpty
+          (ProductItem item) => item.customerVisibleSupplierName.trim().isEmpty
               ? item.merchantName.trim()
-              : item.supplierDisplayName.trim(),
+              : item.customerVisibleSupplierName.trim(),
         )
         .where((String value) => value.isNotEmpty)
         .toSet()

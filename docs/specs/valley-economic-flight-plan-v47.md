@@ -1,5 +1,8 @@
 # Valley v47 - Plano Economico para 100 Mil
 
+> **Função:** Define a viabilidade financeira e as regras de governança para o crescimento sustentável.
+> **Conexões:** Estabelece os guardrails para a Helena (IA) e as taxas operacionais que alimentam o módulo PAY.
+
 ## Resumo executivo
 
 O Valley v47 possui 47 modulos canonicos em 9 dominios. A leitura economica principal e que o ecossistema completo atravessa um vale da morte inicial: com 1.000 ou 10.000 usuarios, o stack inteiro tende a operar deficitario porque os custos fixos de plataforma, IA, atendimento, compliance, pagamentos e operacao fisica chegam antes da densidade de receita.

@@ -97,7 +97,7 @@ PRODUCT_MVP_MODULE_META = {
     },
     "STOCK": {
         "label": "Stock",
-        "subtitle": "Catalogo sincronizado com fornecedores e margem operacional controlada.",
+        "subtitle": "Catalogo sincronizado com lojas Valley e margem operacional controlada.",
         "badge": "SYNC",
         "headline": "Dropshipping e estoque sincronizados com operacao ativa.",
     },
@@ -121,10 +121,33 @@ AUTH_SESSION_TTL_SECONDS = 60 * 60 * 24 * 30
 AUTH_LOGIN_LOCK_THRESHOLD = 5
 AUTH_LOGIN_LOCK_SECONDS = 15 * 60
 STOCK_INTERNAL_FIELDS = {
+    "base_cost_brl",
+    "benchmark_provider_key",
+    "benchmark_retail_price_brl",
+    "benchmark_similarity_score",
+    "benchmark_title",
+    "duplicate_group_key",
+    "duplicate_group_size",
+    "duplicate_winner_item_id",
+    "duplicate_winner_supplier_name",
+    "estimated_fees_brl",
+    "estimated_inventory_net_revenue_brl",
+    "estimated_net_revenue_brl",
+    "estimated_net_revenue_pct",
+    "inventory_cost_brl",
+    "marketing_fee_pct",
+    "operational_fee_pct",
+    "platform_fee_pct",
+    "price_gap_to_benchmark_brl",
+    "publication_reason_codes",
+    "publication_reasons",
+    "publication_signature",
+    "supplier_key",
     "supplier_name",
     "supplier_type",
     "supplier_model",
     "supplier_visibility",
+    "target_net_revenue_pct",
     "provider_key",
     "provider_status",
     "channel_label",
@@ -1775,7 +1798,7 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                     domain_action="media_opened",
                     journey_stage="research",
                     status="SUCCESS",
-                    headline="Midia de fornecedor aberta",
+                    headline="Midia de produto aberta",
                     detail=f"{item_title} teve a midia aberta para validacao da oferta.",
                     item=item,
                     provider=provider,
@@ -3399,7 +3422,57 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
 
     def _load_stock_runtime_catalog(self) -> dict[str, Any] | None:
         payload = load_json_file(self._preferred_stock_catalog_path())
+        items = payload.get("items") if isinstance(payload, dict) else None
+        if isinstance(items, list) and items:
+            return payload
+        pricing_payload = load_json_file(ADMIN_IMPORTED_PRODUCTS_PRICING_PATH) or {}
+        pricing_items = pricing_payload.get("items") if isinstance(pricing_payload, dict) else None
+        if isinstance(pricing_items, list) and pricing_items:
+            fallback_items = [
+                self._stock_runtime_item_from_pricing(item)
+                for item in pricing_items
+                if isinstance(item, dict)
+            ]
+            return {
+                "status": "ok",
+                "service": "valley-stock-catalog-imported-pricing-fallback",
+                "generated_at_utc": utc_now_iso(),
+                "fallback_source": str(ADMIN_IMPORTED_PRODUCTS_PRICING_PATH.relative_to(ROOT)),
+                "items_total": len(fallback_items),
+                "categories_total": len({str(item.get("category") or "") for item in fallback_items}),
+                "items": fallback_items,
+            }
         return payload if isinstance(payload, dict) else None
+
+    def _stock_runtime_item_from_pricing(self, raw_item: dict[str, Any]) -> dict[str, Any]:
+        item = dict(raw_item)
+        item["module_id"] = "STOCK"
+        item["merchant_name"] = str(item.get("merchant_name") or "Valley")
+        item["price_brl"] = round(
+            float(item.get("price_brl") or item.get("suggested_sale_price_brl") or item.get("base_cost_brl") or 0),
+            2,
+        )
+        item["compare_at_brl"] = round(
+            float(item.get("compare_at_brl") or item.get("benchmark_retail_price_brl") or item["price_brl"]),
+            2,
+        )
+        item["stock"] = int(float(item.get("stock") or 0))
+        item["status"] = str(item.get("availability_label") or item.get("publication_status_label") or "Disponivel")
+        item["description"] = str(
+            item.get("description")
+            or f"{item.get('title') or 'Produto Valley'} com estoque e preço sincronizados para compra Valley."
+        )
+        item["cta_label"] = str(item.get("cta_label") or "Abrir pagamento")
+        item["cta_path"] = str(item.get("cta_path") or "")
+        item["media_path"] = str(item.get("media_path") or "")
+        item["image_url"] = str(item.get("image_url") or "")
+        item["video_url"] = str(item.get("video_url") or "")
+        item["video_count"] = int(float(item.get("video_count") or 0))
+        item["gallery_urls"] = item.get("gallery_urls") if isinstance(item.get("gallery_urls"), list) else []
+        item["profile_id"] = str(item.get("profile_id") or "")
+        item["customer_visible_supplier_name"] = "Valley"
+        item["supplier_visibility"] = "internal"
+        return item
 
     def _runtime_catalog_items_by_id(self) -> dict[str, dict[str, Any]]:
         path = self._preferred_stock_catalog_path()
@@ -3780,7 +3853,7 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 {
                     "type": "free_shipping_threshold",
                     "title": "Adicionar itens para isencao de frete",
-                    "detail": f"O fornecedor recomenda completar R$ {amount_to_free:.2f} em produtos elegiveis para tentar frete gratis.",
+                    "detail": f"A loja recomenda completar R$ {amount_to_free:.2f} em produtos elegiveis para tentar frete gratis.",
                     "amount_to_qualify_brl": amount_to_free,
                 }
             )
@@ -3789,13 +3862,14 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 {
                     "type": "regional_consolidation",
                     "title": "Consolidar envio",
-                    "detail": "Para este destino, o fornecedor recomenda consolidar itens no mesmo pedido para reduzir custo logistico por unidade.",
+                    "detail": "Para este destino, a loja recomenda consolidar itens no mesmo pedido para reduzir custo logistico por unidade.",
                 }
             )
 
         return {
             "provider_key": provider_key,
             "supplier_name": str(item.get("supplier_name") or provider_key or "Fornecedor integrado"),
+            "customer_visible_supplier_name": "Valley",
             "quote_source": "supplier_runtime_base",
             "consulted_at_utc": utc_now_iso(),
             "delivery_state": state,
@@ -3805,8 +3879,31 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             "amount_to_free_shipping_brl": amount_to_free,
             "eta": eta,
             "suggestions": suggestions,
-            "policy": "Frete do fornecedor repassado integralmente ao comprador no checkout.",
+            "policy": "Frete da entrega repassado integralmente ao comprador no checkout.",
         }
+
+    def _public_shipping_quote(self, quote: dict[str, Any]) -> dict[str, Any]:
+        public_keys = (
+            "customer_visible_supplier_name",
+            "consulted_at_utc",
+            "delivery_state",
+            "shipping_cost_brl",
+            "shipping_passthrough_brl",
+            "free_shipping_threshold_brl",
+            "amount_to_free_shipping_brl",
+            "eta",
+            "suggestions",
+            "policy",
+        )
+        public_quote = {
+            key: quote[key]
+            for key in public_keys
+            if key in quote
+        }
+        public_quote["customer_visible_supplier_name"] = str(
+            public_quote.get("customer_visible_supplier_name") or "Valley"
+        )
+        return public_quote
 
     def _shipping_quote_payload(self, query: dict[str, list[str]]) -> dict[str, Any]:
         payload = self._read_json_body()
@@ -3818,14 +3915,14 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
         if item is None:
             return {"status": "failed", "action": "shipping-quote", "payload": {"message": "Item indisponivel para cotacao de frete."}}
         if not self._delivery_address_complete(delivery_address):
-            return {"status": "failed", "action": "shipping-quote", "payload": {"message": "Informe endereco completo para consultar o frete do fornecedor."}}
+            return {"status": "failed", "action": "shipping-quote", "payload": {"message": "Informe endereco completo para consultar o frete da entrega."}}
 
-        quote = self._supplier_shipping_quote(item, delivery_address)
+        quote = self._public_shipping_quote(self._supplier_shipping_quote(item, delivery_address))
         return {
             "status": "ok",
             "action": "shipping-quote",
             "payload": {
-                "message": "Frete consultado na base do fornecedor.",
+                "message": "Frete consultado para o endereco informado.",
                 "delivery_address": delivery_address,
                 "shipping_quote": quote,
             },
@@ -3849,13 +3946,14 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 continue
             item = self._find_catalog_item(str(order.get("item_id") or "")) or {}
             shipping_quote = order.get("shipping_quote") if isinstance(order.get("shipping_quote"), dict) else {}
+            public_shipping_quote = self._public_shipping_quote(shipping_quote)
             tracking = order.get("tracking") if isinstance(order.get("tracking"), dict) else {}
             if not tracking:
                 tracking = {
                     "tracking_code": str(order.get("tracking_code") or f"VALLEY-{str(order.get('supplier_order_id') or '')[:8].upper()}"),
                     "status": "payment_pending",
                     "status_label": "Pedido criado",
-                    "eta": str(shipping_quote.get("eta") or "Prazo do fornecedor"),
+                    "eta": str(shipping_quote.get("eta") or "Prazo de entrega"),
                     "events": [
                         {
                             "label": "Compra recebida",
@@ -3872,12 +3970,11 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                     "image_url": str(item.get("image_url") or ""),
                     "price_brl": float(item.get("price_brl") or 0),
                     "shipping_cost_brl": float(order.get("shipping_cost_brl") or shipping_quote.get("shipping_passthrough_brl") or 0),
-                    "provider_key": str(order.get("provider_key") or ""),
                     "customer_visible_supplier_name": str(order.get("customer_visible_supplier_name") or "Valley"),
                     "created_at_utc": str(order.get("created_at_utc") or ""),
                     "status": str(order.get("status") or "payment_pending"),
                     "ship_to": order.get("ship_to") if isinstance(order.get("ship_to"), dict) else {},
-                    "shipping_quote": shipping_quote,
+                    "shipping_quote": public_shipping_quote,
                     "tracking": tracking,
                 }
             )
@@ -5594,8 +5691,8 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             payload_items.append(
                 {
                     "id": f"{item_id}-shipping",
-                    "title": "Frete fornecedor Valley",
-                    "description": "Custo de frete consultado na base do fornecedor e repassado ao comprador.",
+                    "title": "Frete da entrega Valley",
+                    "description": "Custo de frete calculado para o endereço e repassado ao comprador.",
                     "quantity": 1,
                     "currency_id": "BRL",
                     "unit_price": shipping_cost_brl,
@@ -6948,7 +7045,7 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             "status": "ok",
             "action": "open-media",
             "payload": {
-                "message": "Abrindo demonstracao.",
+                "message": "Abrindo midia.",
                 "url": media_url,
             },
         }
@@ -7037,6 +7134,34 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             return result
 
         shipping_quote = self._supplier_shipping_quote(item, delivery_address)
+        public_shipping_quote = self._public_shipping_quote(shipping_quote)
+        supplier_payload = {
+            "payload_version": "valley_supplier_order.v1",
+            "provider_key": str(item.get("provider_key") or ""),
+            "source_product_id": str(item.get("source_product_id") or item.get("source_item_id") or ""),
+            "line_items": [
+                {
+                    "item_id": item_id,
+                    "source_product_id": str(item.get("source_product_id") or item.get("source_item_id") or ""),
+                    "title": str(item.get("title_pt_br") or item.get("title") or "Produto Valley"),
+                    "quantity": 1,
+                    "unit_price_brl": round(float(item.get("price_brl") or 0), 2),
+                }
+            ],
+            "ship_to": delivery_address,
+            "shipping": {
+                "shipping_cost_brl": shipping_quote["shipping_passthrough_brl"],
+                "eta": str(shipping_quote.get("eta") or "Prazo de entrega"),
+                "quote_source": str(shipping_quote.get("quote_source") or "supplier_runtime_base"),
+            },
+            "white_label": {
+                **attempt["white_label"],
+                "apply_to_shipping_label": True,
+                "apply_to_packaging": True,
+                "customer_visible_supplier_name": "Valley",
+                "original_supplier_customer_visible": False,
+            },
+        }
         supplier_order = {
             "supplier_order_id": str(uuid.uuid4()),
             "item_id": item_id,
@@ -7051,7 +7176,7 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 "tracking_code": f"VALLEY-{str(uuid.uuid4())[:8].upper()}",
                 "status": "payment_pending",
                 "status_label": "Pedido criado",
-                "eta": str(shipping_quote.get("eta") or "Prazo do fornecedor"),
+                "eta": str(shipping_quote.get("eta") or "Prazo de entrega"),
                 "events": [
                     {
                         "label": "Compra recebida",
@@ -7060,19 +7185,29 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                     },
                     {
                         "label": "Aguardando coleta na origem",
-                        "detail": "Assim que o fornecedor informar coleta, saida da cidade de origem, chegada ao centro de distribuicao, rota de entrega ou entrega concluida, o Valley mostrara aqui e notificara o usuario.",
+                        "detail": "Assim que houver coleta, saida da cidade de origem, chegada ao centro de distribuicao, rota de entrega ou entrega concluida, o Valley mostrara aqui e notificara o usuario.",
                         "occurred_at_utc": utc_now_iso(),
                     },
                 ],
             },
             "white_label": attempt["white_label"],
+            "supplier_payload": supplier_payload,
             "customer_visible_supplier_name": "Valley",
             "created_at_utc": utc_now_iso(),
             "status": "payment_pending",
         }
+        public_supplier_order = {
+            "supplier_order_id": supplier_order["supplier_order_id"],
+            "item_id": supplier_order["item_id"],
+            "customer_visible_supplier_name": supplier_order["customer_visible_supplier_name"],
+            "shipping_cost_brl": supplier_order["shipping_cost_brl"],
+            "shipping_quote": public_shipping_quote,
+            "tracking": supplier_order["tracking"],
+            "white_label": supplier_payload["white_label"],
+        }
 
         attempt["shipping_quote"] = shipping_quote
-        success_message = f"Parabens pela compra de {item.get('title') or 'sua oferta'}! O frete do fornecedor ja foi incluido no checkout."
+        success_message = f"Parabens pela compra de {item.get('title') or 'sua oferta'}! O frete da entrega ja foi incluido no checkout."
         if self._mercadopago_checkout_ready(item):
             mercadopago_result = self._create_mercadopago_preference(item, shipping_quote=shipping_quote)
             if mercadopago_result.get("status") == "ok":
@@ -7085,8 +7220,8 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                         "provider": "mercado_pago",
                         "preference_id": mercadopago_result.get("preference_id"),
                         "delivery_address": delivery_address,
-                        "shipping_quote": shipping_quote,
-                        "supplier_order": supplier_order,
+                        "shipping_quote": public_shipping_quote,
+                        "supplier_order": public_supplier_order,
                     },
                 }
                 attempt.update({
@@ -7163,8 +7298,8 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 "url": checkout_url,
                 "provider": "mercado_livre",
                 "delivery_address": delivery_address,
-                "shipping_quote": shipping_quote,
-                "supplier_order": supplier_order,
+                "shipping_quote": public_shipping_quote,
+                "supplier_order": public_supplier_order,
             },
         }
         attempt.update({

@@ -213,6 +213,24 @@ class ProductItem {
     return 'Fornecedor integrado';
   }
 
+  String get customerVisibleSupplierName {
+    final String explicitName = _firstReadableString(<Object?>[
+      raw['customer_visible_supplier_name'],
+      raw['customer_visible_merchant_name'],
+      raw['storefront_name'],
+    ]);
+    if (explicitName.isNotEmpty) {
+      return explicitName;
+    }
+    if (supplierInternal || providerKey.trim().isNotEmpty) {
+      return 'Valley';
+    }
+    if (merchantName.trim().isNotEmpty) {
+      return merchantName.trim();
+    }
+    return 'Valley';
+  }
+
   String get providerDisplayName {
     if (providerKey.trim().isNotEmpty) {
       return _humanizeProvider(providerKey);
@@ -434,7 +452,8 @@ class ProductPurchase {
 
   factory ProductPurchase.fromJson(Map<String, dynamic> json) {
     final Map<String, dynamic> tracking =
-        (json['tracking'] as Map<dynamic, dynamic>? ?? const <dynamic, dynamic>{})
+        (json['tracking'] as Map<dynamic, dynamic>? ??
+                const <dynamic, dynamic>{})
             .cast<String, dynamic>();
     return ProductPurchase(
       purchaseId: json['purchase_id'] as String? ?? '',
@@ -447,7 +466,7 @@ class ProductPurchase {
       createdAtUtc: json['created_at_utc'] as String? ?? '',
       trackingCode: tracking['tracking_code'] as String? ?? '',
       trackingLabel: tracking['status_label'] as String? ?? 'Pedido criado',
-      trackingEta: tracking['eta'] as String? ?? 'Prazo do fornecedor',
+      trackingEta: tracking['eta'] as String? ?? 'Prazo de entrega',
       trackingEvents:
           (tracking['events'] as List<dynamic>? ?? const <dynamic>[])
               .whereType<Map<dynamic, dynamic>>()

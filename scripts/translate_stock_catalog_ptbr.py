@@ -534,8 +534,16 @@ def update_public_preview(translated_runtime: dict[str, Any]) -> None:
     summary["products"] = len(stock_items) + len(non_stock_items)
     catalog["summary"] = summary
     catalog["generated_at_utc"] = utc_now_iso()
+    bundled_runtime = dict(translated_runtime)
+    bundled_runtime["items"] = [
+        sanitize_public_stock_item(item)
+        if isinstance(item, dict) and item.get("module_id") == "STOCK"
+        else item
+        for item in translated_runtime.get("items", [])
+        if isinstance(item, dict)
+    ]
     write_json(CATALOG_PATH, catalog)
-    write_json(BUNDLED_STOCK_RUNTIME_ASSET_PATH, translated_runtime)
+    write_json(BUNDLED_STOCK_RUNTIME_ASSET_PATH, bundled_runtime)
 
 
 def main() -> None:

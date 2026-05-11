@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "source_spec": "docs/specs/valley-mvp-execution-plan.md",
   "execution_mode": "controlled_artifacts_only",
-  "objective": {
-    "summary": "Construir um MVP viavel focado em geracao de receita imediata, baixo custo operacional e validacao de fluxo financeiro e operacional.",
-    "central_principle": "O MVP nao e um produto completo. E uma maquina de transacao, identidade e estoque."
+  "objective": { 
+    "summary": "Define o escopo e os princípios para a construção do Produto Mínimo Viável (MVP) do Valley Omniverse, focando na geração de receita imediata, otimização de custos operacionais e validação dos fluxos financeiros e operacionais essenciais. Este manifesto serve como guia para as fases de desenvolvimento e implantação.",
+    "central_principle": "O MVP não é um produto completo, mas sim uma máquina eficiente de transação, identidade e gestão de estoque, projetada para provar o modelo de negócio e gerar valor rapidamente."
   },
-  "included_modules": [
+  "included_modules": [ 
     "MARKETPLACE",
     "STOCK",
     "CHAT"
@@ -15,11 +15,11 @@
   "economic_strategy": {
     "source_spec": "docs/specs/valley-economic-flight-plan-v47.md",
     "break_even_users": 100000,
-    "break_even_mau": 48000,
+    "break_even_mau": 48000, 
     "million_user_monthly_result_brl": 5700000,
-    "rollout_principle": "Nao ligar os 47 modulos ao mesmo tempo; validar primeiro as jornadas que aumentam ARPU e capturam fluxo financeiro.",
-    "golden_combo": [
-      "PLUG",
+    "rollout_principle": "A estratégia de lançamento prioriza a ativação gradual dos módulos, focando inicialmente nas jornadas que demonstram maior potencial de aumento do ARPU (Receita Média por Usuário) e captura de fluxo financeiro, evitando a implantação simultânea de todos os 47 módulos.",
+    "golden_combo": [ 
+      "PLUG", 
       "BUSINESS",
       "DOCS",
       "MARKETPLACE"
@@ -30,7 +30,7 @@
       "WMS"
     ],
     "hold_until_density": [
-      "FOOD",
+      "FOOD", 
       "DELIVERY",
       "MOBILITY"
     ],
@@ -40,7 +40,7 @@
       "bloquear rota, entrega ou SKU abaixo do piso economico",
       "PAY fica desativado nesta rodada; PLUG, DOCS e BUSINESS preservam o desenho transacional ate a reativacao",
       "DOCS registra recibo, contrato ou checksum das operacoes sensiveis"
-    ]
+    ] 
   },
   "excluded_modules": [
     "PAY",
@@ -58,7 +58,7 @@
     "GAMING",
     "IOT"
   ],
-  "cross_cutting_capabilities": {
+  "cross_cutting_capabilities": { 
     "unique_identity": {
       "summary": "Frente transversal do MVP. Nao cria um novo modulo; usa o nucleo de identidade, seguranca e risco ja existentes.",
       "components": [
@@ -74,7 +74,7 @@
             "users",
             "led_cards",
             "security_biometric_credentials"
-          ],
+          ], 
           "event_topics": [
             "security.biometric.enrolled"
           ],
@@ -92,7 +92,7 @@
           "evidence_entities": [
             "users",
             "led_cards"
-          ],
+          ], 
           "event_topics": [],
           "objective": "Validacao vocal para reforco de autenticacao e prova de aceite em operacoes sensiveis."
         },
@@ -110,7 +110,7 @@
             "security_signal_logs",
             "sale_validation_events",
             "transactions",
-            "merchant_storefronts"
+          "merchant_storefronts" 
           ],
           "event_topics": [
             "pay.transaction.posted",
@@ -118,11 +118,11 @@
             "security.incident.closed"
           ],
           "objective": "Score de reputacao e antifraude para operacoes de pagamento, seller onboarding e aprovacoes de risco."
-        }
+        } 
       ]
-    }
+    } 
   },
-  "phases": [
+  "phases": [ 
     {
       "key": "phase_1_core_activation",
       "label": "Fase 1 - Ativacao do Core",
@@ -139,7 +139,7 @@
         "documento e recibo com checksum rastreavel",
         "empresa onboardada com rotina empresarial minima",
         "marketplace alimentando PLUG, BUSINESS e DOCS enquanto PAY fica desativado nesta rodada",
-        "recompensas e descontos com fonte pagadora registrada"
+        "recompensas e descontos com fonte pagadora registrada" 
       ]
     },
     {
@@ -148,7 +148,7 @@
       "goal": "Abrir a camada de catalogo, estoque e venda para gerar fluxo comercial sem CAPEX pesado.",
       "modules": [
         "REPLY",
-        "STOCK",
+        "STOCK", 
         "WMS"
       ],
       "stock_marketplace_model": {
@@ -159,7 +159,7 @@
         ],
         "valley_identity_rule": "Usar profundidade de catalogo, busca, ofertas, variacoes e seller score sem copiar identidade visual dos concorrentes.",
         "visual_direction": "Night/Cosmic como base, Violet para compra, Cyan para confianca operacional e cards claros para produto.",
-        "must_have_surfaces": [
+        "must_have_surfaces": [ 
           "busca principal",
           "categorias",
           "vitrine de ofertas",
@@ -168,7 +168,7 @@
           "variacoes de produto",
           "checkout preparado para PLUG e reativacao posterior de PAY",
           "comprovante e documento por DOCS"
-        ],
+        ], 
         "admin_api_integrations": [
           "Mercado Livre",
           "Amazon",
@@ -177,7 +177,7 @@
           "Magalu",
           "CJDropshipping",
           "Shopee"
-        ],
+        ], 
         "admin_api_fields": [
           "ambiente",
           "regiao/site",
@@ -197,7 +197,7 @@
           "rotinas ativas de catalogo, pedidos, estoque e precos",
           "fallback scraping",
           "bloqueio de IA externa"
-        ],
+        ], 
         "dropshipping_production_blueprint": {
           "spec_path": "docs/specs/valley-dropshipping-production-blueprint.md",
           "supplier_apis": [
@@ -205,7 +205,7 @@
             "Alibaba",
             "CJDropshipping"
           ],
-          "market_price_sources": [
+          "market_price_sources": [ 
             "Mercado Livre",
             "Amazon",
             "Shopee",
@@ -223,7 +223,7 @@
             "reprecificacao automatica",
             "pausa automatica sem margem ou estoque",
             "decisao de pricing append-only"
-          ],
+          ], 
           "database_migration": "database/postgres/033_v47_stock_dropshipping_production_blueprint.sql"
         }
       },
@@ -232,7 +232,7 @@
         "estoque simplificado com enderecamento e variancia minima",
         "checkout do marketplace alimentando PLUG e preservando contrato para PAY",
         "experiencia STOCK reconhecivel como Valley, mesmo com comportamento de grande marketplace"
-      ]
+      ] 
     },
     {
       "key": "phase_3_identity",
@@ -241,7 +241,7 @@
       "modules": [],
       "cross_cutting_capabilities": [
         "face_id",
-        "voice_id",
+        "voice_id", 
         "identity_score"
       ],
       "success_gates": [
@@ -249,7 +249,7 @@
         "Voice ID formalizado como frente spec-first",
         "Identity Score agregado para antifraude e reputacao"
       ]
-    },
+    }, 
     {
       "key": "phase_4_light_ai",
       "label": "Fase 4 - IA Leve",
@@ -257,7 +257,7 @@
       "modules": [
         "CHAT",
         "ADVISOR",
-        "AGENDA"
+        "AGENDA" 
       ],
       "success_gates": [
         "chat com retention segura",
@@ -268,7 +268,7 @@
         "uso limitado por plano",
         "processamento assincrono",
         "foco em produtividade, nao volume",
-        "sem chat livre ilimitado em plano agressivo de preco",
+        "sem chat livre ilimitado em plano agressivo de preco", 
         "tarefas caras entram em fila com orcamento e rate limit"
       ]
     }
@@ -278,14 +278,14 @@
     "numero de empresas ativas",
     "taxa de conversao marketplace",
     "custo por transacao",
-    "fraude / chargeback"
+    "fraude / chargeback" 
   ],
   "golden_rules": [
     "nao escalar logistica cedo",
     "nao subsidiar operacao",
     "separar taxa, processamento e logistica",
     "limitar custo de IA",
-    "monetizar desde o primeiro usuario",
+    "monetizar desde o primeiro usuario", 
     "recompensa so existe com fonte pagadora",
     "piso economico por rota e por SKU e lei operacional"
   ],

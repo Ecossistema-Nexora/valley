@@ -16,9 +16,9 @@
 - [x] Ativar botao de compartilhamento real da oferta para apps/redes sociais. Concluido em 2026-05-07 03:39:00 BRT.
 - [x] Consultar frete do fornecedor pelo endereco de entrega, repassar o custo ao comprador e exibir sugestoes de isencao/reducao no checkout. Concluido em 2026-05-07 03:39:00 BRT.
 - [x] Criar Minhas compras com rastreio automatico e notificacoes de status ate entrega recebida. Concluido em 2026-05-07 03:39:00 BRT.
-- [ ] Remover textos de desenvolvimento/curadoria e ajustar produto/lista com titulo, descricao e valor reais do item.
-- [ ] Preparar payload white-label para fornecedor: marca Valley em etiqueta/embalagem quando API permitir e sem expor nome do fornecedor original ao cliente.
-- [ ] Alterar estrategia de importacao para catalogo 10k+: todas categorias disponiveis, paginacao incremental, cache e tratamento de rate limit.
+- [x] Remover textos de desenvolvimento/curadoria e ajustar produto/lista com titulo, descricao e valor reais do item. Concluido em 2026-05-11 09:59:34 BRT.
+- [x] Preparar payload white-label para fornecedor: marca Valley em etiqueta/embalagem quando API permitir e sem expor nome do fornecedor original ao cliente. Concluido em 2026-05-11 09:59:34 BRT.
+- [x] Alterar estrategia de importacao para catalogo 10k+: todas categorias disponiveis, paginacao incremental, cache e tratamento de rate limit. Concluido em 2026-05-11 09:59:34 BRT.
 - [x] Rebuildar APK ABI corrigido, validar e reenviar pelo Telegram com link publico. Concluido em 2026-05-07 04:44:00 BRT.
 
 ## Evidencias Iniciais
@@ -49,13 +49,22 @@
 - Criado `scripts/repair_valley_cloudflare_named_tunnel.ps1` para renovar automaticamente o token do tunnel quando existir `CLOUDFLARE_API_TOKEN`/`CF_API_TOKEN` com `Cloudflare Tunnel Write` ou `Cloudflare One Connector Write`.
 - Criado `docs/runtime/cloudflare_named_tunnel_repair.md` com o procedimento persistente para copiar o token via `Zero Trust > Networks > Tunnels > valley-admin > Add a replica` ou via API.
 - Execucao do reparador em 2026-05-08 registrou `tmp/runtime/valley-cloudflare-named-tunnel-repair.json` com status `blocked`: `CLOUDFLARE_API_TOKEN/CF_API_TOKEN ausente`.
+- `frontend/flutter/lib/src/data/product_api_models.dart`, `product_api_repository.dart`, `valley_product_shell.dart` e `valley_home_shell.dart` ajustados para usar `customer_visible_supplier_name`, linguagem de loja/entrega e titulos/descricoes/valores reais do item.
+- `scripts/serve_valley_admin.py` passou a gerar `supplier_payload` interno white-label (`valley_supplier_order.v1`) com marca Valley em etiqueta/embalagem quando permitido, sem expor fornecedor original no payload publico de checkout, frete ou Minhas compras.
+- `frontend/flutter/assets/data/valley_product_catalog.json` e `frontend/flutter/assets/data/valley_stock_runtime_ptbr.json` foram regenerados com 80 itens de vitrine e 1089 itens STOCK embarcados; a verificacao estruturada encontrou zero chaves publicas internas de fornecedor/provider/custo/benchmark, exceto `customer_visible_supplier_name=Valley`.
+- `config/stock_catalog_import_policy.json` criado com meta minima `10000`, alvos por provedor, checkpoints incrementais, cache em rate-limit, backoff e limite de preview.
+- `scripts/run_stock_catalog_10k_cycle.ps1` criado como ciclo persistente para importacao 10k+, precificacao, traducao e status em `tmp/runtime/valley-stock-catalog-10k-cycle.json`.
+- `scripts/import_real_stock_catalog.py --target-items 10000` materializou 1089 itens no runtime atual usando cache/fallback porque CJDropshipping retornou HTTP 429 de limite diario; `scripts/translate_stock_catalog_ptbr.py --rebuild-only` regenerou os assets publicos sem gastar nova quota externa.
+- Validacao local em servidor novo `127.0.0.1:8099`: `healthz=ok`, `/api/stock-catalog` com `items_total=1089`, `/api/product-shell` com `80` itens e `POST /api/actions/shipping-quote` com `status=ok`, frete `39.9` e `customer_visible_supplier_name=Valley`.
+- Validacoes executadas em 2026-05-11: `python -m py_compile scripts\import_real_stock_catalog.py scripts\translate_stock_catalog_ptbr.py scripts\serve_valley_admin.py`, `dart format` nos arquivos Flutter alterados, parse do PowerShell `scripts\run_stock_catalog_10k_cycle.ps1`, parse do JSON de politica e `git diff --check` nos arquivos da frente.
 
 ## Bloqueios
 
 - Dominio fixo `https://admin.brasildesconto.com.br` respondeu `530`/`1033` nesta sessao porque o token de named tunnel carregado esta invalido; o acesso remoto atual validado esta via Tailscale `http://100.109.240.100:8085/product`.
-- Catalogo 10k depende de execucao incremental e limites dos fornecedores; quando uma API limitar volume diario, o importador precisa continuar em ciclos ate completar a cobertura.
+- Catalogo 10k agora possui politica e ciclo persistente, mas o volume materializado atual permanece em 1089 itens ate a quota diaria da CJDropshipping liberar novas paginas ou outros provedores autenticados ampliarem a cobertura.
 - Cloudflare Quick Tunnel retornou `429 Too Many Requests` ao tentar renovar URL publica apos muitas tentativas; named tunnel retornou `Unauthorized: Invalid tunnel secret`. A rota operacional foi migrada para `localhost.run`, com Tailscale mantido como alternativa de rede privada.
+- `flutter analyze`/`dart analyze` segmentado nesta sessao excedeu 6 minutos de timeout; a verificacao Dart concluida foi `dart format`, que parseou os arquivos alterados, mas nao substitui a analise estatica completa.
 
 ## Proxima Acao
 
-- Corrigir cadastro/checkout/compartilhamento e rebuildar o APK de producao para reenvio.
+- Executar `scripts/run_stock_catalog_10k_cycle.ps1` quando a quota CJDropshipping ou novos tokens de provedores estiverem disponiveis; renovar o named tunnel Cloudflare para voltar a demonstrar o dominio fixo `admin.brasildesconto.com.br`.

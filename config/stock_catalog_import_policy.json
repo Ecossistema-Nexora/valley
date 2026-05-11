@@ -1,0 +1,29 @@
+{
+  "version": "v1",
+  "scope": "mvp_catalog_10k_plus",
+  "target_items_min": 10000,
+  "preview_limit": 80,
+  "resume_from_runtime": true,
+  "use_incremental_checkpoints": true,
+  "reuse_cache_on_rate_limit": true,
+  "provider_targets_min": {
+    "mercado_livre": 8000,
+    "cjdropshipping": 2000
+  },
+  "rate_limit": {
+    "mercado_livre_min_interval_seconds": 0.12,
+    "cj_min_interval_seconds": 1.15,
+    "max_retries": 4,
+    "backoff_seconds": [2, 5, 15, 60]
+  },
+  "category_strategy": {
+    "coverage": "todas_categorias_viaveis_mapeadas",
+    "pagination": "incremental_com_checkpoint",
+    "cache": "reutilizar_runtime_em_falha_ou_rate_limit",
+    "daily_quota_boundary": "pausar_e_continuar_em_ciclo_posterior"
+  },
+  "external_boundaries": {
+    "provider_daily_limit": "nao_burlar_limite_do_fornecedor",
+    "missing_credentials": "registrar_bloqueio_auditavel_sem_expor_segredo"
+  }
+}

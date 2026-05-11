@@ -1,7 +1,7 @@
 {
   "title": "Valley Product Mode - Front-end final para usuário",
   "description": "Criar a direção visual e estrutural final do front-end Valley em modo produto, sem elementos de desenvolvedor, sem logs, sem painéis técnicos e sem aparência de protótipo. O resultado deve parecer um aplicativo maduro, premium, sofisticado, funcional e pronto para produção, com foco em clareza, fluidez, confiança, velocidade percebida e valor premium.",
-  "productContext": {
+  "productContext": { 
     "brand": "Valley",
     "platforms": [
       "Web responsivo",
@@ -13,7 +13,7 @@
       "futurista",
       "minimalista",
       "elegante",
-      "muito usável"
+      "muito usável" 
     ],
     "hardRules": [
       "Nenhum comentário técnico visível na interface",
@@ -21,11 +21,11 @@
       "Nenhuma ferramenta de log visível",
       "Nenhum placeholder técnico",
       "Nenhum painel interno com aparência administrativa exposta ao usuário final",
-      "Somente botões e ações com cara de produto final"
+      "Somente botões e ações com cara de produto final" 
     ]
   },
-  "objectives": [
-    "Definir o front-end final do Valley em modo produto",
+  "objectives": [ 
+    "Definir o front-end final do Valley em modo produto", 
     "Criar home premium com forte hierarquia visual e percepção de produto maduro",
     "Desenhar navegação clara e modular",
     "Gerar no Stitch uma tela dedicada para cada um dos 47 módulos antes da implementação Flutter",
@@ -35,7 +35,7 @@
     "Representar Helena como assistente overlay com modo minimizado em estrela, voz e expressão facial",
     "Representar chat, conversa, feed, checkout e extrato com linguagem de produto final",
     "Definir comportamento de dock flutuante recolhível e arrastável",
-    "Preparar a base visual para implementação direta"
+    "Preparar a base visual para implementação direta" 
   ],
   "requiredFeatures": {
     "dock": {
@@ -45,7 +45,7 @@
         "Pode ser arrastado horizontalmente de um lado ao outro da tela",
         "Estado recolhido em um único botão premium",
         "Ao tocar, expande a lista de módulos",
-        "Ao selecionar um módulo, recolhe novamente",
+        "Ao selecionar um módulo, recolhe novamente", 
         "Precisa parecer nativo do produto, não um menu improvisado"
       ]
     },
@@ -57,7 +57,7 @@
         "Vitrine de produtos do Marketplace",
         "Vitrine de produtos do Stock",
         "Atalho para Food com ofertas e ETA",
-        "Atalho para Mobility com mapa e rota",
+        "Atalho para Mobility com mapa e rota", 
         "Continuidade do usuário",
         "Histórico recente",
         "Blocos de destaque e recomendações"
@@ -69,7 +69,7 @@
         "Produtos com foto",
         "Produtos com vídeo",
         "Preço",
-        "Marca",
+        "Marca", 
         "Categoria",
         "Status de disponibilidade",
         "Ação principal de compra"
@@ -79,7 +79,7 @@
         "Produtos com vídeo",
         "Indicador de estoque",
         "Origem do hub ou armazém",
-        "Sinalização visual de operação ativa"
+        "Sinalização visual de operação ativa" 
       ],
       "food": [
         "Várias ofertas simultâneas",
@@ -87,7 +87,7 @@
         "Tempo de entrega",
         "Botões reais de pedido",
         "Variações premium e destaque visual"
-      ],
+      ], 
       "mobility": [
         "Mapa visível",
         "Origem e destino",
@@ -95,7 +95,7 @@
         "Tempo estimado de chegada",
         "Botões reais de chamada de veículo"
       ]
-    }
+    } 
   },
   "screens": [
     {
@@ -104,7 +104,7 @@
       "content": [
         "Hero premium enxuto",
         "Busca principal",
-        "Cards de resumo",
+        "Cards de resumo", 
         "Grid de produtos premium",
         "Blocos de continuidade"
       ]
@@ -117,7 +117,7 @@
         "Foto dominante",
         "CTA principal",
         "Acesso a vídeo do produto",
-        "Filtros elegantes"
+        "Filtros elegantes" 
       ]
     },
     {
@@ -128,7 +128,7 @@
         "Indicadores de quantidade",
         "Status de disponibilidade",
         "Acesso a mídia do item",
-        "Leitura rápida de hubs"
+        "Leitura rápida de hubs" 
       ]
     },
     {
@@ -139,7 +139,7 @@
         "Combos premium",
         "Tempo de entrega",
         "Restaurantes e marcas",
-        "Botões de pedido reais"
+        "Botões de pedido reais" 
       ]
     },
     {
@@ -150,7 +150,7 @@
         "Origem e destino",
         "Linha de rota",
         "ETA",
-        "Ação de chamada imediata"
+        "Ação de chamada imediata" 
       ]
     },
     {
@@ -162,7 +162,7 @@
         "Mensagens com estados",
         "Presença visual",
         "Composição fluida para mobile"
-      ]
+      ] 
     },
     {
       "name": "Checkout e extrato",
@@ -172,7 +172,7 @@
         "Parcelamento",
         "Entrega",
         "Extrato bancário visual",
-        "Estados de confirmação"
+        "Estados de confirmação" 
       ]
     }
   ],
@@ -180,7 +180,7 @@
     "buttons": [
       "primary",
       "secondary",
-      "ghost"
+      "ghost" 
     ],
     "cards": [
       "product card premium",
@@ -188,7 +188,7 @@
       "action card",
       "history card"
     ],
-    "states": [
+    "states": [ 
       "normal",
       "hover",
       "focus",
@@ -196,10 +196,10 @@
       "loading",
       "success",
       "error"
-    ]
+    ] 
   },
-  "responsiveness": {
-    "desktop": "Visão analítica ampla com forte composição editorial",
+  "responsiveness": { 
+    "desktop": "Visão analítica ampla com forte composição editorial", 
     "tablet": "Reflow modular preservando prioridade visual",
     "mobile": "Stack fluido, navegação simplificada e dock preservado"
   },
@@ -210,7 +210,7 @@
       "#6EE7F9",
       "#8B5CF6",
       "#E5E7EB"
-    ],
+    ], 
     "paletteDescription": "Base escura premium com ciano luminoso e violeta tecnológico, usando gradientes sutis e profundidade controlada."
   },
   "userIntent": "Gerar no Stitch a direção visual final do Valley em modo produto para usuário final, com uma tela dedicada para cada um dos 47 módulos, catálogo rico em mídia, Food com ofertas e ETA, Mobility com mapa e rota, chat, conversa, checkout, extrato, Helena overlay com estrela da marca e dock flutuante arrastável e recolhível."

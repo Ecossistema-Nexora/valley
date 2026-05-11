@@ -32,6 +32,9 @@ RUNTIME_DIR = ROOT / "tmp" / "runtime"
 FULL_STOCK_PATH = RUNTIME_DIR / "valley-stock-real-catalog.json"
 INTEGRATIONS_PATH = RUNTIME_DIR / "valley-admin-integrations.json"
 SECRETS_PATH = RUNTIME_DIR / "valley-provider-secrets.json"
+ADMIN_IMPORTED_PRODUCTS_PRICING_PATH = RUNTIME_DIR / "valley-admin-imported-products-pricing.json"
+CATALOG_IMPORT_POLICY_PATH = ROOT / "config" / "stock_catalog_import_policy.json"
+IMPORT_CHECKPOINTS_PATH = RUNTIME_DIR / "valley-stock-catalog-import-checkpoints.json"
 
 MERCADOLIVRE_KEY = "mercado_livre"
 MERCADOLIVRE_BASE_URL = "https://api.mercadolibre.com"
@@ -46,12 +49,55 @@ CJ_MIN_INTERVAL_SECONDS = 1.15
 
 PTAX_BASE_URL = "https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata"
 PREVIEW_LIMIT = 80
+DEFAULT_CATALOG_IMPORT_POLICY: dict[str, Any] = {
+    "version": "v1",
+    "target_items_min": 10000,
+    "preview_limit": PREVIEW_LIMIT,
+    "resume_from_runtime": True,
+    "use_incremental_checkpoints": True,
+    "reuse_cache_on_rate_limit": True,
+    "rate_limit": {
+        "mercado_livre_min_interval_seconds": 0.12,
+        "cj_min_interval_seconds": CJ_MIN_INTERVAL_SECONDS,
+        "max_retries": 4,
+        "backoff_seconds": [2, 5, 15, 60],
+    },
+    "provider_targets_min": {
+        MERCADOLIVRE_KEY: 8000,
+        CJDROPSHIPPING_KEY: 2000,
+    },
+}
 
 PUBLIC_STOCK_INTERNAL_FIELDS = {
+    "base_cost_brl",
+    "benchmark_provider_key",
+    "benchmark_retail_price_brl",
+    "benchmark_similarity_score",
+    "benchmark_title",
+    "duplicate_group_key",
+    "duplicate_group_size",
+    "duplicate_winner_item_id",
+    "duplicate_winner_supplier_name",
+    "estimated_fees_brl",
+    "estimated_inventory_net_revenue_brl",
+    "estimated_net_revenue_brl",
+    "estimated_net_revenue_pct",
+    "inventory_cost_brl",
+    "marketing_fee_pct",
+    "operational_fee_pct",
+    "platform_fee_pct",
+    "price_gap_to_benchmark_brl",
+    "publication_reason_codes",
+    "publication_reasons",
+    "publication_signature",
+    "publication_status",
+    "publication_status_label",
+    "supplier_key",
     "supplier_name",
     "supplier_type",
     "supplier_model",
     "supplier_visibility",
+    "target_net_revenue_pct",
     "provider_key",
     "provider_status",
     "channel_label",
@@ -100,6 +146,66 @@ def load_json(path: Path, fallback: Any) -> Any:
 def write_json(path: Path, payload: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+def load_catalog_import_policy(target_items_min: int | None = None) -> dict[str, Any]:
+    payload = load_json(CATALOG_IMPORT_POLICY_PATH, {})
+    policy = dict(DEFAULT_CATALOG_IMPORT_POLICY)
+    if isinstance(payload, dict):
+        policy.update(payload)
+        if isinstance(payload.get("rate_limit"), dict):
+            policy["rate_limit"] = {
+                **DEFAULT_CATALOG_IMPORT_POLICY["rate_limit"],
+                **payload["rate_limit"],
+            }
+        if isinstance(payload.get("provider_targets_min"), dict):
+            policy["provider_targets_min"] = {
+                **DEFAULT_CATALOG_IMPORT_POLICY["provider_targets_min"],
+                **payload["provider_targets_min"],
+            }
+    if target_items_min is not None and target_items_min > 0:
+        policy["target_items_min"] = target_items_min
+    return policy
+
+
+def base_provider_target_items(provider_key: str) -> int:
+    if provider_key == MERCADOLIVRE_KEY:
+        return sum(
+            source.target_items
+            for category_plan in MERCADOLIVRE_CATEGORY_PLANS
+            for source in category_plan.sources
+        )
+    if provider_key == CJDROPSHIPPING_KEY:
+        return sum(
+            source.target_items
+            for category_plan in CJ_CATEGORY_PLANS
+            for source in category_plan.sources
+        )
+    return 0
+
+
+def planned_catalog_target_items(policy: dict[str, Any]) -> int:
+    configured = safe_int(policy.get("target_items_min"), 10000)
+    baseline = base_provider_target_items(MERCADOLIVRE_KEY) + base_provider_target_items(CJDROPSHIPPING_KEY)
+    return max(configured, baseline)
+
+
+def effective_source_target_items(provider_key: str, source_target_items: int, policy: dict[str, Any]) -> int:
+    provider_targets = policy.get("provider_targets_min") if isinstance(policy.get("provider_targets_min"), dict) else {}
+    provider_baseline = max(base_provider_target_items(provider_key), 1)
+    provider_target = max(safe_int(provider_targets.get(provider_key), provider_baseline), provider_baseline)
+    multiplier = provider_target / provider_baseline
+    return max(source_target_items, int(math.ceil(source_target_items * multiplier)))
+
+
+def update_import_checkpoint(provider_key: str, payload: dict[str, Any]) -> None:
+    checkpoint = load_json(IMPORT_CHECKPOINTS_PATH, {})
+    checkpoint = checkpoint if isinstance(checkpoint, dict) else {}
+    checkpoint[provider_key] = {
+        **payload,
+        "updated_at_utc": utc_now_iso(),
+    }
+    write_json(IMPORT_CHECKPOINTS_PATH, checkpoint)
 
 
 def first_attr_value(attributes: list[dict[str, Any]], attribute_id: str) -> str:
@@ -210,7 +316,7 @@ def build_description(category: str, brand: str, model: str, offer_count: int, f
     if isinstance(seller_address.get("state"), dict):
         state = str(seller_address["state"].get("name") or "").strip()
     fragments = [
-        f"Curadoria Valley para {category.lower()} com {offer_count} ofertas ativas no catálogo.",
+        f"Seleção Valley para {category.lower()} com {offer_count} ofertas ativas no catálogo.",
         f"Marca {brand}." if brand else "",
         f"Modelo {model}." if model else "",
         "Frete grátis habilitado." if free_shipping else "",
@@ -628,7 +734,12 @@ def fetch_usd_brl_rate() -> tuple[float, str]:
 
 
 class MercadoLivreClient:
-    def __init__(self, integrations: list[dict[str, Any]], secrets: dict[str, Any]) -> None:
+    def __init__(
+        self,
+        integrations: list[dict[str, Any]],
+        secrets: dict[str, Any],
+        policy: dict[str, Any] | None = None,
+    ) -> None:
         provider = next(
             (item for item in integrations if isinstance(item, dict) and item.get("key") == MERCADOLIVRE_KEY),
             None,
@@ -645,6 +756,10 @@ class MercadoLivreClient:
         if not self.client_id or not self.client_secret or not self.access_token or not self.refresh_token:
             raise RuntimeError("Credenciais OAuth do Mercado Livre estão incompletas.")
         self._lock = threading.Lock()
+        self._throttle_lock = threading.Lock()
+        self._last_request_at = 0.0
+        rate_limit = policy.get("rate_limit") if isinstance(policy, dict) and isinstance(policy.get("rate_limit"), dict) else {}
+        self.min_interval_seconds = float(rate_limit.get("mercado_livre_min_interval_seconds") or 0.12)
 
     def _headers(self) -> dict[str, str]:
         return {
@@ -687,6 +802,11 @@ class MercadoLivreClient:
         write_json(SECRETS_PATH, secrets_payload)
 
     def get_json(self, path: str, params: dict[str, Any] | None = None, retry: bool = True) -> dict[str, Any] | list[Any]:
+        with self._throttle_lock:
+            wait = self.min_interval_seconds - (time.monotonic() - self._last_request_at)
+            if wait > 0:
+                time.sleep(wait)
+            self._last_request_at = time.monotonic()
         query = urllib.parse.urlencode({key: value for key, value in (params or {}).items() if value is not None})
         url = f"{self.base_url}{path}"
         if query:
@@ -707,7 +827,12 @@ class MercadoLivreClient:
 
 
 class CJDropshippingClient:
-    def __init__(self, integrations: list[dict[str, Any]], secrets: dict[str, Any]) -> None:
+    def __init__(
+        self,
+        integrations: list[dict[str, Any]],
+        secrets: dict[str, Any],
+        policy: dict[str, Any] | None = None,
+    ) -> None:
         provider = next(
             (item for item in integrations if isinstance(item, dict) and item.get("key") == CJDROPSHIPPING_KEY),
             None,
@@ -725,10 +850,14 @@ class CJDropshippingClient:
             raise RuntimeError("Access token do CJDropshipping está ausente.")
         self._lock = threading.Lock()
         self._last_request_at = 0.0
+        rate_limit = policy.get("rate_limit") if isinstance(policy, dict) and isinstance(policy.get("rate_limit"), dict) else {}
+        self.min_interval_seconds = float(rate_limit.get("cj_min_interval_seconds") or CJ_MIN_INTERVAL_SECONDS)
+        backoff = rate_limit.get("backoff_seconds")
+        self.backoff_seconds = [float(value) for value in backoff] if isinstance(backoff, list) else [2.0, 5.0, 15.0, 60.0]
 
     def _throttle(self) -> None:
         with self._lock:
-            wait = CJ_MIN_INTERVAL_SECONDS - (time.monotonic() - self._last_request_at)
+            wait = self.min_interval_seconds - (time.monotonic() - self._last_request_at)
             if wait > 0:
                 time.sleep(wait)
             self._last_request_at = time.monotonic()
@@ -753,7 +882,8 @@ class CJDropshippingClient:
         except HTTPError as error:
             detail = error.read().decode("utf-8", errors="replace")
             if error.code == 429 and retry_count < 4:
-                time.sleep(max(CJ_MIN_INTERVAL_SECONDS * (retry_count + 2), 2.0))
+                backoff_index = min(retry_count, len(self.backoff_seconds) - 1)
+                time.sleep(max(self.backoff_seconds[backoff_index], self.min_interval_seconds))
                 return self.get_json(path, params=params, retry_count=retry_count + 1)
             raise RuntimeError(f"{error.code} {path}: {detail}") from error
         except URLError as error:
@@ -847,7 +977,7 @@ def build_ml_stock_item(
             warranty or "Garantia conforme anúncio",
         ],
         "seller": {
-            "name": "Valley Curadoria",
+            "name": "Loja Valley",
             "headline": "Oferta operacional validada para o catálogo Valley.",
             "avatar_url": image_url,
             "rating": 4.8,
@@ -946,7 +1076,7 @@ def build_cj_description(category: str, source: CjSourcePlan, item: dict[str, An
     delivery_cycle = str(item.get("deliveryCycle") or "").strip()
     description = clean_text(str(item.get("description") or ""))
     fragments = [
-        f"Curadoria Valley para {category.lower()} com estoque sincronizado via CJ.",
+        f"Seleção Valley para {category.lower()} com estoque sincronizado.",
         f"Categoria fonte: {item.get('threeCategoryName') or item.get('twoCategoryName') or category}.",
         f"{inventory} unidades em estoque." if inventory else "",
         f"{listed_num} listagens sincronizadas." if listed_num else "",
@@ -1035,7 +1165,7 @@ def build_cj_stock_item(
         "profile_id": "",
         "features": features,
         "seller": {
-            "name": "Valley Curadoria",
+            "name": "Loja Valley",
             "headline": "Oferta sincronizada com estoque e tracking automatizados.",
             "avatar_url": image_url,
             "rating": 4.7,
@@ -1116,17 +1246,19 @@ def collect_ml_source_items(
     source: SourcePlan,
     category: str,
     global_seen: set[str],
+    catalog_policy: dict[str, Any],
 ) -> list[dict[str, Any]]:
     collected: list[dict[str, Any]] = []
     local_seen: set[str] = set()
+    source_target = effective_source_target_items(MERCADOLIVRE_KEY, source.target_items, catalog_policy)
 
     for query in source.queries:
-        if len(collected) >= source.target_items:
+        if len(collected) >= source_target:
             break
 
         offset = 0
         total = math.inf
-        while len(collected) < source.target_items and offset < total and offset <= 950:
+        while len(collected) < source_target and offset < total and offset <= 950:
             search_payload = client.get_json(
                 "/products/search",
                 params={
@@ -1162,7 +1294,7 @@ def collect_ml_source_items(
                     for product in candidate_products
                 }
                 for future in as_completed(future_map):
-                    if len(collected) >= source.target_items:
+                    if len(collected) >= source_target:
                         break
                     product = future_map[future]
                     product_id = str(product.get("id") or "")
@@ -1187,7 +1319,18 @@ def collect_ml_source_items(
             str(item.get("title") or ""),
         )
     )
-    return collected[: source.target_items]
+    update_import_checkpoint(
+        f"{MERCADOLIVRE_KEY}:{category}:{source.domain_id}",
+        {
+            "provider": MERCADOLIVRE_KEY,
+            "category": category,
+            "source": source.domain_id,
+            "collected": len(collected),
+            "target": source_target,
+            "status": "complete" if len(collected) >= source_target else "partial",
+        },
+    )
+    return collected[:source_target]
 
 
 def collect_cj_source_items(
@@ -1197,22 +1340,24 @@ def collect_cj_source_items(
     global_seen: set[str],
     usd_brl_rate: float,
     fx_reference: str,
+    catalog_policy: dict[str, Any],
 ) -> list[dict[str, Any]]:
     collected: list[dict[str, Any]] = []
     local_seen: set[str] = set()
+    source_target = effective_source_target_items(CJDROPSHIPPING_KEY, source.target_items, catalog_policy)
     pages_per_query = max(
         3,
-        math.ceil(source.target_items / max(CJ_PAGE_SIZE * max(len(source.queries), 1), 1)) * 3,
+        math.ceil(source_target / max(CJ_PAGE_SIZE * max(len(source.queries), 1), 1)) * 3,
     )
 
     for query in source.queries:
-        if len(collected) >= source.target_items:
+        if len(collected) >= source_target:
             break
         page = 1
         total_records = math.inf
         empty_streak = 0
         while (
-            len(collected) < source.target_items
+            len(collected) < source_target
             and (page - 1) * CJ_PAGE_SIZE < total_records
             and page <= pages_per_query
         ):
@@ -1252,7 +1397,7 @@ def collect_cj_source_items(
                     page_items.append(item)
 
             for item in page_items:
-                if len(collected) >= source.target_items:
+                if len(collected) >= source_target:
                     break
                 source_product_id = str(item.get("id") or "").strip()
                 identity = stock_identity(CJDROPSHIPPING_KEY, source_product_id)
@@ -1285,7 +1430,18 @@ def collect_cj_source_items(
             str(item.get("title") or ""),
         )
     )
-    return collected[: source.target_items]
+    update_import_checkpoint(
+        f"{CJDROPSHIPPING_KEY}:{category}:{source.collection_label}",
+        {
+            "provider": CJDROPSHIPPING_KEY,
+            "category": category,
+            "source": source.collection_label,
+            "collected": len(collected),
+            "target": source_target,
+            "status": "complete" if len(collected) >= source_target else "partial",
+        },
+    )
+    return collected[:source_target]
 
 
 def dedupe_stock_items(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -1352,20 +1508,62 @@ def collect_global_seen(items: list[dict[str, Any]]) -> set[str]:
     return seen
 
 
+def stock_items_from_imported_pricing() -> list[dict[str, Any]]:
+    payload = load_json(ADMIN_IMPORTED_PRODUCTS_PRICING_PATH, {})
+    raw_items = payload.get("items") if isinstance(payload, dict) else None
+    if not isinstance(raw_items, list):
+        return []
+    stock_items: list[dict[str, Any]] = []
+    for raw_item in raw_items:
+        if not isinstance(raw_item, dict):
+            continue
+        item = dict(raw_item)
+        item["module_id"] = "STOCK"
+        item["merchant_name"] = str(item.get("merchant_name") or "Valley")
+        item["price_brl"] = round(
+            float(item.get("price_brl") or item.get("suggested_sale_price_brl") or item.get("base_cost_brl") or 0),
+            2,
+        )
+        item["compare_at_brl"] = round(
+            float(item.get("compare_at_brl") or item.get("benchmark_retail_price_brl") or item["price_brl"]),
+            2,
+        )
+        item["stock"] = safe_int(item.get("stock"))
+        item["status"] = str(item.get("availability_label") or item.get("publication_status_label") or "Disponível")
+        item["description"] = str(
+            item.get("description")
+            or f"{item.get('title') or 'Produto Valley'} com estoque e preço sincronizados para compra Valley."
+        )
+        item["cta_label"] = str(item.get("cta_label") or "Abrir pagamento")
+        item["cta_path"] = str(item.get("cta_path") or "")
+        item["media_path"] = str(item.get("media_path") or "")
+        item["image_url"] = str(item.get("image_url") or "")
+        item["video_url"] = str(item.get("video_url") or "")
+        item["video_count"] = safe_int(item.get("video_count"))
+        item["gallery_urls"] = item.get("gallery_urls") if isinstance(item.get("gallery_urls"), list) else []
+        item["profile_id"] = str(item.get("profile_id") or "")
+        item["customer_visible_supplier_name"] = "Valley"
+        item["supplier_visibility"] = "internal"
+        stock_items.append(item)
+    return stock_items
+
+
 def collect_mercadolivre_catalog(
     integrations: list[dict[str, Any]],
     provider_secrets: dict[str, Any],
+    catalog_policy: dict[str, Any],
 ) -> list[dict[str, Any]]:
-    client = MercadoLivreClient(integrations, provider_secrets)
+    client = MercadoLivreClient(integrations, provider_secrets, catalog_policy)
     global_seen: set[str] = set()
     stock_items: list[dict[str, Any]] = []
     for category_plan in MERCADOLIVRE_CATEGORY_PLANS:
         for source in category_plan.sources:
-            source_items = collect_ml_source_items(client, source, category_plan.category, global_seen)
+            source_target = effective_source_target_items(MERCADOLIVRE_KEY, source.target_items, catalog_policy)
+            source_items = collect_ml_source_items(client, source, category_plan.category, global_seen, catalog_policy)
             stock_items.extend(source_items)
             print(
                 f"[stock-import] ML {category_plan.category} / {source.domain_id} -> "
-                f"{len(source_items)}/{source.target_items}"
+                f"{len(source_items)}/{source_target}"
             )
     return stock_items
 
@@ -1374,13 +1572,15 @@ def collect_cj_catalog(
     integrations: list[dict[str, Any]],
     provider_secrets: dict[str, Any],
     existing_global_seen: set[str],
+    catalog_policy: dict[str, Any],
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
-    client = CJDropshippingClient(integrations, provider_secrets)
+    client = CJDropshippingClient(integrations, provider_secrets, catalog_policy)
     usd_brl_rate, fx_reference = fetch_usd_brl_rate()
     global_seen = set(existing_global_seen)
     stock_items: list[dict[str, Any]] = []
     for category_plan in CJ_CATEGORY_PLANS:
         for source in category_plan.sources:
+            source_target = effective_source_target_items(CJDROPSHIPPING_KEY, source.target_items, catalog_policy)
             source_items = collect_cj_source_items(
                 client,
                 source,
@@ -1388,11 +1588,12 @@ def collect_cj_catalog(
                 global_seen,
                 usd_brl_rate,
                 fx_reference,
+                catalog_policy,
             )
             stock_items.extend(source_items)
             print(
                 f"[stock-import] CJ {category_plan.category} / {source.queries[0]} -> "
-                f"{len(source_items)}/{source.target_items}"
+                f"{len(source_items)}/{source_target}"
             )
     return stock_items, {"usd_brl_rate": usd_brl_rate, "reference": fx_reference}
 
@@ -1414,7 +1615,8 @@ def enabled_catalog_provider_keys(integrations: list[dict[str, Any]]) -> set[str
     return keys
 
 
-def import_real_stock_catalog(refresh_mercado: bool = False) -> dict[str, Any]:
+def import_real_stock_catalog(refresh_mercado: bool = False, target_items_min: int | None = None) -> dict[str, Any]:
+    catalog_policy = load_catalog_import_policy(target_items_min)
     catalog = load_json(CATALOG_PATH, {})
     if not isinstance(catalog, dict):
         raise RuntimeError("Catálogo base do produto não está legível.")
@@ -1446,6 +1648,7 @@ def import_real_stock_catalog(refresh_mercado: bool = False) -> dict[str, Any]:
                 mercado_items = collect_mercadolivre_catalog(
                     integrations if isinstance(integrations, list) else [],
                     provider_secrets if isinstance(provider_secrets, dict) else {},
+                    catalog_policy,
                 )
                 import_notes.append("Mercado Livre recarregado via API.")
             except Exception as error:  # noqa: BLE001
@@ -1476,6 +1679,7 @@ def import_real_stock_catalog(refresh_mercado: bool = False) -> dict[str, Any]:
                 integrations if isinstance(integrations, list) else [],
                 provider_secrets if isinstance(provider_secrets, dict) else {},
                 collect_global_seen(merged_stock_items),
+                catalog_policy,
             )
             import_notes.append("CJ sincronizado com estoque, preço em BRL via PTAX e tracking por webhook.")
         except Exception as error:  # noqa: BLE001
@@ -1504,11 +1708,36 @@ def import_real_stock_catalog(refresh_mercado: bool = False) -> dict[str, Any]:
         )
         provider_counts.setdefault(provider_key, 0)
 
+    if not merged_stock_items and bool(catalog_policy.get("reuse_cache_on_rate_limit")):
+        existing_runtime_items = (
+            existing_runtime.get("items")
+            if isinstance(existing_runtime, dict) and isinstance(existing_runtime.get("items"), list)
+            else []
+        )
+        cached_stock_items = [
+            item
+            for item in existing_runtime_items
+            if isinstance(item, dict) and item.get("module_id") == "STOCK"
+        ]
+        if cached_stock_items:
+            merged_stock_items = cached_stock_items
+            import_notes.append(
+                "Catalogo STOCK preservado do runtime anterior porque os provedores retornaram limite, falha ou zero itens."
+            )
+        else:
+            pricing_stock_items = stock_items_from_imported_pricing()
+            if pricing_stock_items:
+                merged_stock_items = pricing_stock_items
+                import_notes.append(
+                    "Catalogo STOCK recomposto a partir da fila de precificacao importada porque a API externa retornou limite ou zero itens."
+                )
+
     merged_stock_items = dedupe_stock_items(merged_stock_items)
 
+    preview_limit = max(1, safe_int(catalog_policy.get("preview_limit"), PREVIEW_LIMIT))
     preview_items = round_robin_preview(
         [sanitize_public_stock_item(item) for item in merged_stock_items],
-        PREVIEW_LIMIT,
+        preview_limit,
     )
     existing_items = catalog.get("items") if isinstance(catalog.get("items"), list) else []
     non_stock_items = [
@@ -1522,8 +1751,8 @@ def import_real_stock_catalog(refresh_mercado: bool = False) -> dict[str, Any]:
     hero = catalog.get("hero") if isinstance(catalog.get("hero"), dict) else {}
     hero["title"] = "Valley Stock | Catalogo proprietario"
     hero["subtitle"] = (
-        "Curadoria Valley com catálogo real multi-provedor, agrupado por categoria e taxonomia Google, "
-        "com sincronização de estoque, preço e tracking sem exposição pública do fornecedor."
+        "Seleção Valley com catálogo real multi-provedor, agrupado por categoria e taxonomia Google, "
+        "com sincronização de estoque, preço e tracking sem exposição pública da origem operacional."
     )
     catalog["hero"] = hero
     catalog["generated_at_utc"] = utc_now_iso()
@@ -1533,6 +1762,16 @@ def import_real_stock_catalog(refresh_mercado: bool = False) -> dict[str, Any]:
         "status": "ok",
         "service": "valley-stock-real-catalog",
         "generated_at_utc": utc_now_iso(),
+        "import_strategy": {
+            "target_items_min": planned_catalog_target_items(catalog_policy),
+            "items_remaining_to_target": max(0, planned_catalog_target_items(catalog_policy) - len(merged_stock_items)),
+            "policy_path": str(CATALOG_IMPORT_POLICY_PATH.relative_to(ROOT)),
+            "checkpoint_path": str(IMPORT_CHECKPOINTS_PATH.relative_to(ROOT)),
+            "resume_from_runtime": bool(catalog_policy.get("resume_from_runtime")),
+            "use_incremental_checkpoints": bool(catalog_policy.get("use_incremental_checkpoints")),
+            "reuse_cache_on_rate_limit": bool(catalog_policy.get("reuse_cache_on_rate_limit")),
+            "provider_targets_min": catalog_policy.get("provider_targets_min", {}),
+        },
         "provider": "multi_provider_catalog" if len(providers_active) > 1 else (providers_active[0] if providers_active else "runtime"),
         "providers_active": providers_active,
         "provider_counts": provider_counts,
@@ -1570,8 +1809,14 @@ def main() -> None:
         action="store_true",
         help="Reconsulta o Mercado Livre em vez de reutilizar o runtime já coletado.",
     )
+    parser.add_argument(
+        "--target-items",
+        type=int,
+        default=None,
+        help="Meta minima de itens para escala incremental do catalogo.",
+    )
     args = parser.parse_args()
-    payload = import_real_stock_catalog(refresh_mercado=args.refresh_mercado)
+    payload = import_real_stock_catalog(refresh_mercado=args.refresh_mercado, target_items_min=args.target_items)
     print(json.dumps(payload, ensure_ascii=False, indent=2))
 
 

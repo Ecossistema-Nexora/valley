@@ -379,7 +379,7 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
     if (matchedModule == null) {
       _setHelenaMood(
         'calm',
-        'Esse modulo nao esta ativo nesta rodada do MVP. Posso te levar para Stock, Marketplace ou Chat.',
+        'Esse modulo nao esta ativo nesta rodada. Posso te levar para Stock, Marketplace ou Chat.',
       );
       return;
     }
@@ -754,9 +754,7 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
     }
   }
 
-  Future<void> _submitRegister({
-    required Map<String, String> values,
-  }) async {
+  Future<void> _submitRegister({required Map<String, String> values}) async {
     final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
     setState(() {
       _authBusy = true;
@@ -969,7 +967,7 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
       ShareParams(
         text:
             '${item.titlePtBr}\nR\$ ${item.priceBrl.toStringAsFixed(2)}\n$description\n$offerUrl',
-      subject: item.titlePtBr,
+        subject: item.titlePtBr,
       ),
     );
   }
@@ -997,7 +995,7 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
     if (!_data.modules.any((ProductModule module) => module.id == moduleId)) {
       _setHelenaMood(
         'calm',
-        'Modulo $moduleId fora do MVP ativo nesta rodada.',
+        'Modulo $moduleId fora da vitrine ativa nesta rodada.',
       );
       return;
     }
@@ -1035,7 +1033,7 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
     });
     _setHelenaMood(
       'calm',
-      'Modulo $moduleId em preparacao para uma proxima rodada.',
+      'Modulo $moduleId fora da sua vitrine ativa no momento.',
     );
   }
 
@@ -1222,7 +1220,7 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
     }
     if (!_activeMvpModuleIds.contains(module?.id ?? '')) {
       return _PreparedModuleScreen(
-        moduleId: module?.id ?? 'MVP',
+        moduleId: module?.id ?? 'VALY.OS',
         onNotify: _openNotifications,
         onHome: () => _openSurface('home'),
       );
@@ -1560,7 +1558,7 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
                   const SizedBox(height: 6),
                   Text(
                     module?.subtitle ??
-                        'Curadoria exclusiva de hardware e wearables tecnológicos desenvolvidos no Valley.',
+                        'Vitrine de tecnologia, casa inteligente e acessórios selecionados para compra direta.',
                     style: theme.textTheme.bodyMedium?.copyWith(
                       color: theme.colorScheme.onSurfaceVariant,
                     ),
@@ -1920,7 +1918,7 @@ class _TopBar extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 const Text(
-                  'VALLEY MVP',
+                  'VALLEY',
                   style: TextStyle(
                     color: ValleyBrandColors.cyan,
                     fontWeight: FontWeight.w900,
@@ -1930,7 +1928,7 @@ class _TopBar extends StatelessWidget {
                 ),
                 const SizedBox(height: 3),
                 Text(
-                  'Marketplace, Stock, Chat, Checkout e Perfil em modo produto',
+                  'Marketplace, Stock, Chat, Checkout e Perfil',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
@@ -2293,7 +2291,7 @@ class _IndicatorGrid extends StatelessWidget {
               ),
               const Spacer(),
               const Text(
-                'MVP',
+                'LIVE',
                 style: TextStyle(
                   color: Color(0xFF6EE7F9),
                   fontWeight: FontWeight.w700,
@@ -2399,7 +2397,7 @@ class _IndicatorGrid extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              'FLUXOS DO MVP',
+              'FLUXOS ATIVOS',
               style: theme.textTheme.labelMedium?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant,
                 fontWeight: FontWeight.w700,
@@ -2524,7 +2522,7 @@ class _MarketplaceCard extends StatelessWidget {
                     bottom: 16,
                     child: _MetaPill(
                       icon: Icons.storefront_rounded,
-                      label: item.supplierDisplayName,
+                      label: item.customerVisibleSupplierName,
                     ),
                   ),
                 ],
@@ -2536,7 +2534,7 @@ class _MarketplaceCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    item.title,
+                    item.titlePtBr,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: theme.textTheme.titleLarge?.copyWith(
@@ -2560,7 +2558,7 @@ class _MarketplaceCard extends StatelessWidget {
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              '${item.category} • ${item.providerDisplayName}',
+                              '${item.category} • ${item.customerVisibleSupplierName}',
                               style: theme.textTheme.bodyMedium?.copyWith(
                                 color: theme.colorScheme.onSurfaceVariant,
                               ),
@@ -2827,7 +2825,7 @@ class _StockSectionState extends State<_StockSection> {
 
   List<String> get _supplierOptions {
     final Set<String> values = _catalogItems
-        .map((ProductItem item) => item.supplierDisplayName)
+        .map((ProductItem item) => item.customerVisibleSupplierName)
         .where((String value) => value.trim().isNotEmpty)
         .toSet();
     final List<String> ordered = values.toList()..sort();
@@ -2873,7 +2871,7 @@ class _StockSectionState extends State<_StockSection> {
         return false;
       }
       if (_selectedSupplier != _allLabel &&
-          item.supplierDisplayName != _selectedSupplier) {
+          item.customerVisibleSupplierName != _selectedSupplier) {
         return false;
       }
       if (_selectedCollection != _allLabel &&
@@ -2897,8 +2895,8 @@ class _StockSectionState extends State<_StockSection> {
         item.collectionLabel,
         item.modelName,
         item.category,
-        item.supplierDisplayName,
-        item.providerDisplayName,
+        item.customerVisibleSupplierName,
+        item.customerVisibleSupplierName,
         item.channelLabel,
         item.googleTaxonomyPath,
         item.taxonomyLeaf,
@@ -2979,7 +2977,7 @@ class _StockSectionState extends State<_StockSection> {
         .toSet()
         .length;
     final int supplierCount = items
-        .map((ProductItem item) => item.supplierDisplayName)
+        .map((ProductItem item) => item.customerVisibleSupplierName)
         .where((String value) => value.trim().isNotEmpty)
         .toSet()
         .length;
@@ -3009,10 +3007,10 @@ class _StockSectionState extends State<_StockSection> {
         title: 'Ticket medio',
         value: _formatCurrency(averageTicket),
         accent: const Color(0xFFD0BCFF),
-        caption: 'Curadoria real por relevancia',
+        caption: 'Preco real dos itens exibidos',
       ),
       _StockStatCard(
-        title: 'Fornecedores ativos',
+        title: 'Lojas Valley',
         value: '$supplierCount',
         accent: const Color(0xFF7BE495),
         caption: '$collectionsCount coleções mapeadas na vitrine',
@@ -3059,14 +3057,14 @@ class _StockSectionState extends State<_StockSection> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            'Painel de Curadoria',
+            'Filtros da loja',
             style: theme.textTheme.titleLarge?.copyWith(
               fontWeight: FontWeight.w900,
             ),
           ),
           const SizedBox(height: 6),
           Text(
-            'Catálogo integrado, traduzido para português e pronto para leitura por fornecedor, coleção, taxonomia e faixa de preço.',
+            'Catálogo integrado, traduzido para português e pronto para leitura por loja, coleção, taxonomia e faixa de preço.',
             style: theme.textTheme.bodyMedium?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,
             ),
@@ -3110,10 +3108,7 @@ class _StockSectionState extends State<_StockSection> {
           const SizedBox(height: 16),
           DropdownButtonFormField<String>(
             initialValue: _selectedSupplier,
-            decoration: const InputDecoration(
-              labelText: 'Fornecedor',
-              filled: true,
-            ),
+            decoration: const InputDecoration(labelText: 'Loja', filled: true),
             items: _supplierOptions
                 .map(
                   (String value) => DropdownMenuItem<String>(
@@ -3257,7 +3252,7 @@ class _StockSectionState extends State<_StockSection> {
                   ),
                   const SignalChip(label: 'Catálogo traduzido pt-BR'),
                   SignalChip(
-                    label: '${_supplierOptions.length - 1} fornecedores ativos',
+                    label: '${_supplierOptions.length - 1} lojas ativas',
                     outlined: true,
                     color: ValleyBrandColors.violet,
                   ),
@@ -3279,8 +3274,8 @@ class _StockSectionState extends State<_StockSection> {
               const SizedBox(height: 8),
               Text(
                 _catalogError == null
-                    ? 'A curadoria agora parte do catálogo integrado dos fornecedores ativos, com tradução pt-BR, carrossel de mídia e leitura por categoria, fornecedor e coleção.'
-                    : 'O catalogo externo nao respondeu nesta tentativa. O shell manteve a operacao preparada para continuidade.',
+                    ? 'A vitrine reúne itens reais com tradução pt-BR, carrossel de mídia e leitura por categoria, loja e coleção.'
+                    : 'O catalogo externo nao respondeu nesta tentativa. A vitrine manteve os itens embarcados para compra.',
                 style: theme.textTheme.bodyLarge?.copyWith(
                   color: theme.colorScheme.onSurfaceVariant,
                 ),
@@ -3288,7 +3283,7 @@ class _StockSectionState extends State<_StockSection> {
               if (limitedOverview) ...<Widget>[
                 const SizedBox(height: 12),
                 Text(
-                  'Sem filtro, cada bloco mostra só os itens mais relevantes. Ao escolher um fornecedor ou categoria, o catálogo completo daquela linha é liberado.',
+                  'Sem filtro, cada bloco mostra só os itens mais relevantes. Ao escolher uma loja ou categoria, o catálogo completo daquela linha é liberado.',
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: theme.colorScheme.onSurfaceVariant,
                   ),
@@ -3318,7 +3313,7 @@ class _StockSectionState extends State<_StockSection> {
             radius: 28,
             padding: const EdgeInsets.all(28),
             child: Text(
-              'Nenhum item encontrado para o recorte atual. Ajuste fornecedor, categoria, coleção ou faixa de preço.',
+              'Nenhum item encontrado para o recorte atual. Ajuste loja, categoria, coleção ou faixa de preço.',
               style: theme.textTheme.bodyLarge,
             ),
           )
@@ -3348,12 +3343,12 @@ class _StockSectionState extends State<_StockSection> {
           kicker: 'Stock Mode',
           title: 'Valley Stock | catálogo real por categoria',
           caption:
-              'Estoque em modo produto com catálogo integrado, tradução pt-BR, carrossel de mídia e filtros por fornecedor, coleção e taxonomia.',
+              'Estoque em modo produto com catálogo integrado, tradução pt-BR, carrossel de mídia e filtros por loja, coleção e taxonomia.',
           trailing: Wrap(
             spacing: 8,
             runSpacing: 8,
             children: <Widget>[
-              const SignalChip(label: 'Fornecedor primeiro'),
+              const SignalChip(label: 'Compra protegida'),
               const SignalChip(label: 'Carrossel ativo', outlined: true),
               SignalChip(
                 label: _usingLiveCatalog
@@ -4149,7 +4144,7 @@ class _StockCard extends StatelessWidget {
               children: <Widget>[
                 _MetaPill(
                   icon: Icons.storefront_rounded,
-                  label: item.supplierDisplayName,
+                  label: item.customerVisibleSupplierName,
                 ),
                 _MetaPill(
                   icon: Icons.category_rounded,
@@ -4613,26 +4608,22 @@ class _ProductDetailScreen extends StatelessWidget {
             children: <Widget>[
               _MetaPill(
                 icon: Icons.storefront_rounded,
-                label: item.supplierDisplayName,
+                label: item.customerVisibleSupplierName,
               ),
-              _MetaPill(
-                icon: Icons.sync_alt_rounded,
-                label: item.providerDisplayName,
-              ),
-              if (item.channelLabel.trim().isNotEmpty)
-                _MetaPill(icon: Icons.route_rounded, label: item.channelLabel),
+              _MetaPill(icon: Icons.sync_alt_rounded, label: 'Operação Valley'),
+              _MetaPill(icon: Icons.route_rounded, label: 'Envio acompanhado'),
             ],
           ),
           const SizedBox(height: 18),
           Text(
-            'Visão operacional',
+            'Entrega e garantia',
             style: theme.textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.w800,
             ),
           ),
           const SizedBox(height: 10),
           Text(
-            'O catálogo integrado mantém fornecedor, canal e taxonomia à mão para revisão comercial. Quando houver vídeo, ele ocupa a mídia principal da ficha.',
+            'A compra mantém item, valor, entrega e rastreio vinculados à sua conta. Quando houver vídeo do produto, ele ocupa a mídia principal da ficha.',
             style: theme.textTheme.bodyMedium?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,
               height: 1.45,
@@ -4786,22 +4777,40 @@ class _CheckoutScreenState extends State<_CheckoutScreen> {
   String _lastShippingQuoteKey = '';
 
   Map<String, String> get _profileAddress =>
-      widget.authSession?.user.defaultDeliveryAddress ?? const <String, String>{};
+      widget.authSession?.user.defaultDeliveryAddress ??
+      const <String, String>{};
 
   @override
   void initState() {
     super.initState();
     _useProfileAddress = widget.useProfileAddress && _profileAddress.isNotEmpty;
     _recipientController = TextEditingController(
-      text: _profileAddress['recipient_name'] ?? widget.authSession?.user.fullName ?? '',
+      text:
+          _profileAddress['recipient_name'] ??
+          widget.authSession?.user.fullName ??
+          '',
     );
-    _postalCodeController = TextEditingController(text: _profileAddress['postal_code'] ?? '');
-    _streetController = TextEditingController(text: _profileAddress['street'] ?? '');
-    _numberController = TextEditingController(text: _profileAddress['number'] ?? '');
-    _complementController = TextEditingController(text: _profileAddress['complement'] ?? '');
-    _neighborhoodController = TextEditingController(text: _profileAddress['neighborhood'] ?? '');
-    _cityController = TextEditingController(text: _profileAddress['city'] ?? '');
-    _stateController = TextEditingController(text: _profileAddress['state'] ?? '');
+    _postalCodeController = TextEditingController(
+      text: _profileAddress['postal_code'] ?? '',
+    );
+    _streetController = TextEditingController(
+      text: _profileAddress['street'] ?? '',
+    );
+    _numberController = TextEditingController(
+      text: _profileAddress['number'] ?? '',
+    );
+    _complementController = TextEditingController(
+      text: _profileAddress['complement'] ?? '',
+    );
+    _neighborhoodController = TextEditingController(
+      text: _profileAddress['neighborhood'] ?? '',
+    );
+    _cityController = TextEditingController(
+      text: _profileAddress['city'] ?? '',
+    );
+    _stateController = TextEditingController(
+      text: _profileAddress['state'] ?? '',
+    );
     for (final TextEditingController controller in <TextEditingController>[
       _recipientController,
       _postalCodeController,
@@ -4814,7 +4823,9 @@ class _CheckoutScreenState extends State<_CheckoutScreen> {
     ]) {
       controller.addListener(_scheduleShippingQuote);
     }
-    WidgetsBinding.instance.addPostFrameCallback((_) => _scheduleShippingQuote());
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => _scheduleShippingQuote(),
+    );
   }
 
   @override
@@ -4867,13 +4878,18 @@ class _CheckoutScreenState extends State<_CheckoutScreen> {
 
   void _scheduleShippingQuote() {
     _shippingQuoteTimer?.cancel();
-    _shippingQuoteTimer = Timer(const Duration(milliseconds: 450), _refreshShippingQuote);
+    _shippingQuoteTimer = Timer(
+      const Duration(milliseconds: 450),
+      _refreshShippingQuote,
+    );
   }
 
   Future<void> _refreshShippingQuote() async {
     final Map<String, String> address = _deliveryAddress();
-    final String quoteKey = '${widget.item.id}|${address.entries.map((MapEntry<String, String> entry) => '${entry.key}:${entry.value.trim()}').join('|')}';
-    if (!_deliveryAddressComplete(address) || quoteKey == _lastShippingQuoteKey) {
+    final String quoteKey =
+        '${widget.item.id}|${address.entries.map((MapEntry<String, String> entry) => '${entry.key}:${entry.value.trim()}').join('|')}';
+    if (!_deliveryAddressComplete(address) ||
+        quoteKey == _lastShippingQuoteKey) {
       return;
     }
     _lastShippingQuoteKey = quoteKey;
@@ -4883,14 +4899,16 @@ class _CheckoutScreenState extends State<_CheckoutScreen> {
     try {
       final ProductActionResult result = await widget.repository.invokePath(
         baseUrl: widget.baseUrl,
-        path: '/api/actions/shipping-quote?item_id=${Uri.encodeComponent(widget.item.id)}',
+        path:
+            '/api/actions/shipping-quote?item_id=${Uri.encodeComponent(widget.item.id)}',
         body: <String, dynamic>{'delivery_address': address},
       );
       if (!mounted) {
         return;
       }
       final Map<String, dynamic> quote =
-          (result.payload['shipping_quote'] as Map<dynamic, dynamic>? ?? <dynamic, dynamic>{})
+          (result.payload['shipping_quote'] as Map<dynamic, dynamic>? ??
+                  <dynamic, dynamic>{})
               .cast<String, dynamic>();
       setState(() {
         _shippingQuote = result.ok ? quote : null;
@@ -4910,7 +4928,8 @@ class _CheckoutScreenState extends State<_CheckoutScreen> {
         (widget.item.raw['checkout'] as Map<dynamic, dynamic>? ??
                 <dynamic, dynamic>{})
             .cast<String, dynamic>();
-    final Map<String, dynamic> shippingQuote = _shippingQuote ?? const <String, dynamic>{};
+    final Map<String, dynamic> shippingQuote =
+        _shippingQuote ?? const <String, dynamic>{};
     final double shipping =
         (shippingQuote['shipping_passthrough_brl'] as num?)?.toDouble() ??
         (checkout['shipping_brl'] as num?)?.toDouble() ??
@@ -4935,8 +4954,8 @@ class _CheckoutScreenState extends State<_CheckoutScreen> {
             ),
             _CheckoutRow(
               label: _shippingQuote == null
-                  ? 'Frete fornecedor'
-                  : 'Frete fornecedor consultado',
+                  ? 'Frete da entrega'
+                  : 'Frete consultado',
               value: 'R\$ ${shipping.toStringAsFixed(2)}',
             ),
             if (_shippingQuoteBusy)
@@ -4948,7 +4967,7 @@ class _CheckoutScreenState extends State<_CheckoutScreen> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 12),
                 child: Text(
-                  '${shippingQuote['supplier_name'] ?? widget.item.supplierDisplayName} • ${shippingQuote['eta'] ?? checkout['eta'] ?? 'prazo do fornecedor'}',
+                  '${shippingQuote['customer_visible_supplier_name'] ?? widget.item.customerVisibleSupplierName} • ${shippingQuote['eta'] ?? checkout['eta'] ?? 'prazo de entrega'}',
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: theme.colorScheme.onSurfaceVariant,
                   ),
@@ -4958,8 +4977,9 @@ class _CheckoutScreenState extends State<_CheckoutScreen> {
               _TrustSignalRow(
                 icon: Icons.local_offer_rounded,
                 title: suggestion['title']?.toString() ?? 'Sugestão de frete',
-                body: suggestion['detail']?.toString() ??
-                    'O fornecedor recomenda ajustar a compra para reduzir o frete.',
+                body:
+                    suggestion['detail']?.toString() ??
+                    'A loja recomenda ajustar a compra para reduzir o frete.',
               ),
             _CheckoutRow(
               label: 'Servico Valley',
@@ -4996,12 +5016,14 @@ class _CheckoutScreenState extends State<_CheckoutScreen> {
               const _TrustSignalRow(
                 icon: Icons.point_of_sale_rounded,
                 title: 'Pagamento protegido',
-                body: 'O pagamento abre em ambiente seguro com retorno ao pedido.',
+                body:
+                    'O pagamento abre em ambiente seguro com retorno ao pedido.',
               ),
               const _TrustSignalRow(
                 icon: Icons.description_rounded,
                 title: 'Comprovante do pedido',
-                body: 'A confirmação mantém item, valor e entrega vinculados à conta.',
+                body:
+                    'A confirmação mantém item, valor e entrega vinculados à conta.',
               ),
               const SizedBox(height: 10),
               OutlinedButton.icon(
@@ -5423,7 +5445,7 @@ class _CartScreen extends StatelessWidget {
               ),
               const SizedBox(height: 14),
               Text(
-                'O MVP valida estoque, margem e identidade antes de confirmar o pedido.',
+                'A Valley valida estoque, margem e identidade antes de confirmar o pedido.',
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: theme.colorScheme.onSurfaceVariant,
                   height: 1.35,
@@ -5666,7 +5688,7 @@ class _ReceiptScreen extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            'Prova leve para o MVP, preparada para documento formal e auditoria futura.',
+            'Prova leve da compra, preparada para documento formal e auditoria futura.',
             style: theme.textTheme.bodyMedium?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,
             ),
@@ -6163,7 +6185,7 @@ class _AuthAccessPanelState extends State<_AuthAccessPanel> {
           ),
           const SizedBox(height: 10),
           Text(
-            'Somente módulos ativos do MVP aparecem no APK. O restante continua fora da navegação até o lançamento real.',
+            'Somente módulos ativos aparecem no APK. O restante continua fora da navegação até o lançamento real.',
             style: theme.textTheme.bodySmall?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,
             ),
@@ -6389,88 +6411,95 @@ class _NotificationsScreen extends StatelessWidget {
           const SizedBox(height: 16),
           FutureBuilder<List<Map<String, dynamic>>>(
             future: repository.loadNotifications(baseUrl: baseUrl),
-            builder: (
-              BuildContext context,
-              AsyncSnapshot<List<Map<String, dynamic>>> snapshot,
-            ) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const LinearProgressIndicator(minHeight: 3);
-              }
-              final List<_NotificationEntry> entries = <_NotificationEntry>[
-                for (final Map<String, dynamic> notification
-                    in snapshot.data ?? const <Map<String, dynamic>>[])
-                  _NotificationEntry(
-                    icon: Icons.local_shipping_rounded,
-                    title: notification['title']?.toString() ??
-                        'Atualização da entrega',
-                    body: notification['body']?.toString() ??
-                        'Sua encomenda teve uma nova atualização.',
-                    actionLabel: 'Ver compra',
-                    onTap: onOpenIdentity,
-                  ),
-                ...fallbackEntries,
-              ];
-              return Column(
-                children: <Widget>[
-                  for (final _NotificationEntry entry in entries)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 12),
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(22),
-                        onTap: entry.onTap,
-                        child: Container(
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.05),
+            builder:
+                (
+                  BuildContext context,
+                  AsyncSnapshot<List<Map<String, dynamic>>> snapshot,
+                ) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const LinearProgressIndicator(minHeight: 3);
+                  }
+                  final List<_NotificationEntry> entries = <_NotificationEntry>[
+                    for (final Map<String, dynamic> notification
+                        in snapshot.data ?? const <Map<String, dynamic>>[])
+                      _NotificationEntry(
+                        icon: Icons.local_shipping_rounded,
+                        title:
+                            notification['title']?.toString() ??
+                            'Atualização da entrega',
+                        body:
+                            notification['body']?.toString() ??
+                            'Sua encomenda teve uma nova atualização.',
+                        actionLabel: 'Ver compra',
+                        onTap: onOpenIdentity,
+                      ),
+                    ...fallbackEntries,
+                  ];
+                  return Column(
+                    children: <Widget>[
+                      for (final _NotificationEntry entry in entries)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 12),
+                          child: InkWell(
                             borderRadius: BorderRadius.circular(22),
-                            border: Border.all(
-                              color: Colors.white.withValues(alpha: 0.08),
-                            ),
-                          ),
-                          child: Row(
-                            children: <Widget>[
-                              Icon(entry.icon, color: ValleyBrandColors.cyan),
-                              const SizedBox(width: 14),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(
-                                      entry.title,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleMedium
-                                          ?.copyWith(
-                                            fontWeight: FontWeight.w800,
-                                          ),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      entry.body,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall
-                                          ?.copyWith(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onSurfaceVariant,
-                                          ),
-                                    ),
-                                  ],
+                            onTap: entry.onTap,
+                            child: Container(
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withValues(alpha: 0.05),
+                                borderRadius: BorderRadius.circular(22),
+                                border: Border.all(
+                                  color: Colors.white.withValues(alpha: 0.08),
                                 ),
                               ),
-                              TextButton(
-                                onPressed: entry.onTap,
-                                child: Text(entry.actionLabel),
+                              child: Row(
+                                children: <Widget>[
+                                  Icon(
+                                    entry.icon,
+                                    color: ValleyBrandColors.cyan,
+                                  ),
+                                  const SizedBox(width: 14),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Text(
+                                          entry.title,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleMedium
+                                              ?.copyWith(
+                                                fontWeight: FontWeight.w800,
+                                              ),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        Text(
+                                          entry.body,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall
+                                              ?.copyWith(
+                                                color: Theme.of(
+                                                  context,
+                                                ).colorScheme.onSurfaceVariant,
+                                              ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed: entry.onTap,
+                                    child: Text(entry.actionLabel),
+                                  ),
+                                ],
                               ),
-                            ],
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                ],
-              );
-            },
+                    ],
+                  );
+                },
           ),
         ],
       ),
@@ -6579,14 +6608,14 @@ class _PreparedModuleScreen extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           Text(
-            '$label em preparacao',
+            '$label fora da vitrine ativa',
             style: Theme.of(
               context,
             ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w900),
           ),
           const SizedBox(height: 10),
           Text(
-            'Esta jornada fica apenas como contrato visual do ecossistema. O MVP ativo continua em Marketplace, Stock, Chat, identidade, checkout e comprovante.',
+            'Sua vitrine atual está concentrada em Marketplace, Stock, Chat, identidade, checkout e comprovante.',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
@@ -9934,7 +9963,7 @@ class _ProductMediaStageState extends State<_ProductMediaStage> {
             child: Text(
               widget.onPlay == null
                   ? 'O catálogo sinalizou vídeo, mas a origem ainda não publicou uma URL direta.'
-                  : 'A mídia principal prioriza vídeo externo quando a origem publica uma demonstração válida.',
+                  : 'A mídia principal mostra o vídeo do produto quando há uma URL válida.',
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: Colors.white.withValues(alpha: 0.86),
               ),
@@ -10520,7 +10549,9 @@ class _ClientAreaScreenState extends State<_ClientAreaScreen> {
 
   void _refreshPurchases() {
     setState(() {
-      _purchasesFuture = widget.repository.loadPurchases(baseUrl: widget.baseUrl);
+      _purchasesFuture = widget.repository.loadPurchases(
+        baseUrl: widget.baseUrl,
+      );
     });
   }
 
@@ -10632,24 +10663,32 @@ class _ClientAreaScreenState extends State<_ClientAreaScreen> {
                   const SizedBox(height: 14),
                   FutureBuilder<List<ProductPurchase>>(
                     future: _purchasesFuture,
-                    builder: (BuildContext context, AsyncSnapshot<List<ProductPurchase>> snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const LinearProgressIndicator(minHeight: 3);
-                      }
-                      final List<ProductPurchase> purchases = snapshot.data ?? const <ProductPurchase>[];
-                      if (purchases.isEmpty) {
-                        return Text(
-                          'As compras confirmadas aparecerão aqui automaticamente com rastreio do fornecedor.',
-                          style: TextStyle(color: Colors.white.withValues(alpha: 0.62)),
-                        );
-                      }
-                      return Column(
-                        children: <Widget>[
-                          for (final ProductPurchase purchase in purchases)
-                            _PurchaseTrackingTile(purchase: purchase),
-                        ],
-                      );
-                    },
+                    builder:
+                        (
+                          BuildContext context,
+                          AsyncSnapshot<List<ProductPurchase>> snapshot,
+                        ) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const LinearProgressIndicator(minHeight: 3);
+                          }
+                          final List<ProductPurchase> purchases =
+                              snapshot.data ?? const <ProductPurchase>[];
+                          if (purchases.isEmpty) {
+                            return Text(
+                              'As compras confirmadas aparecerão aqui automaticamente com rastreio da entrega.',
+                              style: TextStyle(
+                                color: Colors.white.withValues(alpha: 0.62),
+                              ),
+                            );
+                          }
+                          return Column(
+                            children: <Widget>[
+                              for (final ProductPurchase purchase in purchases)
+                                _PurchaseTrackingTile(purchase: purchase),
+                            ],
+                          );
+                        },
                   ),
                   if (recentOrders.isNotEmpty) ...<Widget>[
                     const SizedBox(height: 18),
@@ -10784,7 +10823,10 @@ class _PurchaseTrackingTile extends StatelessWidget {
                   ),
                 )
               else
-                const Icon(Icons.inventory_2_rounded, color: ValleyBrandColors.cyan),
+                const Icon(
+                  Icons.inventory_2_rounded,
+                  color: ValleyBrandColors.cyan,
+                ),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
@@ -10817,8 +10859,9 @@ class _PurchaseTrackingTile extends StatelessWidget {
             label: purchase.trackingLabel,
           ),
           const SizedBox(height: 10),
-          for (final Map<String, dynamic> event
-              in purchase.trackingEvents.take(4))
+          for (final Map<String, dynamic> event in purchase.trackingEvents.take(
+            4,
+          ))
             Padding(
               padding: const EdgeInsets.only(bottom: 8),
               child: Row(
@@ -10982,7 +11025,7 @@ class _FloatingModuleDock extends StatelessWidget {
 
     if (compact) {
       return Tooltip(
-        message: 'Dock MVP',
+        message: 'Dock Valley',
         child: Material(
           color: Colors.transparent,
           child: InkWell(
@@ -11040,7 +11083,7 @@ class _FloatingModuleDock extends StatelessWidget {
               children: <Widget>[
                 _DockPill(
                   icon: Icons.grid_view_rounded,
-                  label: compact ? 'MVP' : 'Dock MVP',
+                  label: compact ? 'Menu' : 'Dock Valley',
                   selected: false,
                   color: ValleyBrandColors.cyan,
                   onTap: onOpenSettings,

@@ -20,7 +20,7 @@
 - [x] Enviar APK ABI pelo Telegram com link do painel admin e instrucao de credenciais sem expor senha em arquivos do repositorio. Concluido em 2026-05-07 02:37:18 BRT.
 - [x] Validar Android em modo release com split por ABI quando necessario. Concluido em 2026-05-07 02:34:35 BRT.
 - [x] Renovar ou confirmar runtime publico e registrar URL/manifests atualizados. Concluido em 2026-05-07 02:42:00 BRT.
-- [ ] Auditar todas as funcoes visiveis do APK/admin e tornar operacionais as que ainda dependerem de implementacao ou integracao real.
+- [x] Auditar todas as funcoes visiveis do APK/admin e tornar operacionais as que ainda dependerem de implementacao ou integracao real. Concluido em 2026-05-11 09:59:34 BRT.
 - [ ] Registrar evidencias finais e marcar este plano como concluido quando o MVP estiver demonstravel em modo de producao.
 
 ## Evidencias
@@ -51,6 +51,10 @@
 - Runtime publico ativo via Cloudflare Quick Tunnel em `https://sharing-vital-nashville-folding.trycloudflare.com`; o dominio fixo `https://admin.brasildesconto.com.br` respondeu `530` porque o token de named tunnel carregado esta invalido.
 - Manifestos atualizados: `tmp/runtime/valley-admin-public-runtime.json`, `tmp/runtime/valley-product-public-runtime.json` e `tmp/runtime/valley-product-web-publication.json`.
 - Login admin validado local e publico para `@anderson` com papel `SUPER_ADMIN` e `is_admin=true`; senha nao foi gravada em texto no repositorio.
+- Auditoria de 2026-05-11 fechou a frente visivel de produto/catalogo/checkout: linguagem de cliente final, frete por endereco, Minhas compras, notificacoes, compartilhamento, checkout e white-label sem exposicao de fornecedor original ao cliente.
+- Servidor limpo em `http://127.0.0.1:8099` validou `healthz`, `/api/stock-catalog`, `/api/product-shell` e `POST /api/actions/shipping-quote` com frete e `customer_visible_supplier_name=Valley`.
+- Assets publicos do app foram verificados sem chaves internas de fornecedor/provider/custo/benchmark nos itens STOCK; o runtime interno continua preservando dados operacionais para admin, precificacao e pedido ao provedor.
+- A evidencia final de modo de producao permanece pendente porque o dominio fixo `https://admin.brasildesconto.com.br` ainda retorna erro Cloudflare por token de named tunnel invalido.
 
 ## Bloqueios
 
@@ -59,7 +63,8 @@
 - `cloudflared` esta instalado, mas sem certificado local em `~/.cloudflared`.
 - Nenhum `CLOUDFLARE_API_TOKEN`, `CF_API_TOKEN`, `CLOUDFLARE_ZONE_ID` ou `CLOUDFLARE_ACCOUNT_ID` esta carregado no ambiente atual. A aplicacao real dos DNS fica bloqueada ate existir token API/zone ID seguro fora do git.
 - `flutter analyze` completo ficou mais de 5 minutos em execucao e estourou timeout; a validacao segmentada dos arquivos centrais passou, e o build web release concluiu.
+- Nesta sessao, `flutter analyze --no-pub` e `dart analyze` segmentados tambem excederam timeout; `python -m py_compile`, `dart format`, parse do script PowerShell, parse do JSON de politica e validacao HTTP local passaram.
 
 ## Proxima acao
 
-- Auditar as funcoes visiveis do APK/admin e transformar qualquer fluxo incompleto em operacao real antes de fechar evidencias finais.
+- Renovar o token do named tunnel Cloudflare ou fornecer token API com permissao de tunnel para demonstrar o MVP no dominio fixo e fechar a evidencia final de producao.

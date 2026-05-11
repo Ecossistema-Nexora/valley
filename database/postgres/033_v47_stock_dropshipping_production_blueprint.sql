@@ -1,5 +1,7 @@
 -- Implanta o blueprint de producao do Dropshipping Inteligente no MVP Valley.
--- Foco: STOCK + WMS + MARKETPLACE com API-first, cache, filas, pricing auditavel e bloqueio de IA externa.
+-- Foco: STOCK + WMS + MARKETPLACE.
+-- Integrações: Conecta fornecedores externos (AliExpress, etc) ao inventário lógico do WMS e vitrine do MARKETPLACE.
+-- Transacional: As decisões de preço alimentam o ledger do PAY para garantir margem positiva.
 
 BEGIN;
 

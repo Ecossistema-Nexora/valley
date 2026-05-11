@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "source_spec": "docs/specs/valley-mvp-execution-plan.md",
   "execution_mode": "controlled_artifacts_only",
-  "objective": {
-    "summary": "Construir um MVP viavel focado em geracao de receita imediata, baixo custo operacional e validacao de fluxo financeiro e operacional.",
-    "central_principle": "O MVP nao e um produto completo. E uma maquina de transacao, identidade e estoque."
+  "objective": { 
+    "summary": "Define o escopo e os princípios para a construção do Produto Mínimo Viável (MVP) do Valley Omniverse, focando na geração de receita imediata, otimização de custos operacionais e validação dos fluxos financeiros e operacionais essenciais. Este manifesto serve como guia para as fases de desenvolvimento e implantação.",
+    "central_principle": "O MVP não é um produto completo, mas sim uma máquina eficiente de transação, identidade e gestão de estoque, projetada para provar o modelo de negócio e gerar valor rapidamente."
   },
   "included_modules": [
     "STOCK",
@@ -108,7 +108,7 @@
         "captura via PLUG e MDR modelados sem expor o modulo PAY",
         "documento e recibo com checksum rastreavel",
         "empresa onboardada com rotina empresarial minima",
-        "ordem de servico e compras com fechamento fiscal ponta a ponta"
+        "ordem de servico e compras com fechamento fiscal ponta a ponta" 
       ]
     },
     {
@@ -128,7 +128,7 @@
         ],
         "valley_identity_rule": "Usar profundidade de catalogo, busca, ofertas, variacoes e seller score sem copiar identidade visual dos concorrentes.",
         "visual_direction": "Night/Cosmic como base, Violet para compra, Cyan para confianca operacional e cards claros para produto.",
-        "must_have_surfaces": [
+        "must_have_surfaces": [ 
           "busca principal",
           "categorias",
           "vitrine de ofertas",
@@ -137,7 +137,7 @@
           "variacoes de produto",
           "checkout preparado para PLUG e reativacao posterior de PAY",
           "comprovante e documento por DOCS"
-        ],
+        ], 
         "admin_api_integrations": [
           "Mercado Livre",
           "Amazon",
@@ -146,7 +146,7 @@
           "Magalu",
           "CJDropshipping",
           "Shopee"
-        ],
+        ], 
         "admin_api_fields": [
           "ambiente",
           "regiao/site",
@@ -166,7 +166,7 @@
           "rotinas ativas de catalogo, pedidos, estoque e precos",
           "fallback scraping",
           "bloqueio de IA externa"
-        ],
+        ], 
         "dropshipping_production_blueprint": {
           "spec_path": "docs/specs/valley-dropshipping-production-blueprint.md",
           "supplier_apis": [
@@ -174,7 +174,7 @@
             "Alibaba",
             "CJDropshipping"
           ],
-          "market_price_sources": [
+          "market_price_sources": [ 
             "Mercado Livre",
             "Amazon",
             "Shopee",
@@ -192,7 +192,7 @@
             "reprecificacao automatica",
             "pausa automatica sem margem ou estoque",
             "decisao de pricing append-only"
-          ],
+          ], 
           "database_migration": "database/postgres/033_v47_stock_dropshipping_production_blueprint.sql"
         }
       },
@@ -201,7 +201,7 @@
         "estoque simplificado com enderecamento e variancia minima",
         "checkout do marketplace alimentando PLUG e preservando contrato para PAY",
         "experiencia STOCK reconhecivel como Valley, mesmo com comportamento de grande marketplace"
-      ]
+      ] 
     },
     {
       "key": "phase_3_identity",
@@ -210,7 +210,7 @@
       "modules": [],
       "cross_cutting_capabilities": [
         "face_id",
-        "voice_id",
+        "voice_id", 
         "identity_score"
       ],
       "success_gates": [
@@ -218,7 +218,7 @@
         "Voice ID formalizado como frente spec-first",
         "Identity Score agregado para antifraude e reputacao"
       ]
-    },
+    }, 
     {
       "key": "phase_4_light_ai",
       "label": "Fase 4 - IA Leve",
@@ -226,7 +226,7 @@
       "modules": [
         "CHAT",
         "ADVISOR",
-        "AGENDA"
+        "AGENDA" 
       ],
       "success_gates": [
         "chat com retention segura",
@@ -234,7 +234,7 @@
         "agenda com recorrencia e memoria util"
       ],
       "runtime_rules": [
-        "uso limitado por plano",
+        "uso limitado por plano", 
         "processamento assincrono",
         "foco em produtividade, nao volume"
       ]
@@ -245,14 +245,14 @@
     "numero de empresas ativas",
     "taxa de conversao marketplace",
     "custo por transacao",
-    "fraude / chargeback"
+    "fraude / chargeback" 
   ],
   "golden_rules": [
     "nao escalar logistica cedo",
     "nao subsidiar operacao",
     "separar taxa, processamento e logistica",
     "limitar custo de IA",
-    "monetizar desde o primeiro usuario"
+    "monetizar desde o primeiro usuario" 
   ],
   "expected_result": [
     "break-even antes de 100k usuarios",
