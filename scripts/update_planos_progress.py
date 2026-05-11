@@ -83,6 +83,8 @@ def read_index_rows() -> list[IndexRow]:
         cells = parse_table_row(stripped)
         if len(cells) < 6:
             continue
+        if not re.fullmatch(r"v\d{3}", cells[0]):
+            continue
         ultima_atualizacao = cells[8] if len(cells) >= 9 else cells[5]
         done, total = checklist_counts(plan_path_from_cell(cells[2]))
         rows.append(

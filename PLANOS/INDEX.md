@@ -12,24 +12,6 @@
 
 | versao | criado_em_brt | arquivo | status | escopo | etapas | produzido | falta_produzir | ultima_atualizacao_brt |
 | --- | --- | --- | --- | --- | ---: | ---: | ---: | --- |
-| versao | criado_em_brt | arquivo | status | escopo | 0/0 | 0.0% | 100.0% | ultima_atualizacao_brt |
-| versao | criado_em_brt | arquivo | status | escopo | 0/0 | 0.0% | 100.0% | ultima_atualizacao_brt |
-| versao | criado_em_brt | arquivo | status | escopo | 0/0 | 0.0% | 100.0% | ultima_atualizacao_brt |
-| versao | criado_em_brt | arquivo | status | escopo | 0/0 | 0.0% | 100.0% | ultima_atualizacao_brt |
-| versao | criado_em_brt | arquivo | status | escopo | 0/0 | 0.0% | 100.0% | ultima_atualizacao_brt |
-| versao | criado_em_brt | arquivo | status | escopo | 0/0 | 0.0% | 100.0% | ultima_atualizacao_brt |
-| versao | criado_em_brt | arquivo | status | escopo | 0/0 | 0.0% | 100.0% | ultima_atualizacao_brt |
-| versao | criado_em_brt | arquivo | status | escopo | 0/0 | 0.0% | 100.0% | ultima_atualizacao_brt |
-| versao | criado_em_brt | arquivo | status | escopo | 0/0 | 0.0% | 100.0% | ultima_atualizacao_brt |
-| versao | criado_em_brt | arquivo | status | escopo | 0/0 | 0.0% | 100.0% | ultima_atualizacao_brt |
-| versao | criado_em_brt | arquivo | status | escopo | 0/0 | 0.0% | 100.0% | ultima_atualizacao_brt |
-| versao | criado_em_brt | arquivo | status | escopo | 0/0 | 0.0% | 100.0% | ultima_atualizacao_brt |
-| versao | criado_em_brt | arquivo | status | escopo | 0/0 | 0.0% | 100.0% | ultima_atualizacao_brt |
-| versao | criado_em_brt | arquivo | status | escopo | 0/0 | 0.0% | 100.0% | ultima_atualizacao_brt |
-| versao | criado_em_brt | arquivo | status | escopo | 0/0 | 0.0% | 100.0% | ultima_atualizacao_brt |
-| versao | criado_em_brt | arquivo | status | escopo | 0/0 | 0.0% | 100.0% | ultima_atualizacao_brt |
-| versao | criado_em_brt | arquivo | status | escopo | 0/0 | 0.0% | 100.0% | ultima_atualizacao_brt |
-| versao | criado_em_brt | arquivo | status | escopo | 0/0 | 0.0% | 100.0% | ultima_atualizacao_brt |
 | v001 | 2026-05-04 03:41:30 BRT | [v001__20260504-034130-brt__retomada_exata_sessao_019deda6.md](./v001__20260504-034130-brt__retomada_exata_sessao_019deda6.md) | concluido | Retomada exata da sessao 019deda6 com entrega completa | 10/10 | 100.0% | 0.0% | 2026-05-04 04:30:52 BRT |
 | v002 | 2026-05-05 08:49:36 BRT | [v002__20260505-084936-brt__configuracao_total_superdesign_codex.md](./v002__20260505-084936-brt__configuracao_total_superdesign_codex.md) | concluido | Configuracao total do SuperDesign oficial com handoff para Codex no VALLEY | 6/6 | 100.0% | 0.0% | 2026-05-05 08:49:36 BRT |
 | v003 | 2026-05-05 08:51:47 BRT | [v003__20260505-085147-brt__configuracao_total_superflex_codex.md](./v003__20260505-085147-brt__configuracao_total_superflex_codex.md) | concluido | Configuracao total do Superflex oficial com handoff para Codex no VALLEY | 5/5 | 100.0% | 0.0% | 2026-05-05 08:51:47 BRT |

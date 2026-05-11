@@ -1,5 +1,6 @@
 {
   "name": "Valley Hybrid Database Migration Manifest",
+  "description_technical": "Grafo de dependência de banco de dados. Define a ordem mandatória: Identidade -> Finanças -> Módulos V47 -> Domínios Complementares.",
   "language_policy": "pt-BR simples com termos tecnicos em ingles",
   "safety_policy": "Core-first, append-only para ledger/auditoria e sem DROP destrutivo automatico.",
   "postgres": [

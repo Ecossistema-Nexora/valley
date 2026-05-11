@@ -19,6 +19,8 @@ $StatusPath = Join-Path $RuntimeDir 'valley-mvp-autonomous-closure.json'
 $CatalogStatusPath = Join-Path $RuntimeDir 'valley-stock-catalog-10k-cycle.json'
 $StockRuntimePath = Join-Path $RuntimeDir 'valley-stock-real-catalog.json'
 $CloudflareRepairStatusPath = Join-Path $RuntimeDir 'valley-cloudflare-named-tunnel-repair.json'
+$AdminPublicRuntimePath = Join-Path $RuntimeDir 'valley-admin-public-runtime.json'
+$ProductPublicRuntimePath = Join-Path $RuntimeDir 'valley-product-public-runtime.json'
 $EnvPath = Join-Path $RepoRoot '.env'
 $CodexCloudEnvPath = Join-Path $RuntimeDir 'codex-cloud-secrets.env'
 $TunnelTokenEnvPath = Join-Path $RuntimeDir 'valley-cloudflare-named-tunnel.env'
@@ -190,7 +192,8 @@ function Invoke-ValleyProcess {
 function Test-HttpEndpoint {
     param(
         [string]$Name,
-        [string]$BaseUrl
+        [string]$BaseUrl,
+        [string]$PathSuffix = '/healthz'
     )
     if ([string]::IsNullOrWhiteSpace($BaseUrl)) {
         return [ordered]@{
@@ -199,9 +202,9 @@ function Test-HttpEndpoint {
             detail = 'base_url_empty'
         }
     }
-    $Uri = $BaseUrl.TrimEnd('/') + '/healthz'
+    $Uri = $BaseUrl.TrimEnd('/') + $PathSuffix
     $Client = [System.Net.Http.HttpClient]::new()
-    $Client.Timeout = [TimeSpan]::FromSeconds(10)
+    $Client.Timeout = [TimeSpan]::FromSeconds(45)
     try {
         $Response = $Client.GetAsync($Uri).GetAwaiter().GetResult()
         $Body = $Response.Content.ReadAsStringAsync().GetAwaiter().GetResult()
@@ -321,11 +324,13 @@ try {
             }
             $Steps.Add((Invoke-ValleyProcess -Name 'mvp_cloudflare_named_tunnel_repair' -FilePath 'powershell.exe' -Arguments $RepairArgs -TimeoutSeconds 300))
         } else {
+            $HasConnectorToken = Test-AnyEnv -Names @('CLOUDFLARED_TOKEN')
             $Blocker = [ordered]@{
                 name = 'mvp_cloudflare_named_tunnel_repair'
                 status = 'blocked'
                 reason = 'missing_cloudflare_api_token'
                 required_env = $TokenEnvNames
+                connector_token_present = $HasConnectorToken
                 repair_status_path = $CloudflareRepairStatusPath
                 dashboard_path = 'Zero Trust > Networks > Tunnels > valley-admin > Add a replica > copy token'
             }
@@ -342,7 +347,40 @@ try {
 
     if (-not $SkipValidation) {
         $Steps.Add((Test-HttpEndpoint -Name 'local_runtime_health' -BaseUrl ([string]$Config.validation.local_base_url)))
+        $Steps.Add((Test-HttpEndpoint -Name 'local_product_shell' -BaseUrl ([string]$Config.validation.local_base_url) -PathSuffix '/api/product-shell'))
         $Steps.Add((Test-HttpEndpoint -Name 'tailscale_runtime_health' -BaseUrl ([string]$Config.validation.tailscale_base_url)))
+        $Steps.Add((Test-HttpEndpoint -Name 'tailscale_product_shell' -BaseUrl ([string]$Config.validation.tailscale_base_url) -PathSuffix '/api/product-shell'))
+        $AdminPublicManifest = Load-JsonObject -Path $AdminPublicRuntimePath -Fallback @{}
+        $ProductPublicManifest = Load-JsonObject -Path $ProductPublicRuntimePath -Fallback @{}
+        $AdminProvider = ''
+        $AdminPublicUrl = ''
+        $ProductPublicUrl = ''
+        $RequiresTailscale = $false
+        if ($AdminPublicManifest.PSObject.Properties.Name -contains 'provider') {
+            $AdminProvider = [string]$AdminPublicManifest.provider
+        }
+        if ($AdminPublicManifest.PSObject.Properties.Name -contains 'public_url') {
+            $AdminPublicUrl = [string]$AdminPublicManifest.public_url
+        }
+        if ($ProductPublicManifest.PSObject.Properties.Name -contains 'public_url') {
+            $ProductPublicUrl = [string]$ProductPublicManifest.public_url
+        }
+        if ($AdminPublicManifest.PSObject.Properties.Name -contains 'requires_tailscale') {
+            $RequiresTailscale = [bool]$AdminPublicManifest.requires_tailscale
+        }
+        $Steps.Add([ordered]@{
+            name = 'persistent_public_fallback'
+            status = if (
+                ($AdminPublicManifest.PSObject.Properties.Name -contains 'provider_status') -and
+                ($ProductPublicManifest.PSObject.Properties.Name -contains 'provider_status') -and
+                [string]$AdminPublicManifest.provider_status -eq 'healthy' -and
+                [string]$ProductPublicManifest.provider_status -eq 'healthy'
+            ) { 'ok' } else { 'blocked' }
+            provider = $AdminProvider
+            admin_url = $AdminPublicUrl
+            product_url = $ProductPublicUrl
+            requires_tailscale = $RequiresTailscale
+        })
         $FixedDomainStep = Test-HttpEndpoint -Name 'fixed_domain_health' -BaseUrl ([string]$Config.validation.fixed_domain)
         $Steps.Add($FixedDomainStep)
         if ($FixedDomainStep.status -ne 'ok') {

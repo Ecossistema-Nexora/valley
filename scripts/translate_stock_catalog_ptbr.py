@@ -30,6 +30,7 @@ TRANSLATED_STOCK_PATH = RUNTIME_DIR / "valley-stock-real-catalog-ptbr.json"
 TRANSLATION_CACHE_PATH = RUNTIME_DIR / "valley-stock-translation-cache.json"
 TRANSLATION_STATUS_PATH = RUNTIME_DIR / "valley-stock-translation-status.json"
 PRICING_RUNTIME_PATH = RUNTIME_DIR / "valley-admin-imported-products-pricing.json"
+STOCK_PUBLICATION_POLICY_PATH = RUNTIME_DIR.parents[1] / "config" / "stock_publication_policy.json"
 BUNDLED_STOCK_RUNTIME_ASSET_PATH = (
     RUNTIME_DIR.parents[1]
     / "frontend"
@@ -503,14 +504,32 @@ def update_public_preview(translated_runtime: dict[str, Any]) -> None:
             for item in pricing_items
             if isinstance(item, dict)
         }
+    publication_policy = load_json(STOCK_PUBLICATION_POLICY_PATH, {})
+    publication_policy = publication_policy if isinstance(publication_policy, dict) else {}
+    auto_approve_imported_catalog = bool(publication_policy.get("auto_approve_imported_catalog"))
+    auto_approval_reason_code = str(
+        publication_policy.get("reason_code") or "auto_approved_mvp_total_delivery"
+    )
+    auto_approval_reason_label = str(
+        publication_policy.get("reason_label")
+        or "Catalogo importado aprovado automaticamente nesta instancia MVP."
+    )
     curated_stock_items = []
     for item in stock_items:
         pricing_row = pricing_index.get(str(item.get("id") or ""))
         publication_status = str((pricing_row or {}).get("publication_status") or "").strip().lower()
-        if publication_status == "do_not_publish":
+        if publication_status == "do_not_publish" and not auto_approve_imported_catalog:
             continue
         merged = dict(item)
-        if pricing_row:
+        if auto_approve_imported_catalog:
+            merged["publication_status"] = "approved"
+            merged["publication_status_label"] = str(
+                publication_policy.get("publication_status_label")
+                or "Aprovado automaticamente"
+            )
+            merged["publication_reason_codes"] = [auto_approval_reason_code]
+            merged["publication_reasons"] = [auto_approval_reason_label]
+        elif pricing_row:
             merged["publication_status"] = publication_status
             merged["estimated_net_revenue_brl"] = pricing_row.get("estimated_net_revenue_brl")
             merged["liquidity_score"] = pricing_row.get("liquidity_score")

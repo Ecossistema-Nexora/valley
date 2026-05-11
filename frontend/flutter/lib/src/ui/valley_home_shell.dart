@@ -10,6 +10,13 @@ import 'package:valley_super_app/src/data/valley_models.dart';
 import 'package:valley_super_app/src/ui/ui_components.dart';
 import 'package:valley_super_app/valley_brand_theme.dart';
 
+/// VALLEY HOME SHELL
+/// =================
+/// Funcionalidade: Hub central de navegação e integração de sinais /me/home.
+/// Decisão: Agrupamento de 47 módulos em 6 destinos de navegação para reduzir carga cognitiva.
+/// Integração: ProductApiRepository para carregar UserModuleTrails (jornadas reais).
+/// Caminho Físico: C:\Users\ereta\.codex\worktrees\VALLEY\frontend\flutter\lib\src\ui\valley_home_shell.dart
+
 const String _homeModulePrefsKey = 'valley.home.visible_modules.v1';
 
 /// Retorna o índice de destino da navegação inferior para um determinado código de módulo.

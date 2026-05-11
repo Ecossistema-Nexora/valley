@@ -1,5 +1,18 @@
 #!/usr/bin/env python3
-"""Orquestra validacao e implantacao do banco hibrido Valley."""
+"""
+VALLEY DATABASE ORCHESTRATOR
+============================
+Propósito: Garantir a aplicação atômica e ordenada de schemas PostgreSQL e coleções MongoDB.
+
+Instruções de Uso:
+- python valley_db_orchestrator.py check   -> Checagem estática de ambiente e arquivos.
+- python valley_db_orchestrator.py report  -> Gera o VALLEY_DEPLOYMENT_STATUS.md.
+- python valley_db_orchestrator.py apply-compose -> Sobe Docker e aplica tudo.
+
+Funcionalidades:
+- Detecção de 'provides' via SQL: Evita re-execução de DDLs que geram conflitos de tipo.
+- Snapshots: Backup binário atômico de ambos os bancos para restauração rápida.
+"""
 
 # argparse cria uma CLI objetiva para check, report, apply e compose.
 import argparse

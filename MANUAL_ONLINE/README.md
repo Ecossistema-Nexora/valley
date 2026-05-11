@@ -16,6 +16,23 @@ A estrategia adotada e `core-first`: primeiro blindar identidade, wallets, ledge
 
 Nao foi criada compatibilidade com `platform.users` ou multi-schema legado nesta entrega inicial.
 
+## Mapeamento de Arquivos e Diretórios (Mandatório)
+
+Para navegação técnica persistente:
+
+- **`/config`**: Registro canônico e blueprints.
+    - `modules_v47.json`: Definição de todos os módulos.
+- **`/database`**: Camada de persistência híbrida.
+    - `migrations.json`: Grafo de execução.
+- **`/scripts`**: Motores de automação.
+    - `valley_module_automation.py`: Builder de módulos.
+    - `valley_db_orchestrator.py`: Runner de banco de dados.
+- **`/frontend`**: Aplicação Flutter.
+    - `valley_home_shell.dart`: UI Principal.
+- **`/modules`**: Artefatos gerados por módulo (README/CONTRACT/STATUS).
+- **`/output`**: Relatórios de status e PDF gerado.
+
+
 ## Arquivos Gerados
 
 `database/postgres/001_core_identity_wallets.sql` cria o nucleo relacional de identidade e carteiras.
