@@ -13,8 +13,8 @@
 - [x] Aplicar override temporario do STOCK para desativar auto-pause somente nesta atividade. Concluido em 2026-05-11 15:06:49 BRT.
 - [x] Carregar catalogo STOCK maximo viavel e regenerar assets publicos do app. Concluido em 2026-05-11 15:06:49 BRT.
 - [x] Gerar release blueprints dos paineis admin e lojista/produto com links finais. Concluido em 2026-05-11 15:21:45 BRT.
-- [ ] Gerar APK Android release split por ABI com `https://admin.brasildesconto.com.br`.
-- [ ] Enviar links dos paineis e APK ABI pelo Telegram e registrar evidencias finais.
+- [x] Gerar APK Android release split por ABI com `https://admin.brasildesconto.com.br`. Concluido em 2026-05-11 16:21:35 BRT.
+- [x] Enviar links dos paineis e APK ABI pelo Telegram e registrar evidencias finais. Concluido em 2026-05-11 16:25:30 BRT.
 
 ## Evidencias
 
@@ -29,6 +29,11 @@
 - Blueprints criados: `docs/runtime/valley-admin-release-blueprint-v034.md`, `docs/runtime/valley-merchant-release-blueprint-v034.md` e `docs/runtime/valley-apk-release-blueprint-abi-v034.md`.
 - Painel admin validado com HTTP 200 em `https://admin.brasildesconto.com.br/` apos o rebuild.
 - Painel lojista/produto validado com HTTP 200 em `https://admin.brasildesconto.com.br/product` apos o rebuild Flutter Web com `VALLEY_PRODUCT_API_BASE_URL=https://admin.brasildesconto.com.br`.
+- APK split por ABI gerado em `frontend/flutter/build/app/outputs/flutter-apk`: `app-arm64-v8a-release.apk` (`20781265` bytes), `app-armeabi-v7a-release.apk` (`18280701` bytes) e `app-x86_64-release.apk` (`22208301` bytes).
+- Os APKs contem `admin.brasildesconto.com.br` em `libapp.so`, confirmando o `dart-define` de base publica fixa.
+- Downloads publicados em `https://admin.brasildesconto.com.br/downloads/v034/`; `HEAD` dos tres APKs retornou HTTP 200 com os tamanhos esperados.
+- Telegram enviado com `ok=true` para a mensagem de links dos paineis e downloads.
+- Telegram enviado com `ok=true` para `app-arm64-v8a-release.apk`, `app-armeabi-v7a-release.apk` e `app-x86_64-release.apk`.
 
 ## Bloqueios
 
@@ -37,4 +42,4 @@
 
 ## Proxima acao
 
-- Gerar APK Android release split por ABI com base publica fixa.
+- Atividade v034 concluida. Manter o override como excecao auditavel desta atividade e nao como regra permanente.
