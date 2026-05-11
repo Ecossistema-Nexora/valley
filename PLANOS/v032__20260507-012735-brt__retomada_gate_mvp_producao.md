@@ -55,6 +55,9 @@
 - Servidor limpo em `http://127.0.0.1:8099` validou `healthz`, `/api/stock-catalog`, `/api/product-shell` e `POST /api/actions/shipping-quote` com frete e `customer_visible_supplier_name=Valley`.
 - Assets publicos do app foram verificados sem chaves internas de fornecedor/provider/custo/benchmark nos itens STOCK; o runtime interno continua preservando dados operacionais para admin, precificacao e pedido ao provedor.
 - A evidencia final de modo de producao permanece pendente porque o dominio fixo `https://admin.brasildesconto.com.br` ainda retorna erro Cloudflare por token de named tunnel invalido.
+- Automacao persistente criada em 2026-05-11 10:32:35 BRT: `scripts/run_valley_mvp_autonomous_closure.ps1` orquestra catalogo 10k quando devido, reparo Cloudflare quando houver token, validacao de runtime e atualizacao dos planos.
+- Tarefa agendada local `\ValleyMvpAutonomousClosure` instalada por `scripts/install_valley_mvp_autonomous_closure_task.ps1`, com execucao a cada 6 horas e proxima janela registrada para 2026-05-11 16:30:00 BRT.
+- Status persistente em `tmp/runtime/valley-mvp-autonomous-closure.json`: runtime local e Tailscale retornaram HTTP 200, dominio fixo retornou HTTP 530 / `error code: 1033`, catalogo atual tem 1089/10000 itens e faltam 8911 para a meta automatizada.
 
 ## Bloqueios
 
@@ -64,7 +67,9 @@
 - Nenhum `CLOUDFLARE_API_TOKEN`, `CF_API_TOKEN`, `CLOUDFLARE_ZONE_ID` ou `CLOUDFLARE_ACCOUNT_ID` esta carregado no ambiente atual. A aplicacao real dos DNS fica bloqueada ate existir token API/zone ID seguro fora do git.
 - `flutter analyze` completo ficou mais de 5 minutos em execucao e estourou timeout; a validacao segmentada dos arquivos centrais passou, e o build web release concluiu.
 - Nesta sessao, `flutter analyze --no-pub` e `dart analyze` segmentados tambem excederam timeout; `python -m py_compile`, `dart format`, parse do script PowerShell, parse do JSON de politica e validacao HTTP local passaram.
+- A automacao recorrente esta ativa localmente, mas nao consegue reparar Cloudflare sem `CLOUDFLARE_API_TOKEN`/`CF_API_TOKEN`; quando o token existir no ambiente, a rotina executa o reparo sem gravar segredo no Git.
+- A automacao nativa do Codex foi tentada para a mesma rotina, mas a criacao retornou falha sem detalhe; o fallback persistente ativo ficou no Windows Task Scheduler.
 
 ## Proxima acao
 
-- Renovar o token do named tunnel Cloudflare ou fornecer token API com permissao de tunnel para demonstrar o MVP no dominio fixo e fechar a evidencia final de producao.
+- A rotina `\ValleyMvpAutonomousClosure` continuara tentando automaticamente; para fechar a evidencia final, o proximo passo natural externo e disponibilizar `CLOUDFLARE_API_TOKEN`/`CF_API_TOKEN` com permissao de tunnel ou renovar o token do named tunnel no Cloudflare Zero Trust.

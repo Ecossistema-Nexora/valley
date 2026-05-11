@@ -57,6 +57,10 @@
 - `scripts/import_real_stock_catalog.py --target-items 10000` materializou 1089 itens no runtime atual usando cache/fallback porque CJDropshipping retornou HTTP 429 de limite diario; `scripts/translate_stock_catalog_ptbr.py --rebuild-only` regenerou os assets publicos sem gastar nova quota externa.
 - Validacao local em servidor novo `127.0.0.1:8099`: `healthz=ok`, `/api/stock-catalog` com `items_total=1089`, `/api/product-shell` com `80` itens e `POST /api/actions/shipping-quote` com `status=ok`, frete `39.9` e `customer_visible_supplier_name=Valley`.
 - Validacoes executadas em 2026-05-11: `python -m py_compile scripts\import_real_stock_catalog.py scripts\translate_stock_catalog_ptbr.py scripts\serve_valley_admin.py`, `dart format` nos arquivos Flutter alterados, parse do PowerShell `scripts\run_stock_catalog_10k_cycle.ps1`, parse do JSON de politica e `git diff --check` nos arquivos da frente.
+- `scripts/run_valley_mvp_autonomous_closure.ps1` e `scripts/install_valley_mvp_autonomous_closure_task.ps1` adicionados para transformar o catalogo 10k, reparo Cloudflare e validacao do dominio em rotina automatica safe-only a cada 6 horas.
+- `schtasks.exe /Query /TN \ValleyMvpAutonomousClosure` confirmou a tarefa ativa com proxima execucao em 2026-05-11 16:30:00 BRT.
+- `config/valley_mvp_autonomous_closure.json`, `scripts/run_valley_mvp_autonomous_closure.ps1` e `scripts/install_valley_mvp_autonomous_closure_task.ps1` adicionados para retomada automatica persistente do fechamento: catalogo 10k respeita janela segura, Cloudflare so repara com token presente, e status fica em `tmp/runtime/valley-mvp-autonomous-closure.json`.
+- Tarefa Windows `\ValleyMvpAutonomousClosure` instalada em 2026-05-11 10:23:44 BRT para executar a rotina a cada 6 horas; a propria rotina mantem `safe_only=true` e nao executa deploy, push, reset, escrita em banco externo ou exposicao de segredos.
 
 ## Bloqueios
 
@@ -64,7 +68,8 @@
 - Catalogo 10k agora possui politica e ciclo persistente, mas o volume materializado atual permanece em 1089 itens ate a quota diaria da CJDropshipping liberar novas paginas ou outros provedores autenticados ampliarem a cobertura.
 - Cloudflare Quick Tunnel retornou `429 Too Many Requests` ao tentar renovar URL publica apos muitas tentativas; named tunnel retornou `Unauthorized: Invalid tunnel secret`. A rota operacional foi migrada para `localhost.run`, com Tailscale mantido como alternativa de rede privada.
 - `flutter analyze`/`dart analyze` segmentado nesta sessao excedeu 6 minutos de timeout; a verificacao Dart concluida foi `dart format`, que parseou os arquivos alterados, mas nao substitui a analise estatica completa.
+- A tentativa de registrar automacao recorrente pelo Codex app retornou falha sem detalhe; a persistencia recorrente ativa foi feita via Windows Task Scheduler e registrada em `tmp/runtime/valley-mvp-autonomous-closure-task.json`.
 
 ## Proxima Acao
 
-- Executar `scripts/run_stock_catalog_10k_cycle.ps1` quando a quota CJDropshipping ou novos tokens de provedores estiverem disponiveis; renovar o named tunnel Cloudflare para voltar a demonstrar o dominio fixo `admin.brasildesconto.com.br`.
+- A tarefa `\ValleyMvpAutonomousClosure` executara a rotina automaticamente; quando a quota CJDropshipping ou novos tokens de provedores estiverem disponiveis, o ciclo 10k continua sem acao manual.
