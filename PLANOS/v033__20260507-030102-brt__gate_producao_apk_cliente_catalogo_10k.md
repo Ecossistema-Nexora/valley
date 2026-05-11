@@ -59,8 +59,6 @@
 - Validacoes executadas em 2026-05-11: `python -m py_compile scripts\import_real_stock_catalog.py scripts\translate_stock_catalog_ptbr.py scripts\serve_valley_admin.py`, `dart format` nos arquivos Flutter alterados, parse do PowerShell `scripts\run_stock_catalog_10k_cycle.ps1`, parse do JSON de politica e `git diff --check` nos arquivos da frente.
 - `scripts/run_valley_mvp_autonomous_closure.ps1` e `scripts/install_valley_mvp_autonomous_closure_task.ps1` adicionados para transformar o catalogo 10k, reparo Cloudflare e validacao do dominio em rotina automatica safe-only a cada 6 horas.
 - `schtasks.exe /Query /TN \ValleyMvpAutonomousClosure` confirmou a tarefa ativa com proxima execucao em 2026-05-11 16:30:00 BRT.
-- `config/valley_mvp_autonomous_closure.json`, `scripts/run_valley_mvp_autonomous_closure.ps1` e `scripts/install_valley_mvp_autonomous_closure_task.ps1` adicionados para retomada automatica persistente do fechamento: catalogo 10k respeita janela segura, Cloudflare so repara com token presente, e status fica em `tmp/runtime/valley-mvp-autonomous-closure.json`.
-- Tarefa Windows `\ValleyMvpAutonomousClosure` instalada em 2026-05-11 10:23:44 BRT para executar a rotina a cada 6 horas; a propria rotina mantem `safe_only=true` e nao executa deploy, push, reset, escrita em banco externo ou exposicao de segredos.
 
 ## Bloqueios
 
