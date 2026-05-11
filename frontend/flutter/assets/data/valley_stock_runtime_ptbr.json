@@ -1,7 +1,7 @@
 {
   "status": "ok",
   "service": "valley-stock-real-catalog",
-  "generated_at_utc": "2026-05-11T11:29:41.624156Z",
+  "generated_at_utc": "2026-05-11T12:04:43.209371Z",
   "provider": "multi_provider_catalog",
   "providers_active": [
     "alibaba",
@@ -25,12 +25,12 @@
     "aliexpress autenticado/configurado, mas ainda sem coletor oficial no importador do STOCK."
   ],
   "provider_errors": {
-    "cjdropshipping": "429 /product/listV2: {\"code\":1600200,\"result\":false,\"message\":\"Too Many Requests, QPS limit is 1 time/1second\",\"data\":null,\"requestId\":\"746e9caf6cf742c2b62059f3a7026140\",\"success\":false}"
+    "cjdropshipping": "429 /product/listV2: {\"code\":1600200,\"result\":false,\"message\":\"Too Many Requests, QPS limit is 1 time/1second\",\"data\":null,\"requestId\":\"d10c5df8d0564cb6907a8f1f9c681e78\",\"success\":false}"
   },
   "items_total": 0,
   "categories_total": 0,
   "items": [],
   "translation_locale": "pt-BR",
   "translation_engine": "google-translate-public",
-  "translation_generated_at_utc": "2026-05-11T11:29:42.004533Z"
+  "translation_generated_at_utc": "2026-05-11T12:04:44.101836Z"
 }
