@@ -12,7 +12,7 @@
 - [x] Criar plano persistente da atividade e confirmar Cloudflare fixo saudavel. Concluido em 2026-05-11 14:56:24 BRT.
 - [x] Aplicar override temporario do STOCK para desativar auto-pause somente nesta atividade. Concluido em 2026-05-11 15:06:49 BRT.
 - [x] Carregar catalogo STOCK maximo viavel e regenerar assets publicos do app. Concluido em 2026-05-11 15:06:49 BRT.
-- [ ] Gerar release blueprints dos paineis admin e lojista/produto com links finais.
+- [x] Gerar release blueprints dos paineis admin e lojista/produto com links finais. Concluido em 2026-05-11 15:21:45 BRT.
 - [ ] Gerar APK Android release split por ABI com `https://admin.brasildesconto.com.br`.
 - [ ] Enviar links dos paineis e APK ABI pelo Telegram e registrar evidencias finais.
 
@@ -26,6 +26,9 @@
 - `https://admin.brasildesconto.com.br/api/product-shell` retornou `public_runtime.provider=cloudflare_named_tunnel`, `items=80` na vitrine e `summary.products=1089`.
 - `https://admin.brasildesconto.com.br/api/stock-catalog` retornou `items_total=1089`, `categories_total=7` e itens com `publication_status=approved` por politica de aprovacao desta instancia.
 - CJDropshipping retornou HTTP 429 por limite diario de 1000 requisicoes; por isso a carga desta atividade usou a fila/cache validos de precificacao para materializar o maximo viavel sem simular itens externos.
+- Blueprints criados: `docs/runtime/valley-admin-release-blueprint-v034.md`, `docs/runtime/valley-merchant-release-blueprint-v034.md` e `docs/runtime/valley-apk-release-blueprint-abi-v034.md`.
+- Painel admin validado com HTTP 200 em `https://admin.brasildesconto.com.br/` apos o rebuild.
+- Painel lojista/produto validado com HTTP 200 em `https://admin.brasildesconto.com.br/product` apos o rebuild Flutter Web com `VALLEY_PRODUCT_API_BASE_URL=https://admin.brasildesconto.com.br`.
 
 ## Bloqueios
 
@@ -34,4 +37,4 @@
 
 ## Proxima acao
 
-- Gerar os release blueprints dos paineis e seguir para build Android split por ABI.
+- Gerar APK Android release split por ABI com base publica fixa.
