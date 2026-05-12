@@ -22,6 +22,7 @@ from collections import defaultdict
 from datetime import datetime, timezone
 from functools import partial
 from http import HTTPStatus
+from http.cookies import SimpleCookie
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any
@@ -85,6 +86,8 @@ USER_MODULE_TRAILS_PATH = RUNTIME_DIR / "valley-user-module-trails.jsonl"
 MOVE_TELEMETRY_PATH = RUNTIME_DIR / "move-telemetry.jsonl"
 USER_AUTH_RUNTIME_PATH = RUNTIME_DIR / "valley-user-auth-runtime.json"
 USER_AUTH_EVENTS_PATH = RUNTIME_DIR / "valley-user-auth-events.jsonl"
+AUTH_COOKIE_NAME = "valley_session"
+AUTH_COOKIE_DOMAIN = ".brasildesconto.com.br"
 HOME_DEFAULT_VISIBLE_MODULES = ("PAY", "MARKETPLACE", "STOCK", "CHAT", "DOCS", "PLUG")
 PRODUCT_MVP_MODULES = {"STOCK", "MARKETPLACE", "CHAT", "PAY"}
 PRODUCT_MVP_MODULE_ORDER = ("MARKETPLACE", "STOCK", "CHAT", "PAY")
@@ -995,11 +998,23 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             return
 
         if route == "/api/auth/login":
-            self._write_json(*self._auth_login_response())
+            status, payload = self._auth_login_response()
+            cookie_header = str(payload.pop("_set_cookie", "") or "")
+            self._write_json(
+                status,
+                payload,
+                extra_headers={"Set-Cookie": cookie_header} if cookie_header else None,
+            )
             return
 
         if route == "/api/auth/logout":
-            self._write_json(*self._auth_logout_response())
+            status, payload = self._auth_logout_response()
+            cookie_header = str(payload.pop("_set_cookie", "") or "")
+            self._write_json(
+                status,
+                payload,
+                extra_headers={"Set-Cookie": cookie_header} if cookie_header else None,
+            )
             return
 
         if route == "/api/actions/poll-bridge":
@@ -1377,7 +1392,18 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
         auth_header = str(self.headers.get("Authorization") or "").strip()
         if auth_header.lower().startswith("bearer "):
             return auth_header[7:].strip()
-        return str(self.headers.get("X-Valley-Session") or "").strip()
+        header_token = str(self.headers.get("X-Valley-Session") or "").strip()
+        if header_token:
+            return header_token
+        cookie_header = str(self.headers.get("Cookie") or "")
+        if not cookie_header:
+            return ""
+        parsed = SimpleCookie()
+        try:
+            parsed.load(cookie_header)
+        except Exception:
+            return ""
+        return str(parsed.get(AUTH_COOKIE_NAME).value if parsed.get(AUTH_COOKIE_NAME) else "").strip()
 
     def _user_has_admin_access(self, user: dict[str, Any]) -> bool:
         role = str(user.get("primary_role") or "").strip().upper()
@@ -1385,6 +1411,42 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
         if isinstance(permissions, list) and "*" in permissions:
             return True
         return role in {"ADMIN", "SUPER_ADMIN", "OPS", "OPERATOR"}
+
+    def _user_has_merchant_access(self, user: dict[str, Any]) -> bool:
+        role = str(user.get("primary_role") or "").strip().upper()
+        return role == "MERCHANT" or self._user_has_admin_access(user)
+
+    def _auth_session_cookie_header(self, token: str, expires_at: str) -> str:
+        max_age = AUTH_SESSION_TTL_SECONDS
+        expires_dt = parse_iso_datetime(expires_at)
+        if expires_dt is not None:
+            max_age = max(int((expires_dt - utc_now_datetime()).total_seconds()), 0)
+        parts = [
+            f"{AUTH_COOKIE_NAME}={token}",
+            "Path=/",
+            "HttpOnly",
+            "SameSite=Lax",
+            f"Max-Age={max_age}",
+        ]
+        hostname = self._request_hostname()
+        if hostname == "brasildesconto.com.br" or hostname.endswith(".brasildesconto.com.br"):
+            parts.append(f"Domain={AUTH_COOKIE_DOMAIN}")
+            parts.append("Secure")
+        return "; ".join(parts)
+
+    def _clear_auth_session_cookie_header(self) -> str:
+        parts = [
+            f"{AUTH_COOKIE_NAME}=",
+            "Path=/",
+            "HttpOnly",
+            "SameSite=Lax",
+            "Max-Age=0",
+        ]
+        hostname = self._request_hostname()
+        if hostname == "brasildesconto.com.br" or hostname.endswith(".brasildesconto.com.br"):
+            parts.append(f"Domain={AUTH_COOKIE_DOMAIN}")
+            parts.append("Secure")
+        return "; ".join(parts)
 
     def _auth_public_user(self, user: dict[str, Any]) -> dict[str, Any]:
         merchant_profile = user.get("merchant_profile") if isinstance(user.get("merchant_profile"), dict) else None
@@ -1501,6 +1563,8 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 touched = True
                 continue
             if scope == "admin" and not self._user_has_admin_access(matched_user):
+                return None, None
+            if scope == "merchant" and not self._user_has_merchant_access(matched_user):
                 return None, None
             session["last_seen_at"] = utc_now_iso()
             touched = True
@@ -3145,6 +3209,13 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 "service": "valley-auth",
                 "detail": "Esse usuario nao possui acesso ao admin.",
             }
+        if scope == "merchant" and not self._user_has_merchant_access(user):
+            self._append_auth_event("login_failed", {"identifier": identifier, "scope": scope, "reason": "forbidden"})
+            return HTTPStatus.FORBIDDEN, {
+                "status": "forbidden",
+                "service": "valley-auth",
+                "detail": "Esse usuario nao possui acesso ao ERP do lojista.",
+            }
 
         token = secrets.token_urlsafe(48)
         issued_at = utc_now_iso()
@@ -3191,6 +3262,7 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             "service": "valley-auth",
             "message": "Sessao autenticada com sucesso.",
             "session": self._auth_public_session(session, user, token),
+            "_set_cookie": self._auth_session_cookie_header(token, expires_at),
         }
 
     def _auth_logout_response(self) -> tuple[HTTPStatus, dict[str, Any]]:
@@ -3201,6 +3273,7 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 "status": "ok",
                 "service": "valley-auth",
                 "message": "Sessao local encerrada.",
+                "_set_cookie": self._clear_auth_session_cookie_header(),
             }
 
         token_hash = sha256_hex(token)
@@ -3229,6 +3302,7 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             "status": "ok",
             "service": "valley-auth",
             "message": "Sessao encerrada.",
+            "_set_cookie": self._clear_auth_session_cookie_header(),
         }
 
     def _bridge_status_payload(self) -> dict[str, Any]:
@@ -7388,11 +7462,19 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             "stderr": (result.stderr or "").strip(),
         }
 
-    def _write_json(self, status: HTTPStatus, payload: dict[str, Any]) -> None:
+    def _write_json(
+        self,
+        status: HTTPStatus,
+        payload: dict[str, Any],
+        extra_headers: dict[str, str] | None = None,
+    ) -> None:
         body = json.dumps(payload, ensure_ascii=False, indent=2).encode("utf-8")
         self.send_response(status)
         self.send_header("Content-Type", "application/json; charset=utf-8")
         self.send_header("Content-Length", str(len(body)))
+        for header, value in (extra_headers or {}).items():
+            if value:
+                self.send_header(header, value)
         self.end_headers()
         self.wfile.write(body)
 

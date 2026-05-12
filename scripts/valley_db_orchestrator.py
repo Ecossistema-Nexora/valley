@@ -113,6 +113,7 @@ POSTGRES_SEED_PATHS = [
     ROOT / 'database' / 'seeds' / 'postgres' / '001_v47_expansion_tourism_bio_energy_seed.sql',
     ROOT / 'database' / 'seeds' / 'postgres' / '002_v47_priority_domain_delivery_packages_seed.sql',
     ROOT / 'database' / 'seeds' / 'postgres' / '003_v47_product_mode_demo_seed.sql',
+    ROOT / 'database' / 'seeds' / 'postgres' / '004_v47_merchant_erp_seed.sql',
     PRIORITY_DOMAIN_SQL_DIR / 'platform_developer' / 'operational_seed.sql',
     PRIORITY_DOMAIN_SQL_DIR / 'logistics_erp_operations' / 'operational_seed.sql',
     PRIORITY_DOMAIN_SQL_DIR / 'ai_memory_operations' / 'operational_seed.sql',

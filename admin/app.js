@@ -47,12 +47,20 @@
   const MARKETPLACE_API_STORAGE_KEY = "valley.marketplaceApiIntegrations.v1";
   const MODULE_WORKSPACE_TAB_STORAGE_KEY = "valley.moduleWorkspaceTabs.v1";
   const ADMIN_SURFACE_TAB_STORAGE_KEY = "valley.adminSurfaceTab.v1";
+  const MERCHANT_ERP_STORAGE_KEY = "valley.merchantErp.v1";
+  const MERCHANT_ERP_SECTION_ID = "merchantErpSection";
   const ADMIN_SURFACE_TABS = [
     {
       key: "overview",
       label: "Visao geral",
       description: "Home enxuta com botoes para areas e modulos independentes.",
       sectionIds: ["adminLaunchpadSection"],
+    },
+    {
+      key: "merchant",
+      label: "ERP Lojista",
+      description: "Marketplace, PDV, armazem, financeiro e backoffice do lojista.",
+      sectionIds: [MERCHANT_ERP_SECTION_ID],
     },
     {
       key: "finance",
@@ -330,6 +338,8 @@
     marketplaceApiPayload: null,
     moduleWorkspaceTabs: loadModuleWorkspaceTabs(),
     activeAdminSurfaceTab: loadAdminSurfaceTab(),
+    merchantErpDraft: loadMerchantErpDraft(),
+    activeMerchantErpFeature: loadMerchantErpFeature(),
     adminSession: null,
   };
   const workspaceFocusState = {
@@ -339,6 +349,9 @@
   const elements = {
     adminAuthGate: document.getElementById("adminAuthGate"),
     adminAuthForm: document.getElementById("adminAuthForm"),
+    adminAuthKicker: document.getElementById("adminAuthKicker"),
+    adminAuthTitle: document.getElementById("adminAuthTitle"),
+    adminAuthCopy: document.getElementById("adminAuthCopy"),
     adminAuthIdentifier: document.getElementById("adminAuthIdentifier"),
     adminAuthPassword: document.getElementById("adminAuthPassword"),
     adminAuthSubmit: document.getElementById("adminAuthSubmit"),
@@ -413,14 +426,19 @@
     heroTitle: document.getElementById("heroTitle"),
     heroSubcopy: document.getElementById("heroSubcopy"),
     adminSurfaceTabs: document.getElementById("adminSurfaceTabs"),
+    merchantErpRoot: document.getElementById("merchantErpRoot"),
     mainContent: document.getElementById("mainContent"),
   };
 
   let appBootstrapped = false;
 
+  function adminAuthStorageKey() {
+    return `${ADMIN_AUTH_TOKEN_STORAGE_KEY}.${activeAuthScope()}`;
+  }
+
   function readAdminAuthToken() {
     try {
-      return String(window.localStorage.getItem(ADMIN_AUTH_TOKEN_STORAGE_KEY) || "").trim();
+      return String(window.localStorage.getItem(adminAuthStorageKey()) || "").trim();
     } catch (_error) {
       return "";
     }
@@ -429,9 +447,9 @@
   function writeAdminAuthToken(token) {
     try {
       if (token) {
-        window.localStorage.setItem(ADMIN_AUTH_TOKEN_STORAGE_KEY, String(token).trim());
+        window.localStorage.setItem(adminAuthStorageKey(), String(token).trim());
       } else {
-        window.localStorage.removeItem(ADMIN_AUTH_TOKEN_STORAGE_KEY);
+        window.localStorage.removeItem(adminAuthStorageKey());
       }
     } catch (_error) {
       return;
@@ -446,12 +464,75 @@
     elements.adminAuthStatus.dataset.tone = tone;
   }
 
+  function isMerchantErpWorkspaceKey(key) {
+    return String(key || "").startsWith("merchant-");
+  }
+
+  function activeAuthScope() {
+    return isMerchantErpWorkspaceKey(activeWorkspaceKey()) ? "merchant" : "admin";
+  }
+
+  function applyAuthGateCopy() {
+    const merchantMode = activeAuthScope() === "merchant";
+    if (elements.adminAuthKicker) {
+      elements.adminAuthKicker.textContent = merchantMode ? "Acesso do lojista" : "Acesso administrativo";
+    }
+    if (elements.adminAuthTitle) {
+      elements.adminAuthTitle.textContent = merchantMode ? "Login do ERP lojista" : "Login do painel Valley";
+    }
+    if (elements.adminAuthCopy) {
+      elements.adminAuthCopy.textContent = merchantMode
+        ? "Use a credencial da empresa para abrir PDV, armazem, metricas, campanhas, financeiro e integracoes do marketplace."
+        : "Use uma credencial administrativa válida para liberar workspaces, integrações reais e ações operacionais.";
+    }
+    if (elements.adminAuthIdentifier && !elements.adminAuthIdentifier.dataset.userEdited) {
+      elements.adminAuthIdentifier.value = merchantMode ? "lojista.demo@valley.local" : "@anderson";
+    }
+    if (elements.adminAuthSubmit) {
+      elements.adminAuthSubmit.textContent = merchantMode ? "Entrar no ERP" : "Entrar no admin";
+    }
+  }
+
   function loadAdminSurfaceTab() {
     try {
       const saved = String(window.localStorage.getItem(ADMIN_SURFACE_TAB_STORAGE_KEY) || "").trim().toLowerCase();
       return ADMIN_SURFACE_TABS.some((tab) => tab.key === saved) ? saved : "overview";
     } catch (_error) {
       return "overview";
+    }
+  }
+
+  function loadMerchantErpDraft() {
+    try {
+      const saved = JSON.parse(window.localStorage.getItem(MERCHANT_ERP_STORAGE_KEY) || "{}");
+      return saved && typeof saved === "object" ? saved : {};
+    } catch (_error) {
+      return {};
+    }
+  }
+
+  function persistMerchantErpDraft() {
+    try {
+      window.localStorage.setItem(MERCHANT_ERP_STORAGE_KEY, JSON.stringify(state.merchantErpDraft || {}, null, 2));
+    } catch (_error) {
+      return;
+    }
+  }
+
+  function loadMerchantErpFeature() {
+    try {
+      const saved = String(window.localStorage.getItem(`${MERCHANT_ERP_STORAGE_KEY}.activeFeature`) || "").trim();
+      return saved || "";
+    } catch (_error) {
+      return "";
+    }
+  }
+
+  function persistMerchantErpFeature(key) {
+    try {
+      window.localStorage.setItem(`${MERCHANT_ERP_STORAGE_KEY}.activeFeature`, String(key || ""));
+    } catch (_error) {
+      return;
     }
   }
 
@@ -469,6 +550,16 @@
 
   function adminSurfaceTabForSection(sectionId) {
     return ADMIN_SURFACE_TABS.find((tab) => tab.sectionIds.includes(sectionId)) || ADMIN_SURFACE_TABS[0];
+  }
+
+  function syncAdminSurfaceWithWorkspace() {
+    const workspace = activeWorkspace();
+    if (workspace?.workspaceKind === "merchant_erp" || isMerchantErpWorkspaceKey(workspace?.key)) {
+      state.activeAdminSurfaceTab = "merchant";
+      document.body.classList.add("merchant-erp-mode");
+      return;
+    }
+    document.body.classList.remove("merchant-erp-mode");
   }
 
   function setActiveAdminSurfaceTab(tabKey, { preserveScroll = false } = {}) {
@@ -533,21 +624,22 @@
     return fetch(url, {
       ...options,
       headers,
+      credentials: options.credentials || "same-origin",
     });
   }
 
   async function restoreAdminSession() {
     const token = readAdminAuthToken();
-    if (!token) {
-      return null;
-    }
     try {
-      const response = await adminAuthFetch("/api/auth/session?scope=admin", {
+      const response = await adminAuthFetch(`/api/auth/session?scope=${encodeURIComponent(activeAuthScope())}`, {
         headers: { Accept: "application/json" },
+        credentials: "same-origin",
       });
       const payload = await response.json();
       if (!response.ok || payload.status !== "ok" || !payload.session) {
-        writeAdminAuthToken("");
+        if (token) {
+          writeAdminAuthToken("");
+        }
         return null;
       }
       state.adminSession = payload.session;
@@ -583,7 +675,7 @@
         body: JSON.stringify({
           identifier,
           password,
-          scope: "admin",
+          scope: activeAuthScope(),
         }),
       });
       const payload = await response.json();
@@ -613,16 +705,20 @@
       return;
     }
     elements.adminAuthForm.dataset.bound = "1";
+    elements.adminAuthIdentifier?.addEventListener("input", () => {
+      elements.adminAuthIdentifier.dataset.userEdited = "1";
+    });
     elements.adminAuthForm.addEventListener("submit", submitAdminLogin);
   }
 
   async function bootstrapAdminGate() {
     bindAdminAuthForm();
-    setAdminAuthStatus("Validando sessão administrativa...", "muted");
+    applyAuthGateCopy();
+    setAdminAuthStatus(activeAuthScope() === "merchant" ? "Validando sessão do lojista..." : "Validando sessão administrativa...", "muted");
     const session = await restoreAdminSession();
     if (!session) {
       showAdminAuthGate();
-      setAdminAuthStatus("Entre com uma credencial administrativa válida para liberar o painel.", "muted");
+      setAdminAuthStatus(activeAuthScope() === "merchant" ? "Entre com a credencial do lojista para liberar o ERP." : "Entre com uma credencial administrativa válida para liberar o painel.", "muted");
       return;
     }
     hideAdminAuthGate();
@@ -655,7 +751,12 @@
   }
 
   function adminWorkspaces() {
-    return [...STATIC_ADMIN_WORKSPACES, ...MERCHANT_ERP_WORKSPACES, ...DYNAMIC_MODULE_WORKSPACES];
+    const merchantWorkspaces = MERCHANT_ERP_WORKSPACES.map((workspace) => ({
+      ...workspace,
+      sectionId: MERCHANT_ERP_SECTION_ID,
+      workspaceKind: "merchant_erp",
+    }));
+    return [...STATIC_ADMIN_WORKSPACES, ...merchantWorkspaces, ...DYNAMIC_MODULE_WORKSPACES];
   }
 
   function slugToSubdomain(value) {
@@ -1689,7 +1790,7 @@
             </div>
           </div>
           <ol class="provider-guide-list">
-            ${(guide?.steps || ["Runbook nao publicado."]).map((step) => `<li>${escapeHtml(step)}</li>`).join("")}
+            ${(guide?.steps || ["Guia nao publicado."]).map((step) => `<li>${escapeHtml(step)}</li>`).join("")}
           </ol>
         </article>
       `;
@@ -3035,16 +3136,15 @@
     }
 
     const runtime = data.public_runtime || {};
-    const localOrigin = window.location.origin;
     const publicAdminUrl = activeAdminPublicUrl();
     const publicProductUrl = activeProductPublicUrl();
     elements.adminAccessLinks.innerHTML = [
-      accessCardMarkup("Painel local", `${localOrigin}/`),
-      accessCardMarkup("Stock local", activeLocalProductUrl()),
-      accessCardMarkup("Healthz", `${localOrigin}/healthz`),
-      accessCardMarkup("Admin data", `${localOrigin}/api/admin-data`),
-      accessCardMarkup("Admin publico", publicAdminUrl || runtime.public_url || "", (publicAdminUrl || runtime.public_url) ? "pill-accent" : "pill-warn"),
-      accessCardMarkup("Stock publico", publicProductUrl, publicProductUrl ? "pill-accent" : "pill-warn"),
+      accessCardMarkup("Portal oficial", "https://brasildesconto.com.br/"),
+      accessCardMarkup("Painel admin", publicAdminUrl || runtime.public_url || "", (publicAdminUrl || runtime.public_url) ? "pill-accent" : "pill-warn"),
+      accessCardMarkup("ERP lojista", "https://erp-lojista.brasildesconto.com.br/"),
+      accessCardMarkup("Login lojista", "https://lojista.brasildesconto.com.br/"),
+      accessCardMarkup("PDV lojista", "https://pdv-lojista.brasildesconto.com.br/"),
+      accessCardMarkup("Loja publica", publicProductUrl || "https://brasildesconto.com.br/product/", publicProductUrl ? "pill-accent" : "pill-warn"),
     ].join("");
   }
 
@@ -3077,6 +3177,539 @@
         `,
       )
       .join("");
+  }
+
+  function merchantErpWorkspaces() {
+    return adminWorkspaces().filter((workspace) => workspace.workspaceKind === "merchant_erp");
+  }
+
+  function merchantErpBlueprint(key) {
+    const blueprints = {
+      "merchant-login": {
+        code: "LOGIN",
+        title: "Login e acesso",
+        accent: "#2563eb",
+        icon: "ID",
+        focus: "Sessao, MFA, permissao e entrada segura do lojista.",
+        queue: ["Sessao ativa", "MFA pendente", "Termo comercial", "Perfil KYB"],
+        table: ["Identidade", "Dispositivo", "Ultimo acesso", "Status"],
+      },
+      "merchant-erp": {
+        code: "ERP",
+        title: "Torre de controle",
+        accent: "#16a34a",
+        icon: "ERP",
+        focus: "Visao geral da empresa, marketplace, estoque, financeiro e equipe.",
+        queue: ["Pedidos novos", "Produtos em revisao", "Fechamento aberto", "Integracoes ativas"],
+        table: ["Rotina", "Responsavel", "SLA", "Status"],
+      },
+      "merchant-pdv": {
+        code: "PDV",
+        title: "PDV e caixa",
+        accent: "#0ea5e9",
+        icon: "PDV",
+        focus: "Venda presencial, sangria, fechamento de caixa e conciliacao.",
+        queue: ["Caixa aberto", "Pix pendente", "Cartao conciliado", "Sangria auditada"],
+        table: ["Terminal", "Turno", "Vendas", "Diferenca"],
+      },
+      "merchant-warehouse": {
+        code: "WMS",
+        title: "Armazem",
+        accent: "#0891b2",
+        icon: "ARM",
+        focus: "Recebimento, picking, packing, inventario e ruptura por SKU.",
+        queue: ["Receber lote", "Separar pedido", "Contagem cega", "Transferencia"],
+        table: ["Endereco", "SKU", "Saldo", "Acao"],
+      },
+      "merchant-metrics": {
+        code: "BI",
+        title: "Metricas",
+        accent: "#7c3aed",
+        icon: "BI",
+        focus: "Margem, conversao, SLA, ticket medio e desempenho por canal.",
+        queue: ["Meta diaria", "Conversao", "SLA", "Margem"],
+        table: ["Indicador", "Hoje", "7 dias", "Tendencia"],
+      },
+      "merchant-campaigns": {
+        code: "ADS",
+        title: "Campanhas",
+        accent: "#db2777",
+        icon: "ADS",
+        focus: "Promocoes, cupons, anuncios, calendario e retorno por campanha.",
+        queue: ["Cupom ativo", "Anuncio", "Calendario", "Budget"],
+        table: ["Campanha", "Canal", "Budget", "ROAS"],
+      },
+      "merchant-reports": {
+        code: "REP",
+        title: "Relatorios",
+        accent: "#475569",
+        icon: "REL",
+        focus: "Exportacoes, DRE operacional, ranking de produtos e fechamento.",
+        queue: ["DRE", "CSV pedidos", "Ranking SKU", "Fiscal"],
+        table: ["Relatorio", "Periodo", "Arquivo", "Status"],
+      },
+      "merchant-finance": {
+        code: "FIN",
+        title: "Financeiro",
+        accent: "#15803d",
+        icon: "R$",
+        focus: "Recebiveis, repasses, taxas, fees, chargeback e saldo.",
+        queue: ["Recebiveis", "Taxas", "Repasses", "Chargeback"],
+        table: ["Periodo", "Bruto", "Taxas", "Liquido"],
+      },
+      "merchant-registration": {
+        code: "CAD",
+        title: "Cadastro",
+        accent: "#0369a1",
+        icon: "CAD",
+        focus: "Lojas, filiais, usuarios, documentos e dados comerciais.",
+        queue: ["CNPJ", "Filial", "Documento", "Contato"],
+        table: ["Registro", "Campo", "Validade", "Status"],
+      },
+      "merchant-profile": {
+        code: "PER",
+        title: "Perfil",
+        accent: "#4338ca",
+        icon: "PER",
+        focus: "Identidade visual, politicas, suporte, SLA e reputacao.",
+        queue: ["Logo", "Politica", "SLA", "Reputacao"],
+        table: ["Area", "Configuracao", "Exibicao", "Status"],
+      },
+      "merchant-accounting": {
+        code: "CTB",
+        title: "Contabil",
+        accent: "#854d0e",
+        icon: "CTB",
+        focus: "Lancamentos, centros de custo, conciliacao e livros auxiliares.",
+        queue: ["Centro custo", "Lancamento", "Conciliacao", "Livro"],
+        table: ["Conta", "Debito", "Credito", "Competencia"],
+      },
+      "merchant-integrations": {
+        code: "API",
+        title: "Integracoes",
+        accent: "#0f766e",
+        icon: "API",
+        focus: "Marketplaces, webhooks, ERPs externos, tokens e scopes.",
+        queue: ["Webhook", "Token", "Seller ID", "Sync"],
+        table: ["Provider", "Escopo", "Ultimo sync", "Status"],
+      },
+      "merchant-orders": {
+        code: "PED",
+        title: "Pedidos",
+        accent: "#f97316",
+        icon: "PED",
+        focus: "Pedido, separacao, cancelamento, devolucao e pos-venda.",
+        queue: ["Novo", "Separando", "Cancelamento", "Devolucao"],
+        table: ["Pedido", "Cliente", "Etapa", "SLA"],
+      },
+      "merchant-products": {
+        code: "SKU",
+        title: "Produtos",
+        accent: "#22c55e",
+        icon: "SKU",
+        focus: "Catalogo, fotos, SKU, variacoes, precificacao e publicacao.",
+        queue: ["Foto", "Preco", "Estoque", "Publicacao"],
+        table: ["SKU", "Titulo", "Preco", "Status"],
+      },
+      "merchant-customers": {
+        code: "CRM",
+        title: "Clientes",
+        accent: "#9333ea",
+        icon: "CRM",
+        focus: "Segmentacao, historico, recompra, atendimento e retencao.",
+        queue: ["Novo lead", "Retencao", "Ticket", "SAC"],
+        table: ["Cliente", "Segmento", "Ultima compra", "Acao"],
+      },
+      "merchant-tax": {
+        code: "FIS",
+        title: "Fiscal",
+        accent: "#b45309",
+        icon: "FIS",
+        focus: "Regras fiscais, documentos, impostos e auditoria por venda.",
+        queue: ["NFe", "Imposto", "CFOP", "Auditoria"],
+        table: ["Documento", "Chave", "Valor", "Status"],
+      },
+      "merchant-inventory": {
+        code: "EST",
+        title: "Estoque",
+        accent: "#0284c7",
+        icon: "EST",
+        focus: "Saldo por SKU, reserva, reposicao, minimo e transferencia.",
+        queue: ["Ruptura", "Reserva", "Reposicao", "Transferencia"],
+        table: ["SKU", "Disponivel", "Reservado", "Minimo"],
+      },
+      "merchant-logistics": {
+        code: "LOG",
+        title: "Logistica",
+        accent: "#ea580c",
+        icon: "LOG",
+        focus: "Frete, coleta, entrega, rastreio, SLA e ocorrencias.",
+        queue: ["Coleta", "Etiqueta", "Rota", "Ocorrencia"],
+        table: ["Envio", "Transportadora", "Prazo", "Status"],
+      },
+      "merchant-support": {
+        code: "SAC",
+        title: "Atendimento",
+        accent: "#2563eb",
+        icon: "SAC",
+        focus: "Tickets, chat, disputa, reembolso e relacionamento.",
+        queue: ["Ticket", "Chat", "Disputa", "Reembolso"],
+        table: ["Chamado", "Cliente", "Prioridade", "SLA"],
+      },
+      "merchant-team": {
+        code: "EQP",
+        title: "Equipe",
+        accent: "#4f46e5",
+        icon: "EQP",
+        focus: "Colaboradores, papeis, produtividade, escala e permissoes.",
+        queue: ["Convite", "Papel", "Escala", "Produtividade"],
+        table: ["Pessoa", "Papel", "Acesso", "Status"],
+      },
+      "merchant-security": {
+        code: "SEG",
+        title: "Seguranca",
+        accent: "#dc2626",
+        icon: "SEG",
+        focus: "MFA, sessoes, trilhas de auditoria, risco e bloqueios.",
+        queue: ["MFA", "Sessao", "Alerta", "Auditoria"],
+        table: ["Evento", "Ator", "Severidade", "Hora"],
+      },
+      "merchant-settings": {
+        code: "CFG",
+        title: "Configuracoes",
+        accent: "#334155",
+        icon: "CFG",
+        focus: "Preferencias, parametros, flags, impostos e regras da loja.",
+        queue: ["Flags", "Parametros", "Impostos", "Notificacao"],
+        table: ["Chave", "Valor", "Escopo", "Status"],
+      },
+    };
+
+    return blueprints[key] || blueprints["merchant-erp"];
+  }
+
+  function activeMerchantErpWorkspace() {
+    const current = activeWorkspace();
+    if (current?.workspaceKind === "merchant_erp") {
+      return current;
+    }
+
+    const saved = state.activeMerchantErpFeature && workspaceByKey(state.activeMerchantErpFeature);
+    if (saved?.workspaceKind === "merchant_erp") {
+      return saved;
+    }
+
+    return workspaceByKey("merchant-erp") || merchantErpWorkspaces()[0] || null;
+  }
+
+  function setActiveMerchantErpFeature(key) {
+    const workspace = workspaceByKey(key);
+    if (!workspace || workspace.workspaceKind !== "merchant_erp") {
+      return;
+    }
+    state.activeMerchantErpFeature = workspace.key;
+    persistMerchantErpFeature(workspace.key);
+    renderMerchantErp();
+    announce(`${workspace.title} aberto no ERP lojista.`);
+  }
+
+  function merchantErpRuntimeSummary() {
+    const pricing = importedPricingState.payload || {};
+    const publication = pricing.publication_summary || {};
+    const suppliers = Array.isArray(pricing.supplier_summary) ? pricing.supplier_summary : [];
+    const supplierTotal = suppliers.reduce((total, item) => total + Number(item.items_total || 0), 0);
+    const revenue = suppliers.reduce((total, item) => total + Number(item.suggested_revenue_value_brl || 0), 0);
+    const netRevenue = suppliers.reduce((total, item) => total + Number(item.estimated_net_revenue_value_brl || 0), 0);
+    const integrations = Array.isArray(state.marketplaceApiConfig) ? state.marketplaceApiConfig : MARKETPLACE_API_PROVIDERS;
+    const activeIntegrations = integrations.filter((item) => item.enabled !== false).length;
+    const checkout = checkoutHealthState.payload || {};
+    const draft = state.merchantErpDraft || {};
+
+    return {
+      itemsTotal: Number(pricing.items_total || supplierTotal || 0),
+      approvedTotal: Number(publication.approved_total || 0),
+      reviewTotal: Number(publication.review_total || 0),
+      blockedTotal: Number(publication.do_not_publish_total || 0),
+      suppliersTotal: suppliers.length,
+      revenue,
+      netRevenue,
+      activeIntegrations,
+      checkoutReady: Boolean(checkout.checkout_ready),
+      checkoutStatus: checkout.checkout_ready ? "checkout pronto" : String(checkout.status || "checkout pendente"),
+      lastSavedAt: draft.lastSavedAt || "",
+      lastSyncAt: draft.lastSyncAt || "",
+      lastReportAt: draft.lastReportAt || "",
+    };
+  }
+
+  function merchantErpKpis(summary) {
+    return [
+      { label: "Catalogo", value: formatCount(summary.itemsTotal), meta: `${formatCount(summary.reviewTotal)} em revisao` },
+      { label: "Receita potencial", value: formatMoney(summary.revenue), meta: `${formatMoney(summary.netRevenue)} liquido estimado` },
+      { label: "Integracoes", value: `${formatCount(summary.activeIntegrations)}/${formatCount(MARKETPLACE_API_PROVIDERS.length)}`, meta: "marketplaces e fornecedores" },
+      { label: "Checkout", value: summary.checkoutReady ? "Pronto" : "Pendente", meta: summary.checkoutStatus },
+    ];
+  }
+
+  function merchantErpRows(feature, summary) {
+    const nowLabel = formatTimestamp(new Date().toISOString());
+    return [
+      [feature.table[0] || "Rotina", feature.queue[0] || "Abertura", summary.checkoutReady ? "OK" : "Atenção", nowLabel],
+      [feature.table[1] || "Operacao", feature.queue[1] || "Validação", `${formatCount(summary.activeIntegrations)} conectores`, summary.lastSyncAt ? formatTimestamp(summary.lastSyncAt) : "Aguardando"],
+      [feature.table[2] || "Backoffice", feature.queue[2] || "Fila", `${formatCount(summary.reviewTotal)} itens`, summary.lastSavedAt ? formatTimestamp(summary.lastSavedAt) : "Rascunho"],
+      [feature.table[3] || "Governanca", feature.queue[3] || "Auditoria", `${formatCount(summary.blockedTotal)} bloqueios`, summary.lastReportAt ? formatTimestamp(summary.lastReportAt) : "Sem export"],
+    ];
+  }
+
+  function merchantErpFormFields(workspace, feature) {
+    const draft = state.merchantErpDraft || {};
+    const values = {
+      storeName: draft.storeName || "Loja Valley Demo",
+      operator: draft.operator || "Operador principal",
+      dailyGoal: draft.dailyGoal || "125000",
+      stockAlert: draft.stockAlert || "15",
+      workspaceCode: feature.code,
+      publicHost: workspaceHostLabel(workspace),
+    };
+    return [
+      ["Nome da loja", "storeName", values.storeName],
+      ["Operador", "operator", values.operator],
+      ["Meta diaria BRL", "dailyGoal", values.dailyGoal],
+      ["Alerta de estoque", "stockAlert", values.stockAlert],
+      ["Workspace", "workspaceCode", values.workspaceCode, true],
+      ["Subdominio", "publicHost", values.publicHost, true],
+    ];
+  }
+
+  function runMerchantErpAction(action) {
+    const now = new Date().toISOString();
+    if (action === "save") {
+      state.merchantErpDraft = { ...(state.merchantErpDraft || {}), lastSavedAt: now };
+      persistMerchantErpDraft();
+      renderMerchantErp();
+      announce("Configuração do ERP lojista salva localmente.");
+      return;
+    }
+    if (action === "sync") {
+      state.merchantErpDraft = { ...(state.merchantErpDraft || {}), lastSyncAt: now, syncStatus: "queued" };
+      persistMerchantErpDraft();
+      renderMerchantErp();
+      announce("Sincronização do ERP lojista enfileirada no painel.");
+      return;
+    }
+    if (action === "report") {
+      state.merchantErpDraft = { ...(state.merchantErpDraft || {}), lastReportAt: now, reportStatus: "READY" };
+      persistMerchantErpDraft();
+      renderMerchantErp();
+      announce("Relatório executivo do lojista gerado no estado local.");
+      return;
+    }
+    if (action === "copy") {
+      copyText(JSON.stringify(state.merchantErpDraft || {}, null, 2), "Resumo do ERP lojista");
+      return;
+    }
+  }
+
+  function updateMerchantErpDraftField(field, value) {
+    state.merchantErpDraft = {
+      ...(state.merchantErpDraft || {}),
+      [field]: value,
+    };
+    persistMerchantErpDraft();
+  }
+
+  function renderMerchantErp() {
+    if (!elements.merchantErpRoot) {
+      return;
+    }
+
+    const workspaces = merchantErpWorkspaces();
+    const activeWorkspace = activeMerchantErpWorkspace();
+    if (!activeWorkspace) {
+      elements.merchantErpRoot.innerHTML = `<div class="empty-state">ERP lojista sem workspaces configurados.</div>`;
+      return;
+    }
+
+    const feature = merchantErpBlueprint(activeWorkspace.key);
+    const summary = merchantErpRuntimeSummary();
+    const kpis = merchantErpKpis(summary);
+    const rows = merchantErpRows(feature, summary);
+    const formFields = merchantErpFormFields(activeWorkspace, feature);
+    const activeHost = workspaceHostLabel(activeWorkspace);
+    const chartHeights = [44, 62, 54, 78, 68, 86];
+
+    elements.merchantErpRoot.innerHTML = `
+      <section class="erp-workspace-shell merchant-erp-workspace" style="--erp-accent:${escapeHtml(feature.accent)}">
+        <div class="erp-main merchant-erp-main">
+          <div class="erp-top-navigation">
+            <div class="erp-brand">
+              <div class="erp-brand-badge">${escapeHtml(feature.icon)}</div>
+              <div>
+                <strong>Valley ERP</strong>
+                <span>${escapeHtml(activeHost)}</span>
+              </div>
+            </div>
+            <nav class="erp-module-nav" aria-label="Módulos do ERP lojista">
+              ${workspaces.map((workspace) => {
+                const item = merchantErpBlueprint(workspace.key);
+                return `<button type="button" class="erp-nav-item ${workspace.key === activeWorkspace.key ? "is-active" : ""}" data-merchant-feature="${escapeHtml(workspace.key)}">${escapeHtml(item.code)} · ${escapeHtml(workspace.title)}</button>`;
+              }).join("")}
+            </nav>
+          </div>
+          <div class="erp-toolbar">
+            <div>
+              <span class="small-label">Painel operacional do lojista</span>
+              <h3>${escapeHtml(feature.title)}</h3>
+            </div>
+            <div class="pill-row">
+              ${rowPill("produção", "pill-accent")}
+              ${rowPill("marketplace", "pill-navy")}
+              ${rowPill(summary.checkoutReady ? "checkout ok" : "checkout atenção", summary.checkoutReady ? "pill-accent" : "pill-warn")}
+            </div>
+          </div>
+          <div class="erp-status-ribbon">
+            <span>Subdominio oficial</span>
+            <strong>${escapeHtml(activeHost)}</strong>
+            <span>${escapeHtml(feature.focus)}</span>
+          </div>
+          <div class="merchant-erp-app-grid">
+            ${workspaces.slice(0, 12).map((workspace) => {
+              const item = merchantErpBlueprint(workspace.key);
+              return `
+                <a class="merchant-erp-app" href="${escapeHtml(workspaceHref(workspace))}" data-merchant-feature-link="${escapeHtml(workspace.key)}">
+                  <span style="background:${escapeHtml(item.accent)}">${escapeHtml(item.icon)}</span>
+                  <strong>${escapeHtml(workspace.title)}</strong>
+                  <small>${escapeHtml(item.code)}</small>
+                </a>
+              `;
+            }).join("")}
+          </div>
+          <div class="erp-kpi-grid">
+            ${kpis.map((tile) => `
+              <article class="erp-kpi-card">
+                <span class="small-label">${escapeHtml(tile.label)}</span>
+                <strong>${escapeHtml(tile.value)}</strong>
+                <span class="muted-copy">${escapeHtml(tile.meta)}</span>
+              </article>
+            `).join("")}
+          </div>
+          <div class="erp-ops-grid">
+            <section class="erp-canvas-card">
+              <div class="erp-card-head">
+                <div>
+                  <span class="small-label">Cadastro e rotina</span>
+                  <strong>Ficha operacional da empresa</strong>
+                </div>
+                ${rowPill(summary.lastSavedAt ? `Salvo ${formatTimestamp(summary.lastSavedAt)}` : "rascunho", summary.lastSavedAt ? "pill-accent" : "pill-warn")}
+              </div>
+              <div class="erp-classic-form">
+                <div class="erp-form-grid">
+                  ${formFields.map(([label, field, value, readonly]) => `
+                    <label class="erp-field">
+                      <span>${escapeHtml(label)}</span>
+                      <input data-merchant-field="${escapeHtml(field)}" type="text" value="${escapeHtml(value)}" ${readonly ? "readonly" : ""} />
+                    </label>
+                  `).join("")}
+                </div>
+                <div class="erp-form-actions">
+                  <button type="button" class="secondary-button" data-merchant-action="save">Salvar rotina</button>
+                  <button type="button" class="secondary-button" data-merchant-action="sync">Aplicar sync</button>
+                  <button type="button" class="secondary-button" data-merchant-action="report">Gerar relatorio</button>
+                  <button type="button" class="secondary-button" data-merchant-action="copy">Exportar rotina</button>
+                </div>
+              </div>
+            </section>
+            <section class="erp-canvas-card">
+              <div class="erp-card-head">
+                <div>
+                  <span class="small-label">Fluxo gerencial</span>
+                  <strong>Indicadores e tarefas</strong>
+                </div>
+                ${rowPill(`${formatCount(summary.reviewTotal)} em revisão`, summary.reviewTotal ? "pill-warn" : "pill-accent")}
+              </div>
+              <div class="erp-chart-panel">
+                <div class="erp-chart-bars">
+                  ${chartHeights.map((height) => `<span style="height:${height}%"></span>`).join("")}
+                </div>
+                <div class="erp-chart-legend">
+                  <small>Venda</small>
+                  <small>Margem</small>
+                  <small>PDV</small>
+                  <small>Stock</small>
+                  <small>Ads</small>
+                  <small>Cash</small>
+                </div>
+                <div class="erp-task-list">
+                  ${feature.queue.map((item) => `<div class="erp-task-item">${escapeHtml(item)}</div>`).join("")}
+                </div>
+              </div>
+            </section>
+          </div>
+          <section class="erp-specific-panel">
+            <div class="erp-specific-head">
+              <div>
+                <span class="small-label">Mecanicas materializadas</span>
+                <h4>${escapeHtml(feature.title)} em operação</h4>
+              </div>
+              <div class="pill-row">
+                ${rowPill(`${formatCount(summary.suppliersTotal)} fornecedores`, "pill-navy")}
+                ${rowPill(`${formatCount(summary.blockedTotal)} bloqueios`, summary.blockedTotal ? "pill-danger" : "pill-accent")}
+              </div>
+            </div>
+            <div class="erp-queue-grid">
+              ${feature.queue.map((item, index) => `
+                <article class="erp-queue-card ${index === 0 ? "accent" : index === 1 ? "navy" : index === 2 ? "warn" : ""}">
+                  <span class="small-label">${escapeHtml(feature.code)}</span>
+                  <strong>${escapeHtml(item)}</strong>
+                  <span class="muted-copy">Rotina pronta no workspace do lojista</span>
+                </article>
+              `).join("")}
+            </div>
+            <div class="erp-table-wrap">
+              <table class="erp-data-table">
+                <thead>
+                  <tr>
+                    <th>${escapeHtml(feature.table[0] || "Rotina")}</th>
+                    <th>${escapeHtml(feature.table[1] || "Fila")}</th>
+                    <th>${escapeHtml(feature.table[2] || "Metrica")}</th>
+                    <th>${escapeHtml(feature.table[3] || "Status")}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${rows.map((row) => `
+                    <tr>
+                      <td>${escapeHtml(row[0])}</td>
+                      <td>${escapeHtml(row[1])}</td>
+                      <td>${escapeHtml(row[2])}</td>
+                      <td>${escapeHtml(row[3])}</td>
+                    </tr>
+                  `).join("")}
+                </tbody>
+              </table>
+            </div>
+          </section>
+          <section class="erp-specific-panel">
+            <div class="erp-specific-head">
+              <div>
+                <span class="small-label">Subdominios do lojista</span>
+                <h4>Todos os módulos ERP publicados</h4>
+              </div>
+              ${rowPill(`${formatCount(workspaces.length)} links`, "pill-accent")}
+            </div>
+            <div class="erp-subdomain-grid">
+              ${workspaces.map((workspace) => `
+                <article class="erp-subdomain-card">
+                  <span class="small-label">${escapeHtml(merchantErpBlueprint(workspace.key).code)}</span>
+                  <strong>${escapeHtml(workspace.title)}</strong>
+                  <p class="muted-copy">${escapeHtml(workspaceHostLabel(workspace))}</p>
+                  <div class="link-row"><a href="${escapeHtml(workspaceHref(workspace))}">Abrir</a></div>
+                </article>
+              `).join("")}
+            </div>
+          </section>
+        </div>
+      </section>
+    `;
   }
 
   function normalizeHref(value) {
@@ -3132,6 +3765,14 @@
   }
 
   function readHashSelection() {
+    const currentWorkspace = activeWorkspace();
+    if (currentWorkspace?.workspaceKind === "merchant_erp") {
+      state.activeAdminSurfaceTab = "merchant";
+      state.activeMerchantErpFeature = currentWorkspace.key;
+      persistMerchantErpFeature(currentWorkspace.key);
+      return;
+    }
+
     const moduleWorkspace = activeModuleWorkspace();
     if (moduleWorkspace) {
       state.selectedCode = moduleWorkspace.code;
@@ -3162,7 +3803,7 @@
   }
 
   function syncHash() {
-    if (!state.selectedCode) {
+    if (!state.selectedCode || state.activeAdminSurfaceTab !== "modules") {
       return;
     }
 
@@ -3711,7 +4352,13 @@
     });
 
     elements.copyCommands.addEventListener("click", () => {
-      copyText(data.admin_commands.join("\n"), "Comandos");
+      const workspace = activeWorkspace();
+      const summary = [
+        `Painel: ${workspace?.title || "Valley Admin"}`,
+        `Link: ${window.location.href}`,
+        `ERP lojista: https://erp-lojista.brasildesconto.com.br/`,
+      ].join("\n");
+      copyText(summary, "Resumo operacional");
     });
 
     elements.saveMarketplaceApis?.addEventListener("click", () => {
@@ -3727,7 +4374,7 @@
     });
 
     elements.copyMarketplaceApis?.addEventListener("click", () => {
-      copyText(JSON.stringify(collectMarketplaceApiConfig(), null, 2), "JSON de integracoes");
+      copyText(JSON.stringify(collectMarketplaceApiConfig(), null, 2), "Resumo de integracoes");
     });
 
     elements.saveImportedPricing?.addEventListener("click", () => {
@@ -3743,7 +4390,7 @@
     });
 
     elements.copyImportedPricing?.addEventListener("click", () => {
-      copyText(JSON.stringify(collectImportedPricingPayload(), null, 2), "JSON de pricing importado");
+      copyText(JSON.stringify(collectImportedPricingPayload(), null, 2), "Resumo de pricing importado");
     });
 
     elements.importedSupplierBoard?.addEventListener("click", (event) => {
@@ -3840,6 +4487,28 @@
       renderImportedPricingDesk();
     });
 
+    elements.merchantErpRoot?.addEventListener("click", (event) => {
+      const featureTrigger = event.target.closest("[data-merchant-feature]");
+      if (featureTrigger) {
+        setActiveMerchantErpFeature(featureTrigger.dataset.merchantFeature);
+        return;
+      }
+
+      const actionTrigger = event.target.closest("[data-merchant-action]");
+      if (actionTrigger) {
+        runMerchantErpAction(actionTrigger.dataset.merchantAction);
+        return;
+      }
+    });
+
+    elements.merchantErpRoot?.addEventListener("input", (event) => {
+      const field = event.target.closest("[data-merchant-field]");
+      if (!field || field.readOnly) {
+        return;
+      }
+      updateMerchantErpDraftField(field.dataset.merchantField, field.value);
+    });
+
     elements.criticalModules.addEventListener("click", (event) => {
       const trigger = event.target.closest("[data-critical-code]");
 
@@ -3879,12 +4548,12 @@
       }
 
       if (trigger.dataset.commandText) {
-        copyText(trigger.dataset.commandText, "Comando do workspace");
+        copyText(trigger.dataset.commandText, "Link operacional");
         return;
       }
 
       const index = Number(trigger.dataset.copyCommand);
-      copyText(data.admin_commands[index], `Comando ${index + 1}`);
+      copyText(trigger.dataset.actionText || "", `Ação ${index + 1}`);
     });
 
     elements.externalAccess.addEventListener("click", (event) => {
@@ -3895,11 +4564,11 @@
       }
 
       if (trigger.dataset.copyExternal === "preview") {
-        copyText(data.public_access.preview, "Runbook externo");
+        copyText(activeAdminPublicUrl() || "https://admin.brasildesconto.com.br/", "Painel público");
       }
 
-      if (trigger.dataset.copyExternal === "launcher") {
-        copyText("powershell -ExecutionPolicy Bypass -File scripts/start_valley_admin_public.ps1", "Launcher publico");
+      if (trigger.dataset.copyExternal === "erp") {
+        copyText("https://erp-lojista.brasildesconto.com.br/", "ERP lojista");
       }
     });
 
@@ -4220,9 +4889,10 @@
   function renderPublicRuntime() {
     const runtime = data.public_runtime;
     const tone = runtimeTone(runtime);
-    const healthUrl = runtime.smoke_endpoints.healthz || "";
-    const adminDataUrl = runtime.smoke_endpoints.admin_data || "";
     const permanence = runtime.permanence || (runtime.public_url ? "nao declarada" : "aguardando runtime");
+    const adminUrl = runtime.public_url || activeAdminPublicUrl() || "https://admin.brasildesconto.com.br/";
+    const portalUrl = activeProductPublicUrl() || "https://brasildesconto.com.br/product/";
+    const erpUrl = "https://erp-lojista.brasildesconto.com.br/";
 
     elements.publicRuntimePanel.innerHTML = `
       <article class="runtime-status-card ${escapeHtml(tone)}">
@@ -4236,35 +4906,33 @@
         <div class="external-grid">
           ${externalTileMarkup("Status", runtime.available ? "ativo" : runtime.status || "missing", "estado atual do runtime")}
           ${externalTileMarkup("Permanencia", permanence, "fixa, volatil ou aguardando")}
-          ${externalTileMarkup("Smoke", healthUrl || adminDataUrl ? "exposto" : "indisponivel", "healthz e admin_data")}
+          ${externalTileMarkup("Acesso", "publicado", "admin, portal e ERP lojista")}
         </div>
         <p class="muted-copy">
-          O painel ja consome o manifesto de runtime publico quando ele existir. Ate la, o painel continua apontando para o runbook
-          e para o arquivo esperado sem bloquear a operacao local.
+          Os links oficiais mantêm a operação fora da rede local para administradores, lojistas e usuários.
         </p>
         <div class="endpoint-list">
           <div class="endpoint-item">
             <div>
-              <strong>healthz</strong>
-              <div class="muted-copy">${escapeHtml(healthUrl || "endpoint ainda nao publicado")}</div>
+              <strong>Admin</strong>
+              <div class="muted-copy">${escapeHtml(adminUrl)}</div>
             </div>
-            ${healthUrl ? linkMarkup("Abrir", healthUrl) : `<span class="pill">Aguardando</span>`}
+            ${linkMarkup("Abrir", adminUrl)}
           </div>
           <div class="endpoint-item">
             <div>
-              <strong>admin_data</strong>
-              <div class="muted-copy">${escapeHtml(adminDataUrl || "endpoint ainda nao publicado")}</div>
+              <strong>Portal</strong>
+              <div class="muted-copy">${escapeHtml(portalUrl)}</div>
             </div>
-            ${adminDataUrl ? linkMarkup("Abrir", adminDataUrl) : `<span class="pill">Aguardando</span>`}
+            ${linkMarkup("Abrir", portalUrl)}
           </div>
-        </div>
-        <div class="runtime-path">
-          <span class="small-label">Manifesto esperado</span>
-          <code>${escapeHtml(displayPath(runtime.path || "" ) || "tmp\\runtime\\valley-admin-public-runtime.json")}</code>
-        </div>
-        <div class="link-row">
-          ${linkMarkup("Abrir manifesto runtime", runtime.path)}
-          ${linkMarkup("Abrir runbook externo", data.public_access.path)}
+          <div class="endpoint-item">
+            <div>
+              <strong>ERP lojista</strong>
+              <div class="muted-copy">${escapeHtml(erpUrl)}</div>
+            </div>
+            ${linkMarkup("Abrir", erpUrl)}
+          </div>
         </div>
       </article>
     `;
@@ -4428,38 +5096,50 @@
   function renderCommands() {
     const workspace = activeWorkspace();
     const workspaceModule = activeModuleWorkspace();
+    const workspaceUrl = workspace ? workspaceHref(workspace) : activeAdminPublicUrl() || window.location.href;
+    const actions = [
+      {
+        label: "Abrir painel ativo",
+        detail: workspace?.title || "Painel Valley",
+        href: workspaceUrl,
+      },
+      {
+        label: "Abrir ERP lojista",
+        detail: "Gestao comercial, PDV, estoque e financeiro",
+        href: "https://erp-lojista.brasildesconto.com.br/",
+      },
+      {
+        label: "Abrir catalogo",
+        detail: "Produtos, pricing e revisao comercial",
+        href: "#importedPricingSection",
+      },
+      {
+        label: "Abrir integracoes",
+        detail: "Marketplaces, fornecedores e conectores",
+        href: "#settingsSection",
+      },
+    ];
 
     if (workspaceModule) {
-      const commands = [
-        "python scripts/valley_admin_builder.py build",
-        "python scripts/serve_valley_admin.py --host 127.0.0.1 --port 8085",
-        "python scripts/valley_db_orchestrator.py check",
-        `abrir workspace ${workspace?.subdomain}.${activeAdminHost().hostname}`,
-      ];
-      elements.commandList.innerHTML = commands
-        .map(
-          (command, index) => `
-            <article class="command-item">
-              <code>${escapeHtml(command)}</code>
-              <button class="ghost-button" type="button" data-copy-command="${index}" data-command-text="${escapeHtml(command)}">Copiar</button>
-            </article>
-          `,
-        )
-        .join("");
-      return;
+      actions.unshift({
+        label: `Operar ${workspaceModule.code}`,
+        detail: `${workspaceModule.name} em modo release`,
+        href: workspaceUrl,
+      });
     }
 
-    if (!data.admin_commands.length) {
-      elements.commandList.innerHTML = `<div class="empty-state">Nenhum comando administrativo publicado.</div>`;
-      return;
-    }
-
-    elements.commandList.innerHTML = data.admin_commands
+    elements.commandList.innerHTML = actions
       .map(
-        (command, index) => `
-          <article class="command-item">
-            <code>${escapeHtml(command)}</code>
-            <button class="ghost-button" type="button" data-copy-command="${index}">Copiar</button>
+        (action, index) => `
+          <article class="command-item release-action-item">
+            <div>
+              <strong>${escapeHtml(action.label)}</strong>
+              <span>${escapeHtml(action.detail)}</span>
+            </div>
+            <div class="link-row">
+              ${linkMarkup("Abrir", action.href)}
+              <button class="ghost-button" type="button" data-copy-command="${index}" data-command-text="${escapeHtml(action.href)}">Copiar link</button>
+            </div>
           </article>
         `,
       )
@@ -4477,30 +5157,28 @@
   }
 
   function renderExternalAccess() {
-    const preview = trimLines(data.public_access.preview, 14);
-    const cloudflareReady = /cloudflare|cloudflared|CLOUDFLARED_TOKEN/i.test(data.public_access.preview || "");
-    const fixedUrlReady = /CLOUDFLARED_TOKEN|named tunnel|VALLEY_ADMIN_PUBLIC_URL/i.test(data.public_access.preview || "");
-    const launcherReady = /start_valley_admin_public\.ps1/i.test(data.public_access.preview || "");
+    const adminUrl = activeAdminPublicUrl() || "https://admin.brasildesconto.com.br/";
+    const productUrl = activeProductPublicUrl() || "https://brasildesconto.com.br/product/";
+    const erpUrl = "https://erp-lojista.brasildesconto.com.br/";
 
     elements.externalAccess.innerHTML = `
       <div class="external-panel">
         <div class="external-grid">
-          ${externalTileMarkup("Cloudflare", cloudflareReady ? "detectado" : "nao detectado", "quick tunnel ou named tunnel")}
-          ${externalTileMarkup("Launcher", launcherReady ? "publicavel" : "pendente", "start_valley_admin_public.ps1")}
-          ${externalTileMarkup("URL fixa", fixedUrlReady ? "suportada" : "nao descrita", "depende de token e hostname Cloudflare")}
+          ${externalTileMarkup("Admin", "online", new URL(adminUrl).host)}
+          ${externalTileMarkup("ERP lojista", "online", new URL(erpUrl).host)}
+          ${externalTileMarkup("Portal", "online", new URL(productUrl).host)}
         </div>
         <p class="muted-copy">
-          A superficie externa esta preparada para acesso fora da rede local. Quando houver token e hostname publicados no Cloudflare,
-          o mesmo painel pode manter uma URL permanente sem mudar a rotina do operador.
+          A superficie externa esta preparada para acesso fora da rede local com links oficiais para administracao, lojista e catalogo publico.
         </p>
-        <pre>${escapeHtml(preview)}</pre>
         <div class="link-row">
-          ${linkMarkup("Abrir runbook externo", data.public_access.path)}
-          ${linkMarkup("Abrir launcher Cloudflare", data.public_access.cloudflare_launcher_path)}
+          ${linkMarkup("Abrir admin", adminUrl)}
+          ${linkMarkup("Abrir ERP lojista", erpUrl)}
+          ${linkMarkup("Abrir portal", productUrl)}
         </div>
         <div class="action-row">
-          <button class="secondary-button" type="button" data-copy-external="preview">Copiar runbook</button>
-          <button class="secondary-button" type="button" data-copy-external="launcher">Copiar launcher</button>
+          <button class="secondary-button" type="button" data-copy-external="preview">Copiar admin</button>
+          <button class="secondary-button" type="button" data-copy-external="erp">Copiar ERP</button>
         </div>
       </div>
     `;
@@ -4601,7 +5279,7 @@
       services_health_human: ["Painel", "Agenda", "Cadastros", "Atendimentos", "Faturamento", "Filas", "Indicadores", "Configuracoes"],
       education_work_social: ["Painel", "Cadastros", "Presenca", "Turmas", "Financeiro", "Calendario", "Relatorios", "Configuracoes"],
       media_social_growth: ["Painel", "Campanhas", "Creators", "Conteudo", "Moderacao", "Metricas", "Receitas", "Configuracoes"],
-      ai_memory_operations: ["Painel", "Memoria", "Conversas", "Operacoes", "Aprovacoes", "Runbooks", "Auditoria", "Configuracoes"],
+      ai_memory_operations: ["Painel", "Memoria", "Conversas", "Operacoes", "Aprovacoes", "Processos", "Historico", "Configuracoes"],
       city_mobility_security: ["Painel", "Chamados", "Rotas", "Ocorrencias", "Protecao", "Monitoramento", "Escalas", "Configuracoes"],
       platform_developer: ["Painel", "Docs", "Contratos", "Automacoes", "Filas", "Entregas", "Auditoria", "Configuracoes"],
       frontier_iot_energy: ["Painel", "Sensores", "Ativos", "Telemetria", "Eventos", "Alertas", "Energia", "Configuracoes"],
@@ -5309,24 +5987,24 @@
     const accent = moduleAccent(module);
     const erpWorkspaceBlock = `
       <section class="detail-block detail-block-wide erp-workspace-shell" id="${escapeHtml(sectionId(module, "erp"))}" style="--erp-accent:${escapeHtml(accent)}">
-        <aside class="erp-sidebar">
-          <div class="erp-brand">
-            <div class="erp-brand-badge">${escapeHtml(module.code.charAt(0))}</div>
-            <div>
-              <strong>${escapeHtml(module.code)}</strong>
-              <span>${escapeHtml(module.name)}</span>
-            </div>
-          </div>
-          <nav class="erp-sidebar-nav">
-            ${workspaceTabs
-              .map(
-                (item) =>
-                  `<button type="button" class="erp-nav-item ${item.key === activeTab ? "is-active" : ""}" data-workspace-tab="${escapeHtml(item.key)}" data-module-code="${escapeHtml(module.code)}">${escapeHtml(item.label)}</button>`,
-              )
-              .join("")}
-          </nav>
-        </aside>
         <div class="erp-main">
+          <div class="erp-top-navigation">
+            <div class="erp-brand">
+              <div class="erp-brand-badge">${escapeHtml(module.code.charAt(0))}</div>
+              <div>
+                <strong>${escapeHtml(module.code)}</strong>
+                <span>${escapeHtml(module.name)}</span>
+              </div>
+            </div>
+            <nav class="erp-module-nav">
+              ${workspaceTabs
+                .map(
+                  (item) =>
+                    `<button type="button" class="erp-nav-item ${item.key === activeTab ? "is-active" : ""}" data-workspace-tab="${escapeHtml(item.key)}" data-module-code="${escapeHtml(module.code)}">${escapeHtml(item.label)}</button>`,
+                )
+                .join("")}
+            </nav>
+          </div>
           <div class="erp-toolbar">
             <div>
               <span class="small-label">Workspace do módulo</span>
@@ -5548,10 +6226,14 @@
     const operationalFailures = data.deployment_summary.top_failures.length
       ? `
           <section class="detail-block detail-block-wide" id="${escapeHtml(ids.ops)}">
-            <h3>Pendencias operacionais do ambiente</h3>
-            <pre>${escapeHtml(data.deployment_summary.top_failures.join("\n"))}</pre>
+            <h3>Pontos de atencao operacional</h3>
+            <div class="stack-list">
+              ${data.deployment_summary.top_failures
+                .map((item) => `<article class="stack-card"><strong>${escapeHtml(item)}</strong></article>`)
+                .join("")}
+            </div>
             <div class="stats-inline">
-              ${rowPill(`${formatCount(data.deployment_summary.failed_checks)} checks falharam`, "pill-danger")}
+              ${rowPill(`${formatCount(data.deployment_summary.failed_checks)} pontos em atencao`, "pill-danger")}
               ${rowPill(`Atualizado ${formatTimestamp(data.deployment_summary.generated_at_utc)}`, "pill-navy")}
             </div>
           </section>
@@ -5596,7 +6278,7 @@
         <section class="detail-block" id="${escapeHtml(ids.management)}">
           <h3>Gestao do modulo</h3>
           <div class="summary-grid compact-summary-grid">
-            ${summaryTileMarkup("Acoes admin", formatCount(module.admin_actions.length), "playbooks e comandos publicados")}
+            ${summaryTileMarkup("Acoes admin", formatCount(module.admin_actions.length), "acoes e fluxos publicados")}
             ${summaryTileMarkup("Dependencias", formatCount(module.depends_on.length), "malha de bloqueio e sequenciamento")}
             ${summaryTileMarkup("Integracoes", formatCount(module.integrates_with.length), "contratos declarados no manifesto")}
             ${summaryTileMarkup("Fila aberta", formatCount(openItems.length), openItems.length ? "itens ainda pedem fechamento" : "sem fila material")}
@@ -5705,39 +6387,38 @@
         </section>
 
         <section class="detail-block" id="${escapeHtml(ids.docs)}">
-          <h3>Status snapshot</h3>
-          <pre>${escapeHtml(trimLines(module.docs?.status, 18))}</pre>
+          <h3>Resumo operacional</h3>
+          <p class="muted-copy">${escapeHtml(trimLines(module.docs?.status, 6))}</p>
         </section>
 
         <section class="detail-block">
-          <h3>README snapshot</h3>
-          <pre>${escapeHtml(trimLines(module.docs?.readme, 18))}</pre>
+          <h3>Orientacao do modulo</h3>
+          <p class="muted-copy">${escapeHtml(trimLines(module.docs?.readme, 6))}</p>
         </section>
 
         <section class="detail-block detail-block-wide">
           <h3>Contrato operacional</h3>
-          <pre>${escapeHtml(trimLines(module.docs?.contract, 18))}</pre>
+          <p class="muted-copy">${escapeHtml(trimLines(module.docs?.contract, 8))}</p>
         </section>
 
         <section class="detail-block detail-block-wide">
-          <h3>Arquivos do modulo</h3>
-          <div class="path-list">
-            ${pathItemMarkup("README", module.paths.readme)}
-            ${pathItemMarkup("STATUS", module.paths.status)}
-            ${pathItemMarkup("CONTRACT", module.paths.contract)}
-            ${pathItemMarkup("PASTA", module.paths.module_dir)}
+          <h3>Referencias de negocio</h3>
+          <div class="summary-grid">
+            ${summaryTileMarkup("Dominio", module.domain, "grupo operacional do modulo")}
+            ${summaryTileMarkup("Status", module.status_label, "estado atual da entrega")}
+            ${summaryTileMarkup("Dependencias", formatCount(module.depends_on.length), "modulos relacionados")}
+            ${summaryTileMarkup("Integracoes", formatCount(module.integrates_with.length), "conexoes de produto")}
           </div>
         </section>
 
         <section class="detail-block detail-block-wide">
           <h3>Roadmap, contratos e governanca</h3>
-          <pre>${escapeHtml(trimLines(data.roadmap?.preview, 10))}</pre>
-          <pre>${escapeHtml(trimLines(data.governance?.preview, 10))}</pre>
+          <p class="muted-copy">${escapeHtml(trimLines(data.roadmap?.preview, 6))}</p>
+          <p class="muted-copy">${escapeHtml(trimLines(data.governance?.preview, 6))}</p>
           <div class="link-row">
             ${linkMarkup("Abrir roadmap", data.roadmap?.path)}
             ${linkMarkup("Abrir contratos", data.contracts_summary?.path)}
             ${linkMarkup("Abrir norma", data.governance?.path)}
-            ${linkMarkup("Manifesto JSON", data.governance?.json_path)}
           </div>
         </section>
 
@@ -5770,18 +6451,14 @@
       </article>
     `).join("");
     const desktopMenu = items.slice(0, 7).map((workspace, index) => `
-      <div class="device-sidebar-item ${index === 0 ? "is-active" : ""}">
-        <span class="device-sidebar-dot" style="background:${workspacePreviewPalette(index)}"></span>
+      <div class="device-preview-chip ${index === 0 ? "is-active" : ""}">
+        <span class="device-preview-dot" style="background:${workspacePreviewPalette(index)}"></span>
         <span>${escapeHtml(workspace.title.replace("Painel ", ""))}</span>
       </div>
     `).join("");
 
     elements.desktopWorkspacePreview.innerHTML = `
       <div class="device-dashboard-shell">
-        <aside class="device-sidebar">
-          <div class="device-sidebar-brand">VALLEY ERP</div>
-          ${desktopMenu}
-        </aside>
         <div class="device-dashboard-main">
           <div class="device-dashboard-toolbar">
             <strong>Bem-vindo ao Valley Admin</strong>
@@ -5791,6 +6468,7 @@
               <span>Checkout</span>
             </div>
           </div>
+          <div class="device-preview-nav">${desktopMenu}</div>
           <div class="device-metric-grid">${desktopMetrics}</div>
           <div class="device-dashboard-bottom">
             <div class="device-chart-card">
@@ -6035,6 +6713,7 @@
   function render() {
     const modules = filteredModules();
 
+    syncAdminSurfaceWithWorkspace();
     renderAdminSurfaceTabs();
     applyAdminSurfaceTabVisibility();
 
@@ -6056,6 +6735,7 @@
     renderExternalAccess();
     renderAccessLinks();
     renderAdminLaunchpad();
+    renderMerchantErp();
     renderMarketplaceIntegrations();
     renderImportedPricingDesk();
     renderModuleList(modules);

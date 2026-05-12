@@ -255,6 +255,13 @@
       "purpose_ptbr": "Cria a curadoria automatica de produtos para comercio local com categorias de fornecedores, mapeamento Google, normalizacao, pricing, compliance, comparacao com marketplaces, aprovados/rejeitados e jobs auditaveis.",
       "requires": ["001", "008", "033", "035"],
       "provides": ["curation_suppliers", "curation_supplier_categories", "curation_internal_categories", "curation_google_categories", "curation_category_mapping", "curation_products_raw", "curation_products_normalized", "curation_compliance_rules", "curation_marketplace_price_snapshots", "curation_product_comparison_results", "curation_approved_products", "curation_rejected_products", "curation_sync_jobs", "curation_sync_job_logs", "curation_api_checkpoints", "curation_api_cache_entries", "curation_rate_limit_events", "curation_quota_escalation_reports", "curation_pricing_rules"]
+    },
+    {
+      "id": "037",
+      "path": "database/postgres/037_v47_merchant_erp_marketplace_management.sql",
+      "purpose_ptbr": "Materializa o ERP do lojista para marketplace com workspaces, PDV, armazem, metricas, campanhas, relatorios, financeiro, contabil/fiscal, integracoes, equipe, seguranca e auditoria.",
+      "requires": ["008", "010", "019", "035", "036"],
+      "provides": ["merchant_erp_workspaces", "merchant_erp_staff_members", "merchant_erp_pdv_terminals", "merchant_erp_pdv_sessions", "merchant_erp_cash_movements", "merchant_erp_order_pipeline", "merchant_erp_catalog_tasks", "merchant_erp_inventory_tasks", "merchant_erp_metric_snapshots", "merchant_erp_campaigns", "merchant_erp_report_exports", "merchant_erp_financial_closures", "merchant_erp_accounting_entries", "merchant_erp_integration_connections", "merchant_erp_security_events", "merchant_erp_audit_events", "v_merchant_erp_control_tower"]
     }
   ],
   "mongodb": [

@@ -4,18 +4,18 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Valley Admin ERP</title>
-    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/styles.css?v=036-release-blueprint" />
     <script src="/valley_admin_data.js"></script>
-    <script src="/app.js" defer></script>
+    <script src="/app.js?v=036-release-blueprint" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#mainContent">Ir para o painel</a>
     <section id="adminAuthGate" class="admin-auth-gate" aria-live="polite">
       <div class="admin-auth-card">
-        <p class="panel-kicker">Acesso administrativo</p>
-        <h1>Login do painel Valley</h1>
-        <p class="muted-copy">
-          Use uma credencial administrativa válida para liberar workspaces, integrações reais e comandos operacionais.
+        <p id="adminAuthKicker" class="panel-kicker">Acesso administrativo</p>
+        <h1 id="adminAuthTitle">Login do painel Valley</h1>
+        <p id="adminAuthCopy" class="muted-copy">
+          Use uma credencial administrativa válida para liberar workspaces, integrações reais e ações operacionais.
         </p>
         <form id="adminAuthForm" class="admin-auth-form">
           <label>
@@ -47,42 +47,32 @@
       </div>
     </section>
     <div class="shell">
-      <aside class="control-dock left-dock" aria-label="Navegacao principal">
-        <div class="dock-card">
-          <p class="panel-kicker">Menu</p>
-          <h2>Admin</h2>
-          <nav class="dock-nav">
-            <a class="dock-link" href="#stockIntegrations">STOCK</a>
-            <a class="dock-link" href="#adminLaunchpadSection">Operacao</a>
-            <a class="dock-link" href="#financialDashboard">Financeiro</a>
-            <a class="dock-link" href="#performanceDashboard">Desempenho</a>
-            <a class="dock-link" href="#importedPricingSection">Importados</a>
-            <a class="dock-link" href="#publicationReviewSection">Revisao</a>
-            <a class="dock-link" href="#modulesWorkspace">Modulos</a>
-            <a class="dock-link" href="#stockIntegrations">Stock APIs</a>
-            <a class="dock-link" href="#settingsSection">Configuracoes</a>
+      <section class="top-command-bar" aria-label="Navegacao global dos paineis">
+        <div class="top-command-group">
+          <div>
+            <p class="panel-kicker">Menu</p>
+            <h2>Admin e lojista</h2>
+          </div>
+          <nav class="top-command-nav" aria-label="Navegacao principal">
+            <a class="top-command-link" href="#stockIntegrations">STOCK</a>
+            <a class="top-command-link" href="#adminLaunchpadSection">Operacao</a>
+            <a class="top-command-link" href="#financialDashboard">Financeiro</a>
+            <a class="top-command-link" href="#merchantErpSection">ERP Lojista</a>
+            <a class="top-command-link" href="#performanceDashboard">Desempenho</a>
+            <a class="top-command-link" href="#importedPricingSection">Importados</a>
+            <a class="top-command-link" href="#publicationReviewSection">Revisao</a>
+            <a class="top-command-link" href="#modulesWorkspace">Modulos</a>
+            <a class="top-command-link" href="#settingsSection">Configuracoes</a>
           </nav>
         </div>
-      </aside>
-
-      <aside class="control-dock right-dock" aria-label="Acessos rapidos">
-        <div class="dock-card">
-          <p class="panel-kicker">Acesso</p>
-          <h2>Links</h2>
-          <div id="adminAccessLinks" class="dock-stack"></div>
-        </div>
-        <div class="dock-card">
-          <p class="panel-kicker">Atalhos</p>
-          <h2>Dashboards</h2>
-          <div class="dock-stack">
-            <a class="dock-link" href="#adminLaunchpadSection">Painel admin</a>
-            <a class="dock-link" href="#publicRuntimePanel">Runtime publico</a>
-            <a class="dock-link" href="#stockIntegrations">Integracoes STOCK</a>
-            <a class="dock-link" href="#publicationReviewSection">Fila de revisao</a>
-            <a class="dock-link" href="#detailTitle">Modulo ativo</a>
+        <div class="top-command-group">
+          <div>
+            <p class="panel-kicker">Acesso</p>
+            <h2>Dominios e subdominios</h2>
           </div>
+          <div id="adminAccessLinks" class="top-access-grid"></div>
         </div>
-      </aside>
+      </section>
 
       <header class="hero">
         <div class="hero-copy">
@@ -149,8 +139,8 @@
           <section class="glass-panel command-panel">
             <div class="section-head tight">
               <div>
-                <p class="panel-kicker">Runbook</p>
-                <h2>Comandos-chave</h2>
+                <p class="panel-kicker">Ações</p>
+                <h2>Ações operacionais</h2>
               </div>
             </div>
             <div id="commandList" class="command-list"></div>
@@ -205,6 +195,17 @@
         <section id="workspaceFocusBanner" class="workspace-focus-banner" hidden aria-live="polite"></section>
         <div id="adminWorkspaceRegistry" class="workspace-registry-grid"></div>
         <div id="adminLaunchpadGrid" class="launchpad-grid"></div>
+      </section>
+
+      <section id="merchantErpSection" class="glass-panel merchant-erp-section" aria-label="ERP do lojista" data-admin-pane="merchant">
+        <div class="section-head">
+          <div>
+            <p class="panel-kicker">ERP lojista</p>
+            <h2>Painel de gerenciamento do marketplace</h2>
+          </div>
+          <p class="section-copy">Login, PDV, armazem, metricas, campanhas, relatorios, financeiro, cadastro, perfil, contabil, fiscal, integracoes, equipe e seguranca.</p>
+        </div>
+        <div id="merchantErpRoot"></div>
       </section>
 
       <section id="moduleWorkspaceDirectory" class="glass-panel launchpad-section" aria-label="Subdominios dedicados por modulo" data-admin-pane="modules">
@@ -328,7 +329,7 @@
           <button id="saveMarketplaceApis" class="secondary-button" type="button">Salvar</button>
           <button id="applyMarketplaceApis" class="secondary-button" type="button">Alterar</button>
           <button id="resetMarketplaceApis" class="secondary-button" type="button">Padrao</button>
-          <button id="copyMarketplaceApis" class="secondary-button" type="button">Copiar JSON</button>
+          <button id="copyMarketplaceApis" class="secondary-button" type="button">Exportar resumo</button>
         </div>
         <p class="microcopy">Use referencia de segredo ou vault no campo Secret Ref. Consultas externas do dropshipping devem usar APIs oficiais; scraping fica como fallback controlado e IA externa fica bloqueada por padrao.</p>
       </section>
@@ -339,7 +340,7 @@
             <p class="panel-kicker">Stock integration desk</p>
             <h2>Passo a passo por fornecedor</h2>
           </div>
-          <p class="section-copy">Runbooks de integracao detalhados para ativar APIs oficiais de dropshipping sem improviso.</p>
+          <p class="section-copy">Guias de integração para ativar APIs oficiais de dropshipping com fluxo comercial consistente.</p>
         </div>
         <div id="stockGuideSummary" class="integration-summary-grid"></div>
         <div id="stockProviderGuides" class="provider-guide-grid"></div>
@@ -361,7 +362,7 @@
           <button id="saveImportedPricing" class="secondary-button" type="button">Salvar</button>
           <button id="applyImportedPricing" class="secondary-button" type="button">Alterar</button>
           <button id="resetImportedPricing" class="secondary-button" type="button">Padrao</button>
-          <button id="copyImportedPricing" class="secondary-button" type="button">Copiar JSON</button>
+          <button id="copyImportedPricing" class="secondary-button" type="button">Exportar resumo</button>
         </div>
         <p class="microcopy">O custo base vem do catálogo importado. A mesa calcula preço sugerido, taxas e faturamento líquido estimado por SKU e por fornecedor.</p>
       </section>
@@ -422,8 +423,8 @@
       </section>
 
       <section id="modulesWorkspace" class="workspace" aria-label="Cockpit operacional" data-admin-pane="modules">
-        <aside class="rail glass-panel" aria-label="Filtros e operacao">
-          <div class="rail-block">
+        <section class="module-control-panel glass-panel" aria-label="Filtros e operacao">
+          <div class="module-control-block">
             <label class="field">
               <span>Buscar modulo</span>
               <input id="searchInput" type="search" placeholder="PAY, SOCIAL, LEGAL..." autocomplete="off" />
@@ -431,7 +432,7 @@
             <p class="microcopy">Atalhos: <kbd>/</kbd> foca a busca, <kbd>J</kbd>/<kbd>K</kbd> navegam, <kbd>Esc</kbd> limpa filtros.</p>
           </div>
 
-          <div class="rail-block filters">
+          <div class="module-control-block filters">
             <label class="field">
               <span>Tier</span>
               <select id="tierFilter"></select>
@@ -450,12 +451,12 @@
             </label>
           </div>
 
-          <div class="rail-block rail-actions">
+          <div class="module-control-block rail-actions">
             <button id="resetFilters" class="secondary-button" type="button">Limpar filtros</button>
-            <button id="copyCommands" class="secondary-button" type="button">Copiar comandos</button>
+            <button id="copyCommands" class="secondary-button" type="button">Copiar resumo</button>
           </div>
 
-          <div class="rail-block">
+          <div class="module-control-block">
             <div class="section-head tight">
               <div>
                 <p class="panel-kicker">External access</p>
@@ -464,7 +465,7 @@
             </div>
             <div id="externalAccess" class="external-access"></div>
           </div>
-        </aside>
+        </section>
 
         <section class="main-panel">
           <section class="module-list-panel glass-panel" aria-label="Lista de modulos">

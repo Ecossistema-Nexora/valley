@@ -1,7 +1,7 @@
 {
   "status": "ok",
   "service": "valley-product",
-  "generated_at_utc": "2026-05-12T03:15:59.887911Z",
+  "generated_at_utc": "2026-05-12T06:07:59.975372Z",
   "title": "Valley Stock | Catalogo proprietario",
   "subtitle": "Seleção Valley com catálogo real multi-provedor, agrupado por categoria e taxonomia Google, com sincronização de estoque, preço e tracking sem exposição pública da origem operacional.",
   "public_runtime": {
@@ -4053,43 +4053,47 @@
       "shipping_free": false
     },
     {
-      "id": "7d34af69-4533-503f-a310-0f799b244db8",
+      "id": "6c3a4639-0abc-51f8-bd2a-403394ada2c2",
       "module_id": "STOCK",
-      "title": "C25 Unlocked Phone Smartphone 8GB 256GB Android14.0 6800mAh 6.8inch 5G",
+      "title": "4 Pack Women Sexy Lace Underwear Lingerie Panties G-String Brief Thong Plus Size",
       "brand": "Valley Edge",
       "category": "Smartphones",
-      "price_brl": 538.65,
-      "compare_at_brl": 538.65,
-      "stock": 194,
+      "price_brl": 40.01,
+      "compare_at_brl": 40.01,
+      "stock": 0,
       "merchant_name": "Valley",
-      "image_url": "https://cf.cjdropshipping.com/4c88e7f4-ea34-49d8-a4a2-a98faa28b660.jpg",
+      "image_url": "https://cf.cjdropshipping.com/ea388e11-eaef-4d09-8d13-defb5d1587ea.png",
       "video_url": "",
       "video_count": 0,
-      "status": "194 em estoque • tracking ativo",
+      "status": "0 em estoque • tracking ativo",
       "tags": [
         "Catalogo real",
         "Smartphones",
-        "Quad Core",
+        "Panties",
         "Operacao ativa"
       ],
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para smartphones com estoque sincronizado. Categoria fonte: Quad Core. 194 unidades em estoque. 40 listagens sincronizadas.",
+      "description": "Seleção Valley para smartphones com estoque sincronizado. Categoria fonte: Panties. 48 listagens sincronizadas. Specifications: Color(s): Black / Blue / Purple / Maroon Material: Polyester Fabric Type: Lace Elasticity: Stretchy Pattern: Solid Style: Sexy Classic Size Type: Regular True Fit Waist: High Waist Occasion: All Occasion",
       "gallery_urls": [
-        "https://cf.cjdropshipping.com/4c88e7f4-ea34-49d8-a4a2-a98faa28b660.jpg"
+        "https://cf.cjdropshipping.com/ea388e11-eaef-4d09-8d13-defb5d1587ea.png",
+        "https://cf.cjdropshipping.com/d4a2c177-9076-45d6-9a3b-34d447fc607e.png",
+        "https://cf.cjdropshipping.com/884b11d6-eed1-4f9a-816b-3a5e9428a6e7.png",
+        "https://cf.cjdropshipping.com/92bb9652-2bc5-401a-9bc3-1a79567fe5a5.png",
+        "https://cf.cjdropshipping.com/3be82c57-24d1-466a-bce1-49ff5ca18643.png"
       ],
       "profile_id": "",
       "features": [
         "Estoque global sincronizado",
-        "194 unidades disponíveis",
-        "40 listagens ativas",
+        "Disponibilidade sob consulta",
+        "48 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
         "name": "Loja Valley",
         "headline": "Oferta sincronizada com estoque e tracking automatizados.",
-        "avatar_url": "https://cf.cjdropshipping.com/4c88e7f4-ea34-49d8-a4a2-a98faa28b660.jpg",
+        "avatar_url": "https://cf.cjdropshipping.com/ea388e11-eaef-4d09-8d13-defb5d1587ea.png",
         "rating": 4.7,
         "city": "Operação global"
       },
@@ -4102,13 +4106,13 @@
       },
       "raw_badge": "STOCK",
       "collection_label": "Valley Edge",
-      "model_name": "Quad Core",
+      "model_name": "Panties",
       "google_product_category_id": "267",
       "google_product_category_path": "Electronics > Communications > Telephony > Mobile Phones",
       "google_product_category": "Electronics > Communications > Telephony > Mobile Phones",
-      "price_band": "R$ 500-999",
-      "offer_count": 40,
-      "availability_label": "194 em estoque",
+      "price_band": "Ate R$ 99",
+      "offer_count": 48,
+      "availability_label": "0 em estoque",
       "shipping_free": false
     },
     {
@@ -4466,43 +4470,43 @@
       "shipping_free": false
     },
     {
-      "id": "781814f5-9ae1-5c17-ba50-fad99145bf90",
+      "id": "7d34af69-4533-503f-a310-0f799b244db8",
       "module_id": "STOCK",
-      "title": "XS15 Portable Mini Phone 35-inch 2GB16GB Android Smartphone",
+      "title": "C25 Unlocked Phone Smartphone 8GB 256GB Android14.0 6800mAh 6.8inch 5G",
       "brand": "Valley Edge",
       "category": "Smartphones",
-      "price_brl": 120.18,
-      "compare_at_brl": 120.18,
-      "stock": 39987,
+      "price_brl": 538.65,
+      "compare_at_brl": 538.65,
+      "stock": 194,
       "merchant_name": "Valley",
-      "image_url": "https://cf.cjdropshipping.com/quick/product/c31f793d-63be-4925-9014-11de5285257e.jpg",
+      "image_url": "https://cf.cjdropshipping.com/4c88e7f4-ea34-49d8-a4a2-a98faa28b660.jpg",
       "video_url": "",
       "video_count": 0,
-      "status": "39987 em estoque • tracking ativo",
+      "status": "194 em estoque • tracking ativo",
       "tags": [
         "Catalogo real",
         "Smartphones",
-        "3GB RAM",
+        "Quad Core",
         "Operacao ativa"
       ],
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para smartphones com estoque sincronizado. Categoria fonte: 3GB RAM. 39987 unidades em estoque. 32 listagens sincronizadas.",
+      "description": "Seleção Valley para smartphones com estoque sincronizado. Categoria fonte: Quad Core. 194 unidades em estoque. 40 listagens sincronizadas.",
       "gallery_urls": [
-        "https://cf.cjdropshipping.com/quick/product/c31f793d-63be-4925-9014-11de5285257e.jpg"
+        "https://cf.cjdropshipping.com/4c88e7f4-ea34-49d8-a4a2-a98faa28b660.jpg"
       ],
       "profile_id": "",
       "features": [
         "Estoque global sincronizado",
-        "39987 unidades disponíveis",
-        "32 listagens ativas",
+        "194 unidades disponíveis",
+        "40 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
         "name": "Loja Valley",
         "headline": "Oferta sincronizada com estoque e tracking automatizados.",
-        "avatar_url": "https://cf.cjdropshipping.com/quick/product/c31f793d-63be-4925-9014-11de5285257e.jpg",
+        "avatar_url": "https://cf.cjdropshipping.com/4c88e7f4-ea34-49d8-a4a2-a98faa28b660.jpg",
         "rating": 4.7,
         "city": "Operação global"
       },
@@ -4515,13 +4519,13 @@
       },
       "raw_badge": "STOCK",
       "collection_label": "Valley Edge",
-      "model_name": "3GB RAM",
+      "model_name": "Quad Core",
       "google_product_category_id": "267",
       "google_product_category_path": "Electronics > Communications > Telephony > Mobile Phones",
       "google_product_category": "Electronics > Communications > Telephony > Mobile Phones",
-      "price_band": "R$ 100-249",
-      "offer_count": 32,
-      "availability_label": "39987 em estoque",
+      "price_band": "R$ 500-999",
+      "offer_count": 40,
+      "availability_label": "194 em estoque",
       "shipping_free": false
     },
     {
@@ -4763,7 +4767,7 @@
     }
   ],
   "summary": {
-    "products": 1192
+    "products": 1209
   },
   "hero": {
     "title": "Valley Stock | Catalogo proprietario",

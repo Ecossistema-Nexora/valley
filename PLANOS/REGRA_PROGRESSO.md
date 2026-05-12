@@ -17,6 +17,6 @@ python scripts\update_planos_progress.py
 
 ## Progresso acumulado atual
 
-- Etapas concluidas: `198/199`.
+- Etapas concluidas: `207/208`.
 - Produzido: `99.5%`.
 - Falta produzir: `0.5%`.
