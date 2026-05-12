@@ -2,7 +2,8 @@ param(
     [string]$BindHost = '127.0.0.1',
     [int]$AdminPort = 8085,
     [string]$CloudflaredToken = '',
-    [string]$PublicBaseUrl = ''
+    [string]$PublicBaseUrl = '',
+    [string]$PublicProductUrl = ''
 )
 
 Set-StrictMode -Version Latest
@@ -11,6 +12,7 @@ $ErrorActionPreference = 'Stop'
 $RepoRoot = Split-Path -Parent $PSScriptRoot
 $RuntimeDir = Join-Path $RepoRoot 'tmp\runtime'
 $RuntimeManifest = Join-Path $RuntimeDir 'valley-admin-public-runtime.json'
+$HttpStartupManifest = Join-Path $RuntimeDir 'valley-admin-http-startup.json'
 $ProductRuntimeManifest = Join-Path $RuntimeDir 'valley-product-public-runtime.json'
 $ProductPublicationManifest = Join-Path $RuntimeDir 'valley-product-web-publication.json'
 $ServeScript = Join-Path $RepoRoot 'scripts\serve_valley_admin.py'
@@ -20,10 +22,10 @@ $EnvExamplePath = Join-Path $RepoRoot '.env.example'
 $ReleaseEnvExamplePath = Join-Path $RepoRoot 'config\VALLEY_RELEASE_ENV.example'
 $EnvPath = Join-Path $RepoRoot '.env'
 $CodexCloudEnvPath = Join-Path $RuntimeDir 'codex-cloud-secrets.env'
-$ServeStdoutLog = Join-Path $RuntimeDir 'valley-admin-http.out.log'
-$ServeStderrLog = Join-Path $RuntimeDir 'valley-admin-http.err.log'
-$CloudflareStdoutLog = Join-Path $RuntimeDir 'valley-admin-cloudflare.out.log'
-$CloudflareStderrLog = Join-Path $RuntimeDir 'valley-admin-cloudflare.err.log'
+$ServeStdoutLog = Join-Path $RuntimeDir 'valley-admin-http.live.out.log'
+$ServeStderrLog = Join-Path $RuntimeDir 'valley-admin-http.live.err.log'
+$CloudflareStdoutLog = Join-Path $RuntimeDir 'valley-admin-cloudflare.live.out.log'
+$CloudflareStderrLog = Join-Path $RuntimeDir 'valley-admin-cloudflare.live.err.log'
 
 New-Item -ItemType Directory -Path $RuntimeDir -Force | Out-Null
 
@@ -294,8 +296,18 @@ function Write-ProductManifests {
     )
 
     $BaseUrl = $PublicUrl.TrimEnd('/')
-    $ProductBaseUrl = "$BaseUrl/product"
-    $ProductApiUrl = "$BaseUrl/api/product-shell"
+    $ProductBaseUrl = if (-not [string]::IsNullOrWhiteSpace($PublicProductUrl)) {
+        $PublicProductUrl.TrimEnd('/')
+    } elseif ($BaseUrl -match '^https://admin\.brasildesconto\.com\.br/?$') {
+        'https://brasildesconto.com.br'
+    } else {
+        "$BaseUrl/product"
+    }
+    $ProductApiUrl = if ($ProductBaseUrl -match '^https://brasildesconto\.com\.br/?$') {
+        "$ProductBaseUrl/api/product-shell"
+    } else {
+        "$BaseUrl/api/product-shell"
+    }
     $LocalApiUrl = "$LocalUrl/api/product-shell"
 
     $RuntimePayload = [ordered]@{
@@ -354,6 +366,10 @@ if (-not $PSBoundParameters.ContainsKey('PublicBaseUrl')) {
     }
 }
 
+if (-not $PSBoundParameters.ContainsKey('PublicProductUrl') -and $env:VALLEY_PRODUCT_PUBLIC_URL) {
+    $PublicProductUrl = $env:VALLEY_PRODUCT_PUBLIC_URL
+}
+
 if (-not (Test-Path -LiteralPath $ServeScript)) {
     throw "Script do servidor nao encontrado: $ServeScript"
 }
@@ -398,7 +414,7 @@ if (-not ($HealthPayload -and $HealthPayload.service -eq 'valley-admin')) {
         '--port', $AdminPort.ToString(),
         '--root', $AdminRoot,
         '--data', $AdminData,
-        '--startup-file', $RuntimeManifest
+        '--startup-file', $HttpStartupManifest
     )
 
     Start-Process -FilePath $PythonLauncher.FilePath -ArgumentList $ServeArgs -WorkingDirectory $RepoRoot -RedirectStandardOutput $ServeStdoutLog -RedirectStandardError $ServeStderrLog -WindowStyle Hidden | Out-Null

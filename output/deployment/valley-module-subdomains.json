@@ -1,9 +1,63 @@
 {
-  "generated_at_utc": "2026-05-07T04:39:32Z",
+  "generated_at_utc": "2026-05-11T22:13:44Z",
+  "public_host": "brasildesconto.com.br",
+  "admin_host": "admin.brasildesconto.com.br",
   "zone_host": "admin.brasildesconto.com.br",
   "target_host": "admin.brasildesconto.com.br",
-  "records_total": 56,
+  "tunnel_id": "80a75594-5129-469f-8cce-4a938ac48e06",
+  "tunnel_target_host": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+  "origin_url": "http://192.168.1.2:8085",
+  "desired_tunnel_ingress": [
+    {
+      "hostname": "brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "*.admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    }
+  ],
+  "gateway_records_total": 3,
+  "module_records_total": 56,
+  "records_total": 59,
   "records": [
+    {
+      "kind": "public_site",
+      "key": "public",
+      "title": "Site publico Valley",
+      "module_code": "",
+      "name": "brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true
+    },
+    {
+      "kind": "admin_gateway",
+      "key": "admin",
+      "title": "Painel admin Valley",
+      "module_code": "",
+      "name": "admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true
+    },
+    {
+      "kind": "admin_module_wildcard",
+      "key": "admin-wildcard",
+      "title": "Wildcard dos workspaces admin",
+      "module_code": "",
+      "name": "*.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true
+    },
     {
       "kind": "static_workspace",
       "key": "stock",
@@ -565,5 +619,8 @@
       "proxied": true
     }
   ],
-  "apply_status": "not_requested"
+  "apply_status": "blocked_cloudflare_api",
+  "tunnel_apply_status": "blocked_cloudflare_api",
+  "apply_error": "Cloudflare HTTP 401: {\"success\":false,\"errors\":[{\"code\":10000,\"message\":\"Authentication error\"}],\"messages\":[],\"result\":null}\n",
+  "tunnel_apply_error": "Cloudflare HTTP 401: {\"success\":false,\"errors\":[{\"code\":10000,\"message\":\"Authentication error\"}],\"messages\":[],\"result\":null}\n"
 }

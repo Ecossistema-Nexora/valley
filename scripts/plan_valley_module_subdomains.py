@@ -6,6 +6,7 @@ import argparse
 import json
 import os
 import re
+import socket
 import sys
 import time
 import urllib.error
@@ -18,8 +19,13 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 ADMIN_DATA_PATH = ROOT / "admin" / "valley_admin_data.json"
 OUTPUT_PATH = ROOT / "output" / "deployment" / "valley-module-subdomains.json"
+DEFAULT_PUBLIC_HOST = "brasildesconto.com.br"
+DEFAULT_ADMIN_HOST = "admin.brasildesconto.com.br"
 DEFAULT_ZONE_HOST = "admin.brasildesconto.com.br"
 DEFAULT_TARGET_HOST = "admin.brasildesconto.com.br"
+DEFAULT_TUNNEL_ID = "80a75594-5129-469f-8cce-4a938ac48e06"
+DEFAULT_ACCOUNT_ID = "474fc26bf9c6bcf5e1a84b7f63a516d8"
+DEFAULT_ORIGIN_URL = "http://192.168.1.2:8085"
 
 STATIC_WORKSPACES = [
     {"key": "stock", "title": "Painel STOCK", "subdomain": "stock"},
@@ -34,6 +40,23 @@ STATIC_WORKSPACES = [
 ]
 
 
+def default_tunnel_target_host(tunnel_id: str = DEFAULT_TUNNEL_ID) -> str:
+    return f"{tunnel_id}.cfargotunnel.com"
+
+
+def force_ipv4_resolution() -> None:
+    """Force urllib to use IPv4 for Cloudflare API calls when token IP filters require it."""
+
+    original_getaddrinfo = socket.getaddrinfo
+
+    def ipv4_getaddrinfo(*args: Any, **kwargs: Any) -> list[Any]:
+        results = original_getaddrinfo(*args, **kwargs)
+        ipv4_results = [item for item in results if item[0] == socket.AF_INET]
+        return ipv4_results or results
+
+    socket.getaddrinfo = ipv4_getaddrinfo  # type: ignore[assignment]
+
+
 def load_json(path: Path) -> dict[str, Any]:
     with path.open("r", encoding="utf-8") as handle:
         payload = json.load(handle)
@@ -45,6 +68,46 @@ def load_json(path: Path) -> dict[str, Any]:
 def slug_to_subdomain(value: str) -> str:
     slug = re.sub(r"[^a-z0-9-]+", "-", str(value or "").lower()).strip("-")
     return slug or "modulo"
+
+
+def gateway_records(
+    *,
+    public_host: str,
+    admin_host: str,
+    tunnel_target_host: str,
+) -> list[dict[str, Any]]:
+    return [
+        {
+            "kind": "public_site",
+            "key": "public",
+            "title": "Site publico Valley",
+            "module_code": "",
+            "name": public_host,
+            "type": "CNAME",
+            "content": tunnel_target_host,
+            "proxied": True,
+        },
+        {
+            "kind": "admin_gateway",
+            "key": "admin",
+            "title": "Painel admin Valley",
+            "module_code": "",
+            "name": admin_host,
+            "type": "CNAME",
+            "content": tunnel_target_host,
+            "proxied": True,
+        },
+        {
+            "kind": "admin_module_wildcard",
+            "key": "admin-wildcard",
+            "title": "Wildcard dos workspaces admin",
+            "module_code": "",
+            "name": f"*.{admin_host}",
+            "type": "CNAME",
+            "content": tunnel_target_host,
+            "proxied": True,
+        },
+    ]
 
 
 def module_records(zone_host: str, target_host: str) -> list[dict[str, Any]]:
@@ -89,6 +152,14 @@ def module_records(zone_host: str, target_host: str) -> list[dict[str, Any]]:
     return records
 
 
+def desired_tunnel_ingress(public_host: str, admin_host: str, origin_url: str) -> list[dict[str, Any]]:
+    return [
+        {"hostname": public_host, "service": origin_url, "originRequest": {}},
+        {"hostname": admin_host, "service": origin_url, "originRequest": {}},
+        {"hostname": f"*.{admin_host}", "service": origin_url, "originRequest": {}},
+    ]
+
+
 def cloudflare_request(method: str, path: str, token: str, body: dict[str, Any] | None = None) -> dict[str, Any]:
     data = None if body is None else json.dumps(body).encode("utf-8")
     request = urllib.request.Request(
@@ -111,12 +182,25 @@ def cloudflare_request(method: str, path: str, token: str, body: dict[str, Any] 
     return payload
 
 
-def apply_records(records: list[dict[str, Any]], token: str, zone_id: str) -> list[dict[str, Any]]:
+def list_dns_records_by_name(record: dict[str, Any], token: str, zone_id: str) -> list[dict[str, Any]]:
+    query = urllib.parse.urlencode({"name": record["name"]})
+    existing = cloudflare_request("GET", f"/zones/{zone_id}/dns_records?{query}", token)
+    matches = existing.get("result") if isinstance(existing.get("result"), list) else []
+    return [item for item in matches if isinstance(item, dict)]
+
+
+def apply_records(
+    records: list[dict[str, Any]],
+    token: str,
+    zone_id: str,
+    *,
+    replace_conflicting_records: bool = False,
+) -> list[dict[str, Any]]:
     results: list[dict[str, Any]] = []
     for record in records:
-        query = urllib.parse.urlencode({"type": record["type"], "name": record["name"]})
-        existing = cloudflare_request("GET", f"/zones/{zone_id}/dns_records?{query}", token)
-        matches = existing.get("result") if isinstance(existing.get("result"), list) else []
+        all_matches = list_dns_records_by_name(record, token, zone_id)
+        matches = [item for item in all_matches if str(item.get("type") or "").upper() == record["type"]]
+        conflicts = [item for item in all_matches if str(item.get("type") or "").upper() != record["type"]]
         body = {
             "type": record["type"],
             "name": record["name"],
@@ -125,35 +209,125 @@ def apply_records(records: list[dict[str, Any]], token: str, zone_id: str) -> li
             "proxied": bool(record["proxied"]),
             "comment": "Valley module workspace managed by scripts/plan_valley_module_subdomains.py",
         }
+        if conflicts and not matches and replace_conflicting_records:
+            for conflict in conflicts:
+                conflict_id = str(conflict.get("id") or "")
+                if conflict_id:
+                    cloudflare_request("DELETE", f"/zones/{zone_id}/dns_records/{conflict_id}", token)
+                    time.sleep(0.1)
+            conflicts = []
         if matches:
             record_id = str(matches[0].get("id") or "")
             cloudflare_request("PATCH", f"/zones/{zone_id}/dns_records/{record_id}", token, body)
             action = "updated"
         else:
             cloudflare_request("POST", f"/zones/{zone_id}/dns_records", token, body)
-            action = "created"
-        results.append({"name": record["name"], "action": action})
+            action = "created_after_conflict_replace" if conflicts else "created"
+        results.append({"name": record["name"], "type": record["type"], "action": action})
         time.sleep(0.15)
     return results
 
 
+def apply_tunnel_config(
+    *,
+    token: str,
+    account_id: str,
+    tunnel_id: str,
+    public_host: str,
+    admin_host: str,
+    origin_url: str,
+) -> dict[str, Any]:
+    response = cloudflare_request("GET", f"/accounts/{account_id}/cfd_tunnel/{tunnel_id}/configurations", token)
+    result = response.get("result") if isinstance(response.get("result"), dict) else {}
+    config = result.get("config") if isinstance(result.get("config"), dict) else {}
+    existing_ingress = config.get("ingress") if isinstance(config.get("ingress"), list) else []
+    desired = desired_tunnel_ingress(public_host, admin_host, origin_url)
+    desired_hosts = {str(item["hostname"]).lower() for item in desired}
+    preserved: list[dict[str, Any]] = []
+    catch_all: dict[str, Any] | None = None
+
+    for raw_rule in existing_ingress:
+        if not isinstance(raw_rule, dict):
+            continue
+        hostname = str(raw_rule.get("hostname") or "").strip().lower()
+        if not hostname:
+            catch_all = raw_rule
+            continue
+        if hostname in desired_hosts:
+            continue
+        preserved.append(raw_rule)
+
+    next_config = dict(config)
+    next_config["ingress"] = desired + preserved + [catch_all or {"service": "http_status:404"}]
+    cloudflare_request(
+        "PUT",
+        f"/accounts/{account_id}/cfd_tunnel/{tunnel_id}/configurations",
+        token,
+        {"config": next_config},
+    )
+    return {
+        "tunnel_id": tunnel_id,
+        "origin_url": origin_url,
+        "desired_hosts": sorted(desired_hosts),
+        "preserved_hosts": [
+            str(item.get("hostname") or "")
+            for item in preserved
+            if str(item.get("hostname") or "").strip()
+        ],
+    }
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--public-host", default=os.environ.get("VALLEY_PUBLIC_SITE_HOST", DEFAULT_PUBLIC_HOST))
+    parser.add_argument("--admin-host", default=os.environ.get("VALLEY_ADMIN_SITE_HOST", DEFAULT_ADMIN_HOST))
     parser.add_argument("--zone-host", default=os.environ.get("VALLEY_MODULE_DNS_ZONE_HOST", DEFAULT_ZONE_HOST))
     parser.add_argument("--target-host", default=os.environ.get("VALLEY_MODULE_DNS_TARGET_HOST", DEFAULT_TARGET_HOST))
+    parser.add_argument("--tunnel-id", default=os.environ.get("CLOUDFLARE_TUNNEL_ID", DEFAULT_TUNNEL_ID))
+    parser.add_argument("--tunnel-target-host", default=os.environ.get("VALLEY_CLOUDFLARE_TUNNEL_TARGET_HOST", ""))
+    parser.add_argument("--account-id", default=os.environ.get("CLOUDFLARE_ACCOUNT_ID", DEFAULT_ACCOUNT_ID))
+    parser.add_argument("--origin-url", default=os.environ.get("VALLEY_ADMIN_TUNNEL_ORIGIN", DEFAULT_ORIGIN_URL))
     parser.add_argument("--output", type=Path, default=OUTPUT_PATH)
     parser.add_argument("--apply", action="store_true", help="Apply records through Cloudflare API.")
+    parser.add_argument("--apply-tunnel-config", action="store_true", help="Apply Cloudflare Tunnel public hostname ingress.")
+    parser.add_argument("--force-ipv4", action="store_true", help="Use IPv4 for Cloudflare API calls.")
+    parser.add_argument(
+        "--replace-conflicting-records",
+        action="store_true",
+        help="Delete same-name DNS records with conflicting types before creating the desired CNAME.",
+    )
     args = parser.parse_args()
 
-    records = module_records(args.zone_host.strip().strip("."), args.target_host.strip().strip("."))
+    if args.force_ipv4:
+        force_ipv4_resolution()
+
+    public_host = args.public_host.strip().strip(".")
+    admin_host = args.admin_host.strip().strip(".")
+    zone_host = args.zone_host.strip().strip(".")
+    target_host = args.target_host.strip().strip(".")
+    tunnel_id = args.tunnel_id.strip()
+    tunnel_target_host = (args.tunnel_target_host.strip().strip(".") or default_tunnel_target_host(tunnel_id))
+    gateway = gateway_records(public_host=public_host, admin_host=admin_host, tunnel_target_host=tunnel_target_host)
+    modules = module_records(zone_host, target_host)
+    records = gateway + modules
     manifest: dict[str, Any] = {
         "generated_at_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-        "zone_host": args.zone_host,
-        "target_host": args.target_host,
+        "public_host": public_host,
+        "admin_host": admin_host,
+        "zone_host": zone_host,
+        "target_host": target_host,
+        "tunnel_id": tunnel_id,
+        "tunnel_target_host": tunnel_target_host,
+        "origin_url": args.origin_url,
+        "desired_tunnel_ingress": desired_tunnel_ingress(public_host, admin_host, args.origin_url.strip()),
+        "gateway_records_total": len(gateway),
+        "module_records_total": len(modules),
         "records_total": len(records),
         "records": records,
         "apply_status": "not_requested",
+        "tunnel_apply_status": "not_requested",
     }
+    exit_code = 0
 
     if args.apply:
         token = os.environ.get("CLOUDFLARE_API_TOKEN") or os.environ.get("CF_API_TOKEN") or ""
@@ -161,15 +335,51 @@ def main() -> int:
         if not token or not zone_id:
             manifest["apply_status"] = "blocked_missing_cloudflare_token_or_zone_id"
             print("Cloudflare apply blocked: CLOUDFLARE_API_TOKEN/CF_API_TOKEN and CLOUDFLARE_ZONE_ID are required.", file=sys.stderr)
+            exit_code = 2
         else:
-            manifest["apply_results"] = apply_records(records, token, zone_id)
-            manifest["apply_status"] = "applied"
+            try:
+                manifest["apply_results"] = apply_records(
+                    records,
+                    token,
+                    zone_id,
+                    replace_conflicting_records=args.replace_conflicting_records,
+                )
+                manifest["apply_status"] = "applied"
+            except RuntimeError as exc:
+                manifest["apply_status"] = "blocked_cloudflare_api"
+                manifest["apply_error"] = str(exc)
+                print(f"Cloudflare DNS apply blocked: {exc}", file=sys.stderr)
+                exit_code = 3
+
+    if args.apply_tunnel_config:
+        token = os.environ.get("CLOUDFLARE_API_TOKEN") or os.environ.get("CF_API_TOKEN") or ""
+        if not token:
+            manifest["tunnel_apply_status"] = "blocked_missing_cloudflare_token"
+            print("Cloudflare tunnel apply blocked: CLOUDFLARE_API_TOKEN/CF_API_TOKEN is required.", file=sys.stderr)
+            exit_code = max(exit_code, 2)
+        else:
+            try:
+                manifest["tunnel_apply_result"] = apply_tunnel_config(
+                    token=token,
+                    account_id=args.account_id.strip(),
+                    tunnel_id=tunnel_id,
+                    public_host=public_host,
+                    admin_host=admin_host,
+                    origin_url=args.origin_url.strip(),
+                )
+                manifest["tunnel_apply_status"] = "applied"
+            except RuntimeError as exc:
+                manifest["tunnel_apply_status"] = "blocked_cloudflare_api"
+                manifest["tunnel_apply_error"] = str(exc)
+                print(f"Cloudflare tunnel apply blocked: {exc}", file=sys.stderr)
+                exit_code = max(exit_code, 3)
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(f"Wrote {len(records)} DNS records to {args.output}")
     print(f"apply_status={manifest['apply_status']}")
-    return 0 if manifest["apply_status"] != "blocked_missing_cloudflare_token_or_zone_id" else 2
+    print(f"tunnel_apply_status={manifest['tunnel_apply_status']}")
+    return exit_code
 
 
 if __name__ == "__main__":

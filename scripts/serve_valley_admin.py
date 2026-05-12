@@ -88,6 +88,8 @@ USER_AUTH_EVENTS_PATH = RUNTIME_DIR / "valley-user-auth-events.jsonl"
 HOME_DEFAULT_VISIBLE_MODULES = ("PAY", "MARKETPLACE", "STOCK", "CHAT", "DOCS", "PLUG")
 PRODUCT_MVP_MODULES = {"STOCK", "MARKETPLACE", "CHAT", "PAY"}
 PRODUCT_MVP_MODULE_ORDER = ("MARKETPLACE", "STOCK", "CHAT", "PAY")
+PUBLIC_SITE_HOSTS = {"brasildesconto.com.br", "www.brasildesconto.com.br"}
+ADMIN_SITE_HOST = "admin.brasildesconto.com.br"
 PRODUCT_MVP_MODULE_META = {
     "MARKETPLACE": {
         "label": "Marketplace",
@@ -761,6 +763,12 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
         parsed = urlsplit(self.path)
         route = self._normalize_public_route(parsed.path)
 
+        if self._is_public_site_host() and route in ("/", "/index.html"):
+            self.send_response(HTTPStatus.FOUND)
+            self.send_header("Location", "/product/")
+            self.end_headers()
+            return
+
         if route.startswith("/workspace/"):
             self.path = "/index.html"
             super().do_GET()
@@ -1226,6 +1234,20 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
         if route.startswith("/product/api/"):
             return route.removeprefix("/product")
         return route
+
+    def _request_hostname(self) -> str:
+        host_header = str(self.headers.get("Host") or "").strip().lower()
+        if not host_header:
+            return ""
+        return host_header.split(":", 1)[0]
+
+    def _is_public_site_host(self) -> bool:
+        configured = str(os.environ.get("VALLEY_PUBLIC_SITE_HOST") or "").strip().lower()
+        public_hosts = set(PUBLIC_SITE_HOSTS)
+        if configured:
+            public_hosts.add(configured)
+        hostname = self._request_hostname()
+        return hostname in public_hosts and hostname != ADMIN_SITE_HOST
 
     def _auth_runtime_payload(self) -> dict[str, Any]:
         payload = load_json_file(USER_AUTH_RUNTIME_PATH) or {}

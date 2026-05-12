@@ -1,23 +1,28 @@
 {
-  "status": "ok",
+  "status": "blocked_tunnel_route",
   "service": "valley-admin-public",
   "provider": "cloudflare_named_tunnel",
   "public_url": "https://admin.brasildesconto.com.br",
   "local_url": "http://192.168.1.2:8085",
-  "generated_at_utc": "2026-05-11T18:06:49Z",
+  "generated_at_utc": "2026-05-11T22:08:17Z",
   "temporary": false,
   "permanence": "fixed_external",
-  "provider_status": "healthy",
+  "provider_status": "blocked_remote_ingress_path",
   "smoke_endpoints": {
     "healthz": "https://admin.brasildesconto.com.br/healthz",
     "admin_data": "https://admin.brasildesconto.com.br/api/admin-data",
     "product": "https://admin.brasildesconto.com.br/product",
     "product_shell": "https://admin.brasildesconto.com.br/api/product-shell"
   },
+  "local_smoke_endpoints": {
+    "public_root_redirect": "http://127.0.0.1:8085/",
+    "healthz": "http://127.0.0.1:8085/healthz"
+  },
   "cloudflare": {
     "mode": "named",
     "tunnel_id": "80a75594-5129-469f-8cce-4a938ac48e06",
-    "connector_id": "7e78f7ef-3174-462d-8e40-e48f358c3776",
-    "origin": "http://192.168.1.2:8085"
+    "connector_id": "fe7c69f8-e14e-4696-9638-cec6180c7db9",
+    "origin": "http://192.168.1.2:8085",
+    "blocked_reason": "remote tunnel ingress for admin.brasildesconto.com.br is limited to path ^/erp; API token rejected DNS/Tunnel write"
   }
 }

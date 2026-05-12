@@ -2710,10 +2710,6 @@
   }
 
   function workspaceHref(workspace) {
-    if (workspace.key === "stock") {
-      return activeProductPublicUrl() || `${window.location.origin.replace(/\/$/, "")}/?workspace=${workspace.key}#${workspace.sectionId}`;
-    }
-
     const adminHost = activeAdminHost();
     if (workspace.key === "home") {
       return `${adminHost.protocol}//${adminHost.host}/`;
