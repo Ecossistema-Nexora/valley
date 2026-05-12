@@ -1,7 +1,7 @@
 {
   "status": "ok",
   "service": "valley-product",
-  "generated_at_utc": "2026-05-12T07:22:10.812561Z",
+  "generated_at_utc": "2026-05-12T08:03:55.237778Z",
   "title": "Valley Stock | Catalogo proprietario",
   "subtitle": "Seleção Valley com catálogo real multi-provedor, agrupado por categoria e taxonomia Google, com sincronização de estoque, preço e tracking sem exposição pública da origem operacional.",
   "public_runtime": {
@@ -10,7 +10,6 @@
     "provider": "cloudflare_named_tunnel",
     "public_url": "https://brasildesconto.com.br",
     "public_api_url": "https://brasildesconto.com.br/api/product-shell",
-    "local_api_url": "http://192.168.1.2:8085/api/product-shell",
     "generated_at": "2026-05-11T22:05:32Z",
     "temporary": false,
     "provider_status": "healthy",
@@ -4764,10 +4763,238 @@
       "offer_count": 471,
       "availability_label": "50479 em estoque",
       "shipping_free": false
+    },
+    {
+      "id": "6c399709-7c4f-5c90-81c7-060f40d6de1c",
+      "module_id": "MARKETPLACE",
+      "fixture_source": "valley_release_marketplace_v037",
+      "title": "Vestido midi canelado Valley",
+      "brand": "Moda Centro",
+      "category": "Moda",
+      "price_brl": 119.9,
+      "compare_at_brl": 159.9,
+      "stock": 42,
+      "merchant_name": "Moda Centro Brasil",
+      "image_url": "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=1200&q=80",
+      "video_url": "",
+      "video_count": 0,
+      "status": "Publicado no marketplace",
+      "tags": [
+        "Marketplace",
+        "Vestuário e acessórios",
+        "São Paulo"
+      ],
+      "cta_label": "Comprar",
+      "cta_path": "/checkout",
+      "media_path": "",
+      "description": "Vestido midi canelado Valley vendido por Moda Centro Brasil com operação Valley.",
+      "gallery_urls": [
+        "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=1200&q=80"
+      ],
+      "profile_id": "loja-moda-centro",
+      "features": [
+        "Grade P ao GG",
+        "Troca facilitada",
+        "Envio em 24h"
+      ],
+      "seller": {
+        "name": "Moda Centro Brasil",
+        "headline": "Vestuário e acessórios - Despacho em 24h",
+        "avatar_url": "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=1200&q=80",
+        "rating": 4.8,
+        "city": "São Paulo"
+      },
+      "checkout": {
+        "headline": "Compra protegida Valley",
+        "shipping_brl": 19.9,
+        "service_brl": 0.0,
+        "installments": 10,
+        "eta": "Despacho em 24h"
+      },
+      "raw_badge": "MARKETPLACE",
+      "collection_label": "Brasil Desconto",
+      "model_name": "Vestido midi canelado Valley",
+      "google_product_category_id": "",
+      "google_product_category_path": "Moda",
+      "google_product_category": "Moda",
+      "availability_label": "42 unidades disponíveis",
+      "price_band": "Marketplace"
+    },
+    {
+      "id": "abeebf01-cb72-545f-a9c9-6f6fc40a998d",
+      "module_id": "MARKETPLACE",
+      "fixture_source": "valley_release_marketplace_v037",
+      "title": "Kit organizador de cozinha com 8 peças",
+      "brand": "Casa Prática",
+      "category": "Casa",
+      "price_brl": 84.9,
+      "compare_at_brl": 109.9,
+      "stock": 88,
+      "merchant_name": "Casa Prática Express",
+      "image_url": "https://images.unsplash.com/photo-1556911220-bff31c812dba?auto=format&fit=crop&w=1200&q=80",
+      "video_url": "",
+      "video_count": 0,
+      "status": "Publicado no marketplace",
+      "tags": [
+        "Marketplace",
+        "Casa, utilidades e decoração",
+        "Campinas"
+      ],
+      "cta_label": "Comprar",
+      "cta_path": "/checkout",
+      "media_path": "",
+      "description": "Kit organizador de cozinha com 8 peças vendido por Casa Prática Express com operação Valley.",
+      "gallery_urls": [
+        "https://images.unsplash.com/photo-1556911220-bff31c812dba?auto=format&fit=crop&w=1200&q=80"
+      ],
+      "profile_id": "casa-pratica",
+      "features": [
+        "BPA free",
+        "Empilhável",
+        "Controle de estoque por volume"
+      ],
+      "seller": {
+        "name": "Casa Prática Express",
+        "headline": "Casa, utilidades e decoração - Entrega regional em 48h",
+        "avatar_url": "https://images.unsplash.com/photo-1556911220-bff31c812dba?auto=format&fit=crop&w=1200&q=80",
+        "rating": 4.7,
+        "city": "Campinas"
+      },
+      "checkout": {
+        "headline": "Compra protegida Valley",
+        "shipping_brl": 19.9,
+        "service_brl": 0.0,
+        "installments": 10,
+        "eta": "Entrega regional em 48h"
+      },
+      "raw_badge": "MARKETPLACE",
+      "collection_label": "Brasil Desconto",
+      "model_name": "Kit organizador de cozinha com 8 peças",
+      "google_product_category_id": "",
+      "google_product_category_path": "Casa",
+      "google_product_category": "Casa",
+      "availability_label": "88 unidades disponíveis",
+      "price_band": "Marketplace"
+    },
+    {
+      "id": "c4c27ce0-4098-5f82-ad46-50187f3e9b0b",
+      "module_id": "MARKETPLACE",
+      "fixture_source": "valley_release_marketplace_v037",
+      "title": "Fone bluetooth Pro ANC",
+      "brand": "Tech Vitrine",
+      "category": "Eletrônicos",
+      "price_brl": 229.9,
+      "compare_at_brl": 279.9,
+      "stock": 31,
+      "merchant_name": "Tech Vitrine Pro",
+      "image_url": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1200&q=80",
+      "video_url": "",
+      "video_count": 0,
+      "status": "Publicado no marketplace",
+      "tags": [
+        "Marketplace",
+        "Eletrônicos e acessórios",
+        "Santos"
+      ],
+      "cta_label": "Comprar",
+      "cta_path": "/checkout",
+      "media_path": "",
+      "description": "Fone bluetooth Pro ANC vendido por Tech Vitrine Pro com operação Valley.",
+      "gallery_urls": [
+        "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1200&q=80"
+      ],
+      "profile_id": "tech-vitrine",
+      "features": [
+        "Cancelamento ativo",
+        "Garantia de 12 meses",
+        "Pronto para retirada"
+      ],
+      "seller": {
+        "name": "Tech Vitrine Pro",
+        "headline": "Eletrônicos e acessórios - Retirada e entrega no mesmo dia",
+        "avatar_url": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1200&q=80",
+        "rating": 4.9,
+        "city": "Santos"
+      },
+      "checkout": {
+        "headline": "Compra protegida Valley",
+        "shipping_brl": 19.9,
+        "service_brl": 0.0,
+        "installments": 10,
+        "eta": "Retirada e entrega no mesmo dia"
+      },
+      "raw_badge": "MARKETPLACE",
+      "collection_label": "Brasil Desconto",
+      "model_name": "Fone bluetooth Pro ANC",
+      "google_product_category_id": "",
+      "google_product_category_path": "Eletrônicos",
+      "google_product_category": "Eletrônicos",
+      "availability_label": "31 unidades disponíveis",
+      "price_band": "Marketplace"
+    },
+    {
+      "id": "ba7cdd66-8ccf-501c-ad25-e8da966f1fd9",
+      "module_id": "MARKETPLACE",
+      "fixture_source": "valley_release_marketplace_v037",
+      "title": "Câmera Wi-Fi interna 2K",
+      "brand": "Tech Vitrine",
+      "category": "Segurança",
+      "price_brl": 179.9,
+      "compare_at_brl": 219.9,
+      "stock": 56,
+      "merchant_name": "Tech Vitrine Pro",
+      "image_url": "https://images.unsplash.com/photo-1558002038-1055907df827?auto=format&fit=crop&w=1200&q=80",
+      "video_url": "",
+      "video_count": 0,
+      "status": "Publicado no marketplace",
+      "tags": [
+        "Marketplace",
+        "Eletrônicos e acessórios",
+        "Santos"
+      ],
+      "cta_label": "Comprar",
+      "cta_path": "/checkout",
+      "media_path": "",
+      "description": "Câmera Wi-Fi interna 2K vendido por Tech Vitrine Pro com operação Valley.",
+      "gallery_urls": [
+        "https://images.unsplash.com/photo-1558002038-1055907df827?auto=format&fit=crop&w=1200&q=80"
+      ],
+      "profile_id": "tech-vitrine",
+      "features": [
+        "Visão noturna",
+        "Áudio bidirecional",
+        "Instalação opcional"
+      ],
+      "seller": {
+        "name": "Tech Vitrine Pro",
+        "headline": "Eletrônicos e acessórios - Retirada e entrega no mesmo dia",
+        "avatar_url": "https://images.unsplash.com/photo-1558002038-1055907df827?auto=format&fit=crop&w=1200&q=80",
+        "rating": 4.9,
+        "city": "Santos"
+      },
+      "checkout": {
+        "headline": "Compra protegida Valley",
+        "shipping_brl": 19.9,
+        "service_brl": 0.0,
+        "installments": 10,
+        "eta": "Retirada e entrega no mesmo dia"
+      },
+      "raw_badge": "MARKETPLACE",
+      "collection_label": "Brasil Desconto",
+      "model_name": "Câmera Wi-Fi interna 2K",
+      "google_product_category_id": "",
+      "google_product_category_path": "Segurança",
+      "google_product_category": "Segurança",
+      "availability_label": "56 unidades disponíveis",
+      "price_band": "Marketplace"
     }
   ],
   "summary": {
-    "products": 1209
+    "products": 1213,
+    "visible_products": 84,
+    "real_supplier_products": 1209,
+    "marketplace_merchants": 4,
+    "marketplace_services": 3
   },
   "hero": {
     "title": "Valley Stock | Catalogo proprietario",

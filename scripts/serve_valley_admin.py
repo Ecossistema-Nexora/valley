@@ -2753,7 +2753,7 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
         if audience_key == "admin" and pending > 0:
             add_recommendation(
                 "release-pending",
-                title="Atacar pendencias do release MVP",
+                title="Atacar pendencias do release",
                 subtitle=f"{pending} itens ainda estao pendentes no release summary operacional.",
                 module_code="REPLY",
                 action_label="Ver prioridades",
@@ -3448,12 +3448,12 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 or "Aprovado automaticamente"
             )
             sanitized["publication_reason_codes"] = [
-                str(publication_policy.get("reason_code") or "auto_approved_mvp_total_delivery")
+                str(publication_policy.get("reason_code") or "auto_approved_release_catalog")
             ]
             sanitized["publication_reasons"] = [
                 str(
                     publication_policy.get("reason_label")
-                    or "Catalogo importado aprovado automaticamente nesta instancia MVP."
+                    or "Catalogo importado aprovado automaticamente nesta rotina release."
                 )
             ]
         if item_id:
@@ -4117,7 +4117,7 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
         }
 
     def _compact_product_shell_payload(self, payload: dict[str, Any]) -> dict[str, Any]:
-        """Mantem a API leve e alinhada ao MVP para mobile e tunel remoto."""
+        """Mantem a API leve para mobile e acesso publico Cloudflare."""
         active_modules = PRODUCT_MVP_MODULES
         compact = dict(payload)
 
@@ -4460,7 +4460,8 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             "blockExternalAiLookup": True,
         }
         reason_labels = {
-            "auto_approved_mvp_total_delivery": "Aprovacao automatica desta instancia MVP: catalogo importado liberado sem fila manual e sem regra de preco menor que concorrencia.",
+            "auto_approved_mvp_total_delivery": "Aprovacao automatica release: catalogo importado liberado sem fila manual e sem regra de preco menor que concorrencia.",
+            "auto_approved_release_catalog": "Aprovacao automatica release: catalogo importado liberado sem fila manual e sem regra de preco menor que concorrencia.",
             "benchmark_reference": "Item usado como benchmark de varejo para homologar preço de importação.",
             "catalog_import_disabled": "Importação de catálogo está desligada para este fornecedor.",
             "category_import_disabled": "Importação de categorias está desligada para este fornecedor.",

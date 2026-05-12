@@ -1,0 +1,134 @@
+{
+  "status": "ok",
+  "service": "valley-marketplace-demo-fixtures",
+  "generated_at_utc": "2026-05-12T07:39:06.064161Z",
+  "fixture_source": "valley_release_marketplace_v037",
+  "merchants": [
+    {
+      "id": "loja-moda-centro",
+      "name": "Moda Centro Brasil",
+      "segment": "Vestuário e acessórios",
+      "city": "São Paulo",
+      "rating": 4.8,
+      "sla": "Despacho em 24h"
+    },
+    {
+      "id": "casa-pratica",
+      "name": "Casa Prática Express",
+      "segment": "Casa, utilidades e decoração",
+      "city": "Campinas",
+      "rating": 4.7,
+      "sla": "Entrega regional em 48h"
+    },
+    {
+      "id": "tech-vitrine",
+      "name": "Tech Vitrine Pro",
+      "segment": "Eletrônicos e acessórios",
+      "city": "Santos",
+      "rating": 4.9,
+      "sla": "Retirada e entrega no mesmo dia"
+    },
+    {
+      "id": "servicos-urbanos",
+      "name": "Serviços Urbanos Valley",
+      "segment": "Serviços locais",
+      "city": "Belo Horizonte",
+      "rating": 4.6,
+      "sla": "Agenda sob demanda"
+    }
+  ],
+  "services": [
+    {
+      "id": "instalacao-smart-home",
+      "merchant_id": "servicos-urbanos",
+      "title": "Instalação smart home residencial",
+      "category": "Serviços",
+      "price_brl": 189.9,
+      "description": "Instalação de câmera, sensor, tomada inteligente e configuração inicial no aplicativo do cliente."
+    },
+    {
+      "id": "montagem-moveis",
+      "merchant_id": "casa-pratica",
+      "title": "Montagem de móveis compactos",
+      "category": "Serviços",
+      "price_brl": 149.9,
+      "description": "Serviço local para montagem de rack, mesa, cadeira, cômoda e organização pós-entrega."
+    },
+    {
+      "id": "retirada-troca-expressa",
+      "merchant_id": "tech-vitrine",
+      "title": "Retirada para troca expressa",
+      "category": "Logística reversa",
+      "price_brl": 39.9,
+      "description": "Coleta agendada para troca, devolução ou garantia com rastreio pelo marketplace."
+    }
+  ],
+  "products": [
+    {
+      "id": "vestido-midi-valley",
+      "merchant_id": "loja-moda-centro",
+      "title": "Vestido midi canelado Valley",
+      "brand": "Moda Centro",
+      "category": "Moda",
+      "price_brl": 119.9,
+      "compare_at_brl": 159.9,
+      "stock": 42,
+      "image_url": "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=1200&q=80",
+      "features": [
+        "Grade P ao GG",
+        "Troca facilitada",
+        "Envio em 24h"
+      ]
+    },
+    {
+      "id": "kit-organizador-cozinha",
+      "merchant_id": "casa-pratica",
+      "title": "Kit organizador de cozinha com 8 peças",
+      "brand": "Casa Prática",
+      "category": "Casa",
+      "price_brl": 84.9,
+      "compare_at_brl": 109.9,
+      "stock": 88,
+      "image_url": "https://images.unsplash.com/photo-1556911220-bff31c812dba?auto=format&fit=crop&w=1200&q=80",
+      "features": [
+        "BPA free",
+        "Empilhável",
+        "Controle de estoque por volume"
+      ]
+    },
+    {
+      "id": "fone-bluetooth-pro",
+      "merchant_id": "tech-vitrine",
+      "title": "Fone bluetooth Pro ANC",
+      "brand": "Tech Vitrine",
+      "category": "Eletrônicos",
+      "price_brl": 229.9,
+      "compare_at_brl": 279.9,
+      "stock": 31,
+      "image_url": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1200&q=80",
+      "features": [
+        "Cancelamento ativo",
+        "Garantia de 12 meses",
+        "Pronto para retirada"
+      ]
+    },
+    {
+      "id": "camera-wifi-interna",
+      "merchant_id": "tech-vitrine",
+      "title": "Câmera Wi-Fi interna 2K",
+      "brand": "Tech Vitrine",
+      "category": "Segurança",
+      "price_brl": 179.9,
+      "compare_at_brl": 219.9,
+      "stock": 56,
+      "image_url": "https://images.unsplash.com/photo-1558002038-1055907df827?auto=format&fit=crop&w=1200&q=80",
+      "features": [
+        "Visão noturna",
+        "Áudio bidirecional",
+        "Instalação opcional"
+      ]
+    }
+  ],
+  "catalog_items_total": 4,
+  "real_supplier_products": 1209
+}

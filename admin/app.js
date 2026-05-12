@@ -4005,7 +4005,7 @@
       state.marketplaceApiConfig = readMarketplaceApiConfig();
       renderAdminLaunchpad();
       renderMarketplaceIntegrations();
-      announce("Integracoes carregadas do fallback local.");
+      announce("Integracoes carregadas do rascunho deste navegador.");
     }
   }
 
@@ -4101,7 +4101,7 @@
 
       announce("Integracoes salvas no backend de producao.");
     } catch (error) {
-      announce("Integracoes salvas apenas no fallback local.");
+      announce("Integracoes salvas como rascunho neste navegador.");
     }
 
     renderAdminLaunchpad();

@@ -11,6 +11,10 @@ from uuid import NAMESPACE_URL, uuid5
 
 ROOT = Path(__file__).resolve().parents[1]
 CATALOG_PATH = ROOT / "frontend" / "flutter" / "assets" / "data" / "valley_product_catalog.json"
+REAL_STOCK_RUNTIME_PATH = ROOT / "tmp" / "runtime" / "valley-stock-real-catalog.json"
+BUNDLED_STOCK_RUNTIME_PATH = (
+    ROOT / "frontend" / "flutter" / "assets" / "data" / "valley_stock_runtime_ptbr.json"
+)
 RUNTIME_PATH = ROOT / "tmp" / "runtime" / "valley-marketplace-demo-fixtures.json"
 ASSET_PATH = ROOT / "frontend" / "flutter" / "assets" / "data" / "valley_marketplace_demo_fixtures.json"
 FIXTURE_SOURCE = "valley_release_marketplace_v037"
@@ -31,6 +35,47 @@ def read_json(path: Path) -> dict:
 def write_json(path: Path, payload: object) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+def item_count(payload: object) -> int:
+    if not isinstance(payload, dict):
+        return 0
+    items = payload.get("items")
+    return len(items) if isinstance(items, list) else 0
+
+
+def read_optional_json(path: Path) -> dict:
+    if not path.exists():
+        return {}
+    try:
+        return read_json(path)
+    except Exception:
+        return {}
+
+
+def sync_bundled_stock_runtime() -> int:
+    real_stock = read_optional_json(REAL_STOCK_RUNTIME_PATH)
+    bundled_stock = read_optional_json(BUNDLED_STOCK_RUNTIME_PATH)
+    real_count = item_count(real_stock)
+    bundled_count = item_count(bundled_stock)
+    if real_count > bundled_count:
+        public_runtime = real_stock.get("public_runtime")
+        if isinstance(public_runtime, dict):
+            public_runtime["public_url"] = "https://brasildesconto.com.br"
+            public_runtime["public_api_url"] = "https://brasildesconto.com.br/api/product-shell"
+            public_runtime.pop("local_api_url", None)
+        write_json(BUNDLED_STOCK_RUNTIME_PATH, real_stock)
+        return real_count
+    return bundled_count
+
+
+def sanitize_public_runtime(catalog: dict) -> None:
+    public_runtime = catalog.get("public_runtime")
+    if not isinstance(public_runtime, dict):
+        return
+    public_runtime["public_url"] = "https://brasildesconto.com.br"
+    public_runtime["public_api_url"] = "https://brasildesconto.com.br/api/product-shell"
+    public_runtime.pop("local_api_url", None)
 
 
 MERCHANTS = [
@@ -202,7 +247,9 @@ def product_to_catalog_item(product: dict) -> dict:
 
 
 def main() -> None:
+    real_stock_total = sync_bundled_stock_runtime()
     catalog = read_json(CATALOG_PATH)
+    sanitize_public_runtime(catalog)
     current_items = catalog.get("items") if isinstance(catalog.get("items"), list) else []
     current_items = [
         item
@@ -213,6 +260,12 @@ def main() -> None:
     catalog["items"] = current_items + marketplace_items
     summary = catalog.get("summary") if isinstance(catalog.get("summary"), dict) else {}
     summary["products"] = len(catalog["items"])
+    summary["visible_products"] = len(catalog["items"])
+    summary["real_supplier_products"] = max(
+        real_stock_total,
+        int(summary.get("real_supplier_products") or 0),
+        len([item for item in current_items if isinstance(item, dict) and item.get("module_id") == "STOCK"]),
+    )
     summary["marketplace_merchants"] = len(MERCHANTS)
     summary["marketplace_services"] = len(SERVICES)
     catalog["summary"] = summary
@@ -227,6 +280,7 @@ def main() -> None:
         "services": SERVICES,
         "products": PRODUCTS,
         "catalog_items_total": len(marketplace_items),
+        "real_supplier_products": summary["real_supplier_products"],
     }
     write_json(CATALOG_PATH, catalog)
     write_json(RUNTIME_PATH, payload)

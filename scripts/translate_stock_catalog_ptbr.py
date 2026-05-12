@@ -508,11 +508,11 @@ def update_public_preview(translated_runtime: dict[str, Any]) -> None:
     publication_policy = publication_policy if isinstance(publication_policy, dict) else {}
     auto_approve_imported_catalog = bool(publication_policy.get("auto_approve_imported_catalog"))
     auto_approval_reason_code = str(
-        publication_policy.get("reason_code") or "auto_approved_mvp_total_delivery"
+        publication_policy.get("reason_code") or "auto_approved_release_catalog"
     )
     auto_approval_reason_label = str(
         publication_policy.get("reason_label")
-        or "Catalogo importado aprovado automaticamente nesta instancia MVP."
+        or "Catalogo importado aprovado automaticamente nesta rotina release."
     )
     curated_stock_items = []
     for item in stock_items:

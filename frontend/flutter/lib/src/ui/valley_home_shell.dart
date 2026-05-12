@@ -518,7 +518,7 @@ class _ValleyHomeShellState extends State<ValleyHomeShell> {
       }
       setState(() {
         _remoteHomeStatus =
-            'Persistencia remota indisponivel; fallback local mantido.';
+            'Preferencias mantidas neste aparelho ate a proxima sincronizacao.';
       });
     }
   }
@@ -1723,21 +1723,21 @@ class _OverviewPage extends StatelessWidget {
             const SizedBox(height: 32),
             // Cabeçalho da seção de API da home.
             SectionHeader(
-              kicker: 'Home API',
-              title: 'Sinais personalizados da camada /me/*',
+              kicker: 'Minha conta',
+              title: 'Sinais personalizados da sua jornada',
               caption: remoteHomeLoading
-                  ? 'Sincronizando score, recomendacoes e acoes recentes do backend.'
+                  ? 'Sincronizando preferencias, recomendacoes e acoes recentes.'
                   : remoteHomeStatus.isNotEmpty
                   ? remoteHomeStatus
                   : remoteHomeData?.persistable == true
-                  ? 'Preferencias, recomendacoes e identidade agora saem da API autenticada.'
-                  : 'Sem sessao autenticada, a home usa dados basicos e fallback local.',
+                  ? 'Preferencias, recomendacoes e identidade estao sincronizadas.'
+                  : 'Entre na sua conta para ativar recomendacoes completas.',
               trailing: SignalChip(
                 label: remoteHomeLoading
-                    ? 'syncing'
+                    ? 'sincronizando'
                     : remoteHomeData?.persistable == true
-                    ? 'api live'
-                    : 'local fallback',
+                    ? 'sincronizado'
+                    : 'visitante',
                 color: remoteHomeLoading
                     ? ValleyBrandColors.warning
                     : remoteHomeData?.persistable == true
