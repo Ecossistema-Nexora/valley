@@ -3244,7 +3244,7 @@ class _StockSectionState extends State<_StockSection> {
                         ? 'Sincronizando catálogo real'
                         : _usingLiveCatalog
                         ? '${items.length} itens reais filtrados'
-                        : '${items.length} itens em fallback local',
+                        : '${items.length} itens disponíveis offline',
                     color: _usingLiveCatalog
                         ? ValleyBrandColors.cyan
                         : const Color(0xFFF6C760),

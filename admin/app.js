@@ -4729,8 +4729,8 @@
         elements.heroTitle.textContent = `${workspace.title} em modo de producao`;
         elements.heroSubcopy.textContent = `${workspace.copy} O painel permanece conectado ao manifesto, ao runtime publico e aos dashboards comerciais sem trocar de shell.`;
       } else {
-        elements.heroTitle.textContent = "Painel de producao para MVP e 47 modulos";
-        elements.heroSubcopy.textContent = "Supervisao executiva, trilha tecnica e leitura operacional em uma unica superficie. O painel cruza MVP, registry, contracts, roadmap, migrations, status de implantacao e exposicao publica para acesso externo.";
+        elements.heroTitle.textContent = "Painel de producao para 47 modulos";
+        elements.heroSubcopy.textContent = "Supervisao executiva, gestao comercial e leitura operacional em uma unica superficie. O painel cruza modulos, contratos, catalogo, checkout, lojistas, usuarios e exposicao publica Cloudflare.";
       }
     }
 

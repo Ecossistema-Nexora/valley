@@ -899,7 +899,12 @@ def evaluate_candidate(candidate: dict[str, Any], benchmarks: list[dict[str, Any
 
     if estimated_profit < safe_float(rules.get("min_estimated_profit_brl"), 18):
         failures.append("profit_below_minimum")
-    if market_floor > 0 and advantage_pct < safe_float(rules.get("min_marketplace_advantage_pct"), 10):
+    ignore_marketplace_advantage = bool(rules.get("ignore_marketplace_advantage"))
+    if (
+        not ignore_marketplace_advantage
+        and market_floor > 0
+        and advantage_pct < safe_float(rules.get("min_marketplace_advantage_pct"), 10)
+    ):
         failures.append("marketplace_advantage_below_minimum")
 
     local_fit_score = min(100, source_score + sum(8 for term in preferred_terms if term and term in title))
@@ -1009,12 +1014,21 @@ def category_report(evaluated: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return list(by_category.values())
 
 
-def run_selection(max_categories: int, max_products_per_category: int, max_candidates: int, dry_run: bool) -> dict[str, Any]:
+def run_selection(
+    max_categories: int,
+    max_products_per_category: int,
+    max_candidates: int,
+    dry_run: bool,
+    ignore_marketplace_advantage: bool = False,
+) -> dict[str, Any]:
     config = load_json(CONFIG_PATH, {})
     integrations = load_json(INTEGRATIONS_PATH, [])
     secrets = load_json(SECRETS_PATH, {})
     rules = config.get("commercial_rules") if isinstance(config, dict) else {}
     rules = rules if isinstance(rules, dict) else {}
+    if ignore_marketplace_advantage or env_flag("VALLEY_IGNORE_MARKETPLACE_ADVANTAGE"):
+        rules = dict(rules)
+        rules["ignore_marketplace_advantage"] = True
 
     all_categories: list[dict[str, Any]] = []
     candidates: list[dict[str, Any]] = []
@@ -1106,6 +1120,7 @@ def run_selection(max_categories: int, max_products_per_category: int, max_candi
         "source_providers": list(SOURCE_PROVIDERS),
         "benchmark_providers": list(BENCHMARK_PROVIDERS),
         "allow_scraping": False,
+        "ignore_marketplace_advantage": bool(rules.get("ignore_marketplace_advantage")),
         "categories_total": len(all_categories),
         "candidates_total": len(candidates),
         "eligible_total": len(eligible),
@@ -1168,12 +1183,18 @@ def main() -> None:
     parser.add_argument("--max-products-per-category", type=int, default=12)
     parser.add_argument("--max-candidates", type=int, default=120)
     parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument(
+        "--ignore-marketplace-advantage",
+        action="store_true",
+        help="Libera a regra de vantagem minima de marketplace, inclusive o corte de 10 por cento.",
+    )
     args = parser.parse_args()
     payload = run_selection(
         max_categories=args.max_categories,
         max_products_per_category=args.max_products_per_category,
         max_candidates=args.max_candidates,
         dry_run=args.dry_run,
+        ignore_marketplace_advantage=args.ignore_marketplace_advantage,
     )
     print(json.dumps(payload, ensure_ascii=False, indent=2))
 

@@ -38,7 +38,8 @@ $steps += Invoke-ValleyStep -Name "dropshipping_eligible_10k" -Command @(
   "scripts\import_dropshipping_eligible_products.py",
   "--max-categories", "$MaxCategories",
   "--max-products-per-category", "$MaxProductsPerCategory",
-  "--max-candidates", "$TargetItems"
+  "--max-candidates", "$TargetItems",
+  "--ignore-marketplace-advantage"
 )
 
 $importCommand = @("python", "scripts\import_real_stock_catalog.py", "--target-items", "$TargetItems")
