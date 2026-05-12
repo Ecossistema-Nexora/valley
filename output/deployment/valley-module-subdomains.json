@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-05-12T01:25:30Z",
+  "generated_at_utc": "2026-05-12T03:20:34Z",
   "public_host": "brasildesconto.com.br",
   "admin_host": "admin.brasildesconto.com.br",
   "zone_host": "admin.brasildesconto.com.br",
@@ -22,11 +22,403 @@
       "hostname": "*.admin.brasildesconto.com.br",
       "service": "http://192.168.1.2:8085",
       "originRequest": {}
+    },
+    {
+      "hostname": "stock-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "dropshipping-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "marketplace-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "review-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "finance-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "merchants-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "users-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "checkout-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "sandbox-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "01-reply-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "02-stock-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "03-log-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "04-food-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "05-delivery-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "06-wms-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "07-marketplace-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "08-pay-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "09-fleet-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "10-services-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "11-digital-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "12-real-estate-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "13-health-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "14-edu-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "15-tech-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "16-jobs-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "17-news-podcast-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "18-ads-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "19-influencers-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "20-social-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "21-fitness-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "22-pharmacy-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "23-vet-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "24-tourism-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "25-events-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "26-mobility-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "27-security-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "28-gov-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "29-legal-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "30-charity-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "31-insurance-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "32-gaming-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "33-iot-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "34-bio-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "35-home-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "36-energy-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "37-space-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "38-agenda-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "39-advisor-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "40-financas-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "41-mente-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "42-business-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "43-plug-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "44-up-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "45-media-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "46-chat-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "47-docs-admin.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "lojista.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "erp-lojista.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "pdv-lojista.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "armazem-lojista.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "metricas-lojista.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "campanhas-lojista.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "relatorios-lojista.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "financeiro-lojista.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "cadastro-lojista.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "perfil-lojista.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "contabil-lojista.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "integracao-lojista.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "pedidos-lojista.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "produtos-lojista.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "clientes-lojista.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "fiscal-lojista.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "estoque-lojista.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "logistica-lojista.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "atendimento-lojista.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "equipe-lojista.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "seguranca-lojista.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
+    },
+    {
+      "hostname": "configuracoes-lojista.brasildesconto.com.br",
+      "service": "http://192.168.1.2:8085",
+      "originRequest": {}
     }
   ],
   "gateway_records_total": 3,
   "module_records_total": 56,
-  "records_total": 59,
+  "cost_zero_alias_records_total": 56,
+  "merchant_erp_records_total": 22,
+  "records_total": 137,
   "records": [
     {
       "kind": "public_site",
@@ -617,6 +1009,920 @@
       "type": "CNAME",
       "content": "admin.brasildesconto.com.br",
       "proxied": true
+    },
+    {
+      "kind": "static_workspace_cost_zero_alias",
+      "key": "stock-https-alias",
+      "title": "Painel STOCK HTTPS alias",
+      "module_code": "",
+      "name": "stock-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "stock.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "static_workspace_cost_zero_alias",
+      "key": "dropshipping-https-alias",
+      "title": "Dropshipping HTTPS alias",
+      "module_code": "",
+      "name": "dropshipping-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "dropshipping.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "static_workspace_cost_zero_alias",
+      "key": "marketplace-https-alias",
+      "title": "Marketplace HTTPS alias",
+      "module_code": "",
+      "name": "marketplace-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "marketplace.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "static_workspace_cost_zero_alias",
+      "key": "review-https-alias",
+      "title": "Revisao HTTPS alias",
+      "module_code": "",
+      "name": "review-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "review.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "static_workspace_cost_zero_alias",
+      "key": "finance-https-alias",
+      "title": "Financeiro HTTPS alias",
+      "module_code": "",
+      "name": "finance-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "finance.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "static_workspace_cost_zero_alias",
+      "key": "merchants-https-alias",
+      "title": "Lojistas HTTPS alias",
+      "module_code": "",
+      "name": "merchants-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "merchants.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "static_workspace_cost_zero_alias",
+      "key": "users-https-alias",
+      "title": "Usuarios HTTPS alias",
+      "module_code": "",
+      "name": "users-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "users.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "static_workspace_cost_zero_alias",
+      "key": "checkout-https-alias",
+      "title": "Checkout HTTPS alias",
+      "module_code": "",
+      "name": "checkout-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "checkout.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "static_workspace_cost_zero_alias",
+      "key": "sandbox-https-alias",
+      "title": "Sandbox e Flags HTTPS alias",
+      "module_code": "",
+      "name": "sandbox-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "sandbox.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "module_workspace_cost_zero_alias",
+      "key": "module-reply-https-alias",
+      "title": "REPLY - Valley REPLY HTTPS alias",
+      "module_code": "REPLY",
+      "name": "01-reply-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "01-reply.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "module_workspace_cost_zero_alias",
+      "key": "module-stock-https-alias",
+      "title": "STOCK - Valley Stock HTTPS alias",
+      "module_code": "STOCK",
+      "name": "02-stock-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "02-stock.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "module_workspace_cost_zero_alias",
+      "key": "module-log-https-alias",
+      "title": "LOG - Valley Log HTTPS alias",
+      "module_code": "LOG",
+      "name": "03-log-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "03-log.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "module_workspace_cost_zero_alias",
+      "key": "module-food-https-alias",
+      "title": "FOOD - Valley Food HTTPS alias",
+      "module_code": "FOOD",
+      "name": "04-food-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "04-food.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "module_workspace_cost_zero_alias",
+      "key": "module-delivery-https-alias",
+      "title": "DELIVERY - Valley Delivery HTTPS alias",
+      "module_code": "DELIVERY",
+      "name": "05-delivery-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "05-delivery.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "module_workspace_cost_zero_alias",
+      "key": "module-wms-https-alias",
+      "title": "WMS - Valley WMS HTTPS alias",
+      "module_code": "WMS",
+      "name": "06-wms-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "06-wms.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "module_workspace_cost_zero_alias",
+      "key": "module-marketplace-https-alias",
+      "title": "MARKETPLACE - Valley Marketplace HTTPS alias",
+      "module_code": "MARKETPLACE",
+      "name": "07-marketplace-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "07-marketplace.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "module_workspace_cost_zero_alias",
+      "key": "module-pay-https-alias",
+      "title": "PAY - Valley Pay HTTPS alias",
+      "module_code": "PAY",
+      "name": "08-pay-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "08-pay.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "module_workspace_cost_zero_alias",
+      "key": "module-fleet-https-alias",
+      "title": "FLEET - Valley Fleet HTTPS alias",
+      "module_code": "FLEET",
+      "name": "09-fleet-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "09-fleet.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "module_workspace_cost_zero_alias",
+      "key": "module-services-https-alias",
+      "title": "SERVICES - Valley Services HTTPS alias",
+      "module_code": "SERVICES",
+      "name": "10-services-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "10-services.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "module_workspace_cost_zero_alias",
+      "key": "module-digital-https-alias",
+      "title": "DIGITAL - Valley Digital HTTPS alias",
+      "module_code": "DIGITAL",
+      "name": "11-digital-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "11-digital.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "module_workspace_cost_zero_alias",
+      "key": "module-real_estate-https-alias",
+      "title": "REAL_ESTATE - Valley Real Estate HTTPS alias",
+      "module_code": "REAL_ESTATE",
+      "name": "12-real-estate-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "12-real-estate.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "module_workspace_cost_zero_alias",
+      "key": "module-health-https-alias",
+      "title": "HEALTH - Valley Health HTTPS alias",
+      "module_code": "HEALTH",
+      "name": "13-health-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "13-health.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "module_workspace_cost_zero_alias",
+      "key": "module-edu-https-alias",
+      "title": "EDU - Valley Edu HTTPS alias",
+      "module_code": "EDU",
+      "name": "14-edu-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "14-edu.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "module_workspace_cost_zero_alias",
+      "key": "module-tech-https-alias",
+      "title": "TECH - Valley Tech HTTPS alias",
+      "module_code": "TECH",
+      "name": "15-tech-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "15-tech.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "module_workspace_cost_zero_alias",
+      "key": "module-jobs-https-alias",
+      "title": "JOBS - Valley Jobs HTTPS alias",
+      "module_code": "JOBS",
+      "name": "16-jobs-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "16-jobs.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "module_workspace_cost_zero_alias",
+      "key": "module-news_podcast-https-alias",
+      "title": "NEWS_PODCAST - Valley News & Podcast HTTPS alias",
+      "module_code": "NEWS_PODCAST",
+      "name": "17-news-podcast-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "17-news-podcast.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "module_workspace_cost_zero_alias",
+      "key": "module-ads-https-alias",
+      "title": "ADS - Valley Ads HTTPS alias",
+      "module_code": "ADS",
+      "name": "18-ads-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "18-ads.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "module_workspace_cost_zero_alias",
+      "key": "module-influencers-https-alias",
+      "title": "INFLUENCERS - Valley Influencers HTTPS alias",
+      "module_code": "INFLUENCERS",
+      "name": "19-influencers-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "19-influencers.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "module_workspace_cost_zero_alias",
+      "key": "module-social-https-alias",
+      "title": "SOCIAL - Valley Social HTTPS alias",
+      "module_code": "SOCIAL",
+      "name": "20-social-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "20-social.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "module_workspace_cost_zero_alias",
+      "key": "module-fitness-https-alias",
+      "title": "FITNESS - Valley Fitness HTTPS alias",
+      "module_code": "FITNESS",
+      "name": "21-fitness-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "21-fitness.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "module_workspace_cost_zero_alias",
+      "key": "module-pharmacy-https-alias",
+      "title": "PHARMACY - Valley Pharmacy HTTPS alias",
+      "module_code": "PHARMACY",
+      "name": "22-pharmacy-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "22-pharmacy.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "module_workspace_cost_zero_alias",
+      "key": "module-vet-https-alias",
+      "title": "VET - Valley Vet HTTPS alias",
+      "module_code": "VET",
+      "name": "23-vet-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "23-vet.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "module_workspace_cost_zero_alias",
+      "key": "module-tourism-https-alias",
+      "title": "TOURISM - Valley Tourism HTTPS alias",
+      "module_code": "TOURISM",
+      "name": "24-tourism-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "24-tourism.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "module_workspace_cost_zero_alias",
+      "key": "module-events-https-alias",
+      "title": "EVENTS - Valley Events HTTPS alias",
+      "module_code": "EVENTS",
+      "name": "25-events-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "25-events.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "module_workspace_cost_zero_alias",
+      "key": "module-mobility-https-alias",
+      "title": "MOBILITY - Valley Mobility HTTPS alias",
+      "module_code": "MOBILITY",
+      "name": "26-mobility-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "26-mobility.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "module_workspace_cost_zero_alias",
+      "key": "module-security-https-alias",
+      "title": "SECURITY - Valley Security HTTPS alias",
+      "module_code": "SECURITY",
+      "name": "27-security-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "27-security.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "module_workspace_cost_zero_alias",
+      "key": "module-gov-https-alias",
+      "title": "GOV - Valley Gov HTTPS alias",
+      "module_code": "GOV",
+      "name": "28-gov-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "28-gov.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "module_workspace_cost_zero_alias",
+      "key": "module-legal-https-alias",
+      "title": "LEGAL - Valley Legal HTTPS alias",
+      "module_code": "LEGAL",
+      "name": "29-legal-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "29-legal.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "module_workspace_cost_zero_alias",
+      "key": "module-charity-https-alias",
+      "title": "CHARITY - Valley Charity HTTPS alias",
+      "module_code": "CHARITY",
+      "name": "30-charity-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "30-charity.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "module_workspace_cost_zero_alias",
+      "key": "module-insurance-https-alias",
+      "title": "INSURANCE - Valley Insurance HTTPS alias",
+      "module_code": "INSURANCE",
+      "name": "31-insurance-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "31-insurance.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "module_workspace_cost_zero_alias",
+      "key": "module-gaming-https-alias",
+      "title": "GAMING - Valley Gaming HTTPS alias",
+      "module_code": "GAMING",
+      "name": "32-gaming-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "32-gaming.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "module_workspace_cost_zero_alias",
+      "key": "module-iot-https-alias",
+      "title": "IOT - Valley IoT HTTPS alias",
+      "module_code": "IOT",
+      "name": "33-iot-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "33-iot.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "module_workspace_cost_zero_alias",
+      "key": "module-bio-https-alias",
+      "title": "BIO - Valley Bio HTTPS alias",
+      "module_code": "BIO",
+      "name": "34-bio-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "34-bio.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "module_workspace_cost_zero_alias",
+      "key": "module-home-https-alias",
+      "title": "HOME - Valley Home HTTPS alias",
+      "module_code": "HOME",
+      "name": "35-home-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "35-home.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "module_workspace_cost_zero_alias",
+      "key": "module-energy-https-alias",
+      "title": "ENERGY - Valley Energy HTTPS alias",
+      "module_code": "ENERGY",
+      "name": "36-energy-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "36-energy.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "module_workspace_cost_zero_alias",
+      "key": "module-space-https-alias",
+      "title": "SPACE - Valley Space HTTPS alias",
+      "module_code": "SPACE",
+      "name": "37-space-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "37-space.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "module_workspace_cost_zero_alias",
+      "key": "module-agenda-https-alias",
+      "title": "AGENDA - Valley Agenda HTTPS alias",
+      "module_code": "AGENDA",
+      "name": "38-agenda-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "38-agenda.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "module_workspace_cost_zero_alias",
+      "key": "module-advisor-https-alias",
+      "title": "ADVISOR - Valley Advisor HTTPS alias",
+      "module_code": "ADVISOR",
+      "name": "39-advisor-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "39-advisor.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "module_workspace_cost_zero_alias",
+      "key": "module-financas-https-alias",
+      "title": "FINANCAS - Valley Financas HTTPS alias",
+      "module_code": "FINANCAS",
+      "name": "40-financas-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "40-financas.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "module_workspace_cost_zero_alias",
+      "key": "module-mente-https-alias",
+      "title": "MENTE - Valley Mente HTTPS alias",
+      "module_code": "MENTE",
+      "name": "41-mente-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "41-mente.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "module_workspace_cost_zero_alias",
+      "key": "module-business-https-alias",
+      "title": "BUSINESS - Valley Business HTTPS alias",
+      "module_code": "BUSINESS",
+      "name": "42-business-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "42-business.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "module_workspace_cost_zero_alias",
+      "key": "module-plug-https-alias",
+      "title": "PLUG - Valley Plug HTTPS alias",
+      "module_code": "PLUG",
+      "name": "43-plug-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "43-plug.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "module_workspace_cost_zero_alias",
+      "key": "module-up-https-alias",
+      "title": "UP - Valley Up HTTPS alias",
+      "module_code": "UP",
+      "name": "44-up-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "44-up.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "module_workspace_cost_zero_alias",
+      "key": "module-media-https-alias",
+      "title": "MEDIA - Valley Media HTTPS alias",
+      "module_code": "MEDIA",
+      "name": "45-media-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "45-media.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "module_workspace_cost_zero_alias",
+      "key": "module-chat-https-alias",
+      "title": "CHAT - Valley Chat HTTPS alias",
+      "module_code": "CHAT",
+      "name": "46-chat-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "46-chat.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "module_workspace_cost_zero_alias",
+      "key": "module-docs-https-alias",
+      "title": "DOCS - Valley Docs HTTPS alias",
+      "module_code": "DOCS",
+      "name": "47-docs-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "canonical_name": "47-docs.admin.brasildesconto.com.br",
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "merchant_erp_workspace",
+      "key": "merchant-login",
+      "title": "Login Lojista",
+      "module_code": "MERCHANT_ERP",
+      "name": "lojista.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "merchant_erp_workspace",
+      "key": "merchant-erp",
+      "title": "ERP Lojista",
+      "module_code": "MERCHANT_ERP",
+      "name": "erp-lojista.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "merchant_erp_workspace",
+      "key": "merchant-pdv",
+      "title": "PDV",
+      "module_code": "MERCHANT_ERP",
+      "name": "pdv-lojista.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "merchant_erp_workspace",
+      "key": "merchant-warehouse",
+      "title": "Armazem",
+      "module_code": "MERCHANT_ERP",
+      "name": "armazem-lojista.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "merchant_erp_workspace",
+      "key": "merchant-metrics",
+      "title": "Metricas",
+      "module_code": "MERCHANT_ERP",
+      "name": "metricas-lojista.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "merchant_erp_workspace",
+      "key": "merchant-campaigns",
+      "title": "Campanhas",
+      "module_code": "MERCHANT_ERP",
+      "name": "campanhas-lojista.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "merchant_erp_workspace",
+      "key": "merchant-reports",
+      "title": "Relatorios",
+      "module_code": "MERCHANT_ERP",
+      "name": "relatorios-lojista.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "merchant_erp_workspace",
+      "key": "merchant-finance",
+      "title": "Financeiro",
+      "module_code": "MERCHANT_ERP",
+      "name": "financeiro-lojista.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "merchant_erp_workspace",
+      "key": "merchant-registration",
+      "title": "Cadastro",
+      "module_code": "MERCHANT_ERP",
+      "name": "cadastro-lojista.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "merchant_erp_workspace",
+      "key": "merchant-profile",
+      "title": "Perfil",
+      "module_code": "MERCHANT_ERP",
+      "name": "perfil-lojista.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "merchant_erp_workspace",
+      "key": "merchant-accounting",
+      "title": "Contabil",
+      "module_code": "MERCHANT_ERP",
+      "name": "contabil-lojista.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "merchant_erp_workspace",
+      "key": "merchant-integrations",
+      "title": "Integracao",
+      "module_code": "MERCHANT_ERP",
+      "name": "integracao-lojista.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "merchant_erp_workspace",
+      "key": "merchant-orders",
+      "title": "Pedidos",
+      "module_code": "MERCHANT_ERP",
+      "name": "pedidos-lojista.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "merchant_erp_workspace",
+      "key": "merchant-products",
+      "title": "Produtos",
+      "module_code": "MERCHANT_ERP",
+      "name": "produtos-lojista.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "merchant_erp_workspace",
+      "key": "merchant-customers",
+      "title": "Clientes",
+      "module_code": "MERCHANT_ERP",
+      "name": "clientes-lojista.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "merchant_erp_workspace",
+      "key": "merchant-tax",
+      "title": "Fiscal",
+      "module_code": "MERCHANT_ERP",
+      "name": "fiscal-lojista.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "merchant_erp_workspace",
+      "key": "merchant-inventory",
+      "title": "Estoque",
+      "module_code": "MERCHANT_ERP",
+      "name": "estoque-lojista.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "merchant_erp_workspace",
+      "key": "merchant-logistics",
+      "title": "Logistica",
+      "module_code": "MERCHANT_ERP",
+      "name": "logistica-lojista.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "merchant_erp_workspace",
+      "key": "merchant-support",
+      "title": "Atendimento",
+      "module_code": "MERCHANT_ERP",
+      "name": "atendimento-lojista.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "merchant_erp_workspace",
+      "key": "merchant-team",
+      "title": "Equipe",
+      "module_code": "MERCHANT_ERP",
+      "name": "equipe-lojista.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "merchant_erp_workspace",
+      "key": "merchant-security",
+      "title": "Seguranca",
+      "module_code": "MERCHANT_ERP",
+      "name": "seguranca-lojista.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "cost_zero_ssl_compatible": true
+    },
+    {
+      "kind": "merchant_erp_workspace",
+      "key": "merchant-settings",
+      "title": "Configuracoes",
+      "module_code": "MERCHANT_ERP",
+      "name": "configuracoes-lojista.brasildesconto.com.br",
+      "type": "CNAME",
+      "content": "80a75594-5129-469f-8cce-4a938ac48e06.cfargotunnel.com",
+      "proxied": true,
+      "cost_zero_ssl_compatible": true
     }
   ],
   "apply_status": "applied",
@@ -635,285 +1941,675 @@
     {
       "name": "*.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "stock.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "dropshipping.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "marketplace.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "review.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "finance.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "merchants.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "users.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "checkout.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "sandbox.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "01-reply.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "02-stock.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "03-log.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "04-food.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "05-delivery.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "06-wms.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "07-marketplace.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "08-pay.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "09-fleet.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "10-services.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "11-digital.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "12-real-estate.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "13-health.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "14-edu.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "15-tech.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "16-jobs.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "17-news-podcast.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "18-ads.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "19-influencers.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "20-social.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "21-fitness.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "22-pharmacy.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "23-vet.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "24-tourism.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "25-events.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "26-mobility.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "27-security.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "28-gov.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "29-legal.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "30-charity.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "31-insurance.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "32-gaming.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "33-iot.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "34-bio.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "35-home.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "36-energy.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "37-space.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "38-agenda.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "39-advisor.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "40-financas.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "41-mente.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "42-business.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "43-plug.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "44-up.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "45-media.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "46-chat.admin.brasildesconto.com.br",
       "type": "CNAME",
-      "action": "created"
+      "action": "updated"
     },
     {
       "name": "47-docs.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "stock-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "dropshipping-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "marketplace-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "review-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "finance-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "merchants-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "users-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "checkout-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "sandbox-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "01-reply-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "02-stock-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "03-log-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "04-food-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "05-delivery-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "06-wms-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "07-marketplace-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "08-pay-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "09-fleet-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "10-services-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "11-digital-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "12-real-estate-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "13-health-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "14-edu-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "15-tech-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "16-jobs-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "17-news-podcast-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "18-ads-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "19-influencers-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "20-social-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "21-fitness-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "22-pharmacy-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "23-vet-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "24-tourism-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "25-events-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "26-mobility-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "27-security-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "28-gov-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "29-legal-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "30-charity-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "31-insurance-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "32-gaming-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "33-iot-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "34-bio-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "35-home-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "36-energy-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "37-space-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "38-agenda-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "39-advisor-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "40-financas-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "41-mente-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "42-business-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "43-plug-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "44-up-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "45-media-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "46-chat-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "47-docs-admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "lojista.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "erp-lojista.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "pdv-lojista.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "armazem-lojista.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "metricas-lojista.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "campanhas-lojista.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "relatorios-lojista.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "financeiro-lojista.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "cadastro-lojista.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "perfil-lojista.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "contabil-lojista.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "integracao-lojista.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "pedidos-lojista.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "produtos-lojista.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "clientes-lojista.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "fiscal-lojista.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "estoque-lojista.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "logistica-lojista.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "atendimento-lojista.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "equipe-lojista.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "seguranca-lojista.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "configuracoes-lojista.brasildesconto.com.br",
       "type": "CNAME",
       "action": "created"
     }
@@ -923,8 +2619,86 @@
     "origin_url": "http://192.168.1.2:8085",
     "desired_hosts": [
       "*.admin.brasildesconto.com.br",
+      "01-reply-admin.brasildesconto.com.br",
+      "02-stock-admin.brasildesconto.com.br",
+      "03-log-admin.brasildesconto.com.br",
+      "04-food-admin.brasildesconto.com.br",
+      "05-delivery-admin.brasildesconto.com.br",
+      "06-wms-admin.brasildesconto.com.br",
+      "07-marketplace-admin.brasildesconto.com.br",
+      "08-pay-admin.brasildesconto.com.br",
+      "09-fleet-admin.brasildesconto.com.br",
+      "10-services-admin.brasildesconto.com.br",
+      "11-digital-admin.brasildesconto.com.br",
+      "12-real-estate-admin.brasildesconto.com.br",
+      "13-health-admin.brasildesconto.com.br",
+      "14-edu-admin.brasildesconto.com.br",
+      "15-tech-admin.brasildesconto.com.br",
+      "16-jobs-admin.brasildesconto.com.br",
+      "17-news-podcast-admin.brasildesconto.com.br",
+      "18-ads-admin.brasildesconto.com.br",
+      "19-influencers-admin.brasildesconto.com.br",
+      "20-social-admin.brasildesconto.com.br",
+      "21-fitness-admin.brasildesconto.com.br",
+      "22-pharmacy-admin.brasildesconto.com.br",
+      "23-vet-admin.brasildesconto.com.br",
+      "24-tourism-admin.brasildesconto.com.br",
+      "25-events-admin.brasildesconto.com.br",
+      "26-mobility-admin.brasildesconto.com.br",
+      "27-security-admin.brasildesconto.com.br",
+      "28-gov-admin.brasildesconto.com.br",
+      "29-legal-admin.brasildesconto.com.br",
+      "30-charity-admin.brasildesconto.com.br",
+      "31-insurance-admin.brasildesconto.com.br",
+      "32-gaming-admin.brasildesconto.com.br",
+      "33-iot-admin.brasildesconto.com.br",
+      "34-bio-admin.brasildesconto.com.br",
+      "35-home-admin.brasildesconto.com.br",
+      "36-energy-admin.brasildesconto.com.br",
+      "37-space-admin.brasildesconto.com.br",
+      "38-agenda-admin.brasildesconto.com.br",
+      "39-advisor-admin.brasildesconto.com.br",
+      "40-financas-admin.brasildesconto.com.br",
+      "41-mente-admin.brasildesconto.com.br",
+      "42-business-admin.brasildesconto.com.br",
+      "43-plug-admin.brasildesconto.com.br",
+      "44-up-admin.brasildesconto.com.br",
+      "45-media-admin.brasildesconto.com.br",
+      "46-chat-admin.brasildesconto.com.br",
+      "47-docs-admin.brasildesconto.com.br",
       "admin.brasildesconto.com.br",
-      "brasildesconto.com.br"
+      "armazem-lojista.brasildesconto.com.br",
+      "atendimento-lojista.brasildesconto.com.br",
+      "brasildesconto.com.br",
+      "cadastro-lojista.brasildesconto.com.br",
+      "campanhas-lojista.brasildesconto.com.br",
+      "checkout-admin.brasildesconto.com.br",
+      "clientes-lojista.brasildesconto.com.br",
+      "configuracoes-lojista.brasildesconto.com.br",
+      "contabil-lojista.brasildesconto.com.br",
+      "dropshipping-admin.brasildesconto.com.br",
+      "equipe-lojista.brasildesconto.com.br",
+      "erp-lojista.brasildesconto.com.br",
+      "estoque-lojista.brasildesconto.com.br",
+      "finance-admin.brasildesconto.com.br",
+      "financeiro-lojista.brasildesconto.com.br",
+      "fiscal-lojista.brasildesconto.com.br",
+      "integracao-lojista.brasildesconto.com.br",
+      "logistica-lojista.brasildesconto.com.br",
+      "lojista.brasildesconto.com.br",
+      "marketplace-admin.brasildesconto.com.br",
+      "merchants-admin.brasildesconto.com.br",
+      "metricas-lojista.brasildesconto.com.br",
+      "pdv-lojista.brasildesconto.com.br",
+      "pedidos-lojista.brasildesconto.com.br",
+      "perfil-lojista.brasildesconto.com.br",
+      "produtos-lojista.brasildesconto.com.br",
+      "relatorios-lojista.brasildesconto.com.br",
+      "review-admin.brasildesconto.com.br",
+      "sandbox-admin.brasildesconto.com.br",
+      "seguranca-lojista.brasildesconto.com.br",
+      "stock-admin.brasildesconto.com.br",
+      "users-admin.brasildesconto.com.br"
     ],
     "preserved_hosts": [
       "www.brasildesconto.com.br"

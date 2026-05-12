@@ -26,6 +26,7 @@ DEFAULT_TARGET_HOST = "admin.brasildesconto.com.br"
 DEFAULT_TUNNEL_ID = "80a75594-5129-469f-8cce-4a938ac48e06"
 DEFAULT_ACCOUNT_ID = "474fc26bf9c6bcf5e1a84b7f63a516d8"
 DEFAULT_ORIGIN_URL = "http://192.168.1.2:8085"
+DEFAULT_COST_ZERO_ALIASES = True
 
 STATIC_WORKSPACES = [
     {"key": "stock", "title": "Painel STOCK", "subdomain": "stock"},
@@ -37,6 +38,31 @@ STATIC_WORKSPACES = [
     {"key": "users", "title": "Usuarios", "subdomain": "users"},
     {"key": "checkout", "title": "Checkout", "subdomain": "checkout"},
     {"key": "sandbox", "title": "Sandbox e Flags", "subdomain": "sandbox"},
+]
+
+MERCHANT_ERP_WORKSPACES = [
+    {"key": "merchant-login", "title": "Login Lojista", "host": "lojista"},
+    {"key": "merchant-erp", "title": "ERP Lojista", "host": "erp-lojista"},
+    {"key": "merchant-pdv", "title": "PDV", "host": "pdv-lojista"},
+    {"key": "merchant-warehouse", "title": "Armazem", "host": "armazem-lojista"},
+    {"key": "merchant-metrics", "title": "Metricas", "host": "metricas-lojista"},
+    {"key": "merchant-campaigns", "title": "Campanhas", "host": "campanhas-lojista"},
+    {"key": "merchant-reports", "title": "Relatorios", "host": "relatorios-lojista"},
+    {"key": "merchant-finance", "title": "Financeiro", "host": "financeiro-lojista"},
+    {"key": "merchant-registration", "title": "Cadastro", "host": "cadastro-lojista"},
+    {"key": "merchant-profile", "title": "Perfil", "host": "perfil-lojista"},
+    {"key": "merchant-accounting", "title": "Contabil", "host": "contabil-lojista"},
+    {"key": "merchant-integrations", "title": "Integracao", "host": "integracao-lojista"},
+    {"key": "merchant-orders", "title": "Pedidos", "host": "pedidos-lojista"},
+    {"key": "merchant-products", "title": "Produtos", "host": "produtos-lojista"},
+    {"key": "merchant-customers", "title": "Clientes", "host": "clientes-lojista"},
+    {"key": "merchant-tax", "title": "Fiscal", "host": "fiscal-lojista"},
+    {"key": "merchant-inventory", "title": "Estoque", "host": "estoque-lojista"},
+    {"key": "merchant-logistics", "title": "Logistica", "host": "logistica-lojista"},
+    {"key": "merchant-support", "title": "Atendimento", "host": "atendimento-lojista"},
+    {"key": "merchant-team", "title": "Equipe", "host": "equipe-lojista"},
+    {"key": "merchant-security", "title": "Seguranca", "host": "seguranca-lojista"},
+    {"key": "merchant-settings", "title": "Configuracoes", "host": "configuracoes-lojista"},
 ]
 
 
@@ -152,12 +178,72 @@ def module_records(zone_host: str, target_host: str) -> list[dict[str, Any]]:
     return records
 
 
-def desired_tunnel_ingress(public_host: str, admin_host: str, origin_url: str) -> list[dict[str, Any]]:
-    return [
+def cost_zero_alias_name(record: dict[str, Any], public_host: str, admin_host: str) -> str:
+    prefix = str(record.get("name") or "").strip().lower()
+    suffix = f".{admin_host.lower()}"
+    if prefix.endswith(suffix):
+        prefix = prefix[: -len(suffix)]
+    prefix = slug_to_subdomain(prefix)
+    return f"{prefix}-admin.{public_host}"
+
+
+def cost_zero_alias_records(
+    module_workspace_records: list[dict[str, Any]],
+    *,
+    public_host: str,
+    tunnel_target_host: str,
+    admin_host: str,
+) -> list[dict[str, Any]]:
+    aliases: list[dict[str, Any]] = []
+    for record in module_workspace_records:
+        if record.get("kind") not in {"static_workspace", "module_workspace"}:
+            continue
+        alias = dict(record)
+        alias["kind"] = f"{record.get('kind')}_cost_zero_alias"
+        alias["key"] = f"{record.get('key')}-https-alias"
+        alias["title"] = f"{record.get('title')} HTTPS alias"
+        alias["canonical_name"] = record.get("name")
+        alias["name"] = cost_zero_alias_name(record, public_host, admin_host)
+        alias["content"] = tunnel_target_host
+        alias["cost_zero_ssl_compatible"] = True
+        aliases.append(alias)
+    return aliases
+
+
+def merchant_erp_records(*, public_host: str, tunnel_target_host: str) -> list[dict[str, Any]]:
+    records: list[dict[str, Any]] = []
+    for workspace in MERCHANT_ERP_WORKSPACES:
+        host = slug_to_subdomain(str(workspace["host"]))
+        records.append(
+            {
+                "kind": "merchant_erp_workspace",
+                "key": workspace["key"],
+                "title": workspace["title"],
+                "module_code": "MERCHANT_ERP",
+                "name": f"{host}.{public_host}",
+                "type": "CNAME",
+                "content": tunnel_target_host,
+                "proxied": True,
+                "cost_zero_ssl_compatible": True,
+            }
+        )
+    return records
+
+
+def desired_tunnel_ingress(
+    public_host: str,
+    admin_host: str,
+    origin_url: str,
+    alias_hosts: list[str] | None = None,
+) -> list[dict[str, Any]]:
+    ingress = [
         {"hostname": public_host, "service": origin_url, "originRequest": {}},
         {"hostname": admin_host, "service": origin_url, "originRequest": {}},
         {"hostname": f"*.{admin_host}", "service": origin_url, "originRequest": {}},
     ]
+    for hostname in alias_hosts or []:
+        ingress.append({"hostname": hostname, "service": origin_url, "originRequest": {}})
+    return ingress
 
 
 def cloudflare_request(method: str, path: str, token: str, body: dict[str, Any] | None = None) -> dict[str, Any]:
@@ -236,12 +322,13 @@ def apply_tunnel_config(
     public_host: str,
     admin_host: str,
     origin_url: str,
+    alias_hosts: list[str] | None = None,
 ) -> dict[str, Any]:
     response = cloudflare_request("GET", f"/accounts/{account_id}/cfd_tunnel/{tunnel_id}/configurations", token)
     result = response.get("result") if isinstance(response.get("result"), dict) else {}
     config = result.get("config") if isinstance(result.get("config"), dict) else {}
     existing_ingress = config.get("ingress") if isinstance(config.get("ingress"), list) else []
-    desired = desired_tunnel_ingress(public_host, admin_host, origin_url)
+    desired = desired_tunnel_ingress(public_host, admin_host, origin_url, alias_hosts)
     desired_hosts = {str(item["hostname"]).lower() for item in desired}
     preserved: list[dict[str, Any]] = []
     catch_all: dict[str, Any] | None = None
@@ -287,6 +374,17 @@ def main() -> int:
     parser.add_argument("--tunnel-target-host", default=os.environ.get("VALLEY_CLOUDFLARE_TUNNEL_TARGET_HOST", ""))
     parser.add_argument("--account-id", default=os.environ.get("CLOUDFLARE_ACCOUNT_ID", DEFAULT_ACCOUNT_ID))
     parser.add_argument("--origin-url", default=os.environ.get("VALLEY_ADMIN_TUNNEL_ORIGIN", DEFAULT_ORIGIN_URL))
+    parser.add_argument(
+        "--include-cost-zero-aliases",
+        action=argparse.BooleanOptionalAction,
+        default=(
+            os.environ.get("VALLEY_INCLUDE_COST_ZERO_ALIASES", "1" if DEFAULT_COST_ZERO_ALIASES else "0")
+            .strip()
+            .lower()
+            not in {"0", "false", "no", "off"}
+        ),
+        help="Create first-level HTTPS aliases covered by Universal SSL, for example stock-admin.brasildesconto.com.br.",
+    )
     parser.add_argument("--output", type=Path, default=OUTPUT_PATH)
     parser.add_argument("--apply", action="store_true", help="Apply records through Cloudflare API.")
     parser.add_argument("--apply-tunnel-config", action="store_true", help="Apply Cloudflare Tunnel public hostname ingress.")
@@ -309,7 +407,23 @@ def main() -> int:
     tunnel_target_host = (args.tunnel_target_host.strip().strip(".") or default_tunnel_target_host(tunnel_id))
     gateway = gateway_records(public_host=public_host, admin_host=admin_host, tunnel_target_host=tunnel_target_host)
     modules = module_records(zone_host, target_host)
-    records = gateway + modules
+    cost_zero_aliases = (
+        cost_zero_alias_records(
+            modules,
+            public_host=public_host,
+            tunnel_target_host=tunnel_target_host,
+            admin_host=admin_host,
+        )
+        if args.include_cost_zero_aliases
+        else []
+    )
+    merchant_aliases = (
+        merchant_erp_records(public_host=public_host, tunnel_target_host=tunnel_target_host)
+        if args.include_cost_zero_aliases
+        else []
+    )
+    alias_hosts = [str(record["name"]) for record in cost_zero_aliases + merchant_aliases]
+    records = gateway + modules + cost_zero_aliases + merchant_aliases
     manifest: dict[str, Any] = {
         "generated_at_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "public_host": public_host,
@@ -319,9 +433,11 @@ def main() -> int:
         "tunnel_id": tunnel_id,
         "tunnel_target_host": tunnel_target_host,
         "origin_url": args.origin_url,
-        "desired_tunnel_ingress": desired_tunnel_ingress(public_host, admin_host, args.origin_url.strip()),
+        "desired_tunnel_ingress": desired_tunnel_ingress(public_host, admin_host, args.origin_url.strip(), alias_hosts),
         "gateway_records_total": len(gateway),
         "module_records_total": len(modules),
+        "cost_zero_alias_records_total": len(cost_zero_aliases),
+        "merchant_erp_records_total": len(merchant_aliases),
         "records_total": len(records),
         "records": records,
         "apply_status": "not_requested",
@@ -366,6 +482,7 @@ def main() -> int:
                     public_host=public_host,
                     admin_host=admin_host,
                     origin_url=args.origin_url.strip(),
+                    alias_hosts=alias_hosts,
                 )
                 manifest["tunnel_apply_status"] = "applied"
             except RuntimeError as exc:

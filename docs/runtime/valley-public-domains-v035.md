@@ -70,3 +70,41 @@ Para usar HTTPS nos links exatos `stock.admin.brasildesconto.com.br`, `01-reply.
 
 - Ativar Advanced Certificate Manager/Total TLS na Cloudflare.
 - Criar aliases HTTPS de primeiro nivel, por exemplo `stock-admin.brasildesconto.com.br`, que ficam cobertos pelo wildcard padrao `*.brasildesconto.com.br`.
+
+## Decisao Custo Zero
+
+Em 2026-05-12, a opcao oficial passou a ser custo zero:
+
+- manter `stock.admin.brasildesconto.com.br` e semelhantes como compatibilidade HTTP/legado;
+- usar aliases HTTPS de primeiro nivel como links oficiais dos modulos.
+
+Aliases admin principais:
+
+- `https://stock-admin.brasildesconto.com.br/`
+- `https://01-reply-admin.brasildesconto.com.br/`
+- `https://47-docs-admin.brasildesconto.com.br/`
+
+ERP lojista:
+
+- `https://lojista.brasildesconto.com.br/`
+- `https://erp-lojista.brasildesconto.com.br/`
+- `https://pdv-lojista.brasildesconto.com.br/`
+- `https://armazem-lojista.brasildesconto.com.br/`
+- `https://metricas-lojista.brasildesconto.com.br/`
+- `https://campanhas-lojista.brasildesconto.com.br/`
+- `https://relatorios-lojista.brasildesconto.com.br/`
+- `https://financeiro-lojista.brasildesconto.com.br/`
+- `https://cadastro-lojista.brasildesconto.com.br/`
+- `https://perfil-lojista.brasildesconto.com.br/`
+- `https://contabil-lojista.brasildesconto.com.br/`
+- `https://integracao-lojista.brasildesconto.com.br/`
+- `https://pedidos-lojista.brasildesconto.com.br/`
+- `https://produtos-lojista.brasildesconto.com.br/`
+- `https://clientes-lojista.brasildesconto.com.br/`
+- `https://fiscal-lojista.brasildesconto.com.br/`
+- `https://estoque-lojista.brasildesconto.com.br/`
+- `https://logistica-lojista.brasildesconto.com.br/`
+- `https://atendimento-lojista.brasildesconto.com.br/`
+- `https://equipe-lojista.brasildesconto.com.br/`
+- `https://seguranca-lojista.brasildesconto.com.br/`
+- `https://configuracoes-lojista.brasildesconto.com.br/`

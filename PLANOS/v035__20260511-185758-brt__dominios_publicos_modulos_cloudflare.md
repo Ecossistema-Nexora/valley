@@ -15,7 +15,7 @@
 - [x] Criar entrada unica automatica para aplicar DNS e Tunnel de forma idempotente. Concluido em 2026-05-11 19:05:41 BRT.
 - [x] Executar automacao Cloudflare com token disponivel e registrar bloqueios externos se a API recusar. Concluido em 2026-05-11 19:05:32 BRT.
 - [x] Validar links publicos principais e atualizar evidencias finais. Concluido em 2026-05-11 22:30:25 BRT.
-- [ ] Fechar decisao de HTTPS para subdominios profundos: ativar Advanced Certificate Manager/Total TLS ou criar aliases de primeiro nivel.
+- [x] Fechar decisao de HTTPS para subdominios profundos: manter custo zero com aliases de primeiro nivel cobertos pelo Universal SSL. Concluido em 2026-05-12 00:24:45 BRT.
 
 ## Evidencias
 
@@ -33,12 +33,19 @@
 - Links principais validados externamente: `https://admin.brasildesconto.com.br/healthz` HTTP 200, `https://admin.brasildesconto.com.br/` HTTP 200, `https://brasildesconto.com.br/` HTTP 200 com final em `/product/`, e `https://brasildesconto.com.br/product/` HTTP 200.
 - Modulos `*.admin.brasildesconto.com.br` validam via HTTP, mas HTTPS falha no handshake TLS porque a zona Free/sem ACM nao cobre wildcard profundo `*.admin.brasildesconto.com.br`.
 - Total TLS testado via API em 2026-05-11 22:30:25 BRT; `GET /zones/{zone_id}/acm/total_tls` retornou `enabled=false` e `POST` retornou erro `1450`, exigindo Advanced Certificate Manager.
+- Nova tentativa em 2026-05-12 00:06:01 BRT: Total TLS continuou `enabled=false` e o `POST /acm/total_tls` continuou retornando erro `1450`; `stock.admin`, `01-reply.admin` e `47-docs.admin` retornaram HTTP 200 por `http://`, mas HTTPS continuou sem handshake TLS valido.
+- O `permission_group` informado (`5b1d209212064a84aae4fb68e3908333`) nao pode ser inspecionado pelo token atual; `/user/tokens/permission_groups` retornou `403 Valid user-level authentication not found`.
+- Decisao custo zero aplicada em 2026-05-12 00:24:45 BRT: o manifesto passou a gerar aliases HTTPS de primeiro nivel cobertos por `*.brasildesconto.com.br`, evitando Advanced Certificate Manager.
+- `scripts\apply_valley_public_domains.ps1` aplicou `137` registros com `apply_status=applied` e `tunnel_apply_status=applied`, incluindo `56` aliases admin e `22` aliases ERP lojista.
+- Login e ERP lojista validados com HTTPS 200 em `https://lojista.brasildesconto.com.br/`, `https://erp-lojista.brasildesconto.com.br/`, `https://pdv-lojista.brasildesconto.com.br/`, `https://armazem-lojista.brasildesconto.com.br/`, `https://metricas-lojista.brasildesconto.com.br/`, `https://campanhas-lojista.brasildesconto.com.br/`, `https://relatorios-lojista.brasildesconto.com.br/`, `https://financeiro-lojista.brasildesconto.com.br/` e `https://integracao-lojista.brasildesconto.com.br/`.
+- Todos os `22` aliases do ERP lojista foram validados com HTTPS 200 em 2026-05-12, incluindo cadastro, perfil, contabil, pedidos, produtos, clientes, fiscal, estoque, logistica, atendimento, equipe, seguranca e configuracoes.
+- Aliases admin de modulo validados com HTTPS 200 em `https://stock-admin.brasildesconto.com.br/`, `https://01-reply-admin.brasildesconto.com.br/` e `https://47-docs-admin.brasildesconto.com.br/`.
 
 ## Bloqueios
 
 - Bloqueios anteriores de token, rate limit e rota `^/erp` do Tunnel foram resolvidos em 2026-05-11 22:30:25 BRT.
-- Bloqueio remanescente: HTTPS valido para subdominios profundos `*.admin.brasildesconto.com.br` depende de Advanced Certificate Manager/Total TLS na Cloudflare.
+- Subdominios profundos `*.admin.brasildesconto.com.br` permanecem como compatibilidade HTTP/legado; os links oficiais HTTPS sem custo usam aliases de primeiro nivel.
 
 ## Proxima acao
 
-- Ativar Advanced Certificate Manager/Total TLS na Cloudflare ou usar aliases HTTPS de primeiro nivel para cada modulo se a conta permanecer no plano Free.
+- Usar os aliases HTTPS de primeiro nivel como links oficiais dos modulos e do ERP lojista enquanto a conta permanecer no plano Free.

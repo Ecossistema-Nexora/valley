@@ -243,6 +243,30 @@
       copy: "Controles de sandbox, producao e flags operacionais por conector.",
     },
   ];
+  const MERCHANT_ERP_WORKSPACES = [
+    { key: "merchant-login", title: "Login Lojista", subdomain: "lojista", costZeroHost: "lojista", sectionId: "adminLaunchpadSection", copy: "Entrada segura do lojista para acessar o ERP e o marketplace." },
+    { key: "merchant-erp", title: "ERP Lojista", subdomain: "erp-lojista", costZeroHost: "erp-lojista", sectionId: "modulesWorkspace", copy: "Centro operacional para gerenciar vendas, equipe, catalogo, pedidos e backoffice." },
+    { key: "merchant-pdv", title: "PDV", subdomain: "pdv-lojista", costZeroHost: "pdv-lojista", sectionId: "checkoutHealthPanel", copy: "Venda presencial, checkout, caixa e conciliacao de pedidos." },
+    { key: "merchant-warehouse", title: "Armazem", subdomain: "armazem-lojista", costZeroHost: "armazem-lojista", sectionId: "stockIntegrations", copy: "Estoque, recebimento, picking, inventario e ruptura operacional." },
+    { key: "merchant-metrics", title: "Metricas", subdomain: "metricas-lojista", costZeroHost: "metricas-lojista", sectionId: "performanceDashboard", copy: "Indicadores de venda, margem, conversao, SLA e crescimento." },
+    { key: "merchant-campaigns", title: "Campanhas", subdomain: "campanhas-lojista", costZeroHost: "campanhas-lojista", sectionId: "settingsSection", copy: "Promocoes, cupons, anuncios, canais e calendario comercial." },
+    { key: "merchant-reports", title: "Relatorios", subdomain: "relatorios-lojista", costZeroHost: "relatorios-lojista", sectionId: "performanceDashboard", copy: "Relatorios executivos, exportacoes e acompanhamento por periodo." },
+    { key: "merchant-finance", title: "Financeiro Lojista", subdomain: "financeiro-lojista", costZeroHost: "financeiro-lojista", sectionId: "financialDashboard", copy: "Recebiveis, taxas, repasses, margem, fees e fechamento financeiro." },
+    { key: "merchant-registration", title: "Cadastro", subdomain: "cadastro-lojista", costZeroHost: "cadastro-lojista", sectionId: "modulesWorkspace", copy: "Dados comerciais, lojas, usuarios, permissoes e documentos." },
+    { key: "merchant-profile", title: "Perfil", subdomain: "perfil-lojista", costZeroHost: "perfil-lojista", sectionId: "modulesWorkspace", copy: "Perfil da empresa, identidade visual, atendimento e politicas." },
+    { key: "merchant-accounting", title: "Contabil", subdomain: "contabil-lojista", costZeroHost: "contabil-lojista", sectionId: "financialDashboard", copy: "Notas, impostos, centros de custo, conciliacao e livros auxiliares." },
+    { key: "merchant-integrations", title: "Integracao", subdomain: "integracao-lojista", costZeroHost: "integracao-lojista", sectionId: "settingsSection", copy: "APIs, webhooks, marketplaces, ERPs externos e conectores." },
+    { key: "merchant-orders", title: "Pedidos", subdomain: "pedidos-lojista", costZeroHost: "pedidos-lojista", sectionId: "importedPricingSection", copy: "Pedidos, status, separacao, cancelamento e atendimento pos-venda." },
+    { key: "merchant-products", title: "Produtos", subdomain: "produtos-lojista", costZeroHost: "produtos-lojista", sectionId: "importedPricingSection", copy: "Catalogo, precificacao, fotos, SKU, publicacao e curadoria." },
+    { key: "merchant-customers", title: "Clientes", subdomain: "clientes-lojista", costZeroHost: "clientes-lojista", sectionId: "modulesWorkspace", copy: "Clientes, segmentacao, historico, atendimento e retencao." },
+    { key: "merchant-tax", title: "Fiscal", subdomain: "fiscal-lojista", costZeroHost: "fiscal-lojista", sectionId: "financialDashboard", copy: "Regras fiscais, documentos, impostos e auditoria de operacao." },
+    { key: "merchant-inventory", title: "Estoque", subdomain: "estoque-lojista", costZeroHost: "estoque-lojista", sectionId: "stockIntegrations", copy: "Saldo por SKU, reposicao, reserva, inventario e transferencia." },
+    { key: "merchant-logistics", title: "Logistica", subdomain: "logistica-lojista", costZeroHost: "logistica-lojista", sectionId: "modulesWorkspace", copy: "Frete, entrega, coleta, SLA, rastreio e ocorrencias." },
+    { key: "merchant-support", title: "Atendimento", subdomain: "atendimento-lojista", costZeroHost: "atendimento-lojista", sectionId: "modulesWorkspace", copy: "Tickets, chat, disputa, devolucao e relacionamento com clientes." },
+    { key: "merchant-team", title: "Equipe", subdomain: "equipe-lojista", costZeroHost: "equipe-lojista", sectionId: "modulesWorkspace", copy: "Colaboradores, acessos, papeis, auditoria e produtividade." },
+    { key: "merchant-security", title: "Seguranca", subdomain: "seguranca-lojista", costZeroHost: "seguranca-lojista", sectionId: "settingsSection", copy: "Permissoes, sessoes, alertas, MFA e trilhas de auditoria." },
+    { key: "merchant-settings", title: "Configuracoes", subdomain: "configuracoes-lojista", costZeroHost: "configuracoes-lojista", sectionId: "settingsSection", copy: "Preferencias, parametros operacionais, flags e regras da loja." },
+  ];
   const PRICING_EDITABLE_FIELDS = [
     "target_net_revenue_pct",
     "platform_fee_pct",
@@ -631,7 +655,7 @@
   }
 
   function adminWorkspaces() {
-    return [...STATIC_ADMIN_WORKSPACES, ...DYNAMIC_MODULE_WORKSPACES];
+    return [...STATIC_ADMIN_WORKSPACES, ...MERCHANT_ERP_WORKSPACES, ...DYNAMIC_MODULE_WORKSPACES];
   }
 
   function slugToSubdomain(value) {
@@ -642,7 +666,7 @@
   }
 
   function buildModuleWorkspaces(modules) {
-    const reserved = new Set(STATIC_ADMIN_WORKSPACES.map((workspace) => workspace.subdomain));
+    const reserved = new Set([...STATIC_ADMIN_WORKSPACES, ...MERCHANT_ERP_WORKSPACES].map((workspace) => workspace.subdomain));
     const used = new Set();
 
     return modules.map((module) => {
@@ -2698,6 +2722,27 @@
     return adminWorkspaces().find((workspace) => workspace.subdomain === subdomain) || null;
   }
 
+  function workspaceByCostZeroHost(host) {
+    return adminWorkspaces().find((workspace) => workspace.costZeroHost === host) || null;
+  }
+
+  function publicRootHostFromAdminHost(hostname) {
+    const normalized = String(hostname || "").toLowerCase();
+    return normalized.startsWith("admin.") ? normalized.slice("admin.".length) : normalized;
+  }
+
+  function workspaceHttpsAliasHost(workspace) {
+    const adminHost = activeAdminHost().hostname;
+    if (workspace.key === "home" || isLocalAdminHostname(adminHost)) {
+      return adminHost;
+    }
+    const publicRootHost = publicRootHostFromAdminHost(adminHost);
+    if (workspace.costZeroHost) {
+      return `${workspace.costZeroHost}.${publicRootHost}`;
+    }
+    return `${workspace.subdomain}-admin.${publicRootHost}`;
+  }
+
   function workspaceHostLabel(workspace) {
     const host = activeAdminHost().hostname;
     if (workspace.key === "home") {
@@ -2706,7 +2751,7 @@
     if (isLocalAdminHostname(host)) {
       return `local:${workspace.key}`;
     }
-    return `${workspace.subdomain}.${host}`;
+    return workspaceHttpsAliasHost(workspace);
   }
 
   function workspaceHref(workspace) {
@@ -2716,7 +2761,7 @@
     }
 
     if (!isLocalAdminHostname(adminHost.hostname) && adminHost.hostname.includes(".")) {
-      return `${adminHost.protocol}//${workspace.subdomain}.${adminHost.host}/?workspace=${workspace.key}#${workspace.sectionId}`;
+      return `${adminHost.protocol}//${workspaceHttpsAliasHost(workspace)}/?workspace=${workspace.key}#${workspace.sectionId}`;
     }
 
     return `${window.location.origin.replace(/\/$/, "")}/workspace/${workspace.key}/#${workspace.sectionId}`;
@@ -2750,6 +2795,24 @@
 
     if (currentHost.endsWith(`.${adminHost}`)) {
       const prefix = currentHost.slice(0, -1 * (`.${adminHost}`.length));
+      const hostWorkspace = workspaceBySubdomain(prefix);
+      if (hostWorkspace) {
+        return hostWorkspace.key;
+      }
+    }
+
+    const publicRootHost = publicRootHostFromAdminHost(adminHost);
+    if (currentHost.endsWith(`.${publicRootHost}`)) {
+      const prefix = currentHost.slice(0, -1 * (`.${publicRootHost}`.length));
+      const hostWorkspace = workspaceByCostZeroHost(prefix);
+      if (hostWorkspace) {
+        return hostWorkspace.key;
+      }
+    }
+
+    const costZeroSuffix = `-admin.${publicRootHost}`;
+    if (currentHost.endsWith(costZeroSuffix)) {
+      const prefix = currentHost.slice(0, -1 * costZeroSuffix.length);
       const hostWorkspace = workspaceBySubdomain(prefix);
       if (hostWorkspace) {
         return hostWorkspace.key;
@@ -4677,10 +4740,11 @@
     const code = module.code.toLowerCase();
     const adminHost = activeAdminHost().hostname;
     const baseHost = isLocalAdminHostname(adminHost) ? "admin.brasildesconto.com.br" : adminHost;
+    const publicRootHost = publicRootHostFromAdminHost(baseHost);
     return [
       {
         label: "workspace",
-        route: `${subdomain}.${baseHost}`,
+        route: `${subdomain}-admin.${publicRootHost}`,
         description: `cockpit principal de ${module.name.toLowerCase()}`,
       },
       {

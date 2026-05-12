@@ -23,6 +23,6 @@
     "tunnel_id": "80a75594-5129-469f-8cce-4a938ac48e06",
     "connector_id": "fe7c69f8-e14e-4696-9638-cec6180c7db9",
     "origin": "http://192.168.1.2:8085",
-    "module_tls_note": "Second-level module hostnames like stock.admin.brasildesconto.com.br require Advanced Certificate Manager/Total TLS for valid HTTPS on this Cloudflare zone."
+    "module_tls_note": "Official zero-cost HTTPS module links use first-level aliases like stock-admin.brasildesconto.com.br and lojista.brasildesconto.com.br, covered by Universal SSL."
   }
 }
