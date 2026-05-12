@@ -258,8 +258,9 @@ $ConfigFallback = [pscustomobject]@{
     }
     validation = [pscustomobject]@{
         local_base_url = 'http://127.0.0.1:8085'
-        tailscale_base_url = 'http://100.109.240.100:8085'
+        cloudflare_base_url = 'https://admin.brasildesconto.com.br'
         fixed_domain = 'https://admin.brasildesconto.com.br'
+        tailscale_enabled = $false
     }
     planos = [pscustomobject]@{
         update_progress = $true
@@ -348,14 +349,13 @@ try {
     if (-not $SkipValidation) {
         $Steps.Add((Test-HttpEndpoint -Name 'local_runtime_health' -BaseUrl ([string]$Config.validation.local_base_url)))
         $Steps.Add((Test-HttpEndpoint -Name 'local_product_shell' -BaseUrl ([string]$Config.validation.local_base_url) -PathSuffix '/api/product-shell'))
-        $Steps.Add((Test-HttpEndpoint -Name 'tailscale_runtime_health' -BaseUrl ([string]$Config.validation.tailscale_base_url)))
-        $Steps.Add((Test-HttpEndpoint -Name 'tailscale_product_shell' -BaseUrl ([string]$Config.validation.tailscale_base_url) -PathSuffix '/api/product-shell'))
+        $Steps.Add((Test-HttpEndpoint -Name 'cloudflare_runtime_health' -BaseUrl ([string]$Config.validation.cloudflare_base_url)))
+        $Steps.Add((Test-HttpEndpoint -Name 'cloudflare_product_shell' -BaseUrl ([string]$Config.validation.cloudflare_base_url) -PathSuffix '/api/product-shell'))
         $AdminPublicManifest = Load-JsonObject -Path $AdminPublicRuntimePath -Fallback @{}
         $ProductPublicManifest = Load-JsonObject -Path $ProductPublicRuntimePath -Fallback @{}
         $AdminProvider = ''
         $AdminPublicUrl = ''
         $ProductPublicUrl = ''
-        $RequiresTailscale = $false
         if ($AdminPublicManifest.PSObject.Properties.Name -contains 'provider') {
             $AdminProvider = [string]$AdminPublicManifest.provider
         }
@@ -364,9 +364,6 @@ try {
         }
         if ($ProductPublicManifest.PSObject.Properties.Name -contains 'public_url') {
             $ProductPublicUrl = [string]$ProductPublicManifest.public_url
-        }
-        if ($AdminPublicManifest.PSObject.Properties.Name -contains 'requires_tailscale') {
-            $RequiresTailscale = [bool]$AdminPublicManifest.requires_tailscale
         }
         $Steps.Add([ordered]@{
             name = 'persistent_public_fallback'
@@ -379,7 +376,7 @@ try {
             provider = $AdminProvider
             admin_url = $AdminPublicUrl
             product_url = $ProductPublicUrl
-            requires_tailscale = $RequiresTailscale
+            access_policy = 'cloudflare_only'
         })
         $FixedDomainStep = Test-HttpEndpoint -Name 'fixed_domain_health' -BaseUrl ([string]$Config.validation.fixed_domain)
         $Steps.Add($FixedDomainStep)

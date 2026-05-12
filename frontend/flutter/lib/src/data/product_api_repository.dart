@@ -12,7 +12,7 @@ class ProductApiRepository {
     'VALLEY_PRODUCT_API_BASE_URL',
     defaultValue: '',
   );
-  static const String _releaseBaseUrl = 'http://100.109.240.100:8085';
+  static const String _releaseBaseUrl = 'https://brasildesconto.com.br';
   static const String _bundledStockRuntimeAsset =
       'assets/data/valley_stock_runtime_ptbr.json';
   static const String _sessionTokenKey = 'valley.product.auth.session.v1';
@@ -762,25 +762,10 @@ class ProductApiRepository {
     }
 
     for (final String candidate in <String>[
-      'http://100.109.240.100:8085',
-      'http://100.109.240.100:8085/product',
-      'http://valley-codex.tailb44596.ts.net:8085',
-      'http://valley-codex.tailb44596.ts.net:8085/product',
       'https://brasildesconto.com.br/product',
       'https://brasildesconto.com.br',
       'https://admin.brasildesconto.com.br/product',
       'https://admin.brasildesconto.com.br',
-      'http://10.0.2.2:8085/product',
-      'http://10.0.2.2:8085',
-      'http://127.0.0.1:8085/product',
-      'http://127.0.0.1:8085',
-      'http://localhost:8085/product',
-      'http://localhost:8085',
-      'http://192.168.1.2:8085/product',
-      'http://192.168.1.2:8085',
-      'http://10.0.2.2:8080',
-      'http://127.0.0.1:8080',
-      'http://localhost:8080',
     ]) {
       addCandidate(candidate);
     }

@@ -25,8 +25,9 @@
   },
   "validation": {
     "local_base_url": "http://127.0.0.1:8085",
-    "tailscale_base_url": "http://100.109.240.100:8085",
-    "fixed_domain": "https://admin.brasildesconto.com.br"
+    "cloudflare_base_url": "https://admin.brasildesconto.com.br",
+    "fixed_domain": "https://admin.brasildesconto.com.br",
+    "tailscale_enabled": false
   },
   "planos": {
     "update_progress": true
