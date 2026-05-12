@@ -5,7 +5,7 @@
 
 - Regra: cada item de checklist dos planos conta como uma etapa.
 - Atualize este indice depois de cada acao concluida com `python scripts\update_planos_progress.py`.
-- Etapas concluidas desde o primeiro plano do indice: `196/198`.
+- Etapas concluidas desde o primeiro plano do indice: `197/199`.
 - Produzido desde o Plano 1: `99.0%`.
 - Falta produzir para a conclusao final acumulada: `1.0%`.
 <!-- progresso:fim -->
@@ -46,6 +46,6 @@
 | v032 | 2026-05-07 01:27:35 BRT | [v032__20260507-012735-brt__retomada_gate_mvp_producao.md](./v032__20260507-012735-brt__retomada_gate_mvp_producao.md) | em_andamento | Retomada da sequencia exata para gate MVP Valley em modo de producao | 14/15 | 93.3% | 6.7% | 2026-05-11 09:59:34 BRT |
 | v033 | 2026-05-07 03:01:02 BRT | [v033__20260507-030102-brt__gate_producao_apk_cliente_catalogo_10k.md](./v033__20260507-030102-brt__gate_producao_apk_cliente_catalogo_10k.md) | concluido | Gate de producao do APK cliente com checkout real, white-label e estrategia persistente de catalogo 10k | 12/12 | 100.0% | 0.0% | 2026-05-11 09:59:34 BRT |
 | v034 | 2026-05-11 14:56:24 BRT | [v034__20260511-145624-brt__release_blueprint_stock_apk_paineis_telegram.md](./v034__20260511-145624-brt__release_blueprint_stock_apk_paineis_telegram.md) | concluido | Release blueprint com STOCK sem auto-pause nesta atividade, APK ABI, paineis e Telegram | 6/6 | 100.0% | 0.0% | 2026-05-11 16:25:30 BRT |
-| v035 | 2026-05-11 18:57:58 BRT | [v035__20260511-185758-brt__dominios_publicos_modulos_cloudflare.md](./v035__20260511-185758-brt__dominios_publicos_modulos_cloudflare.md) | em_andamento | Dominios publicos, workspaces admin por modulo e automacao Cloudflare persistente | 5/6 | 83.3% | 16.7% | 2026-05-11 18:57:58 BRT |
+| v035 | 2026-05-11 18:57:58 BRT | [v035__20260511-185758-brt__dominios_publicos_modulos_cloudflare.md](./v035__20260511-185758-brt__dominios_publicos_modulos_cloudflare.md) | em_andamento | Dominios publicos, workspaces admin por modulo e automacao Cloudflare persistente | 6/7 | 85.7% | 14.3% | 2026-05-11 18:57:58 BRT |
 | v019 | 2026-05-05 17:52:38 BRT | [v019__20260505-175238-brt__passo_1_nucleo_relacional_nexora_v40.md](./v019__20260505-175238-brt__passo_1_nucleo_relacional_nexora_v40.md) | concluido | PASSO 1 do banco hibrido Nexora V40 com nucleo relacional de identidade, perfis, wallets e LED Cards | 0/0 | 100.0% | 0.0% | 2026-05-05 17:52:38 BRT |
 | v020 | 2026-05-05 17:55:49 BRT | [v020__20260505-175549-brt__passo_2_ledger_financeiro_smart_equity.md](./v020__20260505-175549-brt__passo_2_ledger_financeiro_smart_equity.md) | concluido | PASSO 2 do banco hibrido Nexora V40 com ledger financeiro, Smart Equity e orders mestre | 0/0 | 100.0% | 0.0% | 2026-05-05 17:55:49 BRT |

@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-05-11T22:13:44Z",
+  "generated_at_utc": "2026-05-12T01:25:30Z",
   "public_host": "brasildesconto.com.br",
   "admin_host": "admin.brasildesconto.com.br",
   "zone_host": "admin.brasildesconto.com.br",
@@ -619,8 +619,315 @@
       "proxied": true
     }
   ],
-  "apply_status": "blocked_cloudflare_api",
-  "tunnel_apply_status": "blocked_cloudflare_api",
-  "apply_error": "Cloudflare HTTP 401: {\"success\":false,\"errors\":[{\"code\":10000,\"message\":\"Authentication error\"}],\"messages\":[],\"result\":null}\n",
-  "tunnel_apply_error": "Cloudflare HTTP 401: {\"success\":false,\"errors\":[{\"code\":10000,\"message\":\"Authentication error\"}],\"messages\":[],\"result\":null}\n"
+  "apply_status": "applied",
+  "tunnel_apply_status": "applied",
+  "apply_results": [
+    {
+      "name": "brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "updated"
+    },
+    {
+      "name": "*.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "stock.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "dropshipping.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "marketplace.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "review.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "finance.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "merchants.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "users.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "checkout.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "sandbox.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "01-reply.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "02-stock.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "03-log.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "04-food.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "05-delivery.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "06-wms.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "07-marketplace.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "08-pay.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "09-fleet.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "10-services.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "11-digital.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "12-real-estate.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "13-health.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "14-edu.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "15-tech.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "16-jobs.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "17-news-podcast.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "18-ads.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "19-influencers.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "20-social.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "21-fitness.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "22-pharmacy.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "23-vet.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "24-tourism.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "25-events.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "26-mobility.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "27-security.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "28-gov.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "29-legal.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "30-charity.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "31-insurance.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "32-gaming.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "33-iot.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "34-bio.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "35-home.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "36-energy.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "37-space.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "38-agenda.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "39-advisor.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "40-financas.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "41-mente.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "42-business.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "43-plug.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "44-up.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "45-media.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "46-chat.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    },
+    {
+      "name": "47-docs.admin.brasildesconto.com.br",
+      "type": "CNAME",
+      "action": "created"
+    }
+  ],
+  "tunnel_apply_result": {
+    "tunnel_id": "80a75594-5129-469f-8cce-4a938ac48e06",
+    "origin_url": "http://192.168.1.2:8085",
+    "desired_hosts": [
+      "*.admin.brasildesconto.com.br",
+      "admin.brasildesconto.com.br",
+      "brasildesconto.com.br"
+    ],
+    "preserved_hosts": [
+      "www.brasildesconto.com.br"
+    ]
+  }
 }

@@ -14,7 +14,8 @@
 - [x] Ajustar runtime para separar site publico de produto e workspaces admin. Concluido em 2026-05-11 19:07:52 BRT.
 - [x] Criar entrada unica automatica para aplicar DNS e Tunnel de forma idempotente. Concluido em 2026-05-11 19:05:41 BRT.
 - [x] Executar automacao Cloudflare com token disponivel e registrar bloqueios externos se a API recusar. Concluido em 2026-05-11 19:05:32 BRT.
-- [ ] Validar links publicos principais e atualizar evidencias finais.
+- [x] Validar links publicos principais e atualizar evidencias finais. Concluido em 2026-05-11 22:30:25 BRT.
+- [ ] Fechar decisao de HTTPS para subdominios profundos: ativar Advanced Certificate Manager/Total TLS ou criar aliases de primeiro nivel.
 
 ## Evidencias
 
@@ -24,12 +25,20 @@
 - `scripts/apply_valley_public_domains.ps1` criado como entrada unica para DNS + Tunnel, com status sanitizado em `tmp/runtime/valley-public-domains-automation.json`.
 - Runtime local validado: Host `brasildesconto.com.br` em `127.0.0.1:8085/` retorna `302 Location: /product/`; Host `admin.brasildesconto.com.br` retorna `200`; Host `stock.admin.brasildesconto.com.br` retorna `200`.
 - Servidor local do admin reiniciado em `0.0.0.0:8085` com `healthz=200`.
+- Nova tentativa com token ativo em 2026-05-11 22:08:59 BRT: `tokens/verify` retornou ativo, mas `zone-read` retornou `9109 Cannot use the access token from location` para IPv6 e IPv4; aplicacao automatica continuou bloqueada.
+- Nova tentativa em 2026-05-11 22:16:30 BRT: IPv6 continuou bloqueado em `2804:2238:71e:1800:ccaa:e713:ea14:bd16`, IPv4 continuou bloqueado em `45.185.45.253`, e a automacao persistente voltou `apply_status=blocked_cloudflare_api`.
+- Tentativa bem-sucedida em 2026-05-11 22:30:25 BRT: leitura de zone/DNS/tunnel retornou HTTP 200 e `scripts\apply_valley_public_domains.ps1` concluiu com `apply_status=applied` e `tunnel_apply_status=applied`.
+- Configuracao remota do Tunnel validada com ingress raiz para `brasildesconto.com.br`, `admin.brasildesconto.com.br` e `*.admin.brasildesconto.com.br`, todos apontando para `http://192.168.1.2:8085`.
+- DNS validado para `brasildesconto.com.br`, `admin.brasildesconto.com.br`, `*.admin.brasildesconto.com.br`, `stock.admin.brasildesconto.com.br`, `01-reply.admin.brasildesconto.com.br` e `47-docs.admin.brasildesconto.com.br`.
+- Links principais validados externamente: `https://admin.brasildesconto.com.br/healthz` HTTP 200, `https://admin.brasildesconto.com.br/` HTTP 200, `https://brasildesconto.com.br/` HTTP 200 com final em `/product/`, e `https://brasildesconto.com.br/product/` HTTP 200.
+- Modulos `*.admin.brasildesconto.com.br` validam via HTTP, mas HTTPS falha no handshake TLS porque a zona Free/sem ACM nao cobre wildcard profundo `*.admin.brasildesconto.com.br`.
+- Total TLS testado via API em 2026-05-11 22:30:25 BRT; `GET /zones/{zone_id}/acm/total_tls` retornou `enabled=false` e `POST` retornou erro `1450`, exigindo Advanced Certificate Manager.
 
 ## Bloqueios
 
-- A Cloudflare recusou a aplicacao por API com `Authentication error` e anteriormente recusou os tokens por `Client IP Address Filtering` nos IPs `45.185.45.253` e `2804:2238:71e:1800:ccaa:e713:ea14:bd16`.
-- O Tunnel remoto atualmente tem rota `admin.brasildesconto.com.br` limitada ao path `^/erp`, por isso `https://admin.brasildesconto.com.br/healthz` e `/` retornam `404` antes de chegar na origem local.
+- Bloqueios anteriores de token, rate limit e rota `^/erp` do Tunnel foram resolvidos em 2026-05-11 22:30:25 BRT.
+- Bloqueio remanescente: HTTPS valido para subdominios profundos `*.admin.brasildesconto.com.br` depende de Advanced Certificate Manager/Total TLS na Cloudflare.
 
 ## Proxima acao
 
-- Desbloquear/escalar o token Cloudflare com `Zone DNS Edit` e `Cloudflare Tunnel Write` sem filtro de IP, entao reexecutar `scripts\apply_valley_public_domains.ps1` para aplicar a configuracao remota e fechar a validacao final.
+- Ativar Advanced Certificate Manager/Total TLS na Cloudflare ou usar aliases HTTPS de primeiro nivel para cada modulo se a conta permanecer no plano Free.

@@ -28,11 +28,13 @@ Public Hostnames do Tunnel:
 - `admin.brasildesconto.com.br` -> `http://192.168.1.2:8085`
 - `*.admin.brasildesconto.com.br` -> `http://192.168.1.2:8085`
 
-Estado observado em 2026-05-11 19:08 BRT:
+Estado validado em 2026-05-11 22:30 BRT:
 
 - O conector `cloudflared` esta online.
-- A configuracao remota recebida pelo conector ainda limita `admin.brasildesconto.com.br` ao path `^/erp`.
-- Enquanto essa configuracao nao for sobrescrita pela API ou pelo painel Cloudflare, `https://admin.brasildesconto.com.br/` e `/healthz` retornam `404` no edge antes de chegar na origem.
+- A configuracao remota do Tunnel foi aplicada sem path restritivo para `brasildesconto.com.br`, `admin.brasildesconto.com.br` e `*.admin.brasildesconto.com.br`.
+- `https://admin.brasildesconto.com.br/healthz`, `https://admin.brasildesconto.com.br/`, `https://brasildesconto.com.br/` e `https://brasildesconto.com.br/product/` retornaram HTTP 200.
+- Os hosts profundos `*.admin.brasildesconto.com.br` resolvem no DNS e roteiam por HTTP, mas HTTPS exige certificado adicional porque o Universal SSL do plano atual nao cobre wildcard profundo.
+- Total TLS foi testado via API e retornou erro `1450`, indicando necessidade de Advanced Certificate Manager.
 
 ## Automacao
 
@@ -61,3 +63,10 @@ IPs observados nesta maquina:
 - `brasildesconto.com.br/` redireciona para `/product/`.
 - `admin.brasildesconto.com.br/` abre o admin central.
 - `*.admin.brasildesconto.com.br/` abre o admin focado no workspace pelo subdominio.
+
+## Pendencia TLS dos Modulos
+
+Para usar HTTPS nos links exatos `stock.admin.brasildesconto.com.br`, `01-reply.admin.brasildesconto.com.br` etc., ha duas opcoes:
+
+- Ativar Advanced Certificate Manager/Total TLS na Cloudflare.
+- Criar aliases HTTPS de primeiro nivel, por exemplo `stock-admin.brasildesconto.com.br`, que ficam cobertos pelo wildcard padrao `*.brasildesconto.com.br`.
