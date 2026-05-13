@@ -36,24 +36,25 @@ class _ValleySuperAppState extends State<ValleySuperApp> {
       themeMode: ThemeMode.light,
       home: FutureBuilder<ProductShellData>(
         future: _future,
-        builder: (BuildContext context, AsyncSnapshot<ProductShellData> snapshot) {
-          if (snapshot.connectionState != ConnectionState.done) {
-            return const _LoadingScreen();
-          }
+        builder:
+            (BuildContext context, AsyncSnapshot<ProductShellData> snapshot) {
+              if (snapshot.connectionState != ConnectionState.done) {
+                return const _LoadingScreen();
+              }
 
-          if (snapshot.hasError || !snapshot.hasData) {
-            return _FailureScreen(
-              onRetry: () {
-                setState(_reload);
-              },
-            );
-          }
+              if (snapshot.hasError || !snapshot.hasData) {
+                return _FailureScreen(
+                  onRetry: () {
+                    setState(_reload);
+                  },
+                );
+              }
 
-          return ValleyProductShell(
-            initialData: snapshot.data!,
-            repository: _repository,
-          );
-        },
+              return ValleyProductShell(
+                initialData: snapshot.data!,
+                repository: _repository,
+              );
+            },
       ),
     );
   }
@@ -78,9 +79,7 @@ class _LoadingScreen extends StatelessWidget {
           ),
         ),
         child: const Center(
-          child: CircularProgressIndicator(
-            color: ValleyBrandColors.violet,
-          ),
+          child: CircularProgressIndicator(color: ValleyBrandColors.violet),
         ),
       ),
     );
@@ -105,10 +104,10 @@ class _FailureScreen extends StatelessWidget {
               const ValleyLogoMark(size: 72, borderRadius: 22),
               const SizedBox(height: 18),
               Text(
-                'Servidor indisponivel',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.w900,
-                ),
+                'Nao foi possivel abrir agora',
+                style: Theme.of(
+                  context,
+                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w900),
               ),
               const SizedBox(height: 14),
               Wrap(

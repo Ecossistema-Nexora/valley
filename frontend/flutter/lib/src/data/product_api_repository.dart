@@ -16,6 +16,12 @@ class ProductApiRepository {
   static const String _bundledStockRuntimeAsset =
       'assets/data/valley_stock_runtime_ptbr.json';
   static const String _sessionTokenKey = 'valley.product.auth.session.v1';
+  static const Set<String> _fallbackActiveModuleIds = <String>{
+    'STOCK',
+    'MARKETPLACE',
+    'CHAT',
+    'PAY',
+  };
 
   Future<ProductShellData> load() async {
     Object? lastError;
@@ -64,23 +70,16 @@ class ProductApiRepository {
       try {
         return await _loadEmergencyBundledShell(activeModuleIds);
       } catch (fallbackError) {
-        throw StateError(
-          'Servidor Valley indisponivel: $lastError; fallback: $error; emergencia: $fallbackError',
+        return _loadInMemoryEmergencyShell(
+          activeModuleIds,
+          reason: 'network: $lastError; bundled: $error; stock: $fallbackError',
         );
       }
     }
   }
 
   bool _shouldPreferBundledShell() {
-    if (_envBaseUrl.trim().isNotEmpty) {
-      return false;
-    }
-    final Uri base = Uri.base;
-    if (base.scheme != 'http' && base.scheme != 'https') {
-      return true;
-    }
-    final String host = base.host.toLowerCase();
-    return host == 'localhost' || host == '127.0.0.1' || host == '10.0.2.2';
+    return true;
   }
 
   Future<List<ProductItem>> loadStockCatalog({String? preferredBaseUrl}) async {
@@ -521,20 +520,26 @@ class ProductApiRepository {
   }
 
   Future<Set<String>> _loadActiveModuleIds() async {
-    final String manifestText = await rootBundle.loadString(
-      'assets/data/valley_mvp_manifest.v1.json',
-    );
-    final Map<String, dynamic> manifest =
-        (jsonDecode(manifestText) as Map<dynamic, dynamic>)
-            .cast<String, dynamic>();
-    final Set<String> excluded =
-        (manifest['excluded_modules'] as List<dynamic>? ?? <dynamic>[])
-            .cast<String>()
-            .toSet();
-    return (manifest['included_modules'] as List<dynamic>? ?? <dynamic>[])
-        .cast<String>()
-        .where((String code) => !excluded.contains(code))
-        .toSet();
+    try {
+      final String manifestText = await rootBundle.loadString(
+        'assets/data/valley_mvp_manifest.v1.json',
+      );
+      final Map<String, dynamic> manifest =
+          (jsonDecode(manifestText) as Map<dynamic, dynamic>)
+              .cast<String, dynamic>();
+      final Set<String> excluded =
+          (manifest['excluded_modules'] as List<dynamic>? ?? <dynamic>[])
+              .map((dynamic item) => item.toString())
+              .toSet();
+      final Set<String> included =
+          (manifest['included_modules'] as List<dynamic>? ?? <dynamic>[])
+              .map((dynamic item) => item.toString())
+              .where((String code) => !excluded.contains(code))
+              .toSet();
+      return included.isEmpty ? _fallbackActiveModuleIds : included;
+    } catch (_) {
+      return _fallbackActiveModuleIds;
+    }
   }
 
   Future<ProductShellData> _loadBundledShell(
@@ -564,7 +569,11 @@ class ProductApiRepository {
           )
           .toList(growable: false);
     }
-    return _parseShell(_releaseBaseUrl, catalog, activeModuleIds);
+    return _parseShell(
+      _defaultRuntimeBaseUrl(catalog),
+      catalog,
+      activeModuleIds,
+    );
   }
 
   Future<List<ProductItem>> _loadBundledStockCatalog() async {
@@ -620,7 +629,7 @@ class ProductApiRepository {
       'items': stockItems.map((ProductItem item) => item.raw).toList(),
     };
     return ProductShellData(
-      baseUrl: _releaseBaseUrl,
+      baseUrl: _defaultRuntimeBaseUrl(rawData),
       title: 'Valley',
       subtitle: 'Catalogo embarcado com checkout publico e operacao remota.',
       generatedAtUtc: '',
@@ -633,6 +642,75 @@ class ProductApiRepository {
       ),
       items: stockItems,
       publicUrl: _releaseBaseUrl,
+      rawData: rawData,
+    );
+  }
+
+  ProductShellData _loadInMemoryEmergencyShell(
+    Set<String> activeModuleIds, {
+    required String reason,
+  }) {
+    final List<ProductModule> modules = _fallbackProductModules(
+      activeModuleIds,
+    ).map(ProductModule.fromJson).toList(growable: false);
+    final ProductItem item = ProductItem.fromJson(<String, dynamic>{
+      'id': 'valley-emergency-stock-001',
+      'module_id': 'STOCK',
+      'title': 'Kit operacional Valley',
+      'brand': 'Valley',
+      'category': 'Operacao',
+      'price_brl': 0,
+      'compare_at_brl': 0,
+      'stock': 1,
+      'merchant_name': 'Valley',
+      'image_url': '',
+      'video_url': '',
+      'video_count': 0,
+      'status': 'Disponivel',
+      'tags': <String>['Valley', 'Catalogo'],
+      'cta_label': 'Abrir',
+      'cta_path': '',
+      'media_path': '',
+      'description': 'Experiencia Valley pronta para navegacao.',
+      'gallery_urls': <String>[],
+      'profile_id': '',
+      'customer_visible_supplier_name': 'Valley',
+      'collection_label': 'Valley',
+      'availability_label': 'Disponivel',
+    });
+    final Map<String, dynamic> rawData = <String, dynamic>{
+      'status': 'ok',
+      'service': 'valley-product-bundled',
+      'title': 'Valley',
+      'subtitle': 'Experiencia Valley pronta para navegacao.',
+      'generated_at_utc': '',
+      'bootstrap_reason': reason,
+      'modules': modules
+          .map(
+            (ProductModule module) => <String, String>{
+              'id': module.id,
+              'label': module.label,
+              'subtitle': module.subtitle,
+              'badge': module.badge,
+            },
+          )
+          .toList(growable: false),
+      'items': <Map<String, dynamic>>[item.raw],
+    };
+    return ProductShellData(
+      baseUrl: _defaultRuntimeBaseUrl(rawData),
+      title: 'Valley',
+      subtitle: 'Experiencia Valley pronta para navegacao.',
+      generatedAtUtc: '',
+      modules: modules,
+      summary: ProductSummary(
+        products: 1,
+        videos: 0,
+        merchants: 1,
+        warehouses: 0,
+      ),
+      items: <ProductItem>[item],
+      publicUrl: _defaultRuntimeBaseUrl(rawData),
       rawData: rawData,
     );
   }
@@ -775,6 +853,24 @@ class ProductApiRepository {
 
   String _normalizeBaseUrl(String value) =>
       value.trim().replaceAll(RegExp(r'/$'), '');
+
+  String _defaultRuntimeBaseUrl([Map<String, dynamic>? rawData]) {
+    final String envBaseUrl = _normalizeBaseUrl(_envBaseUrl);
+    if (envBaseUrl.startsWith('http')) {
+      return envBaseUrl;
+    }
+    final Map<String, dynamic> publicRuntime =
+        (rawData?['public_runtime'] as Map<dynamic, dynamic>? ??
+                <dynamic, dynamic>{})
+            .cast<String, dynamic>();
+    final String publicUrl = _normalizeBaseUrl(
+      publicRuntime['public_url'] as String? ?? '',
+    );
+    if (publicUrl.startsWith('http')) {
+      return publicUrl;
+    }
+    return _releaseBaseUrl;
+  }
 
   List<Map<String, String>> _fallbackProductModules(
     Set<String> activeModuleIds,

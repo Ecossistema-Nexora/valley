@@ -64,16 +64,19 @@ def group_records(records: list[dict]) -> dict[str, list[dict]]:
     for record in records:
         host = str(record.get("name") or "")
         kind = str(record.get("kind") or "")
+        is_cost_zero = bool(record.get("cost_zero_ssl_compatible"))
         if not host or "*" in host:
             continue
         normalized = host.lower()
+        if normalized.endswith(".admin.brasildesconto.com.br") and not is_cost_zero:
+            continue
         if kind == "merchant_erp_workspace" or normalized.endswith("-lojista.brasildesconto.com.br") or normalized == "lojista.brasildesconto.com.br":
             if normalized not in seen_lojista:
                 lojista_records.append(record)
                 seen_lojista.add(normalized)
             continue
         if (
-            kind in {"admin_gateway", "static_workspace", "module_workspace", "static_workspace_cost_zero_alias", "module_workspace_cost_zero_alias"}
+            kind in {"admin_gateway", "static_workspace_cost_zero_alias", "module_workspace_cost_zero_alias"}
             or normalized.endswith("-admin.brasildesconto.com.br")
             or normalized == "admin.brasildesconto.com.br"
         ):
@@ -119,6 +122,11 @@ def module_code(record: dict, fallback: str) -> str:
     return key or fallback.upper()
 
 
+def display_title(record: dict, host: str) -> str:
+    title = str(record.get("title") or host)
+    return title.replace(" HTTPS alias", "")
+
+
 def rows_for_group(group: str, records: Iterable[dict], small: ParagraphStyle) -> list[list[object]]:
     rows: list[list[object]] = [[
         Paragraph("<b>Módulo</b>", small),
@@ -133,7 +141,7 @@ def rows_for_group(group: str, records: Iterable[dict], small: ParagraphStyle) -
             url = "https://brasildesconto.com.br/product/"
         rows.append([
             Paragraph(module_code(record, group), small),
-            Paragraph(str(record.get("title") or host), small),
+            Paragraph(display_title(record, host), small),
             link_paragraph(host, url, small),
             Paragraph(relation_for(group, record), small),
         ])
@@ -155,7 +163,7 @@ def build_markdown(groups: dict[str, list[dict]]) -> None:
             if "/product" in host:
                 url = "https://brasildesconto.com.br/product/"
             lines.append(
-                f"| {module_code(record, group)} | {record.get('title') or host} | [{host}]({url}) | {relation_for(group, record)} |"
+                f"| {module_code(record, group)} | {display_title(record, host)} | [{host}]({url}) | {relation_for(group, record)} |"
             )
         lines.append("")
     MD_PATH.parent.mkdir(parents=True, exist_ok=True)

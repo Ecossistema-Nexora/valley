@@ -84,13 +84,18 @@ class ProductItem {
       videoUrl: json['video_url'] as String? ?? '',
       videoCount: (json['video_count'] as num?)?.toInt() ?? 0,
       status: json['status'] as String? ?? '',
-      tags: (json['tags'] as List<dynamic>? ?? <dynamic>[]).cast<String>(),
+      tags: (json['tags'] as List<dynamic>? ?? <dynamic>[])
+          .map((dynamic item) => item.toString().trim())
+          .where((String item) => item.isNotEmpty)
+          .toList(growable: false),
       ctaLabel: json['cta_label'] as String? ?? 'Abrir',
       ctaPath: json['cta_path'] as String? ?? '',
       mediaPath: json['media_path'] as String? ?? '',
       description: json['description'] as String? ?? '',
       galleryUrls: (json['gallery_urls'] as List<dynamic>? ?? <dynamic>[])
-          .cast<String>(),
+          .map((dynamic item) => item.toString().trim())
+          .where((String item) => item.isNotEmpty)
+          .toList(growable: false),
       profileId: json['profile_id'] as String? ?? '',
       raw: Map<String, dynamic>.from(json),
     );

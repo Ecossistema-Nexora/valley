@@ -1,0 +1,20 @@
+[
+  {
+    "name": "app-arm64-v8a-release.apk",
+    "size_bytes": 20887985,
+    "sha1": "23c4e171b51288118e7ade9eb67ec796128c66ca",
+    "last_write": "2026-05-12T06:48:36"
+  },
+  {
+    "name": "app-armeabi-v7a-release.apk",
+    "size_bytes": 18387421,
+    "sha1": "e95e75d8183d38f49ea27389715481eff9f3d8d0",
+    "last_write": "2026-05-12T06:48:42"
+  },
+  {
+    "name": "app-x86_64-release.apk",
+    "size_bytes": 22315021,
+    "sha1": "a0b831167067274cae0be1163bcbcc6b08f79461",
+    "last_write": "2026-05-12T06:48:48"
+  }
+]

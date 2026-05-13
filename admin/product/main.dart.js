@@ -95223,7 +95223,7 @@ case 24:case 1:return A.H(q,r)
 case 2:return A.G(o.at(-1),r)}})
 return A.I($async$ij,r)},
 anP(){var s,r
-if(B.c.bK("https://admin.brasildesconto.com.br").length!==0)return!1
+if(B.c.bK("https://brasildesconto.com.br").length!==0)return!1
 s=A.wz()
 if(s.gem()!=="http"&&s.gem()!=="https")return!0
 r=s.gmc().toLowerCase()
@@ -95607,7 +95607,7 @@ m=m.a(o.h(0,"module_screens"))
 if(J.fh(m==null?[]:m)){m=A.T(n).i("W<1,aj<k,k>>")
 m=A.S(new A.W(n,new A.aeE(),m),m.i("a3.E"))
 m.$flags=1
-o.m(0,"module_screens",m)}q=p.UV("http://100.109.240.100:8085",o,a)
+o.m(0,"module_screens",m)}q=p.UV("https://brasildesconto.com.br",o,a)
 s=1
 break
 case 1:return A.H(q,r)}})
@@ -95654,7 +95654,7 @@ m=A.S(m,m.$ti.i("a3.E"))
 k=A.ap(["status","ok","service","valley-product-bundled","modules",l,"module_screens",n,"items",m],i,t.z)
 i=h.gG(j)
 h.kw(j,new A.aeM()).gG(0)
-q=new A.nN("http://100.109.240.100:8085","Valley","Catalogo embarcado com checkout publico e operacao remota.","",o,new A.C4(i,0),j,"http://100.109.240.100:8085",k)
+q=new A.nN("https://brasildesconto.com.br","Valley","Catalogo embarcado com checkout publico e operacao remota.","",o,new A.C4(i,0),j,"https://brasildesconto.com.br",k)
 s=1
 break
 case 1:return A.H(q,r)}})
@@ -95735,8 +95735,8 @@ c=A.aG(d)
 b=new A.aeB(n,c)
 a=A.wz().gxJ()
 if(B.c.bj(a,"http")){b.$1(a)
-if(B.c.bj(A.wz().geM(),"/product"))b.$1(a+"/product")}if(B.c.bK("https://admin.brasildesconto.com.br").length!==0)b.$1("https://admin.brasildesconto.com.br")
-b.$1("http://100.109.240.100:8085")
+if(B.c.bj(A.wz().geM(),"/product"))b.$1(a+"/product")}if(B.c.bK("https://brasildesconto.com.br").length!==0)b.$1("https://brasildesconto.com.br")
+b.$1("https://brasildesconto.com.br")
 p=4
 s=7
 return A.D($.oZ().Do("assets/data/valley_admin_data.json"),$async$qJ)
@@ -95758,7 +95758,7 @@ s=6
 break
 case 3:s=2
 break
-case 6:for(d=["http://100.109.240.100:8085","http://100.109.240.100:8085/product","http://valley-codex.tailb44596.ts.net:8085","http://valley-codex.tailb44596.ts.net:8085/product","https://brasildesconto.com.br/product","https://brasildesconto.com.br","https://admin.brasildesconto.com.br/product","https://admin.brasildesconto.com.br","http://10.0.2.2:8085/product","http://10.0.2.2:8085","http://127.0.0.1:8085/product","http://127.0.0.1:8085","http://localhost:8085/product","http://localhost:8085","http://192.168.1.2:8085/product","http://192.168.1.2:8085","http://10.0.2.2:8080","http://127.0.0.1:8080","http://localhost:8080"],e=0;e<19;++e)b.$1(d[e])
+case 6:for(d=["https://brasildesconto.com.br/product","https://brasildesconto.com.br","https://admin.brasildesconto.com.br/product","https://admin.brasildesconto.com.br"],e=0;e<4;++e)b.$1(d[e])
 d=A.S(c,c.$ti.c)
 d.$flags=1
 q=d
@@ -97267,7 +97267,7 @@ c=Math.abs(c.a-e)>0.01||Math.abs(c.b-d)>0.01}s=!c
 if(j.z)c="Sincronizando cat\xe1logo real"
 else{c=J.ib(j.y)
 r=""+f.length
-c=c?r+" itens reais filtrados":r+" itens em fallback local"}r=J.ib(j.y)?B.o:B.ol
+c=c?r+" itens reais filtrados":r+" itens dispon\xedveis offline"}r=J.ib(j.y)?B.o:B.ol
 q=t.p
 r=A.da(A.b([new A.jq(c,r,!J.ib(j.y),i),B.TU,new A.jq(""+(j.gJf().length-1)+" lojas ativas",B.av,!0,i),B.TW,new A.jq(""+g.a+" agrupamentos ativos",B.d1,!0,i)],q),10,10)
 c=h.ok
