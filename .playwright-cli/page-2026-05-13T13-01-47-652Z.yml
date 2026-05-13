@@ -1,0 +1,255 @@
+- generic [active] [ref=e1]:
+  - link "Ir para o painel" [ref=e2] [cursor=pointer]:
+    - /url: "#mainContent"
+  - generic [ref=e3]:
+    - region "Navegacao global dos paineis" [ref=e4]:
+      - generic [ref=e5]:
+        - generic [ref=e6]:
+          - paragraph [ref=e7]: Menu
+          - heading "Admin e lojista" [level=2] [ref=e8]
+        - navigation "Navegacao principal" [ref=e9]:
+          - link "STOCK" [ref=e10] [cursor=pointer]:
+            - /url: "#stockIntegrations"
+          - link "Operacao" [ref=e11] [cursor=pointer]:
+            - /url: "#adminLaunchpadSection"
+          - link "Stitch P0" [ref=e12] [cursor=pointer]:
+            - /url: "#stitchP0ExecutionSection"
+          - link "Financeiro" [ref=e13] [cursor=pointer]:
+            - /url: "#financialDashboard"
+          - link "ERP Lojista" [ref=e14] [cursor=pointer]:
+            - /url: "#merchantErpSection"
+          - link "Desempenho" [ref=e15] [cursor=pointer]:
+            - /url: "#performanceDashboard"
+          - link "Importados" [ref=e16] [cursor=pointer]:
+            - /url: "#importedPricingSection"
+          - link "Revisao" [ref=e17] [cursor=pointer]:
+            - /url: "#publicationReviewSection"
+          - link "Modulos" [ref=e18] [cursor=pointer]:
+            - /url: "#modulesWorkspace"
+          - link "Configuracoes" [ref=e19] [cursor=pointer]:
+            - /url: "#settingsSection"
+      - generic [ref=e21]:
+        - paragraph [ref=e22]: Acesso
+        - heading "Dominios e subdominios" [level=2] [ref=e23]
+    - banner [ref=e24]:
+      - generic [ref=e25]:
+        - generic "Valley" [ref=e26]:
+          - img "Logomarca oficial Valley" [ref=e27]
+          - generic [ref=e28]:
+            - paragraph [ref=e29]: Valley
+            - paragraph [ref=e30]: Super App Production Panel
+        - paragraph [ref=e31]: Valley Release Mode
+        - heading "Painel de producao para 47 modulos" [level=1] [ref=e32]
+        - paragraph [ref=e33]: Supervisao executiva, gestao comercial e leitura operacional em uma unica superficie. O painel cruza modulos, contratos, catalogo, checkout, lojistas, usuarios e exposicao publica Cloudflare.
+      - generic [ref=e34]:
+        - region "Preview do painel em desktop e mobile" [ref=e35]:
+          - generic [ref=e36]: PRODUCAO ATIVA
+          - generic [ref=e37]:
+            - generic [ref=e39]:
+              - generic [ref=e40]: Valley Admin
+              - generic [ref=e41]:
+                - generic [ref=e42]: Produção
+                - generic [ref=e43]: Checkout
+                - generic [ref=e44]: Stock
+            - generic [ref=e49]:
+              - strong [ref=e50]: Valley
+              - generic [ref=e51]: Admin
+        - generic [ref=e53]:
+          - paragraph [ref=e54]: Control Fabric
+          - heading "Registry pendente" [level=2] [ref=e55]
+          - paragraph [ref=e56]: Aguardando leitura do manifesto principal.
+          - generic [ref=e57]:
+            - generic [ref=e58]:
+              - generic [ref=e59]: Console
+              - strong [ref=e60]: Geracao pendente
+            - generic [ref=e61]:
+              - generic [ref=e62]: Saude operacional
+              - strong [ref=e63]: Relatorio aguardando leitura
+        - generic [ref=e66]:
+          - paragraph [ref=e67]: Ações
+          - heading "Ações operacionais" [level=2] [ref=e68]
+    - main [ref=e69]:
+      - region "Abas do painel admin" [ref=e70]:
+        - generic [ref=e71]:
+          - generic [ref=e72]:
+            - paragraph [ref=e73]: Admin surfaces
+            - heading "Abas operacionais do painel" [level=2] [ref=e74]
+          - paragraph [ref=e75]: Cada frente do admin fica isolada em uma aba real para reduzir mistura entre operação, catálogo, finanças e módulos.
+        - tablist "Abas do painel admin"
+      - region "Visao geral do release" [ref=e76]:
+        - generic [ref=e78]:
+          - generic [ref=e79]:
+            - paragraph [ref=e80]: Release overview
+            - heading "Panorama de execucao" [level=2] [ref=e81]
+          - paragraph [ref=e82]: Leitura sintetica do corte atual.
+        - generic [ref=e84]:
+          - generic [ref=e85]:
+            - paragraph [ref=e86]: Priority radar
+            - heading "Sinais prioritarios" [level=2] [ref=e87]
+          - paragraph [ref=e88]: Onde o proximo esforco tecnico gera mais impacto.
+      - region "Home do painel administrador" [ref=e89]:
+        - generic [ref=e90]:
+          - generic [ref=e91]:
+            - paragraph [ref=e92]: Admin launchpad
+            - heading "Home do painel administrador" [level=2] [ref=e93]
+          - paragraph [ref=e94]: "Home enxuta: somente botões para abrir áreas e páginas independentes de cada módulo."
+      - region "Onda 1 P0 Stitch executavel" [ref=e96]:
+        - generic [ref=e97]:
+          - generic [ref=e98]:
+            - paragraph [ref=e99]: Stitch Onda 1
+            - heading "Templates P0 em telas executáveis reais" [level=2] [ref=e100]
+          - paragraph [ref=e101]: Admin Central 1/2 e ERP Lojista convertidos para operação no painel real, com ações conectadas ao runtime existente.
+      - region "ERP do lojista" [ref=e102]:
+        - generic [ref=e103]:
+          - generic [ref=e104]:
+            - paragraph [ref=e105]: ERP lojista
+            - heading "Painel de gerenciamento do marketplace" [level=2] [ref=e106]
+          - paragraph [ref=e107]: Login, PDV, armazem, metricas, campanhas, relatorios, financeiro, cadastro, perfil, contabil, fiscal, integracoes, equipe e seguranca.
+      - region "Subdominios dedicados por modulo" [ref=e108]:
+        - generic [ref=e109]:
+          - generic [ref=e110]:
+            - paragraph [ref=e111]: Module workspaces
+            - heading "Subdominios dedicados por modulo" [level=2] [ref=e112]
+          - paragraph [ref=e113]: Cada modulo ganha uma pagina espelhada com foco automatico, URL dedicada e contexto operacional em modo de producao.
+      - region "Sinais executivos de release" [ref=e114]:
+        - generic [ref=e116]:
+          - generic [ref=e117]:
+            - paragraph [ref=e118]: Release summary
+            - heading "Scoreboard executivo" [level=2] [ref=e119]
+          - paragraph [ref=e120]: Leitura consolidada do payload de release.
+        - generic [ref=e122]:
+          - generic [ref=e123]:
+            - paragraph [ref=e124]: Critical pressure
+            - heading "Top pendencias" [level=2] [ref=e125]
+          - paragraph [ref=e126]: Modulos com maior pressao de fechamento.
+        - generic [ref=e128]:
+          - generic [ref=e129]:
+            - paragraph [ref=e130]: Public runtime
+            - heading "Status da URL publica" [level=2] [ref=e131]
+          - paragraph [ref=e132]: Pronto para consumir runtime quando ele chegar.
+        - generic [ref=e134]:
+          - generic [ref=e135]:
+            - paragraph [ref=e136]: Checkout health
+            - heading "Mercado Pago" [level=2] [ref=e137]
+          - paragraph [ref=e138]: Saúde do checkout, webhook e credenciais operacionais do Valley.
+      - region "Painel financeiro e comercial" [ref=e139]:
+        - generic [ref=e141]:
+          - generic [ref=e142]:
+            - paragraph [ref=e143]: Revenue board
+            - heading "Resultados financeiros" [level=2] [ref=e144]
+          - paragraph [ref=e145]: Leitura operacional derivada do catalogo carregado no ambiente.
+        - generic [ref=e147]:
+          - generic [ref=e148]:
+            - paragraph [ref=e149]: Commercial focus
+            - heading "Destaques de vendas" [level=2] [ref=e150]
+          - paragraph [ref=e151]: Maior segmento, maior valor de catalogo e itens com maior margem potencial.
+      - region "Desempenho por modulo e stock" [ref=e152]:
+        - generic [ref=e154]:
+          - generic [ref=e155]:
+            - paragraph [ref=e156]: Module scoreboard
+            - heading "Resultados por modulo" [level=2] [ref=e157]
+          - paragraph [ref=e158]: Volume de itens, valor potencial, estoque e cobertura comercial.
+        - generic [ref=e160]:
+          - generic [ref=e161]:
+            - paragraph [ref=e162]: Stock intelligence
+            - heading "Radar do modulo STOCK" [level=2] [ref=e163]
+          - paragraph [ref=e164]: Produto lider, segmentos mais fortes e margem potencial do inventario.
+      - region "Integracoes de marketplaces" [ref=e165]:
+        - generic [ref=e166]:
+          - generic [ref=e167]:
+            - paragraph [ref=e168]: Commerce APIs
+            - heading "Central de integracoes de dropshipping" [level=2] [ref=e169]
+          - paragraph [ref=e170]: Cockpit operacional para credenciais, webhooks, escopos, sincronizacao e prontidao por fornecedor.
+        - generic [ref=e171]:
+          - button "Salvar" [ref=e172] [cursor=pointer]
+          - button "Alterar" [ref=e173] [cursor=pointer]
+          - button "Padrao" [ref=e174] [cursor=pointer]
+          - button "Exportar resumo" [ref=e175] [cursor=pointer]
+        - paragraph [ref=e176]: Use referencia de segredo ou vault no campo Secret Ref. Consultas externas do dropshipping devem usar APIs oficiais; scraping fica como fallback controlado e IA externa fica bloqueada por padrao.
+      - region "Playbooks de integracao do modulo stock" [ref=e177]:
+        - generic [ref=e178]:
+          - generic [ref=e179]:
+            - paragraph [ref=e180]: Stock integration desk
+            - heading "Passo a passo por fornecedor" [level=2] [ref=e181]
+          - paragraph [ref=e182]: Guias de integração para ativar APIs oficiais de dropshipping com fluxo comercial consistente.
+      - region "Gestao de produtos importados" [ref=e183]:
+        - generic [ref=e184]:
+          - generic [ref=e185]:
+            - paragraph [ref=e186]: Imported pricing desk
+            - heading "Gestão de produtos importados" [level=2] [ref=e187]
+          - paragraph [ref=e188]: Precificação por faturamento líquido, filtros completos e gestão referenciada por fornecedor.
+        - generic [ref=e190]:
+          - button "Salvar" [ref=e191] [cursor=pointer]
+          - button "Alterar" [ref=e192] [cursor=pointer]
+          - button "Padrao" [ref=e193] [cursor=pointer]
+          - button "Exportar resumo" [ref=e194] [cursor=pointer]
+        - paragraph [ref=e195]: O custo base vem do catálogo importado. A mesa calcula preço sugerido, taxas e faturamento líquido estimado por SKU e por fornecedor.
+      - region "Fila exclusiva de revisao de publicacao" [ref=e196]:
+        - generic [ref=e197]:
+          - generic [ref=e198]:
+            - paragraph [ref=e199]: Publication review
+            - heading "Itens nao publicados ou em revisao" [level=2] [ref=e200]
+          - paragraph [ref=e201]: Fila exclusiva para produtos bloqueados por preco, liquidez, estoque, duplicidade ou configuracao comercial pendente.
+      - region "Matrizes operacionais" [ref=e202]:
+        - generic [ref=e205]:
+          - paragraph [ref=e206]: Tier readiness
+          - heading "Camadas de implantacao" [level=2] [ref=e207]
+        - generic [ref=e210]:
+          - paragraph [ref=e211]: Data strategy
+          - heading "Distribuicao por data home" [level=2] [ref=e212]
+        - generic [ref=e215]:
+          - paragraph [ref=e216]: Natural next step
+          - heading "Fila de evolucao" [level=2] [ref=e217]
+      - region "Cobertura por dominio" [ref=e218]:
+        - generic [ref=e219]:
+          - generic [ref=e220]:
+            - paragraph [ref=e221]: Domain spread
+            - heading "Mapa de dominio e cobertura" [level=2] [ref=e222]
+          - paragraph [ref=e223]: Cada card combina densidade de modulos e prontidao media.
+      - region "Cockpit operacional" [ref=e224]:
+        - region "Filtros e operacao" [ref=e225]:
+          - generic [ref=e226]:
+            - generic [ref=e227]:
+              - generic [ref=e228]: Buscar modulo
+              - searchbox "Buscar modulo" [ref=e229]
+            - paragraph [ref=e230]:
+              - text: "Atalhos:"
+              - generic [ref=e231]: /
+              - text: foca a busca,
+              - generic [ref=e232]: J
+              - text: /
+              - generic [ref=e233]: K
+              - text: navegam,
+              - generic [ref=e234]: Esc
+              - text: limpa filtros.
+          - generic [ref=e235]:
+            - generic [ref=e236]:
+              - generic [ref=e237]: Tier
+              - combobox "Tier" [ref=e238]
+            - generic [ref=e239]:
+              - generic [ref=e240]: Data home
+              - combobox "Data home" [ref=e241]
+            - generic [ref=e242]:
+              - generic [ref=e243]: Status
+              - combobox "Status" [ref=e244]
+            - generic [ref=e245]:
+              - generic [ref=e246]: Dominio
+              - combobox "Dominio" [ref=e247]
+          - generic [ref=e248]:
+            - button "Limpar filtros" [ref=e249] [cursor=pointer]
+            - button "Copiar resumo" [ref=e250] [cursor=pointer]
+          - generic [ref=e253]:
+            - paragraph [ref=e254]: External access
+            - heading "Infra publica" [level=2] [ref=e255]
+        - generic [ref=e256]:
+          - region "Lista de modulos" [ref=e257]:
+            - generic [ref=e259]:
+              - heading "Malha de modulos" [level=2] [ref=e260]
+              - paragraph [ref=e261]: 0 modulos filtrados
+            - listbox "Lista de modulos"
+          - region "Inspetor do modulo" [ref=e262]:
+            - generic [ref=e264]:
+              - heading "Selecione um modulo" [level=2] [ref=e265]
+              - paragraph [ref=e266]: O inspetor mostra docs, checklist, data home, contratos e trilha de release.
+            - navigation "Secoes do modulo" [ref=e267]
+            - generic [ref=e268]: Nenhum modulo selecionado.

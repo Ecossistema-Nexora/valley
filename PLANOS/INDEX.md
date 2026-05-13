@@ -5,9 +5,9 @@
 
 - Regra: cada item de checklist dos planos conta como uma etapa.
 - Atualize este indice depois de cada acao concluida com `python scripts\update_planos_progress.py`.
-- Etapas concluidas desde o primeiro plano do indice: `216/217`.
-- Produzido desde o Plano 1: `99.5%`.
-- Falta produzir para a conclusao final acumulada: `0.5%`.
+- Etapas concluidas desde o primeiro plano do indice: `233/235`.
+- Produzido desde o Plano 1: `99.1%`.
+- Falta produzir para a conclusao final acumulada: `0.9%`.
 <!-- progresso:fim -->
 
 | versao | criado_em_brt | arquivo | status | escopo | etapas | produzido | falta_produzir | ultima_atualizacao_brt |
@@ -50,5 +50,8 @@
 | v036 | 2026-05-12 00:42:57 BRT | [v036__20260512-004257-brt__erp_lojista_marketplace_operacional.md](./v036__20260512-004257-brt__erp_lojista_marketplace_operacional.md) | em_andamento | ERP lojista marketplace operacional com schema, integracoes, mecanicas e frontend publico | 9/9 | 100.0% | 0.0% | 2026-05-12 00:42:57 BRT |
 | v037 | 2026-05-13 04:55:27 BRT | [v037__20260513-045527-brt__blindagem_bootstrap_apk_sem_servidor.md](./v037__20260513-045527-brt__blindagem_bootstrap_apk_sem_servidor.md) | concluido | Blindagem do bootstrap do APK para abrir com catalogo embarcado mesmo com dominio publico fora | 4/4 | 100.0% | 0.0% | 2026-05-13 06:37:16 BRT |
 | v038 | 2026-05-13 07:28:05 BRT | [v038__20260513-072805-brt__regeneracao_token_cloudflare_release_gate.md](./v038__20260513-072805-brt__regeneracao_token_cloudflare_release_gate.md) | concluido | Regeneracao persistente do token Cloudflare e gate fixo para liberar APK | 5/5 | 100.0% | 0.0% | 2026-05-13 08:45:46 BRT |
+| v039 | 2026-05-13 08:57:15 BRT | [v039__20260513-085715-brt__stitch_erp_inventory_handoff.md](./v039__20260513-085715-brt__stitch_erp_inventory_handoff.md) | em_andamento | Inventario do export Stitch ERP e handoff para Flutter/admin | 6/7 | 85.7% | 14.3% | 2026-05-13 08:57:15 BRT |
+| v040 | 2026-05-13 09:07:10 BRT | [v040__20260513-090710-brt__release_templates_stitch_apk_pdf.md](./v040__20260513-090710-brt__release_templates_stitch_apk_pdf.md) | concluido | Release web dos templates Stitch com PDF e APK atualizados | 5/5 | 100.0% | 0.0% | 2026-05-13 09:20:00 BRT |
+| v041 | 2026-05-13 09:51:47 BRT | [v041__20260513-095147-brt__onda1_p0_stitch_telas_executaveis.md](./v041__20260513-095147-brt__onda1_p0_stitch_telas_executaveis.md) | concluido | Onda 1 P0 Stitch em telas executaveis web, Flutter e APK | 6/6 | 100.0% | 0.0% | 2026-05-13 10:38:20 BRT |
 | v019 | 2026-05-05 17:52:38 BRT | [v019__20260505-175238-brt__passo_1_nucleo_relacional_nexora_v40.md](./v019__20260505-175238-brt__passo_1_nucleo_relacional_nexora_v40.md) | concluido | PASSO 1 do banco hibrido Nexora V40 com nucleo relacional de identidade, perfis, wallets e LED Cards | 0/0 | 100.0% | 0.0% | 2026-05-05 17:52:38 BRT |
 | v020 | 2026-05-05 17:55:49 BRT | [v020__20260505-175549-brt__passo_2_ledger_financeiro_smart_equity.md](./v020__20260505-175549-brt__passo_2_ledger_financeiro_smart_equity.md) | concluido | PASSO 2 do banco hibrido Nexora V40 com ledger financeiro, Smart Equity e orders mestre | 0/0 | 100.0% | 0.0% | 2026-05-05 17:55:49 BRT |

@@ -1,0 +1,45 @@
+{
+  "version": "v041",
+  "app_version": "1.0.9+56",
+  "generated_at_utc": "2026-05-13T13:29:50Z",
+  "product_api_base_url": "https://admin.brasildesconto.com.br",
+  "apk_strategy": "split-per-abi",
+  "recommended_android": "app-arm64-v8a-release.apk",
+  "artifacts": [
+    {
+      "name": "app-arm64-v8a-release.apk",
+      "file": "app-arm64-v8a-release.apk",
+      "bytes": 20908757,
+      "sha1": "9B1DD76DC353C3BE18AFCB6CD9C45F0E2B536945",
+      "public_url": "https://admin.brasildesconto.com.br/downloads/v041/app-arm64-v8a-release.apk"
+    },
+    {
+      "name": "app-armeabi-v7a-release.apk",
+      "file": "app-armeabi-v7a-release.apk",
+      "bytes": 18424577,
+      "sha1": "4BFD5E593D1400348FCEF394382F83C5B5FD9B0B",
+      "public_url": "https://admin.brasildesconto.com.br/downloads/v041/app-armeabi-v7a-release.apk"
+    },
+    {
+      "name": "app-x86_64-release.apk",
+      "file": "app-x86_64-release.apk",
+      "bytes": 22335793,
+      "sha1": "BF0729B22323244529E5581DC534655D7EC2661C",
+      "public_url": "https://admin.brasildesconto.com.br/downloads/v041/app-x86_64-release.apk"
+    }
+  ],
+  "web_validation": {
+    "public_url": "https://admin.brasildesconto.com.br/",
+    "playwright_console_errors": 0,
+    "screenshots": [
+      "output/playwright/stitch_p0_executable_admin_desktop.png",
+      "output/playwright/stitch_p0_executable_admin_mobile.png"
+    ]
+  },
+  "mobile_p0": [
+    "login",
+    "checkout",
+    "minhas_compras",
+    "rastreio"
+  ]
+}

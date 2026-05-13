@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-fixed-variant": "#005236",
+                    "surface-tint": "#565e74",
+                    "primary-fixed": "#dae2fd",
+                    "on-primary-container": "#7c839b",
+                    "surface-bright": "#fcf8fa",
+                    "on-background": "#1b1b1d",
+                    "tertiary-fixed-dim": "#adc6ff",
+                    "surface-container-highest": "#e4e2e4",
+                    "secondary-fixed": "#6ffbbe",
+                    "on-surface-variant": "#45464d",
+                    "on-primary-fixed-variant": "#3f465c",
+                    "error": "#ba1a1a",
+                    "on-primary-fixed": "#131b2e",
+                    "on-secondary-fixed": "#002113",
+                    "inverse-on-surface": "#f3f0f2",
+                    "inverse-surface": "#303032",
+                    "secondary": "#006c49",
+                    "on-secondary": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "on-tertiary-fixed": "#001a42",
+                    "surface-dim": "#dcd9db",
+                    "secondary-container": "#6cf8bb",
+                    "surface-container-low": "#f6f3f5",
+                    "on-tertiary-fixed-variant": "#004395",
+                    "outline-variant": "#c6c6cd",
+                    "outline": "#76777d",
+                    "on-error": "#ffffff",
+                    "background": "#fcf8fa",
+                    "surface-container-high": "#eae7e9",
+                    "surface-container": "#f0edef",
+                    "surface-variant": "#e4e2e4",
+                    "tertiary-fixed": "#d8e2ff",
+                    "on-secondary-container": "#00714d",
+                    "error-container": "#ffdad6",
+                    "on-tertiary": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "tertiary": "#000000",
+                    "primary": "#000000",
+                    "inverse-primary": "#bec6e0",
+                    "on-surface": "#1b1b1d",
+                    "tertiary-container": "#001a42",
+                    "secondary-fixed-dim": "#4edea3",
+                    "primary-container": "#131b2e",
+                    "on-tertiary-container": "#3980f4",
+                    "surface-container-lowest": "#ffffff",
+                    "surface": "#fcf8fa",
+                    "primary-fixed-dim": "#bec6e0"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "max-width": "1600px",
+                    "dense-gap": "0.5rem",
+                    "container-padding": "1.5rem",
+                    "gutter": "1rem",
+                    "unit": "4px"
+            },
+            "fontFamily": {
+                    "label-md": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "label-bold": ["Inter"],
+                    "body-md": ["Inter"],
+                    "title-sm": ["Inter"],
+                    "mono-sm": ["JetBrains Mono"],
+                    "headline-md": ["Inter"],
+                    "display-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "label-md": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                    "label-bold": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "title-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "mono-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "display-lg": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body { background-color: #F8FAFC; }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen text-on-surface font-body-md">
+<!-- TopNavBar -->
+<header class="bg-primary text-on-primary fixed top-0 z-50 w-full flex justify-between items-center h-14 px-container-padding border-b border-outline-variant/30">
+<div class="flex items-center gap-gutter">
+<span class="text-headline-md font-display-lg text-on-primary tracking-tight">Valley</span>
+<nav class="hidden md:flex ml-8 items-center gap-6">
+<a class="text-on-primary-container font-label-md hover:text-on-primary transition-colors duration-150" href="#">Dashboard</a>
+<a class="text-on-primary-container font-label-md hover:text-on-primary transition-colors duration-150" href="#">Inventory</a>
+<a class="text-on-primary-container font-label-md hover:text-on-primary transition-colors duration-150" href="#">Sales</a>
+<a class="text-on-primary-container font-label-md hover:text-on-primary transition-colors duration-150" href="#">Logistics</a>
+<a class="text-on-primary font-bold border-b-2 border-secondary-fixed pb-1" href="#">Finance</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block">
+<input class="bg-primary-container/20 border-none text-on-primary placeholder:text-on-primary-container text-body-sm rounded-lg px-4 py-1.5 w-64 focus:ring-1 focus:ring-secondary-fixed" placeholder="Search accounts..." type="text"/>
+</div>
+<div class="flex items-center gap-2">
+<button class="material-symbols-outlined hover:bg-primary-container/20 p-1.5 rounded transition-all">notifications</button>
+<button class="material-symbols-outlined hover:bg-primary-container/20 p-1.5 rounded transition-all">settings</button>
+<button class="material-symbols-outlined hover:bg-primary-container/20 p-1.5 rounded transition-all">help</button>
+<img alt="User profile photo" class="w-8 h-8 rounded-full border border-outline-variant/30" data-alt="A professional headshot of a corporate executive in a sharp navy blue suit, set against a blurred modern office background. The lighting is crisp and cinematic, emphasizing a serious yet approachable expression, consistent with a high-end enterprise management system aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCxi_dv180ss_NjiXXZbOf0UNFOSl7Z4h9YWeDyQNNkP0IQ_sOdxC65mDo_9Rx-uTyzQRs5Yn09-Ymd3WtqxNdpLiWngG6oBzIlb9gyNyhih1WRPfZrvF3cT8Az1yS8My9BQijhCv4-PvvdNANQwSmDSr7vy31q1KpmLarWBGx4RGtUH9E46XyZMNJcFqQ2MAkdVrt03JhxdDnlfTLP9lG8oi3RHuyWBhArFy81We51GAdu9F_lElRGzELmEljGh2pOKaWmx7ZS25b0"/>
+</div>
+</div>
+</header>
+<!-- Sidebar & Content Shell -->
+<div class="flex flex-1 pt-14">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-14 h-[calc(100vh-3.5rem)] w-60 bg-surface border-r border-outline-variant flex flex-col py-gutter space-y-dense-gap overflow-y-auto">
+<div class="px-4 pb-4">
+<h2 class="font-display-lg text-primary text-headline-md">Valley ERP</h2>
+<p class="text-on-surface-variant text-body-sm">Enterprise Hub</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:bg-surface-container-high transition-all duration-200" href="#">
+<span class="material-symbols-outlined">precision_manufacturing</span>
+<span class="font-label-md">Operations</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:bg-surface-container-high transition-all duration-200" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-md">Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:bg-surface-container-high transition-all duration-200" href="#">
+<span class="material-symbols-outlined">groups</span>
+<span class="font-label-md">CRM</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:bg-surface-container-high transition-all duration-200" href="#">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span class="font-label-md">Procurement</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:bg-surface-container-high transition-all duration-200" href="#">
+<span class="material-symbols-outlined">badge</span>
+<span class="font-label-md">Staff</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 bg-secondary-container text-on-secondary-container font-bold border-r-4 border-secondary transition-all" href="#">
+<span class="material-symbols-outlined">history</span>
+<span class="font-label-md">Audit</span>
+</a>
+</nav>
+<div class="p-4 border-t border-outline-variant">
+<button class="w-full bg-secondary text-on-secondary font-label-bold py-2 rounded-lg hover:opacity-90 active:scale-95 transition-all">Quick Action</button>
+</div>
+<div class="mt-auto space-y-1">
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined">contact_support</span>
+<span class="font-label-md">Support</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-label-md">Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-60 flex-1 p-gutter max-w-max-width mx-auto w-full">
+<!-- Workspace Header & Action Bar -->
+<div class="flex justify-between items-end mb-6">
+<div>
+<nav class="flex items-center gap-1 text-on-surface-variant font-label-md mb-1">
+<span>Finance</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-primary font-semibold">Gestão Financeira</span>
+</nav>
+<h1 class="text-display-lg font-display-lg text-primary">Painel de Controle Financeiro</h1>
+</div>
+<div class="flex gap-dense-gap">
+<button class="flex items-center gap-2 px-4 py-2 bg-surface-container-highest border border-outline-variant text-on-surface font-label-bold rounded hover:bg-surface-container-high transition-all">
+<span class="material-symbols-outlined text-[18px]">account_balance</span>
+                        Conciliação Bancária
+                    </button>
+<button class="flex items-center gap-2 px-4 py-2 bg-secondary text-on-secondary font-label-bold rounded hover:opacity-90 transition-all">
+<span class="material-symbols-outlined text-[18px]">download</span>
+                        Exportar Relatórios
+                    </button>
+</div>
+</div>
+<!-- KPI Grid -->
+<div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-gutter mb-gutter">
+<div class="bg-surface-container-lowest border border-outline-variant p-4">
+<p class="font-label-md text-on-surface-variant uppercase tracking-wider mb-1">Saldo em Caixa</p>
+<div class="flex items-baseline gap-2">
+<span class="text-headline-md font-display-lg">R$ 1.240.500</span>
+<span class="text-secondary font-label-bold text-[10px] bg-secondary-container px-1.5 py-0.5 rounded">+4.2%</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-4">
+<p class="font-label-md text-on-surface-variant uppercase tracking-wider mb-1">Contas a Receber (D+30)</p>
+<div class="flex items-baseline gap-2">
+<span class="text-headline-md font-display-lg">R$ 450.200</span>
+<span class="text-on-surface-variant font-mono-sm">124 docs</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-4">
+<p class="font-label-md text-on-surface-variant uppercase tracking-wider mb-1">Contas a Pagar (D+30)</p>
+<div class="flex items-baseline gap-2">
+<span class="text-headline-md font-display-lg">R$ 310.800</span>
+<span class="text-error font-label-bold text-[10px] bg-error-container px-1.5 py-0.5 rounded">-1.8%</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-4">
+<p class="font-label-md text-on-surface-variant uppercase tracking-wider mb-1">Inadimplência</p>
+<div class="flex items-baseline gap-2">
+<span class="text-headline-md font-display-lg">3.4%</span>
+<div class="w-16 h-1.5 bg-surface-container-high rounded-full overflow-hidden ml-auto">
+<div class="bg-error h-full" style="width: 34%"></div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-4 hidden lg:block">
+<p class="font-label-md text-on-surface-variant uppercase tracking-wider mb-1">EBITDA (Atual)</p>
+<div class="flex items-baseline gap-2">
+<span class="text-headline-md font-display-lg">24.8%</span>
+<span class="material-symbols-outlined text-secondary">trending_up</span>
+</div>
+</div>
+</div>
+<!-- Main Operational Area (Bento Layout) -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Fluxo de Caixa (Chart Panel) -->
+<div class="col-span-12 lg:col-span-8 bg-surface-container-lowest border border-outline-variant p-gutter">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-title-sm text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">show_chart</span>
+                            Projeção de Fluxo de Caixa
+                        </h3>
+<div class="flex bg-surface-container-low p-1 rounded">
+<button class="px-3 py-1 text-label-md bg-white shadow-sm rounded">Mensal</button>
+<button class="px-3 py-1 text-label-md hover:text-primary transition-colors">Semanal</button>
+</div>
+</div>
+<!-- Placeholder for Chart -->
+<div class="h-64 relative bg-surface-container-low border border-dashed border-outline-variant flex items-center justify-center">
+<div class="absolute inset-0 flex items-end px-gutter pb-4 gap-4">
+<div class="flex-1 bg-secondary-fixed-dim/40 h-[40%] rounded-t-sm"></div>
+<div class="flex-1 bg-secondary h-[55%] rounded-t-sm"></div>
+<div class="flex-1 bg-secondary-fixed-dim/40 h-[45%] rounded-t-sm"></div>
+<div class="flex-1 bg-secondary h-[70%] rounded-t-sm"></div>
+<div class="flex-1 bg-secondary-fixed-dim/40 h-[60%] rounded-t-sm"></div>
+<div class="flex-1 bg-secondary h-[85%] rounded-t-sm"></div>
+<div class="flex-1 bg-secondary-fixed-dim/40 h-[50%] rounded-t-sm"></div>
+<div class="flex-1 bg-secondary h-[65%] rounded-t-sm"></div>
+</div>
+<p class="font-mono-sm text-on-surface-variant uppercase tracking-widest z-10 bg-white px-4 py-2 border border-outline-variant">Análise de Liquidez Operacional</p>
+</div>
+<div class="mt-4 grid grid-cols-3 gap-gutter pt-4 border-t border-outline-variant">
+<div>
+<p class="text-label-md text-on-surface-variant">Receita Projetada</p>
+<p class="text-body-md font-bold">R$ 1.8M</p>
+</div>
+<div>
+<p class="text-label-md text-on-surface-variant">Custo Operacional</p>
+<p class="text-body-md font-bold">R$ 1.2M</p>
+</div>
+<div>
+<p class="text-label-md text-on-surface-variant">Margem Estimada</p>
+<p class="text-body-md font-bold text-secondary">R$ 600K</p>
+</div>
+</div>
+</div>
+<!-- DRE Resumido -->
+<div class="col-span-12 lg:col-span-4 bg-surface-container-lowest border border-outline-variant flex flex-col">
+<div class="p-gutter border-b border-outline-variant">
+<h3 class="font-title-sm text-primary">DRE Gerencial (Julho)</h3>
+</div>
+<div class="flex-1 p-gutter space-y-4 font-body-sm">
+<div class="flex justify-between items-center">
+<span class="text-on-surface-variant">Receita Bruta</span>
+<span class="font-bold">R$ 2.450.000</span>
+</div>
+<div class="flex justify-between items-center text-error">
+<span class="text-on-surface-variant">(-) Impostos &amp; Deduções</span>
+<span>(R$ 318.500)</span>
+</div>
+<div class="h-px bg-outline-variant"></div>
+<div class="flex justify-between items-center font-bold">
+<span>Receita Líquida</span>
+<span>R$ 2.131.500</span>
+</div>
+<div class="flex justify-between items-center text-error">
+<span class="text-on-surface-variant">(-) CPV / CMV</span>
+<span>(R$ 940.000)</span>
+</div>
+<div class="flex justify-between items-center font-bold">
+<span>Lucro Bruto</span>
+<span>R$ 1.191.500</span>
+</div>
+<div class="flex justify-between items-center text-error">
+<span class="text-on-surface-variant">(-) Despesas Op.</span>
+<span>(R$ 650.000)</span>
+</div>
+<div class="h-px bg-outline-variant"></div>
+<div class="flex justify-between items-center bg-secondary-container px-2 py-1 -mx-2 rounded">
+<span class="font-bold text-on-secondary-container">Lucro Líquido</span>
+<span class="font-bold text-on-secondary-container">R$ 541.500</span>
+</div>
+</div>
+<div class="mt-auto p-4 bg-surface-container-low text-center">
+<a class="text-secondary font-label-bold hover:underline" href="#">Ver DRE Completo</a>
+</div>
+</div>
+<!-- Data Table: Contas Pendentes -->
+<div class="col-span-12 bg-surface-container-lowest border border-outline-variant overflow-hidden">
+<div class="bg-surface-container-low px-gutter py-3 flex justify-between items-center border-b border-outline-variant">
+<div class="flex gap-4">
+<button class="text-primary font-label-bold border-b-2 border-primary pb-1">Contas a Receber</button>
+<button class="text-on-surface-variant font-label-md hover:text-primary transition-colors">Contas a Pagar</button>
+<button class="text-on-surface-variant font-label-md hover:text-primary transition-colors">Conciliados</button>
+</div>
+<div class="flex gap-dense-gap">
+<button class="material-symbols-outlined text-on-surface-variant text-[20px] hover:bg-surface-container-high p-1 rounded">filter_list</button>
+<button class="material-symbols-outlined text-on-surface-variant text-[20px] hover:bg-surface-container-high p-1 rounded">search</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse font-body-sm">
+<thead>
+<tr class="bg-surface-container-low/50 border-b border-outline-variant">
+<th class="px-gutter py-3 font-label-bold text-on-surface-variant uppercase tracking-tighter">Vencimento</th>
+<th class="px-gutter py-3 font-label-bold text-on-surface-variant uppercase tracking-tighter">Cliente / Fornecedor</th>
+<th class="px-gutter py-3 font-label-bold text-on-surface-variant uppercase tracking-tighter">Categoria</th>
+<th class="px-gutter py-3 font-label-bold text-on-surface-variant uppercase tracking-tighter">Valor</th>
+<th class="px-gutter py-3 font-label-bold text-on-surface-variant uppercase tracking-tighter">Status</th>
+<th class="px-gutter py-3"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="border-b border-outline-variant/30 hover:bg-surface-container-low transition-colors">
+<td class="px-gutter py-3 font-mono-sm">15/08/2024</td>
+<td class="px-gutter py-3 font-bold">TechSolutions Inc.</td>
+<td class="px-gutter py-3">Serviços de Software</td>
+<td class="px-gutter py-3">R$ 12.500,00</td>
+<td class="px-gutter py-3">
+<span class="inline-flex items-center gap-1.5 bg-secondary-container/50 text-on-secondary-container px-2 py-0.5 rounded-full text-[11px] font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span> EM DIA
+                                        </span>
+</td>
+<td class="px-gutter py-3 text-right">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary">more_vert</button>
+</td>
+</tr>
+<tr class="border-b border-outline-variant/30 hover:bg-surface-container-low transition-colors">
+<td class="px-gutter py-3 font-mono-sm text-error">10/08/2024</td>
+<td class="px-gutter py-3 font-bold">Distribuidora Global S.A.</td>
+<td class="px-gutter py-3">Matéria Prima</td>
+<td class="px-gutter py-3">R$ 45.320,00</td>
+<td class="px-gutter py-3">
+<span class="inline-flex items-center gap-1.5 bg-error-container text-on-error-container px-2 py-0.5 rounded-full text-[11px] font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span> ATRASADO
+                                        </span>
+</td>
+<td class="px-gutter py-3 text-right">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary">more_vert</button>
+</td>
+</tr>
+<tr class="border-b border-outline-variant/30 hover:bg-surface-container-low transition-colors">
+<td class="px-gutter py-3 font-mono-sm">18/08/2024</td>
+<td class="px-gutter py-3 font-bold">Agência Marketing Digital</td>
+<td class="px-gutter py-3">Publicidade</td>
+<td class="px-gutter py-3">R$ 8.000,00</td>
+<td class="px-gutter py-3">
+<span class="inline-flex items-center gap-1.5 bg-surface-container-highest text-on-surface-variant px-2 py-0.5 rounded-full text-[11px] font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span> PENDENTE
+                                        </span>
+</td>
+<td class="px-gutter py-3 text-right">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary">more_vert</button>
+</td>
+</tr>
+<tr class="border-b border-outline-variant/30 hover:bg-surface-container-low transition-colors">
+<td class="px-gutter py-3 font-mono-sm">22/08/2024</td>
+<td class="px-gutter py-3 font-bold">Condomínio Empresarial</td>
+<td class="px-gutter py-3">Infraestrutura</td>
+<td class="px-gutter py-3">R$ 15.200,00</td>
+<td class="px-gutter py-3">
+<span class="inline-flex items-center gap-1.5 bg-surface-container-highest text-on-surface-variant px-2 py-0.5 rounded-full text-[11px] font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span> PENDENTE
+                                        </span>
+</td>
+<td class="px-gutter py-3 text-right">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary">more_vert</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="px-gutter py-2 bg-surface-container-low flex justify-between items-center text-label-md text-on-surface-variant">
+<span>Mostrando 4 de 124 lançamentos</span>
+<div class="flex gap-4">
+<button class="hover:text-primary">Anterior</button>
+<button class="hover:text-primary">Próximo</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Footer -->
+<footer class="w-full py-4 mt-auto bg-surface-container-lowest border-t border-outline-variant">
+<div class="flex justify-between items-center px-container-padding max-w-max-width mx-auto">
+<p class="font-body-sm text-on-surface-variant">© 2024 Valley Enterprise Systems. All rights reserved.</p>
+<div class="flex items-center gap-6">
+<a class="text-mono-sm text-on-surface-variant hover:text-primary hover:underline decoration-secondary" href="#">Privacy Policy</a>
+<a class="text-mono-sm text-on-surface-variant hover:text-primary hover:underline decoration-secondary" href="#">Terms of Service</a>
+<a class="text-mono-sm text-on-surface-variant hover:text-primary hover:underline decoration-secondary" href="#">API Status</a>
+<a class="text-mono-sm text-on-surface-variant hover:text-primary hover:underline decoration-secondary" href="#">Support Docs</a>
+</div>
+<span class="font-label-bold text-primary">VALLEY_CORE_V2.1</span>
+</div>
+</footer>
+</body></html>

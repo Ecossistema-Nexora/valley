@@ -1,5 +1,5 @@
 window.VALLEY_ADMIN_DATA = {
-  "generated_at_utc": "2026-05-13T11:48:48.139108+00:00",
+  "generated_at_utc": "2026-05-13T13:34:36.195162+00:00",
   "registry_name": "Valley Omniverse V47 - Registro Canonico de Modulos",
   "source": "Esquema Consolidado do Valley Omniverse v47.pdf",
   "language_policy": "pt-BR simples com termos tecnicos em ingles quando forem padroes",

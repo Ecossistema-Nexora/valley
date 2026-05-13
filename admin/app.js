@@ -57,6 +57,12 @@
       sectionIds: ["adminLaunchpadSection"],
     },
     {
+      key: "stitch",
+      label: "Stitch P0",
+      description: "Admin Central e ERP Lojista convertidos para operacao real.",
+      sectionIds: ["stitchP0ExecutionSection"],
+    },
+    {
       key: "merchant",
       label: "ERP Lojista",
       description: "Marketplace, PDV, armazem, financeiro e backoffice do lojista.",
@@ -277,6 +283,32 @@
     { key: "merchant-security", title: "Seguranca", subdomain: "seguranca-lojista", costZeroHost: "seguranca-lojista", sectionId: "settingsSection", copy: "Permissoes, sessoes, alertas, MFA e trilhas de auditoria." },
     { key: "merchant-settings", title: "Configuracoes", subdomain: "configuracoes-lojista", costZeroHost: "configuracoes-lojista", sectionId: "settingsSection", copy: "Preferencias, parametros operacionais, flags e regras da loja." },
   ];
+  const STITCH_P0_WEB_SCREENS = [
+    {
+      key: "valley_admin_central_1",
+      title: "Admin Central 1",
+      target: "Visao operacional",
+      pane: "overview",
+      action: "open-admin-central",
+      detail: "Dashboard, KPIs, fila rapida, links publicos e leitura executiva.",
+    },
+    {
+      key: "valley_admin_central_2",
+      title: "Admin Central 2",
+      target: "Controle executivo",
+      pane: "performance",
+      action: "open-executive",
+      detail: "Desempenho por modulo, sinais de crescimento, pressao operacional e workspaces.",
+    },
+    {
+      key: "valley_erp_do_lojista",
+      title: "ERP do Lojista",
+      target: "Painel marketplace",
+      pane: "merchant",
+      action: "open-erp",
+      detail: "Pedidos, SKU, estoque, PDV, financeiro, integracoes e rotinas salvas.",
+    },
+  ];
   const PRICING_EDITABLE_FIELDS = [
     "target_net_revenue_pct",
     "platform_fee_pct",
@@ -382,6 +414,7 @@
     workspaceFocusBanner: document.getElementById("workspaceFocusBanner"),
     adminWorkspaceRegistry: document.getElementById("adminWorkspaceRegistry"),
     adminLaunchpadGrid: document.getElementById("adminLaunchpadGrid"),
+    stitchP0ExecutionRoot: document.getElementById("stitchP0ExecutionRoot"),
     moduleWorkspaceSummary: document.getElementById("moduleWorkspaceSummary"),
     moduleWorkspaceGrid: document.getElementById("moduleWorkspaceGrid"),
     heroWorkspaceIcons: document.getElementById("heroWorkspaceIcons"),
@@ -3181,6 +3214,246 @@
       .join("");
   }
 
+  function stitchTemplatePath(key, fileName = "code.html") {
+    return `/stitch/20260513_valley_erp/stitch_valley_erp/${encodeURIComponent(key)}/${fileName}`;
+  }
+
+  function stitchP0RuntimeSummary() {
+    const release = releaseSummaryOrFallback();
+    const pricing = importedPricingState.payload || {};
+    const publication = pricing.publication_summary || {};
+    const suppliers = Array.isArray(pricing.supplier_summary) ? pricing.supplier_summary : [];
+    const integrations = Array.isArray(state.marketplaceApiConfig) ? state.marketplaceApiConfig : MARKETPLACE_API_PROVIDERS;
+    const activeIntegrations = integrations.filter((item) => item.enabled !== false).length;
+    const checkout = checkoutHealthState.payload || {};
+    const catalogModulesTotal = catalogModules().length || allModules.length;
+
+    return {
+      templatesTotal: 131,
+      p0Total: 21,
+      webConverted: STITCH_P0_WEB_SCREENS.length,
+      modulesTotal: release.modules_total || allModules.length,
+      modulesCompleted: release.modules_completed || allModules.filter((module) => (module.checklist?.pending || 0) === 0).length,
+      catalogModulesTotal,
+      itemsTotal: Number(pricing.items_total || 0),
+      approvedTotal: Number(publication.approved_total || 0),
+      reviewTotal: Number(publication.review_total || 0),
+      blockedTotal: Number(publication.do_not_publish_total || 0),
+      suppliersTotal: suppliers.length,
+      activeIntegrations,
+      checkoutReady: Boolean(checkout.checkout_ready),
+      adminUrl: activeAdminPublicUrl() || "https://admin.brasildesconto.com.br/",
+      productUrl: activeProductPublicUrl() || "https://brasildesconto.com.br/product/",
+      galleryUrl: "/stitch/20260513_valley_erp/",
+    };
+  }
+
+  function stitchOperationalRows(summary) {
+    return [
+      ["Admin Central 1", "Home executiva", `${formatCount(summary.modulesCompleted)}/${formatCount(summary.modulesTotal)} módulos`, "Aberto no painel"],
+      ["Admin Central 2", "Desempenho", `${formatCount(summary.catalogModulesTotal)} módulos no catálogo`, "Pronto para revisão"],
+      ["ERP do Lojista", "Marketplace", `${formatCount(summary.itemsTotal)} itens`, `${formatCount(summary.reviewTotal)} em revisão`],
+      ["Checkout", "Jornada de compra", summary.checkoutReady ? "Operacional" : "Pendente", summary.checkoutReady ? "Liberado" : "Revisar credenciais"],
+      ["Integrações", "Fornecedores e canais", `${formatCount(summary.activeIntegrations)}/${formatCount(MARKETPLACE_API_PROVIDERS.length)} ativos`, `${formatCount(summary.suppliersTotal)} fornecedores`],
+    ];
+  }
+
+  function renderStitchP0Execution() {
+    if (!elements.stitchP0ExecutionRoot) {
+      return;
+    }
+
+    const summary = stitchP0RuntimeSummary();
+    const rows = stitchOperationalRows(summary);
+
+    elements.stitchP0ExecutionRoot.innerHTML = `
+      <section class="stitch-execution-shell">
+        <div class="stitch-execution-topbar">
+          <div>
+            <span class="small-label">Release web</span>
+            <strong>Onda 1 P0 ativa</strong>
+            <p class="muted-copy">A galeria Stitch virou uma camada operacional com telas reais, dados do runtime e ações executáveis.</p>
+          </div>
+          <div class="stitch-execution-actions">
+            <button type="button" class="secondary-button" data-stitch-action="sync-data">Sincronizar dados</button>
+            <button type="button" class="secondary-button" data-stitch-action="copy-release">Exportar resumo</button>
+            <button type="button" class="secondary-button" data-stitch-action="open-gallery">Abrir galeria</button>
+          </div>
+        </div>
+        <div class="stitch-execution-hero">
+          <div>
+            <span class="small-label">Admin Central 1/2</span>
+            <h3>Controle executivo conectado ao painel Valley</h3>
+            <p>
+              KPIs, workspaces, checkout, catálogo, integrações e ERP lojista agora estão organizados como uma tela P0 executável,
+              mantendo os templates Stitch como referência visual auditável.
+            </p>
+            <div class="pill-row">
+              ${rowPill(`${formatCount(summary.templatesTotal)} templates publicados`, "pill-navy")}
+              ${rowPill(`${formatCount(summary.p0Total)} P0`, "pill-accent")}
+              ${rowPill(`${formatCount(summary.webConverted)} web executáveis`, "pill-warn")}
+            </div>
+          </div>
+          <div class="stitch-url-stack">
+            <article>
+              <span class="small-label">Admin</span>
+              <strong>${escapeHtml(summary.adminUrl)}</strong>
+            </article>
+            <article>
+              <span class="small-label">Usuário</span>
+              <strong>${escapeHtml(summary.productUrl)}</strong>
+            </article>
+            <article>
+              <span class="small-label">Stitch</span>
+              <strong>${escapeHtml(summary.galleryUrl)}</strong>
+            </article>
+          </div>
+        </div>
+        <div class="stitch-kpi-grid">
+          ${summaryTileMarkup("Templates", formatCount(summary.templatesTotal), `${formatCount(summary.p0Total)} P0 publicados`)}
+          ${summaryTileMarkup("Módulos", `${formatCount(summary.modulesCompleted)}/${formatCount(summary.modulesTotal)}`, "release operacional")}
+          ${summaryTileMarkup("Catálogo", formatCount(summary.itemsTotal), `${formatCount(summary.approvedTotal)} aprovados`)}
+          ${summaryTileMarkup("Checkout", summary.checkoutReady ? "Pronto" : "Pendente", "gate de compra")}
+        </div>
+        <section class="stitch-screen-grid">
+          ${STITCH_P0_WEB_SCREENS.map((screen) => `
+            <article class="stitch-screen-card">
+              <img src="${escapeHtml(stitchTemplatePath(screen.key, "screen.png"))}" alt="${escapeHtml(screen.title)}" loading="lazy" />
+              <div>
+                <span class="small-label">${escapeHtml(screen.target)}</span>
+                <strong>${escapeHtml(screen.title)}</strong>
+                <p class="muted-copy">${escapeHtml(screen.detail)}</p>
+              </div>
+              <div class="stitch-screen-actions">
+                <button type="button" class="secondary-button" data-stitch-action="${escapeHtml(screen.action)}">Executar tela</button>
+                <a href="${escapeHtml(stitchTemplatePath(screen.key))}" target="_blank" rel="noopener">Referência</a>
+              </div>
+            </article>
+          `).join("")}
+        </section>
+        <section class="stitch-command-grid">
+          <article class="stitch-command-card">
+            <span class="small-label">Operação</span>
+            <strong>Admin Central</strong>
+            <p class="muted-copy">Abre a home operacional, atualiza os dados e mantém os workspaces em abas reais.</p>
+            <div class="stitch-command-buttons">
+              <button type="button" class="secondary-button" data-stitch-action="open-admin-central">Abrir home</button>
+              <button type="button" class="secondary-button" data-stitch-action="open-workspaces">Workspaces</button>
+            </div>
+          </article>
+          <article class="stitch-command-card">
+            <span class="small-label">Lojista</span>
+            <strong>ERP marketplace</strong>
+            <p class="muted-copy">Ativa a aba do ERP, seus módulos e as rotinas de salvar, sync, relatório e export.</p>
+            <div class="stitch-command-buttons">
+              <button type="button" class="secondary-button" data-stitch-action="open-erp">Abrir ERP</button>
+              <button type="button" class="secondary-button" data-stitch-action="open-pricing">Produtos e SKU</button>
+            </div>
+          </article>
+          <article class="stitch-command-card">
+            <span class="small-label">Conexões</span>
+            <strong>Checkout e integrações</strong>
+            <p class="muted-copy">Leva direto para checkout, marketplaces, fornecedores e status de publicação.</p>
+            <div class="stitch-command-buttons">
+              <button type="button" class="secondary-button" data-stitch-action="open-checkout">Checkout</button>
+              <button type="button" class="secondary-button" data-stitch-action="open-integrations">Integrações</button>
+            </div>
+          </article>
+        </section>
+        <div class="erp-table-wrap">
+          <table class="erp-data-table">
+            <thead>
+              <tr>
+                <th>Tela</th>
+                <th>Rotina</th>
+                <th>Métrica</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rows.map((row) => `
+                <tr>
+                  <td>${escapeHtml(row[0])}</td>
+                  <td>${escapeHtml(row[1])}</td>
+                  <td>${escapeHtml(row[2])}</td>
+                  <td>${escapeHtml(row[3])}</td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    `;
+  }
+
+  function openAdminPaneSection(pane, sectionId) {
+    setActiveAdminSurfaceTab(pane, { preserveScroll: true });
+    window.setTimeout(() => {
+      document.getElementById(sectionId)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 20);
+  }
+
+  function runStitchP0Action(action) {
+    switch (action) {
+      case "sync-data":
+        loadCatalogSummary();
+        loadModuleRuntimeSnapshots();
+        loadCheckoutHealth();
+        loadMarketplaceApiConfig();
+        loadImportedPricing();
+        announce("Dados da Onda 1 Stitch atualizados.");
+        return;
+      case "copy-release":
+        copyText(
+          JSON.stringify(
+            {
+              generated_at: new Date().toISOString(),
+              summary: stitchP0RuntimeSummary(),
+              screens: STITCH_P0_WEB_SCREENS,
+            },
+            null,
+            2,
+          ),
+          "Resumo da Onda 1 Stitch",
+        );
+        return;
+      case "open-gallery":
+        window.open("/stitch/20260513_valley_erp/", "_blank", "noopener");
+        announce("Galeria Stitch aberta.");
+        return;
+      case "open-admin-central":
+        openAdminPaneSection("overview", "adminLaunchpadSection");
+        announce("Admin Central 1 aberto.");
+        return;
+      case "open-executive":
+        openAdminPaneSection("performance", "performanceDashboard");
+        announce("Admin Central 2 aberto.");
+        return;
+      case "open-erp":
+        openAdminPaneSection("merchant", "merchantErpSection");
+        announce("ERP do lojista aberto.");
+        return;
+      case "open-pricing":
+        openAdminPaneSection("catalog", "importedPricingSection");
+        announce("Produtos e SKU abertos.");
+        return;
+      case "open-integrations":
+        openAdminPaneSection("integrations", "settingsSection");
+        announce("Integrações abertas.");
+        return;
+      case "open-checkout":
+        openAdminPaneSection("overview", "checkoutHealthPanel");
+        announce("Checkout aberto.");
+        return;
+      case "open-workspaces":
+        openAdminPaneSection("modules", "moduleWorkspaceDirectory");
+        announce("Diretório de workspaces aberto.");
+        return;
+      default:
+        announce("Ação Stitch indisponível.");
+    }
+  }
+
   function merchantErpWorkspaces() {
     return adminWorkspaces().filter((workspace) => workspace.workspaceKind === "merchant_erp");
   }
@@ -4527,6 +4800,14 @@
         return;
       }
       updateMerchantErpDraftField(field.dataset.merchantField, field.value);
+    });
+
+    elements.stitchP0ExecutionRoot?.addEventListener("click", (event) => {
+      const trigger = event.target.closest("[data-stitch-action]");
+      if (!trigger) {
+        return;
+      }
+      runStitchP0Action(trigger.dataset.stitchAction);
     });
 
     elements.criticalModules.addEventListener("click", (event) => {
@@ -6755,6 +7036,7 @@
     renderExternalAccess();
     renderAccessLinks();
     renderAdminLaunchpad();
+    renderStitchP0Execution();
     renderMerchantErp();
     renderMarketplaceIntegrations();
     renderImportedPricingDesk();

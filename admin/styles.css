@@ -1342,6 +1342,157 @@ body.production-shell .hero-copy {
   color: var(--ink-soft);
 }
 
+.stitch-p0-section {
+  display: grid;
+  gap: 18px;
+}
+
+.stitch-execution-shell {
+  display: grid;
+  gap: 16px;
+}
+
+.stitch-execution-topbar,
+.stitch-execution-hero,
+.stitch-command-card,
+.stitch-screen-card {
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 14px 28px rgba(15, 23, 42, 0.05);
+}
+
+.stitch-execution-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 16px;
+  border-radius: 18px;
+}
+
+.stitch-execution-topbar strong {
+  display: block;
+  margin: 2px 0 4px;
+  font-size: 20px;
+}
+
+.stitch-execution-actions,
+.stitch-command-buttons,
+.stitch-screen-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.stitch-execution-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
+  gap: 18px;
+  padding: clamp(18px, 3vw, 28px);
+  border-radius: 22px;
+  background:
+    linear-gradient(135deg, rgba(19, 27, 46, 0.96), rgba(0, 108, 73, 0.9)),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0));
+  color: #fff;
+}
+
+.stitch-execution-hero h3 {
+  max-width: 760px;
+  margin: 4px 0 10px;
+  font-size: clamp(28px, 4vw, 44px);
+  line-height: 1.05;
+}
+
+.stitch-execution-hero p {
+  max-width: 780px;
+  margin: 0 0 16px;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.stitch-execution-hero .small-label,
+.stitch-execution-hero .muted-copy {
+  color: rgba(255, 255, 255, 0.76);
+}
+
+.stitch-url-stack {
+  display: grid;
+  gap: 10px;
+}
+
+.stitch-url-stack article {
+  display: grid;
+  gap: 6px;
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.stitch-url-stack strong {
+  overflow-wrap: anywhere;
+  font-size: 13px;
+}
+
+.stitch-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.stitch-screen-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.stitch-screen-card {
+  display: grid;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 18px;
+}
+
+.stitch-screen-card img {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  border-radius: 12px;
+  background: #eef2f7;
+}
+
+.stitch-screen-card strong,
+.stitch-command-card strong {
+  display: block;
+  font-size: 18px;
+  line-height: 1.2;
+  color: #0f172a;
+}
+
+.stitch-screen-actions {
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stitch-screen-actions a {
+  font-size: 13px;
+  font-weight: 800;
+  color: #0f766e;
+}
+
+.stitch-command-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.stitch-command-card {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 18px;
+}
+
 .launchpad-card,
 .module-workspace-card {
   display: grid;
@@ -2768,6 +2919,9 @@ kbd {
   .workspace-registry-grid,
   .launchpad-grid,
   .merchant-erp-app-grid,
+  .stitch-kpi-grid,
+  .stitch-screen-grid,
+  .stitch-command-grid,
   .erp-tab-strip,
   .erp-specific-grid,
   .erp-kpi-grid,
@@ -2813,6 +2967,9 @@ kbd {
   .meta-grid,
   .summary-grid,
   .merchant-erp-app-grid,
+  .stitch-kpi-grid,
+  .stitch-screen-grid,
+  .stitch-command-grid,
   .erp-tab-strip,
   .erp-specific-grid,
   .erp-kpi-grid,
@@ -2847,6 +3004,7 @@ kbd {
   .runtime-header,
   .endpoint-item,
   .workspace-focus-head,
+  .stitch-execution-topbar,
   .erp-specific-head,
   .erp-toolbar,
   .erp-card-head,
@@ -2893,6 +3051,10 @@ kbd {
   }
 
   .erp-workspace-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .stitch-execution-hero {
     grid-template-columns: 1fr;
   }
 

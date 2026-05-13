@@ -45,6 +45,47 @@ Color _mediaStageColor(BuildContext context) => _useLightTemplate(context)
     ? const Color(0xFFF4F7FF)
     : const Color(0xFF0E1323);
 
+const List<_StitchP0MobileStep> _stitchP0MobileSteps = <_StitchP0MobileStep>[
+  _StitchP0MobileStep(
+    key: 'login',
+    icon: Icons.login_rounded,
+    title: 'Login',
+    detail: 'sessão segura',
+  ),
+  _StitchP0MobileStep(
+    key: 'checkout',
+    icon: Icons.shopping_cart_checkout_rounded,
+    title: 'Checkout',
+    detail: 'frete e pagamento',
+  ),
+  _StitchP0MobileStep(
+    key: 'purchases',
+    icon: Icons.receipt_long_rounded,
+    title: 'Compras',
+    detail: 'pedidos salvos',
+  ),
+  _StitchP0MobileStep(
+    key: 'tracking',
+    icon: Icons.local_shipping_rounded,
+    title: 'Rastreio',
+    detail: 'linha da entrega',
+  ),
+];
+
+class _StitchP0MobileStep {
+  const _StitchP0MobileStep({
+    required this.key,
+    required this.icon,
+    required this.title,
+    required this.detail,
+  });
+
+  final String key;
+  final IconData icon;
+  final String title;
+  final String detail;
+}
+
 class ValleyProductShell extends StatefulWidget {
   const ValleyProductShell({
     super.key,
@@ -5163,6 +5204,14 @@ class _CheckoutScreenState extends State<_CheckoutScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+              _StitchP0MobileRail(
+                activeKeys: const <String>{'checkout'},
+                title: 'Checkout mobile',
+                subtitle: widget.authRequired
+                    ? 'Login necessário antes do pagamento seguro.'
+                    : 'Sessão ativa para frete, endereço e pagamento.',
+              ),
+              const SizedBox(height: 20),
               Text(
                 widget.item.titlePtBr,
                 style: theme.textTheme.headlineSmall?.copyWith(
@@ -5210,6 +5259,160 @@ class _CheckoutScreenState extends State<_CheckoutScreen> {
           ),
         );
       },
+    );
+  }
+}
+
+class _StitchP0MobileRail extends StatelessWidget {
+  const _StitchP0MobileRail({
+    required this.activeKeys,
+    required this.title,
+    required this.subtitle,
+  });
+
+  final Set<String> activeKeys;
+  final String title;
+  final String subtitle;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: _softContainerColor(context, lightAlpha: 0.98, darkAlpha: 0.08),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          color: ValleyBrandColors.cyan.withValues(alpha: 0.24),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Container(
+                width: 38,
+                height: 38,
+                decoration: BoxDecoration(
+                  color: ValleyBrandColors.cyan.withValues(alpha: 0.18),
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: const Icon(
+                  Icons.view_quilt_rounded,
+                  color: ValleyBrandColors.cyan,
+                  size: 20,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      title,
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      subtitle,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                        height: 1.25,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+              final double itemWidth = constraints.maxWidth < 520 ? 132 : 152;
+              return Wrap(
+                spacing: 10,
+                runSpacing: 10,
+                children: <Widget>[
+                  for (final _StitchP0MobileStep step in _stitchP0MobileSteps)
+                    SizedBox(
+                      width: itemWidth,
+                      child: _StitchP0MobileStage(
+                        step: step,
+                        active: activeKeys.contains(step.key),
+                      ),
+                    ),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _StitchP0MobileStage extends StatelessWidget {
+  const _StitchP0MobileStage({required this.step, required this.active});
+
+  final _StitchP0MobileStep step;
+  final bool active;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final Color accent = active
+        ? ValleyBrandColors.cyan
+        : theme.colorScheme.onSurfaceVariant;
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 180),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: active
+            ? ValleyBrandColors.cyan.withValues(alpha: 0.14)
+            : _softContainerColor(context, lightAlpha: 0.92, darkAlpha: 0.05),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(
+          color: active
+              ? ValleyBrandColors.cyan.withValues(alpha: 0.50)
+              : _softBorderColor(context, lightAlpha: 0.75, darkAlpha: 0.08),
+        ),
+      ),
+      child: Row(
+        children: <Widget>[
+          Icon(step.icon, color: accent, size: 20),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  step.title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.labelLarge?.copyWith(
+                    fontWeight: FontWeight.w900,
+                    color: accent,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  step.detail,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -5673,6 +5876,8 @@ class _ReceiptScreen extends StatelessWidget {
     final ThemeData theme = Theme.of(context);
     final String checksum =
         'VX-${item.id.hashCode.abs().toRadixString(16).padLeft(8, '0').toUpperCase()}';
+    final String receiptText =
+        'Comprovante Valley\nPedido VAL-${item.id}\nProduto: ${item.title}\nSeller: ${item.merchantName}\nValor: R\$ ${(item.priceBrl + 24.8).toStringAsFixed(2)}\nChecksum: $checksum';
     return ValleyPanel(
       radius: 32,
       padding: const EdgeInsets.all(24),
@@ -5710,19 +5915,32 @@ class _ReceiptScreen extends StatelessWidget {
             children: <Widget>[
               FilledButton.icon(
                 onPressed: () =>
-                    Clipboard.setData(ClipboardData(text: checksum)),
+                    Clipboard.setData(ClipboardData(text: receiptText)),
                 icon: const Icon(Icons.copy_rounded),
-                label: const Text('Copiar checksum'),
+                label: const Text('Copiar recibo'),
               ),
               OutlinedButton.icon(
-                onPressed: () {},
+                onPressed: () => SharePlus.instance.share(
+                  ShareParams(
+                    text: receiptText,
+                    subject: 'Comprovante Valley VAL-${item.id}',
+                  ),
+                ),
                 icon: const Icon(Icons.ios_share_rounded),
                 label: const Text('Compartilhar'),
               ),
               OutlinedButton.icon(
-                onPressed: () {},
-                icon: const Icon(Icons.picture_as_pdf_rounded),
-                label: const Text('Baixar PDF'),
+                onPressed: () {
+                  Clipboard.setData(ClipboardData(text: receiptText));
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      behavior: SnackBarBehavior.floating,
+                      content: Text('Recibo preparado para documento.'),
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.description_rounded),
+                label: const Text('Preparar documento'),
               ),
             ],
           ),
@@ -5807,6 +6025,14 @@ class _IdentityTrustScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
+        _StitchP0MobileRail(
+          activeKeys: const <String>{'login'},
+          title: authSession == null ? 'Entrada Valley' : 'Sessão ativa',
+          subtitle: authSession == null
+              ? 'Login e cadastro liberam checkout, compras e rastreio.'
+              : '${authSession!.user.displayName} pode continuar a jornada.',
+        ),
+        const SizedBox(height: 18),
         ValleyPanel(
           radius: 32,
           padding: const EdgeInsets.all(24),
@@ -10626,11 +10852,18 @@ class _ClientAreaScreenState extends State<_ClientAreaScreen> {
                     icon: Icons.business_rounded,
                     label: 'CNPJ em análise',
                   ),
-                  _MetaPill(icon: Icons.stars_rounded, label: '1.840 Pepitas'),
+                  _MetaPill(icon: Icons.stars_rounded, label: '1.840 V-Coin'),
                 ],
               ),
             ],
           ),
+        ),
+        const SizedBox(height: 18),
+        const _StitchP0MobileRail(
+          activeKeys: <String>{'purchases', 'tracking'},
+          title: 'Compras e rastreio',
+          subtitle:
+              'Pedidos confirmados, status de entrega e suporte no mesmo fluxo.',
         ),
         const SizedBox(height: 18),
         LayoutBuilder(

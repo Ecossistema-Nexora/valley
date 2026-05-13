@@ -1,0 +1,2956 @@
+- generic [active] [ref=e1]:
+  - link "Ir para o painel" [ref=e2] [cursor=pointer]:
+    - /url: "#mainContent"
+  - generic [ref=e3]:
+    - region "Navegacao global dos paineis" [ref=e4]:
+      - generic [ref=e5]:
+        - generic [ref=e6]:
+          - paragraph [ref=e7]: Menu
+          - heading "Admin e lojista" [level=2] [ref=e8]
+        - navigation "Navegacao principal" [ref=e9]:
+          - link "STOCK" [ref=e10] [cursor=pointer]:
+            - /url: "#stockIntegrations"
+          - link "Operacao" [ref=e11] [cursor=pointer]:
+            - /url: "#adminLaunchpadSection"
+          - link "Stitch P0" [ref=e12] [cursor=pointer]:
+            - /url: "#stitchP0ExecutionSection"
+          - link "Financeiro" [ref=e13] [cursor=pointer]:
+            - /url: "#financialDashboard"
+          - link "ERP Lojista" [ref=e14] [cursor=pointer]:
+            - /url: "#merchantErpSection"
+          - link "Desempenho" [ref=e15] [cursor=pointer]:
+            - /url: "#performanceDashboard"
+          - link "Importados" [ref=e16] [cursor=pointer]:
+            - /url: "#importedPricingSection"
+          - link "Revisao" [ref=e17] [cursor=pointer]:
+            - /url: "#publicationReviewSection"
+          - link "Modulos" [ref=e18] [cursor=pointer]:
+            - /url: "#modulesWorkspace"
+          - link "Configuracoes" [ref=e19] [cursor=pointer]:
+            - /url: "#settingsSection"
+      - generic [ref=e20]:
+        - generic [ref=e21]:
+          - paragraph [ref=e22]: Acesso
+          - heading "Dominios e subdominios" [level=2] [ref=e23]
+        - generic [ref=e270]:
+          - article [ref=e1296]:
+            - generic [ref=e1297]: Portal oficial
+            - code [ref=e1298]: https://brasildesconto.com.br/
+            - link "Abrir" [ref=e1300] [cursor=pointer]:
+              - /url: https://brasildesconto.com.br/
+          - article [ref=e1301]:
+            - generic [ref=e1302]: Painel admin
+            - code [ref=e1303]: https://admin.brasildesconto.com.br
+            - link "Abrir" [ref=e1305] [cursor=pointer]:
+              - /url: https://admin.brasildesconto.com.br
+          - article [ref=e1306]:
+            - generic [ref=e1307]: ERP lojista
+            - code [ref=e1308]: https://erp-lojista.brasildesconto.com.br/
+            - link "Abrir" [ref=e1310] [cursor=pointer]:
+              - /url: https://erp-lojista.brasildesconto.com.br/
+          - article [ref=e1311]:
+            - generic [ref=e1312]: Login lojista
+            - code [ref=e1313]: https://lojista.brasildesconto.com.br/
+            - link "Abrir" [ref=e1315] [cursor=pointer]:
+              - /url: https://lojista.brasildesconto.com.br/
+          - article [ref=e1316]:
+            - generic [ref=e1317]: PDV lojista
+            - code [ref=e1318]: https://pdv-lojista.brasildesconto.com.br/
+            - link "Abrir" [ref=e1320] [cursor=pointer]:
+              - /url: https://pdv-lojista.brasildesconto.com.br/
+          - article [ref=e1321]:
+            - generic [ref=e1322]: Loja publica
+            - code [ref=e1323]: https://brasildesconto.com.br
+            - link "Abrir" [ref=e1325] [cursor=pointer]:
+              - /url: https://brasildesconto.com.br
+    - banner [ref=e24]:
+      - generic [ref=e25]:
+        - generic "Valley" [ref=e26]:
+          - img "Logomarca oficial Valley" [ref=e27]
+          - generic [ref=e28]:
+            - paragraph [ref=e29]: Valley
+            - paragraph [ref=e30]: Super App Production Panel
+        - paragraph [ref=e31]: Valley Release Mode
+        - heading "Painel de producao para 47 modulos" [level=1] [ref=e32]
+        - paragraph [ref=e33]: Supervisao executiva, gestao comercial e leitura operacional em uma unica superficie. O painel cruza modulos, contratos, catalogo, checkout, lojistas, usuarios e exposicao publica Cloudflare.
+        - generic [ref=e301]:
+          - generic [ref=e302]: modo producao
+          - generic [ref=e303]: 47 modulos visiveis
+          - generic [ref=e304]: 67% prontidao media
+          - generic [ref=e305]: 0 modulos completos
+          - generic [ref=e306]: 13 trilhas hibridas
+          - generic [ref=e307]: 0 ainda planejados
+          - generic [ref=e308]: publico online
+          - generic [ref=e309]: 0 alertas operacionais
+        - generic [ref=e310]:
+          - article [ref=e311]:
+            - generic [ref=e312]: P
+            - strong [ref=e313]: Painel STOCK
+            - generic [ref=e314]: Catalogo, operacao do modulo STOCK e leitura de integracoes do produto.
+          - article [ref=e315]:
+            - generic [ref=e316]: D
+            - strong [ref=e317]: Dropshipping
+            - generic [ref=e318]: Produtos importados, categorias, margem e disputa entre fornecedores.
+          - article [ref=e319]:
+            - generic [ref=e320]: M
+            - strong [ref=e321]: Marketplace
+            - generic [ref=e322]: Apps, webhooks, seller IDs e escopos por marketplace.
+          - article [ref=e323]:
+            - generic [ref=e324]: R
+            - strong [ref=e325]: Revisao
+            - generic [ref=e326]: Fila exclusiva para nao publicados e revisao comercial com motivo.
+      - generic [ref=e34]:
+        - region "Preview do painel em desktop e mobile" [ref=e35]:
+          - generic [ref=e36]: PRODUCAO ATIVA
+          - generic [ref=e37]:
+            - generic [ref=e38]:
+              - generic [ref=e39]:
+                - generic [ref=e40]: Valley Admin
+                - generic [ref=e41]:
+                  - generic [ref=e42]: Produção
+                  - generic [ref=e43]: Checkout
+                  - generic [ref=e44]: Stock
+              - generic [ref=e328]:
+                - generic [ref=e329]:
+                  - strong [ref=e330]: Bem-vindo ao Valley Admin
+                  - generic [ref=e331]:
+                    - generic [ref=e332]: Financeiro
+                    - generic [ref=e333]: Estoque
+                    - generic [ref=e334]: Checkout
+                - generic [ref=e335]:
+                  - generic [ref=e338]: STOCK
+                  - generic [ref=e341]: Dropshipping
+                  - generic [ref=e344]: Marketplace
+                  - generic [ref=e347]: Revisao
+                  - generic [ref=e350]: Financeiro
+                  - generic [ref=e353]: Lojistas
+                  - generic [ref=e356]: Usuarios
+                - generic [ref=e357]:
+                  - article [ref=e358]:
+                    - generic [ref=e359]: P
+                    - strong [ref=e360]: STOCK
+                    - generic [ref=e361]: Catalogo, operacao do modulo STOCK e leitura de integracoes do produto
+                  - article [ref=e362]:
+                    - generic [ref=e363]: D
+                    - strong [ref=e364]: Dropshipping
+                    - generic [ref=e365]: Produtos importados, categorias, margem e disputa entre fornecedores
+                  - article [ref=e366]:
+                    - generic [ref=e367]: M
+                    - strong [ref=e368]: Marketplace
+                    - generic [ref=e369]: Apps, webhooks, seller IDs e escopos por marketplace
+                  - article [ref=e370]:
+                    - generic [ref=e371]: R
+                    - strong [ref=e372]: Revisao
+                    - generic [ref=e373]: Fila exclusiva para nao publicados e revisao comercial com motivo
+                  - article [ref=e374]:
+                    - generic [ref=e375]: F
+                    - strong [ref=e376]: Financeiro
+                    - generic [ref=e377]: Receita projetada, margens, fees e leitura financeira do catalogo
+                  - article [ref=e378]:
+                    - generic [ref=e379]: L
+                    - strong [ref=e380]: Lojistas
+                    - generic [ref=e381]: Cadastro e operacao de sellers, parceiros e workspace institucional
+                - generic [ref=e382]:
+                  - generic [ref=e384]: Receita vs. Operacao
+                  - generic [ref=e392]:
+                    - generic [ref=e393]: Fila rapida
+                    - generic [ref=e394]:
+                      - generic [ref=e395]: Revisao
+                      - emphasis [ref=e396]: "124"
+                    - generic [ref=e397]:
+                      - generic [ref=e398]: Integracoes
+                      - emphasis [ref=e399]: "07"
+                    - generic [ref=e400]:
+                      - generic [ref=e401]: Usuarios
+                      - emphasis [ref=e402]: 2.4k
+            - generic [ref=e48]:
+              - generic [ref=e49]:
+                - strong [ref=e50]: Valley
+                - generic [ref=e51]: Admin
+              - generic [ref=e52]:
+                - article [ref=e403]:
+                  - generic [ref=e404]: P
+                  - generic [ref=e405]: STOCK
+                - article [ref=e406]:
+                  - generic [ref=e407]: D
+                  - generic [ref=e408]: Dropshipping
+                - article [ref=e409]:
+                  - generic [ref=e410]: M
+                  - generic [ref=e411]: Marketplace
+                - article [ref=e412]:
+                  - generic [ref=e413]: R
+                  - generic [ref=e414]: Revisao
+                - article [ref=e415]:
+                  - generic [ref=e416]: F
+                  - generic [ref=e417]: Financeiro
+                - article [ref=e418]:
+                  - generic [ref=e419]: L
+                  - generic [ref=e420]: Lojistas
+        - generic [ref=e53]:
+          - paragraph [ref=e54]: Control Fabric
+          - heading "Valley Omniverse V47 - Registro Canonico de Modulos" [level=2] [ref=e421]
+          - paragraph [ref=e56]: "Fonte: Esquema Consolidado do Valley Omniverse v47.pdf | Linguagem: pt-BR simples com termos tecnicos em ingles quando forem padroes"
+          - generic [ref=e57]:
+            - generic [ref=e58]:
+              - generic [ref=e59]: Console
+              - strong [ref=e60]: 13/05/2026, 08:48
+            - generic [ref=e61]:
+              - generic [ref=e62]: Saude operacional
+              - strong [ref=e63]: 0 pendencias no ultimo status
+        - generic [ref=e64]:
+          - generic [ref=e66]:
+            - paragraph [ref=e67]: Ações
+            - heading "Ações operacionais" [level=2] [ref=e68]
+          - generic [ref=e422]:
+            - article [ref=e423]:
+              - generic [ref=e424]:
+                - strong [ref=e425]: Abrir painel ativo
+                - text: Nucleo Admin
+              - generic [ref=e426]:
+                - link "Abrir" [ref=e427] [cursor=pointer]:
+                  - /url: https://admin.brasildesconto.com.br/
+                - button "Copiar link" [ref=e428] [cursor=pointer]
+            - article [ref=e429]:
+              - generic [ref=e430]:
+                - strong [ref=e431]: Abrir ERP lojista
+                - text: Gestao comercial, PDV, estoque e financeiro
+              - generic [ref=e432]:
+                - link "Abrir" [ref=e433] [cursor=pointer]:
+                  - /url: https://erp-lojista.brasildesconto.com.br/
+                - button "Copiar link" [ref=e434] [cursor=pointer]
+            - article [ref=e435]:
+              - generic [ref=e436]:
+                - strong [ref=e437]: Abrir catalogo
+                - text: Produtos, pricing e revisao comercial
+              - generic [ref=e438]:
+                - link "Abrir" [ref=e439] [cursor=pointer]:
+                  - /url: "#importedPricingSection"
+                - button "Copiar link" [ref=e440] [cursor=pointer]
+            - article [ref=e441]:
+              - generic [ref=e442]:
+                - strong [ref=e443]: Abrir integracoes
+                - text: Marketplaces, fornecedores e conectores
+              - generic [ref=e444]:
+                - link "Abrir" [ref=e445] [cursor=pointer]:
+                  - /url: "#settingsSection"
+                - button "Copiar link" [ref=e446] [cursor=pointer]
+    - main [ref=e69]:
+      - region "Abas do painel admin" [ref=e70]:
+        - generic [ref=e71]:
+          - generic [ref=e72]:
+            - paragraph [ref=e73]: Admin surfaces
+            - heading "Abas operacionais do painel" [level=2] [ref=e74]
+          - paragraph [ref=e75]: Cada frente do admin fica isolada em uma aba real para reduzir mistura entre operação, catálogo, finanças e módulos.
+        - tablist "Abas do painel admin" [ref=e447]:
+          - tab "Visao geral Home enxuta com botoes para areas e modulos independentes." [ref=e2176] [cursor=pointer]:
+            - strong [ref=e2177]: Visao geral
+            - generic [ref=e2178]: Home enxuta com botoes para areas e modulos independentes.
+          - tab "Stitch P0 Admin Central e ERP Lojista convertidos para operacao real." [ref=e2179] [cursor=pointer]:
+            - strong [ref=e2180]: Stitch P0
+            - generic [ref=e2181]: Admin Central e ERP Lojista convertidos para operacao real.
+          - tab "ERP Lojista Marketplace, PDV, armazem, financeiro e backoffice do lojista." [ref=e2182] [cursor=pointer]:
+            - strong [ref=e2183]: ERP Lojista
+            - generic [ref=e2184]: Marketplace, PDV, armazem, financeiro e backoffice do lojista.
+          - tab "Financeiro Receita, checkout e sinais de monetizacao." [ref=e2185] [cursor=pointer]:
+            - strong [ref=e2186]: Financeiro
+            - generic [ref=e2187]: Receita, checkout e sinais de monetizacao.
+          - tab "Desempenho Resultados por modulo e inteligencia do STOCK." [ref=e2188] [cursor=pointer]:
+            - strong [ref=e2189]: Desempenho
+            - generic [ref=e2190]: Resultados por modulo e inteligencia do STOCK.
+          - tab "Integracoes APIs, fornecedores e playbooks de ativacao." [ref=e2191] [cursor=pointer]:
+            - strong [ref=e2192]: Integracoes
+            - generic [ref=e2193]: APIs, fornecedores e playbooks de ativacao.
+          - tab "Catalogo Importados, pricing e fila de publicacao." [ref=e2194] [cursor=pointer]:
+            - strong [ref=e2195]: Catalogo
+            - generic [ref=e2196]: Importados, pricing e fila de publicacao.
+          - tab "Modulos Lista, filtros e cockpit detalhado por modulo." [selected] [ref=e2197] [cursor=pointer]:
+            - strong [ref=e2198]: Modulos
+            - generic [ref=e2199]: Lista, filtros e cockpit detalhado por modulo.
+      - region "Subdominios dedicados por modulo" [ref=e108]:
+        - generic [ref=e109]:
+          - generic [ref=e110]:
+            - paragraph [ref=e111]: Module workspaces
+            - heading "Subdominios dedicados por modulo" [level=2] [ref=e112]
+          - paragraph [ref=e113]: Cada modulo ganha uma pagina espelhada com foco automatico, URL dedicada e contexto operacional em modo de producao.
+        - generic [ref=e2200]:
+          - article [ref=e2201]:
+            - text: Workspaces de modulo
+            - strong [ref=e2202]: "47"
+            - text: um workspace dedicado por modulo
+          - article [ref=e2203]:
+            - text: Modo
+            - strong [ref=e2204]: producao
+            - text: shell e navegação preparados para ambiente real
+          - article [ref=e2205]:
+            - text: Docs rastreados
+            - strong [ref=e2206]: "47"
+            - text: readme, status e contract por modulo
+          - article [ref=e2207]:
+            - text: Hibridos
+            - strong [ref=e2208]: "13"
+            - text: postgres + mongo no mesmo painel
+        - generic [ref=e2209]:
+          - article [ref=e2210]:
+            - generic [ref=e2211]:
+              - generic [ref=e2212]:
+                - heading "REPLY · Valley REPLY" [level=3] [ref=e2213]
+                - paragraph [ref=e2214]: Advanced ERP/WMS com cockpit dedicado, contexto de docs, checklist, contratos e trilha operacional.
+              - generic [ref=e2215]: Parcialmente implantado
+            - generic [ref=e2216]:
+              - generic [ref=e2217]: 01-reply-admin.brasildesconto.com.br
+              - generic [ref=e2218]: foundation
+              - generic [ref=e2219]: logistics_erp_operations
+            - generic [ref=e2220]:
+              - article [ref=e2221]:
+                - text: Prontidao
+                - strong [ref=e2222]: 65%
+                - text: 5 pendencias
+              - article [ref=e2223]:
+                - text: Data home
+                - strong [ref=e2224]: postgres
+                - text: REPLY
+              - article [ref=e2225]:
+                - text: Integracoes
+                - strong [ref=e2226]: "3"
+                - text: conexoes declaradas
+              - article [ref=e2227]:
+                - text: Valor
+                - strong [ref=e2228]: n/d
+                - text: sem resumo comercial
+            - code [ref=e2229]: https://01-reply-admin.brasildesconto.com.br/?workspace=module-reply#modulesWorkspace
+            - generic [ref=e2230]:
+              - link "Abrir subdominio" [ref=e2231] [cursor=pointer]:
+                - /url: https://01-reply-admin.brasildesconto.com.br/?workspace=module-reply#modulesWorkspace
+              - link "Espelho no painel" [ref=e2232] [cursor=pointer]:
+                - /url: "?workspace=module-reply#modulesWorkspace"
+          - article [ref=e2233]:
+            - generic [ref=e2234]:
+              - generic [ref=e2235]:
+                - heading "STOCK · Valley Stock" [level=3] [ref=e2236]
+                - paragraph [ref=e2237]: Centralized Dropshipping com cockpit dedicado, contexto de docs, checklist, contratos e trilha operacional.
+              - generic [ref=e2238]: Parcialmente implantado
+            - generic [ref=e2239]:
+              - generic [ref=e2240]: 02-stock-admin.brasildesconto.com.br
+              - generic [ref=e2241]: foundation
+              - generic [ref=e2242]: logistics_erp_operations
+            - generic [ref=e2243]:
+              - article [ref=e2244]:
+                - text: Prontidao
+                - strong [ref=e2245]: 65%
+                - text: 5 pendencias
+              - article [ref=e2246]:
+                - text: Data home
+                - strong [ref=e2247]: postgres
+                - text: STOCK
+              - article [ref=e2248]:
+                - text: Integracoes
+                - strong [ref=e2249]: "3"
+                - text: conexoes declaradas
+              - article [ref=e2250]:
+                - text: Valor
+                - strong [ref=e2251]: R$ 6.927.182.686,26
+                - text: snapshot comercial
+            - code [ref=e2252]: https://02-stock-admin.brasildesconto.com.br/?workspace=module-stock#modulesWorkspace
+            - generic [ref=e2253]:
+              - link "Abrir subdominio" [ref=e2254] [cursor=pointer]:
+                - /url: https://02-stock-admin.brasildesconto.com.br/?workspace=module-stock#modulesWorkspace
+              - link "Espelho no painel" [ref=e2255] [cursor=pointer]:
+                - /url: "?workspace=module-stock#modulesWorkspace"
+          - article [ref=e2256]:
+            - generic [ref=e2257]:
+              - generic [ref=e2258]:
+                - heading "LOG · Valley Log" [level=3] [ref=e2259]
+                - paragraph [ref=e2260]: Smart Tracking com cockpit dedicado, contexto de docs, checklist, contratos e trilha operacional.
+              - generic [ref=e2261]: Parcialmente implantado
+            - generic [ref=e2262]:
+              - generic [ref=e2263]: 03-log-admin.brasildesconto.com.br
+              - generic [ref=e2264]: foundation
+              - generic [ref=e2265]: logistics_erp_operations
+            - generic [ref=e2266]:
+              - article [ref=e2267]:
+                - text: Prontidao
+                - strong [ref=e2268]: 65%
+                - text: 5 pendencias
+              - article [ref=e2269]:
+                - text: Data home
+                - strong [ref=e2270]: mongo
+                - text: LOG
+              - article [ref=e2271]:
+                - text: Integracoes
+                - strong [ref=e2272]: "3"
+                - text: conexoes declaradas
+              - article [ref=e2273]:
+                - text: Valor
+                - strong [ref=e2274]: n/d
+                - text: sem resumo comercial
+            - code [ref=e2275]: https://03-log-admin.brasildesconto.com.br/?workspace=module-log#modulesWorkspace
+            - generic [ref=e2276]:
+              - link "Abrir subdominio" [ref=e2277] [cursor=pointer]:
+                - /url: https://03-log-admin.brasildesconto.com.br/?workspace=module-log#modulesWorkspace
+              - link "Espelho no painel" [ref=e2278] [cursor=pointer]:
+                - /url: "?workspace=module-log#modulesWorkspace"
+          - article [ref=e2279]:
+            - generic [ref=e2280]:
+              - generic [ref=e2281]:
+                - heading "FOOD · Valley Food" [level=3] [ref=e2282]
+                - paragraph [ref=e2283]: Health-Centric Delivery com cockpit dedicado, contexto de docs, checklist, contratos e trilha operacional.
+              - generic [ref=e2284]: Parcialmente implantado
+            - generic [ref=e2285]:
+              - generic [ref=e2286]: 04-food-admin.brasildesconto.com.br
+              - generic [ref=e2287]: core
+              - generic [ref=e2288]: logistics_erp_operations
+            - generic [ref=e2289]:
+              - article [ref=e2290]:
+                - text: Prontidao
+                - strong [ref=e2291]: 65%
+                - text: 5 pendencias
+              - article [ref=e2292]:
+                - text: Data home
+                - strong [ref=e2293]: postgres
+                - text: FOOD
+              - article [ref=e2294]:
+                - text: Integracoes
+                - strong [ref=e2295]: "3"
+                - text: conexoes declaradas
+              - article [ref=e2296]:
+                - text: Valor
+                - strong [ref=e2297]: n/d
+                - text: sem resumo comercial
+            - code [ref=e2298]: https://04-food-admin.brasildesconto.com.br/?workspace=module-food#modulesWorkspace
+            - generic [ref=e2299]:
+              - link "Abrir subdominio" [ref=e2300] [cursor=pointer]:
+                - /url: https://04-food-admin.brasildesconto.com.br/?workspace=module-food#modulesWorkspace
+              - link "Espelho no painel" [ref=e2301] [cursor=pointer]:
+                - /url: "?workspace=module-food#modulesWorkspace"
+          - article [ref=e2302]:
+            - generic [ref=e2303]:
+              - generic [ref=e2304]:
+                - heading "DELIVERY · Valley Delivery" [level=3] [ref=e2305]
+                - paragraph [ref=e2306]: Urban Courier com cockpit dedicado, contexto de docs, checklist, contratos e trilha operacional.
+              - generic [ref=e2307]: Parcialmente implantado
+            - generic [ref=e2308]:
+              - generic [ref=e2309]: 05-delivery-admin.brasildesconto.com.br
+              - generic [ref=e2310]: core
+              - generic [ref=e2311]: logistics_erp_operations
+            - generic [ref=e2312]:
+              - article [ref=e2313]:
+                - text: Prontidao
+                - strong [ref=e2314]: 71%
+                - text: 4 pendencias
+              - article [ref=e2315]:
+                - text: Data home
+                - strong [ref=e2316]: postgres_mongo
+                - text: DELIVERY
+              - article [ref=e2317]:
+                - text: Integracoes
+                - strong [ref=e2318]: "3"
+                - text: conexoes declaradas
+              - article [ref=e2319]:
+                - text: Valor
+                - strong [ref=e2320]: n/d
+                - text: sem resumo comercial
+            - code [ref=e2321]: https://05-delivery-admin.brasildesconto.com.br/?workspace=module-delivery#modulesWorkspace
+            - generic [ref=e2322]:
+              - link "Abrir subdominio" [ref=e2323] [cursor=pointer]:
+                - /url: https://05-delivery-admin.brasildesconto.com.br/?workspace=module-delivery#modulesWorkspace
+              - link "Espelho no painel" [ref=e2324] [cursor=pointer]:
+                - /url: "?workspace=module-delivery#modulesWorkspace"
+          - article [ref=e2325]:
+            - generic [ref=e2326]:
+              - generic [ref=e2327]:
+                - heading "WMS · Valley WMS" [level=3] [ref=e2328]
+                - paragraph [ref=e2329]: Warehouse Intelligence com cockpit dedicado, contexto de docs, checklist, contratos e trilha operacional.
+              - generic [ref=e2330]: Parcialmente implantado
+            - generic [ref=e2331]:
+              - generic [ref=e2332]: 06-wms-admin.brasildesconto.com.br
+              - generic [ref=e2333]: foundation
+              - generic [ref=e2334]: logistics_erp_operations
+            - generic [ref=e2335]:
+              - article [ref=e2336]:
+                - text: Prontidao
+                - strong [ref=e2337]: 71%
+                - text: 4 pendencias
+              - article [ref=e2338]:
+                - text: Data home
+                - strong [ref=e2339]: postgres_mongo
+                - text: WMS
+              - article [ref=e2340]:
+                - text: Integracoes
+                - strong [ref=e2341]: "3"
+                - text: conexoes declaradas
+              - article [ref=e2342]:
+                - text: Valor
+                - strong [ref=e2343]: n/d
+                - text: sem resumo comercial
+            - code [ref=e2344]: https://06-wms-admin.brasildesconto.com.br/?workspace=module-wms#modulesWorkspace
+            - generic [ref=e2345]:
+              - link "Abrir subdominio" [ref=e2346] [cursor=pointer]:
+                - /url: https://06-wms-admin.brasildesconto.com.br/?workspace=module-wms#modulesWorkspace
+              - link "Espelho no painel" [ref=e2347] [cursor=pointer]:
+                - /url: "?workspace=module-wms#modulesWorkspace"
+          - article [ref=e2348]:
+            - generic [ref=e2349]:
+              - generic [ref=e2350]:
+                - heading "MARKETPLACE · Valley Marketplace" [level=3] [ref=e2351]
+                - paragraph [ref=e2352]: Local Commerce com cockpit dedicado, contexto de docs, checklist, contratos e trilha operacional.
+              - generic [ref=e2353]: Parcialmente implantado
+            - generic [ref=e2354]:
+              - generic [ref=e2355]: 07-marketplace-admin.brasildesconto.com.br
+              - generic [ref=e2356]: foundation
+              - generic [ref=e2357]: commerce_fintech_assets
+            - generic [ref=e2358]:
+              - article [ref=e2359]:
+                - text: Prontidao
+                - strong [ref=e2360]: 65%
+                - text: 5 pendencias
+              - article [ref=e2361]:
+                - text: Data home
+                - strong [ref=e2362]: postgres
+                - text: MARKETPLACE
+              - article [ref=e2363]:
+                - text: Integracoes
+                - strong [ref=e2364]: "3"
+                - text: conexoes declaradas
+              - article [ref=e2365]:
+                - text: Valor
+                - strong [ref=e2366]: R$ 29.708,30
+                - text: snapshot comercial
+            - code [ref=e2367]: https://07-marketplace-admin.brasildesconto.com.br/?workspace=module-marketplace#modulesWorkspace
+            - generic [ref=e2368]:
+              - link "Abrir subdominio" [ref=e2369] [cursor=pointer]:
+                - /url: https://07-marketplace-admin.brasildesconto.com.br/?workspace=module-marketplace#modulesWorkspace
+              - link "Espelho no painel" [ref=e2370] [cursor=pointer]:
+                - /url: "?workspace=module-marketplace#modulesWorkspace"
+          - article [ref=e2371]:
+            - generic [ref=e2372]:
+              - generic [ref=e2373]:
+                - heading "PAY · Valley Pay" [level=3] [ref=e2374]
+                - paragraph [ref=e2375]: The Financial Heart & Atomic Ledger com cockpit dedicado, contexto de docs, checklist, contratos e trilha operacional.
+              - generic [ref=e2376]: Parcialmente implantado
+            - generic [ref=e2377]:
+              - generic [ref=e2378]: 08-pay-admin.brasildesconto.com.br
+              - generic [ref=e2379]: foundation
+              - generic [ref=e2380]: commerce_fintech_assets
+            - generic [ref=e2381]:
+              - article [ref=e2382]:
+                - text: Prontidao
+                - strong [ref=e2383]: 65%
+                - text: 5 pendencias
+              - article [ref=e2384]:
+                - text: Data home
+                - strong [ref=e2385]: postgres
+                - text: PAY
+              - article [ref=e2386]:
+                - text: Integracoes
+                - strong [ref=e2387]: "3"
+                - text: conexoes declaradas
+              - article [ref=e2388]:
+                - text: Valor
+                - strong [ref=e2389]: n/d
+                - text: sem resumo comercial
+            - code [ref=e2390]: https://08-pay-admin.brasildesconto.com.br/?workspace=module-pay#modulesWorkspace
+            - generic [ref=e2391]:
+              - link "Abrir subdominio" [ref=e2392] [cursor=pointer]:
+                - /url: https://08-pay-admin.brasildesconto.com.br/?workspace=module-pay#modulesWorkspace
+              - link "Espelho no painel" [ref=e2393] [cursor=pointer]:
+                - /url: "?workspace=module-pay#modulesWorkspace"
+          - article [ref=e2394]:
+            - generic [ref=e2395]:
+              - generic [ref=e2396]:
+                - heading "FLEET · Valley Fleet" [level=3] [ref=e2397]
+                - paragraph [ref=e2398]: Telemetry & Fleet Management com cockpit dedicado, contexto de docs, checklist, contratos e trilha operacional.
+              - generic [ref=e2399]: Parcialmente implantado
+            - generic [ref=e2400]:
+              - generic [ref=e2401]: 09-fleet-admin.brasildesconto.com.br
+              - generic [ref=e2402]: core
+              - generic [ref=e2403]: logistics_erp_operations
+            - generic [ref=e2404]:
+              - article [ref=e2405]:
+                - text: Prontidao
+                - strong [ref=e2406]: 71%
+                - text: 4 pendencias
+              - article [ref=e2407]:
+                - text: Data home
+                - strong [ref=e2408]: mongo
+                - text: FLEET
+              - article [ref=e2409]:
+                - text: Integracoes
+                - strong [ref=e2410]: "2"
+                - text: conexoes declaradas
+              - article [ref=e2411]:
+                - text: Valor
+                - strong [ref=e2412]: n/d
+                - text: sem resumo comercial
+            - code [ref=e2413]: https://09-fleet-admin.brasildesconto.com.br/?workspace=module-fleet#modulesWorkspace
+            - generic [ref=e2414]:
+              - link "Abrir subdominio" [ref=e2415] [cursor=pointer]:
+                - /url: https://09-fleet-admin.brasildesconto.com.br/?workspace=module-fleet#modulesWorkspace
+              - link "Espelho no painel" [ref=e2416] [cursor=pointer]:
+                - /url: "?workspace=module-fleet#modulesWorkspace"
+          - article [ref=e2417]:
+            - generic [ref=e2418]:
+              - generic [ref=e2419]:
+                - heading "SERVICES · Valley Services" [level=3] [ref=e2420]
+                - paragraph [ref=e2421]: Gigs & Pro Services com cockpit dedicado, contexto de docs, checklist, contratos e trilha operacional.
+              - generic [ref=e2422]: Parcialmente implantado
+            - generic [ref=e2423]:
+              - generic [ref=e2424]: 10-services-admin.brasildesconto.com.br
+              - generic [ref=e2425]: core
+              - generic [ref=e2426]: services_health_human
+            - generic [ref=e2427]:
+              - article [ref=e2428]:
+                - text: Prontidao
+                - strong [ref=e2429]: 65%
+                - text: 5 pendencias
+              - article [ref=e2430]:
+                - text: Data home
+                - strong [ref=e2431]: postgres
+                - text: SERVICES
+              - article [ref=e2432]:
+                - text: Integracoes
+                - strong [ref=e2433]: "2"
+                - text: conexoes declaradas
+              - article [ref=e2434]:
+                - text: Valor
+                - strong [ref=e2435]: n/d
+                - text: sem resumo comercial
+            - code [ref=e2436]: https://10-services-admin.brasildesconto.com.br/?workspace=module-services#modulesWorkspace
+            - generic [ref=e2437]:
+              - link "Abrir subdominio" [ref=e2438] [cursor=pointer]:
+                - /url: https://10-services-admin.brasildesconto.com.br/?workspace=module-services#modulesWorkspace
+              - link "Espelho no painel" [ref=e2439] [cursor=pointer]:
+                - /url: "?workspace=module-services#modulesWorkspace"
+          - article [ref=e2440]:
+            - generic [ref=e2441]:
+              - generic [ref=e2442]:
+                - heading "DIGITAL · Valley Digital" [level=3] [ref=e2443]
+                - paragraph [ref=e2444]: NFT & Digital Assets com cockpit dedicado, contexto de docs, checklist, contratos e trilha operacional.
+              - generic [ref=e2445]: Parcialmente implantado
+            - generic [ref=e2446]:
+              - generic [ref=e2447]: 11-digital-admin.brasildesconto.com.br
+              - generic [ref=e2448]: expansion
+              - generic [ref=e2449]: commerce_fintech_assets
+            - generic [ref=e2450]:
+              - article [ref=e2451]:
+                - text: Prontidao
+                - strong [ref=e2452]: 65%
+                - text: 5 pendencias
+              - article [ref=e2453]:
+                - text: Data home
+                - strong [ref=e2454]: postgres
+                - text: DIGITAL
+              - article [ref=e2455]:
+                - text: Integracoes
+                - strong [ref=e2456]: "2"
+                - text: conexoes declaradas
+              - article [ref=e2457]:
+                - text: Valor
+                - strong [ref=e2458]: n/d
+                - text: sem resumo comercial
+            - code [ref=e2459]: https://11-digital-admin.brasildesconto.com.br/?workspace=module-digital#modulesWorkspace
+            - generic [ref=e2460]:
+              - link "Abrir subdominio" [ref=e2461] [cursor=pointer]:
+                - /url: https://11-digital-admin.brasildesconto.com.br/?workspace=module-digital#modulesWorkspace
+              - link "Espelho no painel" [ref=e2462] [cursor=pointer]:
+                - /url: "?workspace=module-digital#modulesWorkspace"
+          - article [ref=e2463]:
+            - generic [ref=e2464]:
+              - generic [ref=e2465]:
+                - heading "REAL_ESTATE · Valley Real Estate" [level=3] [ref=e2466]
+                - paragraph [ref=e2467]: Tokenized Housing com cockpit dedicado, contexto de docs, checklist, contratos e trilha operacional.
+              - generic [ref=e2468]: Parcialmente implantado
+            - generic [ref=e2469]:
+              - generic [ref=e2470]: 12-real-estate-admin.brasildesconto.com.br
+              - generic [ref=e2471]: expansion
+              - generic [ref=e2472]: commerce_fintech_assets
+            - generic [ref=e2473]:
+              - article [ref=e2474]:
+                - text: Prontidao
+                - strong [ref=e2475]: 65%
+                - text: 5 pendencias
+              - article [ref=e2476]:
+                - text: Data home
+                - strong [ref=e2477]: postgres
+                - text: REAL_ESTATE
+              - article [ref=e2478]:
+                - text: Integracoes
+                - strong [ref=e2479]: "2"
+                - text: conexoes declaradas
+              - article [ref=e2480]:
+                - text: Valor
+                - strong [ref=e2481]: n/d
+                - text: sem resumo comercial
+            - code [ref=e2482]: https://12-real-estate-admin.brasildesconto.com.br/?workspace=module-real_estate#modulesWorkspace
+            - generic [ref=e2483]:
+              - link "Abrir subdominio" [ref=e2484] [cursor=pointer]:
+                - /url: https://12-real-estate-admin.brasildesconto.com.br/?workspace=module-real_estate#modulesWorkspace
+              - link "Espelho no painel" [ref=e2485] [cursor=pointer]:
+                - /url: "?workspace=module-real_estate#modulesWorkspace"
+          - article [ref=e2486]:
+            - generic [ref=e2487]:
+              - generic [ref=e2488]:
+                - heading "HEALTH · Valley Health" [level=3] [ref=e2489]
+                - paragraph [ref=e2490]: Predictive Care com cockpit dedicado, contexto de docs, checklist, contratos e trilha operacional.
+              - generic [ref=e2491]: Parcialmente implantado
+            - generic [ref=e2492]:
+              - generic [ref=e2493]: 13-health-admin.brasildesconto.com.br
+              - generic [ref=e2494]: core
+              - generic [ref=e2495]: services_health_human
+            - generic [ref=e2496]:
+              - article [ref=e2497]:
+                - text: Prontidao
+                - strong [ref=e2498]: 71%
+                - text: 4 pendencias
+              - article [ref=e2499]:
+                - text: Data home
+                - strong [ref=e2500]: postgres_mongo
+                - text: HEALTH
+              - article [ref=e2501]:
+                - text: Integracoes
+                - strong [ref=e2502]: "3"
+                - text: conexoes declaradas
+              - article [ref=e2503]:
+                - text: Valor
+                - strong [ref=e2504]: n/d
+                - text: sem resumo comercial
+            - code [ref=e2505]: https://13-health-admin.brasildesconto.com.br/?workspace=module-health#modulesWorkspace
+            - generic [ref=e2506]:
+              - link "Abrir subdominio" [ref=e2507] [cursor=pointer]:
+                - /url: https://13-health-admin.brasildesconto.com.br/?workspace=module-health#modulesWorkspace
+              - link "Espelho no painel" [ref=e2508] [cursor=pointer]:
+                - /url: "?workspace=module-health#modulesWorkspace"
+          - article [ref=e2509]:
+            - generic [ref=e2510]:
+              - generic [ref=e2511]:
+                - heading "EDU · Valley Edu" [level=3] [ref=e2512]
+                - paragraph [ref=e2513]: Learn-to-Earn com cockpit dedicado, contexto de docs, checklist, contratos e trilha operacional.
+              - generic [ref=e2514]: Parcialmente implantado
+            - generic [ref=e2515]:
+              - generic [ref=e2516]: 14-edu-admin.brasildesconto.com.br
+              - generic [ref=e2517]: expansion
+              - generic [ref=e2518]: education_work_social
+            - generic [ref=e2519]:
+              - article [ref=e2520]:
+                - text: Prontidao
+                - strong [ref=e2521]: 65%
+                - text: 5 pendencias
+              - article [ref=e2522]:
+                - text: Data home
+                - strong [ref=e2523]: postgres
+                - text: EDU
+              - article [ref=e2524]:
+                - text: Integracoes
+                - strong [ref=e2525]: "2"
+                - text: conexoes declaradas
+              - article [ref=e2526]:
+                - text: Valor
+                - strong [ref=e2527]: n/d
+                - text: sem resumo comercial
+            - code [ref=e2528]: https://14-edu-admin.brasildesconto.com.br/?workspace=module-edu#modulesWorkspace
+            - generic [ref=e2529]:
+              - link "Abrir subdominio" [ref=e2530] [cursor=pointer]:
+                - /url: https://14-edu-admin.brasildesconto.com.br/?workspace=module-edu#modulesWorkspace
+              - link "Espelho no painel" [ref=e2531] [cursor=pointer]:
+                - /url: "?workspace=module-edu#modulesWorkspace"
+          - article [ref=e2532]:
+            - generic [ref=e2533]:
+              - generic [ref=e2534]:
+                - heading "TECH · Valley Tech" [level=3] [ref=e2535]
+                - paragraph [ref=e2536]: SaaS Infrastructure & API Builder com cockpit dedicado, contexto de docs, checklist, contratos e trilha operacional.
+              - generic [ref=e2537]: Parcialmente implantado
+            - generic [ref=e2538]:
+              - generic [ref=e2539]: 15-tech-admin.brasildesconto.com.br
+              - generic [ref=e2540]: foundation
+              - generic [ref=e2541]: platform_developer
+            - generic [ref=e2542]:
+              - article [ref=e2543]:
+                - text: Prontidao
+                - strong [ref=e2544]: 65%
+                - text: 5 pendencias
+              - article [ref=e2545]:
+                - text: Data home
+                - strong [ref=e2546]: postgres
+                - text: TECH
+              - article [ref=e2547]:
+                - text: Integracoes
+                - strong [ref=e2548]: "2"
+                - text: conexoes declaradas
+              - article [ref=e2549]:
+                - text: Valor
+                - strong [ref=e2550]: n/d
+                - text: sem resumo comercial
+            - code [ref=e2551]: https://15-tech-admin.brasildesconto.com.br/?workspace=module-tech#modulesWorkspace
+            - generic [ref=e2552]:
+              - link "Abrir subdominio" [ref=e2553] [cursor=pointer]:
+                - /url: https://15-tech-admin.brasildesconto.com.br/?workspace=module-tech#modulesWorkspace
+              - link "Espelho no painel" [ref=e2554] [cursor=pointer]:
+                - /url: "?workspace=module-tech#modulesWorkspace"
+          - article [ref=e2555]:
+            - generic [ref=e2556]:
+              - generic [ref=e2557]:
+                - heading "JOBS · Valley Jobs" [level=3] [ref=e2558]
+                - paragraph [ref=e2559]: AI Matchmaking com cockpit dedicado, contexto de docs, checklist, contratos e trilha operacional.
+              - generic [ref=e2560]: Parcialmente implantado
+            - generic [ref=e2561]:
+              - generic [ref=e2562]: 16-jobs-admin.brasildesconto.com.br
+              - generic [ref=e2563]: core
+              - generic [ref=e2564]: education_work_social
+            - generic [ref=e2565]:
+              - article [ref=e2566]:
+                - text: Prontidao
+                - strong [ref=e2567]: 71%
+                - text: 4 pendencias
+              - article [ref=e2568]:
+                - text: Data home
+                - strong [ref=e2569]: postgres_mongo
+                - text: JOBS
+              - article [ref=e2570]:
+                - text: Integracoes
+                - strong [ref=e2571]: "2"
+                - text: conexoes declaradas
+              - article [ref=e2572]:
+                - text: Valor
+                - strong [ref=e2573]: n/d
+                - text: sem resumo comercial
+            - code [ref=e2574]: https://16-jobs-admin.brasildesconto.com.br/?workspace=module-jobs#modulesWorkspace
+            - generic [ref=e2575]:
+              - link "Abrir subdominio" [ref=e2576] [cursor=pointer]:
+                - /url: https://16-jobs-admin.brasildesconto.com.br/?workspace=module-jobs#modulesWorkspace
+              - link "Espelho no painel" [ref=e2577] [cursor=pointer]:
+                - /url: "?workspace=module-jobs#modulesWorkspace"
+          - article [ref=e2578]:
+            - generic [ref=e2579]:
+              - generic [ref=e2580]:
+                - heading "NEWS_PODCAST · Valley News & Podcast" [level=3] [ref=e2581]
+                - paragraph [ref=e2582]: ContinuaMente com cockpit dedicado, contexto de docs, checklist, contratos e trilha operacional.
+              - generic [ref=e2583]: Parcialmente implantado
+            - generic [ref=e2584]:
+              - generic [ref=e2585]: 17-news-podcast-admin.brasildesconto.com.br
+              - generic [ref=e2586]: expansion
+              - generic [ref=e2587]: media_social_growth
+            - generic [ref=e2588]:
+              - article [ref=e2589]:
+                - text: Prontidao
+                - strong [ref=e2590]: 65%
+                - text: 5 pendencias
+              - article [ref=e2591]:
+                - text: Data home
+                - strong [ref=e2592]: mongo
+                - text: NEWS_PODCAST
+              - article [ref=e2593]:
+                - text: Integracoes
+                - strong [ref=e2594]: "2"
+                - text: conexoes declaradas
+              - article [ref=e2595]:
+                - text: Valor
+                - strong [ref=e2596]: n/d
+                - text: sem resumo comercial
+            - code [ref=e2597]: https://17-news-podcast-admin.brasildesconto.com.br/?workspace=module-news_podcast#modulesWorkspace
+            - generic [ref=e2598]:
+              - link "Abrir subdominio" [ref=e2599] [cursor=pointer]:
+                - /url: https://17-news-podcast-admin.brasildesconto.com.br/?workspace=module-news_podcast#modulesWorkspace
+              - link "Espelho no painel" [ref=e2600] [cursor=pointer]:
+                - /url: "?workspace=module-news_podcast#modulesWorkspace"
+          - article [ref=e2601]:
+            - generic [ref=e2602]:
+              - generic [ref=e2603]:
+                - heading "ADS · Valley Ads" [level=3] [ref=e2604]
+                - paragraph [ref=e2605]: Geofenced Marketing com cockpit dedicado, contexto de docs, checklist, contratos e trilha operacional.
+              - generic [ref=e2606]: Parcialmente implantado
+            - generic [ref=e2607]:
+              - generic [ref=e2608]: 18-ads-admin.brasildesconto.com.br
+              - generic [ref=e2609]: core
+              - generic [ref=e2610]: media_social_growth
+            - generic [ref=e2611]:
+              - article [ref=e2612]:
+                - text: Prontidao
+                - strong [ref=e2613]: 71%
+                - text: 4 pendencias
+              - article [ref=e2614]:
+                - text: Data home
+                - strong [ref=e2615]: mongo
+                - text: ADS
+              - article [ref=e2616]:
+                - text: Integracoes
+                - strong [ref=e2617]: "2"
+                - text: conexoes declaradas
+              - article [ref=e2618]:
+                - text: Valor
+                - strong [ref=e2619]: n/d
+                - text: sem resumo comercial
+            - code [ref=e2620]: https://18-ads-admin.brasildesconto.com.br/?workspace=module-ads#modulesWorkspace
+            - generic [ref=e2621]:
+              - link "Abrir subdominio" [ref=e2622] [cursor=pointer]:
+                - /url: https://18-ads-admin.brasildesconto.com.br/?workspace=module-ads#modulesWorkspace
+              - link "Espelho no painel" [ref=e2623] [cursor=pointer]:
+                - /url: "?workspace=module-ads#modulesWorkspace"
+          - article [ref=e2624]:
+            - generic [ref=e2625]:
+              - generic [ref=e2626]:
+                - heading "INFLUENCERS · Valley Influencers" [level=3] [ref=e2627]
+                - paragraph [ref=e2628]: Creators Hub com cockpit dedicado, contexto de docs, checklist, contratos e trilha operacional.
+              - generic [ref=e2629]: Parcialmente implantado
+            - generic [ref=e2630]:
+              - generic [ref=e2631]: 19-influencers-admin.brasildesconto.com.br
+              - generic [ref=e2632]: core
+              - generic [ref=e2633]: media_social_growth
+            - generic [ref=e2634]:
+              - article [ref=e2635]:
+                - text: Prontidao
+                - strong [ref=e2636]: 71%
+                - text: 4 pendencias
+              - article [ref=e2637]:
+                - text: Data home
+                - strong [ref=e2638]: mongo
+                - text: INFLUENCERS
+              - article [ref=e2639]:
+                - text: Integracoes
+                - strong [ref=e2640]: "2"
+                - text: conexoes declaradas
+              - article [ref=e2641]:
+                - text: Valor
+                - strong [ref=e2642]: n/d
+                - text: sem resumo comercial
+            - code [ref=e2643]: https://19-influencers-admin.brasildesconto.com.br/?workspace=module-influencers#modulesWorkspace
+            - generic [ref=e2644]:
+              - link "Abrir subdominio" [ref=e2645] [cursor=pointer]:
+                - /url: https://19-influencers-admin.brasildesconto.com.br/?workspace=module-influencers#modulesWorkspace
+              - link "Espelho no painel" [ref=e2646] [cursor=pointer]:
+                - /url: "?workspace=module-influencers#modulesWorkspace"
+          - article [ref=e2647]:
+            - generic [ref=e2648]:
+              - generic [ref=e2649]:
+                - heading "SOCIAL · Valley Social" [level=3] [ref=e2650]
+                - paragraph [ref=e2651]: Neighborhood Network com cockpit dedicado, contexto de docs, checklist, contratos e trilha operacional.
+              - generic [ref=e2652]: Parcialmente implantado
+            - generic [ref=e2653]:
+              - generic [ref=e2654]: 20-social-admin.brasildesconto.com.br
+              - generic [ref=e2655]: core
+              - generic [ref=e2656]: media_social_growth
+            - generic [ref=e2657]:
+              - article [ref=e2658]:
+                - text: Prontidao
+                - strong [ref=e2659]: 65%
+                - text: 5 pendencias
+              - article [ref=e2660]:
+                - text: Data home
+                - strong [ref=e2661]: mongo
+                - text: SOCIAL
+              - article [ref=e2662]:
+                - text: Integracoes
+                - strong [ref=e2663]: "3"
+                - text: conexoes declaradas
+              - article [ref=e2664]:
+                - text: Valor
+                - strong [ref=e2665]: n/d
+                - text: sem resumo comercial
+            - code [ref=e2666]: https://20-social-admin.brasildesconto.com.br/?workspace=module-social#modulesWorkspace
+            - generic [ref=e2667]:
+              - link "Abrir subdominio" [ref=e2668] [cursor=pointer]:
+                - /url: https://20-social-admin.brasildesconto.com.br/?workspace=module-social#modulesWorkspace
+              - link "Espelho no painel" [ref=e2669] [cursor=pointer]:
+                - /url: "?workspace=module-social#modulesWorkspace"
+          - article [ref=e2670]:
+            - generic [ref=e2671]:
+              - generic [ref=e2672]:
+                - heading "FITNESS · Valley Fitness" [level=3] [ref=e2673]
+                - paragraph [ref=e2674]: Move-to-Earn com cockpit dedicado, contexto de docs, checklist, contratos e trilha operacional.
+              - generic [ref=e2675]: Parcialmente implantado
+            - generic [ref=e2676]:
+              - generic [ref=e2677]: 21-fitness-admin.brasildesconto.com.br
+              - generic [ref=e2678]: expansion
+              - generic [ref=e2679]: services_health_human
+            - generic [ref=e2680]:
+              - article [ref=e2681]:
+                - text: Prontidao
+                - strong [ref=e2682]: 71%
+                - text: 4 pendencias
+              - article [ref=e2683]:
+                - text: Data home
+                - strong [ref=e2684]: mongo
+                - text: FITNESS
+              - article [ref=e2685]:
+                - text: Integracoes
+                - strong [ref=e2686]: "2"
+                - text: conexoes declaradas
+              - article [ref=e2687]:
+                - text: Valor
+                - strong [ref=e2688]: n/d
+                - text: sem resumo comercial
+            - code [ref=e2689]: https://21-fitness-admin.brasildesconto.com.br/?workspace=module-fitness#modulesWorkspace
+            - generic [ref=e2690]:
+              - link "Abrir subdominio" [ref=e2691] [cursor=pointer]:
+                - /url: https://21-fitness-admin.brasildesconto.com.br/?workspace=module-fitness#modulesWorkspace
+              - link "Espelho no painel" [ref=e2692] [cursor=pointer]:
+                - /url: "?workspace=module-fitness#modulesWorkspace"
+          - article [ref=e2693]:
+            - generic [ref=e2694]:
+              - generic [ref=e2695]:
+                - heading "PHARMACY · Valley Pharmacy" [level=3] [ref=e2696]
+                - paragraph [ref=e2697]: Smart Meds com cockpit dedicado, contexto de docs, checklist, contratos e trilha operacional.
+              - generic [ref=e2698]: Parcialmente implantado
+            - generic [ref=e2699]:
+              - generic [ref=e2700]: 22-pharmacy-admin.brasildesconto.com.br
+              - generic [ref=e2701]: core
+              - generic [ref=e2702]: services_health_human
+            - generic [ref=e2703]:
+              - article [ref=e2704]:
+                - text: Prontidao
+                - strong [ref=e2705]: 65%
+                - text: 5 pendencias
+              - article [ref=e2706]:
+                - text: Data home
+                - strong [ref=e2707]: postgres
+                - text: PHARMACY
+              - article [ref=e2708]:
+                - text: Integracoes
+                - strong [ref=e2709]: "2"
+                - text: conexoes declaradas
+              - article [ref=e2710]:
+                - text: Valor
+                - strong [ref=e2711]: n/d
+                - text: sem resumo comercial
+            - code [ref=e2712]: https://22-pharmacy-admin.brasildesconto.com.br/?workspace=module-pharmacy#modulesWorkspace
+            - generic [ref=e2713]:
+              - link "Abrir subdominio" [ref=e2714] [cursor=pointer]:
+                - /url: https://22-pharmacy-admin.brasildesconto.com.br/?workspace=module-pharmacy#modulesWorkspace
+              - link "Espelho no painel" [ref=e2715] [cursor=pointer]:
+                - /url: "?workspace=module-pharmacy#modulesWorkspace"
+          - article [ref=e2716]:
+            - generic [ref=e2717]:
+              - generic [ref=e2718]:
+                - heading "VET · Valley Vet" [level=3] [ref=e2719]
+                - paragraph [ref=e2720]: Pet Care com cockpit dedicado, contexto de docs, checklist, contratos e trilha operacional.
+              - generic [ref=e2721]: Parcialmente implantado
+            - generic [ref=e2722]:
+              - generic [ref=e2723]: 23-vet-admin.brasildesconto.com.br
+              - generic [ref=e2724]: expansion
+              - generic [ref=e2725]: services_health_human
+            - generic [ref=e2726]:
+              - article [ref=e2727]:
+                - text: Prontidao
+                - strong [ref=e2728]: 65%
+                - text: 5 pendencias
+              - article [ref=e2729]:
+                - text: Data home
+                - strong [ref=e2730]: postgres
+                - text: VET
+              - article [ref=e2731]:
+                - text: Integracoes
+                - strong [ref=e2732]: "2"
+                - text: conexoes declaradas
+              - article [ref=e2733]:
+                - text: Valor
+                - strong [ref=e2734]: n/d
+                - text: sem resumo comercial
+            - code [ref=e2735]: https://23-vet-admin.brasildesconto.com.br/?workspace=module-vet#modulesWorkspace
+            - generic [ref=e2736]:
+              - link "Abrir subdominio" [ref=e2737] [cursor=pointer]:
+                - /url: https://23-vet-admin.brasildesconto.com.br/?workspace=module-vet#modulesWorkspace
+              - link "Espelho no painel" [ref=e2738] [cursor=pointer]:
+                - /url: "?workspace=module-vet#modulesWorkspace"
+          - article [ref=e2739]:
+            - generic [ref=e2740]:
+              - generic [ref=e2741]:
+                - heading "TOURISM · Valley Tourism" [level=3] [ref=e2742]
+                - paragraph [ref=e2743]: Local Explore com cockpit dedicado, contexto de docs, checklist, contratos e trilha operacional.
+              - generic [ref=e2744]: Parcialmente implantado
+            - generic [ref=e2745]:
+              - generic [ref=e2746]: 24-tourism-admin.brasildesconto.com.br
+              - generic [ref=e2747]: expansion
+              - generic [ref=e2748]: city_mobility_security
+            - generic [ref=e2749]:
+              - article [ref=e2750]:
+                - text: Prontidao
+                - strong [ref=e2751]: 71%
+                - text: 4 pendencias
+              - article [ref=e2752]:
+                - text: Data home
+                - strong [ref=e2753]: postgres_mongo
+                - text: TOURISM
+              - article [ref=e2754]:
+                - text: Integracoes
+                - strong [ref=e2755]: "2"
+                - text: conexoes declaradas
+              - article [ref=e2756]:
+                - text: Valor
+                - strong [ref=e2757]: n/d
+                - text: sem resumo comercial
+            - code [ref=e2758]: https://24-tourism-admin.brasildesconto.com.br/?workspace=module-tourism#modulesWorkspace
+            - generic [ref=e2759]:
+              - link "Abrir subdominio" [ref=e2760] [cursor=pointer]:
+                - /url: https://24-tourism-admin.brasildesconto.com.br/?workspace=module-tourism#modulesWorkspace
+              - link "Espelho no painel" [ref=e2761] [cursor=pointer]:
+                - /url: "?workspace=module-tourism#modulesWorkspace"
+          - article [ref=e2762]:
+            - generic [ref=e2763]:
+              - generic [ref=e2764]:
+                - heading "EVENTS · Valley Events" [level=3] [ref=e2765]
+                - paragraph [ref=e2766]: Safe Tickets & Event Escrow com cockpit dedicado, contexto de docs, checklist, contratos e trilha operacional.
+              - generic [ref=e2767]: Parcialmente implantado
+            - generic [ref=e2768]:
+              - generic [ref=e2769]: 25-events-admin.brasildesconto.com.br
+              - generic [ref=e2770]: core
+              - generic [ref=e2771]: city_mobility_security
+            - generic [ref=e2772]:
+              - article [ref=e2773]:
+                - text: Prontidao
+                - strong [ref=e2774]: 65%
+                - text: 5 pendencias
+              - article [ref=e2775]:
+                - text: Data home
+                - strong [ref=e2776]: postgres
+                - text: EVENTS
+              - article [ref=e2777]:
+                - text: Integracoes
+                - strong [ref=e2778]: "2"
+                - text: conexoes declaradas
+              - article [ref=e2779]:
+                - text: Valor
+                - strong [ref=e2780]: n/d
+                - text: sem resumo comercial
+            - code [ref=e2781]: https://25-events-admin.brasildesconto.com.br/?workspace=module-events#modulesWorkspace
+            - generic [ref=e2782]:
+              - link "Abrir subdominio" [ref=e2783] [cursor=pointer]:
+                - /url: https://25-events-admin.brasildesconto.com.br/?workspace=module-events#modulesWorkspace
+              - link "Espelho no painel" [ref=e2784] [cursor=pointer]:
+                - /url: "?workspace=module-events#modulesWorkspace"
+          - article [ref=e2785]:
+            - generic [ref=e2786]:
+              - generic [ref=e2787]:
+                - heading "MOBILITY · Valley Mobility" [level=3] [ref=e2788]
+                - paragraph [ref=e2789]: Urban Transport & Carpool com cockpit dedicado, contexto de docs, checklist, contratos e trilha operacional.
+              - generic [ref=e2790]: Parcialmente implantado
+            - generic [ref=e2791]:
+              - generic [ref=e2792]: 26-mobility-admin.brasildesconto.com.br
+              - generic [ref=e2793]: core
+              - generic [ref=e2794]: city_mobility_security
+            - generic [ref=e2795]:
+              - article [ref=e2796]:
+                - text: Prontidao
+                - strong [ref=e2797]: 71%
+                - text: 4 pendencias
+              - article [ref=e2798]:
+                - text: Data home
+                - strong [ref=e2799]: postgres_mongo
+                - text: MOBILITY
+              - article [ref=e2800]:
+                - text: Integracoes
+                - strong [ref=e2801]: "2"
+                - text: conexoes declaradas
+              - article [ref=e2802]:
+                - text: Valor
+                - strong [ref=e2803]: n/d
+                - text: sem resumo comercial
+            - code [ref=e2804]: https://26-mobility-admin.brasildesconto.com.br/?workspace=module-mobility#modulesWorkspace
+            - generic [ref=e2805]:
+              - link "Abrir subdominio" [ref=e2806] [cursor=pointer]:
+                - /url: https://26-mobility-admin.brasildesconto.com.br/?workspace=module-mobility#modulesWorkspace
+              - link "Espelho no painel" [ref=e2807] [cursor=pointer]:
+                - /url: "?workspace=module-mobility#modulesWorkspace"
+          - article [ref=e2808]:
+            - generic [ref=e2809]:
+              - generic [ref=e2810]:
+                - heading "SECURITY · Valley Security" [level=3] [ref=e2811]
+                - paragraph [ref=e2812]: SOS, Protection & Biometric Guard com cockpit dedicado, contexto de docs, checklist, contratos e trilha operacional.
+              - generic [ref=e2813]: Parcialmente implantado
+            - generic [ref=e2814]:
+              - generic [ref=e2815]: 27-security-admin.brasildesconto.com.br
+              - generic [ref=e2816]: core
+              - generic [ref=e2817]: city_mobility_security
+            - generic [ref=e2818]:
+              - article [ref=e2819]:
+                - text: Prontidao
+                - strong [ref=e2820]: 71%
+                - text: 4 pendencias
+              - article [ref=e2821]:
+                - text: Data home
+                - strong [ref=e2822]: postgres_mongo
+                - text: SECURITY
+              - article [ref=e2823]:
+                - text: Integracoes
+                - strong [ref=e2824]: "2"
+                - text: conexoes declaradas
+              - article [ref=e2825]:
+                - text: Valor
+                - strong [ref=e2826]: n/d
+                - text: sem resumo comercial
+            - code [ref=e2827]: https://27-security-admin.brasildesconto.com.br/?workspace=module-security#modulesWorkspace
+            - generic [ref=e2828]:
+              - link "Abrir subdominio" [ref=e2829] [cursor=pointer]:
+                - /url: https://27-security-admin.brasildesconto.com.br/?workspace=module-security#modulesWorkspace
+              - link "Espelho no painel" [ref=e2830] [cursor=pointer]:
+                - /url: "?workspace=module-security#modulesWorkspace"
+          - article [ref=e2831]:
+            - generic [ref=e2832]:
+              - generic [ref=e2833]:
+                - heading "GOV · Valley Gov" [level=3] [ref=e2834]
+                - paragraph [ref=e2835]: Citizen Portal com cockpit dedicado, contexto de docs, checklist, contratos e trilha operacional.
+              - generic [ref=e2836]: Parcialmente implantado
+            - generic [ref=e2837]:
+              - generic [ref=e2838]: 28-gov-admin.brasildesconto.com.br
+              - generic [ref=e2839]: expansion
+              - generic [ref=e2840]: city_mobility_security
+            - generic [ref=e2841]:
+              - article [ref=e2842]:
+                - text: Prontidao
+                - strong [ref=e2843]: 65%
+                - text: 5 pendencias
+              - article [ref=e2844]:
+                - text: Data home
+                - strong [ref=e2845]: postgres
+                - text: GOV
+              - article [ref=e2846]:
+                - text: Integracoes
+                - strong [ref=e2847]: "2"
+                - text: conexoes declaradas
+              - article [ref=e2848]:
+                - text: Valor
+                - strong [ref=e2849]: n/d
+                - text: sem resumo comercial
+            - code [ref=e2850]: https://28-gov-admin.brasildesconto.com.br/?workspace=module-gov#modulesWorkspace
+            - generic [ref=e2851]:
+              - link "Abrir subdominio" [ref=e2852] [cursor=pointer]:
+                - /url: https://28-gov-admin.brasildesconto.com.br/?workspace=module-gov#modulesWorkspace
+              - link "Espelho no painel" [ref=e2853] [cursor=pointer]:
+                - /url: "?workspace=module-gov#modulesWorkspace"
+          - article [ref=e2854]:
+            - generic [ref=e2855]:
+              - generic [ref=e2856]:
+                - heading "LEGAL · Valley Legal" [level=3] [ref=e2857]
+                - paragraph [ref=e2858]: Smart Contracts, Fallback PIN & AI Mediator com cockpit dedicado, contexto de docs, checklist, contratos e trilha operacional.
+              - generic [ref=e2859]: Parcialmente implantado
+            - generic [ref=e2860]:
+              - generic [ref=e2861]: 29-legal-admin.brasildesconto.com.br
+              - generic [ref=e2862]: foundation
+              - generic [ref=e2863]: city_mobility_security
+            - generic [ref=e2864]:
+              - article [ref=e2865]:
+                - text: Prontidao
+                - strong [ref=e2866]: 65%
+                - text: 5 pendencias
+              - article [ref=e2867]:
+                - text: Data home
+                - strong [ref=e2868]: postgres
+                - text: LEGAL
+              - article [ref=e2869]:
+                - text: Integracoes
+                - strong [ref=e2870]: "2"
+                - text: conexoes declaradas
+              - article [ref=e2871]:
+                - text: Valor
+                - strong [ref=e2872]: n/d
+                - text: sem resumo comercial
+            - code [ref=e2873]: https://29-legal-admin.brasildesconto.com.br/?workspace=module-legal#modulesWorkspace
+            - generic [ref=e2874]:
+              - link "Abrir subdominio" [ref=e2875] [cursor=pointer]:
+                - /url: https://29-legal-admin.brasildesconto.com.br/?workspace=module-legal#modulesWorkspace
+              - link "Espelho no painel" [ref=e2876] [cursor=pointer]:
+                - /url: "?workspace=module-legal#modulesWorkspace"
+          - article [ref=e2877]:
+            - generic [ref=e2878]:
+              - generic [ref=e2879]:
+                - heading "CHARITY · Valley Charity" [level=3] [ref=e2880]
+                - paragraph [ref=e2881]: Transparent Giving com cockpit dedicado, contexto de docs, checklist, contratos e trilha operacional.
+              - generic [ref=e2882]: Parcialmente implantado
+            - generic [ref=e2883]:
+              - generic [ref=e2884]: 30-charity-admin.brasildesconto.com.br
+              - generic [ref=e2885]: expansion
+              - generic [ref=e2886]: education_work_social
+            - generic [ref=e2887]:
+              - article [ref=e2888]:
+                - text: Prontidao
+                - strong [ref=e2889]: 65%
+                - text: 5 pendencias
+              - article [ref=e2890]:
+                - text: Data home
+                - strong [ref=e2891]: postgres
+                - text: CHARITY
+              - article [ref=e2892]:
+                - text: Integracoes
+                - strong [ref=e2893]: "2"
+                - text: conexoes declaradas
+              - article [ref=e2894]:
+                - text: Valor
+                - strong [ref=e2895]: n/d
+                - text: sem resumo comercial
+            - code [ref=e2896]: https://30-charity-admin.brasildesconto.com.br/?workspace=module-charity#modulesWorkspace
+            - generic [ref=e2897]:
+              - link "Abrir subdominio" [ref=e2898] [cursor=pointer]:
+                - /url: https://30-charity-admin.brasildesconto.com.br/?workspace=module-charity#modulesWorkspace
+              - link "Espelho no painel" [ref=e2899] [cursor=pointer]:
+                - /url: "?workspace=module-charity#modulesWorkspace"
+          - article [ref=e2900]:
+            - generic [ref=e2901]:
+              - generic [ref=e2902]:
+                - heading "INSURANCE · Valley Insurance" [level=3] [ref=e2903]
+                - paragraph [ref=e2904]: On-Demand Protection com cockpit dedicado, contexto de docs, checklist, contratos e trilha operacional.
+              - generic [ref=e2905]: Parcialmente implantado
+            - generic [ref=e2906]:
+              - generic [ref=e2907]: 31-insurance-admin.brasildesconto.com.br
+              - generic [ref=e2908]: expansion
+              - generic [ref=e2909]: commerce_fintech_assets
+            - generic [ref=e2910]:
+              - article [ref=e2911]:
+                - text: Prontidao
+                - strong [ref=e2912]: 65%
+                - text: 5 pendencias
+              - article [ref=e2913]:
+                - text: Data home
+                - strong [ref=e2914]: postgres
+                - text: INSURANCE
+              - article [ref=e2915]:
+                - text: Integracoes
+                - strong [ref=e2916]: "2"
+                - text: conexoes declaradas
+              - article [ref=e2917]:
+                - text: Valor
+                - strong [ref=e2918]: n/d
+                - text: sem resumo comercial
+            - code [ref=e2919]: https://31-insurance-admin.brasildesconto.com.br/?workspace=module-insurance#modulesWorkspace
+            - generic [ref=e2920]:
+              - link "Abrir subdominio" [ref=e2921] [cursor=pointer]:
+                - /url: https://31-insurance-admin.brasildesconto.com.br/?workspace=module-insurance#modulesWorkspace
+              - link "Espelho no painel" [ref=e2922] [cursor=pointer]:
+                - /url: "?workspace=module-insurance#modulesWorkspace"
+          - article [ref=e2923]:
+            - generic [ref=e2924]:
+              - generic [ref=e2925]:
+                - heading "GAMING · Valley Gaming" [level=3] [ref=e2926]
+                - paragraph [ref=e2927]: Gamified Ecosystem com cockpit dedicado, contexto de docs, checklist, contratos e trilha operacional.
+              - generic [ref=e2928]: Parcialmente implantado
+            - generic [ref=e2929]:
+              - generic [ref=e2930]: 32-gaming-admin.brasildesconto.com.br
+              - generic [ref=e2931]: expansion
+              - generic [ref=e2932]: media_social_growth
+            - generic [ref=e2933]:
+              - article [ref=e2934]:
+                - text: Prontidao
+                - strong [ref=e2935]: 71%
+                - text: 4 pendencias
+              - article [ref=e2936]:
+                - text: Data home
+                - strong [ref=e2937]: mongo
+                - text: GAMING
+              - article [ref=e2938]:
+                - text: Integracoes
+                - strong [ref=e2939]: "2"
+                - text: conexoes declaradas
+              - article [ref=e2940]:
+                - text: Valor
+                - strong [ref=e2941]: n/d
+                - text: sem resumo comercial
+            - code [ref=e2942]: https://32-gaming-admin.brasildesconto.com.br/?workspace=module-gaming#modulesWorkspace
+            - generic [ref=e2943]:
+              - link "Abrir subdominio" [ref=e2944] [cursor=pointer]:
+                - /url: https://32-gaming-admin.brasildesconto.com.br/?workspace=module-gaming#modulesWorkspace
+              - link "Espelho no painel" [ref=e2945] [cursor=pointer]:
+                - /url: "?workspace=module-gaming#modulesWorkspace"
+          - article [ref=e2946]:
+            - generic [ref=e2947]:
+              - generic [ref=e2948]:
+                - heading "IOT · Valley IoT" [level=3] [ref=e2949]
+                - paragraph [ref=e2950]: Connected Things & Smart Hub com cockpit dedicado, contexto de docs, checklist, contratos e trilha operacional.
+              - generic [ref=e2951]: Parcialmente implantado
+            - generic [ref=e2952]:
+              - generic [ref=e2953]: 33-iot-admin.brasildesconto.com.br
+              - generic [ref=e2954]: foundation
+              - generic [ref=e2955]: frontier_iot_energy
+            - generic [ref=e2956]:
+              - article [ref=e2957]:
+                - text: Prontidao
+                - strong [ref=e2958]: 65%
+                - text: 5 pendencias
+              - article [ref=e2959]:
+                - text: Data home
+                - strong [ref=e2960]: mongo
+                - text: IOT
+              - article [ref=e2961]:
+                - text: Integracoes
+                - strong [ref=e2962]: "3"
+                - text: conexoes declaradas
+              - article [ref=e2963]:
+                - text: Valor
+                - strong [ref=e2964]: n/d
+                - text: sem resumo comercial
+            - code [ref=e2965]: https://33-iot-admin.brasildesconto.com.br/?workspace=module-iot#modulesWorkspace
+            - generic [ref=e2966]:
+              - link "Abrir subdominio" [ref=e2967] [cursor=pointer]:
+                - /url: https://33-iot-admin.brasildesconto.com.br/?workspace=module-iot#modulesWorkspace
+              - link "Espelho no painel" [ref=e2968] [cursor=pointer]:
+                - /url: "?workspace=module-iot#modulesWorkspace"
+          - article [ref=e2969]:
+            - generic [ref=e2970]:
+              - generic [ref=e2971]:
+                - heading "BIO · Valley Bio" [level=3] [ref=e2972]
+                - paragraph [ref=e2973]: Eco-Sustainability & Reverse Logistics com cockpit dedicado, contexto de docs, checklist, contratos e trilha operacional.
+              - generic [ref=e2974]: Parcialmente implantado
+            - generic [ref=e2975]:
+              - generic [ref=e2976]: 34-bio-admin.brasildesconto.com.br
+              - generic [ref=e2977]: expansion
+              - generic [ref=e2978]: frontier_iot_energy
+            - generic [ref=e2979]:
+              - article [ref=e2980]:
+                - text: Prontidao
+                - strong [ref=e2981]: 71%
+                - text: 4 pendencias
+              - article [ref=e2982]:
+                - text: Data home
+                - strong [ref=e2983]: postgres_mongo
+                - text: BIO
+              - article [ref=e2984]:
+                - text: Integracoes
+                - strong [ref=e2985]: "2"
+                - text: conexoes declaradas
+              - article [ref=e2986]:
+                - text: Valor
+                - strong [ref=e2987]: n/d
+                - text: sem resumo comercial
+            - code [ref=e2988]: https://34-bio-admin.brasildesconto.com.br/?workspace=module-bio#modulesWorkspace
+            - generic [ref=e2989]:
+              - link "Abrir subdominio" [ref=e2990] [cursor=pointer]:
+                - /url: https://34-bio-admin.brasildesconto.com.br/?workspace=module-bio#modulesWorkspace
+              - link "Espelho no painel" [ref=e2991] [cursor=pointer]:
+                - /url: "?workspace=module-bio#modulesWorkspace"
+          - article [ref=e2992]:
+            - generic [ref=e2993]:
+              - generic [ref=e2994]:
+                - heading "HOME · Valley Home" [level=3] [ref=e2995]
+                - paragraph [ref=e2996]: Smart Automation com cockpit dedicado, contexto de docs, checklist, contratos e trilha operacional.
+              - generic [ref=e2997]: Parcialmente implantado
+            - generic [ref=e2998]:
+              - generic [ref=e2999]: 35-home-admin.brasildesconto.com.br
+              - generic [ref=e3000]: expansion
+              - generic [ref=e3001]: frontier_iot_energy
+            - generic [ref=e3002]:
+              - article [ref=e3003]:
+                - text: Prontidao
+                - strong [ref=e3004]: 65%
+                - text: 5 pendencias
+              - article [ref=e3005]:
+                - text: Data home
+                - strong [ref=e3006]: mongo
+                - text: HOME
+              - article [ref=e3007]:
+                - text: Integracoes
+                - strong [ref=e3008]: "2"
+                - text: conexoes declaradas
+              - article [ref=e3009]:
+                - text: Valor
+                - strong [ref=e3010]: n/d
+                - text: sem resumo comercial
+            - code [ref=e3011]: https://35-home-admin.brasildesconto.com.br/?workspace=module-home#modulesWorkspace
+            - generic [ref=e3012]:
+              - link "Abrir subdominio" [ref=e3013] [cursor=pointer]:
+                - /url: https://35-home-admin.brasildesconto.com.br/?workspace=module-home#modulesWorkspace
+              - link "Espelho no painel" [ref=e3014] [cursor=pointer]:
+                - /url: "?workspace=module-home#modulesWorkspace"
+          - article [ref=e3015]:
+            - generic [ref=e3016]:
+              - generic [ref=e3017]:
+                - heading "ENERGY · Valley Energy" [level=3] [ref=e3018]
+                - paragraph [ref=e3019]: P2P Smart Grid Trading com cockpit dedicado, contexto de docs, checklist, contratos e trilha operacional.
+              - generic [ref=e3020]: Parcialmente implantado
+            - generic [ref=e3021]:
+              - generic [ref=e3022]: 36-energy-admin.brasildesconto.com.br
+              - generic [ref=e3023]: expansion
+              - generic [ref=e3024]: frontier_iot_energy
+            - generic [ref=e3025]:
+              - article [ref=e3026]:
+                - text: Prontidao
+                - strong [ref=e3027]: 71%
+                - text: 4 pendencias
+              - article [ref=e3028]:
+                - text: Data home
+                - strong [ref=e3029]: postgres_mongo
+                - text: ENERGY
+              - article [ref=e3030]:
+                - text: Integracoes
+                - strong [ref=e3031]: "2"
+                - text: conexoes declaradas
+              - article [ref=e3032]:
+                - text: Valor
+                - strong [ref=e3033]: n/d
+                - text: sem resumo comercial
+            - code [ref=e3034]: https://36-energy-admin.brasildesconto.com.br/?workspace=module-energy#modulesWorkspace
+            - generic [ref=e3035]:
+              - link "Abrir subdominio" [ref=e3036] [cursor=pointer]:
+                - /url: https://36-energy-admin.brasildesconto.com.br/?workspace=module-energy#modulesWorkspace
+              - link "Espelho no painel" [ref=e3037] [cursor=pointer]:
+                - /url: "?workspace=module-energy#modulesWorkspace"
+          - article [ref=e3038]:
+            - generic [ref=e3039]:
+              - generic [ref=e3040]:
+                - heading "SPACE · Valley Space" [level=3] [ref=e3041]
+                - paragraph [ref=e3042]: Augmented Reality Anchors com cockpit dedicado, contexto de docs, checklist, contratos e trilha operacional.
+              - generic [ref=e3043]: Parcialmente implantado
+            - generic [ref=e3044]:
+              - generic [ref=e3045]: 37-space-admin.brasildesconto.com.br
+              - generic [ref=e3046]: frontier
+              - generic [ref=e3047]: frontier_iot_energy
+            - generic [ref=e3048]:
+              - article [ref=e3049]:
+                - text: Prontidao
+                - strong [ref=e3050]: 65%
+                - text: 5 pendencias
+              - article [ref=e3051]:
+                - text: Data home
+                - strong [ref=e3052]: mongo
+                - text: SPACE
+              - article [ref=e3053]:
+                - text: Integracoes
+                - strong [ref=e3054]: "2"
+                - text: conexoes declaradas
+              - article [ref=e3055]:
+                - text: Valor
+                - strong [ref=e3056]: n/d
+                - text: sem resumo comercial
+            - code [ref=e3057]: https://37-space-admin.brasildesconto.com.br/?workspace=module-space#modulesWorkspace
+            - generic [ref=e3058]:
+              - link "Abrir subdominio" [ref=e3059] [cursor=pointer]:
+                - /url: https://37-space-admin.brasildesconto.com.br/?workspace=module-space#modulesWorkspace
+              - link "Espelho no painel" [ref=e3060] [cursor=pointer]:
+                - /url: "?workspace=module-space#modulesWorkspace"
+          - article [ref=e3061]:
+            - generic [ref=e3062]:
+              - generic [ref=e3063]:
+                - heading "AGENDA · Valley Agenda" [level=3] [ref=e3064]
+                - paragraph [ref=e3065]: Helena Core Memory & Smart Lists com cockpit dedicado, contexto de docs, checklist, contratos e trilha operacional.
+              - generic [ref=e3066]: Parcialmente implantado
+            - generic [ref=e3067]:
+              - generic [ref=e3068]: 38-agenda-admin.brasildesconto.com.br
+              - generic [ref=e3069]: core
+              - generic [ref=e3070]: ai_memory_operations
+            - generic [ref=e3071]:
+              - article [ref=e3072]:
+                - text: Prontidao
+                - strong [ref=e3073]: 65%
+                - text: 5 pendencias
+              - article [ref=e3074]:
+                - text: Data home
+                - strong [ref=e3075]: mongo
+                - text: AGENDA
+              - article [ref=e3076]:
+                - text: Integracoes
+                - strong [ref=e3077]: "2"
+                - text: conexoes declaradas
+              - article [ref=e3078]:
+                - text: Valor
+                - strong [ref=e3079]: n/d
+                - text: sem resumo comercial
+            - code [ref=e3080]: https://38-agenda-admin.brasildesconto.com.br/?workspace=module-agenda#modulesWorkspace
+            - generic [ref=e3081]:
+              - link "Abrir subdominio" [ref=e3082] [cursor=pointer]:
+                - /url: https://38-agenda-admin.brasildesconto.com.br/?workspace=module-agenda#modulesWorkspace
+              - link "Espelho no painel" [ref=e3083] [cursor=pointer]:
+                - /url: "?workspace=module-agenda#modulesWorkspace"
+          - article [ref=e3084]:
+            - generic [ref=e3085]:
+              - generic [ref=e3086]:
+                - heading "ADVISOR · Valley Advisor" [level=3] [ref=e3087]
+                - paragraph [ref=e3088]: Omni-Consultoria de IA com cockpit dedicado, contexto de docs, checklist, contratos e trilha operacional.
+              - generic [ref=e3089]: Parcialmente implantado
+            - generic [ref=e3090]:
+              - generic [ref=e3091]: 39-advisor-admin.brasildesconto.com.br
+              - generic [ref=e3092]: core
+              - generic [ref=e3093]: ai_memory_operations
+            - generic [ref=e3094]:
+              - article [ref=e3095]:
+                - text: Prontidao
+                - strong [ref=e3096]: 71%
+                - text: 4 pendencias
+              - article [ref=e3097]:
+                - text: Data home
+                - strong [ref=e3098]: postgres_mongo
+                - text: ADVISOR
+              - article [ref=e3099]:
+                - text: Integracoes
+                - strong [ref=e3100]: "3"
+                - text: conexoes declaradas
+              - article [ref=e3101]:
+                - text: Valor
+                - strong [ref=e3102]: n/d
+                - text: sem resumo comercial
+            - code [ref=e3103]: https://39-advisor-admin.brasildesconto.com.br/?workspace=module-advisor#modulesWorkspace
+            - generic [ref=e3104]:
+              - link "Abrir subdominio" [ref=e3105] [cursor=pointer]:
+                - /url: https://39-advisor-admin.brasildesconto.com.br/?workspace=module-advisor#modulesWorkspace
+              - link "Espelho no painel" [ref=e3106] [cursor=pointer]:
+                - /url: "?workspace=module-advisor#modulesWorkspace"
+          - article [ref=e3107]:
+            - generic [ref=e3108]:
+              - generic [ref=e3109]:
+                - heading "FINANCAS · Valley Financas" [level=3] [ref=e3110]
+                - paragraph [ref=e3111]: PFM & Gestao de Micro-Negocios com cockpit dedicado, contexto de docs, checklist, contratos e trilha operacional.
+              - generic [ref=e3112]: Parcialmente implantado
+            - generic [ref=e3113]:
+              - generic [ref=e3114]: 40-financas-admin.brasildesconto.com.br
+              - generic [ref=e3115]: core
+              - generic [ref=e3116]: commerce_fintech_assets
+            - generic [ref=e3117]:
+              - article [ref=e3118]:
+                - text: Prontidao
+                - strong [ref=e3119]: 65%
+                - text: 5 pendencias
+              - article [ref=e3120]:
+                - text: Data home
+                - strong [ref=e3121]: postgres
+                - text: FINANCAS
+              - article [ref=e3122]:
+                - text: Integracoes
+                - strong [ref=e3123]: "2"
+                - text: conexoes declaradas
+              - article [ref=e3124]:
+                - text: Valor
+                - strong [ref=e3125]: n/d
+                - text: sem resumo comercial
+            - code [ref=e3126]: https://40-financas-admin.brasildesconto.com.br/?workspace=module-financas#modulesWorkspace
+            - generic [ref=e3127]:
+              - link "Abrir subdominio" [ref=e3128] [cursor=pointer]:
+                - /url: https://40-financas-admin.brasildesconto.com.br/?workspace=module-financas#modulesWorkspace
+              - link "Espelho no painel" [ref=e3129] [cursor=pointer]:
+                - /url: "?workspace=module-financas#modulesWorkspace"
+          - article [ref=e3130]:
+            - generic [ref=e3131]:
+              - generic [ref=e3132]:
+                - heading "MENTE · Valley Mente" [level=3] [ref=e3133]
+                - paragraph [ref=e3134]: Saude Mental Digital com cockpit dedicado, contexto de docs, checklist, contratos e trilha operacional.
+              - generic [ref=e3135]: Parcialmente implantado
+            - generic [ref=e3136]:
+              - generic [ref=e3137]: 41-mente-admin.brasildesconto.com.br
+              - generic [ref=e3138]: core
+              - generic [ref=e3139]: services_health_human
+            - generic [ref=e3140]:
+              - article [ref=e3141]:
+                - text: Prontidao
+                - strong [ref=e3142]: 65%
+                - text: 5 pendencias
+              - article [ref=e3143]:
+                - text: Data home
+                - strong [ref=e3144]: postgres
+                - text: MENTE
+              - article [ref=e3145]:
+                - text: Integracoes
+                - strong [ref=e3146]: "2"
+                - text: conexoes declaradas
+              - article [ref=e3147]:
+                - text: Valor
+                - strong [ref=e3148]: n/d
+                - text: sem resumo comercial
+            - code [ref=e3149]: https://41-mente-admin.brasildesconto.com.br/?workspace=module-mente#modulesWorkspace
+            - generic [ref=e3150]:
+              - link "Abrir subdominio" [ref=e3151] [cursor=pointer]:
+                - /url: https://41-mente-admin.brasildesconto.com.br/?workspace=module-mente#modulesWorkspace
+              - link "Espelho no painel" [ref=e3152] [cursor=pointer]:
+                - /url: "?workspace=module-mente#modulesWorkspace"
+          - article [ref=e3153]:
+            - generic [ref=e3154]:
+              - generic [ref=e3155]:
+                - heading "BUSINESS · Valley Business" [level=3] [ref=e3156]
+                - paragraph [ref=e3157]: ERP de Integracao com cockpit dedicado, contexto de docs, checklist, contratos e trilha operacional.
+              - generic [ref=e3158]: Parcialmente implantado
+            - generic [ref=e3159]:
+              - generic [ref=e3160]: 42-business-admin.brasildesconto.com.br
+              - generic [ref=e3161]: foundation
+              - generic [ref=e3162]: logistics_erp_operations
+            - generic [ref=e3163]:
+              - article [ref=e3164]:
+                - text: Prontidao
+                - strong [ref=e3165]: 65%
+                - text: 5 pendencias
+              - article [ref=e3166]:
+                - text: Data home
+                - strong [ref=e3167]: postgres
+                - text: BUSINESS
+              - article [ref=e3168]:
+                - text: Integracoes
+                - strong [ref=e3169]: "2"
+                - text: conexoes declaradas
+              - article [ref=e3170]:
+                - text: Valor
+                - strong [ref=e3171]: n/d
+                - text: sem resumo comercial
+            - code [ref=e3172]: https://42-business-admin.brasildesconto.com.br/?workspace=module-business#modulesWorkspace
+            - generic [ref=e3173]:
+              - link "Abrir subdominio" [ref=e3174] [cursor=pointer]:
+                - /url: https://42-business-admin.brasildesconto.com.br/?workspace=module-business#modulesWorkspace
+              - link "Espelho no painel" [ref=e3175] [cursor=pointer]:
+                - /url: "?workspace=module-business#modulesWorkspace"
+          - article [ref=e3176]:
+            - generic [ref=e3177]:
+              - generic [ref=e3178]:
+                - heading "PLUG · Valley Plug" [level=3] [ref=e3179]
+                - paragraph [ref=e3180]: Maquininha & Tap-to-Pay com cockpit dedicado, contexto de docs, checklist, contratos e trilha operacional.
+              - generic [ref=e3181]: Parcialmente implantado
+            - generic [ref=e3182]:
+              - generic [ref=e3183]: 43-plug-admin.brasildesconto.com.br
+              - generic [ref=e3184]: core
+              - generic [ref=e3185]: commerce_fintech_assets
+            - generic [ref=e3186]:
+              - article [ref=e3187]:
+                - text: Prontidao
+                - strong [ref=e3188]: 65%
+                - text: 5 pendencias
+              - article [ref=e3189]:
+                - text: Data home
+                - strong [ref=e3190]: postgres
+                - text: PLUG
+              - article [ref=e3191]:
+                - text: Integracoes
+                - strong [ref=e3192]: "2"
+                - text: conexoes declaradas
+              - article [ref=e3193]:
+                - text: Valor
+                - strong [ref=e3194]: n/d
+                - text: sem resumo comercial
+            - code [ref=e3195]: https://43-plug-admin.brasildesconto.com.br/?workspace=module-plug#modulesWorkspace
+            - generic [ref=e3196]:
+              - link "Abrir subdominio" [ref=e3197] [cursor=pointer]:
+                - /url: https://43-plug-admin.brasildesconto.com.br/?workspace=module-plug#modulesWorkspace
+              - link "Espelho no painel" [ref=e3198] [cursor=pointer]:
+                - /url: "?workspace=module-plug#modulesWorkspace"
+          - article [ref=e3199]:
+            - generic [ref=e3200]:
+              - generic [ref=e3201]:
+                - heading "UP · Valley Up" [level=3] [ref=e3202]
+                - paragraph [ref=e3203]: Motor de Afiliados CAC Zero com cockpit dedicado, contexto de docs, checklist, contratos e trilha operacional.
+              - generic [ref=e3204]: Parcialmente implantado
+            - generic [ref=e3205]:
+              - generic [ref=e3206]: 44-up-admin.brasildesconto.com.br
+              - generic [ref=e3207]: core
+              - generic [ref=e3208]: commerce_fintech_assets
+            - generic [ref=e3209]:
+              - article [ref=e3210]:
+                - text: Prontidao
+                - strong [ref=e3211]: 71%
+                - text: 4 pendencias
+              - article [ref=e3212]:
+                - text: Data home
+                - strong [ref=e3213]: postgres_mongo
+                - text: UP
+              - article [ref=e3214]:
+                - text: Integracoes
+                - strong [ref=e3215]: "2"
+                - text: conexoes declaradas
+              - article [ref=e3216]:
+                - text: Valor
+                - strong [ref=e3217]: n/d
+                - text: sem resumo comercial
+            - code [ref=e3218]: https://44-up-admin.brasildesconto.com.br/?workspace=module-up#modulesWorkspace
+            - generic [ref=e3219]:
+              - link "Abrir subdominio" [ref=e3220] [cursor=pointer]:
+                - /url: https://44-up-admin.brasildesconto.com.br/?workspace=module-up#modulesWorkspace
+              - link "Espelho no painel" [ref=e3221] [cursor=pointer]:
+                - /url: "?workspace=module-up#modulesWorkspace"
+          - article [ref=e3222]:
+            - generic [ref=e3223]:
+              - generic [ref=e3224]:
+                - heading "MEDIA · Valley Media" [level=3] [ref=e3225]
+                - paragraph [ref=e3226]: Painel de Criadores com cockpit dedicado, contexto de docs, checklist, contratos e trilha operacional.
+              - generic [ref=e3227]: Parcialmente implantado
+            - generic [ref=e3228]:
+              - generic [ref=e3229]: 45-media-admin.brasildesconto.com.br
+              - generic [ref=e3230]: core
+              - generic [ref=e3231]: media_social_growth
+            - generic [ref=e3232]:
+              - article [ref=e3233]:
+                - text: Prontidao
+                - strong [ref=e3234]: 71%
+                - text: 4 pendencias
+              - article [ref=e3235]:
+                - text: Data home
+                - strong [ref=e3236]: postgres_mongo
+                - text: MEDIA
+              - article [ref=e3237]:
+                - text: Integracoes
+                - strong [ref=e3238]: "2"
+                - text: conexoes declaradas
+              - article [ref=e3239]:
+                - text: Valor
+                - strong [ref=e3240]: n/d
+                - text: sem resumo comercial
+            - code [ref=e3241]: https://45-media-admin.brasildesconto.com.br/?workspace=module-media#modulesWorkspace
+            - generic [ref=e3242]:
+              - link "Abrir subdominio" [ref=e3243] [cursor=pointer]:
+                - /url: https://45-media-admin.brasildesconto.com.br/?workspace=module-media#modulesWorkspace
+              - link "Espelho no painel" [ref=e3244] [cursor=pointer]:
+                - /url: "?workspace=module-media#modulesWorkspace"
+          - article [ref=e3245]:
+            - generic [ref=e3246]:
+              - generic [ref=e3247]:
+                - heading "CHAT · Valley Chat" [level=3] [ref=e3248]
+                - paragraph [ref=e3249]: Mensageria com Contexto Helena Dual com cockpit dedicado, contexto de docs, checklist, contratos e trilha operacional.
+              - generic [ref=e3250]: Parcialmente implantado
+            - generic [ref=e3251]:
+              - generic [ref=e3252]: 46-chat-admin.brasildesconto.com.br
+              - generic [ref=e3253]: core
+              - generic [ref=e3254]: ai_memory_operations
+            - generic [ref=e3255]:
+              - article [ref=e3256]:
+                - text: Prontidao
+                - strong [ref=e3257]: 71%
+                - text: 4 pendencias
+              - article [ref=e3258]:
+                - text: Data home
+                - strong [ref=e3259]: postgres_mongo
+                - text: CHAT
+              - article [ref=e3260]:
+                - text: Integracoes
+                - strong [ref=e3261]: "2"
+                - text: conexoes declaradas
+              - article [ref=e3262]:
+                - text: Valor
+                - strong [ref=e3263]: n/d
+                - text: sem resumo comercial
+            - code [ref=e3264]: https://46-chat-admin.brasildesconto.com.br/?workspace=module-chat#modulesWorkspace
+            - generic [ref=e3265]:
+              - link "Abrir subdominio" [ref=e3266] [cursor=pointer]:
+                - /url: https://46-chat-admin.brasildesconto.com.br/?workspace=module-chat#modulesWorkspace
+              - link "Espelho no painel" [ref=e3267] [cursor=pointer]:
+                - /url: "?workspace=module-chat#modulesWorkspace"
+          - article [ref=e3268]:
+            - generic [ref=e3269]:
+              - generic [ref=e3270]:
+                - heading "DOCS · Valley Docs" [level=3] [ref=e3271]
+                - paragraph [ref=e3272]: Fabrica de Documentos e Recibos com cockpit dedicado, contexto de docs, checklist, contratos e trilha operacional.
+              - generic [ref=e3273]: Parcialmente implantado
+            - generic [ref=e3274]:
+              - generic [ref=e3275]: 47-docs-admin.brasildesconto.com.br
+              - generic [ref=e3276]: foundation
+              - generic [ref=e3277]: platform_developer
+            - generic [ref=e3278]:
+              - article [ref=e3279]:
+                - text: Prontidao
+                - strong [ref=e3280]: 65%
+                - text: 5 pendencias
+              - article [ref=e3281]:
+                - text: Data home
+                - strong [ref=e3282]: postgres
+                - text: DOCS
+              - article [ref=e3283]:
+                - text: Integracoes
+                - strong [ref=e3284]: "2"
+                - text: conexoes declaradas
+              - article [ref=e3285]:
+                - text: Valor
+                - strong [ref=e3286]: n/d
+                - text: sem resumo comercial
+            - code [ref=e3287]: https://47-docs-admin.brasildesconto.com.br/?workspace=module-docs#modulesWorkspace
+            - generic [ref=e3288]:
+              - link "Abrir subdominio" [ref=e3289] [cursor=pointer]:
+                - /url: https://47-docs-admin.brasildesconto.com.br/?workspace=module-docs#modulesWorkspace
+              - link "Espelho no painel" [ref=e3290] [cursor=pointer]:
+                - /url: "?workspace=module-docs#modulesWorkspace"
+      - region "Cockpit operacional" [ref=e224]:
+        - region "Filtros e operacao" [ref=e225]:
+          - generic [ref=e226]:
+            - generic [ref=e227]:
+              - generic [ref=e228]: Buscar modulo
+              - searchbox "Buscar modulo" [ref=e229]
+            - paragraph [ref=e230]:
+              - text: "Atalhos:"
+              - generic [ref=e231]: /
+              - text: foca a busca,
+              - generic [ref=e232]: J
+              - text: /
+              - generic [ref=e233]: K
+              - text: navegam,
+              - generic [ref=e234]: Esc
+              - text: limpa filtros.
+          - generic [ref=e235]:
+            - generic [ref=e236]:
+              - generic [ref=e237]: Tier
+              - combobox "Tier" [ref=e238]:
+                - option "Todos" [selected]
+                - option "core"
+                - option "expansion"
+                - option "foundation"
+                - option "frontier"
+            - generic [ref=e239]:
+              - generic [ref=e240]: Data home
+              - combobox "Data home" [ref=e241]:
+                - option "Todos" [selected]
+                - option "mongo"
+                - option "postgres"
+                - option "postgres_mongo"
+            - generic [ref=e242]:
+              - generic [ref=e243]: Status
+              - combobox "Status" [ref=e244]:
+                - option "Todos" [selected]
+                - option "implemented partial"
+            - generic [ref=e245]:
+              - generic [ref=e246]: Dominio
+              - combobox "Dominio" [ref=e247]:
+                - option "Todos" [selected]
+                - option "ai_memory_operations"
+                - option "city_mobility_security"
+                - option "commerce_fintech_assets"
+                - option "education_work_social"
+                - option "frontier_iot_energy"
+                - option "logistics_erp_operations"
+                - option "media_social_growth"
+                - option "platform_developer"
+                - option "services_health_human"
+          - generic [ref=e248]:
+            - button "Limpar filtros" [ref=e249] [cursor=pointer]
+            - button "Copiar resumo" [ref=e250] [cursor=pointer]
+          - generic [ref=e251]:
+            - generic [ref=e253]:
+              - paragraph [ref=e254]: External access
+              - heading "Infra publica" [level=2] [ref=e255]
+            - generic [ref=e3292]:
+              - generic [ref=e3293]:
+                - article [ref=e3294]:
+                  - generic [ref=e3295]: Admin
+                  - strong [ref=e3296]: online
+                  - generic [ref=e3297]: admin.brasildesconto.com.br
+                - article [ref=e3298]:
+                  - generic [ref=e3299]: ERP lojista
+                  - strong [ref=e3300]: online
+                  - generic [ref=e3301]: erp-lojista.brasildesconto.com.br
+                - article [ref=e3302]:
+                  - generic [ref=e3303]: Portal
+                  - strong [ref=e3304]: online
+                  - generic [ref=e3305]: admin.brasildesconto.com.br
+              - paragraph [ref=e3306]: A superficie externa esta preparada para acesso fora da rede local com links oficiais para administracao, lojista e catalogo publico.
+              - generic [ref=e3307]:
+                - link "Abrir admin" [ref=e3308] [cursor=pointer]:
+                  - /url: https://admin.brasildesconto.com.br
+                - link "Abrir ERP lojista" [ref=e3309] [cursor=pointer]:
+                  - /url: https://erp-lojista.brasildesconto.com.br/
+                - link "Abrir portal" [ref=e3310] [cursor=pointer]:
+                  - /url: https://admin.brasildesconto.com.br/product
+              - generic [ref=e3311]:
+                - button "Copiar admin" [ref=e3312] [cursor=pointer]
+                - button "Copiar ERP" [ref=e3313] [cursor=pointer]
+        - generic [ref=e256]:
+          - region "Lista de modulos" [ref=e257]:
+            - generic [ref=e258]:
+              - generic [ref=e259]:
+                - heading "Malha de modulos" [level=2] [ref=e260]
+                - paragraph [ref=e261]: 47 modulos filtrados
+              - generic [ref=e3314]:
+                - generic [ref=e3315]: 67% prontidao
+                - generic [ref=e3316]: 217 pendencias
+            - listbox "Lista de modulos" [ref=e3317]:
+              - option "01 REPLY Valley REPLY foundation Advanced ERP/WMS | logistics_erp_operations postgres Parcialmente implantado 5 pendencias" [selected] [ref=e3318] [cursor=pointer]:
+                - generic [ref=e3319]:
+                  - generic [ref=e3320]:
+                    - generic [ref=e3321]: "01"
+                    - generic [ref=e3322]:
+                      - generic [ref=e3323]: REPLY
+                      - generic [ref=e3324]: Valley REPLY
+                  - generic [ref=e3325]: foundation
+                - generic [ref=e3326]: Advanced ERP/WMS | logistics_erp_operations
+                - generic [ref=e3327]:
+                  - generic [ref=e3328]: postgres
+                  - generic [ref=e3329]: Parcialmente implantado
+                  - generic [ref=e3330]: 5 pendencias
+              - option "02 STOCK Valley Stock foundation Centralized Dropshipping | logistics_erp_operations postgres Parcialmente implantado 5 pendencias" [ref=e3333] [cursor=pointer]:
+                - generic [ref=e3334]:
+                  - generic [ref=e3335]:
+                    - generic [ref=e3336]: "02"
+                    - generic [ref=e3337]:
+                      - generic [ref=e3338]: STOCK
+                      - generic [ref=e3339]: Valley Stock
+                  - generic [ref=e3340]: foundation
+                - generic [ref=e3341]: Centralized Dropshipping | logistics_erp_operations
+                - generic [ref=e3342]:
+                  - generic [ref=e3343]: postgres
+                  - generic [ref=e3344]: Parcialmente implantado
+                  - generic [ref=e3345]: 5 pendencias
+              - option "03 LOG Valley Log foundation Smart Tracking | logistics_erp_operations mongo Parcialmente implantado 5 pendencias" [ref=e3348] [cursor=pointer]:
+                - generic [ref=e3349]:
+                  - generic [ref=e3350]:
+                    - generic [ref=e3351]: "03"
+                    - generic [ref=e3352]:
+                      - generic [ref=e3353]: LOG
+                      - generic [ref=e3354]: Valley Log
+                  - generic [ref=e3355]: foundation
+                - generic [ref=e3356]: Smart Tracking | logistics_erp_operations
+                - generic [ref=e3357]:
+                  - generic [ref=e3358]: mongo
+                  - generic [ref=e3359]: Parcialmente implantado
+                  - generic [ref=e3360]: 5 pendencias
+              - option "04 FOOD Valley Food core Health-Centric Delivery | logistics_erp_operations postgres Parcialmente implantado 5 pendencias" [ref=e3363] [cursor=pointer]:
+                - generic [ref=e3364]:
+                  - generic [ref=e3365]:
+                    - generic [ref=e3366]: "04"
+                    - generic [ref=e3367]:
+                      - generic [ref=e3368]: FOOD
+                      - generic [ref=e3369]: Valley Food
+                  - generic [ref=e3370]: core
+                - generic [ref=e3371]: Health-Centric Delivery | logistics_erp_operations
+                - generic [ref=e3372]:
+                  - generic [ref=e3373]: postgres
+                  - generic [ref=e3374]: Parcialmente implantado
+                  - generic [ref=e3375]: 5 pendencias
+              - option "05 DELIVERY Valley Delivery core Urban Courier | logistics_erp_operations postgres_mongo Parcialmente implantado 4 pendencias" [ref=e3378] [cursor=pointer]:
+                - generic [ref=e3379]:
+                  - generic [ref=e3380]:
+                    - generic [ref=e3381]: "05"
+                    - generic [ref=e3382]:
+                      - generic [ref=e3383]: DELIVERY
+                      - generic [ref=e3384]: Valley Delivery
+                  - generic [ref=e3385]: core
+                - generic [ref=e3386]: Urban Courier | logistics_erp_operations
+                - generic [ref=e3387]:
+                  - generic [ref=e3388]: postgres_mongo
+                  - generic [ref=e3389]: Parcialmente implantado
+                  - generic [ref=e3390]: 4 pendencias
+              - option "06 WMS Valley WMS foundation Warehouse Intelligence | logistics_erp_operations postgres_mongo Parcialmente implantado 4 pendencias" [ref=e3393] [cursor=pointer]:
+                - generic [ref=e3394]:
+                  - generic [ref=e3395]:
+                    - generic [ref=e3396]: "06"
+                    - generic [ref=e3397]:
+                      - generic [ref=e3398]: WMS
+                      - generic [ref=e3399]: Valley WMS
+                  - generic [ref=e3400]: foundation
+                - generic [ref=e3401]: Warehouse Intelligence | logistics_erp_operations
+                - generic [ref=e3402]:
+                  - generic [ref=e3403]: postgres_mongo
+                  - generic [ref=e3404]: Parcialmente implantado
+                  - generic [ref=e3405]: 4 pendencias
+              - option "07 MARKETPLACE Valley Marketplace foundation Local Commerce | commerce_fintech_assets postgres Parcialmente implantado 5 pendencias" [ref=e3408] [cursor=pointer]:
+                - generic [ref=e3409]:
+                  - generic [ref=e3410]:
+                    - generic [ref=e3411]: "07"
+                    - generic [ref=e3412]:
+                      - generic [ref=e3413]: MARKETPLACE
+                      - generic [ref=e3414]: Valley Marketplace
+                  - generic [ref=e3415]: foundation
+                - generic [ref=e3416]: Local Commerce | commerce_fintech_assets
+                - generic [ref=e3417]:
+                  - generic [ref=e3418]: postgres
+                  - generic [ref=e3419]: Parcialmente implantado
+                  - generic [ref=e3420]: 5 pendencias
+              - option "08 PAY Valley Pay foundation The Financial Heart & Atomic Ledger | commerce_fintech_assets postgres Parcialmente implantado 5 pendencias" [ref=e3423] [cursor=pointer]:
+                - generic [ref=e3424]:
+                  - generic [ref=e3425]:
+                    - generic [ref=e3426]: "08"
+                    - generic [ref=e3427]:
+                      - generic [ref=e3428]: PAY
+                      - generic [ref=e3429]: Valley Pay
+                  - generic [ref=e3430]: foundation
+                - generic [ref=e3431]: The Financial Heart & Atomic Ledger | commerce_fintech_assets
+                - generic [ref=e3432]:
+                  - generic [ref=e3433]: postgres
+                  - generic [ref=e3434]: Parcialmente implantado
+                  - generic [ref=e3435]: 5 pendencias
+              - option "09 FLEET Valley Fleet core Telemetry & Fleet Management | logistics_erp_operations mongo Parcialmente implantado 4 pendencias" [ref=e3438] [cursor=pointer]:
+                - generic [ref=e3439]:
+                  - generic [ref=e3440]:
+                    - generic [ref=e3441]: "09"
+                    - generic [ref=e3442]:
+                      - generic [ref=e3443]: FLEET
+                      - generic [ref=e3444]: Valley Fleet
+                  - generic [ref=e3445]: core
+                - generic [ref=e3446]: Telemetry & Fleet Management | logistics_erp_operations
+                - generic [ref=e3447]:
+                  - generic [ref=e3448]: mongo
+                  - generic [ref=e3449]: Parcialmente implantado
+                  - generic [ref=e3450]: 4 pendencias
+              - option "10 SERVICES Valley Services core Gigs & Pro Services | services_health_human postgres Parcialmente implantado 5 pendencias" [ref=e3453] [cursor=pointer]:
+                - generic [ref=e3454]:
+                  - generic [ref=e3455]:
+                    - generic [ref=e3456]: "10"
+                    - generic [ref=e3457]:
+                      - generic [ref=e3458]: SERVICES
+                      - generic [ref=e3459]: Valley Services
+                  - generic [ref=e3460]: core
+                - generic [ref=e3461]: Gigs & Pro Services | services_health_human
+                - generic [ref=e3462]:
+                  - generic [ref=e3463]: postgres
+                  - generic [ref=e3464]: Parcialmente implantado
+                  - generic [ref=e3465]: 5 pendencias
+              - option "11 DIGITAL Valley Digital expansion NFT & Digital Assets | commerce_fintech_assets postgres Parcialmente implantado 5 pendencias" [ref=e3468] [cursor=pointer]:
+                - generic [ref=e3469]:
+                  - generic [ref=e3470]:
+                    - generic [ref=e3471]: "11"
+                    - generic [ref=e3472]:
+                      - generic [ref=e3473]: DIGITAL
+                      - generic [ref=e3474]: Valley Digital
+                  - generic [ref=e3475]: expansion
+                - generic [ref=e3476]: NFT & Digital Assets | commerce_fintech_assets
+                - generic [ref=e3477]:
+                  - generic [ref=e3478]: postgres
+                  - generic [ref=e3479]: Parcialmente implantado
+                  - generic [ref=e3480]: 5 pendencias
+              - option "12 REAL_ESTATE Valley Real Estate expansion Tokenized Housing | commerce_fintech_assets postgres Parcialmente implantado 5 pendencias" [ref=e3483] [cursor=pointer]:
+                - generic [ref=e3484]:
+                  - generic [ref=e3485]:
+                    - generic [ref=e3486]: "12"
+                    - generic [ref=e3487]:
+                      - generic [ref=e3488]: REAL_ESTATE
+                      - generic [ref=e3489]: Valley Real Estate
+                  - generic [ref=e3490]: expansion
+                - generic [ref=e3491]: Tokenized Housing | commerce_fintech_assets
+                - generic [ref=e3492]:
+                  - generic [ref=e3493]: postgres
+                  - generic [ref=e3494]: Parcialmente implantado
+                  - generic [ref=e3495]: 5 pendencias
+              - option "13 HEALTH Valley Health core Predictive Care | services_health_human postgres_mongo Parcialmente implantado 4 pendencias" [ref=e3498] [cursor=pointer]:
+                - generic [ref=e3499]:
+                  - generic [ref=e3500]:
+                    - generic [ref=e3501]: "13"
+                    - generic [ref=e3502]:
+                      - generic [ref=e3503]: HEALTH
+                      - generic [ref=e3504]: Valley Health
+                  - generic [ref=e3505]: core
+                - generic [ref=e3506]: Predictive Care | services_health_human
+                - generic [ref=e3507]:
+                  - generic [ref=e3508]: postgres_mongo
+                  - generic [ref=e3509]: Parcialmente implantado
+                  - generic [ref=e3510]: 4 pendencias
+              - option "14 EDU Valley Edu expansion Learn-to-Earn | education_work_social postgres Parcialmente implantado 5 pendencias" [ref=e3513] [cursor=pointer]:
+                - generic [ref=e3514]:
+                  - generic [ref=e3515]:
+                    - generic [ref=e3516]: "14"
+                    - generic [ref=e3517]:
+                      - generic [ref=e3518]: EDU
+                      - generic [ref=e3519]: Valley Edu
+                  - generic [ref=e3520]: expansion
+                - generic [ref=e3521]: Learn-to-Earn | education_work_social
+                - generic [ref=e3522]:
+                  - generic [ref=e3523]: postgres
+                  - generic [ref=e3524]: Parcialmente implantado
+                  - generic [ref=e3525]: 5 pendencias
+              - option "15 TECH Valley Tech foundation SaaS Infrastructure & API Builder | platform_developer postgres Parcialmente implantado 5 pendencias" [ref=e3528] [cursor=pointer]:
+                - generic [ref=e3529]:
+                  - generic [ref=e3530]:
+                    - generic [ref=e3531]: "15"
+                    - generic [ref=e3532]:
+                      - generic [ref=e3533]: TECH
+                      - generic [ref=e3534]: Valley Tech
+                  - generic [ref=e3535]: foundation
+                - generic [ref=e3536]: SaaS Infrastructure & API Builder | platform_developer
+                - generic [ref=e3537]:
+                  - generic [ref=e3538]: postgres
+                  - generic [ref=e3539]: Parcialmente implantado
+                  - generic [ref=e3540]: 5 pendencias
+              - option "16 JOBS Valley Jobs core AI Matchmaking | education_work_social postgres_mongo Parcialmente implantado 4 pendencias" [ref=e3543] [cursor=pointer]:
+                - generic [ref=e3544]:
+                  - generic [ref=e3545]:
+                    - generic [ref=e3546]: "16"
+                    - generic [ref=e3547]:
+                      - generic [ref=e3548]: JOBS
+                      - generic [ref=e3549]: Valley Jobs
+                  - generic [ref=e3550]: core
+                - generic [ref=e3551]: AI Matchmaking | education_work_social
+                - generic [ref=e3552]:
+                  - generic [ref=e3553]: postgres_mongo
+                  - generic [ref=e3554]: Parcialmente implantado
+                  - generic [ref=e3555]: 4 pendencias
+              - option "17 NEWS_PODCAST Valley News & Podcast expansion ContinuaMente | media_social_growth mongo Parcialmente implantado 5 pendencias" [ref=e3558] [cursor=pointer]:
+                - generic [ref=e3559]:
+                  - generic [ref=e3560]:
+                    - generic [ref=e3561]: "17"
+                    - generic [ref=e3562]:
+                      - generic [ref=e3563]: NEWS_PODCAST
+                      - generic [ref=e3564]: Valley News & Podcast
+                  - generic [ref=e3565]: expansion
+                - generic [ref=e3566]: ContinuaMente | media_social_growth
+                - generic [ref=e3567]:
+                  - generic [ref=e3568]: mongo
+                  - generic [ref=e3569]: Parcialmente implantado
+                  - generic [ref=e3570]: 5 pendencias
+              - option "18 ADS Valley Ads core Geofenced Marketing | media_social_growth mongo Parcialmente implantado 4 pendencias" [ref=e3573] [cursor=pointer]:
+                - generic [ref=e3574]:
+                  - generic [ref=e3575]:
+                    - generic [ref=e3576]: "18"
+                    - generic [ref=e3577]:
+                      - generic [ref=e3578]: ADS
+                      - generic [ref=e3579]: Valley Ads
+                  - generic [ref=e3580]: core
+                - generic [ref=e3581]: Geofenced Marketing | media_social_growth
+                - generic [ref=e3582]:
+                  - generic [ref=e3583]: mongo
+                  - generic [ref=e3584]: Parcialmente implantado
+                  - generic [ref=e3585]: 4 pendencias
+              - option "19 INFLUENCERS Valley Influencers core Creators Hub | media_social_growth mongo Parcialmente implantado 4 pendencias" [ref=e3588] [cursor=pointer]:
+                - generic [ref=e3589]:
+                  - generic [ref=e3590]:
+                    - generic [ref=e3591]: "19"
+                    - generic [ref=e3592]:
+                      - generic [ref=e3593]: INFLUENCERS
+                      - generic [ref=e3594]: Valley Influencers
+                  - generic [ref=e3595]: core
+                - generic [ref=e3596]: Creators Hub | media_social_growth
+                - generic [ref=e3597]:
+                  - generic [ref=e3598]: mongo
+                  - generic [ref=e3599]: Parcialmente implantado
+                  - generic [ref=e3600]: 4 pendencias
+              - option "20 SOCIAL Valley Social core Neighborhood Network | media_social_growth mongo Parcialmente implantado 5 pendencias" [ref=e3603] [cursor=pointer]:
+                - generic [ref=e3604]:
+                  - generic [ref=e3605]:
+                    - generic [ref=e3606]: "20"
+                    - generic [ref=e3607]:
+                      - generic [ref=e3608]: SOCIAL
+                      - generic [ref=e3609]: Valley Social
+                  - generic [ref=e3610]: core
+                - generic [ref=e3611]: Neighborhood Network | media_social_growth
+                - generic [ref=e3612]:
+                  - generic [ref=e3613]: mongo
+                  - generic [ref=e3614]: Parcialmente implantado
+                  - generic [ref=e3615]: 5 pendencias
+              - option "21 FITNESS Valley Fitness expansion Move-to-Earn | services_health_human mongo Parcialmente implantado 4 pendencias" [ref=e3618] [cursor=pointer]:
+                - generic [ref=e3619]:
+                  - generic [ref=e3620]:
+                    - generic [ref=e3621]: "21"
+                    - generic [ref=e3622]:
+                      - generic [ref=e3623]: FITNESS
+                      - generic [ref=e3624]: Valley Fitness
+                  - generic [ref=e3625]: expansion
+                - generic [ref=e3626]: Move-to-Earn | services_health_human
+                - generic [ref=e3627]:
+                  - generic [ref=e3628]: mongo
+                  - generic [ref=e3629]: Parcialmente implantado
+                  - generic [ref=e3630]: 4 pendencias
+              - option "22 PHARMACY Valley Pharmacy core Smart Meds | services_health_human postgres Parcialmente implantado 5 pendencias" [ref=e3633] [cursor=pointer]:
+                - generic [ref=e3634]:
+                  - generic [ref=e3635]:
+                    - generic [ref=e3636]: "22"
+                    - generic [ref=e3637]:
+                      - generic [ref=e3638]: PHARMACY
+                      - generic [ref=e3639]: Valley Pharmacy
+                  - generic [ref=e3640]: core
+                - generic [ref=e3641]: Smart Meds | services_health_human
+                - generic [ref=e3642]:
+                  - generic [ref=e3643]: postgres
+                  - generic [ref=e3644]: Parcialmente implantado
+                  - generic [ref=e3645]: 5 pendencias
+              - option "23 VET Valley Vet expansion Pet Care | services_health_human postgres Parcialmente implantado 5 pendencias" [ref=e3648] [cursor=pointer]:
+                - generic [ref=e3649]:
+                  - generic [ref=e3650]:
+                    - generic [ref=e3651]: "23"
+                    - generic [ref=e3652]:
+                      - generic [ref=e3653]: VET
+                      - generic [ref=e3654]: Valley Vet
+                  - generic [ref=e3655]: expansion
+                - generic [ref=e3656]: Pet Care | services_health_human
+                - generic [ref=e3657]:
+                  - generic [ref=e3658]: postgres
+                  - generic [ref=e3659]: Parcialmente implantado
+                  - generic [ref=e3660]: 5 pendencias
+              - option "24 TOURISM Valley Tourism expansion Local Explore | city_mobility_security postgres_mongo Parcialmente implantado 4 pendencias" [ref=e3663] [cursor=pointer]:
+                - generic [ref=e3664]:
+                  - generic [ref=e3665]:
+                    - generic [ref=e3666]: "24"
+                    - generic [ref=e3667]:
+                      - generic [ref=e3668]: TOURISM
+                      - generic [ref=e3669]: Valley Tourism
+                  - generic [ref=e3670]: expansion
+                - generic [ref=e3671]: Local Explore | city_mobility_security
+                - generic [ref=e3672]:
+                  - generic [ref=e3673]: postgres_mongo
+                  - generic [ref=e3674]: Parcialmente implantado
+                  - generic [ref=e3675]: 4 pendencias
+              - option "25 EVENTS Valley Events core Safe Tickets & Event Escrow | city_mobility_security postgres Parcialmente implantado 5 pendencias" [ref=e3678] [cursor=pointer]:
+                - generic [ref=e3679]:
+                  - generic [ref=e3680]:
+                    - generic [ref=e3681]: "25"
+                    - generic [ref=e3682]:
+                      - generic [ref=e3683]: EVENTS
+                      - generic [ref=e3684]: Valley Events
+                  - generic [ref=e3685]: core
+                - generic [ref=e3686]: Safe Tickets & Event Escrow | city_mobility_security
+                - generic [ref=e3687]:
+                  - generic [ref=e3688]: postgres
+                  - generic [ref=e3689]: Parcialmente implantado
+                  - generic [ref=e3690]: 5 pendencias
+              - option "26 MOBILITY Valley Mobility core Urban Transport & Carpool | city_mobility_security postgres_mongo Parcialmente implantado 4 pendencias" [ref=e3693] [cursor=pointer]:
+                - generic [ref=e3694]:
+                  - generic [ref=e3695]:
+                    - generic [ref=e3696]: "26"
+                    - generic [ref=e3697]:
+                      - generic [ref=e3698]: MOBILITY
+                      - generic [ref=e3699]: Valley Mobility
+                  - generic [ref=e3700]: core
+                - generic [ref=e3701]: Urban Transport & Carpool | city_mobility_security
+                - generic [ref=e3702]:
+                  - generic [ref=e3703]: postgres_mongo
+                  - generic [ref=e3704]: Parcialmente implantado
+                  - generic [ref=e3705]: 4 pendencias
+              - option "27 SECURITY Valley Security core SOS, Protection & Biometric Guard | city_mobility_security postgres_mongo Parcialmente implantado 4 pendencias" [ref=e3708] [cursor=pointer]:
+                - generic [ref=e3709]:
+                  - generic [ref=e3710]:
+                    - generic [ref=e3711]: "27"
+                    - generic [ref=e3712]:
+                      - generic [ref=e3713]: SECURITY
+                      - generic [ref=e3714]: Valley Security
+                  - generic [ref=e3715]: core
+                - generic [ref=e3716]: SOS, Protection & Biometric Guard | city_mobility_security
+                - generic [ref=e3717]:
+                  - generic [ref=e3718]: postgres_mongo
+                  - generic [ref=e3719]: Parcialmente implantado
+                  - generic [ref=e3720]: 4 pendencias
+              - option "28 GOV Valley Gov expansion Citizen Portal | city_mobility_security postgres Parcialmente implantado 5 pendencias" [ref=e3723] [cursor=pointer]:
+                - generic [ref=e3724]:
+                  - generic [ref=e3725]:
+                    - generic [ref=e3726]: "28"
+                    - generic [ref=e3727]:
+                      - generic [ref=e3728]: GOV
+                      - generic [ref=e3729]: Valley Gov
+                  - generic [ref=e3730]: expansion
+                - generic [ref=e3731]: Citizen Portal | city_mobility_security
+                - generic [ref=e3732]:
+                  - generic [ref=e3733]: postgres
+                  - generic [ref=e3734]: Parcialmente implantado
+                  - generic [ref=e3735]: 5 pendencias
+              - option "29 LEGAL Valley Legal foundation Smart Contracts, Fallback PIN & AI Mediator | city_mobility_security postgres Parcialmente implantado 5 pendencias" [ref=e3738] [cursor=pointer]:
+                - generic [ref=e3739]:
+                  - generic [ref=e3740]:
+                    - generic [ref=e3741]: "29"
+                    - generic [ref=e3742]:
+                      - generic [ref=e3743]: LEGAL
+                      - generic [ref=e3744]: Valley Legal
+                  - generic [ref=e3745]: foundation
+                - generic [ref=e3746]: Smart Contracts, Fallback PIN & AI Mediator | city_mobility_security
+                - generic [ref=e3747]:
+                  - generic [ref=e3748]: postgres
+                  - generic [ref=e3749]: Parcialmente implantado
+                  - generic [ref=e3750]: 5 pendencias
+              - option "30 CHARITY Valley Charity expansion Transparent Giving | education_work_social postgres Parcialmente implantado 5 pendencias" [ref=e3753] [cursor=pointer]:
+                - generic [ref=e3754]:
+                  - generic [ref=e3755]:
+                    - generic [ref=e3756]: "30"
+                    - generic [ref=e3757]:
+                      - generic [ref=e3758]: CHARITY
+                      - generic [ref=e3759]: Valley Charity
+                  - generic [ref=e3760]: expansion
+                - generic [ref=e3761]: Transparent Giving | education_work_social
+                - generic [ref=e3762]:
+                  - generic [ref=e3763]: postgres
+                  - generic [ref=e3764]: Parcialmente implantado
+                  - generic [ref=e3765]: 5 pendencias
+              - option "31 INSURANCE Valley Insurance expansion On-Demand Protection | commerce_fintech_assets postgres Parcialmente implantado 5 pendencias" [ref=e3768] [cursor=pointer]:
+                - generic [ref=e3769]:
+                  - generic [ref=e3770]:
+                    - generic [ref=e3771]: "31"
+                    - generic [ref=e3772]:
+                      - generic [ref=e3773]: INSURANCE
+                      - generic [ref=e3774]: Valley Insurance
+                  - generic [ref=e3775]: expansion
+                - generic [ref=e3776]: On-Demand Protection | commerce_fintech_assets
+                - generic [ref=e3777]:
+                  - generic [ref=e3778]: postgres
+                  - generic [ref=e3779]: Parcialmente implantado
+                  - generic [ref=e3780]: 5 pendencias
+              - option "32 GAMING Valley Gaming expansion Gamified Ecosystem | media_social_growth mongo Parcialmente implantado 4 pendencias" [ref=e3783] [cursor=pointer]:
+                - generic [ref=e3784]:
+                  - generic [ref=e3785]:
+                    - generic [ref=e3786]: "32"
+                    - generic [ref=e3787]:
+                      - generic [ref=e3788]: GAMING
+                      - generic [ref=e3789]: Valley Gaming
+                  - generic [ref=e3790]: expansion
+                - generic [ref=e3791]: Gamified Ecosystem | media_social_growth
+                - generic [ref=e3792]:
+                  - generic [ref=e3793]: mongo
+                  - generic [ref=e3794]: Parcialmente implantado
+                  - generic [ref=e3795]: 4 pendencias
+              - option "33 IOT Valley IoT foundation Connected Things & Smart Hub | frontier_iot_energy mongo Parcialmente implantado 5 pendencias" [ref=e3798] [cursor=pointer]:
+                - generic [ref=e3799]:
+                  - generic [ref=e3800]:
+                    - generic [ref=e3801]: "33"
+                    - generic [ref=e3802]:
+                      - generic [ref=e3803]: IOT
+                      - generic [ref=e3804]: Valley IoT
+                  - generic [ref=e3805]: foundation
+                - generic [ref=e3806]: Connected Things & Smart Hub | frontier_iot_energy
+                - generic [ref=e3807]:
+                  - generic [ref=e3808]: mongo
+                  - generic [ref=e3809]: Parcialmente implantado
+                  - generic [ref=e3810]: 5 pendencias
+              - option "34 BIO Valley Bio expansion Eco-Sustainability & Reverse Logistics | frontier_iot_energy postgres_mongo Parcialmente implantado 4 pendencias" [ref=e3813] [cursor=pointer]:
+                - generic [ref=e3814]:
+                  - generic [ref=e3815]:
+                    - generic [ref=e3816]: "34"
+                    - generic [ref=e3817]:
+                      - generic [ref=e3818]: BIO
+                      - generic [ref=e3819]: Valley Bio
+                  - generic [ref=e3820]: expansion
+                - generic [ref=e3821]: Eco-Sustainability & Reverse Logistics | frontier_iot_energy
+                - generic [ref=e3822]:
+                  - generic [ref=e3823]: postgres_mongo
+                  - generic [ref=e3824]: Parcialmente implantado
+                  - generic [ref=e3825]: 4 pendencias
+              - option "35 HOME Valley Home expansion Smart Automation | frontier_iot_energy mongo Parcialmente implantado 5 pendencias" [ref=e3828] [cursor=pointer]:
+                - generic [ref=e3829]:
+                  - generic [ref=e3830]:
+                    - generic [ref=e3831]: "35"
+                    - generic [ref=e3832]:
+                      - generic [ref=e3833]: HOME
+                      - generic [ref=e3834]: Valley Home
+                  - generic [ref=e3835]: expansion
+                - generic [ref=e3836]: Smart Automation | frontier_iot_energy
+                - generic [ref=e3837]:
+                  - generic [ref=e3838]: mongo
+                  - generic [ref=e3839]: Parcialmente implantado
+                  - generic [ref=e3840]: 5 pendencias
+              - option "36 ENERGY Valley Energy expansion P2P Smart Grid Trading | frontier_iot_energy postgres_mongo Parcialmente implantado 4 pendencias" [ref=e3843] [cursor=pointer]:
+                - generic [ref=e3844]:
+                  - generic [ref=e3845]:
+                    - generic [ref=e3846]: "36"
+                    - generic [ref=e3847]:
+                      - generic [ref=e3848]: ENERGY
+                      - generic [ref=e3849]: Valley Energy
+                  - generic [ref=e3850]: expansion
+                - generic [ref=e3851]: P2P Smart Grid Trading | frontier_iot_energy
+                - generic [ref=e3852]:
+                  - generic [ref=e3853]: postgres_mongo
+                  - generic [ref=e3854]: Parcialmente implantado
+                  - generic [ref=e3855]: 4 pendencias
+              - option "37 SPACE Valley Space frontier Augmented Reality Anchors | frontier_iot_energy mongo Parcialmente implantado 5 pendencias" [ref=e3858] [cursor=pointer]:
+                - generic [ref=e3859]:
+                  - generic [ref=e3860]:
+                    - generic [ref=e3861]: "37"
+                    - generic [ref=e3862]:
+                      - generic [ref=e3863]: SPACE
+                      - generic [ref=e3864]: Valley Space
+                  - generic [ref=e3865]: frontier
+                - generic [ref=e3866]: Augmented Reality Anchors | frontier_iot_energy
+                - generic [ref=e3867]:
+                  - generic [ref=e3868]: mongo
+                  - generic [ref=e3869]: Parcialmente implantado
+                  - generic [ref=e3870]: 5 pendencias
+              - option "38 AGENDA Valley Agenda core Helena Core Memory & Smart Lists | ai_memory_operations mongo Parcialmente implantado 5 pendencias" [ref=e3873] [cursor=pointer]:
+                - generic [ref=e3874]:
+                  - generic [ref=e3875]:
+                    - generic [ref=e3876]: "38"
+                    - generic [ref=e3877]:
+                      - generic [ref=e3878]: AGENDA
+                      - generic [ref=e3879]: Valley Agenda
+                  - generic [ref=e3880]: core
+                - generic [ref=e3881]: Helena Core Memory & Smart Lists | ai_memory_operations
+                - generic [ref=e3882]:
+                  - generic [ref=e3883]: mongo
+                  - generic [ref=e3884]: Parcialmente implantado
+                  - generic [ref=e3885]: 5 pendencias
+              - option "39 ADVISOR Valley Advisor core Omni-Consultoria de IA | ai_memory_operations postgres_mongo Parcialmente implantado 4 pendencias" [ref=e3888] [cursor=pointer]:
+                - generic [ref=e3889]:
+                  - generic [ref=e3890]:
+                    - generic [ref=e3891]: "39"
+                    - generic [ref=e3892]:
+                      - generic [ref=e3893]: ADVISOR
+                      - generic [ref=e3894]: Valley Advisor
+                  - generic [ref=e3895]: core
+                - generic [ref=e3896]: Omni-Consultoria de IA | ai_memory_operations
+                - generic [ref=e3897]:
+                  - generic [ref=e3898]: postgres_mongo
+                  - generic [ref=e3899]: Parcialmente implantado
+                  - generic [ref=e3900]: 4 pendencias
+              - option "40 FINANCAS Valley Financas core PFM & Gestao de Micro-Negocios | commerce_fintech_assets postgres Parcialmente implantado 5 pendencias" [ref=e3903] [cursor=pointer]:
+                - generic [ref=e3904]:
+                  - generic [ref=e3905]:
+                    - generic [ref=e3906]: "40"
+                    - generic [ref=e3907]:
+                      - generic [ref=e3908]: FINANCAS
+                      - generic [ref=e3909]: Valley Financas
+                  - generic [ref=e3910]: core
+                - generic [ref=e3911]: PFM & Gestao de Micro-Negocios | commerce_fintech_assets
+                - generic [ref=e3912]:
+                  - generic [ref=e3913]: postgres
+                  - generic [ref=e3914]: Parcialmente implantado
+                  - generic [ref=e3915]: 5 pendencias
+              - option "41 MENTE Valley Mente core Saude Mental Digital | services_health_human postgres Parcialmente implantado 5 pendencias" [ref=e3918] [cursor=pointer]:
+                - generic [ref=e3919]:
+                  - generic [ref=e3920]:
+                    - generic [ref=e3921]: "41"
+                    - generic [ref=e3922]:
+                      - generic [ref=e3923]: MENTE
+                      - generic [ref=e3924]: Valley Mente
+                  - generic [ref=e3925]: core
+                - generic [ref=e3926]: Saude Mental Digital | services_health_human
+                - generic [ref=e3927]:
+                  - generic [ref=e3928]: postgres
+                  - generic [ref=e3929]: Parcialmente implantado
+                  - generic [ref=e3930]: 5 pendencias
+              - option "42 BUSINESS Valley Business foundation ERP de Integracao | logistics_erp_operations postgres Parcialmente implantado 5 pendencias" [ref=e3933] [cursor=pointer]:
+                - generic [ref=e3934]:
+                  - generic [ref=e3935]:
+                    - generic [ref=e3936]: "42"
+                    - generic [ref=e3937]:
+                      - generic [ref=e3938]: BUSINESS
+                      - generic [ref=e3939]: Valley Business
+                  - generic [ref=e3940]: foundation
+                - generic [ref=e3941]: ERP de Integracao | logistics_erp_operations
+                - generic [ref=e3942]:
+                  - generic [ref=e3943]: postgres
+                  - generic [ref=e3944]: Parcialmente implantado
+                  - generic [ref=e3945]: 5 pendencias
+              - option "43 PLUG Valley Plug core Maquininha & Tap-to-Pay | commerce_fintech_assets postgres Parcialmente implantado 5 pendencias" [ref=e3948] [cursor=pointer]:
+                - generic [ref=e3949]:
+                  - generic [ref=e3950]:
+                    - generic [ref=e3951]: "43"
+                    - generic [ref=e3952]:
+                      - generic [ref=e3953]: PLUG
+                      - generic [ref=e3954]: Valley Plug
+                  - generic [ref=e3955]: core
+                - generic [ref=e3956]: Maquininha & Tap-to-Pay | commerce_fintech_assets
+                - generic [ref=e3957]:
+                  - generic [ref=e3958]: postgres
+                  - generic [ref=e3959]: Parcialmente implantado
+                  - generic [ref=e3960]: 5 pendencias
+              - option "44 UP Valley Up core Motor de Afiliados CAC Zero | commerce_fintech_assets postgres_mongo Parcialmente implantado 4 pendencias" [ref=e3963] [cursor=pointer]:
+                - generic [ref=e3964]:
+                  - generic [ref=e3965]:
+                    - generic [ref=e3966]: "44"
+                    - generic [ref=e3967]:
+                      - generic [ref=e3968]: UP
+                      - generic [ref=e3969]: Valley Up
+                  - generic [ref=e3970]: core
+                - generic [ref=e3971]: Motor de Afiliados CAC Zero | commerce_fintech_assets
+                - generic [ref=e3972]:
+                  - generic [ref=e3973]: postgres_mongo
+                  - generic [ref=e3974]: Parcialmente implantado
+                  - generic [ref=e3975]: 4 pendencias
+              - option "45 MEDIA Valley Media core Painel de Criadores | media_social_growth postgres_mongo Parcialmente implantado 4 pendencias" [ref=e3978] [cursor=pointer]:
+                - generic [ref=e3979]:
+                  - generic [ref=e3980]:
+                    - generic [ref=e3981]: "45"
+                    - generic [ref=e3982]:
+                      - generic [ref=e3983]: MEDIA
+                      - generic [ref=e3984]: Valley Media
+                  - generic [ref=e3985]: core
+                - generic [ref=e3986]: Painel de Criadores | media_social_growth
+                - generic [ref=e3987]:
+                  - generic [ref=e3988]: postgres_mongo
+                  - generic [ref=e3989]: Parcialmente implantado
+                  - generic [ref=e3990]: 4 pendencias
+              - option "46 CHAT Valley Chat core Mensageria com Contexto Helena Dual | ai_memory_operations postgres_mongo Parcialmente implantado 4 pendencias" [ref=e3993] [cursor=pointer]:
+                - generic [ref=e3994]:
+                  - generic [ref=e3995]:
+                    - generic [ref=e3996]: "46"
+                    - generic [ref=e3997]:
+                      - generic [ref=e3998]: CHAT
+                      - generic [ref=e3999]: Valley Chat
+                  - generic [ref=e4000]: core
+                - generic [ref=e4001]: Mensageria com Contexto Helena Dual | ai_memory_operations
+                - generic [ref=e4002]:
+                  - generic [ref=e4003]: postgres_mongo
+                  - generic [ref=e4004]: Parcialmente implantado
+                  - generic [ref=e4005]: 4 pendencias
+              - option "47 DOCS Valley Docs foundation Fabrica de Documentos e Recibos | platform_developer postgres Parcialmente implantado 5 pendencias" [ref=e4008] [cursor=pointer]:
+                - generic [ref=e4009]:
+                  - generic [ref=e4010]:
+                    - generic [ref=e4011]: "47"
+                    - generic [ref=e4012]:
+                      - generic [ref=e4013]: DOCS
+                      - generic [ref=e4014]: Valley Docs
+                  - generic [ref=e4015]: foundation
+                - generic [ref=e4016]: Fabrica de Documentos e Recibos | platform_developer
+                - generic [ref=e4017]:
+                  - generic [ref=e4018]: postgres
+                  - generic [ref=e4019]: Parcialmente implantado
+                  - generic [ref=e4020]: 5 pendencias
+          - region "Inspetor do modulo" [ref=e262]:
+            - generic [ref=e263]:
+              - generic [ref=e264]:
+                - heading "01 · Valley REPLY" [level=2] [ref=e4023]
+                - paragraph [ref=e266]: Advanced ERP/WMS | logistics_erp_operations
+              - generic [ref=e4024]:
+                - generic [ref=e4025]: 65% prontidao
+                - generic [ref=e4026]: Parcialmente implantado
+            - navigation "Secoes do modulo" [ref=e267]:
+              - link "Resumo" [ref=e4027] [cursor=pointer]:
+                - /url: "#01-reply-summary"
+              - link "Workspace ERP" [ref=e4028] [cursor=pointer]:
+                - /url: "#01-reply-erp"
+              - link "Gestao" [ref=e4029] [cursor=pointer]:
+                - /url: "#01-reply-management"
+              - link "Financeiro" [ref=e4030] [cursor=pointer]:
+                - /url: "#01-reply-finance"
+              - link "Acoplamentos" [ref=e4031] [cursor=pointer]:
+                - /url: "#01-reply-architecture"
+              - link "Checklist" [ref=e4032] [cursor=pointer]:
+                - /url: "#01-reply-checklist"
+              - link "Docs" [ref=e4033] [cursor=pointer]:
+                - /url: "#01-reply-docs"
+              - link "Operacao" [ref=e4034] [cursor=pointer]:
+                - /url: "#01-reply-ops"
+            - generic [ref=e4035]:
+              - generic [ref=e4037]:
+                - generic [ref=e4038]:
+                  - generic [ref=e4039]:
+                    - generic [ref=e4040]: R
+                    - generic [ref=e4041]:
+                      - strong [ref=e4042]: REPLY
+                      - generic [ref=e4043]: Valley REPLY
+                  - navigation [ref=e4044]:
+                    - button "Visao geral" [ref=e4045] [cursor=pointer]
+                    - button "Operacao" [ref=e4046] [cursor=pointer]
+                    - button "Integracoes" [ref=e4047] [cursor=pointer]
+                    - button "Governanca" [ref=e4048] [cursor=pointer]
+                - generic [ref=e4049]:
+                  - generic [ref=e4050]:
+                    - text: Workspace do módulo
+                    - heading "Valley REPLY" [level=3] [ref=e4051]
+                  - generic [ref=e4052]:
+                    - generic [ref=e4053]: produção
+                    - generic [ref=e4054]: sandbox espelhado
+                    - generic [ref=e4055]: logistics_erp_operations
+                    - generic [ref=e4056]: Parcialmente implantado
+                - generic [ref=e4057]:
+                  - generic [ref=e4058]: Subdomínio dedicado
+                  - strong [ref=e4059]: 01-reply
+                  - generic [ref=e4060]: Advanced ERP/WMS
+                - generic [ref=e4061]:
+                  - button "Visao geral KPI, ficha e resumo executivo" [ref=e4062] [cursor=pointer]:
+                    - strong [ref=e4063]: Visao geral
+                    - generic [ref=e4064]: KPI, ficha e resumo executivo
+                  - button "Operacao filas, cadencia e blocos funcionais" [ref=e4065] [cursor=pointer]:
+                    - strong [ref=e4066]: Operacao
+                    - generic [ref=e4067]: filas, cadencia e blocos funcionais
+                  - button "Integracoes subdominios, APIs e atalhos do cockpit" [ref=e4068] [cursor=pointer]:
+                    - strong [ref=e4069]: Integracoes
+                    - generic [ref=e4070]: subdominios, APIs e atalhos do cockpit
+                  - button "Governanca registros, auditoria e fechamento" [ref=e4071] [cursor=pointer]:
+                    - strong [ref=e4072]: Governanca
+                    - generic [ref=e4073]: registros, auditoria e fechamento
+                - generic [ref=e4074]:
+                  - generic [ref=e4075]:
+                    - article [ref=e4076]:
+                      - generic [ref=e4077]: Pedidos
+                      - strong [ref=e4078]: "13"
+                      - generic [ref=e4079]: volume operacional
+                    - article [ref=e4080]:
+                      - generic [ref=e4081]: Fila
+                      - strong [ref=e4082]: "5"
+                      - generic [ref=e4083]: itens aguardando
+                    - article [ref=e4084]:
+                      - generic [ref=e4085]: Integracoes
+                      - strong [ref=e4086]: "3"
+                      - generic [ref=e4087]: rotas ativas
+                    - article [ref=e4088]:
+                      - generic [ref=e4089]: Prontidao
+                      - strong [ref=e4090]: 65%
+                      - generic [ref=e4091]: indice atual
+                  - generic [ref=e4092]:
+                    - generic [ref=e4093]:
+                      - generic [ref=e4094]:
+                        - generic [ref=e4095]:
+                          - text: Cadastro operacional
+                          - strong [ref=e4096]: Ficha mestre do módulo
+                        - generic [ref=e4097]: Atualizado 13/05/2026, 08:48
+                      - generic [ref=e4098]:
+                        - generic [ref=e4099]:
+                          - generic [ref=e4100]:
+                            - generic [ref=e4101]: Código
+                            - textbox "Código" [ref=e4102]: "001"
+                          - generic [ref=e4103]:
+                            - generic [ref=e4104]: Descrição
+                            - textbox "Descrição" [ref=e4105]: Valley REPLY
+                          - generic [ref=e4106]:
+                            - generic [ref=e4107]: Plano / Núcleo
+                            - textbox "Plano / Núcleo" [ref=e4108]: logistics_erp_operations
+                          - generic [ref=e4109]:
+                            - generic [ref=e4110]: Data home
+                            - textbox "Data home" [ref=e4111]: postgres
+                          - generic [ref=e4112]:
+                            - generic [ref=e4113]: Status
+                            - textbox "Status" [ref=e4114]: Parcialmente implantado
+                          - generic [ref=e4115]:
+                            - generic [ref=e4116]: Responsável
+                            - textbox "Responsável" [ref=e4117]: Valley Admin
+                        - generic [ref=e4118]:
+                          - button "Abrir workspace" [ref=e4119] [cursor=pointer]
+                          - button "Docs" [ref=e4120] [cursor=pointer]
+                          - button "Operação" [ref=e4121] [cursor=pointer]
+                          - button "Copiar caminho" [ref=e4122] [cursor=pointer]
+                    - generic [ref=e4123]:
+                      - generic [ref=e4124]:
+                        - generic [ref=e4125]:
+                          - text: Painel gerencial
+                          - strong [ref=e4126]: Indicadores e tarefas
+                        - generic [ref=e4127]: 5 itens críticos
+                      - generic [ref=e4128]:
+                        - generic [ref=e4136]:
+                          - generic [ref=e4137]: Backlog
+                          - generic [ref=e4138]: Fila
+                          - generic [ref=e4139]: Links
+                          - generic [ref=e4140]: Deps
+                          - generic [ref=e4141]: Ritmo
+                          - generic [ref=e4142]: Meta
+                        - generic [ref=e4143]:
+                          - generic [ref=e4144]: Fronteira MongoDB mapeada.
+                          - generic [ref=e4145]: Regras de negocio cadastradas ou descartadas em runtime.
+                          - generic [ref=e4146]: Testes de integracao planejados.
+                          - generic [ref=e4147]: Manual Online atualizado.
+                - generic [ref=e4148]:
+                  - generic [ref=e4149]:
+                    - article [ref=e4150]:
+                      - generic [ref=e4151]: Fila critica
+                      - strong [ref=e4152]: "5"
+                      - generic [ref=e4153]: Fronteira MongoDB mapeada.
+                    - article [ref=e4154]:
+                      - generic [ref=e4155]: Dependencias
+                      - strong [ref=e4156]: "3"
+                      - generic [ref=e4157]: ID, PAY, BUSINESS
+                    - article [ref=e4158]:
+                      - generic [ref=e4159]: Acoplamentos
+                      - strong [ref=e4160]: "3"
+                      - generic [ref=e4161]: STOCK, MARKETPLACE, WMS
+                    - article [ref=e4162]:
+                      - generic [ref=e4163]: Modo
+                      - strong [ref=e4164]: Producao
+                      - generic [ref=e4165]: sandbox espelhado no shell principal
+                  - generic [ref=e4166]:
+                    - article [ref=e4167]:
+                      - generic [ref=e4168]: Operacao
+                      - strong [ref=e4169]: REPLY operacao
+                      - paragraph [ref=e4170]: fila principal, excecoes, checkpoints e produtividade
+                    - article [ref=e4171]:
+                      - generic [ref=e4172]: Cadastros
+                      - strong [ref=e4173]: REPLY cadastros
+                      - paragraph [ref=e4174]: entidades, regras, formularios e validacoes
+                    - article [ref=e4175]:
+                      - generic [ref=e4176]: Integracoes
+                      - strong [ref=e4177]: REPLY integracoes
+                      - paragraph [ref=e4178]: api, webhook, sincronismo e observabilidade
+                    - article [ref=e4179]:
+                      - generic [ref=e4180]: Governanca
+                      - strong [ref=e4181]: REPLY governanca
+                      - paragraph [ref=e4182]: auditoria, permissoes, logs e fechamento
+                - generic [ref=e4183]:
+                  - generic [ref=e4184]:
+                    - article [ref=e4185]:
+                      - generic [ref=e4186]: workspace
+                      - strong [ref=e4187]: 01-reply-admin.brasildesconto.com.br
+                      - paragraph [ref=e4188]: cockpit principal de valley reply
+                    - article [ref=e4189]:
+                      - generic [ref=e4190]: ops
+                      - strong [ref=e4191]: ops-reply.admin.brasildesconto.com.br
+                      - paragraph [ref=e4192]: operacao, filas, playbooks e monitoramento
+                    - article [ref=e4193]:
+                      - generic [ref=e4194]: api
+                      - strong [ref=e4195]: api-reply.admin.brasildesconto.com.br
+                      - paragraph [ref=e4196]: integracoes, webhooks, credenciais e saude
+                    - article [ref=e4197]:
+                      - generic [ref=e4198]: backoffice
+                      - strong [ref=e4199]: backoffice-reply.admin.brasildesconto.com.br
+                      - paragraph [ref=e4200]: cadastros, permissoes, auditoria e fechamento
+                  - generic [ref=e4201]:
+                    - article [ref=e4202]:
+                      - strong [ref=e4203]: Abrir workspace
+                      - paragraph [ref=e4204]: rota espelho ou subdominio do modulo
+                      - button "Abrir workspace" [ref=e4205] [cursor=pointer]
+                    - article [ref=e4206]:
+                      - strong [ref=e4207]: Abrir docs
+                      - paragraph [ref=e4208]: README, status e contract do modulo
+                      - button "Abrir docs" [ref=e4209] [cursor=pointer]
+                    - article [ref=e4210]:
+                      - strong [ref=e4211]: Ir para operacao
+                      - paragraph [ref=e4212]: pendencias e checks do ambiente
+                      - button "Ir para operacao" [ref=e4213] [cursor=pointer]
+                - generic [ref=e4215]:
+                  - generic [ref=e4216]:
+                    - generic [ref=e4217]:
+                      - text: Grade operacional
+                      - strong [ref=e4218]: Registros do módulo
+                    - generic [ref=e4219]: sem valor comercial
+                  - table [ref=e4221]:
+                    - rowgroup [ref=e4222]:
+                      - row "Código Descrição Operações Fila Status" [ref=e4223]:
+                        - columnheader "Código" [ref=e4224]
+                        - columnheader "Descrição" [ref=e4225]
+                        - columnheader "Operações" [ref=e4226]
+                        - columnheader "Fila" [ref=e4227]
+                        - columnheader "Status" [ref=e4228]
+                    - rowgroup [ref=e4229]:
+                      - row "001 Fluxo principal do REPLY 13 5 Parcialmente implantado" [ref=e4230]:
+                        - cell "001" [ref=e4231]
+                        - cell "Fluxo principal do REPLY" [ref=e4232]
+                        - cell "13" [ref=e4233]
+                        - cell "5" [ref=e4234]
+                        - cell "Parcialmente implantado" [ref=e4235]
+                      - row "002 Checklist de fechamento 5 5 Em aberto" [ref=e4236]:
+                        - cell "002" [ref=e4237]
+                        - cell "Checklist de fechamento" [ref=e4238]
+                        - cell "5" [ref=e4239]
+                        - cell "5" [ref=e4240]
+                        - cell "Em aberto" [ref=e4241]
+                      - row "003 Integrações declaradas 3 3 Ativo" [ref=e4242]:
+                        - cell "003" [ref=e4243]
+                        - cell "Integrações declaradas" [ref=e4244]
+                        - cell "3" [ref=e4245]
+                        - cell "3" [ref=e4246]
+                        - cell "Ativo" [ref=e4247]
+              - generic [ref=e4248]:
+                - heading "Decision snapshot" [level=3] [ref=e4249]
+                - paragraph [ref=e4250]: ERP/WMS para compras, estoque, ordens de servico e faturamento.
+                - generic [ref=e4251]:
+                  - generic [ref=e4252]: foundation
+                  - generic [ref=e4253]: postgres
+                  - generic [ref=e4254]: Parcialmente implantado
+                - generic [ref=e4257]:
+                  - article [ref=e4258]:
+                    - text: Prontidao
+                    - strong [ref=e4259]: 65%
+                    - text: indice composto por checklist e status
+                  - article [ref=e4260]:
+                    - text: Checklist
+                    - strong [ref=e4261]: 8/13
+                    - text: itens concluidos no modulo
+                  - article [ref=e4262]:
+                    - text: Integracoes
+                    - strong [ref=e4263]: "3"
+                    - text: conexoes declaradas no manifesto
+                  - article [ref=e4264]:
+                    - text: Pendencias
+                    - strong [ref=e4265]: "5"
+                    - text: fila residual para fechamento
+              - generic [ref=e4266]:
+                - heading "Gestao do modulo" [level=3] [ref=e4267]
+                - generic [ref=e4268]:
+                  - article [ref=e4269]:
+                    - text: Acoes admin
+                    - strong [ref=e4270]: "6"
+                    - text: acoes e fluxos publicados
+                  - article [ref=e4271]:
+                    - text: Dependencias
+                    - strong [ref=e4272]: "3"
+                    - text: malha de bloqueio e sequenciamento
+                  - article [ref=e4273]:
+                    - text: Integracoes
+                    - strong [ref=e4274]: "3"
+                    - text: contratos declarados no manifesto
+                  - article [ref=e4275]:
+                    - text: Fila aberta
+                    - strong [ref=e4276]: "5"
+                    - text: itens ainda pedem fechamento
+                - generic [ref=e4277]:
+                  - generic [ref=e4278]:
+                    - generic [ref=e4279]: Acoes administrativas
+                    - paragraph [ref=e4280]: revisar_schema_postgres, alinhar_rbac_abac, registrar_regras_negocio, planejar_testes_integracao, atualizar_manual, regenerar_pdf
+                  - generic [ref=e4281]:
+                    - generic [ref=e4282]: Proximo foco
+                    - paragraph [ref=e4283]: Fronteira MongoDB mapeada.
+              - generic [ref=e4284]:
+                - heading "Arquitetura e acoplamentos" [level=3] [ref=e4285]
+                - generic [ref=e4286]:
+                  - generic [ref=e4287]:
+                    - generic [ref=e4288]: Dependencias
+                    - paragraph [ref=e4289]: ID, PAY, BUSINESS
+                  - generic [ref=e4290]:
+                    - generic [ref=e4291]: Integracoes
+                    - paragraph [ref=e4292]: STOCK, MARKETPLACE, WMS
+                  - generic [ref=e4293]:
+                    - generic [ref=e4294]: Data home
+                    - paragraph [ref=e4295]: postgres
+                  - generic [ref=e4296]:
+                    - generic [ref=e4297]: Automation status
+                    - paragraph [ref=e4298]: Parcialmente implantado
+              - generic [ref=e4299]:
+                - heading "Financeiro e desempenho" [level=3] [ref=e4300]
+                - paragraph [ref=e4301]: Este modulo ainda nao recebeu resumo comercial via catalogo operacional.
+              - generic [ref=e4302]:
+                - heading "Proximo movimento" [level=3] [ref=e4303]
+                - generic [ref=e4304]:
+                  - generic [ref=e4305]: 5 itens abertos
+                  - generic [ref=e4306]: 6 acoes administrativas
+                - generic [ref=e4307]:
+                  - generic [ref=e4308]:
+                    - generic [ref=e4309]: NEXT
+                    - generic [ref=e4310]: Fronteira MongoDB mapeada.
+                  - generic [ref=e4311]:
+                    - generic [ref=e4312]: NEXT
+                    - generic [ref=e4313]: Regras de negocio cadastradas ou descartadas em runtime.
+                  - generic [ref=e4314]:
+                    - generic [ref=e4315]: NEXT
+                    - generic [ref=e4316]: Testes de integracao planejados.
+                - generic [ref=e4317]:
+                  - generic [ref=e4318]: revisar_schema_postgres
+                  - generic [ref=e4319]: alinhar_rbac_abac
+                  - generic [ref=e4320]: registrar_regras_negocio
+                  - generic [ref=e4321]: planejar_testes_integracao
+                  - generic [ref=e4322]: atualizar_manual
+                  - generic [ref=e4323]: regenerar_pdf
+              - generic [ref=e4324]:
+                - heading "Checklist de fechamento" [level=3] [ref=e4325]
+                - generic [ref=e4326]:
+                  - generic [ref=e4327]: 5 pendencias
+                  - generic [ref=e4328]: 5 itens abertos
+                - generic [ref=e4329]:
+                  - generic [ref=e4330]:
+                    - generic [ref=e4331]: OK
+                    - generic [ref=e4332]: Registry canonico criado.
+                  - generic [ref=e4333]:
+                    - generic [ref=e4334]: OK
+                    - generic [ref=e4335]: Blueprint operacional detalhado registrado.
+                  - generic [ref=e4336]:
+                    - generic [ref=e4337]: OK
+                    - generic [ref=e4338]: Suporte base de schema ja implantado ou parcialmente implantado.
+                  - generic [ref=e4339]:
+                    - generic [ref=e4340]: OK
+                    - generic [ref=e4341]: Contrato operacional inicial gerado.
+                  - generic [ref=e4342]:
+                    - generic [ref=e4343]: OK
+                    - generic [ref=e4344]: Fronteira PostgreSQL mapeada.
+                  - generic [ref=e4345]:
+                    - generic [ref=e4346]: TODO
+                    - generic [ref=e4347]: Fronteira MongoDB mapeada.
+                  - generic [ref=e4348]:
+                    - generic [ref=e4349]: OK
+                    - generic [ref=e4350]: Eventos canonicos definidos.
+                  - generic [ref=e4351]:
+                    - generic [ref=e4352]: OK
+                    - generic [ref=e4353]: Fluxos Admin/RBAC/ABAC mapeados.
+                  - generic [ref=e4354]:
+                    - generic [ref=e4355]: OK
+                    - generic [ref=e4356]: Compliance inicial mapeado.
+                  - generic [ref=e4357]:
+                    - generic [ref=e4358]: TODO
+                    - generic [ref=e4359]: Regras de negocio cadastradas ou descartadas em runtime.
+                  - generic [ref=e4360]:
+                    - generic [ref=e4361]: TODO
+                    - generic [ref=e4362]: Testes de integracao planejados.
+                  - generic [ref=e4363]:
+                    - generic [ref=e4364]: TODO
+                    - generic [ref=e4365]: Manual Online atualizado.
+                  - generic [ref=e4366]:
+                    - generic [ref=e4367]: TODO
+                    - generic [ref=e4368]: PDF regenerado.
+              - generic [ref=e4369]:
+                - heading "Resumo operacional" [level=3] [ref=e4370]
+                - paragraph [ref=e4371]: "# Status - Valley REPLY - [x] Registry canonico criado. - [x] Blueprint operacional detalhado registrado. - [x] Suporte base de schema ja implantado ou parcialmente implantado. - [x] Contrato operacional inicial gerado. - [x] Fronteira PostgreSQL mapeada. ..."
+              - generic [ref=e4372]:
+                - heading "Orientacao do modulo" [level=3] [ref=e4373]
+                - paragraph [ref=e4374]: "# 01. Valley REPLY Este arquivo e gerado pela automacao `scripts/valley_module_automation.py`. Ele descreve o modulo em linguagem simples e serve como ponto inicial para desenvolvimento, implantacao e evolucao continua. ## Identidade Tecnica - Codigo tecnico: `REPLY` - Subtitulo: `Advanced ERP/WMS` ..."
+              - generic [ref=e4375]:
+                - heading "Contrato operacional" [level=3] [ref=e4376]
+                - paragraph [ref=e4377]: "# Contrato Operacional - 01. Valley REPLY Este arquivo e gerado pela automacao `scripts/valley_module_automation.py`. Ele define a fronteira inicial do modulo para guiar desenvolvimento, implantacao e evolucao sem quebrar o nucleo Valley. ## Identidade Do Modulo - Codigo tecnico: `REPLY` - Dominio: `logistics_erp_operations` - Tier: `foundation` - Data home: `postgres` ..."
+              - generic [ref=e4378]:
+                - heading "Referencias de negocio" [level=3] [ref=e4379]
+                - generic [ref=e4380]:
+                  - article [ref=e4381]:
+                    - text: Dominio
+                    - strong [ref=e4382]: logistics_erp_operations
+                    - text: grupo operacional do modulo
+                  - article [ref=e4383]:
+                    - text: Status
+                    - strong [ref=e4384]: Parcialmente implantado
+                    - text: estado atual da entrega
+                  - article [ref=e4385]:
+                    - text: Dependencias
+                    - strong [ref=e4386]: "3"
+                    - text: modulos relacionados
+                  - article [ref=e4387]:
+                    - text: Integracoes
+                    - strong [ref=e4388]: "3"
+                    - text: conexoes de produto
+              - generic [ref=e4389]:
+                - heading "Roadmap, contratos e governanca" [level=3] [ref=e4390]
+                - paragraph [ref=e4391]: "# Roadmap Automatizado - Valley Omniverse V47 Este arquivo e gerado de forma deterministica por `scripts/valley_module_automation.py`. Este roadmap automatiza a evolucao dos 47 modulos a partir do registry `config/modules_v47.json`. Regra central: tudo que envolve dinheiro, identidade, contratos e documentos vai para PostgreSQL; IA, social, telemetria e alto volume vao para MongoDB ou backend especializado. ## Cobertura Atual - `DATA_CONTRACT`: 5 modulos. ..."
+                - paragraph [ref=e4392]: "# Norma Unificada V47 Esta norma consolida os PDFs oficiais do Valley Omniverse e resolve conflitos de diretriz pela regra que mais protege estabilidade, seguranca, continuidade de entrega, privacidade e coerencia arquitetural. ## Hierarquia De Decisao 1. Seguranca, privacidade, integridade do repositorio e conformidade legal vencem autonomia, velocidade ou conveniencia. 2. Contratos canonicos de dados vencem preferencias locais de implementacao. 3. Continuidade de entrega com estado real reportado vence simulacao de saude ou promessa otimista. ..."
+                - generic [ref=e4393]:
+                  - link "Abrir roadmap" [ref=e4394] [cursor=pointer]:
+                    - /url: ../output/module-roadmap/VALLEY_MODULE_ROADMAP.md
+                  - link "Abrir contratos" [ref=e4395] [cursor=pointer]:
+                    - /url: ../output/module-roadmap/VALLEY_MODULE_CONTRACTS.md
+                  - link "Abrir norma" [ref=e4396] [cursor=pointer]:
+                    - /url: ../MANUAL_ONLINE/NORMA_UNIFICADA_V47.md
+              - generic [ref=e4397]:
+                - heading "Pendencias operacionais do ambiente" [level=3] [ref=e4398]
+                - paragraph [ref=e4399]: O ultimo relatorio nao expôs falhas criticas para o cockpit.
+  - generic [ref=e269]: Diretório de workspaces aberto.

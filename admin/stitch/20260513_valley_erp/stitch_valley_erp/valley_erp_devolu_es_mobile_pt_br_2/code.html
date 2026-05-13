@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary": "#006c49",
+                        "on-secondary-fixed-variant": "#005236",
+                        "on-primary-fixed": "#131b2e",
+                        "on-secondary": "#ffffff",
+                        "tertiary": "#000000",
+                        "surface-bright": "#fcf8fa",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "on-background": "#1b1b1d",
+                        "surface": "#fcf8fa",
+                        "surface-container-highest": "#e4e2e4",
+                        "tertiary-fixed-dim": "#adc6ff",
+                        "surface-tint": "#565e74",
+                        "secondary-fixed-dim": "#4edea3",
+                        "error-container": "#ffdad6",
+                        "primary-container": "#131b2e",
+                        "on-secondary-fixed": "#002113",
+                        "tertiary-container": "#001a42",
+                        "surface-container-low": "#f6f3f5",
+                        "on-surface": "#1b1b1d",
+                        "on-error": "#ffffff",
+                        "surface-container-high": "#eae7e9",
+                        "outline": "#76777d",
+                        "on-primary": "#ffffff",
+                        "surface-container": "#f0edef",
+                        "primary-fixed": "#dae2fd",
+                        "on-tertiary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-surface-variant": "#45464d",
+                        "primary-fixed-dim": "#bec6e0",
+                        "tertiary-fixed": "#d8e2ff",
+                        "outline-variant": "#c6c6cd",
+                        "surface-dim": "#dcd9db",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed-variant": "#004395",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-container": "#3980f4",
+                        "secondary-container": "#6cf8bb",
+                        "on-primary-container": "#7c839b",
+                        "inverse-primary": "#bec6e0",
+                        "secondary-fixed": "#6ffbbe",
+                        "on-tertiary-fixed": "#001a42",
+                        "on-secondary-container": "#00714d",
+                        "inverse-on-surface": "#f3f0f2",
+                        "primary": "#000000",
+                        "background": "#fcf8fa",
+                        "surface-variant": "#e4e2e4",
+                        "inverse-surface": "#303032"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "container-padding": "1.5rem",
+                        "unit": "4px",
+                        "gutter": "1rem",
+                        "dense-gap": "0.5rem",
+                        "max-width": "1600px"
+                    },
+                    "fontFamily": {
+                        "mono-sm": ["JetBrains Mono"],
+                        "label-bold": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "title-sm": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "mono-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                        "label-bold": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "display-lg": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                        "title-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "headline-md": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="bg-primary dark:bg-primary-container text-on-primary dark:text-on-primary-container font-headline-md text-headline-md docked full-width top-0 border-b border-outline-variant flat no shadows flex justify-between items-center w-full px-container-padding h-16 fixed top-0 z-50">
+<div class="flex items-center gap-unit">
+<span class="material-symbols-outlined cursor-pointer">menu</span>
+<span class="font-display-lg text-display-lg text-on-primary dark:text-on-primary-container tracking-tight ml-2">Valley</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined cursor-pointer">search</span>
+<div class="w-8 h-8 rounded-full bg-secondary-container overflow-hidden border border-outline-variant">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="Professional corporate headshot of a business manager in a clean, modern studio setting. High-key lighting emphasizing a sharp, professional look suitable for an ERP system user profile. The aesthetic is clean and corporate with soft blue undertones in the background to match the modern UI design system." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAbn0k8DZQrFdPq4ioAWcykitHYDiGtc30DT2XIqt3LLAx31ua5Fx0zCYAgPhCGifKq8ZxdhIeAVv8tK1qTPGiipXndCZp5xcrQ4rC6-6ZSjkeI2AkxMr5_VsAyjNZ1-9kyC_0qCXjV00cU1CFDUeHnr0CYX-OEBiJG6IluMRSR1bTrjwe5ksoXzybgvCfSWIfHphmtV5EZ3CvUPL7vg88bC-QOzirI51Lv6b3440kSC3ICkUYP08i8Kl7HECw7saneJ9eJYO72p7Ki"/>
+</div>
+</div>
+</header>
+<main class="pt-20 px-4 max-w-max-width mx-auto">
+<!-- KPI Section -->
+<section class="mb-6">
+<div class="flex items-center justify-between mb-4 mt-2">
+<h2 class="font-title-sm text-title-sm text-on-surface">Gestão de Devoluções</h2>
+<span class="font-mono-sm text-mono-sm text-outline px-2 py-1 bg-surface-container rounded border border-outline-variant">HOJE, 24 MAI</span>
+</div>
+<div class="flex overflow-x-auto gap-dense-gap pb-2 hide-scrollbar">
+<!-- KPI Card 1 -->
+<div class="min-w-[140px] bg-surface-container-lowest border border-outline-variant p-3 rounded-lg flex flex-col gap-1">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Pendentes</span>
+<span class="font-headline-md text-headline-md text-primary">12</span>
+<div class="flex items-center gap-1 text-error text-[10px] font-bold">
+<span class="material-symbols-outlined text-[12px]">trending_up</span>
+<span>+4%</span>
+</div>
+</div>
+<!-- KPI Card 2 -->
+<div class="min-w-[140px] bg-surface-container-lowest border border-outline-variant p-3 rounded-lg flex flex-col gap-1">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Aprovadas</span>
+<span class="font-headline-md text-headline-md text-secondary">48</span>
+<div class="flex items-center gap-1 text-secondary text-[10px] font-bold">
+<span class="material-symbols-outlined text-[12px]">check_circle</span>
+<span>Normal</span>
+</div>
+</div>
+<!-- KPI Card 3 -->
+<div class="min-w-[140px] bg-surface-container-lowest border border-outline-variant p-3 rounded-lg flex flex-col gap-1">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Total Mês</span>
+<span class="font-headline-md text-headline-md text-on-surface">R$ 14k</span>
+<div class="flex items-center gap-1 text-on-tertiary-container text-[10px] font-bold">
+<span class="material-symbols-outlined text-[12px]">payments</span>
+<span>Meta 80%</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Filter Chips -->
+<div class="flex gap-2 mb-6 overflow-x-auto hide-scrollbar py-1">
+<button class="bg-primary text-on-primary px-4 py-1.5 rounded-full font-label-md text-label-md flex items-center gap-2 whitespace-nowrap">
+                Todas <span class="bg-on-primary/20 px-1.5 rounded-full text-[10px]">60</span>
+</button>
+<button class="bg-surface-container-high text-on-surface-variant px-4 py-1.5 rounded-full font-label-md text-label-md flex items-center gap-2 whitespace-nowrap border border-outline-variant">
+                Aguardando
+            </button>
+<button class="bg-surface-container-high text-on-surface-variant px-4 py-1.5 rounded-full font-label-md text-label-md flex items-center gap-2 whitespace-nowrap border border-outline-variant">
+                Em Análise
+            </button>
+</div>
+<!-- Devoluções Feed -->
+<div class="space-y-4">
+<!-- Card 1 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+<div class="p-4">
+<div class="flex justify-between items-start mb-3">
+<div class="flex flex-col">
+<span class="font-mono-sm text-mono-sm text-outline">#DEV-2024-882</span>
+<h3 class="font-title-sm text-title-sm text-on-surface">João Silva Almeida</h3>
+</div>
+<span class="bg-error-container text-on-error-container text-[10px] font-bold px-2 py-0.5 rounded uppercase">Urgente</span>
+</div>
+<div class="flex items-center gap-4 mb-4">
+<div class="w-12 h-12 bg-surface-container rounded-lg flex items-center justify-center border border-outline-variant overflow-hidden">
+<img alt="Produto" class="w-full h-full object-cover" data-alt="Close-up of a high-end red athletic shoe on a clean, professional product photography background. Soft studio lighting highlights the texture and design of the footwear, maintaining a sleek and commercial catalog aesthetic suitable for an enterprise ERP product inventory system." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmM3FGvrpHYhz2KEv2oW5OTDJcejFXpdJPUd4rNaK7k3E9Ju9Daw_RyP-AvFaru5-9bcHAdmEQ_gwHe43BUD4cC2_fuVv1EOxxfXVpsJi4M9AmTslPhcz-z8_mcQoaz4kJNWUzlQtHjXNAIjYp9k9XPoDqW7NKh7v-6KzlZwIqHgILPZ5bk3tIDxYoYqkXFRGUFtYZizBi464B8E5148SK84xs0piwRQsHWIFOaR1Fu1jYhksjy-hnmTVsreDf1wpxG6-zww0Z8Ig9"/>
+</div>
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm text-on-surface">Tênis Performance X1</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant italic">Defeito na costura lateral</span>
+</div>
+</div>
+<div class="flex items-center justify-between py-2 border-t border-outline-variant">
+<span class="font-label-md text-label-md text-on-surface-variant">Valor: <span class="text-on-surface font-bold">R$ 459,90</span></span>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-outline">schedule</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">há 2 horas</span>
+</div>
+</div>
+</div>
+<div class="flex border-t border-outline-variant">
+<button class="flex-1 py-3 font-label-bold text-label-bold text-error flex items-center justify-center gap-2 hover:bg-error-container/20 transition-colors active:scale-95 duration-150">
+<span class="material-symbols-outlined text-[18px]">close</span> NEGAR
+                    </button>
+<div class="w-[1px] bg-outline-variant"></div>
+<button class="flex-1 py-3 font-label-bold text-label-bold text-secondary flex items-center justify-center gap-2 hover:bg-secondary-container/20 transition-colors active:scale-95 duration-150">
+<span class="material-symbols-outlined text-[18px]">check</span> APROVAR
+                    </button>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+<div class="p-4">
+<div class="flex justify-between items-start mb-3">
+<div class="flex flex-col">
+<span class="font-mono-sm text-mono-sm text-outline">#DEV-2024-879</span>
+<h3 class="font-title-sm text-title-sm text-on-surface">Mariana Oliveira</h3>
+</div>
+<span class="bg-primary-container text-on-primary-container text-[10px] font-bold px-2 py-0.5 rounded uppercase">Aguardando</span>
+</div>
+<div class="flex items-center gap-4 mb-4">
+<div class="w-12 h-12 bg-surface-container rounded-lg flex items-center justify-center border border-outline-variant overflow-hidden">
+<img alt="Produto" class="w-full h-full object-cover" data-alt="Minimalist high-resolution photo of professional black over-ear headphones on a clean white surface. Soft shadows and balanced studio lighting create a premium electronic accessory aesthetic. The style is modern, sharp, and perfectly aligned with a professional corporate inventory UI." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDozDMLCQEegBf-GdKkHg21Yc-CbF7DWAJCJ7hze58DG40KhuD-7TeaUg1Z_S5F95dPUMcCLsXQFXJlHQEI9eoqtFOqRTkbLurqHIyZuUGxfTzSXEDXkv0PX-HXqearbevrIaN4HdCvtO_95hw04OggR2JMqNenPcBdrvaOs7MOfHY00pe7F8thgCBpB-Ph_d4grReipGjxsnanJmKD_-ExjHFFXmM-Lfh1QD1zYZSpoOcjpYynovKNNvb7HyyBZEk5dwA-dLUxmkzC"/>
+</div>
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm text-on-surface">Fone Bluetooth Max B2</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant italic">Arrependimento de compra</span>
+</div>
+</div>
+<div class="flex items-center justify-between py-2 border-t border-outline-variant">
+<span class="font-label-md text-label-md text-on-surface-variant">Valor: <span class="text-on-surface font-bold">R$ 890,00</span></span>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-outline">schedule</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">há 5 horas</span>
+</div>
+</div>
+</div>
+<div class="flex border-t border-outline-variant">
+<button class="flex-1 py-3 font-label-bold text-label-bold text-error flex items-center justify-center gap-2 hover:bg-error-container/20 transition-colors active:scale-95 duration-150">
+<span class="material-symbols-outlined text-[18px]">close</span> NEGAR
+                    </button>
+<div class="w-[1px] bg-outline-variant"></div>
+<button class="flex-1 py-3 font-label-bold text-label-bold text-secondary flex items-center justify-center gap-2 hover:bg-secondary-container/20 transition-colors active:scale-95 duration-150">
+<span class="material-symbols-outlined text-[18px]">check</span> APROVAR
+                    </button>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm opacity-90">
+<div class="p-4">
+<div class="flex justify-between items-start mb-3">
+<div class="flex flex-col">
+<span class="font-mono-sm text-mono-sm text-outline">#DEV-2024-875</span>
+<h3 class="font-title-sm text-title-sm text-on-surface">Ricardo Mendonça</h3>
+</div>
+<span class="bg-secondary-container text-on-secondary-container text-[10px] font-bold px-2 py-0.5 rounded uppercase">Em Rota</span>
+</div>
+<div class="flex items-center gap-4 mb-4">
+<div class="w-12 h-12 bg-surface-container rounded-lg flex items-center justify-center border border-outline-variant overflow-hidden">
+<img alt="Produto" class="w-full h-full object-cover" data-alt="Elegant silver watch displayed on a neutral gray background. The lighting is sophisticated and directional, highlighting the metallic finish and high-quality craftsmanship. This professional product shot is designed to represent luxury items within an enterprise retail management system." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDGjKUxffJUV9fUE65uUegCJoe1XXvW-16cZ1d66_5A88_-vyiLGT5F2eTX06sxdAnYLKLgPwfQ2gmjfVEfgEe-vurUMWwl65kuB9_CbIKrnT6NOG6weJuYlNKiYqAvq8EeKGFfU3If37oXVZieHD9ZFgiPn3-2h5aQ-gVRl7dXqHg8TJnccgcLVDPDf-Tw81bLomb44t1LB1jtYC572OQ9h8y-BkjfUJycqkSvFzWNxFd2nNR2YHZ7Nm0nCl6kMhD-pVhh_aq5O1z6"/>
+</div>
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm text-on-surface">Relógio Chronos Platinum</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant italic">Atraso na entrega técnica</span>
+</div>
+</div>
+<div class="flex items-center justify-between py-2 border-t border-outline-variant">
+<span class="font-label-md text-label-md text-on-surface-variant">Valor: <span class="text-on-surface font-bold">R$ 1.250,00</span></span>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-outline">schedule</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">ontem</span>
+</div>
+</div>
+</div>
+<div class="flex border-t border-outline-variant bg-surface-container-low">
+<button class="w-full py-3 font-label-bold text-label-bold text-on-surface-variant flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">local_shipping</span> RASTREAR COLETA
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<!-- Floating Action Button - Contextual for Creation -->
+<button class="fixed right-6 bottom-24 bg-primary text-on-primary w-14 h-14 rounded-full shadow-xl flex items-center justify-center z-50 active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-[28px]">add</span>
+</button>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center h-20 px-2 pb-safe bg-surface dark:bg-surface-dim border-t border-outline-variant bg-surface-container-lowest shadow-md rounded-t-xl md:hidden">
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-all active:scale-90 transition-transform cursor-pointer">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Início</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-4 py-1 active:scale-90 transition-transform cursor-pointer">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-label-md text-label-md">Vendas</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-all active:scale-90 transition-transform cursor-pointer">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-label-md text-label-md">Estoque</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-all active:scale-90 transition-transform cursor-pointer">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+<span class="font-label-md text-label-md">Finanças</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-all active:scale-90 transition-transform cursor-pointer">
+<span class="material-symbols-outlined">more_horiz</span>
+<span class="font-label-md text-label-md">Mais</span>
+</div>
+</nav>
+</body></html>

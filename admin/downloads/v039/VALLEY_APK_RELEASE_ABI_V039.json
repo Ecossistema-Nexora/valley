@@ -1,0 +1,28 @@
+{
+  "status": "ok",
+  "version": "v039",
+  "build_name": "1.0.8",
+  "build_number": 55,
+  "generated_at_utc": "2026-05-13T12:15:48Z",
+  "public_api_base_url": "https://admin.brasildesconto.com.br",
+  "stitch_templates_url": "https://admin.brasildesconto.com.br/stitch/20260513_valley_erp/",
+  "pdf": "VALLEY_RELEASE_LINKS_MODULOS_ABNT.pdf",
+  "template_manifest": "VALLEY_STITCH_TEMPLATE_PUBLICATION.json",
+  "apks": [
+    {
+      "file": "app-armeabi-v7a-release.apk",
+      "bytes": 18424633,
+      "sha1": "3EDE8BDF7EFE862874027800E0478E925AA202E2"
+    },
+    {
+      "file": "app-arm64-v8a-release.apk",
+      "bytes": 20908813,
+      "sha1": "B8E2BBF5CAF4257B705AF5B3BCE4963191DB3DC3"
+    },
+    {
+      "file": "app-x86_64-release.apk",
+      "bytes": 22335853,
+      "sha1": "CEAD561F74A33565BBA4535CB788E21EA0975D8B"
+    }
+  ]
+}

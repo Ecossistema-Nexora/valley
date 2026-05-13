@@ -1,0 +1,652 @@
+- generic [active] [ref=e1]:
+  - link "Ir para o painel" [ref=e2] [cursor=pointer]:
+    - /url: "#mainContent"
+  - generic [ref=e3]:
+    - region "Navegacao global dos paineis" [ref=e4]:
+      - generic [ref=e5]:
+        - generic [ref=e6]:
+          - paragraph [ref=e7]: Menu
+          - heading "Admin e lojista" [level=2] [ref=e8]
+        - navigation "Navegacao principal" [ref=e9]:
+          - link "STOCK" [ref=e10] [cursor=pointer]:
+            - /url: "#stockIntegrations"
+          - link "Operacao" [ref=e11] [cursor=pointer]:
+            - /url: "#adminLaunchpadSection"
+          - link "Stitch P0" [ref=e12] [cursor=pointer]:
+            - /url: "#stitchP0ExecutionSection"
+          - link "Financeiro" [ref=e13] [cursor=pointer]:
+            - /url: "#financialDashboard"
+          - link "ERP Lojista" [ref=e14] [cursor=pointer]:
+            - /url: "#merchantErpSection"
+          - link "Desempenho" [ref=e15] [cursor=pointer]:
+            - /url: "#performanceDashboard"
+          - link "Importados" [ref=e16] [cursor=pointer]:
+            - /url: "#importedPricingSection"
+          - link "Revisao" [ref=e17] [cursor=pointer]:
+            - /url: "#publicationReviewSection"
+          - link "Modulos" [ref=e18] [cursor=pointer]:
+            - /url: "#modulesWorkspace"
+          - link "Configuracoes" [ref=e19] [cursor=pointer]:
+            - /url: "#settingsSection"
+      - generic [ref=e20]:
+        - generic [ref=e21]:
+          - paragraph [ref=e22]: Acesso
+          - heading "Dominios e subdominios" [level=2] [ref=e23]
+        - generic [ref=e270]:
+          - article [ref=e1296]:
+            - generic [ref=e1297]: Portal oficial
+            - code [ref=e1298]: https://brasildesconto.com.br/
+            - link "Abrir" [ref=e1300] [cursor=pointer]:
+              - /url: https://brasildesconto.com.br/
+          - article [ref=e1301]:
+            - generic [ref=e1302]: Painel admin
+            - code [ref=e1303]: https://admin.brasildesconto.com.br
+            - link "Abrir" [ref=e1305] [cursor=pointer]:
+              - /url: https://admin.brasildesconto.com.br
+          - article [ref=e1306]:
+            - generic [ref=e1307]: ERP lojista
+            - code [ref=e1308]: https://erp-lojista.brasildesconto.com.br/
+            - link "Abrir" [ref=e1310] [cursor=pointer]:
+              - /url: https://erp-lojista.brasildesconto.com.br/
+          - article [ref=e1311]:
+            - generic [ref=e1312]: Login lojista
+            - code [ref=e1313]: https://lojista.brasildesconto.com.br/
+            - link "Abrir" [ref=e1315] [cursor=pointer]:
+              - /url: https://lojista.brasildesconto.com.br/
+          - article [ref=e1316]:
+            - generic [ref=e1317]: PDV lojista
+            - code [ref=e1318]: https://pdv-lojista.brasildesconto.com.br/
+            - link "Abrir" [ref=e1320] [cursor=pointer]:
+              - /url: https://pdv-lojista.brasildesconto.com.br/
+          - article [ref=e1321]:
+            - generic [ref=e1322]: Loja publica
+            - code [ref=e1323]: https://brasildesconto.com.br
+            - link "Abrir" [ref=e1325] [cursor=pointer]:
+              - /url: https://brasildesconto.com.br
+    - banner [ref=e24]:
+      - generic [ref=e25]:
+        - generic "Valley" [ref=e26]:
+          - img "Logomarca oficial Valley" [ref=e27]
+          - generic [ref=e28]:
+            - paragraph [ref=e29]: Valley
+            - paragraph [ref=e30]: Super App Production Panel
+        - paragraph [ref=e31]: Valley Release Mode
+        - heading "Painel de producao para 47 modulos" [level=1] [ref=e32]
+        - paragraph [ref=e33]: Supervisao executiva, gestao comercial e leitura operacional em uma unica superficie. O painel cruza modulos, contratos, catalogo, checkout, lojistas, usuarios e exposicao publica Cloudflare.
+        - generic [ref=e301]:
+          - generic [ref=e302]: modo producao
+          - generic [ref=e303]: 47 modulos visiveis
+          - generic [ref=e304]: 67% prontidao media
+          - generic [ref=e305]: 0 modulos completos
+          - generic [ref=e306]: 13 trilhas hibridas
+          - generic [ref=e307]: 0 ainda planejados
+          - generic [ref=e308]: publico online
+          - generic [ref=e309]: 0 alertas operacionais
+        - generic [ref=e310]:
+          - article [ref=e311]:
+            - generic [ref=e312]: P
+            - strong [ref=e313]: Painel STOCK
+            - generic [ref=e314]: Catalogo, operacao do modulo STOCK e leitura de integracoes do produto.
+          - article [ref=e315]:
+            - generic [ref=e316]: D
+            - strong [ref=e317]: Dropshipping
+            - generic [ref=e318]: Produtos importados, categorias, margem e disputa entre fornecedores.
+          - article [ref=e319]:
+            - generic [ref=e320]: M
+            - strong [ref=e321]: Marketplace
+            - generic [ref=e322]: Apps, webhooks, seller IDs e escopos por marketplace.
+          - article [ref=e323]:
+            - generic [ref=e324]: R
+            - strong [ref=e325]: Revisao
+            - generic [ref=e326]: Fila exclusiva para nao publicados e revisao comercial com motivo.
+      - generic [ref=e34]:
+        - region "Preview do painel em desktop e mobile" [ref=e35]:
+          - generic [ref=e36]: PRODUCAO ATIVA
+          - generic [ref=e37]:
+            - generic [ref=e38]:
+              - generic [ref=e39]:
+                - generic [ref=e40]: Valley Admin
+                - generic [ref=e41]:
+                  - generic [ref=e42]: Produção
+                  - generic [ref=e43]: Checkout
+                  - generic [ref=e44]: Stock
+              - generic [ref=e328]:
+                - generic [ref=e329]:
+                  - strong [ref=e330]: Bem-vindo ao Valley Admin
+                  - generic [ref=e331]:
+                    - generic [ref=e332]: Financeiro
+                    - generic [ref=e333]: Estoque
+                    - generic [ref=e334]: Checkout
+                - generic [ref=e335]:
+                  - generic [ref=e338]: STOCK
+                  - generic [ref=e341]: Dropshipping
+                  - generic [ref=e344]: Marketplace
+                  - generic [ref=e347]: Revisao
+                  - generic [ref=e350]: Financeiro
+                  - generic [ref=e353]: Lojistas
+                  - generic [ref=e356]: Usuarios
+                - generic [ref=e357]:
+                  - article [ref=e358]:
+                    - generic [ref=e359]: P
+                    - strong [ref=e360]: STOCK
+                    - generic [ref=e361]: Catalogo, operacao do modulo STOCK e leitura de integracoes do produto
+                  - article [ref=e362]:
+                    - generic [ref=e363]: D
+                    - strong [ref=e364]: Dropshipping
+                    - generic [ref=e365]: Produtos importados, categorias, margem e disputa entre fornecedores
+                  - article [ref=e366]:
+                    - generic [ref=e367]: M
+                    - strong [ref=e368]: Marketplace
+                    - generic [ref=e369]: Apps, webhooks, seller IDs e escopos por marketplace
+                  - article [ref=e370]:
+                    - generic [ref=e371]: R
+                    - strong [ref=e372]: Revisao
+                    - generic [ref=e373]: Fila exclusiva para nao publicados e revisao comercial com motivo
+                  - article [ref=e374]:
+                    - generic [ref=e375]: F
+                    - strong [ref=e376]: Financeiro
+                    - generic [ref=e377]: Receita projetada, margens, fees e leitura financeira do catalogo
+                  - article [ref=e378]:
+                    - generic [ref=e379]: L
+                    - strong [ref=e380]: Lojistas
+                    - generic [ref=e381]: Cadastro e operacao de sellers, parceiros e workspace institucional
+                - generic [ref=e382]:
+                  - generic [ref=e384]: Receita vs. Operacao
+                  - generic [ref=e392]:
+                    - generic [ref=e393]: Fila rapida
+                    - generic [ref=e394]:
+                      - generic [ref=e395]: Revisao
+                      - emphasis [ref=e396]: "124"
+                    - generic [ref=e397]:
+                      - generic [ref=e398]: Integracoes
+                      - emphasis [ref=e399]: "07"
+                    - generic [ref=e400]:
+                      - generic [ref=e401]: Usuarios
+                      - emphasis [ref=e402]: 2.4k
+            - generic [ref=e48]:
+              - generic [ref=e49]:
+                - strong [ref=e50]: Valley
+                - generic [ref=e51]: Admin
+              - generic [ref=e52]:
+                - article [ref=e403]:
+                  - generic [ref=e404]: P
+                  - generic [ref=e405]: STOCK
+                - article [ref=e406]:
+                  - generic [ref=e407]: D
+                  - generic [ref=e408]: Dropshipping
+                - article [ref=e409]:
+                  - generic [ref=e410]: M
+                  - generic [ref=e411]: Marketplace
+                - article [ref=e412]:
+                  - generic [ref=e413]: R
+                  - generic [ref=e414]: Revisao
+                - article [ref=e415]:
+                  - generic [ref=e416]: F
+                  - generic [ref=e417]: Financeiro
+                - article [ref=e418]:
+                  - generic [ref=e419]: L
+                  - generic [ref=e420]: Lojistas
+        - generic [ref=e53]:
+          - paragraph [ref=e54]: Control Fabric
+          - heading "Valley Omniverse V47 - Registro Canonico de Modulos" [level=2] [ref=e421]
+          - paragraph [ref=e56]: "Fonte: Esquema Consolidado do Valley Omniverse v47.pdf | Linguagem: pt-BR simples com termos tecnicos em ingles quando forem padroes"
+          - generic [ref=e57]:
+            - generic [ref=e58]:
+              - generic [ref=e59]: Console
+              - strong [ref=e60]: 13/05/2026, 08:48
+            - generic [ref=e61]:
+              - generic [ref=e62]: Saude operacional
+              - strong [ref=e63]: 0 pendencias no ultimo status
+        - generic [ref=e64]:
+          - generic [ref=e66]:
+            - paragraph [ref=e67]: Ações
+            - heading "Ações operacionais" [level=2] [ref=e68]
+          - generic [ref=e422]:
+            - article [ref=e423]:
+              - generic [ref=e424]:
+                - strong [ref=e425]: Abrir painel ativo
+                - text: Nucleo Admin
+              - generic [ref=e426]:
+                - link "Abrir" [ref=e427] [cursor=pointer]:
+                  - /url: https://admin.brasildesconto.com.br/
+                - button "Copiar link" [ref=e428] [cursor=pointer]
+            - article [ref=e429]:
+              - generic [ref=e430]:
+                - strong [ref=e431]: Abrir ERP lojista
+                - text: Gestao comercial, PDV, estoque e financeiro
+              - generic [ref=e432]:
+                - link "Abrir" [ref=e433] [cursor=pointer]:
+                  - /url: https://erp-lojista.brasildesconto.com.br/
+                - button "Copiar link" [ref=e434] [cursor=pointer]
+            - article [ref=e435]:
+              - generic [ref=e436]:
+                - strong [ref=e437]: Abrir catalogo
+                - text: Produtos, pricing e revisao comercial
+              - generic [ref=e438]:
+                - link "Abrir" [ref=e439] [cursor=pointer]:
+                  - /url: "#importedPricingSection"
+                - button "Copiar link" [ref=e440] [cursor=pointer]
+            - article [ref=e441]:
+              - generic [ref=e442]:
+                - strong [ref=e443]: Abrir integracoes
+                - text: Marketplaces, fornecedores e conectores
+              - generic [ref=e444]:
+                - link "Abrir" [ref=e445] [cursor=pointer]:
+                  - /url: "#settingsSection"
+                - button "Copiar link" [ref=e446] [cursor=pointer]
+    - main [ref=e69]:
+      - region "Abas do painel admin" [ref=e70]:
+        - generic [ref=e71]:
+          - generic [ref=e72]:
+            - paragraph [ref=e73]: Admin surfaces
+            - heading "Abas operacionais do painel" [level=2] [ref=e74]
+          - paragraph [ref=e75]: Cada frente do admin fica isolada em uma aba real para reduzir mistura entre operação, catálogo, finanças e módulos.
+        - tablist "Abas do painel admin" [ref=e447]:
+          - tab "Visao geral Home enxuta com botoes para areas e modulos independentes." [ref=e1758] [cursor=pointer]:
+            - strong [ref=e1759]: Visao geral
+            - generic [ref=e1760]: Home enxuta com botoes para areas e modulos independentes.
+          - tab "Stitch P0 Admin Central e ERP Lojista convertidos para operacao real." [ref=e1761] [cursor=pointer]:
+            - strong [ref=e1762]: Stitch P0
+            - generic [ref=e1763]: Admin Central e ERP Lojista convertidos para operacao real.
+          - tab "ERP Lojista Marketplace, PDV, armazem, financeiro e backoffice do lojista." [selected] [ref=e1764] [cursor=pointer]:
+            - strong [ref=e1765]: ERP Lojista
+            - generic [ref=e1766]: Marketplace, PDV, armazem, financeiro e backoffice do lojista.
+          - tab "Financeiro Receita, checkout e sinais de monetizacao." [ref=e1767] [cursor=pointer]:
+            - strong [ref=e1768]: Financeiro
+            - generic [ref=e1769]: Receita, checkout e sinais de monetizacao.
+          - tab "Desempenho Resultados por modulo e inteligencia do STOCK." [ref=e1770] [cursor=pointer]:
+            - strong [ref=e1771]: Desempenho
+            - generic [ref=e1772]: Resultados por modulo e inteligencia do STOCK.
+          - tab "Integracoes APIs, fornecedores e playbooks de ativacao." [ref=e1773] [cursor=pointer]:
+            - strong [ref=e1774]: Integracoes
+            - generic [ref=e1775]: APIs, fornecedores e playbooks de ativacao.
+          - tab "Catalogo Importados, pricing e fila de publicacao." [ref=e1776] [cursor=pointer]:
+            - strong [ref=e1777]: Catalogo
+            - generic [ref=e1778]: Importados, pricing e fila de publicacao.
+          - tab "Modulos Lista, filtros e cockpit detalhado por modulo." [ref=e1779] [cursor=pointer]:
+            - strong [ref=e1780]: Modulos
+            - generic [ref=e1781]: Lista, filtros e cockpit detalhado por modulo.
+      - region "ERP do lojista" [ref=e102]:
+        - generic [ref=e103]:
+          - generic [ref=e104]:
+            - paragraph [ref=e105]: ERP lojista
+            - heading "Painel de gerenciamento do marketplace" [level=2] [ref=e106]
+          - paragraph [ref=e107]: Login, PDV, armazem, metricas, campanhas, relatorios, financeiro, cadastro, perfil, contabil, fiscal, integracoes, equipe e seguranca.
+        - generic [ref=e1784]:
+          - generic [ref=e1785]:
+            - generic [ref=e1786]:
+              - generic [ref=e1787]: ERP
+              - generic [ref=e1788]:
+                - strong [ref=e1789]: Valley ERP
+                - generic [ref=e1790]: erp-lojista.brasildesconto.com.br
+            - navigation "Módulos do ERP lojista" [ref=e1791]:
+              - button "LOGIN · Login Lojista" [ref=e1792] [cursor=pointer]
+              - button "ERP · ERP Lojista" [ref=e1793] [cursor=pointer]
+              - button "PDV · PDV" [ref=e1794] [cursor=pointer]
+              - button "WMS · Armazem" [ref=e1795] [cursor=pointer]
+              - button "BI · Metricas" [ref=e1796] [cursor=pointer]
+              - button "ADS · Campanhas" [ref=e1797] [cursor=pointer]
+              - button "REP · Relatorios" [ref=e1798] [cursor=pointer]
+              - button "FIN · Financeiro Lojista" [ref=e1799] [cursor=pointer]
+              - button "CAD · Cadastro" [ref=e1800] [cursor=pointer]
+              - button "PER · Perfil" [ref=e1801] [cursor=pointer]
+              - button "CTB · Contabil" [ref=e1802] [cursor=pointer]
+              - button "API · Integracao" [ref=e1803] [cursor=pointer]
+              - button "PED · Pedidos" [ref=e1804] [cursor=pointer]
+              - button "SKU · Produtos" [ref=e1805] [cursor=pointer]
+              - button "CRM · Clientes" [ref=e1806] [cursor=pointer]
+              - button "FIS · Fiscal" [ref=e1807] [cursor=pointer]
+              - button "EST · Estoque" [ref=e1808] [cursor=pointer]
+              - button "INV · Inventario de Estoque" [ref=e1809] [cursor=pointer]
+              - button "LOG · Logistica" [ref=e1810] [cursor=pointer]
+              - button "CD · Transportadora e Cross Docking" [ref=e1811] [cursor=pointer]
+              - button "SAC · Atendimento" [ref=e1812] [cursor=pointer]
+              - button "EQP · Equipe" [ref=e1813] [cursor=pointer]
+              - button "SEG · Seguranca" [ref=e1814] [cursor=pointer]
+              - button "CFG · Configuracoes" [ref=e1815] [cursor=pointer]
+          - generic [ref=e1816]:
+            - generic [ref=e1817]:
+              - text: Painel operacional do lojista
+              - heading "Torre de controle" [level=3] [ref=e1818]
+            - generic [ref=e1819]:
+              - generic [ref=e1820]: produção
+              - generic [ref=e1821]: marketplace
+              - generic [ref=e1822]: checkout atenção
+          - generic [ref=e1823]:
+            - generic [ref=e1824]: Subdominio oficial
+            - strong [ref=e1825]: erp-lojista.brasildesconto.com.br
+            - generic [ref=e1826]: Visao geral da empresa, marketplace, estoque, financeiro e equipe.
+          - generic [ref=e1827]:
+            - link "ID Login Lojista LOGIN" [ref=e1828] [cursor=pointer]:
+              - /url: https://lojista.brasildesconto.com.br/?workspace=merchant-login#merchantErpSection
+              - generic [ref=e1829]: ID
+              - strong [ref=e1830]: Login Lojista
+              - generic [ref=e1831]: LOGIN
+            - link "ERP ERP Lojista ERP" [ref=e1832] [cursor=pointer]:
+              - /url: https://erp-lojista.brasildesconto.com.br/?workspace=merchant-erp#merchantErpSection
+              - generic [ref=e1833]: ERP
+              - strong [ref=e1834]: ERP Lojista
+              - generic [ref=e1835]: ERP
+            - link "PDV PDV PDV" [ref=e1836] [cursor=pointer]:
+              - /url: https://pdv-lojista.brasildesconto.com.br/?workspace=merchant-pdv#merchantErpSection
+              - generic [ref=e1837]: PDV
+              - strong [ref=e1838]: PDV
+              - generic [ref=e1839]: PDV
+            - link "ARM Armazem WMS" [ref=e1840] [cursor=pointer]:
+              - /url: https://armazem-lojista.brasildesconto.com.br/?workspace=merchant-warehouse#merchantErpSection
+              - generic [ref=e1841]: ARM
+              - strong [ref=e1842]: Armazem
+              - generic [ref=e1843]: WMS
+            - link "BI Metricas BI" [ref=e1844] [cursor=pointer]:
+              - /url: https://metricas-lojista.brasildesconto.com.br/?workspace=merchant-metrics#merchantErpSection
+              - generic [ref=e1845]: BI
+              - strong [ref=e1846]: Metricas
+              - generic [ref=e1847]: BI
+            - link "ADS Campanhas ADS" [ref=e1848] [cursor=pointer]:
+              - /url: https://campanhas-lojista.brasildesconto.com.br/?workspace=merchant-campaigns#merchantErpSection
+              - generic [ref=e1849]: ADS
+              - strong [ref=e1850]: Campanhas
+              - generic [ref=e1851]: ADS
+            - link "REL Relatorios REP" [ref=e1852] [cursor=pointer]:
+              - /url: https://relatorios-lojista.brasildesconto.com.br/?workspace=merchant-reports#merchantErpSection
+              - generic [ref=e1853]: REL
+              - strong [ref=e1854]: Relatorios
+              - generic [ref=e1855]: REP
+            - link "R$ Financeiro Lojista FIN" [ref=e1856] [cursor=pointer]:
+              - /url: https://financeiro-lojista.brasildesconto.com.br/?workspace=merchant-finance#merchantErpSection
+              - generic [ref=e1857]: R$
+              - strong [ref=e1858]: Financeiro Lojista
+              - generic [ref=e1859]: FIN
+            - link "CAD Cadastro CAD" [ref=e1860] [cursor=pointer]:
+              - /url: https://cadastro-lojista.brasildesconto.com.br/?workspace=merchant-registration#merchantErpSection
+              - generic [ref=e1861]: CAD
+              - strong [ref=e1862]: Cadastro
+              - generic [ref=e1863]: CAD
+            - link "PER Perfil PER" [ref=e1864] [cursor=pointer]:
+              - /url: https://perfil-lojista.brasildesconto.com.br/?workspace=merchant-profile#merchantErpSection
+              - generic [ref=e1865]: PER
+              - strong [ref=e1866]: Perfil
+              - generic [ref=e1867]: PER
+            - link "CTB Contabil CTB" [ref=e1868] [cursor=pointer]:
+              - /url: https://contabil-lojista.brasildesconto.com.br/?workspace=merchant-accounting#merchantErpSection
+              - generic [ref=e1869]: CTB
+              - strong [ref=e1870]: Contabil
+              - generic [ref=e1871]: CTB
+            - link "API Integracao API" [ref=e1872] [cursor=pointer]:
+              - /url: https://integracao-lojista.brasildesconto.com.br/?workspace=merchant-integrations#merchantErpSection
+              - generic [ref=e1873]: API
+              - strong [ref=e1874]: Integracao
+              - generic [ref=e1875]: API
+          - generic [ref=e1876]:
+            - article [ref=e1877]:
+              - generic [ref=e1878]: Catalogo
+              - strong [ref=e1879]: "0"
+              - generic [ref=e1880]: 0 em revisao
+            - article [ref=e1881]:
+              - generic [ref=e1882]: Receita potencial
+              - strong [ref=e1883]: R$ 0,00
+              - generic [ref=e1884]: R$ 0,00 liquido estimado
+            - article [ref=e1885]:
+              - generic [ref=e1886]: Integracoes
+              - strong [ref=e1887]: 7/7
+              - generic [ref=e1888]: marketplaces e fornecedores
+            - article [ref=e1889]:
+              - generic [ref=e1890]: Checkout
+              - strong [ref=e1891]: Pendente
+              - generic [ref=e1892]: checkout pendente
+          - generic [ref=e1893]:
+            - generic [ref=e1894]:
+              - generic [ref=e1895]:
+                - generic [ref=e1896]:
+                  - text: Cadastro e rotina
+                  - strong [ref=e1897]: Ficha operacional da empresa
+                - generic [ref=e1898]: rascunho
+              - generic [ref=e1899]:
+                - generic [ref=e1900]:
+                  - generic [ref=e1901]:
+                    - generic [ref=e1902]: Nome da loja
+                    - textbox "Nome da loja" [ref=e1903]: Loja Valley Demo
+                  - generic [ref=e1904]:
+                    - generic [ref=e1905]: Operador
+                    - textbox "Operador" [ref=e1906]: Operador principal
+                  - generic [ref=e1907]:
+                    - generic [ref=e1908]: Meta diaria BRL
+                    - textbox "Meta diaria BRL" [ref=e1909]: "125000"
+                  - generic [ref=e1910]:
+                    - generic [ref=e1911]: Alerta de estoque
+                    - textbox "Alerta de estoque" [ref=e1912]: "15"
+                  - generic [ref=e1913]:
+                    - generic [ref=e1914]: Workspace
+                    - textbox "Workspace" [ref=e1915]: ERP
+                  - generic [ref=e1916]:
+                    - generic [ref=e1917]: Subdominio
+                    - textbox "Subdominio" [ref=e1918]: erp-lojista.brasildesconto.com.br
+                - generic [ref=e1919]:
+                  - button "Salvar rotina" [ref=e1920] [cursor=pointer]
+                  - button "Aplicar sync" [ref=e1921] [cursor=pointer]
+                  - button "Gerar relatorio" [ref=e1922] [cursor=pointer]
+                  - button "Exportar rotina" [ref=e1923] [cursor=pointer]
+            - generic [ref=e1924]:
+              - generic [ref=e1925]:
+                - generic [ref=e1926]:
+                  - text: Fluxo gerencial
+                  - strong [ref=e1927]: Indicadores e tarefas
+                - generic [ref=e1928]: 0 em revisão
+              - generic [ref=e1929]:
+                - generic [ref=e1937]:
+                  - generic [ref=e1938]: Venda
+                  - generic [ref=e1939]: Margem
+                  - generic [ref=e1940]: PDV
+                  - generic [ref=e1941]: Stock
+                  - generic [ref=e1942]: Ads
+                  - generic [ref=e1943]: Cash
+                - generic [ref=e1944]:
+                  - generic [ref=e1945]: Pedidos novos
+                  - generic [ref=e1946]: Produtos em revisao
+                  - generic [ref=e1947]: Fechamento aberto
+                  - generic [ref=e1948]: Integracoes ativas
+          - generic [ref=e1949]:
+            - generic [ref=e1950]:
+              - generic [ref=e1951]:
+                - text: Mecanicas materializadas
+                - heading "Torre de controle em operação" [level=4] [ref=e1952]
+              - generic [ref=e1953]:
+                - generic [ref=e1954]: 0 fornecedores
+                - generic [ref=e1955]: 0 bloqueios
+            - generic [ref=e1956]:
+              - article [ref=e1957]:
+                - generic [ref=e1958]: ERP
+                - strong [ref=e1959]: Pedidos novos
+                - generic [ref=e1960]: Rotina pronta no workspace do lojista
+              - article [ref=e1961]:
+                - generic [ref=e1962]: ERP
+                - strong [ref=e1963]: Produtos em revisao
+                - generic [ref=e1964]: Rotina pronta no workspace do lojista
+              - article [ref=e1965]:
+                - generic [ref=e1966]: ERP
+                - strong [ref=e1967]: Fechamento aberto
+                - generic [ref=e1968]: Rotina pronta no workspace do lojista
+              - article [ref=e1969]:
+                - generic [ref=e1970]: ERP
+                - strong [ref=e1971]: Integracoes ativas
+                - generic [ref=e1972]: Rotina pronta no workspace do lojista
+            - table [ref=e1974]:
+              - rowgroup [ref=e1975]:
+                - row "Rotina Responsavel SLA Status" [ref=e1976]:
+                  - columnheader "Rotina" [ref=e1977]
+                  - columnheader "Responsavel" [ref=e1978]
+                  - columnheader "SLA" [ref=e1979]
+                  - columnheader "Status" [ref=e1980]
+              - rowgroup [ref=e1981]:
+                - row "Rotina Pedidos novos Atenção 13/05/2026, 10:01" [ref=e1982]:
+                  - cell "Rotina" [ref=e1983]
+                  - cell "Pedidos novos" [ref=e1984]
+                  - cell "Atenção" [ref=e1985]
+                  - cell "13/05/2026, 10:01" [ref=e1986]
+                - row "Responsavel Produtos em revisao 7 conectores Aguardando" [ref=e1987]:
+                  - cell "Responsavel" [ref=e1988]
+                  - cell "Produtos em revisao" [ref=e1989]
+                  - cell "7 conectores" [ref=e1990]
+                  - cell "Aguardando" [ref=e1991]
+                - row "SLA Fechamento aberto 0 itens Rascunho" [ref=e1992]:
+                  - cell "SLA" [ref=e1993]
+                  - cell "Fechamento aberto" [ref=e1994]
+                  - cell "0 itens" [ref=e1995]
+                  - cell "Rascunho" [ref=e1996]
+                - row "Status Integracoes ativas 0 bloqueios Sem export" [ref=e1997]:
+                  - cell "Status" [ref=e1998]
+                  - cell "Integracoes ativas" [ref=e1999]
+                  - cell "0 bloqueios" [ref=e2000]
+                  - cell "Sem export" [ref=e2001]
+          - generic [ref=e2002]:
+            - generic [ref=e2003]:
+              - generic [ref=e2004]:
+                - text: Subdominios do lojista
+                - heading "Todos os módulos ERP publicados" [level=4] [ref=e2005]
+              - generic [ref=e2006]: 24 links
+            - generic [ref=e2007]:
+              - article [ref=e2008]:
+                - generic [ref=e2009]: LOGIN
+                - strong [ref=e2010]: Login Lojista
+                - paragraph [ref=e2011]: lojista.brasildesconto.com.br
+                - link "Abrir" [ref=e2013] [cursor=pointer]:
+                  - /url: https://lojista.brasildesconto.com.br/?workspace=merchant-login#merchantErpSection
+              - article [ref=e2014]:
+                - generic [ref=e2015]: ERP
+                - strong [ref=e2016]: ERP Lojista
+                - paragraph [ref=e2017]: erp-lojista.brasildesconto.com.br
+                - link "Abrir" [ref=e2019] [cursor=pointer]:
+                  - /url: https://erp-lojista.brasildesconto.com.br/?workspace=merchant-erp#merchantErpSection
+              - article [ref=e2020]:
+                - generic [ref=e2021]: PDV
+                - strong [ref=e2022]: PDV
+                - paragraph [ref=e2023]: pdv-lojista.brasildesconto.com.br
+                - link "Abrir" [ref=e2025] [cursor=pointer]:
+                  - /url: https://pdv-lojista.brasildesconto.com.br/?workspace=merchant-pdv#merchantErpSection
+              - article [ref=e2026]:
+                - generic [ref=e2027]: WMS
+                - strong [ref=e2028]: Armazem
+                - paragraph [ref=e2029]: armazem-lojista.brasildesconto.com.br
+                - link "Abrir" [ref=e2031] [cursor=pointer]:
+                  - /url: https://armazem-lojista.brasildesconto.com.br/?workspace=merchant-warehouse#merchantErpSection
+              - article [ref=e2032]:
+                - generic [ref=e2033]: BI
+                - strong [ref=e2034]: Metricas
+                - paragraph [ref=e2035]: metricas-lojista.brasildesconto.com.br
+                - link "Abrir" [ref=e2037] [cursor=pointer]:
+                  - /url: https://metricas-lojista.brasildesconto.com.br/?workspace=merchant-metrics#merchantErpSection
+              - article [ref=e2038]:
+                - generic [ref=e2039]: ADS
+                - strong [ref=e2040]: Campanhas
+                - paragraph [ref=e2041]: campanhas-lojista.brasildesconto.com.br
+                - link "Abrir" [ref=e2043] [cursor=pointer]:
+                  - /url: https://campanhas-lojista.brasildesconto.com.br/?workspace=merchant-campaigns#merchantErpSection
+              - article [ref=e2044]:
+                - generic [ref=e2045]: REP
+                - strong [ref=e2046]: Relatorios
+                - paragraph [ref=e2047]: relatorios-lojista.brasildesconto.com.br
+                - link "Abrir" [ref=e2049] [cursor=pointer]:
+                  - /url: https://relatorios-lojista.brasildesconto.com.br/?workspace=merchant-reports#merchantErpSection
+              - article [ref=e2050]:
+                - generic [ref=e2051]: FIN
+                - strong [ref=e2052]: Financeiro Lojista
+                - paragraph [ref=e2053]: financeiro-lojista.brasildesconto.com.br
+                - link "Abrir" [ref=e2055] [cursor=pointer]:
+                  - /url: https://financeiro-lojista.brasildesconto.com.br/?workspace=merchant-finance#merchantErpSection
+              - article [ref=e2056]:
+                - generic [ref=e2057]: CAD
+                - strong [ref=e2058]: Cadastro
+                - paragraph [ref=e2059]: cadastro-lojista.brasildesconto.com.br
+                - link "Abrir" [ref=e2061] [cursor=pointer]:
+                  - /url: https://cadastro-lojista.brasildesconto.com.br/?workspace=merchant-registration#merchantErpSection
+              - article [ref=e2062]:
+                - generic [ref=e2063]: PER
+                - strong [ref=e2064]: Perfil
+                - paragraph [ref=e2065]: perfil-lojista.brasildesconto.com.br
+                - link "Abrir" [ref=e2067] [cursor=pointer]:
+                  - /url: https://perfil-lojista.brasildesconto.com.br/?workspace=merchant-profile#merchantErpSection
+              - article [ref=e2068]:
+                - generic [ref=e2069]: CTB
+                - strong [ref=e2070]: Contabil
+                - paragraph [ref=e2071]: contabil-lojista.brasildesconto.com.br
+                - link "Abrir" [ref=e2073] [cursor=pointer]:
+                  - /url: https://contabil-lojista.brasildesconto.com.br/?workspace=merchant-accounting#merchantErpSection
+              - article [ref=e2074]:
+                - generic [ref=e2075]: API
+                - strong [ref=e2076]: Integracao
+                - paragraph [ref=e2077]: integracao-lojista.brasildesconto.com.br
+                - link "Abrir" [ref=e2079] [cursor=pointer]:
+                  - /url: https://integracao-lojista.brasildesconto.com.br/?workspace=merchant-integrations#merchantErpSection
+              - article [ref=e2080]:
+                - generic [ref=e2081]: PED
+                - strong [ref=e2082]: Pedidos
+                - paragraph [ref=e2083]: pedidos-lojista.brasildesconto.com.br
+                - link "Abrir" [ref=e2085] [cursor=pointer]:
+                  - /url: https://pedidos-lojista.brasildesconto.com.br/?workspace=merchant-orders#merchantErpSection
+              - article [ref=e2086]:
+                - generic [ref=e2087]: SKU
+                - strong [ref=e2088]: Produtos
+                - paragraph [ref=e2089]: produtos-lojista.brasildesconto.com.br
+                - link "Abrir" [ref=e2091] [cursor=pointer]:
+                  - /url: https://produtos-lojista.brasildesconto.com.br/?workspace=merchant-products#merchantErpSection
+              - article [ref=e2092]:
+                - generic [ref=e2093]: CRM
+                - strong [ref=e2094]: Clientes
+                - paragraph [ref=e2095]: clientes-lojista.brasildesconto.com.br
+                - link "Abrir" [ref=e2097] [cursor=pointer]:
+                  - /url: https://clientes-lojista.brasildesconto.com.br/?workspace=merchant-customers#merchantErpSection
+              - article [ref=e2098]:
+                - generic [ref=e2099]: FIS
+                - strong [ref=e2100]: Fiscal
+                - paragraph [ref=e2101]: fiscal-lojista.brasildesconto.com.br
+                - link "Abrir" [ref=e2103] [cursor=pointer]:
+                  - /url: https://fiscal-lojista.brasildesconto.com.br/?workspace=merchant-tax#merchantErpSection
+              - article [ref=e2104]:
+                - generic [ref=e2105]: EST
+                - strong [ref=e2106]: Estoque
+                - paragraph [ref=e2107]: estoque-lojista.brasildesconto.com.br
+                - link "Abrir" [ref=e2109] [cursor=pointer]:
+                  - /url: https://estoque-lojista.brasildesconto.com.br/?workspace=merchant-inventory#merchantErpSection
+              - article [ref=e2110]:
+                - generic [ref=e2111]: INV
+                - strong [ref=e2112]: Inventario de Estoque
+                - paragraph [ref=e2113]: inventario-lojista.brasildesconto.com.br
+                - link "Abrir" [ref=e2115] [cursor=pointer]:
+                  - /url: https://inventario-lojista.brasildesconto.com.br/?workspace=merchant-stock-count#merchantErpSection
+              - article [ref=e2116]:
+                - generic [ref=e2117]: LOG
+                - strong [ref=e2118]: Logistica
+                - paragraph [ref=e2119]: logistica-lojista.brasildesconto.com.br
+                - link "Abrir" [ref=e2121] [cursor=pointer]:
+                  - /url: https://logistica-lojista.brasildesconto.com.br/?workspace=merchant-logistics#merchantErpSection
+              - article [ref=e2122]:
+                - generic [ref=e2123]: CD
+                - strong [ref=e2124]: Transportadora e Cross Docking
+                - paragraph [ref=e2125]: transportadora-lojista.brasildesconto.com.br
+                - link "Abrir" [ref=e2127] [cursor=pointer]:
+                  - /url: https://transportadora-lojista.brasildesconto.com.br/?workspace=merchant-carrier-cross-docking#merchantErpSection
+              - article [ref=e2128]:
+                - generic [ref=e2129]: SAC
+                - strong [ref=e2130]: Atendimento
+                - paragraph [ref=e2131]: atendimento-lojista.brasildesconto.com.br
+                - link "Abrir" [ref=e2133] [cursor=pointer]:
+                  - /url: https://atendimento-lojista.brasildesconto.com.br/?workspace=merchant-support#merchantErpSection
+              - article [ref=e2134]:
+                - generic [ref=e2135]: EQP
+                - strong [ref=e2136]: Equipe
+                - paragraph [ref=e2137]: equipe-lojista.brasildesconto.com.br
+                - link "Abrir" [ref=e2139] [cursor=pointer]:
+                  - /url: https://equipe-lojista.brasildesconto.com.br/?workspace=merchant-team#merchantErpSection
+              - article [ref=e2140]:
+                - generic [ref=e2141]: SEG
+                - strong [ref=e2142]: Seguranca
+                - paragraph [ref=e2143]: seguranca-lojista.brasildesconto.com.br
+                - link "Abrir" [ref=e2145] [cursor=pointer]:
+                  - /url: https://seguranca-lojista.brasildesconto.com.br/?workspace=merchant-security#merchantErpSection
+              - article [ref=e2146]:
+                - generic [ref=e2147]: CFG
+                - strong [ref=e2148]: Configuracoes
+                - paragraph [ref=e2149]: configuracoes-lojista.brasildesconto.com.br
+                - link "Abrir" [ref=e2151] [cursor=pointer]:
+                  - /url: https://configuracoes-lojista.brasildesconto.com.br/?workspace=merchant-settings#merchantErpSection
+  - generic [ref=e269]: ERP do lojista aberto.

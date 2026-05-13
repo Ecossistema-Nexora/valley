@@ -1,0 +1,1049 @@
+- generic [active] [ref=e1]:
+  - link "Ir para o painel" [ref=e2] [cursor=pointer]:
+    - /url: "#mainContent"
+  - generic [ref=e3]:
+    - region "Navegacao global dos paineis" [ref=e4]:
+      - generic [ref=e5]:
+        - generic [ref=e6]:
+          - paragraph [ref=e7]: Menu
+          - heading "Admin e lojista" [level=2] [ref=e8]
+        - navigation "Navegacao principal" [ref=e9]:
+          - link "STOCK" [ref=e10] [cursor=pointer]:
+            - /url: "#stockIntegrations"
+          - link "Operacao" [ref=e11] [cursor=pointer]:
+            - /url: "#adminLaunchpadSection"
+          - link "Stitch P0" [ref=e12] [cursor=pointer]:
+            - /url: "#stitchP0ExecutionSection"
+          - link "Financeiro" [ref=e13] [cursor=pointer]:
+            - /url: "#financialDashboard"
+          - link "ERP Lojista" [ref=e14] [cursor=pointer]:
+            - /url: "#merchantErpSection"
+          - link "Desempenho" [ref=e15] [cursor=pointer]:
+            - /url: "#performanceDashboard"
+          - link "Importados" [ref=e16] [cursor=pointer]:
+            - /url: "#importedPricingSection"
+          - link "Revisao" [ref=e17] [cursor=pointer]:
+            - /url: "#publicationReviewSection"
+          - link "Modulos" [ref=e18] [cursor=pointer]:
+            - /url: "#modulesWorkspace"
+          - link "Configuracoes" [ref=e19] [cursor=pointer]:
+            - /url: "#settingsSection"
+      - generic [ref=e20]:
+        - generic [ref=e21]:
+          - paragraph [ref=e22]: Acesso
+          - heading "Dominios e subdominios" [level=2] [ref=e23]
+        - generic [ref=e270]:
+          - article [ref=e1296]:
+            - generic [ref=e1297]: Portal oficial
+            - code [ref=e1298]: https://brasildesconto.com.br/
+            - link "Abrir" [ref=e1300] [cursor=pointer]:
+              - /url: https://brasildesconto.com.br/
+          - article [ref=e1301]:
+            - generic [ref=e1302]: Painel admin
+            - code [ref=e1303]: https://admin.brasildesconto.com.br
+            - link "Abrir" [ref=e1305] [cursor=pointer]:
+              - /url: https://admin.brasildesconto.com.br
+          - article [ref=e1306]:
+            - generic [ref=e1307]: ERP lojista
+            - code [ref=e1308]: https://erp-lojista.brasildesconto.com.br/
+            - link "Abrir" [ref=e1310] [cursor=pointer]:
+              - /url: https://erp-lojista.brasildesconto.com.br/
+          - article [ref=e1311]:
+            - generic [ref=e1312]: Login lojista
+            - code [ref=e1313]: https://lojista.brasildesconto.com.br/
+            - link "Abrir" [ref=e1315] [cursor=pointer]:
+              - /url: https://lojista.brasildesconto.com.br/
+          - article [ref=e1316]:
+            - generic [ref=e1317]: PDV lojista
+            - code [ref=e1318]: https://pdv-lojista.brasildesconto.com.br/
+            - link "Abrir" [ref=e1320] [cursor=pointer]:
+              - /url: https://pdv-lojista.brasildesconto.com.br/
+          - article [ref=e1321]:
+            - generic [ref=e1322]: Loja publica
+            - code [ref=e1323]: https://brasildesconto.com.br
+            - link "Abrir" [ref=e1325] [cursor=pointer]:
+              - /url: https://brasildesconto.com.br
+    - banner [ref=e24]:
+      - generic [ref=e25]:
+        - generic "Valley" [ref=e26]:
+          - img "Logomarca oficial Valley" [ref=e27]
+          - generic [ref=e28]:
+            - paragraph [ref=e29]: Valley
+            - paragraph [ref=e30]: Super App Production Panel
+        - paragraph [ref=e31]: Valley Release Mode
+        - heading "Painel de producao para 47 modulos" [level=1] [ref=e32]
+        - paragraph [ref=e33]: Supervisao executiva, gestao comercial e leitura operacional em uma unica superficie. O painel cruza modulos, contratos, catalogo, checkout, lojistas, usuarios e exposicao publica Cloudflare.
+        - generic [ref=e301]:
+          - generic [ref=e302]: modo producao
+          - generic [ref=e303]: 47 modulos visiveis
+          - generic [ref=e304]: 67% prontidao media
+          - generic [ref=e305]: 0 modulos completos
+          - generic [ref=e306]: 13 trilhas hibridas
+          - generic [ref=e307]: 0 ainda planejados
+          - generic [ref=e308]: publico online
+          - generic [ref=e309]: 0 alertas operacionais
+        - generic [ref=e310]:
+          - article [ref=e311]:
+            - generic [ref=e312]: P
+            - strong [ref=e313]: Painel STOCK
+            - generic [ref=e314]: Catalogo, operacao do modulo STOCK e leitura de integracoes do produto.
+          - article [ref=e315]:
+            - generic [ref=e316]: D
+            - strong [ref=e317]: Dropshipping
+            - generic [ref=e318]: Produtos importados, categorias, margem e disputa entre fornecedores.
+          - article [ref=e319]:
+            - generic [ref=e320]: M
+            - strong [ref=e321]: Marketplace
+            - generic [ref=e322]: Apps, webhooks, seller IDs e escopos por marketplace.
+          - article [ref=e323]:
+            - generic [ref=e324]: R
+            - strong [ref=e325]: Revisao
+            - generic [ref=e326]: Fila exclusiva para nao publicados e revisao comercial com motivo.
+      - generic [ref=e34]:
+        - region "Preview do painel em desktop e mobile" [ref=e35]:
+          - generic [ref=e36]: PRODUCAO ATIVA
+          - generic [ref=e37]:
+            - generic [ref=e38]:
+              - generic [ref=e39]:
+                - generic [ref=e40]: Valley Admin
+                - generic [ref=e41]:
+                  - generic [ref=e42]: Produção
+                  - generic [ref=e43]: Checkout
+                  - generic [ref=e44]: Stock
+              - generic [ref=e328]:
+                - generic [ref=e329]:
+                  - strong [ref=e330]: Bem-vindo ao Valley Admin
+                  - generic [ref=e331]:
+                    - generic [ref=e332]: Financeiro
+                    - generic [ref=e333]: Estoque
+                    - generic [ref=e334]: Checkout
+                - generic [ref=e335]:
+                  - generic [ref=e338]: STOCK
+                  - generic [ref=e341]: Dropshipping
+                  - generic [ref=e344]: Marketplace
+                  - generic [ref=e347]: Revisao
+                  - generic [ref=e350]: Financeiro
+                  - generic [ref=e353]: Lojistas
+                  - generic [ref=e356]: Usuarios
+                - generic [ref=e357]:
+                  - article [ref=e358]:
+                    - generic [ref=e359]: P
+                    - strong [ref=e360]: STOCK
+                    - generic [ref=e361]: Catalogo, operacao do modulo STOCK e leitura de integracoes do produto
+                  - article [ref=e362]:
+                    - generic [ref=e363]: D
+                    - strong [ref=e364]: Dropshipping
+                    - generic [ref=e365]: Produtos importados, categorias, margem e disputa entre fornecedores
+                  - article [ref=e366]:
+                    - generic [ref=e367]: M
+                    - strong [ref=e368]: Marketplace
+                    - generic [ref=e369]: Apps, webhooks, seller IDs e escopos por marketplace
+                  - article [ref=e370]:
+                    - generic [ref=e371]: R
+                    - strong [ref=e372]: Revisao
+                    - generic [ref=e373]: Fila exclusiva para nao publicados e revisao comercial com motivo
+                  - article [ref=e374]:
+                    - generic [ref=e375]: F
+                    - strong [ref=e376]: Financeiro
+                    - generic [ref=e377]: Receita projetada, margens, fees e leitura financeira do catalogo
+                  - article [ref=e378]:
+                    - generic [ref=e379]: L
+                    - strong [ref=e380]: Lojistas
+                    - generic [ref=e381]: Cadastro e operacao de sellers, parceiros e workspace institucional
+                - generic [ref=e382]:
+                  - generic [ref=e384]: Receita vs. Operacao
+                  - generic [ref=e392]:
+                    - generic [ref=e393]: Fila rapida
+                    - generic [ref=e394]:
+                      - generic [ref=e395]: Revisao
+                      - emphasis [ref=e396]: "124"
+                    - generic [ref=e397]:
+                      - generic [ref=e398]: Integracoes
+                      - emphasis [ref=e399]: "07"
+                    - generic [ref=e400]:
+                      - generic [ref=e401]: Usuarios
+                      - emphasis [ref=e402]: 2.4k
+            - generic [ref=e48]:
+              - generic [ref=e49]:
+                - strong [ref=e50]: Valley
+                - generic [ref=e51]: Admin
+              - generic [ref=e52]:
+                - article [ref=e403]:
+                  - generic [ref=e404]: P
+                  - generic [ref=e405]: STOCK
+                - article [ref=e406]:
+                  - generic [ref=e407]: D
+                  - generic [ref=e408]: Dropshipping
+                - article [ref=e409]:
+                  - generic [ref=e410]: M
+                  - generic [ref=e411]: Marketplace
+                - article [ref=e412]:
+                  - generic [ref=e413]: R
+                  - generic [ref=e414]: Revisao
+                - article [ref=e415]:
+                  - generic [ref=e416]: F
+                  - generic [ref=e417]: Financeiro
+                - article [ref=e418]:
+                  - generic [ref=e419]: L
+                  - generic [ref=e420]: Lojistas
+        - generic [ref=e53]:
+          - paragraph [ref=e54]: Control Fabric
+          - heading "Valley Omniverse V47 - Registro Canonico de Modulos" [level=2] [ref=e421]
+          - paragraph [ref=e56]: "Fonte: Esquema Consolidado do Valley Omniverse v47.pdf | Linguagem: pt-BR simples com termos tecnicos em ingles quando forem padroes"
+          - generic [ref=e57]:
+            - generic [ref=e58]:
+              - generic [ref=e59]: Console
+              - strong [ref=e60]: 13/05/2026, 08:48
+            - generic [ref=e61]:
+              - generic [ref=e62]: Saude operacional
+              - strong [ref=e63]: 0 pendencias no ultimo status
+        - generic [ref=e64]:
+          - generic [ref=e66]:
+            - paragraph [ref=e67]: Ações
+            - heading "Ações operacionais" [level=2] [ref=e68]
+          - generic [ref=e422]:
+            - article [ref=e423]:
+              - generic [ref=e424]:
+                - strong [ref=e425]: Abrir painel ativo
+                - text: Nucleo Admin
+              - generic [ref=e426]:
+                - link "Abrir" [ref=e427] [cursor=pointer]:
+                  - /url: https://admin.brasildesconto.com.br/
+                - button "Copiar link" [ref=e428] [cursor=pointer]
+            - article [ref=e429]:
+              - generic [ref=e430]:
+                - strong [ref=e431]: Abrir ERP lojista
+                - text: Gestao comercial, PDV, estoque e financeiro
+              - generic [ref=e432]:
+                - link "Abrir" [ref=e433] [cursor=pointer]:
+                  - /url: https://erp-lojista.brasildesconto.com.br/
+                - button "Copiar link" [ref=e434] [cursor=pointer]
+            - article [ref=e435]:
+              - generic [ref=e436]:
+                - strong [ref=e437]: Abrir catalogo
+                - text: Produtos, pricing e revisao comercial
+              - generic [ref=e438]:
+                - link "Abrir" [ref=e439] [cursor=pointer]:
+                  - /url: "#importedPricingSection"
+                - button "Copiar link" [ref=e440] [cursor=pointer]
+            - article [ref=e441]:
+              - generic [ref=e442]:
+                - strong [ref=e443]: Abrir integracoes
+                - text: Marketplaces, fornecedores e conectores
+              - generic [ref=e444]:
+                - link "Abrir" [ref=e445] [cursor=pointer]:
+                  - /url: "#settingsSection"
+                - button "Copiar link" [ref=e446] [cursor=pointer]
+    - main [ref=e69]:
+      - region "Abas do painel admin" [ref=e70]:
+        - generic [ref=e71]:
+          - generic [ref=e72]:
+            - paragraph [ref=e73]: Admin surfaces
+            - heading "Abas operacionais do painel" [level=2] [ref=e74]
+          - paragraph [ref=e75]: Cada frente do admin fica isolada em uma aba real para reduzir mistura entre operação, catálogo, finanças e módulos.
+        - tablist "Abas do painel admin" [ref=e447]:
+          - tab "Visao geral Home enxuta com botoes para areas e modulos independentes." [selected] [ref=e1326] [cursor=pointer]:
+            - strong [ref=e1327]: Visao geral
+            - generic [ref=e1328]: Home enxuta com botoes para areas e modulos independentes.
+          - tab "Stitch P0 Admin Central e ERP Lojista convertidos para operacao real." [ref=e1329] [cursor=pointer]:
+            - strong [ref=e1330]: Stitch P0
+            - generic [ref=e1331]: Admin Central e ERP Lojista convertidos para operacao real.
+          - tab "ERP Lojista Marketplace, PDV, armazem, financeiro e backoffice do lojista." [ref=e1332] [cursor=pointer]:
+            - strong [ref=e1333]: ERP Lojista
+            - generic [ref=e1334]: Marketplace, PDV, armazem, financeiro e backoffice do lojista.
+          - tab "Financeiro Receita, checkout e sinais de monetizacao." [ref=e1335] [cursor=pointer]:
+            - strong [ref=e1336]: Financeiro
+            - generic [ref=e1337]: Receita, checkout e sinais de monetizacao.
+          - tab "Desempenho Resultados por modulo e inteligencia do STOCK." [ref=e1338] [cursor=pointer]:
+            - strong [ref=e1339]: Desempenho
+            - generic [ref=e1340]: Resultados por modulo e inteligencia do STOCK.
+          - tab "Integracoes APIs, fornecedores e playbooks de ativacao." [ref=e1341] [cursor=pointer]:
+            - strong [ref=e1342]: Integracoes
+            - generic [ref=e1343]: APIs, fornecedores e playbooks de ativacao.
+          - tab "Catalogo Importados, pricing e fila de publicacao." [ref=e1344] [cursor=pointer]:
+            - strong [ref=e1345]: Catalogo
+            - generic [ref=e1346]: Importados, pricing e fila de publicacao.
+          - tab "Modulos Lista, filtros e cockpit detalhado por modulo." [ref=e1347] [cursor=pointer]:
+            - strong [ref=e1348]: Modulos
+            - generic [ref=e1349]: Lista, filtros e cockpit detalhado por modulo.
+      - region "Visao geral do release" [ref=e76]:
+        - generic [ref=e77]:
+          - generic [ref=e78]:
+            - generic [ref=e79]:
+              - paragraph [ref=e80]: Release overview
+              - heading "Panorama de execucao" [level=2] [ref=e81]
+            - paragraph [ref=e82]: Leitura sintetica do corte atual.
+          - generic [ref=e472]:
+            - article [ref=e473]:
+              - generic [ref=e474]: Escopo ativo
+              - strong [ref=e475]: 47/47
+              - generic [ref=e476]: modulos no corte atual
+            - article [ref=e479]:
+              - generic [ref=e480]: Prontidao media
+              - strong [ref=e481]: 67%
+              - generic [ref=e482]: 394 itens concluidos
+            - article [ref=e485]:
+              - generic [ref=e486]: Camada base
+              - strong [ref=e487]: "11"
+              - generic [ref=e488]: 0 ainda em planejamento
+            - article [ref=e491]:
+              - generic [ref=e492]: Hibridos
+              - strong [ref=e493]: "13"
+              - generic [ref=e494]: postgres + mongo no mesmo modulo
+            - article [ref=e497]:
+              - generic [ref=e498]: Migrations
+              - strong [ref=e499]: "37"
+              - generic [ref=e500]: 5 scripts mongo
+            - article [ref=e503]:
+              - generic [ref=e504]: Pendencias
+              - strong [ref=e505]: "217"
+              - generic [ref=e506]: checklist aberto no recorte atual
+        - generic [ref=e83]:
+          - generic [ref=e84]:
+            - generic [ref=e85]:
+              - paragraph [ref=e86]: Priority radar
+              - heading "Sinais prioritarios" [level=2] [ref=e87]
+            - paragraph [ref=e88]: Onde o proximo esforco tecnico gera mais impacto.
+          - generic [ref=e509]:
+            - article [ref=e510]:
+              - generic [ref=e511]:
+                - generic [ref=e512]:
+                  - generic [ref=e513]: Media de prontidao
+                  - generic [ref=e514]: 0 modulos completos em 47 do release
+                - generic [ref=e515]: 64%
+            - article [ref=e516]:
+              - generic [ref=e517]:
+                - generic [ref=e518]:
+                  - generic [ref=e519]: Modulo mais critico
+                  - generic [ref=e520]: Valley REPLY | 5 pendencias | 62% prontidao
+                - generic [ref=e521]: REPLY
+            - article [ref=e522]:
+              - generic [ref=e523]:
+                - generic [ref=e524]:
+                  - generic [ref=e525]: Top pendencias
+                  - generic [ref=e526]: 47 modulos ainda abertos no corte global
+                - generic [ref=e527]: "217"
+            - article [ref=e528]:
+              - generic [ref=e529]:
+                - generic [ref=e530]:
+                  - generic [ref=e531]: URL publica
+                  - generic [ref=e532]: admin.brasildesconto.com.br | fixed_external
+                - generic [ref=e533]: ativa
+      - region "Home do painel administrador" [ref=e89]:
+        - generic [ref=e90]:
+          - generic [ref=e91]:
+            - paragraph [ref=e92]: Admin launchpad
+            - heading "Home do painel administrador" [level=2] [ref=e93]
+          - paragraph [ref=e94]: "Home enxuta: somente botões para abrir áreas e páginas independentes de cada módulo."
+        - generic [ref=e534]:
+          - link "Abrir Painel STOCK" [ref=e1350] [cursor=pointer]:
+            - /url: https://stock-admin.brasildesconto.com.br/?workspace=stock#stockIntegrations
+            - generic [ref=e1351]: Painel STOCK
+            - generic [ref=e1352]: stock-admin.brasildesconto.com.br
+          - link "Abrir Dropshipping" [ref=e1353] [cursor=pointer]:
+            - /url: https://dropshipping-admin.brasildesconto.com.br/?workspace=dropshipping#importedPricingSection
+            - generic [ref=e1354]: Dropshipping
+            - generic [ref=e1355]: dropshipping-admin.brasildesconto.com.br
+          - link "Abrir Marketplace" [ref=e1356] [cursor=pointer]:
+            - /url: https://marketplace-admin.brasildesconto.com.br/?workspace=marketplace#settingsSection
+            - generic [ref=e1357]: Marketplace
+            - generic [ref=e1358]: marketplace-admin.brasildesconto.com.br
+          - link "Abrir Revisao" [ref=e1359] [cursor=pointer]:
+            - /url: https://review-admin.brasildesconto.com.br/?workspace=review#publicationReviewSection
+            - generic [ref=e1360]: Revisao
+            - generic [ref=e1361]: review-admin.brasildesconto.com.br
+          - link "Abrir Financeiro" [ref=e1362] [cursor=pointer]:
+            - /url: https://finance-admin.brasildesconto.com.br/?workspace=finance#financialDashboard
+            - generic [ref=e1363]: Financeiro
+            - generic [ref=e1364]: finance-admin.brasildesconto.com.br
+          - link "Abrir Lojistas" [ref=e1365] [cursor=pointer]:
+            - /url: https://merchants-admin.brasildesconto.com.br/?workspace=merchants#modulesWorkspace
+            - generic [ref=e1366]: Lojistas
+            - generic [ref=e1367]: merchants-admin.brasildesconto.com.br
+          - link "Abrir Usuarios" [ref=e1368] [cursor=pointer]:
+            - /url: https://users-admin.brasildesconto.com.br/?workspace=users#modulesWorkspace
+            - generic [ref=e1369]: Usuarios
+            - generic [ref=e1370]: users-admin.brasildesconto.com.br
+          - link "Abrir Checkout" [ref=e1371] [cursor=pointer]:
+            - /url: https://checkout-admin.brasildesconto.com.br/?workspace=checkout#checkoutHealthPanel
+            - generic [ref=e1372]: Checkout
+            - generic [ref=e1373]: checkout-admin.brasildesconto.com.br
+          - link "Abrir Sandbox e Flags" [ref=e1374] [cursor=pointer]:
+            - /url: https://sandbox-admin.brasildesconto.com.br/?workspace=sandbox#settingsSection
+            - generic [ref=e1375]: Sandbox e Flags
+            - generic [ref=e1376]: sandbox-admin.brasildesconto.com.br
+          - link "Abrir Login Lojista" [ref=e1377] [cursor=pointer]:
+            - /url: https://lojista.brasildesconto.com.br/?workspace=merchant-login#merchantErpSection
+            - generic [ref=e1378]: Login Lojista
+            - generic [ref=e1379]: lojista.brasildesconto.com.br
+          - link "Abrir ERP Lojista" [ref=e1380] [cursor=pointer]:
+            - /url: https://erp-lojista.brasildesconto.com.br/?workspace=merchant-erp#merchantErpSection
+            - generic [ref=e1381]: ERP Lojista
+            - generic [ref=e1382]: erp-lojista.brasildesconto.com.br
+          - link "Abrir PDV" [ref=e1383] [cursor=pointer]:
+            - /url: https://pdv-lojista.brasildesconto.com.br/?workspace=merchant-pdv#merchantErpSection
+            - generic [ref=e1384]: PDV
+            - generic [ref=e1385]: pdv-lojista.brasildesconto.com.br
+          - link "Abrir Armazem" [ref=e1386] [cursor=pointer]:
+            - /url: https://armazem-lojista.brasildesconto.com.br/?workspace=merchant-warehouse#merchantErpSection
+            - generic [ref=e1387]: Armazem
+            - generic [ref=e1388]: armazem-lojista.brasildesconto.com.br
+          - link "Abrir Metricas" [ref=e1389] [cursor=pointer]:
+            - /url: https://metricas-lojista.brasildesconto.com.br/?workspace=merchant-metrics#merchantErpSection
+            - generic [ref=e1390]: Metricas
+            - generic [ref=e1391]: metricas-lojista.brasildesconto.com.br
+          - link "Abrir Campanhas" [ref=e1392] [cursor=pointer]:
+            - /url: https://campanhas-lojista.brasildesconto.com.br/?workspace=merchant-campaigns#merchantErpSection
+            - generic [ref=e1393]: Campanhas
+            - generic [ref=e1394]: campanhas-lojista.brasildesconto.com.br
+          - link "Abrir Relatorios" [ref=e1395] [cursor=pointer]:
+            - /url: https://relatorios-lojista.brasildesconto.com.br/?workspace=merchant-reports#merchantErpSection
+            - generic [ref=e1396]: Relatorios
+            - generic [ref=e1397]: relatorios-lojista.brasildesconto.com.br
+          - link "Abrir Financeiro Lojista" [ref=e1398] [cursor=pointer]:
+            - /url: https://financeiro-lojista.brasildesconto.com.br/?workspace=merchant-finance#merchantErpSection
+            - generic [ref=e1399]: Financeiro Lojista
+            - generic [ref=e1400]: financeiro-lojista.brasildesconto.com.br
+          - link "Abrir Cadastro" [ref=e1401] [cursor=pointer]:
+            - /url: https://cadastro-lojista.brasildesconto.com.br/?workspace=merchant-registration#merchantErpSection
+            - generic [ref=e1402]: Cadastro
+            - generic [ref=e1403]: cadastro-lojista.brasildesconto.com.br
+          - link "Abrir Perfil" [ref=e1404] [cursor=pointer]:
+            - /url: https://perfil-lojista.brasildesconto.com.br/?workspace=merchant-profile#merchantErpSection
+            - generic [ref=e1405]: Perfil
+            - generic [ref=e1406]: perfil-lojista.brasildesconto.com.br
+          - link "Abrir Contabil" [ref=e1407] [cursor=pointer]:
+            - /url: https://contabil-lojista.brasildesconto.com.br/?workspace=merchant-accounting#merchantErpSection
+            - generic [ref=e1408]: Contabil
+            - generic [ref=e1409]: contabil-lojista.brasildesconto.com.br
+          - link "Abrir Integracao" [ref=e1410] [cursor=pointer]:
+            - /url: https://integracao-lojista.brasildesconto.com.br/?workspace=merchant-integrations#merchantErpSection
+            - generic [ref=e1411]: Integracao
+            - generic [ref=e1412]: integracao-lojista.brasildesconto.com.br
+          - link "Abrir Pedidos" [ref=e1413] [cursor=pointer]:
+            - /url: https://pedidos-lojista.brasildesconto.com.br/?workspace=merchant-orders#merchantErpSection
+            - generic [ref=e1414]: Pedidos
+            - generic [ref=e1415]: pedidos-lojista.brasildesconto.com.br
+          - link "Abrir Produtos" [ref=e1416] [cursor=pointer]:
+            - /url: https://produtos-lojista.brasildesconto.com.br/?workspace=merchant-products#merchantErpSection
+            - generic [ref=e1417]: Produtos
+            - generic [ref=e1418]: produtos-lojista.brasildesconto.com.br
+          - link "Abrir Clientes" [ref=e1419] [cursor=pointer]:
+            - /url: https://clientes-lojista.brasildesconto.com.br/?workspace=merchant-customers#merchantErpSection
+            - generic [ref=e1420]: Clientes
+            - generic [ref=e1421]: clientes-lojista.brasildesconto.com.br
+          - link "Abrir Fiscal" [ref=e1422] [cursor=pointer]:
+            - /url: https://fiscal-lojista.brasildesconto.com.br/?workspace=merchant-tax#merchantErpSection
+            - generic [ref=e1423]: Fiscal
+            - generic [ref=e1424]: fiscal-lojista.brasildesconto.com.br
+          - link "Abrir Estoque" [ref=e1425] [cursor=pointer]:
+            - /url: https://estoque-lojista.brasildesconto.com.br/?workspace=merchant-inventory#merchantErpSection
+            - generic [ref=e1426]: Estoque
+            - generic [ref=e1427]: estoque-lojista.brasildesconto.com.br
+          - link "Abrir Inventario de Estoque" [ref=e1428] [cursor=pointer]:
+            - /url: https://inventario-lojista.brasildesconto.com.br/?workspace=merchant-stock-count#merchantErpSection
+            - generic [ref=e1429]: Inventario de Estoque
+            - generic [ref=e1430]: inventario-lojista.brasildesconto.com.br
+          - link "Abrir Logistica" [ref=e1431] [cursor=pointer]:
+            - /url: https://logistica-lojista.brasildesconto.com.br/?workspace=merchant-logistics#merchantErpSection
+            - generic [ref=e1432]: Logistica
+            - generic [ref=e1433]: logistica-lojista.brasildesconto.com.br
+          - link "Abrir Transportadora e Cross Docking" [ref=e1434] [cursor=pointer]:
+            - /url: https://transportadora-lojista.brasildesconto.com.br/?workspace=merchant-carrier-cross-docking#merchantErpSection
+            - generic [ref=e1435]: Transportadora e Cross Docking
+            - generic [ref=e1436]: transportadora-lojista.brasildesconto.com.br
+          - link "Abrir Atendimento" [ref=e1437] [cursor=pointer]:
+            - /url: https://atendimento-lojista.brasildesconto.com.br/?workspace=merchant-support#merchantErpSection
+            - generic [ref=e1438]: Atendimento
+            - generic [ref=e1439]: atendimento-lojista.brasildesconto.com.br
+          - link "Abrir Equipe" [ref=e1440] [cursor=pointer]:
+            - /url: https://equipe-lojista.brasildesconto.com.br/?workspace=merchant-team#merchantErpSection
+            - generic [ref=e1441]: Equipe
+            - generic [ref=e1442]: equipe-lojista.brasildesconto.com.br
+          - link "Abrir Seguranca" [ref=e1443] [cursor=pointer]:
+            - /url: https://seguranca-lojista.brasildesconto.com.br/?workspace=merchant-security#merchantErpSection
+            - generic [ref=e1444]: Seguranca
+            - generic [ref=e1445]: seguranca-lojista.brasildesconto.com.br
+          - link "Abrir Configuracoes" [ref=e1446] [cursor=pointer]:
+            - /url: https://configuracoes-lojista.brasildesconto.com.br/?workspace=merchant-settings#merchantErpSection
+            - generic [ref=e1447]: Configuracoes
+            - generic [ref=e1448]: configuracoes-lojista.brasildesconto.com.br
+          - link "Abrir REPLY · Valley REPLY" [ref=e1449] [cursor=pointer]:
+            - /url: https://01-reply-admin.brasildesconto.com.br/?workspace=module-reply#modulesWorkspace
+            - generic [ref=e1450]: REPLY · Valley REPLY
+            - generic [ref=e1451]: 01-reply-admin.brasildesconto.com.br
+          - link "Abrir STOCK · Valley Stock" [ref=e1452] [cursor=pointer]:
+            - /url: https://02-stock-admin.brasildesconto.com.br/?workspace=module-stock#modulesWorkspace
+            - generic [ref=e1453]: STOCK · Valley Stock
+            - generic [ref=e1454]: 02-stock-admin.brasildesconto.com.br
+          - link "Abrir LOG · Valley Log" [ref=e1455] [cursor=pointer]:
+            - /url: https://03-log-admin.brasildesconto.com.br/?workspace=module-log#modulesWorkspace
+            - generic [ref=e1456]: LOG · Valley Log
+            - generic [ref=e1457]: 03-log-admin.brasildesconto.com.br
+          - link "Abrir FOOD · Valley Food" [ref=e1458] [cursor=pointer]:
+            - /url: https://04-food-admin.brasildesconto.com.br/?workspace=module-food#modulesWorkspace
+            - generic [ref=e1459]: FOOD · Valley Food
+            - generic [ref=e1460]: 04-food-admin.brasildesconto.com.br
+          - link "Abrir DELIVERY · Valley Delivery" [ref=e1461] [cursor=pointer]:
+            - /url: https://05-delivery-admin.brasildesconto.com.br/?workspace=module-delivery#modulesWorkspace
+            - generic [ref=e1462]: DELIVERY · Valley Delivery
+            - generic [ref=e1463]: 05-delivery-admin.brasildesconto.com.br
+          - link "Abrir WMS · Valley WMS" [ref=e1464] [cursor=pointer]:
+            - /url: https://06-wms-admin.brasildesconto.com.br/?workspace=module-wms#modulesWorkspace
+            - generic [ref=e1465]: WMS · Valley WMS
+            - generic [ref=e1466]: 06-wms-admin.brasildesconto.com.br
+          - link "Abrir MARKETPLACE · Valley Marketplace" [ref=e1467] [cursor=pointer]:
+            - /url: https://07-marketplace-admin.brasildesconto.com.br/?workspace=module-marketplace#modulesWorkspace
+            - generic [ref=e1468]: MARKETPLACE · Valley Marketplace
+            - generic [ref=e1469]: 07-marketplace-admin.brasildesconto.com.br
+          - link "Abrir PAY · Valley Pay" [ref=e1470] [cursor=pointer]:
+            - /url: https://08-pay-admin.brasildesconto.com.br/?workspace=module-pay#modulesWorkspace
+            - generic [ref=e1471]: PAY · Valley Pay
+            - generic [ref=e1472]: 08-pay-admin.brasildesconto.com.br
+          - link "Abrir FLEET · Valley Fleet" [ref=e1473] [cursor=pointer]:
+            - /url: https://09-fleet-admin.brasildesconto.com.br/?workspace=module-fleet#modulesWorkspace
+            - generic [ref=e1474]: FLEET · Valley Fleet
+            - generic [ref=e1475]: 09-fleet-admin.brasildesconto.com.br
+          - link "Abrir SERVICES · Valley Services" [ref=e1476] [cursor=pointer]:
+            - /url: https://10-services-admin.brasildesconto.com.br/?workspace=module-services#modulesWorkspace
+            - generic [ref=e1477]: SERVICES · Valley Services
+            - generic [ref=e1478]: 10-services-admin.brasildesconto.com.br
+          - link "Abrir DIGITAL · Valley Digital" [ref=e1479] [cursor=pointer]:
+            - /url: https://11-digital-admin.brasildesconto.com.br/?workspace=module-digital#modulesWorkspace
+            - generic [ref=e1480]: DIGITAL · Valley Digital
+            - generic [ref=e1481]: 11-digital-admin.brasildesconto.com.br
+          - link "Abrir REAL_ESTATE · Valley Real Estate" [ref=e1482] [cursor=pointer]:
+            - /url: https://12-real-estate-admin.brasildesconto.com.br/?workspace=module-real_estate#modulesWorkspace
+            - generic [ref=e1483]: REAL_ESTATE · Valley Real Estate
+            - generic [ref=e1484]: 12-real-estate-admin.brasildesconto.com.br
+          - link "Abrir HEALTH · Valley Health" [ref=e1485] [cursor=pointer]:
+            - /url: https://13-health-admin.brasildesconto.com.br/?workspace=module-health#modulesWorkspace
+            - generic [ref=e1486]: HEALTH · Valley Health
+            - generic [ref=e1487]: 13-health-admin.brasildesconto.com.br
+          - link "Abrir EDU · Valley Edu" [ref=e1488] [cursor=pointer]:
+            - /url: https://14-edu-admin.brasildesconto.com.br/?workspace=module-edu#modulesWorkspace
+            - generic [ref=e1489]: EDU · Valley Edu
+            - generic [ref=e1490]: 14-edu-admin.brasildesconto.com.br
+          - link "Abrir TECH · Valley Tech" [ref=e1491] [cursor=pointer]:
+            - /url: https://15-tech-admin.brasildesconto.com.br/?workspace=module-tech#modulesWorkspace
+            - generic [ref=e1492]: TECH · Valley Tech
+            - generic [ref=e1493]: 15-tech-admin.brasildesconto.com.br
+          - link "Abrir JOBS · Valley Jobs" [ref=e1494] [cursor=pointer]:
+            - /url: https://16-jobs-admin.brasildesconto.com.br/?workspace=module-jobs#modulesWorkspace
+            - generic [ref=e1495]: JOBS · Valley Jobs
+            - generic [ref=e1496]: 16-jobs-admin.brasildesconto.com.br
+          - link "Abrir NEWS_PODCAST · Valley News & Podcast" [ref=e1497] [cursor=pointer]:
+            - /url: https://17-news-podcast-admin.brasildesconto.com.br/?workspace=module-news_podcast#modulesWorkspace
+            - generic [ref=e1498]: NEWS_PODCAST · Valley News & Podcast
+            - generic [ref=e1499]: 17-news-podcast-admin.brasildesconto.com.br
+          - link "Abrir ADS · Valley Ads" [ref=e1500] [cursor=pointer]:
+            - /url: https://18-ads-admin.brasildesconto.com.br/?workspace=module-ads#modulesWorkspace
+            - generic [ref=e1501]: ADS · Valley Ads
+            - generic [ref=e1502]: 18-ads-admin.brasildesconto.com.br
+          - link "Abrir INFLUENCERS · Valley Influencers" [ref=e1503] [cursor=pointer]:
+            - /url: https://19-influencers-admin.brasildesconto.com.br/?workspace=module-influencers#modulesWorkspace
+            - generic [ref=e1504]: INFLUENCERS · Valley Influencers
+            - generic [ref=e1505]: 19-influencers-admin.brasildesconto.com.br
+          - link "Abrir SOCIAL · Valley Social" [ref=e1506] [cursor=pointer]:
+            - /url: https://20-social-admin.brasildesconto.com.br/?workspace=module-social#modulesWorkspace
+            - generic [ref=e1507]: SOCIAL · Valley Social
+            - generic [ref=e1508]: 20-social-admin.brasildesconto.com.br
+          - link "Abrir FITNESS · Valley Fitness" [ref=e1509] [cursor=pointer]:
+            - /url: https://21-fitness-admin.brasildesconto.com.br/?workspace=module-fitness#modulesWorkspace
+            - generic [ref=e1510]: FITNESS · Valley Fitness
+            - generic [ref=e1511]: 21-fitness-admin.brasildesconto.com.br
+          - link "Abrir PHARMACY · Valley Pharmacy" [ref=e1512] [cursor=pointer]:
+            - /url: https://22-pharmacy-admin.brasildesconto.com.br/?workspace=module-pharmacy#modulesWorkspace
+            - generic [ref=e1513]: PHARMACY · Valley Pharmacy
+            - generic [ref=e1514]: 22-pharmacy-admin.brasildesconto.com.br
+          - link "Abrir VET · Valley Vet" [ref=e1515] [cursor=pointer]:
+            - /url: https://23-vet-admin.brasildesconto.com.br/?workspace=module-vet#modulesWorkspace
+            - generic [ref=e1516]: VET · Valley Vet
+            - generic [ref=e1517]: 23-vet-admin.brasildesconto.com.br
+          - link "Abrir TOURISM · Valley Tourism" [ref=e1518] [cursor=pointer]:
+            - /url: https://24-tourism-admin.brasildesconto.com.br/?workspace=module-tourism#modulesWorkspace
+            - generic [ref=e1519]: TOURISM · Valley Tourism
+            - generic [ref=e1520]: 24-tourism-admin.brasildesconto.com.br
+          - link "Abrir EVENTS · Valley Events" [ref=e1521] [cursor=pointer]:
+            - /url: https://25-events-admin.brasildesconto.com.br/?workspace=module-events#modulesWorkspace
+            - generic [ref=e1522]: EVENTS · Valley Events
+            - generic [ref=e1523]: 25-events-admin.brasildesconto.com.br
+          - link "Abrir MOBILITY · Valley Mobility" [ref=e1524] [cursor=pointer]:
+            - /url: https://26-mobility-admin.brasildesconto.com.br/?workspace=module-mobility#modulesWorkspace
+            - generic [ref=e1525]: MOBILITY · Valley Mobility
+            - generic [ref=e1526]: 26-mobility-admin.brasildesconto.com.br
+          - link "Abrir SECURITY · Valley Security" [ref=e1527] [cursor=pointer]:
+            - /url: https://27-security-admin.brasildesconto.com.br/?workspace=module-security#modulesWorkspace
+            - generic [ref=e1528]: SECURITY · Valley Security
+            - generic [ref=e1529]: 27-security-admin.brasildesconto.com.br
+          - link "Abrir GOV · Valley Gov" [ref=e1530] [cursor=pointer]:
+            - /url: https://28-gov-admin.brasildesconto.com.br/?workspace=module-gov#modulesWorkspace
+            - generic [ref=e1531]: GOV · Valley Gov
+            - generic [ref=e1532]: 28-gov-admin.brasildesconto.com.br
+          - link "Abrir LEGAL · Valley Legal" [ref=e1533] [cursor=pointer]:
+            - /url: https://29-legal-admin.brasildesconto.com.br/?workspace=module-legal#modulesWorkspace
+            - generic [ref=e1534]: LEGAL · Valley Legal
+            - generic [ref=e1535]: 29-legal-admin.brasildesconto.com.br
+          - link "Abrir CHARITY · Valley Charity" [ref=e1536] [cursor=pointer]:
+            - /url: https://30-charity-admin.brasildesconto.com.br/?workspace=module-charity#modulesWorkspace
+            - generic [ref=e1537]: CHARITY · Valley Charity
+            - generic [ref=e1538]: 30-charity-admin.brasildesconto.com.br
+          - link "Abrir INSURANCE · Valley Insurance" [ref=e1539] [cursor=pointer]:
+            - /url: https://31-insurance-admin.brasildesconto.com.br/?workspace=module-insurance#modulesWorkspace
+            - generic [ref=e1540]: INSURANCE · Valley Insurance
+            - generic [ref=e1541]: 31-insurance-admin.brasildesconto.com.br
+          - link "Abrir GAMING · Valley Gaming" [ref=e1542] [cursor=pointer]:
+            - /url: https://32-gaming-admin.brasildesconto.com.br/?workspace=module-gaming#modulesWorkspace
+            - generic [ref=e1543]: GAMING · Valley Gaming
+            - generic [ref=e1544]: 32-gaming-admin.brasildesconto.com.br
+          - link "Abrir IOT · Valley IoT" [ref=e1545] [cursor=pointer]:
+            - /url: https://33-iot-admin.brasildesconto.com.br/?workspace=module-iot#modulesWorkspace
+            - generic [ref=e1546]: IOT · Valley IoT
+            - generic [ref=e1547]: 33-iot-admin.brasildesconto.com.br
+          - link "Abrir BIO · Valley Bio" [ref=e1548] [cursor=pointer]:
+            - /url: https://34-bio-admin.brasildesconto.com.br/?workspace=module-bio#modulesWorkspace
+            - generic [ref=e1549]: BIO · Valley Bio
+            - generic [ref=e1550]: 34-bio-admin.brasildesconto.com.br
+          - link "Abrir HOME · Valley Home" [ref=e1551] [cursor=pointer]:
+            - /url: https://35-home-admin.brasildesconto.com.br/?workspace=module-home#modulesWorkspace
+            - generic [ref=e1552]: HOME · Valley Home
+            - generic [ref=e1553]: 35-home-admin.brasildesconto.com.br
+          - link "Abrir ENERGY · Valley Energy" [ref=e1554] [cursor=pointer]:
+            - /url: https://36-energy-admin.brasildesconto.com.br/?workspace=module-energy#modulesWorkspace
+            - generic [ref=e1555]: ENERGY · Valley Energy
+            - generic [ref=e1556]: 36-energy-admin.brasildesconto.com.br
+          - link "Abrir SPACE · Valley Space" [ref=e1557] [cursor=pointer]:
+            - /url: https://37-space-admin.brasildesconto.com.br/?workspace=module-space#modulesWorkspace
+            - generic [ref=e1558]: SPACE · Valley Space
+            - generic [ref=e1559]: 37-space-admin.brasildesconto.com.br
+          - link "Abrir AGENDA · Valley Agenda" [ref=e1560] [cursor=pointer]:
+            - /url: https://38-agenda-admin.brasildesconto.com.br/?workspace=module-agenda#modulesWorkspace
+            - generic [ref=e1561]: AGENDA · Valley Agenda
+            - generic [ref=e1562]: 38-agenda-admin.brasildesconto.com.br
+          - link "Abrir ADVISOR · Valley Advisor" [ref=e1563] [cursor=pointer]:
+            - /url: https://39-advisor-admin.brasildesconto.com.br/?workspace=module-advisor#modulesWorkspace
+            - generic [ref=e1564]: ADVISOR · Valley Advisor
+            - generic [ref=e1565]: 39-advisor-admin.brasildesconto.com.br
+          - link "Abrir FINANCAS · Valley Financas" [ref=e1566] [cursor=pointer]:
+            - /url: https://40-financas-admin.brasildesconto.com.br/?workspace=module-financas#modulesWorkspace
+            - generic [ref=e1567]: FINANCAS · Valley Financas
+            - generic [ref=e1568]: 40-financas-admin.brasildesconto.com.br
+          - link "Abrir MENTE · Valley Mente" [ref=e1569] [cursor=pointer]:
+            - /url: https://41-mente-admin.brasildesconto.com.br/?workspace=module-mente#modulesWorkspace
+            - generic [ref=e1570]: MENTE · Valley Mente
+            - generic [ref=e1571]: 41-mente-admin.brasildesconto.com.br
+          - link "Abrir BUSINESS · Valley Business" [ref=e1572] [cursor=pointer]:
+            - /url: https://42-business-admin.brasildesconto.com.br/?workspace=module-business#modulesWorkspace
+            - generic [ref=e1573]: BUSINESS · Valley Business
+            - generic [ref=e1574]: 42-business-admin.brasildesconto.com.br
+          - link "Abrir PLUG · Valley Plug" [ref=e1575] [cursor=pointer]:
+            - /url: https://43-plug-admin.brasildesconto.com.br/?workspace=module-plug#modulesWorkspace
+            - generic [ref=e1576]: PLUG · Valley Plug
+            - generic [ref=e1577]: 43-plug-admin.brasildesconto.com.br
+          - link "Abrir UP · Valley Up" [ref=e1578] [cursor=pointer]:
+            - /url: https://44-up-admin.brasildesconto.com.br/?workspace=module-up#modulesWorkspace
+            - generic [ref=e1579]: UP · Valley Up
+            - generic [ref=e1580]: 44-up-admin.brasildesconto.com.br
+          - link "Abrir MEDIA · Valley Media" [ref=e1581] [cursor=pointer]:
+            - /url: https://45-media-admin.brasildesconto.com.br/?workspace=module-media#modulesWorkspace
+            - generic [ref=e1582]: MEDIA · Valley Media
+            - generic [ref=e1583]: 45-media-admin.brasildesconto.com.br
+          - link "Abrir CHAT · Valley Chat" [ref=e1584] [cursor=pointer]:
+            - /url: https://46-chat-admin.brasildesconto.com.br/?workspace=module-chat#modulesWorkspace
+            - generic [ref=e1585]: CHAT · Valley Chat
+            - generic [ref=e1586]: 46-chat-admin.brasildesconto.com.br
+          - link "Abrir DOCS · Valley Docs" [ref=e1587] [cursor=pointer]:
+            - /url: https://47-docs-admin.brasildesconto.com.br/?workspace=module-docs#modulesWorkspace
+            - generic [ref=e1588]: DOCS · Valley Docs
+            - generic [ref=e1589]: 47-docs-admin.brasildesconto.com.br
+      - region "Sinais executivos de release" [ref=e114]:
+        - generic [ref=e115]:
+          - generic [ref=e116]:
+            - generic [ref=e117]:
+              - paragraph [ref=e118]: Release summary
+              - heading "Scoreboard executivo" [level=2] [ref=e119]
+            - paragraph [ref=e120]: Leitura consolidada do payload de release.
+          - generic [ref=e775]:
+            - article [ref=e776]:
+              - text: Modulos completos
+              - strong [ref=e777]: 0/47
+              - text: fechados no corte global do release
+            - article [ref=e778]:
+              - text: Modulos com pendencia
+              - strong [ref=e779]: "47"
+              - text: 10 visiveis na trilha critica
+            - article [ref=e780]:
+              - text: Checklist global
+              - strong [ref=e781]: 64%
+              - text: 394 de 611 itens concluidos
+            - article [ref=e782]:
+              - text: Media de prontidao
+              - strong [ref=e783]: 64%
+              - text: 217 itens ainda abertos
+        - generic [ref=e121]:
+          - generic [ref=e122]:
+            - generic [ref=e123]:
+              - paragraph [ref=e124]: Critical pressure
+              - heading "Top pendencias" [level=2] [ref=e125]
+            - paragraph [ref=e126]: Modulos com maior pressao de fechamento.
+          - generic [ref=e784]:
+            - button "REPLY Valley REPLY foundation 5 pendencias 62% Parcialmente implantado" [ref=e785] [cursor=pointer]:
+              - generic [ref=e786]:
+                - generic [ref=e787]:
+                  - generic [ref=e788]: REPLY
+                  - generic [ref=e789]: Valley REPLY
+                - generic [ref=e790]: foundation
+              - generic [ref=e791]:
+                - generic [ref=e792]: 5 pendencias
+                - generic [ref=e793]: 62%
+                - generic [ref=e794]: Parcialmente implantado
+            - button "STOCK Valley Stock foundation 5 pendencias 62% Parcialmente implantado" [ref=e795] [cursor=pointer]:
+              - generic [ref=e796]:
+                - generic [ref=e797]:
+                  - generic [ref=e798]: STOCK
+                  - generic [ref=e799]: Valley Stock
+                - generic [ref=e800]: foundation
+              - generic [ref=e801]:
+                - generic [ref=e802]: 5 pendencias
+                - generic [ref=e803]: 62%
+                - generic [ref=e804]: Parcialmente implantado
+            - button "LOG Valley Log foundation 5 pendencias 62% Parcialmente implantado" [ref=e805] [cursor=pointer]:
+              - generic [ref=e806]:
+                - generic [ref=e807]:
+                  - generic [ref=e808]: LOG
+                  - generic [ref=e809]: Valley Log
+                - generic [ref=e810]: foundation
+              - generic [ref=e811]:
+                - generic [ref=e812]: 5 pendencias
+                - generic [ref=e813]: 62%
+                - generic [ref=e814]: Parcialmente implantado
+            - button "FOOD Valley Food core 5 pendencias 62% Parcialmente implantado" [ref=e815] [cursor=pointer]:
+              - generic [ref=e816]:
+                - generic [ref=e817]:
+                  - generic [ref=e818]: FOOD
+                  - generic [ref=e819]: Valley Food
+                - generic [ref=e820]: core
+              - generic [ref=e821]:
+                - generic [ref=e822]: 5 pendencias
+                - generic [ref=e823]: 62%
+                - generic [ref=e824]: Parcialmente implantado
+            - button "MARKETPLACE Valley Marketplace foundation 5 pendencias 62% Parcialmente implantado" [ref=e825] [cursor=pointer]:
+              - generic [ref=e826]:
+                - generic [ref=e827]:
+                  - generic [ref=e828]: MARKETPLACE
+                  - generic [ref=e829]: Valley Marketplace
+                - generic [ref=e830]: foundation
+              - generic [ref=e831]:
+                - generic [ref=e832]: 5 pendencias
+                - generic [ref=e833]: 62%
+                - generic [ref=e834]: Parcialmente implantado
+        - generic [ref=e127]:
+          - generic [ref=e128]:
+            - generic [ref=e129]:
+              - paragraph [ref=e130]: Public runtime
+              - heading "Status da URL publica" [level=2] [ref=e131]
+            - paragraph [ref=e132]: Pronto para consumir runtime quando ele chegar.
+          - article [ref=e836]:
+            - generic [ref=e837]:
+              - generic [ref=e838]:
+                - generic [ref=e839]: admin.brasildesconto.com.br
+                - generic [ref=e840]: https://admin.brasildesconto.com.br
+              - generic [ref=e841]: publico online
+            - generic [ref=e842]:
+              - article [ref=e843]:
+                - generic [ref=e844]: Status
+                - strong [ref=e845]: ativo
+                - generic [ref=e846]: estado atual do runtime
+              - article [ref=e847]:
+                - generic [ref=e848]: Permanencia
+                - strong [ref=e849]: fixed_external
+                - generic [ref=e850]: fixa, volatil ou aguardando
+              - article [ref=e851]:
+                - generic [ref=e852]: Acesso
+                - strong [ref=e853]: publicado
+                - generic [ref=e854]: admin, portal e ERP lojista
+            - paragraph [ref=e855]: Os links oficiais mantêm a operação fora da rede local para administradores, lojistas e usuários.
+            - generic [ref=e856]:
+              - generic [ref=e857]:
+                - generic [ref=e858]:
+                  - strong [ref=e859]: Admin
+                  - generic [ref=e860]: https://admin.brasildesconto.com.br
+                - link "Abrir" [ref=e861] [cursor=pointer]:
+                  - /url: https://admin.brasildesconto.com.br
+              - generic [ref=e862]:
+                - generic [ref=e863]:
+                  - strong [ref=e864]: Portal
+                  - generic [ref=e865]: https://admin.brasildesconto.com.br/product
+                - link "Abrir" [ref=e866] [cursor=pointer]:
+                  - /url: https://admin.brasildesconto.com.br/product
+              - generic [ref=e867]:
+                - generic [ref=e868]:
+                  - strong [ref=e869]: ERP lojista
+                  - generic [ref=e870]: https://erp-lojista.brasildesconto.com.br/
+                - link "Abrir" [ref=e871] [cursor=pointer]:
+                  - /url: https://erp-lojista.brasildesconto.com.br/
+        - generic [ref=e133]:
+          - generic [ref=e134]:
+            - generic [ref=e135]:
+              - paragraph [ref=e136]: Checkout health
+              - heading "Mercado Pago" [level=2] [ref=e137]
+            - paragraph [ref=e138]: Saúde do checkout, webhook e credenciais operacionais do Valley.
+          - article [ref=e1590]:
+            - generic [ref=e1591]:
+              - generic [ref=e1592]:
+                - generic [ref=e1593]: Mercado Pago Checkout
+                - generic [ref=e1594]: Checkout Pro do Valley com preferências server-side, retorno e webhook público.
+              - generic [ref=e1595]: operacional
+            - generic [ref=e1596]:
+              - article [ref=e1597]:
+                - generic [ref=e1598]: Checkout
+                - strong [ref=e1599]: pronto
+                - generic [ref=e1600]: access token presente
+              - article [ref=e1601]:
+                - generic [ref=e1602]: Credenciais
+                - strong [ref=e1603]: 1/3
+                - generic [ref=e1604]: token, public key e webhook secret
+              - article [ref=e1605]:
+                - generic [ref=e1606]: Validação
+                - strong [ref=e1607]: ok
+                - generic [ref=e1608]: 13/05/2026, 10:03
+              - article [ref=e1609]:
+                - generic [ref=e1610]: Modo
+                - strong [ref=e1611]: production
+                - generic [ref=e1612]: sandbox e producao ligados
+            - paragraph [ref=e1613]: O backend valida o access token no endpoint oficial do Mercado Pago antes de liberar o checkout próprio.
+            - generic [ref=e1614]:
+              - generic [ref=e1615]:
+                - generic [ref=e1616]:
+                  - strong [ref=e1617]: notification_url
+                  - generic [ref=e1618]: https://admin.brasildesconto.com.br/integrations/mercadopago/notifications?source_news=webhooks
+                - link "Abrir" [ref=e1619] [cursor=pointer]:
+                  - /url: https://admin.brasildesconto.com.br/integrations/mercadopago/notifications?source_news=webhooks
+              - generic [ref=e1620]:
+                - generic [ref=e1621]:
+                  - strong [ref=e1622]: return_url
+                  - generic [ref=e1623]: https://admin.brasildesconto.com.br/integrations/mercadopago/return?status=approved&item_id=demo-item
+                - link "Abrir" [ref=e1624] [cursor=pointer]:
+                  - /url: https://admin.brasildesconto.com.br/integrations/mercadopago/return?status=approved&item_id=demo-item
+      - region "Matrizes operacionais" [ref=e202]:
+        - generic [ref=e203]:
+          - generic [ref=e205]:
+            - paragraph [ref=e206]: Tier readiness
+            - heading "Camadas de implantacao" [level=2] [ref=e207]
+          - generic [ref=e908]:
+            - article [ref=e909]:
+              - generic [ref=e910]:
+                - generic [ref=e911]:
+                  - generic [ref=e912]: foundation
+                  - generic [ref=e913]: 66% prontidao media
+                - generic [ref=e914]: 11 modulos
+            - article [ref=e917]:
+              - generic [ref=e918]:
+                - generic [ref=e919]:
+                  - generic [ref=e920]: core
+                  - generic [ref=e921]: 68% prontidao media
+                - generic [ref=e922]: 21 modulos
+            - article [ref=e925]:
+              - generic [ref=e926]:
+                - generic [ref=e927]:
+                  - generic [ref=e928]: expansion
+                  - generic [ref=e929]: 67% prontidao media
+                - generic [ref=e930]: 14 modulos
+            - article [ref=e933]:
+              - generic [ref=e934]:
+                - generic [ref=e935]:
+                  - generic [ref=e936]: frontier
+                  - generic [ref=e937]: 65% prontidao media
+                - generic [ref=e938]: 1 modulos
+        - generic [ref=e208]:
+          - generic [ref=e210]:
+            - paragraph [ref=e211]: Data strategy
+            - heading "Distribuicao por data home" [level=2] [ref=e212]
+          - generic [ref=e941]:
+            - article [ref=e942]:
+              - generic [ref=e943]:
+                - generic [ref=e944]:
+                  - generic [ref=e945]: postgres
+                  - generic [ref=e946]: 65% prontidao media
+                - generic [ref=e947]: 22 modulos
+            - article [ref=e950]:
+              - generic [ref=e951]:
+                - generic [ref=e952]:
+                  - generic [ref=e953]: mongo
+                  - generic [ref=e954]: 68% prontidao media
+                - generic [ref=e955]: 12 modulos
+            - article [ref=e958]:
+              - generic [ref=e959]:
+                - generic [ref=e960]:
+                  - generic [ref=e961]: postgres_mongo
+                  - generic [ref=e962]: 71% prontidao media
+                - generic [ref=e963]: 13 modulos
+        - generic [ref=e213]:
+          - generic [ref=e215]:
+            - paragraph [ref=e216]: Natural next step
+            - heading "Fila de evolucao" [level=2] [ref=e217]
+          - generic [ref=e966]:
+            - article [ref=e967]:
+              - generic [ref=e968]:
+                - generic [ref=e969]:
+                  - generic [ref=e970]: REPLY · Valley REPLY
+                  - generic [ref=e971]: Advanced ERP/WMS | logistics_erp_operations
+                - generic [ref=e972]: foundation
+              - generic [ref=e973]:
+                - generic [ref=e974]: postgres
+                - generic [ref=e975]: Parcialmente implantado
+                - generic [ref=e976]: 5 pendencias
+              - generic [ref=e979]:
+                - generic [ref=e980]: revisar_schema_postgres
+                - generic [ref=e981]: alinhar_rbac_abac
+                - generic [ref=e982]: registrar_regras_negocio
+            - article [ref=e983]:
+              - generic [ref=e984]:
+                - generic [ref=e985]:
+                  - generic [ref=e986]: STOCK · Valley Stock
+                  - generic [ref=e987]: Centralized Dropshipping | logistics_erp_operations
+                - generic [ref=e988]: foundation
+              - generic [ref=e989]:
+                - generic [ref=e990]: postgres
+                - generic [ref=e991]: Parcialmente implantado
+                - generic [ref=e992]: 5 pendencias
+              - generic [ref=e995]:
+                - generic [ref=e996]: revisar_schema_postgres
+                - generic [ref=e997]: alinhar_rbac_abac
+                - generic [ref=e998]: registrar_regras_negocio
+            - article [ref=e999]:
+              - generic [ref=e1000]:
+                - generic [ref=e1001]:
+                  - generic [ref=e1002]: LOG · Valley Log
+                  - generic [ref=e1003]: Smart Tracking | logistics_erp_operations
+                - generic [ref=e1004]: foundation
+              - generic [ref=e1005]:
+                - generic [ref=e1006]: mongo
+                - generic [ref=e1007]: Parcialmente implantado
+                - generic [ref=e1008]: 5 pendencias
+              - generic [ref=e1011]:
+                - generic [ref=e1012]: revisar_schema_mongo
+                - generic [ref=e1013]: alinhar_rbac_abac
+                - generic [ref=e1014]: registrar_regras_negocio
+            - article [ref=e1015]:
+              - generic [ref=e1016]:
+                - generic [ref=e1017]:
+                  - generic [ref=e1018]: MARKETPLACE · Valley Marketplace
+                  - generic [ref=e1019]: Local Commerce | commerce_fintech_assets
+                - generic [ref=e1020]: foundation
+              - generic [ref=e1021]:
+                - generic [ref=e1022]: postgres
+                - generic [ref=e1023]: Parcialmente implantado
+                - generic [ref=e1024]: 5 pendencias
+              - generic [ref=e1027]:
+                - generic [ref=e1028]: revisar_schema_postgres
+                - generic [ref=e1029]: alinhar_rbac_abac
+                - generic [ref=e1030]: registrar_regras_negocio
+            - article [ref=e1031]:
+              - generic [ref=e1032]:
+                - generic [ref=e1033]:
+                  - generic [ref=e1034]: PAY · Valley Pay
+                  - generic [ref=e1035]: The Financial Heart & Atomic Ledger | commerce_fintech_assets
+                - generic [ref=e1036]: foundation
+              - generic [ref=e1037]:
+                - generic [ref=e1038]: postgres
+                - generic [ref=e1039]: Parcialmente implantado
+                - generic [ref=e1040]: 5 pendencias
+              - generic [ref=e1043]:
+                - generic [ref=e1044]: revisar_schema_postgres
+                - generic [ref=e1045]: alinhar_rbac_abac
+                - generic [ref=e1046]: registrar_regras_negocio
+            - article [ref=e1047]:
+              - generic [ref=e1048]:
+                - generic [ref=e1049]:
+                  - generic [ref=e1050]: TECH · Valley Tech
+                  - generic [ref=e1051]: SaaS Infrastructure & API Builder | platform_developer
+                - generic [ref=e1052]: foundation
+              - generic [ref=e1053]:
+                - generic [ref=e1054]: postgres
+                - generic [ref=e1055]: Parcialmente implantado
+                - generic [ref=e1056]: 5 pendencias
+              - generic [ref=e1059]:
+                - generic [ref=e1060]: revisar_schema_postgres
+                - generic [ref=e1061]: alinhar_rbac_abac
+                - generic [ref=e1062]: registrar_regras_negocio
+      - region "Cobertura por dominio" [ref=e218]:
+        - generic [ref=e219]:
+          - generic [ref=e220]:
+            - paragraph [ref=e221]: Domain spread
+            - heading "Mapa de dominio e cobertura" [level=2] [ref=e222]
+          - paragraph [ref=e223]: Cada card combina densidade de modulos e prontidao media.
+        - generic [ref=e1063]:
+          - article [ref=e1064]:
+            - generic [ref=e1065]:
+              - heading "ai_memory_operations" [level=3] [ref=e1066]
+              - paragraph [ref=e1067]: 3 modulos com 69% de prontidao media.
+            - generic [ref=e1070]:
+              - generic [ref=e1071]: 0 planejados
+              - generic [ref=e1072]: 2 hibridos
+              - generic [ref=e1073]: 13 pendencias
+          - article [ref=e1074]:
+            - generic [ref=e1075]:
+              - heading "city_mobility_security" [level=3] [ref=e1076]
+              - paragraph [ref=e1077]: 6 modulos com 68% de prontidao media.
+            - generic [ref=e1080]:
+              - generic [ref=e1081]: 0 planejados
+              - generic [ref=e1082]: 3 hibridos
+              - generic [ref=e1083]: 27 pendencias
+          - article [ref=e1084]:
+            - generic [ref=e1085]:
+              - heading "commerce_fintech_assets" [level=3] [ref=e1086]
+              - paragraph [ref=e1087]: 8 modulos com 66% de prontidao media.
+            - generic [ref=e1090]:
+              - generic [ref=e1091]: 0 planejados
+              - generic [ref=e1092]: 1 hibridos
+              - generic [ref=e1093]: 39 pendencias
+          - article [ref=e1094]:
+            - generic [ref=e1095]:
+              - heading "education_work_social" [level=3] [ref=e1096]
+              - paragraph [ref=e1097]: 3 modulos com 67% de prontidao media.
+            - generic [ref=e1100]:
+              - generic [ref=e1101]: 0 planejados
+              - generic [ref=e1102]: 1 hibridos
+              - generic [ref=e1103]: 14 pendencias
+          - article [ref=e1104]:
+            - generic [ref=e1105]:
+              - heading "frontier_iot_energy" [level=3] [ref=e1106]
+              - paragraph [ref=e1107]: 5 modulos com 67% de prontidao media.
+            - generic [ref=e1110]:
+              - generic [ref=e1111]: 0 planejados
+              - generic [ref=e1112]: 2 hibridos
+              - generic [ref=e1113]: 23 pendencias
+          - article [ref=e1114]:
+            - generic [ref=e1115]:
+              - heading "logistics_erp_operations" [level=3] [ref=e1116]
+              - paragraph [ref=e1117]: 8 modulos com 67% de prontidao media.
+            - generic [ref=e1120]:
+              - generic [ref=e1121]: 0 planejados
+              - generic [ref=e1122]: 2 hibridos
+              - generic [ref=e1123]: 37 pendencias
+          - article [ref=e1124]:
+            - generic [ref=e1125]:
+              - heading "media_social_growth" [level=3] [ref=e1126]
+              - paragraph [ref=e1127]: 6 modulos com 69% de prontidao media.
+            - generic [ref=e1130]:
+              - generic [ref=e1131]: 0 planejados
+              - generic [ref=e1132]: 1 hibridos
+              - generic [ref=e1133]: 26 pendencias
+          - article [ref=e1134]:
+            - generic [ref=e1135]:
+              - heading "platform_developer" [level=3] [ref=e1136]
+              - paragraph [ref=e1137]: 2 modulos com 65% de prontidao media.
+            - generic [ref=e1140]:
+              - generic [ref=e1141]: 0 planejados
+              - generic [ref=e1142]: 0 hibridos
+              - generic [ref=e1143]: 10 pendencias
+          - article [ref=e1144]:
+            - generic [ref=e1145]:
+              - heading "services_health_human" [level=3] [ref=e1146]
+              - paragraph [ref=e1147]: 6 modulos com 67% de prontidao media.
+            - generic [ref=e1150]:
+              - generic [ref=e1151]: 0 planejados
+              - generic [ref=e1152]: 1 hibridos
+              - generic [ref=e1153]: 28 pendencias
+  - generic [ref=e269]: Admin Central 1 aberto.

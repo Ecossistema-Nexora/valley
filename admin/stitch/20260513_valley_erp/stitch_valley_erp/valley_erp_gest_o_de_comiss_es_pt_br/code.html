@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Valley ERP - Gestão de Comissões</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-container": "#3980f4",
+                        "on-error-container": "#93000a",
+                        "error-container": "#ffdad6",
+                        "on-secondary-fixed": "#002113",
+                        "on-secondary": "#ffffff",
+                        "on-primary-fixed": "#131b2e",
+                        "background": "#fcf8fa",
+                        "surface": "#fcf8fa",
+                        "tertiary-container": "#001a42",
+                        "surface-variant": "#e4e2e4",
+                        "on-tertiary-fixed-variant": "#004395",
+                        "on-primary-container": "#7c839b",
+                        "on-background": "#1b1b1d",
+                        "on-surface-variant": "#45464d",
+                        "secondary-fixed": "#6ffbbe",
+                        "secondary": "#006c49",
+                        "primary": "#000000",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "on-error": "#ffffff",
+                        "surface-container-high": "#eae7e9",
+                        "inverse-on-surface": "#f3f0f2",
+                        "secondary-fixed-dim": "#4edea3",
+                        "surface-bright": "#fcf8fa",
+                        "on-primary": "#ffffff",
+                        "on-secondary-fixed-variant": "#005236",
+                        "surface-tint": "#565e74",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary": "#000000",
+                        "secondary-container": "#6cf8bb",
+                        "outline-variant": "#c6c6cd",
+                        "surface-container-low": "#f6f3f5",
+                        "surface-container": "#f0edef",
+                        "inverse-primary": "#bec6e0",
+                        "surface-container-highest": "#e4e2e4",
+                        "primary-container": "#131b2e",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed-dim": "#bec6e0",
+                        "on-secondary-container": "#00714d",
+                        "tertiary-fixed": "#d8e2ff",
+                        "tertiary-fixed-dim": "#adc6ff",
+                        "primary-fixed": "#dae2fd",
+                        "on-surface": "#1b1b1d",
+                        "on-tertiary-fixed": "#001a42",
+                        "surface-dim": "#dcd9db",
+                        "outline": "#76777d",
+                        "inverse-surface": "#303032",
+                        "error": "#ba1a1a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "max-width": "1600px",
+                        "gutter": "1rem",
+                        "dense-gap": "0.5rem",
+                        "container-padding": "1.5rem"
+                    },
+                    "fontFamily": {
+                        "body-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "title-sm": ["Inter"],
+                        "mono-sm": ["JetBrains Mono"],
+                        "display-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "label-bold": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                        "headline-md": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "title-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                        "mono-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                        "display-lg": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "label-bold": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #fcf8fa; color: #1b1b1d; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="flex min-h-screen">
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col border-r border-outline-variant w-60 h-screen fixed left-0 top-0 z-40 bg-surface dark:bg-surface">
+<div class="px-gutter py-6 flex flex-col gap-1">
+<h1 class="font-headline-md text-headline-md font-black text-on-surface dark:text-on-surface">Valley</h1>
+<p class="text-on-surface-variant font-label-md">Commercial Hub</p>
+</div>
+<nav class="flex-1 overflow-y-auto no-scrollbar">
+<div class="flex items-center gap-dense-gap px-gutter py-3 cursor-pointer hover:bg-surface-container-high transition-all text-on-surface-variant font-label-md">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Dashboard</span>
+</div>
+<div class="flex items-center gap-dense-gap px-gutter py-3 cursor-pointer text-secondary border-r-2 border-secondary font-label-bold bg-secondary-container/10">
+<span class="material-symbols-outlined">analytics</span>
+<span>Operations</span>
+</div>
+<div class="flex items-center gap-dense-gap px-gutter py-3 cursor-pointer hover:bg-surface-container-high transition-all text-on-surface-variant font-label-md">
+<span class="material-symbols-outlined">inventory_2</span>
+<span>Inventory</span>
+</div>
+<div class="flex items-center gap-dense-gap px-gutter py-3 cursor-pointer hover:bg-surface-container-high transition-all text-on-surface-variant font-label-md">
+<span class="material-symbols-outlined">payments</span>
+<span>Finance</span>
+</div>
+<div class="flex items-center gap-dense-gap px-gutter py-3 cursor-pointer hover:bg-surface-container-high transition-all text-on-surface-variant font-label-md">
+<span class="material-symbols-outlined">leaderboard</span>
+<span>Analytics</span>
+</div>
+<div class="flex items-center gap-dense-gap px-gutter py-3 cursor-pointer hover:bg-surface-container-high transition-all text-on-surface-variant font-label-md">
+<span class="material-symbols-outlined">settings</span>
+<span>Settings</span>
+</div>
+</nav>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 md:ml-60 flex flex-col min-w-0">
+<!-- TopNavBar -->
+<header class="flex justify-between items-center w-full px-container-padding h-16 sticky top-0 z-50 bg-primary-container dark:bg-primary-container border-b border-outline-variant dark:border-outline-variant">
+<div class="flex items-center gap-gutter">
+<span class="md:hidden font-display-lg text-display-lg font-bold text-on-primary">Valley</span>
+<div class="hidden sm:flex items-center bg-surface-variant/20 rounded-lg px-3 py-1.5 gap-2 w-64">
+<span class="material-symbols-outlined text-on-primary-container text-sm">search</span>
+<input class="bg-transparent border-none text-on-primary-container focus:ring-0 text-body-sm w-full outline-none placeholder:text-on-primary-container/50" placeholder="Buscar operação..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-on-primary-container hover:bg-surface-variant/10 p-2 rounded-full transition-colors">notifications</button>
+<button class="material-symbols-outlined text-on-primary-container hover:bg-surface-variant/10 p-2 rounded-full transition-colors">help_outline</button>
+<div class="h-8 w-8 rounded-full overflow-hidden bg-secondary-container flex items-center justify-center">
+<img alt="User profile" data-alt="A professional close-up headshot of a business executive with a friendly expression. The background is a clean, modern office with soft natural lighting and minimalist decor. The overall aesthetic is professional and polished, following a high-key light-mode UI style with crisp details and a warm, inviting atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdHoYQRfrAZwMzns_Fx1C4VHwemx1A8RmPypJSJyT5C0mMUsonVdXYulxRSFvwHC-ucDCsY3VHNww5iqYT_o1ISNOg3Plx2Fmd-R-OYT3i9Pb6vURTnpsWiwb7FxevgwDH-UJzynpPUdJvbGxTCAHdeFdvSWmxr3cb-Nhn8sQiYFRFsaZX9P1WCOoE0G-mmhEKzrZTVHcDqw6aX1p8TdF3YkoLJKO_SWoeI8WcIPrPZs4DKwcVT2ZaVt5qzu9xxTQIUcgSLoksHHyo"/>
+</div>
+</div>
+</header>
+<!-- Workspace Content -->
+<div class="p-container-padding space-y-gutter">
+<!-- Breadcrumbs & Actions -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+<div>
+<nav class="flex gap-2 text-on-surface-variant font-label-md mb-1">
+<span>Operations</span>
+<span>/</span>
+<span class="text-on-surface font-label-bold">Gestão de Comissões</span>
+</nav>
+<h2 class="font-headline-md text-headline-md text-on-surface">Dashboard de Performance Comercial</h2>
+</div>
+<div class="flex gap-dense-gap">
+<button class="flex items-center gap-2 bg-surface border border-outline px-4 py-2 rounded font-label-bold text-on-surface hover:bg-surface-container transition-all">
+<span class="material-symbols-outlined text-sm">sync</span>
+                        Recalcular Período
+                    </button>
+<button class="flex items-center gap-2 bg-primary text-on-primary px-4 py-2 rounded font-label-bold hover:opacity-90 transition-all">
+<span class="material-symbols-outlined text-sm">file_download</span>
+                        Exportar Relatório
+                    </button>
+</div>
+</div>
+<!-- KPI Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<div class="bg-surface-container-lowest border border-outline-variant p-4 flex flex-col gap-1">
+<span class="text-on-surface-variant font-label-md">Total Comissões (Mês)</span>
+<span class="text-headline-md font-bold text-on-surface">R$ 142.500,00</span>
+<div class="flex items-center gap-1 text-secondary font-label-md">
+<span class="material-symbols-outlined text-xs">arrow_upward</span>
+<span>+12.5% vs mês anterior</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-4 flex flex-col gap-1">
+<span class="text-on-surface-variant font-label-md">Ticket Médio</span>
+<span class="text-headline-md font-bold text-on-surface">R$ 4.230,00</span>
+<div class="flex items-center gap-1 text-error font-label-md">
+<span class="material-symbols-outlined text-xs">arrow_downward</span>
+<span>-2.1% vs meta</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-4 flex flex-col gap-1">
+<span class="text-on-surface-variant font-label-md">Vendedores Ativos</span>
+<span class="text-headline-md font-bold text-on-surface">42</span>
+<div class="flex items-center gap-1 text-on-surface-variant font-label-md">
+<span class="material-symbols-outlined text-xs">group</span>
+<span>8 Equipes Regionais</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-4 flex flex-col gap-1">
+<span class="text-on-surface-variant font-label-md">Status de Pagamento</span>
+<div class="flex items-center gap-2 mt-2">
+<div class="h-2 w-full bg-surface-container rounded-full overflow-hidden flex">
+<div class="bg-secondary h-full" style="width: 65%"></div>
+<div class="bg-on-tertiary-container h-full" style="width: 25%"></div>
+<div class="bg-error h-full" style="width: 10%"></div>
+</div>
+</div>
+<span class="font-label-md text-on-surface-variant mt-1">65% Processado</span>
+</div>
+</div>
+<!-- Main Layout: Bento Grid Style -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Performance Ranking Chart Area -->
+<div class="col-span-12 lg:col-span-8 space-y-gutter">
+<!-- Comparison Chart Panel -->
+<div class="bg-surface-container-lowest border border-outline-variant p-gutter rounded">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-title-sm text-title-sm">Comparativo Vendas vs. Comissões</h3>
+<div class="flex gap-4">
+<div class="flex items-center gap-1.5">
+<span class="w-3 h-3 bg-secondary rounded-full"></span>
+<span class="text-label-md">Vendas Brutas</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-3 h-3 bg-on-tertiary-container rounded-full"></span>
+<span class="text-label-md">Comissões</span>
+</div>
+</div>
+</div>
+<!-- Mock Bar Chart -->
+<div class="h-64 flex items-end justify-between gap-4 px-4">
+<!-- Mon -->
+<div class="flex-1 flex flex-col items-center gap-2 h-full justify-end">
+<div class="w-full flex justify-center gap-1 h-full items-end">
+<div class="bg-secondary/20 w-4 h-[70%]"></div>
+<div class="bg-on-tertiary-container w-4 h-[10%]"></div>
+</div>
+<span class="text-label-md font-mono-sm">Seg</span>
+</div>
+<!-- Tue -->
+<div class="flex-1 flex flex-col items-center gap-2 h-full justify-end">
+<div class="w-full flex justify-center gap-1 h-full items-end">
+<div class="bg-secondary/20 w-4 h-[85%]"></div>
+<div class="bg-on-tertiary-container w-4 h-[12%]"></div>
+</div>
+<span class="text-label-md font-mono-sm">Ter</span>
+</div>
+<!-- Wed -->
+<div class="flex-1 flex flex-col items-center gap-2 h-full justify-end">
+<div class="w-full flex justify-center gap-1 h-full items-end">
+<div class="bg-secondary/20 w-4 h-[60%]"></div>
+<div class="bg-on-tertiary-container w-4 h-[08%]"></div>
+</div>
+<span class="text-label-md font-mono-sm">Qua</span>
+</div>
+<!-- Thu -->
+<div class="flex-1 flex flex-col items-center gap-2 h-full justify-end">
+<div class="w-full flex justify-center gap-1 h-full items-end">
+<div class="bg-secondary/20 w-4 h-[95%]"></div>
+<div class="bg-on-tertiary-container w-4 h-[15%]"></div>
+</div>
+<span class="text-label-md font-mono-sm">Qui</span>
+</div>
+<!-- Fri -->
+<div class="flex-1 flex flex-col items-center gap-2 h-full justify-end">
+<div class="w-full flex justify-center gap-1 h-full items-end">
+<div class="bg-secondary/20 w-4 h-[80%]"></div>
+<div class="bg-on-tertiary-container w-4 h-[11%]"></div>
+</div>
+<span class="text-label-md font-mono-sm">Sex</span>
+</div>
+<!-- Sat -->
+<div class="flex-1 flex flex-col items-center gap-2 h-full justify-end">
+<div class="w-full flex justify-center gap-1 h-full items-end">
+<div class="bg-secondary/20 w-4 h-[40%]"></div>
+<div class="bg-on-tertiary-container w-4 h-[05%]"></div>
+</div>
+<span class="text-label-md font-mono-sm">Sab</span>
+</div>
+<!-- Sun -->
+<div class="flex-1 flex flex-col items-center gap-2 h-full justify-end">
+<div class="w-full flex justify-center gap-1 h-full items-end">
+<div class="bg-secondary/20 w-4 h-[30%]"></div>
+<div class="bg-on-tertiary-container w-4 h-[04%]"></div>
+</div>
+<span class="text-label-md font-mono-sm">Dom</span>
+</div>
+</div>
+</div>
+<!-- Filter Bar -->
+<div class="bg-surface-container flex flex-wrap items-center gap-gutter px-gutter py-2 border border-outline-variant rounded">
+<div class="flex items-center gap-2 border-r border-outline-variant pr-4">
+<span class="material-symbols-outlined text-sm text-on-surface-variant">filter_list</span>
+<span class="text-label-bold text-on-surface-variant uppercase">Filtros</span>
+</div>
+<div class="flex items-center gap-dense-gap">
+<span class="bg-surface-container-highest px-3 py-1 rounded-full text-label-md flex items-center gap-2">
+                                Equipe: São Paulo
+                                <button class="material-symbols-outlined text-xs">close</button>
+</span>
+<span class="bg-surface-container-highest px-3 py-1 rounded-full text-label-md flex items-center gap-2">
+                                Período: Março 2024
+                                <button class="material-symbols-outlined text-xs">close</button>
+</span>
+<button class="text-on-tertiary-container font-label-bold text-xs hover:underline">+ Adicionar Filtro</button>
+</div>
+</div>
+<!-- Data Table -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded overflow-hidden">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container border-b border-outline-variant">
+<th class="px-gutter py-3 font-label-bold text-on-surface-variant uppercase tracking-wider">Vendedor</th>
+<th class="px-gutter py-3 font-label-bold text-on-surface-variant uppercase tracking-wider">Vendas Totais</th>
+<th class="px-gutter py-3 font-label-bold text-on-surface-variant uppercase tracking-wider">Comissão</th>
+<th class="px-gutter py-3 font-label-bold text-on-surface-variant uppercase tracking-wider">Status</th>
+<th class="px-gutter py-3 font-label-bold text-on-surface-variant uppercase tracking-wider text-right">Ação</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-gutter py-3 flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-primary-container text-on-primary flex items-center justify-center font-bold text-xs">RM</div>
+<div>
+<p class="text-body-md font-semibold">Ricardo Mendes</p>
+<p class="text-label-md text-on-surface-variant">Equipe Norte</p>
+</div>
+</td>
+<td class="px-gutter py-3 text-body-sm font-mono-sm">R$ 145.000,00</td>
+<td class="px-gutter py-3 text-body-sm font-bold text-on-tertiary-container">R$ 7.250,00</td>
+<td class="px-gutter py-3">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container text-label-md">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                                            Pago
+                                        </span>
+</td>
+<td class="px-gutter py-3 text-right">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary">more_vert</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-gutter py-3 flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-surface-container-highest text-on-surface flex items-center justify-center font-bold text-xs">AS</div>
+<div>
+<p class="text-body-md font-semibold">Ana Silvia</p>
+<p class="text-label-md text-on-surface-variant">Equipe Sul</p>
+</div>
+</td>
+<td class="px-gutter py-3 text-body-sm font-mono-sm">R$ 98.420,00</td>
+<td class="px-gutter py-3 text-body-sm font-bold text-on-tertiary-container">R$ 4.921,00</td>
+<td class="px-gutter py-3">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant text-label-md">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span>
+                                            Pendente
+                                        </span>
+</td>
+<td class="px-gutter py-3 text-right">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary">more_vert</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-gutter py-3 flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-secondary-container text-on-secondary flex items-center justify-center font-bold text-xs">GL</div>
+<div>
+<p class="text-body-md font-semibold">Gabriel Lima</p>
+<p class="text-label-md text-on-surface-variant">Equipe Norte</p>
+</div>
+</td>
+<td class="px-gutter py-3 text-body-sm font-mono-sm">R$ 112.900,00</td>
+<td class="px-gutter py-3 text-body-sm font-bold text-on-tertiary-container">R$ 5.645,00</td>
+<td class="px-gutter py-3">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-on-tertiary-container/10 text-on-tertiary-container text-label-md">
+<span class="w-1.5 h-1.5 rounded-full bg-on-tertiary-container"></span>
+                                            Aprovado
+                                        </span>
+</td>
+<td class="px-gutter py-3 text-right">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary">more_vert</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Right Sidebar: Ranking & History -->
+<div class="col-span-12 lg:col-span-4 space-y-gutter">
+<!-- Top Performers Ranking -->
+<div class="bg-surface-container-lowest border border-outline-variant p-gutter rounded">
+<div class="flex justify-between items-center mb-4">
+<h3 class="font-title-sm text-title-sm">Ranking de Performance</h3>
+<button class="text-label-bold text-on-tertiary-container hover:underline">Ver todos</button>
+</div>
+<div class="space-y-4">
+<div class="flex items-center gap-3 p-2 bg-surface rounded border-l-4 border-secondary">
+<span class="font-display-lg text-secondary opacity-20 italic">01</span>
+<div class="flex-1">
+<p class="text-body-md font-bold">Ricardo Mendes</p>
+<p class="text-label-md text-on-surface-variant">Meta: 115% atingida</p>
+</div>
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">military_tech</span>
+</div>
+<div class="flex items-center gap-3 p-2 bg-surface rounded">
+<span class="font-display-lg text-outline opacity-20 italic">02</span>
+<div class="flex-1">
+<p class="text-body-md font-bold">Gabriel Lima</p>
+<p class="text-label-md text-on-surface-variant">Meta: 102% atingida</p>
+</div>
+</div>
+<div class="flex items-center gap-3 p-2 bg-surface rounded">
+<span class="font-display-lg text-outline opacity-20 italic">03</span>
+<div class="flex-1">
+<p class="text-body-md font-bold">Ana Silvia</p>
+<p class="text-label-md text-on-surface-variant">Meta: 98% atingida</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Integration Card -->
+<div class="bg-on-primary-fixed p-gutter rounded-xl text-on-primary shadow-lg overflow-hidden relative">
+<div class="relative z-10">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 bg-white/10 rounded flex items-center justify-center">
+<span class="material-symbols-outlined">account_balance</span>
+</div>
+<div>
+<h4 class="font-label-bold uppercase">Folha de Pagamento</h4>
+<p class="text-xs opacity-70">Integração ERP Ativa</p>
+</div>
+</div>
+<p class="text-body-sm mb-6 opacity-90 leading-relaxed">
+                                As comissões aprovadas são automaticamente sincronizadas com o módulo financeiro todas as sextas-feiras às 18:00.
+                            </p>
+<div class="flex justify-between items-center border-t border-white/10 pt-4">
+<span class="font-mono-sm text-xs">Sync: 12 Mar, 10:45</span>
+<button class="bg-secondary text-on-secondary px-3 py-1 rounded text-xs font-label-bold uppercase tracking-wide">Sincronizar</button>
+</div>
+</div>
+<div class="absolute -right-10 -bottom-10 opacity-5">
+<span class="material-symbols-outlined text-[120px]">payments</span>
+</div>
+</div>
+<!-- History Timeline -->
+<div class="bg-surface-container-lowest border border-outline-variant p-gutter rounded">
+<h3 class="font-title-sm text-title-sm mb-4">Histórico Operacional</h3>
+<div class="relative pl-6 space-y-6 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-px before:bg-outline-variant">
+<div class="relative">
+<span class="absolute -left-5 top-1 w-2.5 h-2.5 rounded-full bg-secondary border-2 border-surface"></span>
+<p class="text-label-bold">Comissões Calculadas</p>
+<p class="text-label-md text-on-surface-variant">Período de Março fechado automaticamente.</p>
+<span class="text-[10px] text-outline font-mono-sm">Hoje, 09:12</span>
+</div>
+<div class="relative">
+<span class="absolute -left-5 top-1 w-2.5 h-2.5 rounded-full bg-outline border-2 border-surface"></span>
+<p class="text-label-bold">Aprovação de Lote #342</p>
+<p class="text-label-md text-on-surface-variant">Aprovado pelo Diretor Financeiro.</p>
+<span class="text-[10px] text-outline font-mono-sm">Ontem, 16:45</span>
+</div>
+<div class="relative">
+<span class="absolute -left-5 top-1 w-2.5 h-2.5 rounded-full bg-error border-2 border-surface"></span>
+<p class="text-label-bold">Divergência Encontrada</p>
+<p class="text-label-md text-on-surface-variant">Vendedor Ricardo Mendes: Venda estornada.</p>
+<span class="text-[10px] text-outline font-mono-sm">11 Mar, 11:20</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<footer class="h-16"></footer>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 bg-surface border-t border-outline-variant shadow-lg rounded-t-xl">
+<div class="flex flex-col items-center justify-center text-secondary font-label-bold bg-secondary-container rounded-full px-4 py-1 active:scale-95 transition-transform cursor-pointer">
+<span class="material-symbols-outlined">home</span>
+<span class="text-[10px]">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant active:scale-95 transition-transform cursor-pointer">
+<span class="material-symbols-outlined">assignment</span>
+<span class="text-[10px]">Tasks</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant active:scale-95 transition-transform cursor-pointer">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="text-[10px]">Orders</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant active:scale-95 transition-transform cursor-pointer">
+<span class="material-symbols-outlined">menu</span>
+<span class="text-[10px]">More</span>
+</div>
+</nav>
+</body></html>

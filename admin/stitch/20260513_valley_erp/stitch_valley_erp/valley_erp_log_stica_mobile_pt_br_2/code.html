@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Valley ERP - Logística Mobile</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-container": "#131b2e",
+                    "on-background": "#1b1b1d",
+                    "secondary-fixed": "#6ffbbe",
+                    "on-primary": "#ffffff",
+                    "on-surface-variant": "#45464d",
+                    "secondary-container": "#6cf8bb",
+                    "on-secondary-container": "#00714d",
+                    "on-primary-container": "#7c839b",
+                    "surface": "#fcf8fa",
+                    "on-surface": "#1b1b1d",
+                    "outline": "#76777d",
+                    "on-secondary": "#ffffff",
+                    "primary": "#000000",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary": "#000000",
+                    "surface-variant": "#e4e2e4",
+                    "background": "#fcf8fa",
+                    "secondary": "#006c49",
+                    "outline-variant": "#c6c6cd"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "unit": "4px",
+                    "gutter": "1rem",
+                    "container-padding": "1.5rem",
+                    "max-width": "1600px",
+                    "dense-gap": "0.5rem"
+            },
+            "fontFamily": {
+                    "body-md": ["Inter"],
+                    "label-md": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "title-sm": ["Inter"],
+                    "mono-sm": ["JetBrains Mono"],
+                    "label-bold": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "display-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                    "title-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "mono-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                    "label-bold": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "display-lg": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #fcf8fa;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="font-body-md text-on-background">
+<!-- Header Section (WorkspaceHeader) -->
+<header class="bg-primary-container text-on-primary sticky top-0 z-50">
+<div class="h-14 w-full px-container-padding flex justify-between items-center max-w-max-width mx-auto">
+<div class="flex items-center gap-3">
+<span class="font-display-lg text-title-sm font-bold text-on-primary tracking-tight">Valley</span>
+<div class="h-6 w-px bg-on-primary-container/30"></div>
+<div class="flex flex-col">
+<span class="font-label-bold text-label-bold text-secondary-fixed">RT-402 ATIVO</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-primary-container">notifications</span>
+<div class="w-8 h-8 rounded-full bg-surface-variant overflow-hidden border border-outline-variant">
+<img alt="User profile avatar" data-alt="A professional headshot of a logistics manager with a confident expression, set against a blurred industrial warehouse background with cool blue and white lighting. The image is crisp and high-contrast, following a modern corporate aesthetic with a focus on efficiency and reliability. The color palette is dominated by neutral tones and soft highlights." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBc7lFSHPOMchdED732eImN2nPRIRrJGXJbp8v2Vm2dt96hkJ-b9X7zG36ZfLVaEjTZE6-MpgBD0BylePEH3t_xoRFsugzDCfeoXt82jZAk9EA5yo-zKjwdV-t1K8Jt4UmdCCpxN-ee681q41USTrVXG-ghuleyQXDCLvn1B5JBpFIeyf_aDKTyyen9PDFab7P81kpNrgazVKreg99EVsIVqQospsrNlcJkpxDnyTyv-5HXsshs7fPKRTcMlcHJgO-H2VwZTfKhTjmP"/>
+</div>
+</div>
+</div>
+<!-- Efficiency Bar -->
+<div class="bg-primary-container border-t border-on-primary-container/10 px-container-padding py-2 flex justify-between items-center">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary-fixed text-[18px]">bolt</span>
+<span class="font-label-md text-label-md text-on-primary">Eficiência: 94%</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="flex flex-col items-end">
+<span class="font-mono-sm text-[10px] text-on-primary-container uppercase tracking-widest">Previsão</span>
+<span class="font-title-sm text-title-sm">14:20</span>
+</div>
+</div>
+</div>
+</header>
+<main class="max-w-max-width mx-auto px-container-padding py-gutter space-y-gutter pb-24">
+<!-- Quick Actions -->
+<div class="grid grid-cols-2 gap-dense-gap">
+<button class="bg-secondary-container text-on-secondary-container p-4 rounded-xl flex flex-col items-center justify-center gap-2 transition-all active:scale-95">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">qr_code_scanner</span>
+<span class="font-label-bold text-label-bold uppercase">ESCANEAR PACOTE</span>
+</button>
+<button class="bg-surface-container-highest border border-outline-variant p-4 rounded-xl flex flex-col items-center justify-center gap-2 transition-all active:scale-95">
+<span class="material-symbols-outlined text-primary">navigation</span>
+<span class="font-label-bold text-label-bold text-primary uppercase">INICIAR ROTA</span>
+</button>
+</div>
+<!-- Section Title -->
+<div class="flex justify-between items-end">
+<div>
+<h2 class="font-headline-md text-headline-md text-primary">Entregas para Hoje</h2>
+<p class="font-body-sm text-on-surface-variant">8 paradas restantes • 22.8 km</p>
+</div>
+<button class="text-secondary font-label-bold flex items-center gap-1 uppercase">
+                MAPA <span class="material-symbols-outlined text-[16px]">map</span>
+</button>
+</div>
+<!-- Deliveries List (Bento-ish Layout) -->
+<div class="space-y-4">
+<!-- Delivery Item 1: Priority -->
+<div class="bg-surface-container-lowest border-l-4 border-l-secondary rounded-lg border border-outline-variant p-4 shadow-sm relative">
+<div class="absolute top-4 right-4 flex items-center gap-1 bg-secondary-fixed/30 text-on-secondary-container px-2 py-0.5 rounded text-[10px] font-bold">
+<span class="material-symbols-outlined text-[12px]">priority_high</span> EXPRESSO
+                </div>
+<div class="flex gap-4">
+<div class="w-20 h-20 rounded bg-surface-variant overflow-hidden shrink-0">
+<img alt="Map thumbnail" data-alt="A high-detail satellite view map snippet showing a dense urban residential block with clear street markings and a highlighted blue navigation path. The lighting is bright and clear, emphasizing a functional logistics tool aesthetic. The map uses a clean, modern style with a subtle white and grey color palette, professional and precise." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB6TjKU6foTG28s9TPHoK3pxWWy-vgCSCS4s_faVNpURJ6LMnVUKrIafsaU8PvBYLj6hNmsZ7DqNyuKP1LMtOsR9MX1emANSu2ocg8c7BMzfc5mZq-iWLGyoCBNp7fbk--IWzH8H7o-1c3_bl48mxxZSrDITXgPwHWPa2S-XqS6i0snQ6FBF0sabDUvtxIBDXaQnsh1RnOjLh3LXVLU8wfe7k_AydrDVsM9QrLTnFeNndJw4NbUuZdV6D_gFBzK96-4TSI2wrSRCycT"/>
+</div>
+<div class="flex-1">
+<span class="font-mono-sm text-on-surface-variant">#VAL-99283</span>
+<h3 class="font-title-sm text-title-sm text-primary">Oakwood Distribution Center</h3>
+<p class="font-body-sm text-on-surface-variant">442 Industrial Way, Setor 7</p>
+</div>
+</div>
+<div class="mt-4 pt-4 border-t border-outline-variant flex gap-2">
+<button class="flex-1 bg-primary text-on-primary py-2 font-label-bold rounded-lg flex items-center justify-center gap-2 uppercase">
+                        CONCLUIR
+                    </button>
+<button class="w-12 h-10 border border-outline-variant rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">call</span>
+</button>
+</div>
+</div>
+<!-- Delivery Item 2 -->
+<div class="bg-surface-container-lowest rounded-lg border border-outline-variant p-4 shadow-sm">
+<div class="flex gap-4">
+<div class="w-20 h-20 rounded bg-surface-variant overflow-hidden shrink-0">
+<img alt="Map thumbnail" data-alt="A clean graphic map showing a suburban intersection with a green delivery pin marking a specific house. The style is minimalist and corporate, utilizing light greys and soft blue accents. The lighting is even and high-key, suitable for a professional ERP mobile interface. Visual focus is on clarity and ease of reading." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXQor0RalvRYz0AdWy0K0ddvNhxd7AZqWvSL_LAGBoH1S0B2F62IgJTlmvJRBFK8jIe8baIOdyhnTMviIEbu7MCBZ79jht8dmU1OlqtiMcvBjFaYPC33r6axepjtWGdqWkvYzSxsQOgeqZkJhUPwF1G7uzEMk1DLnqcZTnOs2DogmMSJbmJ3LIvhWs5R27pPo5ZfiM21GjKHBpmqYW3CNM9ty0w1FVfx9n3H_4YBjjiB5UF-AQgqYBftid7uJwmZEF9FplOO-0wvR7"/>
+</div>
+<div class="flex-1">
+<span class="font-mono-sm text-on-surface-variant">#VAL-99301</span>
+<h3 class="font-title-sm text-title-sm text-primary">Pinnacle Retail Hub</h3>
+<p class="font-body-sm text-on-surface-variant">88 Market St, Centro</p>
+</div>
+</div>
+<div class="mt-4 pt-4 border-t border-outline-variant flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-outline text-[20px]">inventory_2</span>
+<span class="font-body-sm text-on-surface-variant">3 Paletes</span>
+</div>
+<button class="text-primary font-label-bold border border-primary px-4 py-1.5 rounded-lg uppercase">
+                        DETALHES
+                    </button>
+</div>
+</div>
+<!-- Delivery Item 3 -->
+<div class="bg-surface-container-lowest rounded-lg border border-outline-variant p-4 shadow-sm opacity-70">
+<div class="flex gap-4">
+<div class="w-20 h-20 rounded bg-surface-variant flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-outline text-[32px]">location_on</span>
+</div>
+<div class="flex-1">
+<span class="font-mono-sm text-on-surface-variant">#VAL-99315</span>
+<h3 class="font-title-sm text-title-sm text-primary">Swift Logistics Co.</h3>
+<p class="font-body-sm text-on-surface-variant">12 Logistics Loop</p>
+</div>
+</div>
+<div class="mt-4 text-center">
+<span class="font-label-md text-on-surface-variant italic">Próximo na sequência</span>
+</div>
+</div>
+</div>
+<!-- Operations Stats -->
+<div class="grid grid-cols-3 gap-dense-gap pt-4">
+<div class="bg-white border border-outline-variant p-3 rounded-xl text-center">
+<span class="font-mono-sm text-[10px] text-on-surface-variant block uppercase">COMBUSTÍVEL</span>
+<span class="font-title-sm text-primary">68%</span>
+</div>
+<div class="bg-white border border-outline-variant p-3 rounded-xl text-center">
+<span class="font-mono-sm text-[10px] text-on-surface-variant block uppercase">CARGA</span>
+<span class="font-title-sm text-primary">1.2t</span>
+</div>
+<div class="bg-white border border-outline-variant p-3 rounded-xl text-center">
+<span class="font-mono-sm text-[10px] text-on-surface-variant block uppercase">TEMP</span>
+<span class="font-title-sm text-secondary">4°C</span>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar (BottomNavBar Mobile Only Rule) -->
+<nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-outline-variant h-16 flex items-center justify-around px-container-padding z-50 md:hidden">
+<button class="flex flex-col items-center justify-center gap-1 text-on-secondary-container">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">local_shipping</span>
+<span class="text-[10px] font-bold">Logística</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined">map</span>
+<span class="text-[10px] font-medium">Rota</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined">inventory</span>
+<span class="text-[10px] font-medium">Carga</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined">history</span>
+<span class="text-[10px] font-medium">Histórico</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-medium">Perfil</span>
+</button>
+</nav>
+<!-- FAB for Emergency/Quick Sync -->
+<button class="fixed right-6 bottom-20 w-14 h-14 bg-primary text-on-primary rounded-full shadow-lg flex items-center justify-center z-40">
+<span class="material-symbols-outlined text-[28px]">sync</span>
+</button>
+</body></html>

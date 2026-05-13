@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Catálogo de Produtos | Valley ERP</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container": "#f0edef",
+                        "primary-container": "#131b2e",
+                        "surface-tint": "#565e74",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed": "#dae2fd",
+                        "on-surface": "#1b1b1d",
+                        "on-background": "#1b1b1d",
+                        "secondary": "#006c49",
+                        "tertiary": "#000000",
+                        "error": "#ba1a1a",
+                        "outline": "#76777d",
+                        "surface-container-highest": "#e4e2e4",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "inverse-primary": "#bec6e0",
+                        "error-container": "#ffdad6",
+                        "surface-container-high": "#eae7e9",
+                        "outline-variant": "#c6c6cd",
+                        "tertiary-fixed": "#d8e2ff",
+                        "secondary-fixed-dim": "#4edea3",
+                        "on-tertiary-fixed-variant": "#004395",
+                        "on-tertiary-fixed": "#001a42",
+                        "background": "#fcf8fa",
+                        "on-surface-variant": "#45464d",
+                        "on-primary-fixed": "#131b2e",
+                        "inverse-surface": "#303032",
+                        "tertiary-container": "#001a42",
+                        "on-error": "#ffffff",
+                        "on-secondary-fixed-variant": "#005236",
+                        "secondary-container": "#6cf8bb",
+                        "surface": "#fcf8fa",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-fixed": "#002113",
+                        "surface-container-low": "#f6f3f5",
+                        "on-tertiary-container": "#3980f4",
+                        "secondary-fixed": "#6ffbbe",
+                        "on-secondary-container": "#00714d",
+                        "on-error-container": "#93000a",
+                        "primary-fixed-dim": "#bec6e0",
+                        "on-primary-container": "#7c839b",
+                        "surface-dim": "#dcd9db",
+                        "on-primary": "#ffffff",
+                        "surface-variant": "#e4e2e4",
+                        "surface-bright": "#fcf8fa",
+                        "primary": "#000000",
+                        "inverse-on-surface": "#f3f0f2",
+                        "tertiary-fixed-dim": "#adc6ff",
+                        "on-tertiary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "gutter": "1rem",
+                        "max-width": "1600px",
+                        "container-padding": "1.5rem",
+                        "dense-gap": "0.5rem"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "title-sm": ["Inter"],
+                        "label-md": ["Inter"],
+                        "mono-sm": ["JetBrains Mono"],
+                        "label-bold": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "display-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "title-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "mono-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                        "label-bold": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                        "headline-md": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "display-lg": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body {
+            background-color: #fcf8fa;
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+<!-- TopNavBar -->
+<header class="bg-primary docked full-width top-0 z-50 border-b border-outline-variant">
+<div class="flex justify-between items-center h-14 px-gutter w-full max-w-[1600px] mx-auto">
+<div class="flex items-center gap-6">
+<span class="font-headline-md text-headline-md font-bold text-on-primary">Valley</span>
+<div class="hidden md:flex items-center bg-white/10 rounded-lg px-3 py-1.5 w-80">
+<span class="material-symbols-outlined text-on-primary/70 text-[20px] mr-2">search</span>
+<input class="bg-transparent border-none text-on-primary placeholder:text-on-primary/50 focus:ring-0 text-sm w-full" placeholder="Buscar produtos, SKUs..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-on-primary hover:bg-primary-fixed-dim/10 p-2 rounded-lg transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-on-primary hover:bg-primary-fixed-dim/10 p-2 rounded-lg transition-colors">
+<span class="material-symbols-outlined">help</span>
+</button>
+<button class="text-on-primary hover:bg-primary-fixed-dim/10 p-2 rounded-lg transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="h-8 w-8 rounded-full overflow-hidden bg-surface-container ml-2">
+<img alt="Avatar do Usuário" data-alt="A professional headshot of a business executive in a high-end corporate setting. The lighting is soft and flattering, emphasizing a clean and modern professional look. The background is a slightly blurred office with glass partitions and subtle cool-blue tones. The overall aesthetic is sharp and reliable, fitting for a corporate ERP environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3cmiWr4MpKWEiHTe9_BG0V3QXrrWXIHW8QeQPtKlQDIqcSj13Q_7Y9TZ8M5vLW38mT1R556kJivZ7FmpplYfKdf6aEQqxKBZq4ArPcD8Fr2nYesrXDxhPB4yss7WtKWnw-aHlZRLP0TVhZgqF1JAlrxwomYULH7UDoAiseteol827t-lpkqHugCemR0Dt6KmhZZ4feLjMN6jyvBaf2YIHs34RYFpDo9eyijl5LK9v4AIuc431vey0QN2LN6S0OOUNFVYUeypeDoch"/>
+</div>
+</div>
+</div>
+</header>
+<div class="flex flex-1 pt-14">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-14 h-[calc(100vh-3.5rem)] w-60 bg-surface-container-low border-r border-outline-variant flex flex-col p-dense-gap overflow-y-auto hidden md:flex">
+<div class="py-4 px-3 mb-2">
+<p class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Menu Principal</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg px-3 py-2 transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 bg-secondary-container text-on-secondary-container font-bold rounded-lg px-3 py-2 scale-[0.98]" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-label-md text-label-md">Estoque</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg px-3 py-2 transition-colors" href="#">
+<span class="material-symbols-outlined">settings_applications</span>
+<span class="font-label-md text-label-md">Operações</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg px-3 py-2 transition-colors" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-md text-label-md">Análises</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg px-3 py-2 transition-colors" href="#">
+<span class="material-symbols-outlined">storefront</span>
+<span class="font-label-md text-label-md">Lojistas</span>
+</a>
+</nav>
+<div class="mt-auto pt-4 border-t border-outline-variant space-y-1">
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg px-3 py-2 transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Configurações</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg px-3 py-2 transition-colors" href="#">
+<span class="material-symbols-outlined text-error">logout</span>
+<span class="font-label-md text-label-md">Sair</span>
+</a>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 md:ml-60 p-gutter bg-background overflow-x-hidden">
+<!-- WorkspaceHeader -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+<div>
+<nav class="flex gap-2 text-on-surface-variant mb-1">
+<span class="font-label-md text-label-md">Estoque</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="font-label-md text-label-md font-bold text-primary">Catálogo de Produtos</span>
+</nav>
+<h1 class="font-display-lg text-display-lg text-primary">Catálogo de Produtos</h1>
+</div>
+<div class="flex items-center gap-2">
+<button class="flex items-center gap-2 px-4 py-2 border border-outline-variant rounded-lg font-label-md text-label-md hover:bg-surface-container-high transition-colors text-on-surface">
+<span class="material-symbols-outlined text-[20px]">file_download</span>
+                        Exportar
+                    </button>
+<button class="flex items-center gap-2 px-4 py-2 bg-primary text-on-primary rounded-lg font-label-md text-label-md hover:bg-primary-container transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[20px]">add</span>
+                        Novo Produto
+                    </button>
+</div>
+</div>
+<!-- KPI Row -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+<div class="bg-surface-container-lowest p-4 rounded-lg border border-outline-variant">
+<p class="font-label-md text-label-md text-on-surface-variant mb-1">Total de SKUs</p>
+<div class="flex items-end justify-between">
+<span class="font-display-lg text-display-lg text-primary">1,248</span>
+<span class="font-label-bold text-label-bold text-secondary flex items-center bg-secondary-container/20 px-1.5 py-0.5 rounded">
+                            +12% <span class="material-symbols-outlined text-[16px]">arrow_upward</span>
+</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-lg border border-outline-variant">
+<p class="font-label-md text-label-md text-on-surface-variant mb-1">Valor em Estoque</p>
+<div class="flex items-end justify-between">
+<span class="font-display-lg text-display-lg text-primary">R$ 452k</span>
+<span class="font-label-bold text-label-bold text-secondary flex items-center bg-secondary-container/20 px-1.5 py-0.5 rounded">
+                            +4.2% <span class="material-symbols-outlined text-[16px]">arrow_upward</span>
+</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-lg border border-outline-variant">
+<p class="font-label-md text-label-md text-on-surface-variant mb-1">Ruptura de Estoque</p>
+<div class="flex items-end justify-between">
+<span class="font-display-lg text-display-lg text-primary">24</span>
+<span class="font-label-bold text-label-bold text-error flex items-center bg-error-container/20 px-1.5 py-0.5 rounded">
+                            -5% <span class="material-symbols-outlined text-[16px]">arrow_downward</span>
+</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-lg border border-outline-variant">
+<p class="font-label-md text-label-md text-on-surface-variant mb-1">Produtos Inativos</p>
+<div class="flex items-end justify-between">
+<span class="font-display-lg text-display-lg text-primary">12</span>
+<span class="font-label-bold text-label-bold text-on-surface-variant flex items-center bg-surface-container-highest px-1.5 py-0.5 rounded">
+                            Estável
+                        </span>
+</div>
+</div>
+</div>
+<!-- Filter Bar -->
+<div class="bg-surface-container-low border border-outline-variant rounded-t-lg p-3 flex flex-col lg:flex-row gap-3 items-center justify-between">
+<div class="flex flex-wrap items-center gap-2">
+<div class="relative">
+<select class="appearance-none bg-surface-container-lowest border border-outline-variant rounded px-4 py-1.5 pr-8 font-label-md text-label-md text-on-surface focus:ring-primary focus:border-primary">
+<option>Todas as Categorias</option>
+<option>Eletrônicos</option>
+<option>Vestuário</option>
+<option>Alimentos</option>
+<option>Móveis</option>
+</select>
+<span class="material-symbols-outlined absolute right-2 top-1.5 text-on-surface-variant pointer-events-none">expand_more</span>
+</div>
+<div class="relative">
+<select class="appearance-none bg-surface-container-lowest border border-outline-variant rounded px-4 py-1.5 pr-8 font-label-md text-label-md text-on-surface focus:ring-primary focus:border-primary">
+<option>Status: Ativo</option>
+<option>Status: Inativo</option>
+<option>Status: Sem Estoque</option>
+</select>
+<span class="material-symbols-outlined absolute right-2 top-1.5 text-on-surface-variant pointer-events-none">expand_more</span>
+</div>
+<button class="flex items-center gap-1.5 px-3 py-1.5 bg-surface-container-highest border border-outline-variant rounded font-label-md text-label-md text-on-surface hover:bg-outline-variant/30 transition-colors">
+<span class="material-symbols-outlined text-[18px]">filter_list</span>
+                        Filtros Avançados
+                    </button>
+</div>
+<div class="flex items-center border border-outline-variant rounded overflow-hidden">
+<button class="p-2 bg-primary text-on-primary">
+<span class="material-symbols-outlined">grid_view</span>
+</button>
+<button class="p-2 bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined">view_list</span>
+</button>
+</div>
+</div>
+<!-- Bento Product Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-gutter mb-8">
+<!-- Product Card 1 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden hover:shadow-md transition-shadow group">
+<div class="aspect-video relative overflow-hidden bg-surface-container">
+<img alt="Relógio Minimalista" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="A studio shot of a high-end minimalist white smartwatch on a clean light grey background. The lighting is crisp and even, highlighting the sleek curves and metallic accents of the device. Professional commercial photography style, perfectly suited for an enterprise e-commerce catalog. Bright, corporate, and clean atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdb_Bc-ZPRmaE43zkxGP2BWNXolz6FAKE-SteLtlngML9Ek-L01MK-I2I8fbwf-eaDkYCHuyuwrJkUw2NkGsJzgKdCkTBjdRJdMK681p_3EwKXZmOrEvof9TAkdx9hGK0a1Li04SFFvRsZd1JzHDFdhq33Clgs8m1DIfGRO8a-9lg717heTVBV-W42yMb4SrHucERZEr4SscoNNDlVJmMhiaf2nDOYqvR9zexcYgSLqFLPSLHEXozlpyylH0i2J8x3eidhTQCJP-7b"/>
+<span class="absolute top-2 right-2 bg-secondary text-on-secondary font-label-bold text-[10px] px-2 py-0.5 rounded-full uppercase">Em Estoque</span>
+</div>
+<div class="p-4">
+<div class="flex justify-between items-start mb-2">
+<div>
+<p class="font-label-bold text-label-bold text-on-tertiary-container uppercase mb-1">Eletrônicos</p>
+<h3 class="font-title-sm text-title-sm text-primary">SmartWatch Valley Pro v2</h3>
+</div>
+<button class="text-on-surface-variant hover:text-primary">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<p class="font-mono-sm text-mono-sm text-on-surface-variant mb-4">SKU: WCH-PRO-2024</p>
+<div class="flex items-center justify-between pt-4 border-t border-outline-variant">
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant">Preço Venda</p>
+<p class="font-title-sm text-title-sm text-primary">R$ 1.299,00</p>
+</div>
+<div class="text-right">
+<p class="font-label-md text-label-md text-on-surface-variant">Estoque</p>
+<p class="font-title-sm text-title-sm text-secondary">142 un</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Product Card 2 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden hover:shadow-md transition-shadow group">
+<div class="aspect-video relative overflow-hidden bg-surface-container">
+<img alt="Fone de Ouvido" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Close-up of premium black over-ear noise-cancelling headphones placed on a minimalist wooden desk. Soft natural light flows from a window, creating subtle highlights on the matte finish. High-end product photography for a corporate tech brand. The mood is focused and sophisticated, reflecting quality and efficiency." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrT_6k3GXB7hAlmlhbjF095FtmMVa2hWnNW76uQTYF8wSUXMSxeaZzbfbFBglVwwnV4p0tZNUiOiCMZaz2eYnSTh2Z7d1eob6f28dPSGLKSI6FVOlN25-JPmiWEeJIG6JKabmr6QHU1OW5n-1koRNucnDjd5OnqIbqUs25MxIF1Si2tfVTtz1qdZmOgmTUpwr6fmUjhAmPBv9LWsSi0zyq6XBV1rEVGSG2rBDrCJXS30fPbhmol3r5-T09Xs6qCuodO2VWHgBvFrKj"/>
+<span class="absolute top-2 right-2 bg-error text-on-error font-label-bold text-[10px] px-2 py-0.5 rounded-full uppercase">Estoque Crítico</span>
+</div>
+<div class="p-4">
+<div class="flex justify-between items-start mb-2">
+<div>
+<p class="font-label-bold text-label-bold text-on-tertiary-container uppercase mb-1">Eletrônicos</p>
+<h3 class="font-title-sm text-title-sm text-primary">Headset Noise Cancel Max</h3>
+</div>
+<button class="text-on-surface-variant hover:text-primary">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<p class="font-mono-sm text-mono-sm text-on-surface-variant mb-4">SKU: HDS-MAX-449</p>
+<div class="flex items-center justify-between pt-4 border-t border-outline-variant">
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant">Preço Venda</p>
+<p class="font-title-sm text-title-sm text-primary">R$ 849,00</p>
+</div>
+<div class="text-right">
+<p class="font-label-md text-label-md text-on-surface-variant">Estoque</p>
+<p class="font-title-sm text-title-sm text-error">5 un</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Product Card 3 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden hover:shadow-md transition-shadow group">
+<div class="aspect-video relative overflow-hidden bg-surface-container">
+<img alt="Tênis Running" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="A pair of modern black and white running sneakers floating in a minimalist white void. Sharp studio lighting creates crisp shadows below the shoes. The style is dynamic and athletic, utilizing a clean high-contrast palette. Ideal for a retail inventory system showing performance apparel. The vibe is energetic and modern." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAYeH87a8JrOAAmIqVEbsJocFiihq0x6dokmMyfciqr-NTpdNgHGRWoHoDf1rKiUjDsozylUoyfgaQ-ZNGaBNrcjF9SysVuxyp0J6tkpKqgZoMqBx4g8b6ZRl9CI4tGrhe4HvnO5BJv1-L6lhopxlc91j4wXB19TIC5F9TjxTUSanKMXRlyiSOlsVbhcLX5O4Us0bwOO0VhKTyH7YvtzaxLKn0NRYkXl_TGrcVHVT8zcyngEhKHFtD_a_7QUbTdPA49bCDKQeA0OoCU"/>
+<span class="absolute top-2 right-2 bg-secondary text-on-secondary font-label-bold text-[10px] px-2 py-0.5 rounded-full uppercase">Em Estoque</span>
+</div>
+<div class="p-4">
+<div class="flex justify-between items-start mb-2">
+<div>
+<p class="font-label-bold text-label-bold text-on-tertiary-container uppercase mb-1">Vestuário</p>
+<h3 class="font-title-sm text-title-sm text-primary">Tênis Performance Run X</h3>
+</div>
+<button class="text-on-surface-variant hover:text-primary">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<p class="font-mono-sm text-mono-sm text-on-surface-variant mb-4">SKU: SHO-RNX-202</p>
+<div class="flex items-center justify-between pt-4 border-t border-outline-variant">
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant">Preço Venda</p>
+<p class="font-title-sm text-title-sm text-primary">R$ 429,90</p>
+</div>
+<div class="text-right">
+<p class="font-label-md text-label-md text-on-surface-variant">Estoque</p>
+<p class="font-title-sm text-title-sm text-secondary">58 un</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Product Card 4 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden hover:shadow-md transition-shadow group">
+<div class="aspect-video relative overflow-hidden bg-surface-container">
+<img alt="Relógio Clássico" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Luxury analog wristwatch with a leather strap resting on a dark velvet cushion. Subtle spotlighting creates dramatic highlights on the watch face and glass. The aesthetic is prestigious and timeless, with deep shadows and warm leather tones. A premium product listing for an upscale ERP retail system. Elegant and authoritative lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBGmyKklrmO3rqhplTDYzGe0WF5yawz2nBvztx8hE0Z8TPl30OqpPVG8SnxI_VOkcczmPeau4ZtFAjCCgFYvBJ7P91GT6UKgl31Mznf_fb6zYQq8_zjg7X6aFGFP1Q7ckVrVRR8PJ8jpT7KB32Gslqo2L609yO6zf81YgHgsE8oFv4vFWR3wb-hzLeU_QBlM6V5TTHXX-7ETPSSs2rGv_6VkEMTBDqOpYDBBPVe_TlrhKM8H6rAFbH9dwayZtXwIxLLihVjR32ZNckr"/>
+<span class="absolute top-2 right-2 bg-on-surface-variant text-on-surface font-label-bold text-[10px] px-2 py-0.5 rounded-full uppercase">Inativo</span>
+</div>
+<div class="p-4">
+<div class="flex justify-between items-start mb-2">
+<div>
+<p class="font-label-bold text-label-bold text-on-tertiary-container uppercase mb-1">Acessórios</p>
+<h3 class="font-title-sm text-title-sm text-primary">Relógio Classic Executive</h3>
+</div>
+<button class="text-on-surface-variant hover:text-primary">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<p class="font-mono-sm text-mono-sm text-on-surface-variant mb-4">SKU: ACC-CLS-110</p>
+<div class="flex items-center justify-between pt-4 border-t border-outline-variant">
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant">Preço Venda</p>
+<p class="font-title-sm text-title-sm text-primary">R$ 2.450,00</p>
+</div>
+<div class="text-right">
+<p class="font-label-md text-label-md text-on-surface-variant">Estoque</p>
+<p class="font-title-sm text-title-sm text-on-surface-variant">0 un</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Pagination -->
+<div class="flex items-center justify-between border-t border-outline-variant py-4">
+<p class="font-label-md text-label-md text-on-surface-variant">Mostrando 1-12 de 1.248 produtos</p>
+<div class="flex items-center gap-1">
+<button class="w-8 h-8 flex items-center justify-center border border-outline-variant rounded hover:bg-surface-container-high transition-colors text-on-surface">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center bg-primary text-on-primary rounded font-label-md text-label-md">1</button>
+<button class="w-8 h-8 flex items-center justify-center border border-outline-variant rounded hover:bg-surface-container-high transition-colors text-on-surface font-label-md text-label-md">2</button>
+<button class="w-8 h-8 flex items-center justify-center border border-outline-variant rounded hover:bg-surface-container-high transition-colors text-on-surface font-label-md text-label-md">3</button>
+<span class="px-2 text-on-surface-variant">...</span>
+<button class="w-8 h-8 flex items-center justify-center border border-outline-variant rounded hover:bg-surface-container-high transition-colors text-on-surface font-label-md text-label-md">104</button>
+<button class="w-8 h-8 flex items-center justify-center border border-outline-variant rounded hover:bg-surface-container-high transition-colors text-on-surface">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+</main>
+</div>
+<!-- Footer -->
+<footer class="bg-surface-container w-full mt-auto py-4 border-t border-outline-variant">
+<div class="flex justify-between items-center px-gutter w-full max-w-[1600px] mx-auto md:ml-60">
+<p class="font-body-sm text-body-sm text-on-surface-variant">© 2024 Valley ERP. Todos os direitos reservados.</p>
+<div class="flex items-center gap-6">
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Termos de Uso</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Privacidade</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Suporte Técnico</a>
+</div>
+</div>
+</footer>
+</body></html>

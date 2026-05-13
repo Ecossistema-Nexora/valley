@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary": "#006c49",
+                    "on-background": "#1b1b1d",
+                    "primary": "#000000",
+                    "on-primary": "#ffffff",
+                    "surface-bright": "#fcf8fa",
+                    "on-surface-variant": "#45464d",
+                    "surface-container": "#f0edef",
+                    "on-error": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "primary-container": "#131b2e",
+                    "on-tertiary-container": "#3980f4",
+                    "inverse-on-surface": "#f3f0f2",
+                    "on-tertiary-fixed-variant": "#004395",
+                    "secondary-container": "#6cf8bb",
+                    "error-container": "#ffdad6",
+                    "error": "#ba1a1a",
+                    "primary-fixed-dim": "#bec6e0",
+                    "on-primary-container": "#7c839b",
+                    "on-primary-fixed-variant": "#3f465c",
+                    "tertiary-fixed-dim": "#adc6ff",
+                    "surface-container-high": "#eae7e9",
+                    "background": "#fcf8fa",
+                    "on-tertiary": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "inverse-surface": "#303032",
+                    "outline": "#76777d",
+                    "surface-tint": "#565e74",
+                    "outline-variant": "#c6c6cd",
+                    "on-surface": "#1b1b1d",
+                    "primary-fixed": "#dae2fd",
+                    "surface-dim": "#dcd9db",
+                    "secondary-fixed": "#6ffbbe",
+                    "on-secondary-fixed": "#002113",
+                    "tertiary-container": "#001a42",
+                    "on-primary-fixed": "#131b2e",
+                    "inverse-primary": "#bec6e0",
+                    "tertiary": "#000000",
+                    "surface-container-highest": "#e4e2e4",
+                    "surface-variant": "#e4e2e4",
+                    "tertiary-fixed": "#d8e2ff",
+                    "on-secondary-container": "#00714d",
+                    "surface": "#fcf8fa",
+                    "surface-container-low": "#f6f3f5",
+                    "secondary-fixed-dim": "#4edea3",
+                    "on-tertiary-fixed": "#001a42",
+                    "on-secondary-fixed-variant": "#005236"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "container-padding": "1.5rem",
+                    "gutter": "1rem",
+                    "unit": "4px",
+                    "max-width": "1600px",
+                    "dense-gap": "0.5rem"
+            },
+            "fontFamily": {
+                    "label-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "title-sm": ["Inter"],
+                    "mono-sm": ["JetBrains Mono"],
+                    "headline-md": ["Inter"],
+                    "body-md": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "label-bold": ["Inter"]
+            },
+            "fontSize": {
+                    "label-md": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "display-lg": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "title-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "mono-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                    "label-bold": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #fcf8fa;
+            color: #1b1b1d;
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .scroll-hide::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col">
+<!-- TopNavBar (Mobile Execution) -->
+<header class="bg-primary-container text-on-primary-container h-14 flex items-center px-container-padding sticky top-0 z-50">
+<div class="flex items-center gap-4 w-full">
+<button class="p-2 -ml-2 text-on-primary-container">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="font-title-sm text-title-sm font-bold text-on-primary flex-1">Configurações de Segurança</h1>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-primary-container">notifications</span>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant">
+<img alt="User profile avatar" data-alt="A professional close-up portrait of a young male corporate executive with a friendly expression. The lighting is soft and studio-quality, emphasizing a modern light-mode aesthetic. Background is a neutral, clean office interior with subtle blurs. The color palette is composed of soft greys, whites, and corporate blues, matching a high-end enterprise interface style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDw0aqPbSNgxcnSA3wdpBTTt2m0M3n_arECsq6VeUMJEdkdqwh6z5IxAmwGcFMQGvJMd77DPBJ0myOMjzoOp5bzZ3s7ZEKTCTBUWYbpwkMO6RddUXOM2cVayF6rVtbCgNS_jcLPM5VoRlDQ9k5j0iW70XYRVBy5rx1A-saR-07tC11UIX9jWSvz1Dvy7t33X3dQuoK7UpItUAwZqLcXx3bQXWD1ruzqyL6qSrAFKQqDns_jh14naWJpjfcqGHVCBeRfuluL9W-pYWv8"/>
+</div>
+</div>
+</div>
+</header>
+<main class="flex-1 max-w-max-width mx-auto w-full px-container-padding py-gutter space-y-6">
+<!-- Status MFA Section -->
+<section class="bg-surface-container-lowest border border-outline-variant p-4 rounded-xl">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-secondary-container text-on-secondary-container rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined">verified_user</span>
+</div>
+<div>
+<h2 class="font-title-sm text-title-sm">Status do MFA</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Proteção de conta ativa</p>
+</div>
+</div>
+<span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full font-label-md text-label-md uppercase tracking-wider">Ativado</span>
+</div>
+<div class="bg-surface-container p-3 rounded-lg flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary">check_circle</span>
+<span class="font-body-sm text-body-sm">Autenticador Valley Configurado</span>
+</div>
+</section>
+<!-- Troca de Senha / Action Cards Grid -->
+<div class="grid grid-cols-1 gap-4">
+<button class="bg-surface border border-outline-variant p-4 rounded-xl flex items-center justify-between hover:bg-surface-container-low transition-colors text-left">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant">lock_reset</span>
+<div>
+<span class="block font-title-sm text-title-sm">Alterar Senha</span>
+<span class="block font-body-sm text-body-sm text-on-surface-variant">Última alteração há 45 dias</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline">chevron_right</span>
+</button>
+<button class="bg-surface border border-outline-variant p-4 rounded-xl flex items-center justify-between hover:bg-surface-container-low transition-colors text-left">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant">passkey</span>
+<div>
+<span class="block font-title-sm text-title-sm">Chaves de Acesso</span>
+<span class="block font-body-sm text-body-sm text-on-surface-variant">Biometria e chaves FIDO</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline">chevron_right</span>
+</button>
+</div>
+<!-- Dispositivos Conectados -->
+<section>
+<div class="flex items-center justify-between mb-3 px-1">
+<h3 class="font-title-sm text-title-sm">Dispositivos Conectados</h3>
+<button class="font-label-md text-label-md text-on-tertiary-container uppercase font-bold tracking-tight">Ver Todos</button>
+</div>
+<div class="space-y-3">
+<!-- Device 1 (Current) -->
+<div class="bg-surface-container-lowest border border-outline-variant p-4 rounded-xl">
+<div class="flex items-start justify-between">
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-on-surface-variant text-[32px]">smartphone</span>
+<div>
+<h4 class="font-title-sm text-title-sm">iPhone 15 Pro</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">São Paulo, BR • Ativo agora</p>
+<span class="inline-block mt-2 font-mono-sm text-mono-sm text-secondary bg-secondary-container/20 px-2 py-0.5 rounded">Este dispositivo</span>
+</div>
+</div>
+<button class="text-on-surface-variant p-1">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Device 2 -->
+<div class="bg-surface border border-outline-variant p-4 rounded-xl opacity-80">
+<div class="flex items-start justify-between">
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-on-surface-variant text-[32px]">laptop_mac</span>
+<div>
+<h4 class="font-title-sm text-title-sm">MacBook Pro M2</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Curitiba, BR • Ontem, 14:20</p>
+</div>
+</div>
+<button class="text-on-surface-variant p-1">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Histórico de Acesso Simplificado -->
+<section>
+<h3 class="font-title-sm text-title-sm mb-3 px-1">Logs de Acesso Recentes</h3>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl divide-y divide-outline-variant">
+<div class="p-4 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-2 h-2 rounded-full bg-secondary"></div>
+<div>
+<p class="font-body-sm text-body-sm font-bold">Login bem-sucedido</p>
+<p class="font-mono-sm text-mono-sm text-on-surface-variant">Hoje, 09:12 • 172.16.0.42</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline text-[20px]">info</span>
+</div>
+<div class="p-4 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-2 h-2 rounded-full bg-error"></div>
+<div>
+<p class="font-body-sm text-body-sm font-bold">Falha na senha</p>
+<p class="font-mono-sm text-mono-sm text-on-surface-variant">Ontem, 23:45 • 187.21.4.11</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-error text-[20px]">warning</span>
+</div>
+<div class="p-4 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-2 h-2 rounded-full bg-on-tertiary-container"></div>
+<div>
+<p class="font-body-sm text-body-sm font-bold">MFA Validado</p>
+<p class="font-mono-sm text-mono-sm text-on-surface-variant">Ontem, 08:30 • 172.16.0.42</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline text-[20px]">info</span>
+</div>
+</div>
+<button class="w-full mt-4 py-3 border border-outline-variant rounded-xl font-label-md text-label-md text-on-surface hover:bg-surface-container-low transition-colors uppercase tracking-widest font-bold">Ver Auditoria Completa</button>
+</section>
+<!-- Footer Info -->
+<footer class="pt-8 pb-12 text-center space-y-2">
+<p class="font-body-sm text-body-sm text-on-surface-variant opacity-60 italic">Última verificação de segurança: 12 Out 2024</p>
+<div class="flex justify-center gap-6">
+<a class="font-label-md text-label-md text-on-surface-variant underline" href="#">Políticas</a>
+<a class="font-label-md text-label-md text-on-surface-variant underline" href="#">Suporte</a>
+</div>
+</footer>
+</main>
+<!-- BottomNavBar (Mobile Platform Pivot) -->
+<nav class="bg-surface border-t border-outline-variant h-16 flex items-center justify-around sticky bottom-0 z-50 md:hidden">
+<div class="flex flex-col items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-[10px] uppercase mt-1">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-label-md text-[10px] uppercase mt-1">Finance</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">storefront</span>
+<span class="font-label-md text-[10px] uppercase mt-1">Portal</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container px-4 py-1 rounded-xl">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">settings</span>
+<span class="font-label-md text-[10px] uppercase mt-1 font-bold">Ajustes</span>
+</div>
+</nav>
+</body></html>

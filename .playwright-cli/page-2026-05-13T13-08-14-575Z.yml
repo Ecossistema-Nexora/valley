@@ -1,0 +1,2555 @@
+- generic [active] [ref=e1]:
+  - link "Ir para o painel" [ref=e2] [cursor=pointer]:
+    - /url: "#mainContent"
+  - generic [ref=e3]:
+    - region "Navegacao global dos paineis" [ref=e4]:
+      - generic [ref=e5]:
+        - generic [ref=e6]:
+          - paragraph [ref=e7]: Menu
+          - heading "Admin e lojista" [level=2] [ref=e8]
+        - navigation "Navegacao principal" [ref=e9]:
+          - link "STOCK" [ref=e10] [cursor=pointer]:
+            - /url: "#stockIntegrations"
+          - link "Operacao" [ref=e11] [cursor=pointer]:
+            - /url: "#adminLaunchpadSection"
+          - link "Stitch P0" [ref=e12] [cursor=pointer]:
+            - /url: "#stitchP0ExecutionSection"
+          - link "Financeiro" [ref=e13] [cursor=pointer]:
+            - /url: "#financialDashboard"
+          - link "ERP Lojista" [ref=e14] [cursor=pointer]:
+            - /url: "#merchantErpSection"
+          - link "Desempenho" [ref=e15] [cursor=pointer]:
+            - /url: "#performanceDashboard"
+          - link "Importados" [ref=e16] [cursor=pointer]:
+            - /url: "#importedPricingSection"
+          - link "Revisao" [ref=e17] [cursor=pointer]:
+            - /url: "#publicationReviewSection"
+          - link "Modulos" [ref=e18] [cursor=pointer]:
+            - /url: "#modulesWorkspace"
+          - link "Configuracoes" [ref=e19] [cursor=pointer]:
+            - /url: "#settingsSection"
+      - generic [ref=e20]:
+        - generic [ref=e21]:
+          - paragraph [ref=e22]: Acesso
+          - heading "Dominios e subdominios" [level=2] [ref=e23]
+        - generic [ref=e270]:
+          - article [ref=e1296]:
+            - generic [ref=e1297]: Portal oficial
+            - code [ref=e1298]: https://brasildesconto.com.br/
+            - link "Abrir" [ref=e1300] [cursor=pointer]:
+              - /url: https://brasildesconto.com.br/
+          - article [ref=e1301]:
+            - generic [ref=e1302]: Painel admin
+            - code [ref=e1303]: https://admin.brasildesconto.com.br
+            - link "Abrir" [ref=e1305] [cursor=pointer]:
+              - /url: https://admin.brasildesconto.com.br
+          - article [ref=e1306]:
+            - generic [ref=e1307]: ERP lojista
+            - code [ref=e1308]: https://erp-lojista.brasildesconto.com.br/
+            - link "Abrir" [ref=e1310] [cursor=pointer]:
+              - /url: https://erp-lojista.brasildesconto.com.br/
+          - article [ref=e1311]:
+            - generic [ref=e1312]: Login lojista
+            - code [ref=e1313]: https://lojista.brasildesconto.com.br/
+            - link "Abrir" [ref=e1315] [cursor=pointer]:
+              - /url: https://lojista.brasildesconto.com.br/
+          - article [ref=e1316]:
+            - generic [ref=e1317]: PDV lojista
+            - code [ref=e1318]: https://pdv-lojista.brasildesconto.com.br/
+            - link "Abrir" [ref=e1320] [cursor=pointer]:
+              - /url: https://pdv-lojista.brasildesconto.com.br/
+          - article [ref=e1321]:
+            - generic [ref=e1322]: Loja publica
+            - code [ref=e1323]: https://brasildesconto.com.br
+            - link "Abrir" [ref=e1325] [cursor=pointer]:
+              - /url: https://brasildesconto.com.br
+    - banner [ref=e24]:
+      - generic [ref=e25]:
+        - generic "Valley" [ref=e26]:
+          - img "Logomarca oficial Valley" [ref=e27]
+          - generic [ref=e28]:
+            - paragraph [ref=e29]: Valley
+            - paragraph [ref=e30]: Super App Production Panel
+        - paragraph [ref=e31]: Valley Release Mode
+        - heading "Painel de producao para 47 modulos" [level=1] [ref=e32]
+        - paragraph [ref=e33]: Supervisao executiva, gestao comercial e leitura operacional em uma unica superficie. O painel cruza modulos, contratos, catalogo, checkout, lojistas, usuarios e exposicao publica Cloudflare.
+        - generic [ref=e301]:
+          - generic [ref=e302]: modo producao
+          - generic [ref=e303]: 47 modulos visiveis
+          - generic [ref=e304]: 67% prontidao media
+          - generic [ref=e305]: 0 modulos completos
+          - generic [ref=e306]: 13 trilhas hibridas
+          - generic [ref=e307]: 0 ainda planejados
+          - generic [ref=e308]: publico online
+          - generic [ref=e309]: 0 alertas operacionais
+        - generic [ref=e310]:
+          - article [ref=e311]:
+            - generic [ref=e312]: P
+            - strong [ref=e313]: Painel STOCK
+            - generic [ref=e314]: Catalogo, operacao do modulo STOCK e leitura de integracoes do produto.
+          - article [ref=e315]:
+            - generic [ref=e316]: D
+            - strong [ref=e317]: Dropshipping
+            - generic [ref=e318]: Produtos importados, categorias, margem e disputa entre fornecedores.
+          - article [ref=e319]:
+            - generic [ref=e320]: M
+            - strong [ref=e321]: Marketplace
+            - generic [ref=e322]: Apps, webhooks, seller IDs e escopos por marketplace.
+          - article [ref=e323]:
+            - generic [ref=e324]: R
+            - strong [ref=e325]: Revisao
+            - generic [ref=e326]: Fila exclusiva para nao publicados e revisao comercial com motivo.
+      - generic [ref=e34]:
+        - region "Preview do painel em desktop e mobile" [ref=e35]:
+          - generic [ref=e36]: PRODUCAO ATIVA
+          - generic [ref=e37]:
+            - generic [ref=e38]:
+              - generic [ref=e39]:
+                - generic [ref=e40]: Valley Admin
+                - generic [ref=e41]:
+                  - generic [ref=e42]: Produção
+                  - generic [ref=e43]: Checkout
+                  - generic [ref=e44]: Stock
+              - generic [ref=e328]:
+                - generic [ref=e329]:
+                  - strong [ref=e330]: Bem-vindo ao Valley Admin
+                  - generic [ref=e331]:
+                    - generic [ref=e332]: Financeiro
+                    - generic [ref=e333]: Estoque
+                    - generic [ref=e334]: Checkout
+                - generic [ref=e335]:
+                  - generic [ref=e338]: STOCK
+                  - generic [ref=e341]: Dropshipping
+                  - generic [ref=e344]: Marketplace
+                  - generic [ref=e347]: Revisao
+                  - generic [ref=e350]: Financeiro
+                  - generic [ref=e353]: Lojistas
+                  - generic [ref=e356]: Usuarios
+                - generic [ref=e357]:
+                  - article [ref=e358]:
+                    - generic [ref=e359]: P
+                    - strong [ref=e360]: STOCK
+                    - generic [ref=e361]: Catalogo, operacao do modulo STOCK e leitura de integracoes do produto
+                  - article [ref=e362]:
+                    - generic [ref=e363]: D
+                    - strong [ref=e364]: Dropshipping
+                    - generic [ref=e365]: Produtos importados, categorias, margem e disputa entre fornecedores
+                  - article [ref=e366]:
+                    - generic [ref=e367]: M
+                    - strong [ref=e368]: Marketplace
+                    - generic [ref=e369]: Apps, webhooks, seller IDs e escopos por marketplace
+                  - article [ref=e370]:
+                    - generic [ref=e371]: R
+                    - strong [ref=e372]: Revisao
+                    - generic [ref=e373]: Fila exclusiva para nao publicados e revisao comercial com motivo
+                  - article [ref=e374]:
+                    - generic [ref=e375]: F
+                    - strong [ref=e376]: Financeiro
+                    - generic [ref=e377]: Receita projetada, margens, fees e leitura financeira do catalogo
+                  - article [ref=e378]:
+                    - generic [ref=e379]: L
+                    - strong [ref=e380]: Lojistas
+                    - generic [ref=e381]: Cadastro e operacao de sellers, parceiros e workspace institucional
+                - generic [ref=e382]:
+                  - generic [ref=e384]: Receita vs. Operacao
+                  - generic [ref=e392]:
+                    - generic [ref=e393]: Fila rapida
+                    - generic [ref=e394]:
+                      - generic [ref=e395]: Revisao
+                      - emphasis [ref=e396]: "124"
+                    - generic [ref=e397]:
+                      - generic [ref=e398]: Integracoes
+                      - emphasis [ref=e399]: "07"
+                    - generic [ref=e400]:
+                      - generic [ref=e401]: Usuarios
+                      - emphasis [ref=e402]: 2.4k
+            - generic [ref=e48]:
+              - generic [ref=e49]:
+                - strong [ref=e50]: Valley
+                - generic [ref=e51]: Admin
+              - generic [ref=e52]:
+                - article [ref=e403]:
+                  - generic [ref=e404]: P
+                  - generic [ref=e405]: STOCK
+                - article [ref=e406]:
+                  - generic [ref=e407]: D
+                  - generic [ref=e408]: Dropshipping
+                - article [ref=e409]:
+                  - generic [ref=e410]: M
+                  - generic [ref=e411]: Marketplace
+                - article [ref=e412]:
+                  - generic [ref=e413]: R
+                  - generic [ref=e414]: Revisao
+                - article [ref=e415]:
+                  - generic [ref=e416]: F
+                  - generic [ref=e417]: Financeiro
+                - article [ref=e418]:
+                  - generic [ref=e419]: L
+                  - generic [ref=e420]: Lojistas
+        - generic [ref=e53]:
+          - paragraph [ref=e54]: Control Fabric
+          - heading "Valley Omniverse V47 - Registro Canonico de Modulos" [level=2] [ref=e421]
+          - paragraph [ref=e56]: "Fonte: Esquema Consolidado do Valley Omniverse v47.pdf | Linguagem: pt-BR simples com termos tecnicos em ingles quando forem padroes"
+          - generic [ref=e57]:
+            - generic [ref=e58]:
+              - generic [ref=e59]: Console
+              - strong [ref=e60]: 13/05/2026, 08:48
+            - generic [ref=e61]:
+              - generic [ref=e62]: Saude operacional
+              - strong [ref=e63]: 0 pendencias no ultimo status
+        - generic [ref=e64]:
+          - generic [ref=e66]:
+            - paragraph [ref=e67]: Ações
+            - heading "Ações operacionais" [level=2] [ref=e68]
+          - generic [ref=e422]:
+            - article [ref=e423]:
+              - generic [ref=e424]:
+                - strong [ref=e425]: Abrir painel ativo
+                - text: Nucleo Admin
+              - generic [ref=e426]:
+                - link "Abrir" [ref=e427] [cursor=pointer]:
+                  - /url: https://admin.brasildesconto.com.br/
+                - button "Copiar link" [ref=e428] [cursor=pointer]
+            - article [ref=e429]:
+              - generic [ref=e430]:
+                - strong [ref=e431]: Abrir ERP lojista
+                - text: Gestao comercial, PDV, estoque e financeiro
+              - generic [ref=e432]:
+                - link "Abrir" [ref=e433] [cursor=pointer]:
+                  - /url: https://erp-lojista.brasildesconto.com.br/
+                - button "Copiar link" [ref=e434] [cursor=pointer]
+            - article [ref=e435]:
+              - generic [ref=e436]:
+                - strong [ref=e437]: Abrir catalogo
+                - text: Produtos, pricing e revisao comercial
+              - generic [ref=e438]:
+                - link "Abrir" [ref=e439] [cursor=pointer]:
+                  - /url: "#importedPricingSection"
+                - button "Copiar link" [ref=e440] [cursor=pointer]
+            - article [ref=e441]:
+              - generic [ref=e442]:
+                - strong [ref=e443]: Abrir integracoes
+                - text: Marketplaces, fornecedores e conectores
+              - generic [ref=e444]:
+                - link "Abrir" [ref=e445] [cursor=pointer]:
+                  - /url: "#settingsSection"
+                - button "Copiar link" [ref=e446] [cursor=pointer]
+    - main [ref=e69]:
+      - region "Abas do painel admin" [ref=e70]:
+        - generic [ref=e71]:
+          - generic [ref=e72]:
+            - paragraph [ref=e73]: Admin surfaces
+            - heading "Abas operacionais do painel" [level=2] [ref=e74]
+          - paragraph [ref=e75]: Cada frente do admin fica isolada em uma aba real para reduzir mistura entre operação, catálogo, finanças e módulos.
+        - tablist "Abas do painel admin" [ref=e447]:
+          - tab "Visao geral Home enxuta com botoes para areas e modulos independentes." [ref=e6180] [cursor=pointer]:
+            - strong [ref=e6181]: Visao geral
+            - generic [ref=e6182]: Home enxuta com botoes para areas e modulos independentes.
+          - tab "Stitch P0 Admin Central e ERP Lojista convertidos para operacao real." [ref=e6183] [cursor=pointer]:
+            - strong [ref=e6184]: Stitch P0
+            - generic [ref=e6185]: Admin Central e ERP Lojista convertidos para operacao real.
+          - tab "ERP Lojista Marketplace, PDV, armazem, financeiro e backoffice do lojista." [ref=e6186] [cursor=pointer]:
+            - strong [ref=e6187]: ERP Lojista
+            - generic [ref=e6188]: Marketplace, PDV, armazem, financeiro e backoffice do lojista.
+          - tab "Financeiro Receita, checkout e sinais de monetizacao." [ref=e6189] [cursor=pointer]:
+            - strong [ref=e6190]: Financeiro
+            - generic [ref=e6191]: Receita, checkout e sinais de monetizacao.
+          - tab "Desempenho Resultados por modulo e inteligencia do STOCK." [ref=e6192] [cursor=pointer]:
+            - strong [ref=e6193]: Desempenho
+            - generic [ref=e6194]: Resultados por modulo e inteligencia do STOCK.
+          - tab "Integracoes APIs, fornecedores e playbooks de ativacao." [selected] [ref=e6195] [cursor=pointer]:
+            - strong [ref=e6196]: Integracoes
+            - generic [ref=e6197]: APIs, fornecedores e playbooks de ativacao.
+          - tab "Catalogo Importados, pricing e fila de publicacao." [ref=e6198] [cursor=pointer]:
+            - strong [ref=e6199]: Catalogo
+            - generic [ref=e6200]: Importados, pricing e fila de publicacao.
+          - tab "Modulos Lista, filtros e cockpit detalhado por modulo." [ref=e6201] [cursor=pointer]:
+            - strong [ref=e6202]: Modulos
+            - generic [ref=e6203]: Lista, filtros e cockpit detalhado por modulo.
+      - region "Integracoes de marketplaces" [ref=e165]:
+        - generic [ref=e166]:
+          - generic [ref=e167]:
+            - paragraph [ref=e168]: Commerce APIs
+            - heading "Central de integracoes de dropshipping" [level=2] [ref=e169]
+          - paragraph [ref=e170]: Cockpit operacional para credenciais, webhooks, escopos, sincronizacao e prontidao por fornecedor.
+        - generic [ref=e6204]:
+          - article [ref=e6205]:
+            - text: Fornecedores
+            - strong [ref=e6206]: "7"
+            - text: base ativa do cockpit dropshipping
+          - article [ref=e6207]:
+            - text: Conectores ativos
+            - strong [ref=e6208]: "7"
+            - text: 7 em producao
+          - article [ref=e6209]:
+            - text: Stock ativo
+            - strong [ref=e6210]: "7"
+            - text: 3 com pendencia externa
+          - article [ref=e6211]:
+            - text: Prontidao media
+            - strong [ref=e6212]: 78%
+            - text: credenciais, tokens e webhooks
+          - article [ref=e6213]:
+            - text: Fallbacks
+            - strong [ref=e6214]: "0"
+            - text: sem rota paralela aberta
+        - generic [ref=e6215]:
+          - article [ref=e6216]:
+            - generic [ref=e6217]:
+              - generic [ref=e6218]:
+                - heading "Mercado Livre" [level=3] [ref=e6219]
+                - paragraph [ref=e6220]: Fechar lacunas de credencial restantes para evitar rota parcial em produção.
+              - generic [ref=e6221]:
+                - generic [ref=e6222]: producao
+                - generic [ref=e6223]: em homologacao
+                - generic [ref=e6224]: benchmark_ready
+            - generic [ref=e6227]:
+              - article [ref=e6228]:
+                - text: Credenciais
+                - strong [ref=e6229]: 10/11
+                - text: campos operacionais preenchidos
+              - article [ref=e6230]:
+                - text: Sync
+                - strong [ref=e6231]: 3/4
+                - text: catalogo, pedidos, estoque, preco
+              - article [ref=e6232]:
+                - text: Cadencia
+                - strong [ref=e6233]: 30 min
+                - text: cache 20 min
+              - article [ref=e6234]:
+                - text: Margem piso
+                - strong [ref=e6235]: 12%
+                - text: seller 273569456
+              - article [ref=e6236]:
+                - text: Modos
+                - strong [ref=e6237]: sandbox / prod
+                - text: categorias importadas
+            - generic [ref=e6238]:
+              - generic [ref=e6239]:
+                - generic [ref=e6240]: Cobertura operacional
+                - generic [ref=e6241]:
+                  - generic [ref=e6242]: Stock on
+                  - generic [ref=e6243]: Catalogo off
+                  - generic [ref=e6244]: Categorias on
+                  - generic [ref=e6245]: Pedidos on
+                  - generic [ref=e6246]: Estoque on
+                  - generic [ref=e6247]: Preco on
+                  - generic [ref=e6248]: Sandbox on
+                  - generic [ref=e6249]: Prod on
+                  - generic [ref=e6250]: Regra varejo
+                  - generic [ref=e6251]: Liquidez on
+                  - generic [ref=e6252]: Sem scraping
+                  - generic [ref=e6253]: IA externa bloqueada
+              - generic [ref=e6254]:
+                - generic [ref=e6255]: Checklist de credenciais
+                - generic [ref=e6256]:
+                  - generic [ref=e6257]:
+                    - generic [ref=e6258]: OK
+                    - generic [ref=e6259]: Base URL
+                  - generic [ref=e6260]:
+                    - generic [ref=e6261]: OK
+                    - generic [ref=e6262]: Client/App
+                  - generic [ref=e6263]:
+                    - generic [ref=e6264]: OK
+                    - generic [ref=e6265]: Secret ref
+                  - generic [ref=e6266]:
+                    - generic [ref=e6267]: OK
+                    - generic [ref=e6268]: Redirect URI
+                  - generic [ref=e6269]:
+                    - generic [ref=e6270]: OK
+                    - generic [ref=e6271]: Seller/Store
+                  - generic [ref=e6272]:
+                    - generic [ref=e6273]: OK
+                    - generic [ref=e6274]: Tokens
+                  - generic [ref=e6275]:
+                    - generic [ref=e6276]: TODO
+                    - generic [ref=e6277]: Scopes
+                  - generic [ref=e6278]:
+                    - generic [ref=e6279]: OK
+                    - generic [ref=e6280]: Webhook
+                  - generic [ref=e6281]:
+                    - generic [ref=e6282]: OK
+                    - generic [ref=e6283]: Stock ativo
+                  - generic [ref=e6284]:
+                    - generic [ref=e6285]: OK
+                    - generic [ref=e6286]: Sandbox + producao
+                  - generic [ref=e6287]:
+                    - generic [ref=e6288]: OK
+                    - generic [ref=e6289]: Categorias
+              - generic [ref=e6290]:
+                - generic [ref=e6291]: Passos de ativacao
+                - list [ref=e6292]:
+                  - listitem [ref=e6293]: Criar app no Mercado Livre Developers e registrar redirect URI do admin.
+                  - listitem [ref=e6294]: Salvar Client ID, Secret Ref e seller ID no cockpit em ambiente correto.
+                  - listitem [ref=e6295]: Autorizar a conta da loja, persistir access token e refresh token no vault.
+            - generic [ref=e6296]:
+              - generic [ref=e6297]: Evidencias runtime
+              - generic [ref=e6299]: valley-marketplace-oauth-runtime.json
+          - article [ref=e6300]:
+            - generic [ref=e6301]:
+              - generic [ref=e6302]:
+                - heading "Amazon" [level=3] [ref=e6303]
+                - paragraph [ref=e6304]: Publicar credenciais principais no vault e referenciar o segredo no cockpit.
+              - generic [ref=e6305]:
+                - generic [ref=e6306]: producao
+                - generic [ref=e6307]: credencial externa pendente
+                - generic [ref=e6308]: benchmark_auth_pending
+            - generic [ref=e6311]:
+              - article [ref=e6312]:
+                - text: Credenciais
+                - strong [ref=e6313]: 7/11
+                - text: campos operacionais preenchidos
+              - article [ref=e6314]:
+                - text: Sync
+                - strong [ref=e6315]: 3/4
+                - text: catalogo, pedidos, estoque, preco
+              - article [ref=e6316]:
+                - text: Cadencia
+                - strong [ref=e6317]: 30 min
+                - text: cache 20 min
+              - article [ref=e6318]:
+                - text: Margem piso
+                - strong [ref=e6319]: 12%
+                - text: seller ainda ausente
+              - article [ref=e6320]:
+                - text: Modos
+                - strong [ref=e6321]: sandbox / prod
+                - text: categorias importadas
+            - generic [ref=e6322]:
+              - generic [ref=e6323]:
+                - generic [ref=e6324]: Cobertura operacional
+                - generic [ref=e6325]:
+                  - generic [ref=e6326]: Stock on
+                  - generic [ref=e6327]: Catalogo off
+                  - generic [ref=e6328]: Categorias on
+                  - generic [ref=e6329]: Pedidos on
+                  - generic [ref=e6330]: Estoque on
+                  - generic [ref=e6331]: Preco on
+                  - generic [ref=e6332]: Sandbox on
+                  - generic [ref=e6333]: Prod on
+                  - generic [ref=e6334]: Regra varejo
+                  - generic [ref=e6335]: Liquidez on
+                  - generic [ref=e6336]: Sem scraping
+                  - generic [ref=e6337]: IA externa bloqueada
+              - generic [ref=e6338]:
+                - generic [ref=e6339]: Checklist de credenciais
+                - generic [ref=e6340]:
+                  - generic [ref=e6341]:
+                    - generic [ref=e6342]: OK
+                    - generic [ref=e6343]: Base URL
+                  - generic [ref=e6344]:
+                    - generic [ref=e6345]: TODO
+                    - generic [ref=e6346]: Client/App
+                  - generic [ref=e6347]:
+                    - generic [ref=e6348]: OK
+                    - generic [ref=e6349]: Secret ref
+                  - generic [ref=e6350]:
+                    - generic [ref=e6351]: TODO
+                    - generic [ref=e6352]: Redirect URI
+                  - generic [ref=e6353]:
+                    - generic [ref=e6354]: TODO
+                    - generic [ref=e6355]: Seller/Store
+                  - generic [ref=e6356]:
+                    - generic [ref=e6357]: OK
+                    - generic [ref=e6358]: Tokens
+                  - generic [ref=e6359]:
+                    - generic [ref=e6360]: TODO
+                    - generic [ref=e6361]: Scopes
+                  - generic [ref=e6362]:
+                    - generic [ref=e6363]: OK
+                    - generic [ref=e6364]: Webhook
+                  - generic [ref=e6365]:
+                    - generic [ref=e6366]: OK
+                    - generic [ref=e6367]: Stock ativo
+                  - generic [ref=e6368]:
+                    - generic [ref=e6369]: OK
+                    - generic [ref=e6370]: Sandbox + producao
+                  - generic [ref=e6371]:
+                    - generic [ref=e6372]: OK
+                    - generic [ref=e6373]: Categorias
+              - generic [ref=e6374]:
+                - generic [ref=e6375]: Passos de ativacao
+                - list [ref=e6376]:
+                  - listitem [ref=e6377]: Registrar app SP-API, vincular IAM role e gerar credenciais LWA.
+                  - listitem [ref=e6378]: Preencher marketplace BR, seller ID e referencias de segredo no cockpit.
+                  - listitem [ref=e6379]: Cadastrar endpoint de notificacao e mapear scopes de catalogo, pricing, orders e listings.
+            - generic [ref=e6380]:
+              - generic [ref=e6381]: Pendencias externas
+              - generic [ref=e6383]: credentials_or_oauth_token
+          - article [ref=e6384]:
+            - generic [ref=e6385]:
+              - generic [ref=e6386]:
+                - heading "AliExpress" [level=3] [ref=e6387]
+                - paragraph [ref=e6388]: Fechar lacunas de credencial restantes para evitar rota parcial em produção.
+              - generic [ref=e6389]:
+                - generic [ref=e6390]: producao
+                - generic [ref=e6391]: pronto para producao
+                - generic [ref=e6392]: active
+            - generic [ref=e6395]:
+              - article [ref=e6396]:
+                - text: Credenciais
+                - strong [ref=e6397]: 10/11
+                - text: campos operacionais preenchidos
+              - article [ref=e6398]:
+                - text: Sync
+                - strong [ref=e6399]: 4/4
+                - text: catalogo, pedidos, estoque, preco
+              - article [ref=e6400]:
+                - text: Cadencia
+                - strong [ref=e6401]: 30 min
+                - text: cache 20 min
+              - article [ref=e6402]:
+                - text: Margem piso
+                - strong [ref=e6403]: 12%
+                - text: seller 6266338639
+              - article [ref=e6404]:
+                - text: Modos
+                - strong [ref=e6405]: sandbox / prod
+                - text: categorias importadas
+            - generic [ref=e6406]:
+              - generic [ref=e6407]:
+                - generic [ref=e6408]: Cobertura operacional
+                - generic [ref=e6409]:
+                  - generic [ref=e6410]: Stock on
+                  - generic [ref=e6411]: Catalogo on
+                  - generic [ref=e6412]: Categorias on
+                  - generic [ref=e6413]: Pedidos on
+                  - generic [ref=e6414]: Estoque on
+                  - generic [ref=e6415]: Preco on
+                  - generic [ref=e6416]: Sandbox on
+                  - generic [ref=e6417]: Prod on
+                  - generic [ref=e6418]: Regra varejo
+                  - generic [ref=e6419]: Liquidez on
+                  - generic [ref=e6420]: Sem scraping
+                  - generic [ref=e6421]: IA externa bloqueada
+              - generic [ref=e6422]:
+                - generic [ref=e6423]: Checklist de credenciais
+                - generic [ref=e6424]:
+                  - generic [ref=e6425]:
+                    - generic [ref=e6426]: OK
+                    - generic [ref=e6427]: Base URL
+                  - generic [ref=e6428]:
+                    - generic [ref=e6429]: OK
+                    - generic [ref=e6430]: Client/App
+                  - generic [ref=e6431]:
+                    - generic [ref=e6432]: OK
+                    - generic [ref=e6433]: Secret ref
+                  - generic [ref=e6434]:
+                    - generic [ref=e6435]: OK
+                    - generic [ref=e6436]: Redirect URI
+                  - generic [ref=e6437]:
+                    - generic [ref=e6438]: OK
+                    - generic [ref=e6439]: Seller/Store
+                  - generic [ref=e6440]:
+                    - generic [ref=e6441]: OK
+                    - generic [ref=e6442]: Tokens
+                  - generic [ref=e6443]:
+                    - generic [ref=e6444]: TODO
+                    - generic [ref=e6445]: Scopes
+                  - generic [ref=e6446]:
+                    - generic [ref=e6447]: OK
+                    - generic [ref=e6448]: Webhook
+                  - generic [ref=e6449]:
+                    - generic [ref=e6450]: OK
+                    - generic [ref=e6451]: Stock ativo
+                  - generic [ref=e6452]:
+                    - generic [ref=e6453]: OK
+                    - generic [ref=e6454]: Sandbox + producao
+                  - generic [ref=e6455]:
+                    - generic [ref=e6456]: OK
+                    - generic [ref=e6457]: Categorias
+              - generic [ref=e6458]:
+                - generic [ref=e6459]: Passos de ativacao
+                - list [ref=e6460]:
+                  - listitem [ref=e6461]: Criar aplicacao na Open Platform e registrar callback de autorizacao.
+                  - listitem [ref=e6462]: Salvar App Key, Secret Ref e access token no cofre do ambiente.
+                  - listitem [ref=e6463]: Mapear catalogo, variacoes, estoque e rotas de order fulfillment.
+            - generic [ref=e6464]:
+              - generic [ref=e6465]: Evidencias runtime
+              - generic [ref=e6467]: valley-aliexpress-oauth-runtime.json
+          - article [ref=e6468]:
+            - generic [ref=e6469]:
+              - generic [ref=e6470]:
+                - heading "Alibaba" [level=3] [ref=e6471]
+                - paragraph [ref=e6472]: Publicar credenciais principais no vault e referenciar o segredo no cockpit.
+              - generic [ref=e6473]:
+                - generic [ref=e6474]: producao
+                - generic [ref=e6475]: credencial externa pendente
+                - generic [ref=e6476]: external_auth_pending
+            - generic [ref=e6479]:
+              - article [ref=e6480]:
+                - text: Credenciais
+                - strong [ref=e6481]: 8/11
+                - text: campos operacionais preenchidos
+              - article [ref=e6482]:
+                - text: Sync
+                - strong [ref=e6483]: 4/4
+                - text: catalogo, pedidos, estoque, preco
+              - article [ref=e6484]:
+                - text: Cadencia
+                - strong [ref=e6485]: 30 min
+                - text: cache 20 min
+              - article [ref=e6486]:
+                - text: Margem piso
+                - strong [ref=e6487]: 12%
+                - text: seller ainda ausente
+              - article [ref=e6488]:
+                - text: Modos
+                - strong [ref=e6489]: sandbox / prod
+                - text: categorias importadas
+            - generic [ref=e6490]:
+              - generic [ref=e6491]:
+                - generic [ref=e6492]: Cobertura operacional
+                - generic [ref=e6493]:
+                  - generic [ref=e6494]: Stock on
+                  - generic [ref=e6495]: Catalogo on
+                  - generic [ref=e6496]: Categorias on
+                  - generic [ref=e6497]: Pedidos on
+                  - generic [ref=e6498]: Estoque on
+                  - generic [ref=e6499]: Preco on
+                  - generic [ref=e6500]: Sandbox on
+                  - generic [ref=e6501]: Prod on
+                  - generic [ref=e6502]: Regra varejo
+                  - generic [ref=e6503]: Liquidez on
+                  - generic [ref=e6504]: Sem scraping
+                  - generic [ref=e6505]: IA externa bloqueada
+              - generic [ref=e6506]:
+                - generic [ref=e6507]: Checklist de credenciais
+                - generic [ref=e6508]:
+                  - generic [ref=e6509]:
+                    - generic [ref=e6510]: OK
+                    - generic [ref=e6511]: Base URL
+                  - generic [ref=e6512]:
+                    - generic [ref=e6513]: TODO
+                    - generic [ref=e6514]: Client/App
+                  - generic [ref=e6515]:
+                    - generic [ref=e6516]: OK
+                    - generic [ref=e6517]: Secret ref
+                  - generic [ref=e6518]:
+                    - generic [ref=e6519]: OK
+                    - generic [ref=e6520]: Redirect URI
+                  - generic [ref=e6521]:
+                    - generic [ref=e6522]: TODO
+                    - generic [ref=e6523]: Seller/Store
+                  - generic [ref=e6524]:
+                    - generic [ref=e6525]: OK
+                    - generic [ref=e6526]: Tokens
+                  - generic [ref=e6527]:
+                    - generic [ref=e6528]: TODO
+                    - generic [ref=e6529]: Scopes
+                  - generic [ref=e6530]:
+                    - generic [ref=e6531]: OK
+                    - generic [ref=e6532]: Webhook
+                  - generic [ref=e6533]:
+                    - generic [ref=e6534]: OK
+                    - generic [ref=e6535]: Stock ativo
+                  - generic [ref=e6536]:
+                    - generic [ref=e6537]: OK
+                    - generic [ref=e6538]: Sandbox + producao
+                  - generic [ref=e6539]:
+                    - generic [ref=e6540]: OK
+                    - generic [ref=e6541]: Categorias
+              - generic [ref=e6542]:
+                - generic [ref=e6543]: Passos de ativacao
+                - list [ref=e6544]:
+                  - listitem [ref=e6545]: Provisionar app enterprise no Alibaba OpenAPI e liberar produtos alvo.
+                  - listitem [ref=e6546]: Cadastrar chaves e parametros de assinatura no admin.
+                  - listitem [ref=e6547]: Conectar importacao de catalogo e regras de margem por familia de produto.
+            - generic [ref=e6548]:
+              - generic [ref=e6549]: Pendencias externas
+              - generic [ref=e6551]: credentials_or_oauth_token
+            - generic [ref=e6552]:
+              - generic [ref=e6553]: Evidencias runtime
+              - generic [ref=e6555]: valley-alibaba-oauth-runtime.json
+          - article [ref=e6556]:
+            - generic [ref=e6557]:
+              - generic [ref=e6558]:
+                - heading "Magalu" [level=3] [ref=e6559]
+                - paragraph [ref=e6560]: Registrar seller ou store ID para fechar o contrato operacional da conta.
+              - generic [ref=e6561]:
+                - generic [ref=e6562]: producao
+                - generic [ref=e6563]: em homologacao
+                - generic [ref=e6564]: benchmark_ready
+            - generic [ref=e6567]:
+              - article [ref=e6568]:
+                - text: Credenciais
+                - strong [ref=e6569]: 9/11
+                - text: campos operacionais preenchidos
+              - article [ref=e6570]:
+                - text: Sync
+                - strong [ref=e6571]: 3/4
+                - text: catalogo, pedidos, estoque, preco
+              - article [ref=e6572]:
+                - text: Cadencia
+                - strong [ref=e6573]: 30 min
+                - text: cache 20 min
+              - article [ref=e6574]:
+                - text: Margem piso
+                - strong [ref=e6575]: 12%
+                - text: seller ainda ausente
+              - article [ref=e6576]:
+                - text: Modos
+                - strong [ref=e6577]: sandbox / prod
+                - text: categorias importadas
+            - generic [ref=e6578]:
+              - generic [ref=e6579]:
+                - generic [ref=e6580]: Cobertura operacional
+                - generic [ref=e6581]:
+                  - generic [ref=e6582]: Stock on
+                  - generic [ref=e6583]: Catalogo off
+                  - generic [ref=e6584]: Categorias on
+                  - generic [ref=e6585]: Pedidos on
+                  - generic [ref=e6586]: Estoque on
+                  - generic [ref=e6587]: Preco on
+                  - generic [ref=e6588]: Sandbox on
+                  - generic [ref=e6589]: Prod on
+                  - generic [ref=e6590]: Regra varejo
+                  - generic [ref=e6591]: Liquidez on
+                  - generic [ref=e6592]: Sem scraping
+                  - generic [ref=e6593]: IA externa bloqueada
+              - generic [ref=e6594]:
+                - generic [ref=e6595]: Checklist de credenciais
+                - generic [ref=e6596]:
+                  - generic [ref=e6597]:
+                    - generic [ref=e6598]: OK
+                    - generic [ref=e6599]: Base URL
+                  - generic [ref=e6600]:
+                    - generic [ref=e6601]: OK
+                    - generic [ref=e6602]: Client/App
+                  - generic [ref=e6603]:
+                    - generic [ref=e6604]: OK
+                    - generic [ref=e6605]: Secret ref
+                  - generic [ref=e6606]:
+                    - generic [ref=e6607]: OK
+                    - generic [ref=e6608]: Redirect URI
+                  - generic [ref=e6609]:
+                    - generic [ref=e6610]: TODO
+                    - generic [ref=e6611]: Seller/Store
+                  - generic [ref=e6612]:
+                    - generic [ref=e6613]: OK
+                    - generic [ref=e6614]: Tokens
+                  - generic [ref=e6615]:
+                    - generic [ref=e6616]: TODO
+                    - generic [ref=e6617]: Scopes
+                  - generic [ref=e6618]:
+                    - generic [ref=e6619]: OK
+                    - generic [ref=e6620]: Webhook
+                  - generic [ref=e6621]:
+                    - generic [ref=e6622]: OK
+                    - generic [ref=e6623]: Stock ativo
+                  - generic [ref=e6624]:
+                    - generic [ref=e6625]: OK
+                    - generic [ref=e6626]: Sandbox + producao
+                  - generic [ref=e6627]:
+                    - generic [ref=e6628]: OK
+                    - generic [ref=e6629]: Categorias
+              - generic [ref=e6630]:
+                - generic [ref=e6631]: Passos de ativacao
+                - list [ref=e6632]:
+                  - listitem [ref=e6633]: Homologar a conta seller e solicitar credenciais de API ao Magalu.
+                  - listitem [ref=e6634]: Salvar client, secret, seller ID e webhook secret no cockpit.
+                  - listitem [ref=e6635]: Configurar sincronizacao de catalogo, preco e saldo por SKU.
+            - generic [ref=e6636]:
+              - generic [ref=e6637]: Evidencias runtime
+              - generic [ref=e6639]: valley-magalu-oauth-runtime.json
+          - article [ref=e6640]:
+            - generic [ref=e6641]:
+              - generic [ref=e6642]:
+                - heading "CJDropshipping" [level=3] [ref=e6643]
+                - paragraph [ref=e6644]: Publicar credenciais principais no vault e referenciar o segredo no cockpit.
+              - generic [ref=e6645]:
+                - generic [ref=e6646]: producao
+                - generic [ref=e6647]: em homologacao
+                - generic [ref=e6648]: active
+            - generic [ref=e6651]:
+              - article [ref=e6652]:
+                - text: Credenciais
+                - strong [ref=e6653]: 8/11
+                - text: campos operacionais preenchidos
+              - article [ref=e6654]:
+                - text: Sync
+                - strong [ref=e6655]: 4/4
+                - text: catalogo, pedidos, estoque, preco
+              - article [ref=e6656]:
+                - text: Cadencia
+                - strong [ref=e6657]: 30 min
+                - text: cache 20 min
+              - article [ref=e6658]:
+                - text: Margem piso
+                - strong [ref=e6659]: 12%
+                - text: seller 36307
+              - article [ref=e6660]:
+                - text: Modos
+                - strong [ref=e6661]: sandbox / prod
+                - text: categorias importadas
+            - generic [ref=e6662]:
+              - generic [ref=e6663]:
+                - generic [ref=e6664]: Cobertura operacional
+                - generic [ref=e6665]:
+                  - generic [ref=e6666]: Stock on
+                  - generic [ref=e6667]: Catalogo on
+                  - generic [ref=e6668]: Categorias on
+                  - generic [ref=e6669]: Pedidos on
+                  - generic [ref=e6670]: Estoque on
+                  - generic [ref=e6671]: Preco on
+                  - generic [ref=e6672]: Sandbox on
+                  - generic [ref=e6673]: Prod on
+                  - generic [ref=e6674]: Regra varejo
+                  - generic [ref=e6675]: Liquidez on
+                  - generic [ref=e6676]: Sem scraping
+                  - generic [ref=e6677]: IA externa bloqueada
+              - generic [ref=e6678]:
+                - generic [ref=e6679]: Checklist de credenciais
+                - generic [ref=e6680]:
+                  - generic [ref=e6681]:
+                    - generic [ref=e6682]: OK
+                    - generic [ref=e6683]: Base URL
+                  - generic [ref=e6684]:
+                    - generic [ref=e6685]: TODO
+                    - generic [ref=e6686]: Client/App
+                  - generic [ref=e6687]:
+                    - generic [ref=e6688]: OK
+                    - generic [ref=e6689]: Secret ref
+                  - generic [ref=e6690]:
+                    - generic [ref=e6691]: TODO
+                    - generic [ref=e6692]: Redirect URI
+                  - generic [ref=e6693]:
+                    - generic [ref=e6694]: OK
+                    - generic [ref=e6695]: Seller/Store
+                  - generic [ref=e6696]:
+                    - generic [ref=e6697]: OK
+                    - generic [ref=e6698]: Tokens
+                  - generic [ref=e6699]:
+                    - generic [ref=e6700]: TODO
+                    - generic [ref=e6701]: Scopes
+                  - generic [ref=e6702]:
+                    - generic [ref=e6703]: OK
+                    - generic [ref=e6704]: Webhook
+                  - generic [ref=e6705]:
+                    - generic [ref=e6706]: OK
+                    - generic [ref=e6707]: Stock ativo
+                  - generic [ref=e6708]:
+                    - generic [ref=e6709]: OK
+                    - generic [ref=e6710]: Sandbox + producao
+                  - generic [ref=e6711]:
+                    - generic [ref=e6712]: OK
+                    - generic [ref=e6713]: Categorias
+              - generic [ref=e6714]:
+                - generic [ref=e6715]: Passos de ativacao
+                - list [ref=e6716]:
+                  - listitem [ref=e6717]: Gerar API Key em My CJ > Authorization > API e registrar a referencia segura no admin.
+                  - listitem [ref=e6718]: Trocar a API Key por access token no backend e persistir refresh token em runtime seguro.
+                  - listitem [ref=e6719]: Configurar webhook em /integrations/cjdropshipping/notifications.
+            - generic [ref=e6720]:
+              - generic [ref=e6721]: Evidencias runtime
+              - generic [ref=e6722]:
+                - generic [ref=e6723]: valley-cjdropshipping-notification-latest.json
+                - generic [ref=e6724]: valley-stock-real-catalog.json
+          - article [ref=e6725]:
+            - generic [ref=e6726]:
+              - generic [ref=e6727]:
+                - heading "Shopee" [level=3] [ref=e6728]
+                - paragraph [ref=e6729]: Publicar credenciais principais no vault e referenciar o segredo no cockpit.
+              - generic [ref=e6730]:
+                - generic [ref=e6731]: producao
+                - generic [ref=e6732]: credencial externa pendente
+                - generic [ref=e6733]: benchmark_auth_pending
+            - generic [ref=e6736]:
+              - article [ref=e6737]:
+                - text: Credenciais
+                - strong [ref=e6738]: 8/11
+                - text: campos operacionais preenchidos
+              - article [ref=e6739]:
+                - text: Sync
+                - strong [ref=e6740]: 3/4
+                - text: catalogo, pedidos, estoque, preco
+              - article [ref=e6741]:
+                - text: Cadencia
+                - strong [ref=e6742]: 30 min
+                - text: cache 20 min
+              - article [ref=e6743]:
+                - text: Margem piso
+                - strong [ref=e6744]: 12%
+                - text: seller ainda ausente
+              - article [ref=e6745]:
+                - text: Modos
+                - strong [ref=e6746]: sandbox / prod
+                - text: categorias importadas
+            - generic [ref=e6747]:
+              - generic [ref=e6748]:
+                - generic [ref=e6749]: Cobertura operacional
+                - generic [ref=e6750]:
+                  - generic [ref=e6751]: Stock on
+                  - generic [ref=e6752]: Catalogo off
+                  - generic [ref=e6753]: Categorias on
+                  - generic [ref=e6754]: Pedidos on
+                  - generic [ref=e6755]: Estoque on
+                  - generic [ref=e6756]: Preco on
+                  - generic [ref=e6757]: Sandbox on
+                  - generic [ref=e6758]: Prod on
+                  - generic [ref=e6759]: Regra varejo
+                  - generic [ref=e6760]: Liquidez on
+                  - generic [ref=e6761]: Sem scraping
+                  - generic [ref=e6762]: IA externa bloqueada
+              - generic [ref=e6763]:
+                - generic [ref=e6764]: Checklist de credenciais
+                - generic [ref=e6765]:
+                  - generic [ref=e6766]:
+                    - generic [ref=e6767]: OK
+                    - generic [ref=e6768]: Base URL
+                  - generic [ref=e6769]:
+                    - generic [ref=e6770]: TODO
+                    - generic [ref=e6771]: Client/App
+                  - generic [ref=e6772]:
+                    - generic [ref=e6773]: OK
+                    - generic [ref=e6774]: Secret ref
+                  - generic [ref=e6775]:
+                    - generic [ref=e6776]: OK
+                    - generic [ref=e6777]: Redirect URI
+                  - generic [ref=e6778]:
+                    - generic [ref=e6779]: TODO
+                    - generic [ref=e6780]: Seller/Store
+                  - generic [ref=e6781]:
+                    - generic [ref=e6782]: OK
+                    - generic [ref=e6783]: Tokens
+                  - generic [ref=e6784]:
+                    - generic [ref=e6785]: TODO
+                    - generic [ref=e6786]: Scopes
+                  - generic [ref=e6787]:
+                    - generic [ref=e6788]: OK
+                    - generic [ref=e6789]: Webhook
+                  - generic [ref=e6790]:
+                    - generic [ref=e6791]: OK
+                    - generic [ref=e6792]: Stock ativo
+                  - generic [ref=e6793]:
+                    - generic [ref=e6794]: OK
+                    - generic [ref=e6795]: Sandbox + producao
+                  - generic [ref=e6796]:
+                    - generic [ref=e6797]: OK
+                    - generic [ref=e6798]: Categorias
+              - generic [ref=e6799]:
+                - generic [ref=e6800]: Passos de ativacao
+                - list [ref=e6801]:
+                  - listitem [ref=e6802]: Criar app partner, registrar redirect URI e assinar requisicoes com partner key.
+                  - listitem [ref=e6803]: Salvar partner ID, secret ref, tokens e store ID no cockpit.
+                  - listitem [ref=e6804]: Configurar scopes de item, estoque, orders e logistics.
+            - generic [ref=e6805]:
+              - generic [ref=e6806]: Pendencias externas
+              - generic [ref=e6808]: credentials_or_oauth_token
+        - generic [ref=e6809]:
+          - generic [ref=e6810]:
+            - generic [ref=e6811]:
+              - generic [ref=e6812]:
+                - heading "Mercado Livre" [level=3] [ref=e6813]
+                - paragraph [ref=e6814]: mercado_livre
+                - paragraph [ref=e6815]: Fechar lacunas de credencial restantes para evitar rota parcial em produção.
+              - generic [ref=e6816]:
+                - generic [ref=e6817]: em homologacao
+                - generic [ref=e6818]: benchmark_ready
+                - generic [ref=e6819]:
+                  - generic [ref=e6820]: Ativo
+                  - checkbox "Ativo" [checked] [ref=e6821]
+            - generic [ref=e6822]:
+              - article [ref=e6823]:
+                - text: Prontidao
+                - strong [ref=e6824]: 91%
+                - text: 10/11 blocos fechados
+              - article [ref=e6825]:
+                - text: Cadencia
+                - strong [ref=e6826]: 30 min
+                - text: cache 20 min
+              - article [ref=e6827]:
+                - text: Escopos
+                - strong [ref=e6828]: "0"
+                - text: nenhum escopo declarado
+              - article [ref=e6829]:
+                - text: Margem piso
+                - strong [ref=e6830]: 12%
+                - text: seller 273569456
+            - generic [ref=e6831]:
+              - generic [ref=e6832]:
+                - generic [ref=e6833]: producao
+                - generic [ref=e6834]: oauth2
+                - generic [ref=e6835]: MLB
+              - generic [ref=e6836]:
+                - generic [ref=e6837]: Stock on
+                - generic [ref=e6838]: Catalogo off
+                - generic [ref=e6839]: Categorias on
+                - generic [ref=e6840]: Pedidos on
+                - generic [ref=e6841]: Estoque on
+                - generic [ref=e6842]: Preco on
+                - generic [ref=e6843]: Sandbox on
+                - generic [ref=e6844]: Prod on
+                - generic [ref=e6845]: Regra varejo
+                - generic [ref=e6846]: Liquidez on
+                - generic [ref=e6847]: Sem scraping
+                - generic [ref=e6848]: IA externa bloqueada
+            - generic [ref=e6849]:
+              - generic [ref=e6850]:
+                - generic [ref=e6851]: Ambiente
+                - combobox "Ambiente" [ref=e6852]:
+                  - option "Sandbox"
+                  - option "Producao" [selected]
+              - generic [ref=e6853]:
+                - generic [ref=e6854]: Regiao / Site
+                - textbox "Regiao / Site" [ref=e6855]:
+                  - /placeholder: BR, MLB, GLOBAL
+                  - text: MLB
+              - generic [ref=e6856]:
+                - generic [ref=e6857]: Autenticacao
+                - combobox "Autenticacao" [ref=e6858]:
+                  - option "OAuth2" [selected]
+                  - option "App Key + Secret"
+                  - option "Token gerenciado"
+              - generic [ref=e6859]:
+                - generic [ref=e6860]: Base URL
+                - textbox "Base URL" [ref=e6861]: https://api.mercadolibre.com
+              - generic [ref=e6862]:
+                - generic [ref=e6863]: Client ID / App Key
+                - textbox "Client ID / App Key" [ref=e6864]: "2348749644660918"
+              - generic [ref=e6865]:
+                - generic [ref=e6866]: Secret Ref
+                - textbox "Secret Ref" [ref=e6867]:
+                  - /placeholder: vault/marketplaces/mercado_livre
+                  - text: vault/marketplaces/mercado_livre/client-secret
+              - generic [ref=e6868]:
+                - generic [ref=e6869]: Access Token Ref
+                - textbox "Access Token Ref" [ref=e6870]:
+                  - /placeholder: vault/marketplaces/mercado_livre/access-token
+                  - text: vault/marketplaces/mercado_livre/access-token
+              - generic [ref=e6871]:
+                - generic [ref=e6872]: Refresh Token Ref
+                - textbox "Refresh Token Ref" [ref=e6873]:
+                  - /placeholder: vault/marketplaces/mercado_livre/refresh-token
+                  - text: vault/marketplaces/mercado_livre/refresh-token
+              - generic [ref=e6874]:
+                - generic [ref=e6875]: Redirect URI
+                - textbox "Redirect URI" [ref=e6876]:
+                  - /placeholder: https://admin.brasildesconto.com.br/integrations/mercado_livre/callback
+                  - text: https://admin.brasildesconto.com.br
+              - generic [ref=e6877]:
+                - generic [ref=e6878]: Seller / Store ID
+                - textbox "Seller / Store ID" [ref=e6879]: "273569456"
+              - generic [ref=e6880]:
+                - generic [ref=e6881]: Webhook URL
+                - textbox "Webhook URL" [ref=e6882]: https://admin.brasildesconto.com.br/integrations/mercadolivre/notifications
+              - generic [ref=e6883]:
+                - generic [ref=e6884]: Webhook Secret Ref
+                - textbox "Webhook Secret Ref" [ref=e6885]: vault/marketplaces/mercado_livre/webhook-secret
+              - generic [ref=e6886]:
+                - generic [ref=e6887]: Scopes
+                - textbox "Scopes" [ref=e6888]
+              - generic [ref=e6889]:
+                - generic [ref=e6890]: Sync a cada min.
+                - spinbutton "Sync a cada min." [ref=e6891]: "30"
+              - generic [ref=e6892]:
+                - generic [ref=e6893]: Cache TTL min.
+                - spinbutton "Cache TTL min." [ref=e6894]: "20"
+              - generic [ref=e6895]:
+                - generic [ref=e6896]: Margem minima %
+                - spinbutton "Margem minima %" [ref=e6897]: "12"
+              - generic "Sincronizacoes Mercado Livre" [ref=e6898]:
+                - generic [ref=e6899]:
+                  - generic [ref=e6900]: Modulo STOCK
+                  - checkbox "Modulo STOCK" [checked] [ref=e6901]
+                - generic [ref=e6902]:
+                  - generic [ref=e6903]: Sandbox
+                  - checkbox "Sandbox" [checked] [ref=e6904]
+                - generic [ref=e6905]:
+                  - generic [ref=e6906]: Producao
+                  - checkbox "Producao" [checked] [ref=e6907]
+                - generic [ref=e6908]:
+                  - generic [ref=e6909]: Catalogo
+                  - checkbox "Catalogo" [ref=e6910]
+                - generic [ref=e6911]:
+                  - generic [ref=e6912]: Categorias
+                  - checkbox "Categorias" [checked] [ref=e6913]
+                - generic [ref=e6914]:
+                  - generic [ref=e6915]: Pedidos
+                  - checkbox "Pedidos" [checked] [ref=e6916]
+                - generic [ref=e6917]:
+                  - generic [ref=e6918]: Estoque
+                  - checkbox "Estoque" [checked] [ref=e6919]
+                - generic [ref=e6920]:
+                  - generic [ref=e6921]: Preco
+                  - checkbox "Preco" [checked] [ref=e6922]
+                - generic [ref=e6923]:
+                  - generic [ref=e6924]: Publicar aprovados
+                  - checkbox "Publicar aprovados" [checked] [ref=e6925]
+                - generic [ref=e6926]:
+                  - generic [ref=e6927]: Varejo abaixo
+                  - checkbox "Varejo abaixo" [checked] [ref=e6928]
+                - generic [ref=e6929]:
+                  - generic [ref=e6930]: Checar liquidez
+                  - checkbox "Checar liquidez" [checked] [ref=e6931]
+                - generic [ref=e6932]:
+                  - generic [ref=e6933]: Fallback scraping
+                  - checkbox "Fallback scraping" [ref=e6934]
+                - generic [ref=e6935]:
+                  - generic [ref=e6936]: Bloquear IA externa
+                  - checkbox "Bloquear IA externa" [checked] [ref=e6937]
+              - generic [ref=e6938]:
+                - generic [ref=e6939]: Notas
+                - textbox "Notas" [ref=e6940]: Marketplace mantido apenas para comparação autorizada; não é fornecedor de dropshipping.
+            - generic [ref=e6941]:
+              - generic [ref=e6942]:
+                - generic [ref=e6943]: Checklist de credenciais
+                - generic [ref=e6944]:
+                  - generic [ref=e6945]:
+                    - generic [ref=e6946]: OK
+                    - generic [ref=e6947]: Base URL
+                  - generic [ref=e6948]:
+                    - generic [ref=e6949]: OK
+                    - generic [ref=e6950]: Client/App
+                  - generic [ref=e6951]:
+                    - generic [ref=e6952]: OK
+                    - generic [ref=e6953]: Secret ref
+                  - generic [ref=e6954]:
+                    - generic [ref=e6955]: OK
+                    - generic [ref=e6956]: Redirect URI
+                  - generic [ref=e6957]:
+                    - generic [ref=e6958]: OK
+                    - generic [ref=e6959]: Seller/Store
+                  - generic [ref=e6960]:
+                    - generic [ref=e6961]: OK
+                    - generic [ref=e6962]: Tokens
+                  - generic [ref=e6963]:
+                    - generic [ref=e6964]: TODO
+                    - generic [ref=e6965]: Scopes
+                  - generic [ref=e6966]:
+                    - generic [ref=e6967]: OK
+                    - generic [ref=e6968]: Webhook
+                  - generic [ref=e6969]:
+                    - generic [ref=e6970]: OK
+                    - generic [ref=e6971]: Stock ativo
+                  - generic [ref=e6972]:
+                    - generic [ref=e6973]: OK
+                    - generic [ref=e6974]: Sandbox + producao
+                  - generic [ref=e6975]:
+                    - generic [ref=e6976]: OK
+                    - generic [ref=e6977]: Categorias
+              - generic [ref=e6978]:
+                - generic [ref=e6979]: Proxima acao
+                - paragraph [ref=e6980]: Fechar lacunas de credencial restantes para evitar rota parcial em produção.
+                - generic [ref=e6981]: Webhook alvo
+                - code [ref=e6982]: https://admin.brasildesconto.com.br/integrations/mercadolivre/notifications
+            - generic [ref=e6983]:
+              - generic [ref=e6984]: Evidencias runtime
+              - generic [ref=e6986]: valley-marketplace-oauth-runtime.json
+          - generic [ref=e6987]:
+            - generic [ref=e6988]:
+              - generic [ref=e6989]:
+                - heading "Amazon" [level=3] [ref=e6990]
+                - paragraph [ref=e6991]: amazon
+                - paragraph [ref=e6992]: Publicar credenciais principais no vault e referenciar o segredo no cockpit.
+              - generic [ref=e6993]:
+                - generic [ref=e6994]: credencial externa pendente
+                - generic [ref=e6995]: benchmark_auth_pending
+                - generic [ref=e6996]:
+                  - generic [ref=e6997]: Ativo
+                  - checkbox "Ativo" [checked] [ref=e6998]
+            - generic [ref=e6999]:
+              - article [ref=e7000]:
+                - text: Prontidao
+                - strong [ref=e7001]: 64%
+                - text: 7/11 blocos fechados
+              - article [ref=e7002]:
+                - text: Cadencia
+                - strong [ref=e7003]: 30 min
+                - text: cache 20 min
+              - article [ref=e7004]:
+                - text: Escopos
+                - strong [ref=e7005]: "0"
+                - text: nenhum escopo declarado
+              - article [ref=e7006]:
+                - text: Margem piso
+                - strong [ref=e7007]: 12%
+                - text: seller pendente
+            - generic [ref=e7008]:
+              - generic [ref=e7009]:
+                - generic [ref=e7010]: producao
+                - generic [ref=e7011]: operator_login
+                - generic [ref=e7012]: BR
+              - generic [ref=e7013]:
+                - generic [ref=e7014]: Stock on
+                - generic [ref=e7015]: Catalogo off
+                - generic [ref=e7016]: Categorias on
+                - generic [ref=e7017]: Pedidos on
+                - generic [ref=e7018]: Estoque on
+                - generic [ref=e7019]: Preco on
+                - generic [ref=e7020]: Sandbox on
+                - generic [ref=e7021]: Prod on
+                - generic [ref=e7022]: Regra varejo
+                - generic [ref=e7023]: Liquidez on
+                - generic [ref=e7024]: Sem scraping
+                - generic [ref=e7025]: IA externa bloqueada
+              - generic [ref=e7027]: credentials_or_oauth_token
+            - generic [ref=e7028]:
+              - generic [ref=e7029]:
+                - generic [ref=e7030]: Ambiente
+                - combobox "Ambiente" [ref=e7031]:
+                  - option "Sandbox"
+                  - option "Producao" [selected]
+              - generic [ref=e7032]:
+                - generic [ref=e7033]: Regiao / Site
+                - textbox "Regiao / Site" [ref=e7034]:
+                  - /placeholder: BR, MLB, GLOBAL
+                  - text: BR
+              - generic [ref=e7035]:
+                - generic [ref=e7036]: Autenticacao
+                - combobox "Autenticacao" [ref=e7037]:
+                  - option "OAuth2" [selected]
+                  - option "App Key + Secret"
+                  - option "Token gerenciado"
+              - generic [ref=e7038]:
+                - generic [ref=e7039]: Base URL
+                - textbox "Base URL" [ref=e7040]: https://sellingpartnerapi-na.amazon.com
+              - generic [ref=e7041]:
+                - generic [ref=e7042]: Client ID / App Key
+                - textbox "Client ID / App Key" [ref=e7043]
+              - generic [ref=e7044]:
+                - generic [ref=e7045]: Secret Ref
+                - textbox "Secret Ref" [ref=e7046]:
+                  - /placeholder: vault/marketplaces/amazon
+                  - text: runtime://marketplaces/amazon/operator-login
+              - generic [ref=e7047]:
+                - generic [ref=e7048]: Access Token Ref
+                - textbox "Access Token Ref" [ref=e7049]:
+                  - /placeholder: vault/marketplaces/amazon/access-token
+                  - text: vault/marketplaces/amazon/access-token
+              - generic [ref=e7050]:
+                - generic [ref=e7051]: Refresh Token Ref
+                - textbox "Refresh Token Ref" [ref=e7052]:
+                  - /placeholder: vault/marketplaces/amazon/refresh-token
+                  - text: vault/marketplaces/amazon/refresh-token
+              - generic [ref=e7053]:
+                - generic [ref=e7054]: Redirect URI
+                - textbox "Redirect URI" [ref=e7055]:
+                  - /placeholder: https://admin.brasildesconto.com.br/integrations/amazon/callback
+              - generic [ref=e7056]:
+                - generic [ref=e7057]: Seller / Store ID
+                - textbox "Seller / Store ID" [ref=e7058]
+              - generic [ref=e7059]:
+                - generic [ref=e7060]: Webhook URL
+                - textbox "Webhook URL" [ref=e7061]: https://admin.brasildesconto.com.br/integrations/amazon/notifications
+              - generic [ref=e7062]:
+                - generic [ref=e7063]: Webhook Secret Ref
+                - textbox "Webhook Secret Ref" [ref=e7064]: vault/marketplaces/amazon/webhook-secret
+              - generic [ref=e7065]:
+                - generic [ref=e7066]: Scopes
+                - textbox "Scopes" [ref=e7067]
+              - generic [ref=e7068]:
+                - generic [ref=e7069]: Sync a cada min.
+                - spinbutton "Sync a cada min." [ref=e7070]: "30"
+              - generic [ref=e7071]:
+                - generic [ref=e7072]: Cache TTL min.
+                - spinbutton "Cache TTL min." [ref=e7073]: "20"
+              - generic [ref=e7074]:
+                - generic [ref=e7075]: Margem minima %
+                - spinbutton "Margem minima %" [ref=e7076]: "12"
+              - generic "Sincronizacoes Amazon" [ref=e7077]:
+                - generic [ref=e7078]:
+                  - generic [ref=e7079]: Modulo STOCK
+                  - checkbox "Modulo STOCK" [checked] [ref=e7080]
+                - generic [ref=e7081]:
+                  - generic [ref=e7082]: Sandbox
+                  - checkbox "Sandbox" [checked] [ref=e7083]
+                - generic [ref=e7084]:
+                  - generic [ref=e7085]: Producao
+                  - checkbox "Producao" [checked] [ref=e7086]
+                - generic [ref=e7087]:
+                  - generic [ref=e7088]: Catalogo
+                  - checkbox "Catalogo" [ref=e7089]
+                - generic [ref=e7090]:
+                  - generic [ref=e7091]: Categorias
+                  - checkbox "Categorias" [checked] [ref=e7092]
+                - generic [ref=e7093]:
+                  - generic [ref=e7094]: Pedidos
+                  - checkbox "Pedidos" [checked] [ref=e7095]
+                - generic [ref=e7096]:
+                  - generic [ref=e7097]: Estoque
+                  - checkbox "Estoque" [checked] [ref=e7098]
+                - generic [ref=e7099]:
+                  - generic [ref=e7100]: Preco
+                  - checkbox "Preco" [checked] [ref=e7101]
+                - generic [ref=e7102]:
+                  - generic [ref=e7103]: Publicar aprovados
+                  - checkbox "Publicar aprovados" [checked] [ref=e7104]
+                - generic [ref=e7105]:
+                  - generic [ref=e7106]: Varejo abaixo
+                  - checkbox "Varejo abaixo" [checked] [ref=e7107]
+                - generic [ref=e7108]:
+                  - generic [ref=e7109]: Checar liquidez
+                  - checkbox "Checar liquidez" [checked] [ref=e7110]
+                - generic [ref=e7111]:
+                  - generic [ref=e7112]: Fallback scraping
+                  - checkbox "Fallback scraping" [ref=e7113]
+                - generic [ref=e7114]:
+                  - generic [ref=e7115]: Bloquear IA externa
+                  - checkbox "Bloquear IA externa" [checked] [ref=e7116]
+              - generic [ref=e7117]:
+                - generic [ref=e7118]: Notas
+                - textbox "Notas" [ref=e7119]: Marketplace mantido apenas para comparação autorizada; não é fornecedor de dropshipping.
+            - generic [ref=e7120]:
+              - generic [ref=e7121]:
+                - generic [ref=e7122]: Checklist de credenciais
+                - generic [ref=e7123]:
+                  - generic [ref=e7124]:
+                    - generic [ref=e7125]: OK
+                    - generic [ref=e7126]: Base URL
+                  - generic [ref=e7127]:
+                    - generic [ref=e7128]: TODO
+                    - generic [ref=e7129]: Client/App
+                  - generic [ref=e7130]:
+                    - generic [ref=e7131]: OK
+                    - generic [ref=e7132]: Secret ref
+                  - generic [ref=e7133]:
+                    - generic [ref=e7134]: TODO
+                    - generic [ref=e7135]: Redirect URI
+                  - generic [ref=e7136]:
+                    - generic [ref=e7137]: TODO
+                    - generic [ref=e7138]: Seller/Store
+                  - generic [ref=e7139]:
+                    - generic [ref=e7140]: OK
+                    - generic [ref=e7141]: Tokens
+                  - generic [ref=e7142]:
+                    - generic [ref=e7143]: TODO
+                    - generic [ref=e7144]: Scopes
+                  - generic [ref=e7145]:
+                    - generic [ref=e7146]: OK
+                    - generic [ref=e7147]: Webhook
+                  - generic [ref=e7148]:
+                    - generic [ref=e7149]: OK
+                    - generic [ref=e7150]: Stock ativo
+                  - generic [ref=e7151]:
+                    - generic [ref=e7152]: OK
+                    - generic [ref=e7153]: Sandbox + producao
+                  - generic [ref=e7154]:
+                    - generic [ref=e7155]: OK
+                    - generic [ref=e7156]: Categorias
+              - generic [ref=e7157]:
+                - generic [ref=e7158]: Proxima acao
+                - paragraph [ref=e7159]: Publicar credenciais principais no vault e referenciar o segredo no cockpit.
+                - generic [ref=e7160]: Webhook alvo
+                - code [ref=e7161]: https://admin.brasildesconto.com.br/integrations/amazon/notifications
+          - generic [ref=e7162]:
+            - generic [ref=e7163]:
+              - generic [ref=e7164]:
+                - heading "AliExpress" [level=3] [ref=e7165]
+                - paragraph [ref=e7166]: aliexpress
+                - paragraph [ref=e7167]: Fechar lacunas de credencial restantes para evitar rota parcial em produção.
+              - generic [ref=e7168]:
+                - generic [ref=e7169]: pronto para producao
+                - generic [ref=e7170]: active
+                - generic [ref=e7171]:
+                  - generic [ref=e7172]: Ativo
+                  - checkbox "Ativo" [checked] [ref=e7173]
+            - generic [ref=e7174]:
+              - article [ref=e7175]:
+                - text: Prontidao
+                - strong [ref=e7176]: 91%
+                - text: 10/11 blocos fechados
+              - article [ref=e7177]:
+                - text: Cadencia
+                - strong [ref=e7178]: 30 min
+                - text: cache 20 min
+              - article [ref=e7179]:
+                - text: Escopos
+                - strong [ref=e7180]: "0"
+                - text: nenhum escopo declarado
+              - article [ref=e7181]:
+                - text: Margem piso
+                - strong [ref=e7182]: 12%
+                - text: seller 6266338639
+            - generic [ref=e7183]:
+              - generic [ref=e7184]:
+                - generic [ref=e7185]: producao
+                - generic [ref=e7186]: oauth2
+                - generic [ref=e7187]: GLOBAL
+              - generic [ref=e7188]:
+                - generic [ref=e7189]: Stock on
+                - generic [ref=e7190]: Catalogo on
+                - generic [ref=e7191]: Categorias on
+                - generic [ref=e7192]: Pedidos on
+                - generic [ref=e7193]: Estoque on
+                - generic [ref=e7194]: Preco on
+                - generic [ref=e7195]: Sandbox on
+                - generic [ref=e7196]: Prod on
+                - generic [ref=e7197]: Regra varejo
+                - generic [ref=e7198]: Liquidez on
+                - generic [ref=e7199]: Sem scraping
+                - generic [ref=e7200]: IA externa bloqueada
+            - generic [ref=e7201]:
+              - generic [ref=e7202]:
+                - generic [ref=e7203]: Ambiente
+                - combobox "Ambiente" [ref=e7204]:
+                  - option "Sandbox"
+                  - option "Producao" [selected]
+              - generic [ref=e7205]:
+                - generic [ref=e7206]: Regiao / Site
+                - textbox "Regiao / Site" [ref=e7207]:
+                  - /placeholder: BR, MLB, GLOBAL
+                  - text: GLOBAL
+              - generic [ref=e7208]:
+                - generic [ref=e7209]: Autenticacao
+                - combobox "Autenticacao" [ref=e7210]:
+                  - option "OAuth2" [selected]
+                  - option "App Key + Secret"
+                  - option "Token gerenciado"
+              - generic [ref=e7211]:
+                - generic [ref=e7212]: Base URL
+                - textbox "Base URL" [ref=e7213]: https://api-sg.aliexpress.com
+              - generic [ref=e7214]:
+                - generic [ref=e7215]: Client ID / App Key
+                - textbox "Client ID / App Key" [ref=e7216]: "533110"
+              - generic [ref=e7217]:
+                - generic [ref=e7218]: Secret Ref
+                - textbox "Secret Ref" [ref=e7219]:
+                  - /placeholder: vault/marketplaces/aliexpress
+                  - text: vault/marketplaces/aliexpress/client-secret
+              - generic [ref=e7220]:
+                - generic [ref=e7221]: Access Token Ref
+                - textbox "Access Token Ref" [ref=e7222]:
+                  - /placeholder: vault/marketplaces/aliexpress/access-token
+                  - text: vault/marketplaces/aliexpress/access-token
+              - generic [ref=e7223]:
+                - generic [ref=e7224]: Refresh Token Ref
+                - textbox "Refresh Token Ref" [ref=e7225]:
+                  - /placeholder: vault/marketplaces/aliexpress/refresh-token
+                  - text: vault/marketplaces/aliexpress/refresh-token
+              - generic [ref=e7226]:
+                - generic [ref=e7227]: Redirect URI
+                - textbox "Redirect URI" [ref=e7228]:
+                  - /placeholder: https://admin.brasildesconto.com.br/integrations/aliexpress/callback
+                  - text: https://admin.brasildesconto.com.br/integrations/aliexpress/callback
+              - generic [ref=e7229]:
+                - generic [ref=e7230]: Seller / Store ID
+                - textbox "Seller / Store ID" [ref=e7231]: "6266338639"
+              - generic [ref=e7232]:
+                - generic [ref=e7233]: Webhook URL
+                - textbox "Webhook URL" [ref=e7234]: https://admin.brasildesconto.com.br/integrations/aliexpress/notifications
+              - generic [ref=e7235]:
+                - generic [ref=e7236]: Webhook Secret Ref
+                - textbox "Webhook Secret Ref" [ref=e7237]: vault/marketplaces/aliexpress/webhook-secret
+              - generic [ref=e7238]:
+                - generic [ref=e7239]: Scopes
+                - textbox "Scopes" [ref=e7240]
+              - generic [ref=e7241]:
+                - generic [ref=e7242]: Sync a cada min.
+                - spinbutton "Sync a cada min." [ref=e7243]: "30"
+              - generic [ref=e7244]:
+                - generic [ref=e7245]: Cache TTL min.
+                - spinbutton "Cache TTL min." [ref=e7246]: "20"
+              - generic [ref=e7247]:
+                - generic [ref=e7248]: Margem minima %
+                - spinbutton "Margem minima %" [ref=e7249]: "12"
+              - generic "Sincronizacoes AliExpress" [ref=e7250]:
+                - generic [ref=e7251]:
+                  - generic [ref=e7252]: Modulo STOCK
+                  - checkbox "Modulo STOCK" [checked] [ref=e7253]
+                - generic [ref=e7254]:
+                  - generic [ref=e7255]: Sandbox
+                  - checkbox "Sandbox" [checked] [ref=e7256]
+                - generic [ref=e7257]:
+                  - generic [ref=e7258]: Producao
+                  - checkbox "Producao" [checked] [ref=e7259]
+                - generic [ref=e7260]:
+                  - generic [ref=e7261]: Catalogo
+                  - checkbox "Catalogo" [checked] [ref=e7262]
+                - generic [ref=e7263]:
+                  - generic [ref=e7264]: Categorias
+                  - checkbox "Categorias" [checked] [ref=e7265]
+                - generic [ref=e7266]:
+                  - generic [ref=e7267]: Pedidos
+                  - checkbox "Pedidos" [checked] [ref=e7268]
+                - generic [ref=e7269]:
+                  - generic [ref=e7270]: Estoque
+                  - checkbox "Estoque" [checked] [ref=e7271]
+                - generic [ref=e7272]:
+                  - generic [ref=e7273]: Preco
+                  - checkbox "Preco" [checked] [ref=e7274]
+                - generic [ref=e7275]:
+                  - generic [ref=e7276]: Publicar aprovados
+                  - checkbox "Publicar aprovados" [checked] [ref=e7277]
+                - generic [ref=e7278]:
+                  - generic [ref=e7279]: Varejo abaixo
+                  - checkbox "Varejo abaixo" [checked] [ref=e7280]
+                - generic [ref=e7281]:
+                  - generic [ref=e7282]: Checar liquidez
+                  - checkbox "Checar liquidez" [checked] [ref=e7283]
+                - generic [ref=e7284]:
+                  - generic [ref=e7285]: Fallback scraping
+                  - checkbox "Fallback scraping" [ref=e7286]
+                - generic [ref=e7287]:
+                  - generic [ref=e7288]: Bloquear IA externa
+                  - checkbox "Bloquear IA externa" [checked] [ref=e7289]
+              - generic [ref=e7290]:
+                - generic [ref=e7291]: Notas
+                - textbox "Notas" [ref=e7292]: Fornecedor de origem para dropshipping reparado com política segura, refs de runtime e superfície pública alinhada.
+            - generic [ref=e7293]:
+              - generic [ref=e7294]:
+                - generic [ref=e7295]: Checklist de credenciais
+                - generic [ref=e7296]:
+                  - generic [ref=e7297]:
+                    - generic [ref=e7298]: OK
+                    - generic [ref=e7299]: Base URL
+                  - generic [ref=e7300]:
+                    - generic [ref=e7301]: OK
+                    - generic [ref=e7302]: Client/App
+                  - generic [ref=e7303]:
+                    - generic [ref=e7304]: OK
+                    - generic [ref=e7305]: Secret ref
+                  - generic [ref=e7306]:
+                    - generic [ref=e7307]: OK
+                    - generic [ref=e7308]: Redirect URI
+                  - generic [ref=e7309]:
+                    - generic [ref=e7310]: OK
+                    - generic [ref=e7311]: Seller/Store
+                  - generic [ref=e7312]:
+                    - generic [ref=e7313]: OK
+                    - generic [ref=e7314]: Tokens
+                  - generic [ref=e7315]:
+                    - generic [ref=e7316]: TODO
+                    - generic [ref=e7317]: Scopes
+                  - generic [ref=e7318]:
+                    - generic [ref=e7319]: OK
+                    - generic [ref=e7320]: Webhook
+                  - generic [ref=e7321]:
+                    - generic [ref=e7322]: OK
+                    - generic [ref=e7323]: Stock ativo
+                  - generic [ref=e7324]:
+                    - generic [ref=e7325]: OK
+                    - generic [ref=e7326]: Sandbox + producao
+                  - generic [ref=e7327]:
+                    - generic [ref=e7328]: OK
+                    - generic [ref=e7329]: Categorias
+              - generic [ref=e7330]:
+                - generic [ref=e7331]: Proxima acao
+                - paragraph [ref=e7332]: Fechar lacunas de credencial restantes para evitar rota parcial em produção.
+                - generic [ref=e7333]: Webhook alvo
+                - code [ref=e7334]: https://admin.brasildesconto.com.br/integrations/aliexpress/notifications
+            - generic [ref=e7335]:
+              - generic [ref=e7336]: Evidencias runtime
+              - generic [ref=e7338]: valley-aliexpress-oauth-runtime.json
+          - generic [ref=e7339]:
+            - generic [ref=e7340]:
+              - generic [ref=e7341]:
+                - heading "Alibaba" [level=3] [ref=e7342]
+                - paragraph [ref=e7343]: alibaba
+                - paragraph [ref=e7344]: Publicar credenciais principais no vault e referenciar o segredo no cockpit.
+              - generic [ref=e7345]:
+                - generic [ref=e7346]: credencial externa pendente
+                - generic [ref=e7347]: external_auth_pending
+                - generic [ref=e7348]:
+                  - generic [ref=e7349]: Ativo
+                  - checkbox "Ativo" [checked] [ref=e7350]
+            - generic [ref=e7351]:
+              - article [ref=e7352]:
+                - text: Prontidao
+                - strong [ref=e7353]: 73%
+                - text: 8/11 blocos fechados
+              - article [ref=e7354]:
+                - text: Cadencia
+                - strong [ref=e7355]: 30 min
+                - text: cache 20 min
+              - article [ref=e7356]:
+                - text: Escopos
+                - strong [ref=e7357]: "0"
+                - text: nenhum escopo declarado
+              - article [ref=e7358]:
+                - text: Margem piso
+                - strong [ref=e7359]: 12%
+                - text: seller pendente
+            - generic [ref=e7360]:
+              - generic [ref=e7361]:
+                - generic [ref=e7362]: producao
+                - generic [ref=e7363]: operator_login
+                - generic [ref=e7364]: GLOBAL
+              - generic [ref=e7365]:
+                - generic [ref=e7366]: Stock on
+                - generic [ref=e7367]: Catalogo on
+                - generic [ref=e7368]: Categorias on
+                - generic [ref=e7369]: Pedidos on
+                - generic [ref=e7370]: Estoque on
+                - generic [ref=e7371]: Preco on
+                - generic [ref=e7372]: Sandbox on
+                - generic [ref=e7373]: Prod on
+                - generic [ref=e7374]: Regra varejo
+                - generic [ref=e7375]: Liquidez on
+                - generic [ref=e7376]: Sem scraping
+                - generic [ref=e7377]: IA externa bloqueada
+              - generic [ref=e7379]: credentials_or_oauth_token
+            - generic [ref=e7380]:
+              - generic [ref=e7381]:
+                - generic [ref=e7382]: Ambiente
+                - combobox "Ambiente" [ref=e7383]:
+                  - option "Sandbox"
+                  - option "Producao" [selected]
+              - generic [ref=e7384]:
+                - generic [ref=e7385]: Regiao / Site
+                - textbox "Regiao / Site" [ref=e7386]:
+                  - /placeholder: BR, MLB, GLOBAL
+                  - text: GLOBAL
+              - generic [ref=e7387]:
+                - generic [ref=e7388]: Autenticacao
+                - combobox "Autenticacao" [ref=e7389]:
+                  - option "OAuth2" [selected]
+                  - option "App Key + Secret"
+                  - option "Token gerenciado"
+              - generic [ref=e7390]:
+                - generic [ref=e7391]: Base URL
+                - textbox "Base URL" [ref=e7392]: https://openapi.alibaba.com
+              - generic [ref=e7393]:
+                - generic [ref=e7394]: Client ID / App Key
+                - textbox "Client ID / App Key" [ref=e7395]
+              - generic [ref=e7396]:
+                - generic [ref=e7397]: Secret Ref
+                - textbox "Secret Ref" [ref=e7398]:
+                  - /placeholder: vault/marketplaces/alibaba
+                  - text: runtime://marketplaces/alibaba/operator-login
+              - generic [ref=e7399]:
+                - generic [ref=e7400]: Access Token Ref
+                - textbox "Access Token Ref" [ref=e7401]:
+                  - /placeholder: vault/marketplaces/alibaba/access-token
+                  - text: vault/marketplaces/alibaba/access-token
+              - generic [ref=e7402]:
+                - generic [ref=e7403]: Refresh Token Ref
+                - textbox "Refresh Token Ref" [ref=e7404]:
+                  - /placeholder: vault/marketplaces/alibaba/refresh-token
+                  - text: vault/marketplaces/alibaba/refresh-token
+              - generic [ref=e7405]:
+                - generic [ref=e7406]: Redirect URI
+                - textbox "Redirect URI" [ref=e7407]:
+                  - /placeholder: https://admin.brasildesconto.com.br/integrations/alibaba/callback
+                  - text: https://admin.brasildesconto.com.br/integrations/alibaba/callback
+              - generic [ref=e7408]:
+                - generic [ref=e7409]: Seller / Store ID
+                - textbox "Seller / Store ID" [ref=e7410]
+              - generic [ref=e7411]:
+                - generic [ref=e7412]: Webhook URL
+                - textbox "Webhook URL" [ref=e7413]: https://admin.brasildesconto.com.br/integrations/alibaba/notifications
+              - generic [ref=e7414]:
+                - generic [ref=e7415]: Webhook Secret Ref
+                - textbox "Webhook Secret Ref" [ref=e7416]: vault/marketplaces/alibaba/webhook-secret
+              - generic [ref=e7417]:
+                - generic [ref=e7418]: Scopes
+                - textbox "Scopes" [ref=e7419]
+              - generic [ref=e7420]:
+                - generic [ref=e7421]: Sync a cada min.
+                - spinbutton "Sync a cada min." [ref=e7422]: "30"
+              - generic [ref=e7423]:
+                - generic [ref=e7424]: Cache TTL min.
+                - spinbutton "Cache TTL min." [ref=e7425]: "20"
+              - generic [ref=e7426]:
+                - generic [ref=e7427]: Margem minima %
+                - spinbutton "Margem minima %" [ref=e7428]: "12"
+              - generic "Sincronizacoes Alibaba" [ref=e7429]:
+                - generic [ref=e7430]:
+                  - generic [ref=e7431]: Modulo STOCK
+                  - checkbox "Modulo STOCK" [checked] [ref=e7432]
+                - generic [ref=e7433]:
+                  - generic [ref=e7434]: Sandbox
+                  - checkbox "Sandbox" [checked] [ref=e7435]
+                - generic [ref=e7436]:
+                  - generic [ref=e7437]: Producao
+                  - checkbox "Producao" [checked] [ref=e7438]
+                - generic [ref=e7439]:
+                  - generic [ref=e7440]: Catalogo
+                  - checkbox "Catalogo" [checked] [ref=e7441]
+                - generic [ref=e7442]:
+                  - generic [ref=e7443]: Categorias
+                  - checkbox "Categorias" [checked] [ref=e7444]
+                - generic [ref=e7445]:
+                  - generic [ref=e7446]: Pedidos
+                  - checkbox "Pedidos" [checked] [ref=e7447]
+                - generic [ref=e7448]:
+                  - generic [ref=e7449]: Estoque
+                  - checkbox "Estoque" [checked] [ref=e7450]
+                - generic [ref=e7451]:
+                  - generic [ref=e7452]: Preco
+                  - checkbox "Preco" [checked] [ref=e7453]
+                - generic [ref=e7454]:
+                  - generic [ref=e7455]: Publicar aprovados
+                  - checkbox "Publicar aprovados" [checked] [ref=e7456]
+                - generic [ref=e7457]:
+                  - generic [ref=e7458]: Varejo abaixo
+                  - checkbox "Varejo abaixo" [checked] [ref=e7459]
+                - generic [ref=e7460]:
+                  - generic [ref=e7461]: Checar liquidez
+                  - checkbox "Checar liquidez" [checked] [ref=e7462]
+                - generic [ref=e7463]:
+                  - generic [ref=e7464]: Fallback scraping
+                  - checkbox "Fallback scraping" [ref=e7465]
+                - generic [ref=e7466]:
+                  - generic [ref=e7467]: Bloquear IA externa
+                  - checkbox "Bloquear IA externa" [checked] [ref=e7468]
+              - generic [ref=e7469]:
+                - generic [ref=e7470]: Notas
+                - textbox "Notas" [ref=e7471]: Fornecedor de origem para dropshipping reparado com política segura, refs de runtime e superfície pública alinhada.
+            - generic [ref=e7472]:
+              - generic [ref=e7473]:
+                - generic [ref=e7474]: Checklist de credenciais
+                - generic [ref=e7475]:
+                  - generic [ref=e7476]:
+                    - generic [ref=e7477]: OK
+                    - generic [ref=e7478]: Base URL
+                  - generic [ref=e7479]:
+                    - generic [ref=e7480]: TODO
+                    - generic [ref=e7481]: Client/App
+                  - generic [ref=e7482]:
+                    - generic [ref=e7483]: OK
+                    - generic [ref=e7484]: Secret ref
+                  - generic [ref=e7485]:
+                    - generic [ref=e7486]: OK
+                    - generic [ref=e7487]: Redirect URI
+                  - generic [ref=e7488]:
+                    - generic [ref=e7489]: TODO
+                    - generic [ref=e7490]: Seller/Store
+                  - generic [ref=e7491]:
+                    - generic [ref=e7492]: OK
+                    - generic [ref=e7493]: Tokens
+                  - generic [ref=e7494]:
+                    - generic [ref=e7495]: TODO
+                    - generic [ref=e7496]: Scopes
+                  - generic [ref=e7497]:
+                    - generic [ref=e7498]: OK
+                    - generic [ref=e7499]: Webhook
+                  - generic [ref=e7500]:
+                    - generic [ref=e7501]: OK
+                    - generic [ref=e7502]: Stock ativo
+                  - generic [ref=e7503]:
+                    - generic [ref=e7504]: OK
+                    - generic [ref=e7505]: Sandbox + producao
+                  - generic [ref=e7506]:
+                    - generic [ref=e7507]: OK
+                    - generic [ref=e7508]: Categorias
+              - generic [ref=e7509]:
+                - generic [ref=e7510]: Proxima acao
+                - paragraph [ref=e7511]: Publicar credenciais principais no vault e referenciar o segredo no cockpit.
+                - generic [ref=e7512]: Webhook alvo
+                - code [ref=e7513]: https://admin.brasildesconto.com.br/integrations/alibaba/notifications
+            - generic [ref=e7514]:
+              - generic [ref=e7515]: Evidencias runtime
+              - generic [ref=e7517]: valley-alibaba-oauth-runtime.json
+          - generic [ref=e7518]:
+            - generic [ref=e7519]:
+              - generic [ref=e7520]:
+                - heading "Magalu" [level=3] [ref=e7521]
+                - paragraph [ref=e7522]: magalu
+                - paragraph [ref=e7523]: Registrar seller ou store ID para fechar o contrato operacional da conta.
+              - generic [ref=e7524]:
+                - generic [ref=e7525]: em homologacao
+                - generic [ref=e7526]: benchmark_ready
+                - generic [ref=e7527]:
+                  - generic [ref=e7528]: Ativo
+                  - checkbox "Ativo" [checked] [ref=e7529]
+            - generic [ref=e7530]:
+              - article [ref=e7531]:
+                - text: Prontidao
+                - strong [ref=e7532]: 82%
+                - text: 9/11 blocos fechados
+              - article [ref=e7533]:
+                - text: Cadencia
+                - strong [ref=e7534]: 30 min
+                - text: cache 20 min
+              - article [ref=e7535]:
+                - text: Escopos
+                - strong [ref=e7536]: "0"
+                - text: nenhum escopo declarado
+              - article [ref=e7537]:
+                - text: Margem piso
+                - strong [ref=e7538]: 12%
+                - text: seller pendente
+            - generic [ref=e7539]:
+              - generic [ref=e7540]:
+                - generic [ref=e7541]: producao
+                - generic [ref=e7542]: oauth2
+                - generic [ref=e7543]: BR
+              - generic [ref=e7544]:
+                - generic [ref=e7545]: Stock on
+                - generic [ref=e7546]: Catalogo off
+                - generic [ref=e7547]: Categorias on
+                - generic [ref=e7548]: Pedidos on
+                - generic [ref=e7549]: Estoque on
+                - generic [ref=e7550]: Preco on
+                - generic [ref=e7551]: Sandbox on
+                - generic [ref=e7552]: Prod on
+                - generic [ref=e7553]: Regra varejo
+                - generic [ref=e7554]: Liquidez on
+                - generic [ref=e7555]: Sem scraping
+                - generic [ref=e7556]: IA externa bloqueada
+            - generic [ref=e7557]:
+              - generic [ref=e7558]:
+                - generic [ref=e7559]: Ambiente
+                - combobox "Ambiente" [ref=e7560]:
+                  - option "Sandbox"
+                  - option "Producao" [selected]
+              - generic [ref=e7561]:
+                - generic [ref=e7562]: Regiao / Site
+                - textbox "Regiao / Site" [ref=e7563]:
+                  - /placeholder: BR, MLB, GLOBAL
+                  - text: BR
+              - generic [ref=e7564]:
+                - generic [ref=e7565]: Autenticacao
+                - combobox "Autenticacao" [ref=e7566]:
+                  - option "OAuth2" [selected]
+                  - option "App Key + Secret"
+                  - option "Token gerenciado"
+              - generic [ref=e7567]:
+                - generic [ref=e7568]: Base URL
+                - textbox "Base URL" [ref=e7569]: https://api.magalu.com
+              - generic [ref=e7570]:
+                - generic [ref=e7571]: Client ID / App Key
+                - textbox "Client ID / App Key" [ref=e7572]: pTxRy6D7STVfFAN7CyU72F9_RRBO2uVgtZq_f4fPvpY
+              - generic [ref=e7573]:
+                - generic [ref=e7574]: Secret Ref
+                - textbox "Secret Ref" [ref=e7575]:
+                  - /placeholder: vault/marketplaces/magalu
+                  - text: vault/marketplaces/magalu/client-secret
+              - generic [ref=e7576]:
+                - generic [ref=e7577]: Access Token Ref
+                - textbox "Access Token Ref" [ref=e7578]:
+                  - /placeholder: vault/marketplaces/magalu/access-token
+                  - text: vault/marketplaces/magalu/access-token
+              - generic [ref=e7579]:
+                - generic [ref=e7580]: Refresh Token Ref
+                - textbox "Refresh Token Ref" [ref=e7581]:
+                  - /placeholder: vault/marketplaces/magalu/refresh-token
+                  - text: vault/marketplaces/magalu/refresh-token
+              - generic [ref=e7582]:
+                - generic [ref=e7583]: Redirect URI
+                - textbox "Redirect URI" [ref=e7584]:
+                  - /placeholder: https://admin.brasildesconto.com.br/integrations/magalu/callback
+                  - text: https://admin.brasildesconto.com.br/integrations/magalu/callback
+              - generic [ref=e7585]:
+                - generic [ref=e7586]: Seller / Store ID
+                - textbox "Seller / Store ID" [ref=e7587]
+              - generic [ref=e7588]:
+                - generic [ref=e7589]: Webhook URL
+                - textbox "Webhook URL" [ref=e7590]: https://admin.brasildesconto.com.br/integrations/magalu/notifications
+              - generic [ref=e7591]:
+                - generic [ref=e7592]: Webhook Secret Ref
+                - textbox "Webhook Secret Ref" [ref=e7593]: vault/marketplaces/magalu/webhook-secret
+              - generic [ref=e7594]:
+                - generic [ref=e7595]: Scopes
+                - textbox "Scopes" [ref=e7596]
+              - generic [ref=e7597]:
+                - generic [ref=e7598]: Sync a cada min.
+                - spinbutton "Sync a cada min." [ref=e7599]: "30"
+              - generic [ref=e7600]:
+                - generic [ref=e7601]: Cache TTL min.
+                - spinbutton "Cache TTL min." [ref=e7602]: "20"
+              - generic [ref=e7603]:
+                - generic [ref=e7604]: Margem minima %
+                - spinbutton "Margem minima %" [ref=e7605]: "12"
+              - generic "Sincronizacoes Magalu" [ref=e7606]:
+                - generic [ref=e7607]:
+                  - generic [ref=e7608]: Modulo STOCK
+                  - checkbox "Modulo STOCK" [checked] [ref=e7609]
+                - generic [ref=e7610]:
+                  - generic [ref=e7611]: Sandbox
+                  - checkbox "Sandbox" [checked] [ref=e7612]
+                - generic [ref=e7613]:
+                  - generic [ref=e7614]: Producao
+                  - checkbox "Producao" [checked] [ref=e7615]
+                - generic [ref=e7616]:
+                  - generic [ref=e7617]: Catalogo
+                  - checkbox "Catalogo" [ref=e7618]
+                - generic [ref=e7619]:
+                  - generic [ref=e7620]: Categorias
+                  - checkbox "Categorias" [checked] [ref=e7621]
+                - generic [ref=e7622]:
+                  - generic [ref=e7623]: Pedidos
+                  - checkbox "Pedidos" [checked] [ref=e7624]
+                - generic [ref=e7625]:
+                  - generic [ref=e7626]: Estoque
+                  - checkbox "Estoque" [checked] [ref=e7627]
+                - generic [ref=e7628]:
+                  - generic [ref=e7629]: Preco
+                  - checkbox "Preco" [checked] [ref=e7630]
+                - generic [ref=e7631]:
+                  - generic [ref=e7632]: Publicar aprovados
+                  - checkbox "Publicar aprovados" [checked] [ref=e7633]
+                - generic [ref=e7634]:
+                  - generic [ref=e7635]: Varejo abaixo
+                  - checkbox "Varejo abaixo" [checked] [ref=e7636]
+                - generic [ref=e7637]:
+                  - generic [ref=e7638]: Checar liquidez
+                  - checkbox "Checar liquidez" [checked] [ref=e7639]
+                - generic [ref=e7640]:
+                  - generic [ref=e7641]: Fallback scraping
+                  - checkbox "Fallback scraping" [ref=e7642]
+                - generic [ref=e7643]:
+                  - generic [ref=e7644]: Bloquear IA externa
+                  - checkbox "Bloquear IA externa" [checked] [ref=e7645]
+              - generic [ref=e7646]:
+                - generic [ref=e7647]: Notas
+                - textbox "Notas" [ref=e7648]: Marketplace mantido apenas para comparação autorizada; não é fornecedor de dropshipping.
+            - generic [ref=e7649]:
+              - generic [ref=e7650]:
+                - generic [ref=e7651]: Checklist de credenciais
+                - generic [ref=e7652]:
+                  - generic [ref=e7653]:
+                    - generic [ref=e7654]: OK
+                    - generic [ref=e7655]: Base URL
+                  - generic [ref=e7656]:
+                    - generic [ref=e7657]: OK
+                    - generic [ref=e7658]: Client/App
+                  - generic [ref=e7659]:
+                    - generic [ref=e7660]: OK
+                    - generic [ref=e7661]: Secret ref
+                  - generic [ref=e7662]:
+                    - generic [ref=e7663]: OK
+                    - generic [ref=e7664]: Redirect URI
+                  - generic [ref=e7665]:
+                    - generic [ref=e7666]: TODO
+                    - generic [ref=e7667]: Seller/Store
+                  - generic [ref=e7668]:
+                    - generic [ref=e7669]: OK
+                    - generic [ref=e7670]: Tokens
+                  - generic [ref=e7671]:
+                    - generic [ref=e7672]: TODO
+                    - generic [ref=e7673]: Scopes
+                  - generic [ref=e7674]:
+                    - generic [ref=e7675]: OK
+                    - generic [ref=e7676]: Webhook
+                  - generic [ref=e7677]:
+                    - generic [ref=e7678]: OK
+                    - generic [ref=e7679]: Stock ativo
+                  - generic [ref=e7680]:
+                    - generic [ref=e7681]: OK
+                    - generic [ref=e7682]: Sandbox + producao
+                  - generic [ref=e7683]:
+                    - generic [ref=e7684]: OK
+                    - generic [ref=e7685]: Categorias
+              - generic [ref=e7686]:
+                - generic [ref=e7687]: Proxima acao
+                - paragraph [ref=e7688]: Registrar seller ou store ID para fechar o contrato operacional da conta.
+                - generic [ref=e7689]: Webhook alvo
+                - code [ref=e7690]: https://admin.brasildesconto.com.br/integrations/magalu/notifications
+            - generic [ref=e7691]:
+              - generic [ref=e7692]: Evidencias runtime
+              - generic [ref=e7694]: valley-magalu-oauth-runtime.json
+          - generic [ref=e7695]:
+            - generic [ref=e7696]:
+              - generic [ref=e7697]:
+                - heading "CJDropshipping" [level=3] [ref=e7698]
+                - paragraph [ref=e7699]: cjdropshipping
+                - paragraph [ref=e7700]: Publicar credenciais principais no vault e referenciar o segredo no cockpit.
+              - generic [ref=e7701]:
+                - generic [ref=e7702]: em homologacao
+                - generic [ref=e7703]: active
+                - generic [ref=e7704]:
+                  - generic [ref=e7705]: Ativo
+                  - checkbox "Ativo" [checked] [ref=e7706]
+            - generic [ref=e7707]:
+              - article [ref=e7708]:
+                - text: Prontidao
+                - strong [ref=e7709]: 73%
+                - text: 8/11 blocos fechados
+              - article [ref=e7710]:
+                - text: Cadencia
+                - strong [ref=e7711]: 30 min
+                - text: cache 20 min
+              - article [ref=e7712]:
+                - text: Escopos
+                - strong [ref=e7713]: "0"
+                - text: nenhum escopo declarado
+              - article [ref=e7714]:
+                - text: Margem piso
+                - strong [ref=e7715]: 12%
+                - text: seller 36307
+            - generic [ref=e7716]:
+              - generic [ref=e7717]:
+                - generic [ref=e7718]: producao
+                - generic [ref=e7719]: oauth2
+                - generic [ref=e7720]: GLOBAL
+              - generic [ref=e7721]:
+                - generic [ref=e7722]: Stock on
+                - generic [ref=e7723]: Catalogo on
+                - generic [ref=e7724]: Categorias on
+                - generic [ref=e7725]: Pedidos on
+                - generic [ref=e7726]: Estoque on
+                - generic [ref=e7727]: Preco on
+                - generic [ref=e7728]: Sandbox on
+                - generic [ref=e7729]: Prod on
+                - generic [ref=e7730]: Regra varejo
+                - generic [ref=e7731]: Liquidez on
+                - generic [ref=e7732]: Sem scraping
+                - generic [ref=e7733]: IA externa bloqueada
+            - generic [ref=e7734]:
+              - generic [ref=e7735]:
+                - generic [ref=e7736]: Ambiente
+                - combobox "Ambiente" [ref=e7737]:
+                  - option "Sandbox"
+                  - option "Producao" [selected]
+              - generic [ref=e7738]:
+                - generic [ref=e7739]: Regiao / Site
+                - textbox "Regiao / Site" [ref=e7740]:
+                  - /placeholder: BR, MLB, GLOBAL
+                  - text: GLOBAL
+              - generic [ref=e7741]:
+                - generic [ref=e7742]: Autenticacao
+                - combobox "Autenticacao" [ref=e7743]:
+                  - option "OAuth2" [selected]
+                  - option "App Key + Secret"
+                  - option "Token gerenciado"
+              - generic [ref=e7744]:
+                - generic [ref=e7745]: Base URL
+                - textbox "Base URL" [ref=e7746]: https://developers.cjdropshipping.com
+              - generic [ref=e7747]:
+                - generic [ref=e7748]: Client ID / App Key
+                - textbox "Client ID / App Key" [ref=e7749]
+              - generic [ref=e7750]:
+                - generic [ref=e7751]: Secret Ref
+                - textbox "Secret Ref" [ref=e7752]:
+                  - /placeholder: vault/marketplaces/cjdropshipping
+                  - text: vault/marketplaces/cjdropshipping/client-secret
+              - generic [ref=e7753]:
+                - generic [ref=e7754]: Access Token Ref
+                - textbox "Access Token Ref" [ref=e7755]:
+                  - /placeholder: vault/marketplaces/cjdropshipping/access-token
+                  - text: vault/marketplaces/cjdropshipping/access-token
+              - generic [ref=e7756]:
+                - generic [ref=e7757]: Refresh Token Ref
+                - textbox "Refresh Token Ref" [ref=e7758]:
+                  - /placeholder: vault/marketplaces/cjdropshipping/refresh-token
+                  - text: vault/marketplaces/cjdropshipping/refresh-token
+              - generic [ref=e7759]:
+                - generic [ref=e7760]: Redirect URI
+                - textbox "Redirect URI" [ref=e7761]:
+                  - /placeholder: https://admin.brasildesconto.com.br/integrations/cjdropshipping/callback
+              - generic [ref=e7762]:
+                - generic [ref=e7763]: Seller / Store ID
+                - textbox "Seller / Store ID" [ref=e7764]: "36307"
+              - generic [ref=e7765]:
+                - generic [ref=e7766]: Webhook URL
+                - textbox "Webhook URL" [ref=e7767]: https://admin.brasildesconto.com.br/integrations/cjdropshipping/notifications
+              - generic [ref=e7768]:
+                - generic [ref=e7769]: Webhook Secret Ref
+                - textbox "Webhook Secret Ref" [ref=e7770]: vault/marketplaces/cjdropshipping/webhook-secret
+              - generic [ref=e7771]:
+                - generic [ref=e7772]: Scopes
+                - textbox "Scopes" [ref=e7773]
+              - generic [ref=e7774]:
+                - generic [ref=e7775]: Sync a cada min.
+                - spinbutton "Sync a cada min." [ref=e7776]: "30"
+              - generic [ref=e7777]:
+                - generic [ref=e7778]: Cache TTL min.
+                - spinbutton "Cache TTL min." [ref=e7779]: "20"
+              - generic [ref=e7780]:
+                - generic [ref=e7781]: Margem minima %
+                - spinbutton "Margem minima %" [ref=e7782]: "12"
+              - generic "Sincronizacoes CJDropshipping" [ref=e7783]:
+                - generic [ref=e7784]:
+                  - generic [ref=e7785]: Modulo STOCK
+                  - checkbox "Modulo STOCK" [checked] [ref=e7786]
+                - generic [ref=e7787]:
+                  - generic [ref=e7788]: Sandbox
+                  - checkbox "Sandbox" [checked] [ref=e7789]
+                - generic [ref=e7790]:
+                  - generic [ref=e7791]: Producao
+                  - checkbox "Producao" [checked] [ref=e7792]
+                - generic [ref=e7793]:
+                  - generic [ref=e7794]: Catalogo
+                  - checkbox "Catalogo" [checked] [ref=e7795]
+                - generic [ref=e7796]:
+                  - generic [ref=e7797]: Categorias
+                  - checkbox "Categorias" [checked] [ref=e7798]
+                - generic [ref=e7799]:
+                  - generic [ref=e7800]: Pedidos
+                  - checkbox "Pedidos" [checked] [ref=e7801]
+                - generic [ref=e7802]:
+                  - generic [ref=e7803]: Estoque
+                  - checkbox "Estoque" [checked] [ref=e7804]
+                - generic [ref=e7805]:
+                  - generic [ref=e7806]: Preco
+                  - checkbox "Preco" [checked] [ref=e7807]
+                - generic [ref=e7808]:
+                  - generic [ref=e7809]: Publicar aprovados
+                  - checkbox "Publicar aprovados" [checked] [ref=e7810]
+                - generic [ref=e7811]:
+                  - generic [ref=e7812]: Varejo abaixo
+                  - checkbox "Varejo abaixo" [checked] [ref=e7813]
+                - generic [ref=e7814]:
+                  - generic [ref=e7815]: Checar liquidez
+                  - checkbox "Checar liquidez" [checked] [ref=e7816]
+                - generic [ref=e7817]:
+                  - generic [ref=e7818]: Fallback scraping
+                  - checkbox "Fallback scraping" [ref=e7819]
+                - generic [ref=e7820]:
+                  - generic [ref=e7821]: Bloquear IA externa
+                  - checkbox "Bloquear IA externa" [checked] [ref=e7822]
+              - generic [ref=e7823]:
+                - generic [ref=e7824]: Notas
+                - textbox "Notas" [ref=e7825]: Fornecedor de origem para dropshipping reparado com política segura, refs de runtime e superfície pública alinhada.
+            - generic [ref=e7826]:
+              - generic [ref=e7827]:
+                - generic [ref=e7828]: Checklist de credenciais
+                - generic [ref=e7829]:
+                  - generic [ref=e7830]:
+                    - generic [ref=e7831]: OK
+                    - generic [ref=e7832]: Base URL
+                  - generic [ref=e7833]:
+                    - generic [ref=e7834]: TODO
+                    - generic [ref=e7835]: Client/App
+                  - generic [ref=e7836]:
+                    - generic [ref=e7837]: OK
+                    - generic [ref=e7838]: Secret ref
+                  - generic [ref=e7839]:
+                    - generic [ref=e7840]: TODO
+                    - generic [ref=e7841]: Redirect URI
+                  - generic [ref=e7842]:
+                    - generic [ref=e7843]: OK
+                    - generic [ref=e7844]: Seller/Store
+                  - generic [ref=e7845]:
+                    - generic [ref=e7846]: OK
+                    - generic [ref=e7847]: Tokens
+                  - generic [ref=e7848]:
+                    - generic [ref=e7849]: TODO
+                    - generic [ref=e7850]: Scopes
+                  - generic [ref=e7851]:
+                    - generic [ref=e7852]: OK
+                    - generic [ref=e7853]: Webhook
+                  - generic [ref=e7854]:
+                    - generic [ref=e7855]: OK
+                    - generic [ref=e7856]: Stock ativo
+                  - generic [ref=e7857]:
+                    - generic [ref=e7858]: OK
+                    - generic [ref=e7859]: Sandbox + producao
+                  - generic [ref=e7860]:
+                    - generic [ref=e7861]: OK
+                    - generic [ref=e7862]: Categorias
+              - generic [ref=e7863]:
+                - generic [ref=e7864]: Proxima acao
+                - paragraph [ref=e7865]: Publicar credenciais principais no vault e referenciar o segredo no cockpit.
+                - generic [ref=e7866]: Webhook alvo
+                - code [ref=e7867]: https://admin.brasildesconto.com.br/integrations/cjdropshipping/notifications
+            - generic [ref=e7868]:
+              - generic [ref=e7869]: Evidencias runtime
+              - generic [ref=e7870]:
+                - generic [ref=e7871]: valley-cjdropshipping-notification-latest.json
+                - generic [ref=e7872]: valley-stock-real-catalog.json
+          - generic [ref=e7873]:
+            - generic [ref=e7874]:
+              - generic [ref=e7875]:
+                - heading "Shopee" [level=3] [ref=e7876]
+                - paragraph [ref=e7877]: shopee
+                - paragraph [ref=e7878]: Publicar credenciais principais no vault e referenciar o segredo no cockpit.
+              - generic [ref=e7879]:
+                - generic [ref=e7880]: credencial externa pendente
+                - generic [ref=e7881]: benchmark_auth_pending
+                - generic [ref=e7882]:
+                  - generic [ref=e7883]: Ativo
+                  - checkbox "Ativo" [checked] [ref=e7884]
+            - generic [ref=e7885]:
+              - article [ref=e7886]:
+                - text: Prontidao
+                - strong [ref=e7887]: 73%
+                - text: 8/11 blocos fechados
+              - article [ref=e7888]:
+                - text: Cadencia
+                - strong [ref=e7889]: 30 min
+                - text: cache 20 min
+              - article [ref=e7890]:
+                - text: Escopos
+                - strong [ref=e7891]: "0"
+                - text: nenhum escopo declarado
+              - article [ref=e7892]:
+                - text: Margem piso
+                - strong [ref=e7893]: 12%
+                - text: seller pendente
+            - generic [ref=e7894]:
+              - generic [ref=e7895]:
+                - generic [ref=e7896]: producao
+                - generic [ref=e7897]: operator_login
+                - generic [ref=e7898]: BR
+              - generic [ref=e7899]:
+                - generic [ref=e7900]: Stock on
+                - generic [ref=e7901]: Catalogo off
+                - generic [ref=e7902]: Categorias on
+                - generic [ref=e7903]: Pedidos on
+                - generic [ref=e7904]: Estoque on
+                - generic [ref=e7905]: Preco on
+                - generic [ref=e7906]: Sandbox on
+                - generic [ref=e7907]: Prod on
+                - generic [ref=e7908]: Regra varejo
+                - generic [ref=e7909]: Liquidez on
+                - generic [ref=e7910]: Sem scraping
+                - generic [ref=e7911]: IA externa bloqueada
+              - generic [ref=e7913]: credentials_or_oauth_token
+            - generic [ref=e7914]:
+              - generic [ref=e7915]:
+                - generic [ref=e7916]: Ambiente
+                - combobox "Ambiente" [ref=e7917]:
+                  - option "Sandbox"
+                  - option "Producao" [selected]
+              - generic [ref=e7918]:
+                - generic [ref=e7919]: Regiao / Site
+                - textbox "Regiao / Site" [ref=e7920]:
+                  - /placeholder: BR, MLB, GLOBAL
+                  - text: BR
+              - generic [ref=e7921]:
+                - generic [ref=e7922]: Autenticacao
+                - combobox "Autenticacao" [ref=e7923]:
+                  - option "OAuth2" [selected]
+                  - option "App Key + Secret"
+                  - option "Token gerenciado"
+              - generic [ref=e7924]:
+                - generic [ref=e7925]: Base URL
+                - textbox "Base URL" [ref=e7926]: https://partner.shopeemobile.com
+              - generic [ref=e7927]:
+                - generic [ref=e7928]: Client ID / App Key
+                - textbox "Client ID / App Key" [ref=e7929]
+              - generic [ref=e7930]:
+                - generic [ref=e7931]: Secret Ref
+                - textbox "Secret Ref" [ref=e7932]:
+                  - /placeholder: vault/marketplaces/shopee
+                  - text: runtime://marketplaces/shopee/operator-login
+              - generic [ref=e7933]:
+                - generic [ref=e7934]: Access Token Ref
+                - textbox "Access Token Ref" [ref=e7935]:
+                  - /placeholder: vault/marketplaces/shopee/access-token
+                  - text: vault/marketplaces/shopee/access-token
+              - generic [ref=e7936]:
+                - generic [ref=e7937]: Refresh Token Ref
+                - textbox "Refresh Token Ref" [ref=e7938]:
+                  - /placeholder: vault/marketplaces/shopee/refresh-token
+                  - text: vault/marketplaces/shopee/refresh-token
+              - generic [ref=e7939]:
+                - generic [ref=e7940]: Redirect URI
+                - textbox "Redirect URI" [ref=e7941]:
+                  - /placeholder: https://admin.brasildesconto.com.br/integrations/shopee/callback
+                  - text: https://admin.brasildesconto.com.br/integrations/shopee/callback
+              - generic [ref=e7942]:
+                - generic [ref=e7943]: Seller / Store ID
+                - textbox "Seller / Store ID" [ref=e7944]
+              - generic [ref=e7945]:
+                - generic [ref=e7946]: Webhook URL
+                - textbox "Webhook URL" [ref=e7947]: https://admin.brasildesconto.com.br/integrations/shopee/notifications
+              - generic [ref=e7948]:
+                - generic [ref=e7949]: Webhook Secret Ref
+                - textbox "Webhook Secret Ref" [ref=e7950]: vault/marketplaces/shopee/webhook-secret
+              - generic [ref=e7951]:
+                - generic [ref=e7952]: Scopes
+                - textbox "Scopes" [ref=e7953]
+              - generic [ref=e7954]:
+                - generic [ref=e7955]: Sync a cada min.
+                - spinbutton "Sync a cada min." [ref=e7956]: "30"
+              - generic [ref=e7957]:
+                - generic [ref=e7958]: Cache TTL min.
+                - spinbutton "Cache TTL min." [ref=e7959]: "20"
+              - generic [ref=e7960]:
+                - generic [ref=e7961]: Margem minima %
+                - spinbutton "Margem minima %" [ref=e7962]: "12"
+              - generic "Sincronizacoes Shopee" [ref=e7963]:
+                - generic [ref=e7964]:
+                  - generic [ref=e7965]: Modulo STOCK
+                  - checkbox "Modulo STOCK" [checked] [ref=e7966]
+                - generic [ref=e7967]:
+                  - generic [ref=e7968]: Sandbox
+                  - checkbox "Sandbox" [checked] [ref=e7969]
+                - generic [ref=e7970]:
+                  - generic [ref=e7971]: Producao
+                  - checkbox "Producao" [checked] [ref=e7972]
+                - generic [ref=e7973]:
+                  - generic [ref=e7974]: Catalogo
+                  - checkbox "Catalogo" [ref=e7975]
+                - generic [ref=e7976]:
+                  - generic [ref=e7977]: Categorias
+                  - checkbox "Categorias" [checked] [ref=e7978]
+                - generic [ref=e7979]:
+                  - generic [ref=e7980]: Pedidos
+                  - checkbox "Pedidos" [checked] [ref=e7981]
+                - generic [ref=e7982]:
+                  - generic [ref=e7983]: Estoque
+                  - checkbox "Estoque" [checked] [ref=e7984]
+                - generic [ref=e7985]:
+                  - generic [ref=e7986]: Preco
+                  - checkbox "Preco" [checked] [ref=e7987]
+                - generic [ref=e7988]:
+                  - generic [ref=e7989]: Publicar aprovados
+                  - checkbox "Publicar aprovados" [checked] [ref=e7990]
+                - generic [ref=e7991]:
+                  - generic [ref=e7992]: Varejo abaixo
+                  - checkbox "Varejo abaixo" [checked] [ref=e7993]
+                - generic [ref=e7994]:
+                  - generic [ref=e7995]: Checar liquidez
+                  - checkbox "Checar liquidez" [checked] [ref=e7996]
+                - generic [ref=e7997]:
+                  - generic [ref=e7998]: Fallback scraping
+                  - checkbox "Fallback scraping" [ref=e7999]
+                - generic [ref=e8000]:
+                  - generic [ref=e8001]: Bloquear IA externa
+                  - checkbox "Bloquear IA externa" [checked] [ref=e8002]
+              - generic [ref=e8003]:
+                - generic [ref=e8004]: Notas
+                - textbox "Notas" [ref=e8005]: Marketplace mantido apenas para comparação autorizada; não é fornecedor de dropshipping.
+            - generic [ref=e8006]:
+              - generic [ref=e8007]:
+                - generic [ref=e8008]: Checklist de credenciais
+                - generic [ref=e8009]:
+                  - generic [ref=e8010]:
+                    - generic [ref=e8011]: OK
+                    - generic [ref=e8012]: Base URL
+                  - generic [ref=e8013]:
+                    - generic [ref=e8014]: TODO
+                    - generic [ref=e8015]: Client/App
+                  - generic [ref=e8016]:
+                    - generic [ref=e8017]: OK
+                    - generic [ref=e8018]: Secret ref
+                  - generic [ref=e8019]:
+                    - generic [ref=e8020]: OK
+                    - generic [ref=e8021]: Redirect URI
+                  - generic [ref=e8022]:
+                    - generic [ref=e8023]: TODO
+                    - generic [ref=e8024]: Seller/Store
+                  - generic [ref=e8025]:
+                    - generic [ref=e8026]: OK
+                    - generic [ref=e8027]: Tokens
+                  - generic [ref=e8028]:
+                    - generic [ref=e8029]: TODO
+                    - generic [ref=e8030]: Scopes
+                  - generic [ref=e8031]:
+                    - generic [ref=e8032]: OK
+                    - generic [ref=e8033]: Webhook
+                  - generic [ref=e8034]:
+                    - generic [ref=e8035]: OK
+                    - generic [ref=e8036]: Stock ativo
+                  - generic [ref=e8037]:
+                    - generic [ref=e8038]: OK
+                    - generic [ref=e8039]: Sandbox + producao
+                  - generic [ref=e8040]:
+                    - generic [ref=e8041]: OK
+                    - generic [ref=e8042]: Categorias
+              - generic [ref=e8043]:
+                - generic [ref=e8044]: Proxima acao
+                - paragraph [ref=e8045]: Publicar credenciais principais no vault e referenciar o segredo no cockpit.
+                - generic [ref=e8046]: Webhook alvo
+                - code [ref=e8047]: https://admin.brasildesconto.com.br/integrations/shopee/notifications
+        - generic [ref=e171]:
+          - button "Salvar" [ref=e172] [cursor=pointer]
+          - button "Alterar" [ref=e173] [cursor=pointer]
+          - button "Padrao" [ref=e174] [cursor=pointer]
+          - button "Exportar resumo" [ref=e175] [cursor=pointer]
+        - paragraph [ref=e176]: Use referencia de segredo ou vault no campo Secret Ref. Consultas externas do dropshipping devem usar APIs oficiais; scraping fica como fallback controlado e IA externa fica bloqueada por padrao.
+      - region "Playbooks de integracao do modulo stock" [ref=e177]:
+        - generic [ref=e178]:
+          - generic [ref=e179]:
+            - paragraph [ref=e180]: Stock integration desk
+            - heading "Passo a passo por fornecedor" [level=2] [ref=e181]
+          - paragraph [ref=e182]: Guias de integração para ativar APIs oficiais de dropshipping com fluxo comercial consistente.
+        - generic [ref=e8048]:
+          - article [ref=e8049]:
+            - text: Fornecedores mapeados
+            - strong [ref=e8050]: "7"
+            - text: playbooks ativos no cockpit
+          - article [ref=e8051]:
+            - text: Stock habilitado
+            - strong [ref=e8052]: "7"
+            - text: fornecedores com modulo STOCK ligado
+          - article [ref=e8053]:
+            - text: Webhooks fechados
+            - strong [ref=e8054]: "7"
+            - text: assinatura e callback publicados
+          - article [ref=e8055]:
+            - text: Tokens publicados
+            - strong [ref=e8056]: "7"
+            - text: cofre operacional e refresh controlado
+          - article [ref=e8057]:
+            - text: Contas em producao
+            - strong [ref=e8058]: "7"
+            - text: 7 com notas operacionais
+        - generic [ref=e8059]:
+          - article [ref=e8060]:
+            - generic [ref=e8061]:
+              - generic [ref=e8062]:
+                - heading "Mercado Livre" [level=3] [ref=e8063]
+                - paragraph [ref=e8064]: OAuth2 com app Mercado Livre e seller autorizado.
+              - generic [ref=e8065]: MLB
+            - generic [ref=e8066]:
+              - generic [ref=e8067]: mercado_livre
+              - generic [ref=e8068]: https://api.mercadolibre.com
+              - generic [ref=e8069]: em homologacao
+              - generic [ref=e8070]: benchmark_ready
+            - generic [ref=e8071]:
+              - generic [ref=e8072]:
+                - generic [ref=e8073]: Prontidao
+                - strong [ref=e8074]: 91%
+              - generic [ref=e8075]:
+                - generic [ref=e8076]: Ambiente
+                - strong [ref=e8077]: Producao
+              - generic [ref=e8078]:
+                - generic [ref=e8079]: Cadencia
+                - strong [ref=e8080]: 30 min
+            - list [ref=e8081]:
+              - listitem [ref=e8082]: Criar app no Mercado Livre Developers e registrar redirect URI do admin.
+              - listitem [ref=e8083]: Salvar Client ID, Secret Ref e seller ID no cockpit em ambiente correto.
+              - listitem [ref=e8084]: Autorizar a conta da loja, persistir access token e refresh token no vault.
+              - listitem [ref=e8085]: Configurar webhooks de orders, items e shipments apontando para a URL publica do Valley.
+              - listitem [ref=e8086]: Executar primeira importacao de catalogo e validar estoque, preco e pedidos em sandbox antes de producao.
+          - article [ref=e8087]:
+            - generic [ref=e8088]:
+              - generic [ref=e8089]:
+                - heading "Amazon" [level=3] [ref=e8090]
+                - paragraph [ref=e8091]: Selling Partner API com LWA + IAM role assinada.
+              - generic [ref=e8092]: BR
+            - generic [ref=e8093]:
+              - generic [ref=e8094]: amazon
+              - generic [ref=e8095]: https://sellingpartnerapi-na.amazon.com
+              - generic [ref=e8096]: credencial externa pendente
+              - generic [ref=e8097]: benchmark_auth_pending
+            - generic [ref=e8098]:
+              - generic [ref=e8099]:
+                - generic [ref=e8100]: Prontidao
+                - strong [ref=e8101]: 64%
+              - generic [ref=e8102]:
+                - generic [ref=e8103]: Ambiente
+                - strong [ref=e8104]: Producao
+              - generic [ref=e8105]:
+                - generic [ref=e8106]: Cadencia
+                - strong [ref=e8107]: 30 min
+            - list [ref=e8108]:
+              - listitem [ref=e8109]: Registrar app SP-API, vincular IAM role e gerar credenciais LWA.
+              - listitem [ref=e8110]: Preencher marketplace BR, seller ID e referencias de segredo no cockpit.
+              - listitem [ref=e8111]: Cadastrar endpoint de notificacao e mapear scopes de catalogo, pricing, orders e listings.
+              - listitem [ref=e8112]: Rodar sync inicial de listings e estoque, depois habilitar pedidos e webhooks.
+              - listitem [ref=e8113]: Validar reconciliação de inventario por SKU antes de ativar producao.
+          - article [ref=e8114]:
+            - generic [ref=e8115]:
+              - generic [ref=e8116]:
+                - heading "AliExpress" [level=3] [ref=e8117]
+                - paragraph [ref=e8118]: App Key + Secret com autorizacao do seller no portal AliExpress Open Platform.
+              - generic [ref=e8119]: GLOBAL
+            - generic [ref=e8120]:
+              - generic [ref=e8121]: aliexpress
+              - generic [ref=e8122]: https://api-sg.aliexpress.com
+              - generic [ref=e8123]: pronto para producao
+              - generic [ref=e8124]: active
+            - generic [ref=e8125]:
+              - generic [ref=e8126]:
+                - generic [ref=e8127]: Prontidao
+                - strong [ref=e8128]: 91%
+              - generic [ref=e8129]:
+                - generic [ref=e8130]: Ambiente
+                - strong [ref=e8131]: Producao
+              - generic [ref=e8132]:
+                - generic [ref=e8133]: Cadencia
+                - strong [ref=e8134]: 30 min
+            - list [ref=e8135]:
+              - listitem [ref=e8136]: Criar aplicacao na Open Platform e registrar callback de autorizacao.
+              - listitem [ref=e8137]: Salvar App Key, Secret Ref e access token no cofre do ambiente.
+              - listitem [ref=e8138]: Mapear catalogo, variacoes, estoque e rotas de order fulfillment.
+              - listitem [ref=e8139]: Definir janela de sync de preco e estoque para evitar rate limit.
+              - listitem [ref=e8140]: Executar homologacao com uma loja piloto antes de publicar toda a malha STOCK.
+          - article [ref=e8141]:
+            - generic [ref=e8142]:
+              - generic [ref=e8143]:
+                - heading "Alibaba" [level=3] [ref=e8144]
+                - paragraph [ref=e8145]: OpenAPI com app enterprise e chaves assinadas.
+              - generic [ref=e8146]: GLOBAL
+            - generic [ref=e8147]:
+              - generic [ref=e8148]: alibaba
+              - generic [ref=e8149]: https://openapi.alibaba.com
+              - generic [ref=e8150]: credencial externa pendente
+              - generic [ref=e8151]: external_auth_pending
+            - generic [ref=e8152]:
+              - generic [ref=e8153]:
+                - generic [ref=e8154]: Prontidao
+                - strong [ref=e8155]: 73%
+              - generic [ref=e8156]:
+                - generic [ref=e8157]: Ambiente
+                - strong [ref=e8158]: Producao
+              - generic [ref=e8159]:
+                - generic [ref=e8160]: Cadencia
+                - strong [ref=e8161]: 30 min
+            - list [ref=e8162]:
+              - listitem [ref=e8163]: Provisionar app enterprise no Alibaba OpenAPI e liberar produtos alvo.
+              - listitem [ref=e8164]: Cadastrar chaves e parametros de assinatura no admin.
+              - listitem [ref=e8165]: Conectar importacao de catalogo e regras de margem por familia de produto.
+              - listitem [ref=e8166]: Habilitar apenas leitura no primeiro ciclo e comparar SKUs com base local.
+              - listitem [ref=e8167]: Liberar pedidos e confirmacoes apos bater consistencia de estoque e SLA.
+          - article [ref=e8168]:
+            - generic [ref=e8169]:
+              - generic [ref=e8170]:
+                - heading "Magalu" [level=3] [ref=e8171]
+                - paragraph [ref=e8172]: OAuth2 / credenciais Magalu Marketplace com seller homologado.
+              - generic [ref=e8173]: BR
+            - generic [ref=e8174]:
+              - generic [ref=e8175]: magalu
+              - generic [ref=e8176]: https://api.magalu.com
+              - generic [ref=e8177]: em homologacao
+              - generic [ref=e8178]: benchmark_ready
+            - generic [ref=e8179]:
+              - generic [ref=e8180]:
+                - generic [ref=e8181]: Prontidao
+                - strong [ref=e8182]: 82%
+              - generic [ref=e8183]:
+                - generic [ref=e8184]: Ambiente
+                - strong [ref=e8185]: Producao
+              - generic [ref=e8186]:
+                - generic [ref=e8187]: Cadencia
+                - strong [ref=e8188]: 30 min
+            - list [ref=e8189]:
+              - listitem [ref=e8190]: Homologar a conta seller e solicitar credenciais de API ao Magalu.
+              - listitem [ref=e8191]: Salvar client, secret, seller ID e webhook secret no cockpit.
+              - listitem [ref=e8192]: Configurar sincronizacao de catalogo, preco e saldo por SKU.
+              - listitem [ref=e8193]: Mapear fluxo de pedido e cancelamento conforme regras do parceiro.
+              - listitem [ref=e8194]: Virar ambiente para producao apenas depois de checklist fiscal e logistico fechado.
+          - article [ref=e8195]:
+            - generic [ref=e8196]:
+              - generic [ref=e8197]:
+                - heading "CJDropshipping" [level=3] [ref=e8198]
+                - paragraph [ref=e8199]: API Key da conta CJ com exchange para access token e refresh token.
+              - generic [ref=e8200]: GLOBAL
+            - generic [ref=e8201]:
+              - generic [ref=e8202]: cjdropshipping
+              - generic [ref=e8203]: https://developers.cjdropshipping.com
+              - generic [ref=e8204]: em homologacao
+              - generic [ref=e8205]: active
+            - generic [ref=e8206]:
+              - generic [ref=e8207]:
+                - generic [ref=e8208]: Prontidao
+                - strong [ref=e8209]: 73%
+              - generic [ref=e8210]:
+                - generic [ref=e8211]: Ambiente
+                - strong [ref=e8212]: Producao
+              - generic [ref=e8213]:
+                - generic [ref=e8214]: Cadencia
+                - strong [ref=e8215]: 30 min
+            - list [ref=e8216]:
+              - listitem [ref=e8217]: Gerar API Key em My CJ > Authorization > API e registrar a referencia segura no admin.
+              - listitem [ref=e8218]: Trocar a API Key por access token no backend e persistir refresh token em runtime seguro.
+              - listitem [ref=e8219]: Configurar webhook em /integrations/cjdropshipping/notifications.
+              - listitem [ref=e8220]: Importar catalogo inicial e normalizar categorias, shipping profile e origem.
+              - listitem [ref=e8221]: Configurar sincronizacao de custo, disponibilidade e tracking.
+              - listitem [ref=e8222]: Aplicar margem minima e bloqueios de produto antes da exposicao na vitrine.
+              - listitem [ref=e8223]: Validar pedido de ponta a ponta com tracking e webhook de status antes da escala.
+          - article [ref=e8224]:
+            - generic [ref=e8225]:
+              - generic [ref=e8226]:
+                - heading "Shopee" [level=3] [ref=e8227]
+                - paragraph [ref=e8228]: Partner API com partner ID, partner key e loja autorizada.
+              - generic [ref=e8229]: BR
+            - generic [ref=e8230]:
+              - generic [ref=e8231]: shopee
+              - generic [ref=e8232]: https://partner.shopeemobile.com
+              - generic [ref=e8233]: credencial externa pendente
+              - generic [ref=e8234]: benchmark_auth_pending
+            - generic [ref=e8235]:
+              - generic [ref=e8236]:
+                - generic [ref=e8237]: Prontidao
+                - strong [ref=e8238]: 73%
+              - generic [ref=e8239]:
+                - generic [ref=e8240]: Ambiente
+                - strong [ref=e8241]: Producao
+              - generic [ref=e8242]:
+                - generic [ref=e8243]: Cadencia
+                - strong [ref=e8244]: 30 min
+            - list [ref=e8245]:
+              - listitem [ref=e8246]: Criar app partner, registrar redirect URI e assinar requisicoes com partner key.
+              - listitem [ref=e8247]: Salvar partner ID, secret ref, tokens e store ID no cockpit.
+              - listitem [ref=e8248]: Configurar scopes de item, estoque, orders e logistics.
+              - listitem [ref=e8249]: Executar leitura inicial do catalogo e validar reconciliacao por variacao.
+              - listitem [ref=e8250]: Habilitar webhooks e producao depois de testar pedido e atualizacao de status.
+  - generic [ref=e269]: Integrações abertas.

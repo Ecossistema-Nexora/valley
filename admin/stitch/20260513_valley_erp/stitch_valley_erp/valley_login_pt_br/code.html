@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Valley | Login Seguro</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-bright": "#fcf8fa",
+                    "on-primary": "#ffffff",
+                    "primary": "#000000",
+                    "on-background": "#1b1b1d",
+                    "secondary": "#006c49",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "on-error": "#ffffff",
+                    "surface-container": "#f0edef",
+                    "on-surface-variant": "#45464d",
+                    "on-primary-container": "#7c839b",
+                    "primary-fixed-dim": "#bec6e0",
+                    "error-container": "#ffdad6",
+                    "error": "#ba1a1a",
+                    "secondary-container": "#6cf8bb",
+                    "on-tertiary-fixed-variant": "#004395",
+                    "inverse-on-surface": "#f3f0f2",
+                    "on-tertiary-container": "#3980f4",
+                    "primary-container": "#131b2e",
+                    "on-tertiary": "#ffffff",
+                    "background": "#fcf8fa",
+                    "tertiary-fixed-dim": "#adc6ff",
+                    "surface-container-high": "#eae7e9",
+                    "on-primary-fixed-variant": "#3f465c",
+                    "primary-fixed": "#dae2fd",
+                    "outline-variant": "#c6c6cd",
+                    "on-surface": "#1b1b1d",
+                    "surface-tint": "#565e74",
+                    "outline": "#76777d",
+                    "inverse-surface": "#303032",
+                    "on-error-container": "#93000a",
+                    "inverse-primary": "#bec6e0",
+                    "on-primary-fixed": "#131b2e",
+                    "tertiary-container": "#001a42",
+                    "surface-dim": "#dcd9db",
+                    "secondary-fixed": "#6ffbbe",
+                    "on-secondary-fixed": "#002113",
+                    "on-secondary-container": "#00714d",
+                    "tertiary-fixed": "#d8e2ff",
+                    "surface-variant": "#e4e2e4",
+                    "surface-container-highest": "#e4e2e4",
+                    "tertiary": "#000000",
+                    "on-secondary-fixed-variant": "#005236",
+                    "on-tertiary-fixed": "#001a42",
+                    "secondary-fixed-dim": "#4edea3",
+                    "surface-container-low": "#f6f3f5",
+                    "surface": "#fcf8fa"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "container-padding": "1.5rem",
+                    "unit": "4px",
+                    "gutter": "1rem",
+                    "max-width": "1600px",
+                    "dense-gap": "0.5rem"
+            },
+            "fontFamily": {
+                    "title-sm": ["Inter"],
+                    "mono-sm": ["JetBrains Mono"],
+                    "label-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "label-bold": ["Inter"]
+            },
+            "fontSize": {
+                    "title-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "mono-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "display-lg": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                    "label-bold": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .brand-gradient {
+            background: radial-gradient(circle at top right, #131b2e 0%, #fcf8fa 100%);
+        }
+        .form-glass {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+    </style>
+</head>
+<body class="bg-surface-bright min-h-screen flex flex-col font-body-md text-on-surface selection:bg-secondary-container">
+<main class="flex-grow flex items-center justify-center relative px-container-padding py-20 brand-gradient overflow-hidden">
+<div class="absolute inset-0 opacity-10 pointer-events-none">
+<div class="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-primary-container rounded-full blur-[120px]"></div>
+<div class="absolute bottom-[-5%] left-[-5%] w-[400px] h-[400px] bg-secondary-container rounded-full blur-[100px]"></div>
+</div>
+<div class="w-full max-w-[440px] z-10">
+<div class="flex flex-col items-center mb-8">
+<img alt="Valley Logo" class="h-24 w-auto mb-6 drop-shadow-xl" src="https://lh3.googleusercontent.com/aida/ADBb0ujl3zgWByWP880hxWIV1XgqNsvOWPMw43gij0kc8QHuUO8NCDDV_6ovKZ2Cy0Zikh6HkV954BXWeFw-n2WCuXNGnKJAms78ztDPGAU0QzXnOe_aaZqpuQ2YFIk2enQFIOHo8yG-FzKtnp6K2HOY2rYeq4VIQRVliDz2hqjNk92utsVboHBN7HVuxomsKrf9KBHxjExs-sShBUhcapdDqSBi2Km0hY92pEq6s_Yi_0hnuiuMraNirTGY_XNEAjhtSVvb03yjRr1y2U8"/>
+<h1 class="font-display-lg text-display-lg text-primary tracking-tight">Bem-vindo ao Valley</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-2">Operações Comerciais Corporativas</p>
+</div>
+<div class="form-glass border border-outline-variant p-10 rounded-xl shadow-2xl">
+<form class="space-y-6">
+<div class="space-y-2">
+<label class="font-label-bold text-label-bold text-on-surface-variant block uppercase" for="email">E-mail</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">mail</span>
+<input class="w-full pl-10 pr-4 py-3 bg-surface-container-lowest border border-outline rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all font-body-md" id="email" placeholder="nome@empresa.com" required="" type="email"/>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between items-center">
+<label class="font-label-bold text-label-bold text-on-surface-variant block uppercase" for="password">Senha</label>
+<a class="font-label-md text-label-md text-secondary hover:underline" href="#">Esqueceu a senha?</a>
+</div>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">lock</span>
+<input class="w-full pl-10 pr-12 py-3 bg-surface-container-lowest border border-outline rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all font-body-md" id="password" placeholder="••••••••" required="" type="password"/>
+<button class="absolute right-3 top-1/2 -translate-y-1/2 text-outline hover:text-on-surface" type="button">
+<span class="material-symbols-outlined">visibility</span>
+</button>
+</div>
+</div>
+<div class="flex items-center space-x-2">
+<input class="w-4 h-4 rounded border-outline text-primary focus:ring-primary" id="remember" type="checkbox"/>
+<label class="font-body-sm text-body-sm text-on-surface-variant" for="remember">Manter conectado por 30 dias</label>
+</div>
+<button class="w-full py-4 bg-primary text-on-primary font-title-sm text-title-sm rounded-lg hover:bg-on-surface-variant active:scale-[0.98] transition-all shadow-lg flex items-center justify-center gap-2" type="submit">
+<span>Entrar</span>
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</form>
+<div class="relative my-8">
+<div class="absolute inset-0 flex items-center">
+<div class="w-full border-t border-outline-variant"></div>
+</div>
+<div class="relative flex justify-center text-label-md text-label-md uppercase">
+<span class="bg-white px-4 text-outline">Ou continuar com</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<button class="flex items-center justify-center gap-3 py-3 px-4 border border-outline rounded-lg font-label-md text-label-md hover:bg-surface-container transition-colors">
+<img alt="Google" class="w-4 h-4" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDeFsHKyZah2VxPGBZIvDViu40oD2KNgaiu4hgSy_MHO42lBWXyt4j77jb0YCGGr4c7cejGPkh4VxG93hcfmQJL1Wlg6wpPY4cUAbgqIVLjprpHWXbn0r6he1A3F1QGLHAHZubq1z37-ybykNPHPx0F69YmRqMCpB1thgRb60rKIx4uDrtOWZQeqFu6DIRY224Un_xnCcIma6_dxvCxqRUwgUIdVVaUzPW5oy01QEWoEP90QHgvykbUC7UUIwqi9UhrAGJHiAJESr7L"/>
+<span>Google SSO</span>
+</button>
+<button class="flex items-center justify-center gap-3 py-3 px-4 border border-outline rounded-lg font-label-md text-label-md hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-sm">cloud</span>
+<span>IdP Corporativo</span>
+</button>
+</div>
+</div>
+<p class="text-center mt-8 font-body-sm text-body-sm text-on-surface-variant">
+                Não tem uma conta? <a class="font-title-sm text-title-sm text-primary hover:underline" href="#">Solicitar Acesso</a>
+</p>
+</div>
+</main>
+<footer class="w-full py-gutter px-container-padding flex justify-between items-center max-w-max-width mx-auto bg-surface-container-lowest border-t border-outline-variant">
+<div class="flex items-center gap-2">
+<span class="font-title-sm text-title-sm font-black text-primary uppercase">Valley</span>
+<span class="text-on-surface-variant text-body-sm">|</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">© 2024 Valley Operações Comerciais. Todos os direitos reservados.</span>
+</div>
+<div class="flex gap-6">
+<a class="text-on-surface-variant font-body-sm text-body-sm hover:text-secondary underline transition-all" href="#">Política de Privacidade</a>
+<a class="text-on-surface-variant font-body-sm text-body-sm hover:text-secondary underline transition-all" href="#">Termos de Serviço</a>
+<a class="text-on-surface-variant font-body-sm text-body-sm hover:text-secondary underline transition-all" href="#">Segurança</a>
+</div>
+</footer>
+</body></html>

@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Valley ERP - Lista de Pedidos</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-container": "#131b2e",
+                    "on-background": "#1b1b1d",
+                    "secondary-fixed": "#6ffbbe",
+                    "on-primary": "#ffffff",
+                    "on-surface-variant": "#45464d",
+                    "secondary-container": "#6cf8bb",
+                    "on-secondary-container": "#00714d",
+                    "on-tertiary-container": "#3980f4",
+                    "on-tertiary-fixed": "#001a42",
+                    "on-secondary-fixed": "#002113",
+                    "surface-dim": "#dcd9db",
+                    "on-tertiary-fixed-variant": "#004395",
+                    "surface-container-highest": "#e4e2e4",
+                    "on-primary-container": "#7c839b",
+                    "surface": "#fcf8fa",
+                    "on-surface": "#1b1b1d",
+                    "outline": "#76777d",
+                    "on-secondary": "#ffffff",
+                    "primary": "#000000",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary": "#000000",
+                    "surface-bright": "#fcf8fa",
+                    "inverse-surface": "#303032",
+                    "error": "#ba1a1a",
+                    "tertiary-container": "#001a42",
+                    "on-tertiary": "#ffffff",
+                    "tertiary-fixed": "#d8e2ff",
+                    "on-error": "#ffffff",
+                    "surface-container-low": "#f6f3f5",
+                    "on-primary-fixed": "#131b2e",
+                    "on-primary-fixed-variant": "#3f465c",
+                    "surface-variant": "#e4e2e4",
+                    "on-error-container": "#93000a",
+                    "inverse-primary": "#bec6e0",
+                    "error-container": "#ffdad6",
+                    "background": "#fcf8fa",
+                    "secondary": "#006c49",
+                    "primary-fixed": "#dae2fd",
+                    "inverse-on-surface": "#f3f0f2",
+                    "surface-tint": "#565e74",
+                    "surface-container": "#f0edef",
+                    "tertiary-fixed-dim": "#adc6ff",
+                    "surface-container-high": "#eae7e9",
+                    "on-secondary-fixed-variant": "#005236",
+                    "primary-fixed-dim": "#bec6e0",
+                    "secondary-fixed-dim": "#4edea3",
+                    "outline-variant": "#c6c6cd"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "unit": "4px",
+                    "gutter": "1rem",
+                    "container-padding": "1.5rem",
+                    "max-width": "1600px",
+                    "dense-gap": "0.5rem"
+            },
+            "fontFamily": {
+                    "body-md": ["Inter"],
+                    "label-md": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "title-sm": ["Inter"],
+                    "mono-sm": ["JetBrains Mono"],
+                    "label-bold": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "display-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                    "title-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "mono-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                    "label-bold": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "display-lg": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md text-body-md antialiased min-h-screen flex flex-col">
+<!-- Top Navigation Bar -->
+<header class="bg-primary-container docked full-width top-0 z-50 border-b border-outline-variant">
+<div class="flex justify-between items-center h-14 w-full px-container-padding max-w-max-width mx-auto">
+<div class="flex items-center gap-dense-gap">
+<span class="font-display-lg text-display-lg font-bold text-on-primary tracking-tight">Valley</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-on-primary-container hover:text-on-primary transition-colors p-2">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</button>
+<button class="text-on-primary-container hover:text-on-primary transition-colors p-2">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant">
+<img alt="User profile avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAsOWXFvNBnn2rkxvA-yO63ds683xI_D11XiQFIN-kqTW-GLKLXMftpv5uEHkcU8tGG3c6VpEKQ2mTTharL_E8yGC1AQqFS7RkHYRH8YoaA7TL9LHnXZXBW8sh_FihbG51T7rcN6XVnfy2oXTcv_EIfKiBFcKwr-4JYSsEcJfeAs68oCEP9ZVpLhofjIaqnlY9koQWiCNoNWYXKV-Lw-pz2plImDzNUSfBSBQpUd-lyhDser9zS-35htY8CLfrGsS6nLhHR8aDsh3gY"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Content Area -->
+<main class="flex-grow pb-24 pt-4">
+<!-- Dashboard Header -->
+<div class="px-container-padding mb-4">
+<h1 class="font-headline-md text-headline-md text-on-surface">Gestão de Pedidos</h1>
+<p class="font-label-md text-label-md text-on-surface-variant">Gerencie e processe pedidos comerciais ativos.</p>
+</div>
+<!-- Sticky Tab Navigation -->
+<div class="sticky top-14 bg-background/95 backdrop-blur-sm z-40 border-b border-outline-variant px-container-padding">
+<div class="flex gap-6 overflow-x-auto hide-scrollbar">
+<button class="py-3 border-b-2 border-secondary text-primary font-bold whitespace-nowrap font-label-bold text-label-bold">Todos os Pedidos</button>
+<button class="py-3 text-on-surface-variant hover:text-on-surface whitespace-nowrap font-label-bold text-label-bold">Pendentes</button>
+<button class="py-3 text-on-surface-variant hover:text-on-surface whitespace-nowrap font-label-bold text-label-bold">Ativos</button>
+<button class="py-3 text-on-surface-variant hover:text-on-surface whitespace-nowrap font-label-bold text-label-bold">Despachados</button>
+</div>
+</div>
+<!-- Filter Bar -->
+<div class="px-container-padding py-3 bg-surface-container-low flex items-center justify-between">
+<div class="flex gap-2">
+<span class="px-3 py-1 bg-secondary-container text-on-secondary-container rounded-full font-label-md text-label-md flex items-center gap-1">
+                    Hoje
+                    <span class="material-symbols-outlined text-[14px]" data-icon="close">close</span>
+</span>
+<button class="flex items-center gap-1 text-on-surface-variant font-label-md text-label-md px-2 py-1 border border-outline-variant rounded-lg">
+<span class="material-symbols-outlined text-[16px]" data-icon="filter_list">filter_list</span>
+                    Filtros
+                </button>
+</div>
+<span class="font-mono-sm text-mono-sm text-on-surface-variant">24 Resultados</span>
+</div>
+<!-- Order List Grid -->
+<div class="px-container-padding space-y-3 mt-4">
+<!-- Order Card 1 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start mb-3">
+<div>
+<span class="font-mono-sm text-mono-sm text-on-surface-variant block uppercase tracking-wider">#ORD-8821</span>
+<h3 class="font-title-sm text-title-sm text-on-surface mt-1">Sistemas de Válvulas de Alta Precisão</h3>
+</div>
+<span class="px-2 py-1 bg-secondary-container/30 text-on-secondary-container rounded-full font-label-bold text-[10px] uppercase border border-secondary/20">Ativo</span>
+</div>
+<div class="flex items-center gap-3 mb-4">
+<img alt="Avatar do Cliente" class="w-8 h-8 rounded-full bg-surface-variant" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBbflE7Sl0qBKaL-0GSg8Lwe2YwZa0q21g51_kzcQfODGHMcJTVJHOhbJF5SDDSGI9azJ50T_LgktdAFWd8uxgIHomzgFTHlznE4pWP8PQjl6EottUib4OxX1742PkoUzFrx3nCtV0sVvbz7YxII5NQ1tuSNQRQc_7LhZynVzGXR3HZsH4yWAzQIZ6k9VQsmJp0jbIuhVpoSaT3JSWmM5YvAtPKidmijfuvnG4RvoIXMiEJwYTtaafUVirVNST-qmqPXLF7C2sqRGhQ"/>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Apex Manufacturing Corp</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Distrito Industrial, Terminal 4</p>
+</div>
+</div>
+<div class="flex justify-between items-center py-3 border-t border-dashed border-outline-variant mb-4">
+<span class="font-body-md text-body-md text-on-surface-variant">Total do Pedido</span>
+<span class="font-title-sm text-title-sm text-primary">$12.450,00</span>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<button class="flex items-center justify-center gap-2 py-2 border border-outline-variant rounded-lg font-label-bold text-label-bold text-on-surface hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="call">call</span>
+                        Ligar para Cliente
+                    </button>
+<button class="flex items-center justify-center gap-2 py-2 bg-primary text-on-primary rounded-lg font-label-bold text-label-bold hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined text-[18px]" data-icon="edit_note">edit_note</span>
+                        Atualizar Status
+                    </button>
+</div>
+</div>
+<!-- Order Card 2 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-4 shadow-sm">
+<div class="flex justify-between items-start mb-3">
+<div>
+<span class="font-mono-sm text-mono-sm text-on-surface-variant block uppercase tracking-wider">#ORD-8820</span>
+<h3 class="font-title-sm text-title-sm text-on-surface mt-1">Controlador Lógico Eletrônico</h3>
+</div>
+<span class="px-2 py-1 bg-surface-variant text-on-surface-variant rounded-full font-label-bold text-[10px] uppercase border border-outline-variant">Pendente</span>
+</div>
+<div class="flex items-center gap-3 mb-4">
+<img alt="Avatar do Cliente" class="w-8 h-8 rounded-full bg-surface-variant" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnQgqJ7xpISzMC8GmvNYftZA6tSL_HFgO3CFtrFRyKWnJG429Qi8_jV8ZOMNLUgrwRas3zavDyNIShw_3EGAEOZXeZaY9TuSnnn0wuIvJ-arretOMkA7ki8kX35JsGNuDi5VAHJ8luVVz2049_iEXDKgTVm4bsph7GLDRQakty63Z2QuaB713oexqq4w_D5UI75gWW2nr3OD4e_UQX5im_QRnUwvLl0dDrmaXSM6UWfgAdMnr-xvpcuFyXp8_5_8kmczCxJarccdbO"/>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Skyline Solutions</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Hub Central, Conjunto 202</p>
+</div>
+</div>
+<div class="flex justify-between items-center py-3 border-t border-dashed border-outline-variant mb-4">
+<span class="font-body-md text-body-md text-on-surface-variant">Total do Pedido</span>
+<span class="font-title-sm text-title-sm text-primary">$4.820,50</span>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<button class="flex items-center justify-center gap-2 py-2 border border-outline-variant rounded-lg font-label-bold text-label-bold text-on-surface hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="call">call</span>
+                        Ligar para Cliente
+                    </button>
+<button class="flex items-center justify-center gap-2 py-2 bg-primary text-on-primary rounded-lg font-label-bold text-label-bold hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined text-[18px]" data-icon="edit_note">edit_note</span>
+                        Atualizar Status
+                    </button>
+</div>
+</div>
+<!-- Order Card 3 (Bento-style variation for density) -->
+<div class="bg-surface-container-highest/30 border border-outline-variant rounded-xl p-4">
+<div class="flex justify-between items-center mb-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary" data-icon="local_shipping">local_shipping</span>
+<span class="font-label-bold text-label-bold text-on-surface">3 Itens Despachados</span>
+</div>
+<span class="font-mono-sm text-mono-sm text-on-surface-variant">Última atualização: 2m atrás</span>
+</div>
+<div class="flex -space-x-2">
+<div class="w-10 h-10 rounded-lg border-2 border-surface bg-white flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-[20px]" data-icon="settings_input_component">settings_input_component</span>
+</div>
+<div class="w-10 h-10 rounded-lg border-2 border-surface bg-white flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-[20px]" data-icon="cable">cable</span>
+</div>
+<div class="w-10 h-10 rounded-lg border-2 border-surface bg-white flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-[20px]" data-icon="sensors">sensors</span>
+</div>
+</div>
+</div>
+<!-- Order Card 4 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-4 shadow-sm">
+<div class="flex justify-between items-start mb-3">
+<div>
+<span class="font-mono-sm text-mono-sm text-on-surface-variant block uppercase tracking-wider">#ORD-8819</span>
+<h3 class="font-title-sm text-title-sm text-on-surface mt-1">Kit de Vedação Hidráulica (Lote)</h3>
+</div>
+<span class="px-2 py-1 bg-error-container text-on-error-container rounded-full font-label-bold text-[10px] uppercase border border-error/20">Sinalizado</span>
+</div>
+<div class="flex items-center gap-3 mb-4">
+<img alt="Avatar do Cliente" class="w-8 h-8 rounded-full bg-surface-variant" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2vzDI4Ov3cSTwPxW0E3bxG5Hnstk4PISBezQ-baLpZTa9nha1T4x6rSdV10qcTgd-0LxeKAy46mvWTCqJ0_X-whdADAfqXqc1lGH9dL2kHV4YyESl75DI1tn-HVGGP_-rQLpnk0AQ1Pm5egnLVhGbsksKRzjgupWYrMI4AgtyGvbIavfZFRvy0UF7RMqtzfMY7bQkTrb3pdkvcXS3jtNWmf4FBJKVlhtkIL8P1l8mZYZdjqBBj6_-xZbLD2re4DfqDRSMRus-WOK4"/>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Logistics One</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Porto Norte, Doca 12</p>
+</div>
+</div>
+<div class="flex justify-between items-center py-3 border-t border-dashed border-outline-variant mb-4">
+<span class="font-body-md text-body-md text-on-surface-variant">Total do Pedido</span>
+<span class="font-title-sm text-title-sm text-primary">$2.115,00</span>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<button class="flex items-center justify-center gap-2 py-2 border border-outline-variant rounded-lg font-label-bold text-label-bold text-on-surface hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="call">call</span>
+                        Ligar para Cliente
+                    </button>
+<button class="flex items-center justify-center gap-2 py-2 bg-primary text-on-primary rounded-lg font-label-bold text-label-bold hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined text-[18px]" data-icon="edit_note">edit_note</span>
+                        Atualizar Status
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar (Mobile Primary Shell) -->
+<nav class="fixed bottom-0 left-0 right-0 bg-surface border-t border-outline-variant z-50 md:hidden">
+<div class="flex justify-around items-center h-16 max-w-max-width mx-auto">
+<button class="flex flex-col items-center gap-1 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</button>
+<button class="flex flex-col items-center gap-1 bg-secondary-container text-on-secondary-container rounded-xl font-bold px-4 py-1.5 transition-all">
+<span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+<span class="font-label-md text-label-md">Pedidos</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="local_shipping">local_shipping</span>
+<span class="font-label-md text-label-md">Logística</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span class="font-label-md text-label-md">Financeiro</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span class="font-label-md text-label-md">Logs</span>
+</button>
+</div>
+</nav>
+<!-- Floating Action Button -->
+<button class="fixed bottom-20 right-6 w-14 h-14 bg-secondary text-on-secondary rounded-full flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition-all z-40">
+<span class="material-symbols-outlined text-[28px]" data-icon="add">add</span>
+</button>
+<!-- Footer -->
+<footer class="hidden md:block bg-surface-container-lowest border-t border-outline-variant py-gutter px-container-padding">
+<div class="max-w-max-width mx-auto flex justify-between items-center">
+<span class="font-body-sm text-body-sm text-on-surface-variant">© 2024 Valley Commercial Operations. Todos os direitos reservados.</span>
+<div class="flex gap-4">
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary underline transition-all" href="#">Política de Privacidade</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary underline transition-all" href="#">Termos de Serviço</a>
+</div>
+</div>
+</footer>
+</body></html>

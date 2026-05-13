@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container": "#f0edef",
+                    "primary-container": "#131b2e",
+                    "surface-tint": "#565e74",
+                    "surface-container-lowest": "#ffffff",
+                    "primary-fixed": "#dae2fd",
+                    "on-surface": "#1b1b1d",
+                    "on-background": "#1b1b1d",
+                    "secondary": "#006c49",
+                    "tertiary": "#000000",
+                    "error": "#ba1a1a",
+                    "outline": "#76777d",
+                    "surface-container-highest": "#e4e2e4",
+                    "on-primary-fixed-variant": "#3f465c",
+                    "inverse-primary": "#bec6e0",
+                    "error-container": "#ffdad6",
+                    "surface-container-high": "#eae7e9",
+                    "outline-variant": "#c6c6cd",
+                    "tertiary-fixed": "#d8e2ff",
+                    "secondary-fixed-dim": "#4edea3",
+                    "on-tertiary-fixed-variant": "#004395",
+                    "on-tertiary-fixed": "#001a42",
+                    "background": "#fcf8fa",
+                    "on-surface-variant": "#45464d",
+                    "on-primary-fixed": "#131b2e",
+                    "inverse-surface": "#303032",
+                    "tertiary-container": "#001a42",
+                    "on-error": "#ffffff",
+                    "on-secondary-fixed-variant": "#005236",
+                    "secondary-container": "#6cf8bb",
+                    "surface": "#fcf8fa",
+                    "on-secondary": "#ffffff",
+                    "on-secondary-fixed": "#002113",
+                    "surface-container-low": "#f6f3f5",
+                    "on-tertiary-container": "#3980f4",
+                    "secondary-fixed": "#6ffbbe",
+                    "on-secondary-container": "#00714d",
+                    "on-error-container": "#93000a",
+                    "primary-fixed-dim": "#bec6e0",
+                    "on-primary-container": "#7c839b",
+                    "surface-dim": "#dcd9db",
+                    "on-primary": "#ffffff",
+                    "surface-variant": "#e4e2e4",
+                    "surface-bright": "#fcf8fa",
+                    "primary": "#000000",
+                    "inverse-on-surface": "#f3f0f2",
+                    "tertiary-fixed-dim": "#adc6ff",
+                    "on-tertiary": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "unit": "4px",
+                    "gutter": "1rem",
+                    "max-width": "1600px",
+                    "container-padding": "1.5rem",
+                    "dense-gap": "0.5rem"
+            },
+            "fontFamily": {
+                    "body-md": ["Inter"],
+                    "title-sm": ["Inter"],
+                    "label-md": ["Inter"],
+                    "mono-sm": ["JetBrains Mono"],
+                    "label-bold": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "display-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "title-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "mono-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                    "label-bold": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "display-lg": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        body {
+            background-color: #fcf8fa;
+            color: #1b1b1d;
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="flex flex-col min-h-screen">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-gutter h-14 bg-primary-container border-b border-outline-variant">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-primary-fixed">menu</span>
+<span class="text-headline-md font-headline-md font-bold text-on-primary tracking-tight">Valley</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-primary-fixed">search</span>
+<div class="w-8 h-8 rounded-full bg-secondary-fixed flex items-center justify-center overflow-hidden">
+<span class="text-on-secondary-container font-label-bold text-label-bold">JD</span>
+</div>
+</div>
+</header>
+<main class="mt-14 mb-20 flex-1 overflow-y-auto">
+<!-- Search & Quick Filters -->
+<div class="bg-surface-container-lowest px-4 py-3 sticky top-14 z-40 border-b border-outline-variant">
+<div class="relative mb-3">
+<input class="w-full h-11 bg-surface-container border border-outline-variant rounded-lg pl-10 pr-4 text-body-md font-body-md focus:ring-1 focus:ring-secondary focus:border-secondary outline-none" placeholder="Buscar por SKU ou Nome..." type="text"/>
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-on-surface-variant">search</span>
+</div>
+<div class="flex gap-2 overflow-x-auto hide-scrollbar">
+<button class="flex items-center gap-1.5 px-3 py-1.5 bg-secondary-container text-on-secondary-container rounded-full whitespace-nowrap text-label-md font-label-md">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">filter_list</span>
+                    Filtros
+                </button>
+<button class="px-3 py-1.5 bg-surface-container-high text-on-surface-variant border border-outline-variant rounded-full whitespace-nowrap text-label-md font-label-md">Em Estoque</button>
+<button class="px-3 py-1.5 bg-surface-container-high text-on-surface-variant border border-outline-variant rounded-full whitespace-nowrap text-label-md font-label-md">Eletrônicos</button>
+<button class="px-3 py-1.5 bg-surface-container-high text-on-surface-variant border border-outline-variant rounded-full whitespace-nowrap text-label-md font-label-md">Peças</button>
+</div>
+</div>
+<!-- Product Grid -->
+<div class="p-4 grid grid-cols-1 gap-4">
+<!-- Product Card 1 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden flex shadow-sm">
+<div class="w-24 h-24 flex-shrink-0 bg-surface-container relative">
+<img class="w-full h-full object-cover" data-alt="A professional close-up of high-precision industrial hardware components with a sleek metallic finish. The lighting is cold and clinical, highlighting the surgical precision of the engineering. The background is a clean, neutral grey workspace that adheres to the corporate modern aesthetic. The focus is sharp on the intricate textures and serial numbers of the SKU." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnQsnBVmhLy56tnv-Lhf5n55QEk_NvzwYL-598Cwl6G0KS0xMzItKAgv17fzpNAn3FlAItGIfe0Y3YA3OVJyH33xMbo0b7r4JYT21INxe9Zn0ou5WE0BWkMbWGcFMk1U4tSFeK63o8WJ7fignU5OTlv1emESThdCXqzAjrJOM21KGN7gZB6KTPHFJjeX4a2so80xa5WfCQNu9ZcHzgfpcF3wLdZBWtHg5UBKEchmaJGnEEq82W8vm_cwCevIEhjfJymmWbaymfN000"/>
+</div>
+<div class="p-3 flex-1 flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start">
+<span class="text-mono-sm font-mono-sm text-on-surface-variant">SKU: 8842-PT</span>
+<span class="flex items-center gap-1 text-[10px] font-label-bold uppercase text-secondary bg-secondary-container/30 px-1.5 py-0.5 rounded">Em Estoque</span>
+</div>
+<h3 class="text-title-sm font-title-sm text-on-surface mt-1">Sensor de Fluxo V-12</h3>
+<p class="text-label-md font-label-md text-on-surface-variant">Linha Automação Industrial</p>
+</div>
+<div class="flex justify-between items-end">
+<span class="text-title-sm font-title-sm text-primary">R$ 1.240,00</span>
+<div class="flex gap-2">
+<button class="w-8 h-8 flex items-center justify-center border border-outline-variant rounded-lg text-on-surface-variant active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[20px]">add_shopping_cart</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Product Card 2 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden flex shadow-sm">
+<div class="w-24 h-24 flex-shrink-0 bg-surface-container relative">
+<img class="w-full h-full object-cover" data-alt="Macro photography of a modern circuit board with glowing blue indicators and copper pathways. The image has a deep navy and cool white tone to match the enterprise color scheme. Soft ambient lighting emphasizes the high-tech, reliable nature of the electronic component. The scene is clean and organized, representing operational efficiency in a technology-forward warehouse." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3xC2nCDil3r_ifCyj9iJ7Kz6e5zaEaLF1Zsmb2afTRXKwitZN5fKQJ_Qt0YM3wmhdqIG3GH60IHGC0iDj3E8iCyWoxiXf-lx6qP4ahgrOrCPn2ci0MZLkNeWZJ7YEJrVCae2MF-YUE6SDaXw963S5QHg-wevs_BLG-5hifZaP0-itRZewXF6NtC_qMDjscZbSbxYWjL9661vF6dalkiplxFFNvxa26XL-nFsNEU9VD-BqbxdF7NenI_JHADPmyDWgxU_e5wWx8sBV"/>
+</div>
+<div class="p-3 flex-1 flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start">
+<span class="text-mono-sm font-mono-sm text-on-surface-variant">SKU: 1029-TR</span>
+<span class="flex items-center gap-1 text-[10px] font-label-bold uppercase text-error bg-error-container/30 px-1.5 py-0.5 rounded">Esgotado</span>
+</div>
+<h3 class="text-title-sm font-title-sm text-on-surface mt-1">Módulo Central de Dados</h3>
+<p class="text-label-md font-label-md text-on-surface-variant">Linha Infraestrutura</p>
+</div>
+<div class="flex justify-between items-end">
+<span class="text-title-sm font-title-sm text-primary">R$ 4.890,50</span>
+<div class="flex gap-2">
+<button class="w-8 h-8 flex items-center justify-center border border-outline-variant rounded-lg text-on-surface-variant active:scale-95 transition-transform opacity-50">
+<span class="material-symbols-outlined text-[20px]">add_shopping_cart</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Product Card 3 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden flex shadow-sm">
+<div class="w-24 h-24 flex-shrink-0 bg-surface-container relative">
+<img class="w-full h-full object-cover" data-alt="Technical product shot of a durable industrial motor housing with a matte navy blue finish and metallic steel accents. The lighting is directional, creating subtle highlights on the structural ridges of the machine. The composition is strictly aligned to communicate reliability and industrial power. The overall aesthetic is professional, modern, and high-density, consistent with corporate ERP systems." src="https://lh3.googleusercontent.com/aida-public/AB6AXuADjnloMd60L1_TB1XqJnqpQoMOdsgKHmyLcBteQnkIhPDAUEpE6R90YhzFxIBl6nByQErNv-TFuqiGiDALg4fx6XncFH7SyJR-4ZYuh9bsN7TonjiK4q5dimFulR4a0JIKZmc3gMSXzbq1lZ15HL_YESZU6Xc9r_qe8RE0A5cgfv6QGLuazR8W0MNNb-ixyLKy4QhrCZufWsqKSwwAd3A8zyj16zXfCv8bB_wV_h-5AyN9C-fipU2z6sZIOmNvk67xVqcK2Om-WfqM"/>
+</div>
+<div class="p-3 flex-1 flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start">
+<span class="text-mono-sm font-mono-sm text-on-surface-variant">SKU: 4552-MK</span>
+<span class="flex items-center gap-1 text-[10px] font-label-bold uppercase text-surface-tint bg-surface-container-high px-1.5 py-0.5 rounded">Baixo Estoque</span>
+</div>
+<h3 class="text-title-sm font-title-sm text-on-surface mt-1">Motor Trifásico 5HP</h3>
+<p class="text-label-md font-label-md text-on-surface-variant">Linha Pesada</p>
+</div>
+<div class="flex justify-between items-end">
+<span class="text-title-sm font-title-sm text-primary">R$ 955,00</span>
+<div class="flex gap-2">
+<button class="w-8 h-8 flex items-center justify-center border border-outline-variant rounded-lg text-on-surface-variant active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[20px]">add_shopping_cart</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Product Card 4 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden flex shadow-sm">
+<div class="w-24 h-24 flex-shrink-0 bg-surface-container relative">
+<img class="w-full h-full object-cover" data-alt="An assortment of precision laboratory measuring instruments arranged neatly on a sterile, light-mode surface. The lighting is even and soft, eliminating harsh shadows to showcase the clean lines of the tools. The palette consists of whites, silvers, and subtle blue accents, creating a high-tech corporate feel. The mood is authoritative and efficient, reflecting a high-stakes commercial operation." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfIwqC2r7lz7ZOf36-sRpZEHy7Vt02bss_QJf1unUpJKrwZWZ8EgYjOBdnElChoIGSHWwAXGp78Rq674477SvcBhIaZcm7xFSo3m7MxsNqx8jAzUYVnQEHOd3YTGF1WJUWQjoccX9XOq16ntmTeT_mLDmdMASYW7HZOgWKm2yhIPi_IiD3hkUsHwj__jq0ibTDUEIV2Xu4Ay7BBg2vTlklt94NEhHpMlJzoM1Prm8CVvmRBySDqpfKDJaB9YAYkaBLwmatCf8H9Sc3"/>
+</div>
+<div class="p-3 flex-1 flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start">
+<span class="text-mono-sm font-mono-sm text-on-surface-variant">SKU: 2210-QL</span>
+<span class="flex items-center gap-1 text-[10px] font-label-bold uppercase text-secondary bg-secondary-container/30 px-1.5 py-0.5 rounded">Em Estoque</span>
+</div>
+<h3 class="text-title-sm font-title-sm text-on-surface mt-1">Kit Medição Digital Pro</h3>
+<p class="text-label-md font-label-md text-on-surface-variant">Linha Qualidade</p>
+</div>
+<div class="flex justify-between items-end">
+<span class="text-title-sm font-title-sm text-primary">R$ 312,20</span>
+<div class="flex gap-2">
+<button class="w-8 h-8 flex items-center justify-center border border-outline-variant rounded-lg text-on-surface-variant active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[20px]">add_shopping_cart</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center pt-2 pb-safe px-2 bg-surface-container-lowest border-t border-outline-variant h-16">
+<div class="flex flex-col items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">home</span>
+<span class="text-label-md font-label-md">Início</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-4 py-1 scale-95 transition-transform duration-150">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">precision_manufacturing</span>
+<span class="text-label-md font-label-md">Operações</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">analytics</span>
+<span class="text-label-md font-label-md">Analíticos</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-label-md font-label-md">Ajustes</span>
+</div>
+</nav>
+<!-- FAB (Suppressed on Catalogue as per relevance rule, but included contextually for "Create Product" if user had specified it - here we follow guidelines to prioritize content) -->
+</body></html>

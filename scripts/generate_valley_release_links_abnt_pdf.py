@@ -21,6 +21,8 @@ SUBDOMAINS_PATH = ROOT / "output" / "deployment" / "valley-module-subdomains.jso
 ADMIN_RUNTIME_PATH = ROOT / "tmp" / "runtime" / "valley-admin-public-runtime.json"
 PRODUCT_RUNTIME_PATH = ROOT / "tmp" / "runtime" / "valley-product-public-runtime.json"
 LOCALHOST_RUN_STATUS_PATH = ROOT / "tmp" / "runtime" / "valley-localhost-run-status.json"
+STITCH_PUBLICATION_PATH = ROOT / "tmp" / "runtime" / "valley-stitch-template-publication.json"
+DOWNLOADS_ROOT = ROOT / "admin" / "downloads"
 PDF_PATH = ROOT / "output" / "pdf" / "VALLEY_RELEASE_LINKS_MODULOS_ABNT.pdf"
 MD_PATH = ROOT / "output" / "pdf" / "VALLEY_RELEASE_LINKS_MODULOS_ABNT.md"
 
@@ -39,10 +41,37 @@ def load_optional_json(path: Path) -> dict:
     return payload if isinstance(payload, dict) else {}
 
 
+def latest_apk_release_manifest() -> dict:
+    manifests = sorted(
+        DOWNLOADS_ROOT.glob("v*/VALLEY_APK_RELEASE_ABI_*.json"),
+        key=lambda path: path.stat().st_mtime,
+        reverse=True,
+    )
+    for manifest_path in manifests:
+        payload = load_optional_json(manifest_path)
+        if payload:
+            payload["_manifest_path"] = str(manifest_path.relative_to(ROOT))
+            return payload
+    return {}
+
+
 def public_url(host: str) -> str:
     if host.startswith("http://") or host.startswith("https://"):
-        return host if host.endswith("/") else f"{host}/"
+        path_part = host.split("?", 1)[0].rstrip("/")
+        has_file_extension = "." in path_part.rsplit("/", 1)[-1]
+        if host.endswith("/") or has_file_extension:
+            return host
+        return f"{host}/"
     return f"https://{host.strip().strip('/')}/"
+
+
+def host_path_from_url(url: str) -> str:
+    raw = str(url or "").strip()
+    if raw.startswith("https://"):
+        return raw.removeprefix("https://").rstrip("/")
+    if raw.startswith("http://"):
+        return raw.removeprefix("http://").rstrip("/")
+    return raw.strip("/")
 
 
 def link_paragraph(text: str, url: str, style: ParagraphStyle) -> Paragraph:
@@ -60,6 +89,8 @@ def group_records(records: list[dict]) -> dict[str, list[dict]]:
     admin_runtime = load_optional_json(ADMIN_RUNTIME_PATH)
     product_runtime = load_optional_json(PRODUCT_RUNTIME_PATH)
     localhost_runtime = load_optional_json(LOCALHOST_RUN_STATUS_PATH)
+    stitch_publication = load_optional_json(STITCH_PUBLICATION_PATH)
+    apk_release = latest_apk_release_manifest()
     admin_public_url = str(
         admin_runtime.get("public_url") or localhost_runtime.get("public_url") or ""
     ).strip()
@@ -144,11 +175,98 @@ def group_records(records: list[dict]) -> dict[str, list[dict]]:
     usuario_records = [record for record in usuario_records if str(record.get("name") or "").strip()]
     admin_records.sort(key=lambda item: (str(item.get("kind") or ""), str(item.get("name") or "")))
     lojista_records.sort(key=lambda item: str(item.get("name") or ""))
-    return {"Admin": admin_records, "Lojista": lojista_records, "Usuário": usuario_records}
+
+    stitch_records = []
+    if stitch_publication.get("public_index_url"):
+        stitch_records.append(
+            {
+                "title": "Galeria release Stitch ERP",
+                "name": host_path_from_url(str(stitch_publication.get("public_index_url") or "")),
+                "module_code": "STITCH",
+                "related": "Indice publico com todos os templates Stitch publicados para handoff e validacao.",
+                "kind": "stitch_gallery",
+            }
+        )
+    screens = stitch_publication.get("screens")
+    if isinstance(screens, list):
+        for screen in screens:
+            if not isinstance(screen, dict):
+                continue
+            html_url = str(screen.get("public_html_url") or "").strip()
+            if not html_url:
+                continue
+            stitch_records.append(
+                {
+                    "title": str(screen.get("title") or screen.get("key") or "Template Stitch"),
+                    "name": host_path_from_url(html_url),
+                    "module_code": "STITCH",
+                    "related": (
+                        f"{screen.get('priority') or 'P3'} / "
+                        f"{screen.get('surface') or 'shared_design'} / "
+                        f"{screen.get('form_factor') or 'desktop'}"
+                    ),
+                    "kind": "stitch_template",
+                }
+            )
+
+    download_records = []
+    artifacts = apk_release.get("artifacts")
+    if isinstance(artifacts, list):
+        recommended = str(apk_release.get("recommended_android") or "")
+        for artifact in artifacts:
+            if not isinstance(artifact, dict):
+                continue
+            url = str(artifact.get("public_url") or "").strip()
+            if not url:
+                continue
+            name = str(artifact.get("name") or artifact.get("file") or "APK")
+            download_records.append(
+                {
+                    "title": (
+                        "APK Android recomendado"
+                        if name == recommended
+                        else f"APK Android {name.replace('app-', '').replace('-release.apk', '')}"
+                    ),
+                    "name": url,
+                    "module_code": "APK",
+                    "related": (
+                        f"{apk_release.get('version') or 'release'} / "
+                        f"{apk_release.get('app_version') or 'sem versao'} / "
+                        f"{artifact.get('bytes') or 0} bytes / SHA1 {artifact.get('sha1') or ''}"
+                    ),
+                    "kind": "release_download",
+                }
+            )
+    manifest_path = str(apk_release.get("_manifest_path") or "")
+    if manifest_path:
+        public_manifest_path = manifest_path.replace("\\", "/")
+        if public_manifest_path.startswith("admin/"):
+            public_manifest_path = public_manifest_path.removeprefix("admin/")
+        download_records.append(
+            {
+                "title": "Manifest release APK",
+                "name": f"https://admin.brasildesconto.com.br/{public_manifest_path}",
+                "module_code": "APK",
+                "related": "Manifest ABI com hashes, URL publica e build embarcado.",
+                "kind": "release_manifest",
+            }
+        )
+
+    return {
+        "Admin": admin_records,
+        "Lojista": lojista_records,
+        "Usuário": usuario_records,
+        "Templates Stitch": stitch_records,
+        "Downloads Release": download_records,
+    }
 
 
 def relation_for(group: str, record: dict) -> str:
     host = str(record.get("name") or "")
+    if group == "Templates Stitch":
+        return str(record.get("related") or "Template Stitch publicado como referencia de handoff.")
+    if group == "Downloads Release":
+        return str(record.get("related") or "Artefato publico de release.")
     if group == "Admin":
         if "marketplace" in host:
             return "Controla integrações, canais, lojistas e publicações."
@@ -295,7 +413,7 @@ def main() -> None:
         Paragraph("VALLEY", title),
         Paragraph("DOCUMENTO RELEASE DE LINKS CLICÁVEIS POR MÓDULO", title),
         Spacer(1, 1.2 * cm),
-        Paragraph("Admin, Lojista e Usuário", title),
+        Paragraph("Admin, Lojista, Usuário e Templates Stitch", title),
         Spacer(1, 6 * cm),
         Paragraph(f"Brasil, {datetime.now().strftime('%d/%m/%Y')}", title),
         PageBreak(),
@@ -334,9 +452,10 @@ def main() -> None:
         )
         story.extend([table, Spacer(1, 0.4 * cm)])
 
+    conclusion_index = 3 + len(groups)
     story.extend(
         [
-            Paragraph("6 CONCLUSÃO", h1),
+            Paragraph(f"{conclusion_index} CONCLUSÃO", h1),
             Paragraph(
                 "Os links listados neste documento formam a malha release do Valley para operação comercial, gestão do lojista e jornada pública do usuário final.",
                 body,

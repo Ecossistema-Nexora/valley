@@ -1,0 +1,407 @@
+- generic [active] [ref=e1]:
+  - link "Ir para o painel" [ref=e2] [cursor=pointer]:
+    - /url: "#mainContent"
+  - generic [ref=e3]:
+    - region "Navegacao global dos paineis" [ref=e4]:
+      - generic [ref=e5]:
+        - generic [ref=e6]:
+          - paragraph [ref=e7]: Menu
+          - heading "Admin e lojista" [level=2] [ref=e8]
+        - navigation "Navegacao principal" [ref=e9]:
+          - link "STOCK" [ref=e10] [cursor=pointer]:
+            - /url: "#stockIntegrations"
+          - link "Operacao" [ref=e11] [cursor=pointer]:
+            - /url: "#adminLaunchpadSection"
+          - link "Stitch P0" [ref=e12] [cursor=pointer]:
+            - /url: "#stitchP0ExecutionSection"
+          - link "Financeiro" [ref=e13] [cursor=pointer]:
+            - /url: "#financialDashboard"
+          - link "ERP Lojista" [ref=e14] [cursor=pointer]:
+            - /url: "#merchantErpSection"
+          - link "Desempenho" [ref=e15] [cursor=pointer]:
+            - /url: "#performanceDashboard"
+          - link "Importados" [ref=e16] [cursor=pointer]:
+            - /url: "#importedPricingSection"
+          - link "Revisao" [ref=e17] [cursor=pointer]:
+            - /url: "#publicationReviewSection"
+          - link "Modulos" [ref=e18] [cursor=pointer]:
+            - /url: "#modulesWorkspace"
+          - link "Configuracoes" [ref=e19] [cursor=pointer]:
+            - /url: "#settingsSection"
+      - generic [ref=e20]:
+        - generic [ref=e21]:
+          - paragraph [ref=e22]: Acesso
+          - heading "Dominios e subdominios" [level=2] [ref=e23]
+        - generic [ref=e270]:
+          - article [ref=e271]:
+            - generic [ref=e272]: Portal oficial
+            - code [ref=e273]: https://brasildesconto.com.br/
+            - link "Abrir" [ref=e275] [cursor=pointer]:
+              - /url: https://brasildesconto.com.br/
+          - article [ref=e276]:
+            - generic [ref=e277]: Painel admin
+            - code [ref=e278]: https://admin.brasildesconto.com.br
+            - link "Abrir" [ref=e280] [cursor=pointer]:
+              - /url: https://admin.brasildesconto.com.br
+          - article [ref=e281]:
+            - generic [ref=e282]: ERP lojista
+            - code [ref=e283]: https://erp-lojista.brasildesconto.com.br/
+            - link "Abrir" [ref=e285] [cursor=pointer]:
+              - /url: https://erp-lojista.brasildesconto.com.br/
+          - article [ref=e286]:
+            - generic [ref=e287]: Login lojista
+            - code [ref=e288]: https://lojista.brasildesconto.com.br/
+            - link "Abrir" [ref=e290] [cursor=pointer]:
+              - /url: https://lojista.brasildesconto.com.br/
+          - article [ref=e291]:
+            - generic [ref=e292]: PDV lojista
+            - code [ref=e293]: https://pdv-lojista.brasildesconto.com.br/
+            - link "Abrir" [ref=e295] [cursor=pointer]:
+              - /url: https://pdv-lojista.brasildesconto.com.br/
+          - article [ref=e296]:
+            - generic [ref=e297]: Loja publica
+            - code [ref=e298]: https://admin.brasildesconto.com.br/product
+            - link "Abrir" [ref=e300] [cursor=pointer]:
+              - /url: https://admin.brasildesconto.com.br/product
+    - banner [ref=e24]:
+      - generic [ref=e25]:
+        - generic "Valley" [ref=e26]:
+          - img "Logomarca oficial Valley" [ref=e27]
+          - generic [ref=e28]:
+            - paragraph [ref=e29]: Valley
+            - paragraph [ref=e30]: Super App Production Panel
+        - paragraph [ref=e31]: Valley Release Mode
+        - heading "Painel de producao para 47 modulos" [level=1] [ref=e32]
+        - paragraph [ref=e33]: Supervisao executiva, gestao comercial e leitura operacional em uma unica superficie. O painel cruza modulos, contratos, catalogo, checkout, lojistas, usuarios e exposicao publica Cloudflare.
+        - generic [ref=e301]:
+          - generic [ref=e302]: modo producao
+          - generic [ref=e303]: 47 modulos visiveis
+          - generic [ref=e304]: 67% prontidao media
+          - generic [ref=e305]: 0 modulos completos
+          - generic [ref=e306]: 13 trilhas hibridas
+          - generic [ref=e307]: 0 ainda planejados
+          - generic [ref=e308]: publico online
+          - generic [ref=e309]: 0 alertas operacionais
+        - generic [ref=e310]:
+          - article [ref=e311]:
+            - generic [ref=e312]: P
+            - strong [ref=e313]: Painel STOCK
+            - generic [ref=e314]: Catalogo, operacao do modulo STOCK e leitura de integracoes do produto.
+          - article [ref=e315]:
+            - generic [ref=e316]: D
+            - strong [ref=e317]: Dropshipping
+            - generic [ref=e318]: Produtos importados, categorias, margem e disputa entre fornecedores.
+          - article [ref=e319]:
+            - generic [ref=e320]: M
+            - strong [ref=e321]: Marketplace
+            - generic [ref=e322]: Apps, webhooks, seller IDs e escopos por marketplace.
+          - article [ref=e323]:
+            - generic [ref=e324]: R
+            - strong [ref=e325]: Revisao
+            - generic [ref=e326]: Fila exclusiva para nao publicados e revisao comercial com motivo.
+      - generic [ref=e34]:
+        - region "Preview do painel em desktop e mobile" [ref=e35]:
+          - generic [ref=e36]: PRODUCAO ATIVA
+          - generic [ref=e37]:
+            - generic [ref=e38]:
+              - generic [ref=e39]:
+                - generic [ref=e40]: Valley Admin
+                - generic [ref=e41]:
+                  - generic [ref=e42]: Produção
+                  - generic [ref=e43]: Checkout
+                  - generic [ref=e44]: Stock
+              - generic [ref=e328]:
+                - generic [ref=e329]:
+                  - strong [ref=e330]: Bem-vindo ao Valley Admin
+                  - generic [ref=e331]:
+                    - generic [ref=e332]: Financeiro
+                    - generic [ref=e333]: Estoque
+                    - generic [ref=e334]: Checkout
+                - generic [ref=e335]:
+                  - generic [ref=e338]: STOCK
+                  - generic [ref=e341]: Dropshipping
+                  - generic [ref=e344]: Marketplace
+                  - generic [ref=e347]: Revisao
+                  - generic [ref=e350]: Financeiro
+                  - generic [ref=e353]: Lojistas
+                  - generic [ref=e356]: Usuarios
+                - generic [ref=e357]:
+                  - article [ref=e358]:
+                    - generic [ref=e359]: P
+                    - strong [ref=e360]: STOCK
+                    - generic [ref=e361]: Catalogo, operacao do modulo STOCK e leitura de integracoes do produto
+                  - article [ref=e362]:
+                    - generic [ref=e363]: D
+                    - strong [ref=e364]: Dropshipping
+                    - generic [ref=e365]: Produtos importados, categorias, margem e disputa entre fornecedores
+                  - article [ref=e366]:
+                    - generic [ref=e367]: M
+                    - strong [ref=e368]: Marketplace
+                    - generic [ref=e369]: Apps, webhooks, seller IDs e escopos por marketplace
+                  - article [ref=e370]:
+                    - generic [ref=e371]: R
+                    - strong [ref=e372]: Revisao
+                    - generic [ref=e373]: Fila exclusiva para nao publicados e revisao comercial com motivo
+                  - article [ref=e374]:
+                    - generic [ref=e375]: F
+                    - strong [ref=e376]: Financeiro
+                    - generic [ref=e377]: Receita projetada, margens, fees e leitura financeira do catalogo
+                  - article [ref=e378]:
+                    - generic [ref=e379]: L
+                    - strong [ref=e380]: Lojistas
+                    - generic [ref=e381]: Cadastro e operacao de sellers, parceiros e workspace institucional
+                - generic [ref=e382]:
+                  - generic [ref=e384]: Receita vs. Operacao
+                  - generic [ref=e392]:
+                    - generic [ref=e393]: Fila rapida
+                    - generic [ref=e394]:
+                      - generic [ref=e395]: Revisao
+                      - emphasis [ref=e396]: "124"
+                    - generic [ref=e397]:
+                      - generic [ref=e398]: Integracoes
+                      - emphasis [ref=e399]: "07"
+                    - generic [ref=e400]:
+                      - generic [ref=e401]: Usuarios
+                      - emphasis [ref=e402]: 2.4k
+            - generic [ref=e48]:
+              - generic [ref=e49]:
+                - strong [ref=e50]: Valley
+                - generic [ref=e51]: Admin
+              - generic [ref=e52]:
+                - article [ref=e403]:
+                  - generic [ref=e404]: P
+                  - generic [ref=e405]: STOCK
+                - article [ref=e406]:
+                  - generic [ref=e407]: D
+                  - generic [ref=e408]: Dropshipping
+                - article [ref=e409]:
+                  - generic [ref=e410]: M
+                  - generic [ref=e411]: Marketplace
+                - article [ref=e412]:
+                  - generic [ref=e413]: R
+                  - generic [ref=e414]: Revisao
+                - article [ref=e415]:
+                  - generic [ref=e416]: F
+                  - generic [ref=e417]: Financeiro
+                - article [ref=e418]:
+                  - generic [ref=e419]: L
+                  - generic [ref=e420]: Lojistas
+        - generic [ref=e53]:
+          - paragraph [ref=e54]: Control Fabric
+          - heading "Valley Omniverse V47 - Registro Canonico de Modulos" [level=2] [ref=e421]
+          - paragraph [ref=e56]: "Fonte: Esquema Consolidado do Valley Omniverse v47.pdf | Linguagem: pt-BR simples com termos tecnicos em ingles quando forem padroes"
+          - generic [ref=e57]:
+            - generic [ref=e58]:
+              - generic [ref=e59]: Console
+              - strong [ref=e60]: 13/05/2026, 08:48
+            - generic [ref=e61]:
+              - generic [ref=e62]: Saude operacional
+              - strong [ref=e63]: 0 pendencias no ultimo status
+        - generic [ref=e64]:
+          - generic [ref=e66]:
+            - paragraph [ref=e67]: Ações
+            - heading "Ações operacionais" [level=2] [ref=e68]
+          - generic [ref=e422]:
+            - article [ref=e423]:
+              - generic [ref=e424]:
+                - strong [ref=e425]: Abrir painel ativo
+                - text: Nucleo Admin
+              - generic [ref=e426]:
+                - link "Abrir" [ref=e427] [cursor=pointer]:
+                  - /url: https://admin.brasildesconto.com.br/
+                - button "Copiar link" [ref=e428] [cursor=pointer]
+            - article [ref=e429]:
+              - generic [ref=e430]:
+                - strong [ref=e431]: Abrir ERP lojista
+                - text: Gestao comercial, PDV, estoque e financeiro
+              - generic [ref=e432]:
+                - link "Abrir" [ref=e433] [cursor=pointer]:
+                  - /url: https://erp-lojista.brasildesconto.com.br/
+                - button "Copiar link" [ref=e434] [cursor=pointer]
+            - article [ref=e435]:
+              - generic [ref=e436]:
+                - strong [ref=e437]: Abrir catalogo
+                - text: Produtos, pricing e revisao comercial
+              - generic [ref=e438]:
+                - link "Abrir" [ref=e439] [cursor=pointer]:
+                  - /url: "#importedPricingSection"
+                - button "Copiar link" [ref=e440] [cursor=pointer]
+            - article [ref=e441]:
+              - generic [ref=e442]:
+                - strong [ref=e443]: Abrir integracoes
+                - text: Marketplaces, fornecedores e conectores
+              - generic [ref=e444]:
+                - link "Abrir" [ref=e445] [cursor=pointer]:
+                  - /url: "#settingsSection"
+                - button "Copiar link" [ref=e446] [cursor=pointer]
+    - main [ref=e69]:
+      - region "Abas do painel admin" [ref=e70]:
+        - generic [ref=e71]:
+          - generic [ref=e72]:
+            - paragraph [ref=e73]: Admin surfaces
+            - heading "Abas operacionais do painel" [level=2] [ref=e74]
+          - paragraph [ref=e75]: Cada frente do admin fica isolada em uma aba real para reduzir mistura entre operação, catálogo, finanças e módulos.
+        - tablist "Abas do painel admin" [ref=e447]:
+          - tab "Visao geral Home enxuta com botoes para areas e modulos independentes." [ref=e1154] [cursor=pointer]:
+            - strong [ref=e1155]: Visao geral
+            - generic [ref=e1156]: Home enxuta com botoes para areas e modulos independentes.
+          - tab "Stitch P0 Admin Central e ERP Lojista convertidos para operacao real." [selected] [ref=e1157] [cursor=pointer]:
+            - strong [ref=e1158]: Stitch P0
+            - generic [ref=e1159]: Admin Central e ERP Lojista convertidos para operacao real.
+          - tab "ERP Lojista Marketplace, PDV, armazem, financeiro e backoffice do lojista." [ref=e1160] [cursor=pointer]:
+            - strong [ref=e1161]: ERP Lojista
+            - generic [ref=e1162]: Marketplace, PDV, armazem, financeiro e backoffice do lojista.
+          - tab "Financeiro Receita, checkout e sinais de monetizacao." [ref=e1163] [cursor=pointer]:
+            - strong [ref=e1164]: Financeiro
+            - generic [ref=e1165]: Receita, checkout e sinais de monetizacao.
+          - tab "Desempenho Resultados por modulo e inteligencia do STOCK." [ref=e1166] [cursor=pointer]:
+            - strong [ref=e1167]: Desempenho
+            - generic [ref=e1168]: Resultados por modulo e inteligencia do STOCK.
+          - tab "Integracoes APIs, fornecedores e playbooks de ativacao." [ref=e1169] [cursor=pointer]:
+            - strong [ref=e1170]: Integracoes
+            - generic [ref=e1171]: APIs, fornecedores e playbooks de ativacao.
+          - tab "Catalogo Importados, pricing e fila de publicacao." [ref=e1172] [cursor=pointer]:
+            - strong [ref=e1173]: Catalogo
+            - generic [ref=e1174]: Importados, pricing e fila de publicacao.
+          - tab "Modulos Lista, filtros e cockpit detalhado por modulo." [ref=e1175] [cursor=pointer]:
+            - strong [ref=e1176]: Modulos
+            - generic [ref=e1177]: Lista, filtros e cockpit detalhado por modulo.
+      - region "Onda 1 P0 Stitch executavel" [ref=e96]:
+        - generic [ref=e97]:
+          - generic [ref=e98]:
+            - paragraph [ref=e99]: Stitch Onda 1
+            - heading "Templates P0 em telas executáveis reais" [level=2] [ref=e100]
+          - paragraph [ref=e101]: Admin Central 1/2 e ERP Lojista convertidos para operação no painel real, com ações conectadas ao runtime existente.
+        - generic [ref=e1179]:
+          - generic [ref=e1180]:
+            - generic [ref=e1181]:
+              - text: Release web
+              - strong [ref=e1182]: Onda 1 P0 ativa
+              - paragraph [ref=e1183]: A galeria Stitch virou uma camada operacional com telas reais, dados do runtime e ações executáveis.
+            - generic [ref=e1184]:
+              - button "Sincronizar dados" [ref=e1185] [cursor=pointer]
+              - button "Exportar resumo" [ref=e1186] [cursor=pointer]
+              - button "Abrir galeria" [ref=e1187] [cursor=pointer]
+          - generic [ref=e1188]:
+            - generic [ref=e1189]:
+              - text: Admin Central 1/2
+              - heading "Controle executivo conectado ao painel Valley" [level=3] [ref=e1190]
+              - paragraph [ref=e1191]: KPIs, workspaces, checkout, catálogo, integrações e ERP lojista agora estão organizados como uma tela P0 executável, mantendo os templates Stitch como referência visual auditável.
+              - generic [ref=e1192]:
+                - generic [ref=e1193]: 131 templates publicados
+                - generic [ref=e1194]: 21 P0
+                - generic [ref=e1195]: 3 web executáveis
+            - generic [ref=e1196]:
+              - article [ref=e1197]:
+                - generic [ref=e1198]: Admin
+                - strong [ref=e1199]: https://admin.brasildesconto.com.br
+              - article [ref=e1200]:
+                - generic [ref=e1201]: Usuário
+                - strong [ref=e1202]: https://admin.brasildesconto.com.br/product
+              - article [ref=e1203]:
+                - generic [ref=e1204]: Stitch
+                - strong [ref=e1205]: /stitch/20260513_valley_erp/
+          - generic [ref=e1206]:
+            - article [ref=e1207]:
+              - text: Templates
+              - strong [ref=e1208]: "131"
+              - text: 21 P0 publicados
+            - article [ref=e1209]:
+              - text: Módulos
+              - strong [ref=e1210]: 0/47
+              - text: release operacional
+            - article [ref=e1211]:
+              - text: Catálogo
+              - strong [ref=e1212]: "0"
+              - text: 0 aprovados
+            - article [ref=e1213]:
+              - text: Checkout
+              - strong [ref=e1214]: Pendente
+              - text: gate de compra
+          - generic [ref=e1215]:
+            - article [ref=e1216]:
+              - img "Admin Central 1" [ref=e1217]
+              - generic [ref=e1218]:
+                - text: Visao operacional
+                - strong [ref=e1219]: Admin Central 1
+                - paragraph [ref=e1220]: Dashboard, KPIs, fila rapida, links publicos e leitura executiva.
+              - generic [ref=e1221]:
+                - button "Executar tela" [ref=e1222] [cursor=pointer]
+                - link "Referência" [ref=e1223] [cursor=pointer]:
+                  - /url: /stitch/20260513_valley_erp/stitch_valley_erp/valley_admin_central_1/code.html
+            - article [ref=e1224]:
+              - img "Admin Central 2" [ref=e1225]
+              - generic [ref=e1226]:
+                - text: Controle executivo
+                - strong [ref=e1227]: Admin Central 2
+                - paragraph [ref=e1228]: Desempenho por modulo, sinais de crescimento, pressao operacional e workspaces.
+              - generic [ref=e1229]:
+                - button "Executar tela" [ref=e1230] [cursor=pointer]
+                - link "Referência" [ref=e1231] [cursor=pointer]:
+                  - /url: /stitch/20260513_valley_erp/stitch_valley_erp/valley_admin_central_2/code.html
+            - article [ref=e1232]:
+              - img "ERP do Lojista" [ref=e1233]
+              - generic [ref=e1234]:
+                - text: Painel marketplace
+                - strong [ref=e1235]: ERP do Lojista
+                - paragraph [ref=e1236]: Pedidos, SKU, estoque, PDV, financeiro, integracoes e rotinas salvas.
+              - generic [ref=e1237]:
+                - button "Executar tela" [ref=e1238] [cursor=pointer]
+                - link "Referência" [ref=e1239] [cursor=pointer]:
+                  - /url: /stitch/20260513_valley_erp/stitch_valley_erp/valley_erp_do_lojista/code.html
+          - generic [ref=e1240]:
+            - article [ref=e1241]:
+              - generic [ref=e1242]: Operação
+              - strong [ref=e1243]: Admin Central
+              - paragraph [ref=e1244]: Abre a home operacional, atualiza os dados e mantém os workspaces em abas reais.
+              - generic [ref=e1245]:
+                - button "Abrir home" [ref=e1246] [cursor=pointer]
+                - button "Workspaces" [ref=e1247] [cursor=pointer]
+            - article [ref=e1248]:
+              - generic [ref=e1249]: Lojista
+              - strong [ref=e1250]: ERP marketplace
+              - paragraph [ref=e1251]: Ativa a aba do ERP, seus módulos e as rotinas de salvar, sync, relatório e export.
+              - generic [ref=e1252]:
+                - button "Abrir ERP" [ref=e1253] [cursor=pointer]
+                - button "Produtos e SKU" [ref=e1254] [cursor=pointer]
+            - article [ref=e1255]:
+              - generic [ref=e1256]: Conexões
+              - strong [ref=e1257]: Checkout e integrações
+              - paragraph [ref=e1258]: Leva direto para checkout, marketplaces, fornecedores e status de publicação.
+              - generic [ref=e1259]:
+                - button "Checkout" [ref=e1260] [cursor=pointer]
+                - button "Integrações" [ref=e1261] [cursor=pointer]
+          - table [ref=e1263]:
+            - rowgroup [ref=e1264]:
+              - row "Tela Rotina Métrica Status" [ref=e1265]:
+                - columnheader "Tela" [ref=e1266]
+                - columnheader "Rotina" [ref=e1267]
+                - columnheader "Métrica" [ref=e1268]
+                - columnheader "Status" [ref=e1269]
+            - rowgroup [ref=e1270]:
+              - row "Admin Central 1 Home executiva 0/47 módulos Aberto no painel" [ref=e1271]:
+                - cell "Admin Central 1" [ref=e1272]
+                - cell "Home executiva" [ref=e1273]
+                - cell "0/47 módulos" [ref=e1274]
+                - cell "Aberto no painel" [ref=e1275]
+              - row "Admin Central 2 Desempenho 47 módulos no catálogo Pronto para revisão" [ref=e1276]:
+                - cell "Admin Central 2" [ref=e1277]
+                - cell "Desempenho" [ref=e1278]
+                - cell "47 módulos no catálogo" [ref=e1279]
+                - cell "Pronto para revisão" [ref=e1280]
+              - row "ERP do Lojista Marketplace 0 itens 0 em revisão" [ref=e1281]:
+                - cell "ERP do Lojista" [ref=e1282]
+                - cell "Marketplace" [ref=e1283]
+                - cell "0 itens" [ref=e1284]
+                - cell "0 em revisão" [ref=e1285]
+              - row "Checkout Jornada de compra Pendente Revisar credenciais" [ref=e1286]:
+                - cell "Checkout" [ref=e1287]
+                - cell "Jornada de compra" [ref=e1288]
+                - cell "Pendente" [ref=e1289]
+                - cell "Revisar credenciais" [ref=e1290]
+              - row "Integrações Fornecedores e canais 7/7 ativos 0 fornecedores" [ref=e1291]:
+                - cell "Integrações" [ref=e1292]
+                - cell "Fornecedores e canais" [ref=e1293]
+                - cell "7/7 ativos" [ref=e1294]
+                - cell "0 fornecedores" [ref=e1295]
+  - generic [ref=e269]: Aba Stitch P0 Admin Central e ERP Lojista convertidos para operacao real. aberta.
