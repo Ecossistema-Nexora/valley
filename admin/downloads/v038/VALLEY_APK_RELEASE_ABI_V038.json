@@ -1,0 +1,27 @@
+{
+  "version": "v038",
+  "app_version": "1.0.7+54",
+  "generated_at_utc": "2026-05-13T11:45:46Z",
+  "public_runtime": "https://admin.brasildesconto.com.br",
+  "product_url": "https://admin.brasildesconto.com.br/product",
+  "api_url": "https://admin.brasildesconto.com.br/api/product-shell",
+  "provider": "cloudflare_named_tunnel",
+  "offline_bootstrap": true,
+  "files": [
+    {
+      "name": "app-armeabi-v7a-release.apk",
+      "bytes": 18357953,
+      "sha1": "36815329ACB57B2B8FF9708A0CE84C4556E5824A"
+    },
+    {
+      "name": "app-arm64-v8a-release.apk",
+      "bytes": 20842133,
+      "sha1": "F1677631964C439C241932471A924A4B6E7D2614"
+    },
+    {
+      "name": "app-x86_64-release.apk",
+      "bytes": 22269173,
+      "sha1": "A9C72904AEE6A44C3FA8132CC137225D5BE1F67A"
+    }
+  ]
+}

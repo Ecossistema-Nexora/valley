@@ -362,19 +362,22 @@ try {
         }
     }
 } catch {
-    if (-not (Test-Path -LiteralPath $StatusPath -PathType Leaf)) {
-        Write-JsonFile -Path $StatusPath -Payload @{
-            status = 'blocked'
-            reason = $_.Exception.Message
-            account_id = $AccountId
-            tunnel_id = $TunnelId
-            tunnel_name = $TunnelName
-            public_url = $PublicBaseUrl
-            credentials = @{
-                api_token = New-SecretFingerprint -Value $ApiToken
-                existing_replica_token = New-SecretFingerprint -Value $ExistingReplicaToken
-                origin_cert_present = -not [string]::IsNullOrWhiteSpace($OriginCert)
-            }
+    $Reason = $_.Exception.Message
+    if ($Reason -match 'Authentication error') {
+        $Reason = 'cloudflare_api_authentication_error'
+    }
+
+    Write-JsonFile -Path $StatusPath -Payload @{
+        status = 'blocked'
+        reason = $Reason
+        account_id = $AccountId
+        tunnel_id = $TunnelId
+        tunnel_name = $TunnelName
+        public_url = $PublicBaseUrl
+        credentials = @{
+            api_token = New-SecretFingerprint -Value $ApiToken
+            existing_replica_token = New-SecretFingerprint -Value $ExistingReplicaToken
+            origin_cert_present = -not [string]::IsNullOrWhiteSpace($OriginCert)
         }
     }
     throw
