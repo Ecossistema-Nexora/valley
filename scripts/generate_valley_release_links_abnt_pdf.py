@@ -18,15 +18,30 @@ from reportlab.platypus import PageBreak, Paragraph, SimpleDocTemplate, Spacer, 
 
 ROOT = Path(__file__).resolve().parents[1]
 SUBDOMAINS_PATH = ROOT / "output" / "deployment" / "valley-module-subdomains.json"
+ADMIN_RUNTIME_PATH = ROOT / "tmp" / "runtime" / "valley-admin-public-runtime.json"
+PRODUCT_RUNTIME_PATH = ROOT / "tmp" / "runtime" / "valley-product-public-runtime.json"
+LOCALHOST_RUN_STATUS_PATH = ROOT / "tmp" / "runtime" / "valley-localhost-run-status.json"
 PDF_PATH = ROOT / "output" / "pdf" / "VALLEY_RELEASE_LINKS_MODULOS_ABNT.pdf"
 MD_PATH = ROOT / "output" / "pdf" / "VALLEY_RELEASE_LINKS_MODULOS_ABNT.md"
 
 
 def load_json(path: Path) -> dict:
-    return json.loads(path.read_text(encoding="utf-8"))
+    return json.loads(path.read_text(encoding="utf-8-sig"))
+
+
+def load_optional_json(path: Path) -> dict:
+    if not path.exists():
+        return {}
+    try:
+        payload = load_json(path)
+    except json.JSONDecodeError:
+        return {}
+    return payload if isinstance(payload, dict) else {}
 
 
 def public_url(host: str) -> str:
+    if host.startswith("http://") or host.startswith("https://"):
+        return host if host.endswith("/") else f"{host}/"
     return f"https://{host.strip().strip('/')}/"
 
 
@@ -42,14 +57,45 @@ def link_paragraph(text: str, url: str, style: ParagraphStyle) -> Paragraph:
 
 
 def group_records(records: list[dict]) -> dict[str, list[dict]]:
+    admin_runtime = load_optional_json(ADMIN_RUNTIME_PATH)
+    product_runtime = load_optional_json(PRODUCT_RUNTIME_PATH)
+    localhost_runtime = load_optional_json(LOCALHOST_RUN_STATUS_PATH)
+    admin_public_url = str(
+        admin_runtime.get("public_url") or localhost_runtime.get("public_url") or ""
+    ).strip()
+    product_public_url = str(
+        product_runtime.get("public_url") or localhost_runtime.get("product_url") or ""
+    ).strip()
+    product_api_url = str(
+        product_runtime.get("public_api_url") or localhost_runtime.get("api_url") or ""
+    ).strip()
+
     admin_records = []
     lojista_records = []
     usuario_records = [
+        {
+            "title": "Runtime operacional atual",
+            "name": admin_public_url,
+            "module_code": "ADMIN",
+            "related": "Painel web ativo validado para testes externos enquanto o dominio fixo aguarda reparo do tunnel.",
+        },
         {
             "title": "Portal público Valley",
             "name": "brasildesconto.com.br",
             "module_code": "USUARIO",
             "related": "Entrada oficial da marca e catálogo público",
+        },
+        {
+            "title": "Produto web/mobile operacional atual",
+            "name": product_public_url,
+            "module_code": "USUARIO",
+            "related": "Catálogo, checkout, rastreio e conta do usuário na rota pública validada.",
+        },
+        {
+            "title": "API pública operacional atual",
+            "name": product_api_url,
+            "module_code": "API",
+            "related": "Endpoint público validado para shell de produto e ações do aplicativo.",
         },
         {
             "title": "Produto web/mobile",
@@ -58,6 +104,17 @@ def group_records(records: list[dict]) -> dict[str, list[dict]]:
             "related": "Catálogo, checkout, rastreio e conta do usuário",
         },
     ]
+
+    if admin_public_url:
+        admin_records.append(
+            {
+                "title": "Painel admin operacional atual",
+                "name": admin_public_url,
+                "module_code": "ADMIN",
+                "related": "Admin e workspaces web atualizados com a rota pública validada.",
+                "kind": "runtime_current",
+            }
+        )
 
     seen_admin: set[str] = set()
     seen_lojista: set[str] = set()
@@ -84,6 +141,7 @@ def group_records(records: list[dict]) -> dict[str, list[dict]]:
                 admin_records.append(record)
                 seen_admin.add(normalized)
 
+    usuario_records = [record for record in usuario_records if str(record.get("name") or "").strip()]
     admin_records.sort(key=lambda item: (str(item.get("kind") or ""), str(item.get("name") or "")))
     lojista_records.sort(key=lambda item: str(item.get("name") or ""))
     return {"Admin": admin_records, "Lojista": lojista_records, "Usuário": usuario_records}
@@ -137,7 +195,7 @@ def rows_for_group(group: str, records: Iterable[dict], small: ParagraphStyle) -
     for record in records:
         host = str(record.get("name") or "")
         url = public_url(host)
-        if "/product" in host:
+        if host == "brasildesconto.com.br/product":
             url = "https://brasildesconto.com.br/product/"
         rows.append([
             Paragraph(module_code(record, group), small),
@@ -160,7 +218,7 @@ def build_markdown(groups: dict[str, list[dict]]) -> None:
         for record in records:
             host = str(record.get("name") or "")
             url = public_url(host)
-            if "/product" in host:
+            if host == "brasildesconto.com.br/product":
                 url = "https://brasildesconto.com.br/product/"
             lines.append(
                 f"| {module_code(record, group)} | {display_title(record, host)} | [{host}]({url}) | {relation_for(group, record)} |"

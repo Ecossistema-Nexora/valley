@@ -54,6 +54,7 @@ Documento fonte do PDF ABNT com links clicáveis separados em Admin, Lojista e U
 | MEDIA | MEDIA - Valley Media | [45-media-admin.brasildesconto.com.br](https://45-media-admin.brasildesconto.com.br/) | Controla módulo, regras, governança e operação global. |
 | CHAT | CHAT - Valley Chat | [46-chat-admin.brasildesconto.com.br](https://46-chat-admin.brasildesconto.com.br/) | Controla módulo, regras, governança e operação global. |
 | DOCS | DOCS - Valley Docs | [47-docs-admin.brasildesconto.com.br](https://47-docs-admin.brasildesconto.com.br/) | Controla módulo, regras, governança e operação global. |
+| ADMIN | Painel admin operacional atual | [https://01e7dcdc3079ce.lhr.life](https://01e7dcdc3079ce.lhr.life/) | Controla módulo, regras, governança e operação global. |
 | CHECKOUT-HTTPS-ALIAS | Checkout | [checkout-admin.brasildesconto.com.br](https://checkout-admin.brasildesconto.com.br/) | Conecta checkout, repasses, taxas e conciliação. |
 | DROPSHIPPING-HTTPS-ALIAS | Dropshipping | [dropshipping-admin.brasildesconto.com.br](https://dropshipping-admin.brasildesconto.com.br/) | Alimenta catálogo, fornecedores, estoque e precificação. |
 | FINANCE-HTTPS-ALIAS | Financeiro | [finance-admin.brasildesconto.com.br](https://finance-admin.brasildesconto.com.br/) | Conecta checkout, repasses, taxas e conciliação. |
@@ -97,5 +98,8 @@ Documento fonte do PDF ABNT com links clicáveis separados em Admin, Lojista e U
 
 | Módulo | Tela/Painel | Link | Relação |
 |---|---|---|---|
+| ADMIN | Runtime operacional atual | [https://01e7dcdc3079ce.lhr.life](https://01e7dcdc3079ce.lhr.life/) | Painel web ativo validado para testes externos enquanto o dominio fixo aguarda reparo do tunnel. |
 | USUARIO | Portal público Valley | [brasildesconto.com.br](https://brasildesconto.com.br/) | Entrada oficial da marca e catálogo público |
+| USUARIO | Produto web/mobile operacional atual | [https://01e7dcdc3079ce.lhr.life/product](https://01e7dcdc3079ce.lhr.life/product/) | Catálogo, checkout, rastreio e conta do usuário na rota pública validada. |
+| API | API pública operacional atual | [https://01e7dcdc3079ce.lhr.life/api/product-shell](https://01e7dcdc3079ce.lhr.life/api/product-shell/) | Endpoint público validado para shell de produto e ações do aplicativo. |
 | USUARIO | Produto web/mobile | [brasildesconto.com.br/product](https://brasildesconto.com.br/product/) | Catálogo, checkout, rastreio e conta do usuário |

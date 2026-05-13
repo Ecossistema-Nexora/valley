@@ -1,7 +1,7 @@
 param(
     [int]$ApiPort = 8085,
-    [string]$PublicUrl = 'https://grilled-uncurrently-shaunta.ngrok-free.dev',
-    [int]$NgrokApiPort = 4040,
+    [string]$PublicUrl = 'https://admin.brasildesconto.com.br',
+    [switch]$AllowNgrok,
     [switch]$InstallTask,
     [switch]$Watch,
     [switch]$ReplaceStale
@@ -13,10 +13,14 @@ $ErrorActionPreference = 'Stop'
 $RepoRoot = Split-Path -Parent $PSScriptRoot
 $RuntimeDir = Join-Path $RepoRoot 'tmp\runtime'
 $EnvPath = Join-Path $RepoRoot '.env'
+$EnvExamplePath = Join-Path $RepoRoot '.env.example'
+$ReleaseEnvExamplePath = Join-Path $RepoRoot 'config\VALLEY_RELEASE_ENV.example'
+$CodexCloudEnvPath = Join-Path $RuntimeDir 'codex-cloud-secrets.env'
+$TunnelTokenEnvPath = Join-Path $RuntimeDir 'valley-cloudflare-named-tunnel.env'
 $ApiOutLog = Join-Path $RuntimeDir 'valley-product-api.win.out.log'
 $ApiErrLog = Join-Path $RuntimeDir 'valley-product-api.win.err.log'
-$NgrokOutLog = Join-Path $RuntimeDir 'valley-product-ngrok.win.out.log'
-$NgrokErrLog = Join-Path $RuntimeDir 'valley-product-ngrok.win.err.log'
+$NgrokOutLog = Join-Path $RuntimeDir 'valley-product-ngrok.disabled.out.log'
+$NgrokErrLog = Join-Path $RuntimeDir 'valley-product-ngrok.disabled.err.log'
 $CloudflareOutLog = Join-Path $RuntimeDir 'valley-product-cloudflare.out.log'
 $CloudflareErrLog = Join-Path $RuntimeDir 'valley-product-cloudflare.err.log'
 $ManifestPath = Join-Path $RuntimeDir 'valley-product-public-runtime.json'
@@ -31,21 +35,34 @@ function Write-Step {
 }
 
 function Import-LocalEnv {
-    if (-not (Test-Path -LiteralPath $EnvPath)) {
-        return
-    }
-
-    foreach ($RawLine in Get-Content -LiteralPath $EnvPath) {
-        $Line = $RawLine.Trim()
-        if (-not $Line -or $Line.StartsWith('#') -or -not $Line.Contains('=')) {
+    foreach ($Path in @($EnvExamplePath, $ReleaseEnvExamplePath, $EnvPath, $CodexCloudEnvPath, $TunnelTokenEnvPath)) {
+        if (-not (Test-Path -LiteralPath $Path)) {
             continue
         }
 
-        $Key, $Value = $Line.Split('=', 2)
-        $Key = $Key.Trim()
-        $Value = $Value.Trim().Trim('"').Trim("'")
-        if ($Key -and [string]::IsNullOrWhiteSpace([Environment]::GetEnvironmentVariable($Key, 'Process'))) {
-            [Environment]::SetEnvironmentVariable($Key, $Value, 'Process')
+        foreach ($RawLine in Get-Content -LiteralPath $Path) {
+            $Line = $RawLine.Trim()
+            if (-not $Line -or $Line.StartsWith('#') -or -not $Line.Contains('=')) {
+                continue
+            }
+
+            $Key, $Value = $Line.Split('=', 2)
+            $Key = $Key.Trim()
+            $Value = $Value.Trim().Trim('"').Trim("'")
+            if (-not $Key -or [string]::IsNullOrWhiteSpace($Value)) {
+                continue
+            }
+
+            $ShouldOverride = @(
+                'CLOUDFLARED_TOKEN',
+                'VALLEY_ADMIN_PUBLIC_URL',
+                'VALLEY_CLOUDFLARE_PUBLIC_URL',
+                'VALLEY_PRODUCT_PUBLIC_URL'
+            ) -contains $Key
+            $CurrentValue = [Environment]::GetEnvironmentVariable($Key, 'Process')
+            if ([string]::IsNullOrWhiteSpace($CurrentValue) -or $ShouldOverride) {
+                [Environment]::SetEnvironmentVariable($Key, $Value, 'Process')
+            }
         }
     }
 }
@@ -109,20 +126,72 @@ function Stop-NgrokIfNeeded {
 
     Get-CimInstance Win32_Process -Filter "name='ngrok.exe'" |
         Where-Object {
-            $_.CommandLine -like "*$Domain*" -or
+            ([string]::IsNullOrWhiteSpace($Domain) -or $_.CommandLine -like "*$Domain*") -or
             $_.CommandLine -like "*:$ApiPort*"
         } |
         ForEach-Object {
-            Write-Step ("Encerrando ngrok antigo PID {0}" -f $_.ProcessId)
+            Write-Step ("Encerrando ngrok desabilitado PID {0}" -f $_.ProcessId)
             Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue
         }
+}
+
+function Write-NgrokDisabledMarker {
+    $Marker = [ordered]@{
+        status = 'disabled'
+        provider = 'ngrok'
+        disabled_at = (Get-Date).ToString('o')
+        reason = 'ngrok removido do caminho de release por limite baixo; Cloudflare e a rota primaria.'
+        allow_override = 'somente com -AllowNgrok, fora do fluxo padrao'
+    }
+
+    $Marker | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath (Join-Path $RuntimeDir 'valley-ngrok-disabled.json') -Encoding UTF8
+}
+
+function Write-BlockedRuntimeManifest {
+    param([string]$Reason)
+
+    $Payload = [ordered]@{
+        status = 'blocked'
+        service = 'valley-product-public'
+        provider = 'cloudflare_required'
+        public_url = ''
+        public_api_url = ''
+        local_api_url = "http://127.0.0.1:$ApiPort/api/product-shell"
+        generated_at = (Get-Date).ToString('o')
+        temporary = $true
+        provider_status = 'blocked'
+        reason = $Reason
+        disabled_providers = @('ngrok')
+        logs = @{
+            api_stdout = $ApiOutLog
+            api_stderr = $ApiErrLog
+            ngrok_disabled = Join-Path $RuntimeDir 'valley-ngrok-disabled.json'
+            cloudflare_stdout = $CloudflareOutLog
+            cloudflare_stderr = $CloudflareErrLog
+        }
+    }
+
+    $Payload | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath $ManifestPath -Encoding UTF8
+    $Publication = [ordered]@{
+        status = 'blocked'
+        provider = 'cloudflare_required'
+        public_url = ''
+        api_url = ''
+        generated_at = (Get-Date).ToString('o')
+        temporary = $true
+        provider_status = 'blocked'
+        reason = $Reason
+        disabled_providers = @('ngrok')
+    }
+    $Publication | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath $PublicationPath -Encoding UTF8
 }
 
 function Stop-CloudflareIfNeeded {
     Get-CimInstance Win32_Process -Filter "name='cloudflared.exe'" |
         Where-Object {
             $_.CommandLine -like "*127.0.0.1:$ApiPort*" -or
-            $_.CommandLine -like "*http://127.0.0.1:$ApiPort*"
+            $_.CommandLine -like "*http://127.0.0.1:$ApiPort*" -or
+            $_.CommandLine -like "*tunnel run*"
         } |
         ForEach-Object {
             Write-Step ("Encerrando cloudflared antigo PID {0}" -f $_.ProcessId)
@@ -353,10 +422,84 @@ function Try-StartCloudflareQuickTunnel {
     return $false
 }
 
+function Try-StartCloudflareNamedTunnel {
+    param(
+        [string]$LocalUrl,
+        [string]$PublicApiUrl
+    )
+
+    $Token = [Environment]::GetEnvironmentVariable('CLOUDFLARED_TOKEN', 'Process')
+    if ([string]::IsNullOrWhiteSpace($Token)) {
+        Write-Step 'Token CLOUDFLARED_TOKEN ausente; named tunnel nao pode iniciar.'
+        return $false
+    }
+
+    if (Test-ProductApi -Url $PublicApiUrl) {
+        Write-Step ("Named tunnel Cloudflare ja esta saudavel: {0}" -f $PublicApiUrl)
+        Write-RuntimeManifest `
+            -Provider 'cloudflare_named_tunnel' `
+            -BaseUrl $PublicUrl `
+            -PublicApiUrl $PublicApiUrl `
+            -LocalUrl $LocalUrl `
+            -Temporary $false `
+            -ProviderStatus 'healthy'
+        return $true
+    }
+
+    if ($ReplaceStale) {
+        Stop-CloudflareIfNeeded
+    }
+
+    Write-Step ("Subindo Cloudflare named tunnel -> {0}" -f $PublicUrl)
+    Start-Process `
+        -FilePath $script:Cloudflared `
+        -ArgumentList @('tunnel', 'run', '--token', $Token) `
+        -WorkingDirectory $RepoRoot `
+        -RedirectStandardOutput $CloudflareOutLog `
+        -RedirectStandardError $CloudflareErrLog `
+        -WindowStyle Hidden
+
+    $Deadline = (Get-Date).AddSeconds(45)
+    do {
+        Start-Sleep -Seconds 2
+        if (Test-ProductApi -Url $PublicApiUrl) {
+            Write-RuntimeManifest `
+                -Provider 'cloudflare_named_tunnel' `
+                -BaseUrl $PublicUrl `
+                -PublicApiUrl $PublicApiUrl `
+                -LocalUrl $LocalUrl `
+                -Temporary $false `
+                -ProviderStatus 'healthy'
+            Write-Step ("Runtime publico ativo via Cloudflare named tunnel: {0}" -f $PublicApiUrl)
+            return $true
+        }
+    } while ((Get-Date) -lt $Deadline)
+
+    Write-Step 'Cloudflare named tunnel indisponivel; mantendo bloqueio ate token valido.'
+    return $false
+}
+
 function Start-ProductRuntime {
     $LocalUrl = "http://127.0.0.1:$ApiPort/api/product-shell"
 
     Ensure-LocalApi -LocalUrl $LocalUrl
+    Stop-NgrokIfNeeded -Domain $script:NgrokDomain
+    Write-NgrokDisabledMarker
+    Write-BlockedRuntimeManifest -Reason 'awaiting_cloudflare_healthy_tunnel'
+
+    $ReservedApiUrl = "$PublicUrl/api/product-shell"
+    if ($AllowNgrok) {
+        Write-Step "ngrok foi solicitado explicitamente com -AllowNgrok; uso fora do fluxo padrao."
+        if (Try-StartNgrok -LocalUrl $LocalUrl -PublicApiUrl $ReservedApiUrl) {
+            return
+        }
+    } else {
+        Write-Step "ngrok desabilitado permanentemente no fluxo padrao; priorizando Cloudflare."
+    }
+
+    if (Try-StartCloudflareNamedTunnel -LocalUrl $LocalUrl -PublicApiUrl $ReservedApiUrl) {
+        return
+    }
 
     if (Try-StartCloudflareQuickTunnel -LocalUrl $LocalUrl) {
         return
@@ -409,11 +552,14 @@ $script:Python = Resolve-Executable `
         (Join-Path $env:LOCALAPPDATA 'Programs\Python\Python312\python.exe'),
         (Join-Path $env:LOCALAPPDATA 'Programs\Python\Python311\python.exe')
     )
-$script:Ngrok = Resolve-Executable `
-    -CommandName 'ngrok' `
-    -Candidates @(
-        (Join-Path $env:LOCALAPPDATA 'Microsoft\WinGet\Packages\Ngrok.Ngrok_Microsoft.Winget.Source_8wekyb3d8bbwe\ngrok.exe')
-    )
+$script:Ngrok = $null
+if ($AllowNgrok) {
+    $script:Ngrok = Resolve-Executable `
+        -CommandName 'ngrok' `
+        -Candidates @(
+            (Join-Path $env:LOCALAPPDATA 'Microsoft\WinGet\Packages\Ngrok.Ngrok_Microsoft.Winget.Source_8wekyb3d8bbwe\ngrok.exe')
+        )
+}
 $script:Cloudflared = Resolve-Executable `
     -CommandName 'cloudflared' `
     -Candidates @(

@@ -18,14 +18,19 @@ Nao foi criada compatibilidade com `platform.users` ou multi-schema legado nesta
 
 ## Mapeamento de Arquivos e Diretórios (Mandatório)
 
-Para navegação técnica persistente:
+Para navegação técnica persistente (Estrutura Padronizada V2):
 
 - **`/config`**: Registro canônico e blueprints.
     - `modules_v47.json`: Definição de todos os módulos.
+    - `mvp/manifesto_mvp_v1.json`: Manifesto de execução do Produto Mínimo Viável.
+- **`/docs`**: Documentação técnica e especificações.
+    - `/design`: Blueprints de interface e fluxo (ex: `blueprint_stitch_v036.md`).
+    - `/specs`: Propostas de produto e especificações mestras (ex: `proposta_frontend_final.md`).
 - **`/database`**: Camada de persistência híbrida.
     - `migrations.json`: Grafo de execução.
 - **`/scripts`**: Motores de automação.
-    - `valley_module_automation.py`: Builder de módulos.
+    - `automacao_sincronizador_modulos.py`: Builder de módulos e sincronização de registry.
+    - `automacao_gerador_pdf.py`: Gerador de documentação executiva.
     - `valley_db_orchestrator.py`: Runner de banco de dados.
 - **`/frontend`**: Aplicação Flutter.
     - `valley_home_shell.dart`: UI Principal.

@@ -1,0 +1,33 @@
+{
+  "name": "Valley Gemini Refactor Loop",
+  "version": "2026-05-13",
+  "mandatory": true,
+  "batch_size_limit": 5,
+  "engine": "VALLEY MODULE AUTOMATION ENGINE",
+  "codex_role": {
+    "select_files": true,
+    "auto_accept_by_rescan": true,
+    "emit_next_task_after_done_signal": true,
+    "reject_destructive_changes": true
+  },
+  "gemini_role": {
+    "allowed_files_per_round": 5,
+    "must_report_completion": true,
+    "completion_message_template": "GEMINI_DONE task_id=<task_id> files=<quantidade> status=done",
+    "completion_signal_path": "tmp/runtime/valley-gemini-completion-signal.json"
+  },
+  "paths": {
+    "checklist_json": "tmp/runtime/valley-gemini-refactor-checklist.json",
+    "checklist_md": "output/refactor/VALLEY_GEMINI_REFACTOR_CHECKLIST.md",
+    "current_task": "tmp/runtime/valley-gemini-current-task.md",
+    "queue": "tmp/runtime/valley-gemini-refactor-task-queue.jsonl",
+    "acceptance_ledger": "tmp/runtime/valley-gemini-refactor-acceptance-ledger.jsonl",
+    "status": "tmp/runtime/valley-gemini-refactor-loop-status.json",
+    "watchdog_log": "tmp/runtime/valley-gemini-refactor-watchdog.log"
+  },
+  "commands": {
+    "scan": "python scripts/run_valley_gemini_refactor_loop.py scan --batch-size 5 --engine-mode checkpoint",
+    "watchdog": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/run_valley_gemini_refactor_watchdog.ps1 -Command loop -BatchSize 5 -MaxCycles 1 -EngineMode checkpoint",
+    "install_task": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/install_valley_gemini_refactor_loop_task.ps1 -IntervalMinutes 1 -EngineMode checkpoint"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "policy_name": "valley_cloudflare_token_regeneration",
+  "version": "1.0.0",
+  "mandatory": true,
+  "primary_provider": "cloudflare",
+  "disabled_providers": ["ngrok"],
+  "domain": "https://admin.brasildesconto.com.br",
+  "tunnel_name": "valley-admin",
+  "tunnel_id": "80a75594-5129-469f-8cce-4a938ac48e06",
+  "account_id": "474fc26bf9c6bcf5e1a84b7f63a516d8",
+  "scripts": {
+    "regenerate_token": "scripts/ensure_valley_cloudflare_token_regeneration.ps1",
+    "install_task": "scripts/install_valley_cloudflare_token_regeneration_task.ps1",
+    "release_gate": "scripts/ensure_valley_release_runtime.ps1"
+  },
+  "runtime_status": {
+    "token_regeneration": "tmp/runtime/valley-cloudflare-token-regeneration-status.json",
+    "release_gate": "tmp/runtime/valley-release-runtime-gate.json",
+    "blocker": "tmp/runtime/valley-cloudflare-release-blocker.json"
+  },
+  "rules": [
+    "Never use ngrok in the default release flow.",
+    "Regenerate CLOUDFLARED_TOKEN only from CLOUDFLARE_API_TOKEN/CF_API_TOKEN or a local authenticated cloudflared cert.pem.",
+    "Do not print or commit tokens.",
+    "Do not build or send APK until /healthz, /product and /api/product-shell pass through Cloudflare validation.",
+    "Keep the scheduled task active until the fixed Cloudflare domain is healthy."
+  ]
+}

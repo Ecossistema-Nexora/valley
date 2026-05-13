@@ -1,21 +1,17 @@
 #!/usr/bin/env python3
 """
-VALLEY MODULE AUTOMATION ENGINE
-===============================
-Propósito: Sincronizar o registro canônico (modules_v47.json) com a estrutura física de diretórios.
+AUTOMAÇÃO DE MÓDULOS VALLEY (Sincronizador)
+===========================================
+Propósito: Sincronizar o registro canônico (modules_v47.json) com a estrutura física de diretórios e schemas.
+Contexto: Este script é o coração da evolução modular do projeto Valley, garantindo que o DDL e o Roadmap estejam alinhados.
+Regras de Negócio:
+1. Threshold de Prioridade (2): Define a "Primeira Onda" de domínios prioritários.
+2. Consistência: Valida obrigatoriamente a existência dos 47 módulos.
 
 Instruções de Uso:
 1. python valley_module_automation.py validate  -> Valida a integridade dos 47 módulos.
 2. python valley_module_automation.py sync      -> Gera READMEs, STATUS e CONTRACTS em /modules.
 3. python valley_module_automation.py sql       -> Gera a migration 007_v47_module_delivery_automation.sql.
-
-Integrações:
-- Consome: config/modules_v47.json e config/modules_v47_blueprints.json.
-- Alimenta: database/postgres/007_v47_module_delivery_automation.sql.
-- Mapeia: Toda a documentação em /modules/<slug>.
-
-Decisões:
-- Threshold de Prioridade (2): Define a "Primeira Onda" de domínios prioritários para evitar sobrecarga de DDL.
 """
 
 # argparse cria uma CLI simples para rodar sync, validate e roadmap.

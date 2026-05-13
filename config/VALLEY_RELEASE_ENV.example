@@ -7,8 +7,6 @@ GIT_REMOTE_FETCH_URL=https://github.com/Ecossistema-Nexora/valley.git
 GIT_REMOTE_PUSH_URL=https://github.com/Ecossistema-Nexora/valley.git
 
 # Public release runtime
-# Authtoken do ngrok para evitar dependencia de config global revogada ou ausente.
-VALLEY_NGROK_AUTHTOKEN=
-
-# Defina somente quando tiver um dominio reservado no ngrok.
-VALLEY_NGROK_ADMIN_DOMAIN=
+# ngrok esta desabilitado no fluxo de release Valley.
+# A rota primaria de release deve ser Cloudflare; nao defina variaveis ngrok aqui.
+VALLEY_NGROK_RELEASE_DISABLED=true

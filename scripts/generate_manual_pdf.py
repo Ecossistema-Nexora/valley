@@ -1,5 +1,13 @@
 #!/usr/bin/env python3
-"""Gera o PDF do Manual Online Valley a partir do Markdown vivo."""
+"""
+GERADOR DE MANUAL PDF - VALLEY
+==============================
+Propósito: Converter a documentação viva em Markdown (MANUAL_ONLINE) para um formato PDF executivo.
+Contexto: Utilizado para compartilhamento com stakeholders e leitura offline da arquitetura técnica.
+Regras:
+1. Utiliza a biblioteca reportlab para renderização.
+2. Mantém a identidade visual Valley (Cores e Fontes específicas).
+"""
 
 # pathlib fornece caminhos portaveis para localizar o projeto.
 from pathlib import Path

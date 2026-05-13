@@ -1,20 +1,25 @@
-[
-  {
-    "name": "app-arm64-v8a-release.apk",
-    "size_bytes": 20887985,
-    "sha1": "23c4e171b51288118e7ade9eb67ec796128c66ca",
-    "last_write": "2026-05-12T06:48:36"
-  },
-  {
-    "name": "app-armeabi-v7a-release.apk",
-    "size_bytes": 18387421,
-    "sha1": "e95e75d8183d38f49ea27389715481eff9f3d8d0",
-    "last_write": "2026-05-12T06:48:42"
-  },
-  {
-    "name": "app-x86_64-release.apk",
-    "size_bytes": 22315021,
-    "sha1": "a0b831167067274cae0be1163bcbcc6b08f79461",
-    "last_write": "2026-05-12T06:48:48"
-  }
-]
+{
+  "version": "v037",
+  "generated_at_utc": "2026-05-13T09:37:14Z",
+  "public_runtime": "https://01e7dcdc3079ce.lhr.life",
+  "local_runtime": "http://127.0.0.1:8085",
+  "tailscale_runtime": "http://100.109.240.100:8085",
+  "offline_bootstrap": true,
+  "files": [
+    {
+      "name": "app-armeabi-v7a-release.apk",
+      "bytes": 18340241,
+      "sha1": "7ED1F2A3A68D90452D065A37FFE4E943700E8325"
+    },
+    {
+      "name": "app-arm64-v8a-release.apk",
+      "bytes": 20824421,
+      "sha1": "FF78959F26F26C56E4190BB704AF9109C3F18B22"
+    },
+    {
+      "name": "app-x86_64-release.apk",
+      "bytes": 22251457,
+      "sha1": "329A1835524AC71B9A7D8F8BD313873C1012A893"
+    }
+  ]
+}

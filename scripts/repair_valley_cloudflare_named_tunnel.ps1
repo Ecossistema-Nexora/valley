@@ -45,7 +45,18 @@ function Parse-EnvFile {
 function Import-ValleyEnv {
     foreach ($Path in @($EnvPath, $CodexCloudEnvPath, $TunnelTokenEnvPath)) {
         foreach ($Entry in (Parse-EnvFile -Path $Path).GetEnumerator()) {
-            if ([string]::IsNullOrWhiteSpace([Environment]::GetEnvironmentVariable($Entry.Key, 'Process'))) {
+            if ([string]::IsNullOrWhiteSpace($Entry.Value)) {
+                continue
+            }
+
+            $CurrentValue = [Environment]::GetEnvironmentVariable($Entry.Key, 'Process')
+            $ShouldOverride = @(
+                'CLOUDFLARED_TOKEN',
+                'VALLEY_ADMIN_PUBLIC_URL',
+                'VALLEY_CLOUDFLARE_PUBLIC_URL',
+                'VALLEY_PRODUCT_PUBLIC_URL'
+            ) -contains $Entry.Key
+            if ([string]::IsNullOrWhiteSpace($CurrentValue) -or $ShouldOverride) {
                 [Environment]::SetEnvironmentVariable($Entry.Key, $Entry.Value, 'Process')
             }
         }

@@ -1,7 +1,6 @@
 {
-  "generated_at_utc": "2026-04-21T20:21:46.861926+00:00",
+  "generated_at_utc": "2026-05-13T09:17:35.775205+00:00",
   "registry_name": "Valley Omniverse V47 - Registro Canonico de Modulos",
-  "description_ptbr": "Este arquivo JSON contém dados administrativos e de configuração para o painel de administração do Valley Omniverse V47. Ele detalha a estrutura dos módulos, resumos de release, status de implantação, informações de banco de dados e comandos administrativos, servindo como uma fonte canônica para o estado atual do sistema.",
   "source": "Esquema Consolidado do Valley Omniverse v47.pdf",
   "language_policy": "pt-BR simples com termos tecnicos em ingles quando forem padroes",
   "module_summary": {
@@ -466,16 +465,16 @@
   "public_runtime": {
     "available": true,
     "path": "../tmp/runtime/valley-admin-public-runtime.json",
-    "status": "production_persistent",
-    "public_url": "https://admin.brasildesconto.com.br",
-    "permanence": "fixed_external",
+    "status": "ok",
+    "public_url": "https://01e7dcdc3079ce.lhr.life",
+    "permanence": "persistent_localhost_run_watchdog",
     "smoke_endpoints": {
-      "healthz": "https://admin.brasildesconto.com.br/healthz",
-      "admin_data": "https://admin.brasildesconto.com.br/api/admin-data"
+      "healthz": "https://01e7dcdc3079ce.lhr.life/healthz",
+      "admin_data": "https://01e7dcdc3079ce.lhr.life/api/admin-data"
     }
   },
   "database_summary": {
-    "postgres_migrations": 34,
+    "postgres_migrations": 37,
     "mongodb_scripts": 5,
     "postgres_items": [
       {
@@ -1098,6 +1097,120 @@
           "v_stock_dropshipping_production_ops",
           "v_stock_dropshipping_provider_health"
         ]
+      },
+      {
+        "id": "034",
+        "path": "database/postgres/034_v47_foundation_futureproof_enrichment.sql",
+        "purpose_ptbr": "Enriquece aditivamente o core relacional com colunas futuras de identidade, risco, operacao, wallet, pedidos, transacoes e equity para reduzir retrabalho estrutural.",
+        "requires": [
+          "001",
+          "002",
+          "033"
+        ],
+        "provides": [
+          "column:users.metadata_json",
+          "column:pj_profiles.metadata_json",
+          "column:rider_profiles.metadata_json",
+          "column:wallets.metadata_json",
+          "column:led_cards.metadata_json",
+          "column:orders.metadata_json",
+          "column:transactions.processor_transaction_id",
+          "column:equity_ledger.metadata_json"
+        ]
+      },
+      {
+        "id": "035",
+        "path": "database/postgres/035_v47_phase1_commerce_identity_engagement.sql",
+        "purpose_ptbr": "Fecha a Fase 1 comercial focada com auth, perfis, home, checkout, chat comprador-lojista, carrinho, favoritos, reviews e SAC sobre Financeiro, Stock, Marketplace e Dropshipping.",
+        "requires": [
+          "004",
+          "005",
+          "008",
+          "010",
+          "033",
+          "034"
+        ],
+        "provides": [
+          "auth_identities",
+          "auth_sessions",
+          "auth_login_events",
+          "user_profiles",
+          "merchant_profiles",
+          "home_surface_preferences",
+          "checkout_provider_configs",
+          "checkout_payment_intents",
+          "checkout_webhook_events",
+          "commerce_chat_threads",
+          "shopping_carts",
+          "shopping_cart_items",
+          "user_favorites",
+          "marketplace_item_reviews",
+          "support_tickets",
+          "support_ticket_messages"
+        ]
+      },
+      {
+        "id": "036",
+        "path": "database/postgres/036_v47_dropshipping_curation_engine.sql",
+        "purpose_ptbr": "Cria a curadoria automatica de produtos para comercio local com categorias de fornecedores, mapeamento Google, normalizacao, pricing, compliance, comparacao com marketplaces, aprovados/rejeitados e jobs auditaveis.",
+        "requires": [
+          "001",
+          "008",
+          "033",
+          "035"
+        ],
+        "provides": [
+          "curation_suppliers",
+          "curation_supplier_categories",
+          "curation_internal_categories",
+          "curation_google_categories",
+          "curation_category_mapping",
+          "curation_products_raw",
+          "curation_products_normalized",
+          "curation_compliance_rules",
+          "curation_marketplace_price_snapshots",
+          "curation_product_comparison_results",
+          "curation_approved_products",
+          "curation_rejected_products",
+          "curation_sync_jobs",
+          "curation_sync_job_logs",
+          "curation_api_checkpoints",
+          "curation_api_cache_entries",
+          "curation_rate_limit_events",
+          "curation_quota_escalation_reports",
+          "curation_pricing_rules"
+        ]
+      },
+      {
+        "id": "037",
+        "path": "database/postgres/037_v47_merchant_erp_marketplace_management.sql",
+        "purpose_ptbr": "Materializa o ERP do lojista para marketplace com workspaces, PDV, armazem, metricas, campanhas, relatorios, financeiro, contabil/fiscal, integracoes, equipe, seguranca e auditoria.",
+        "requires": [
+          "008",
+          "010",
+          "019",
+          "035",
+          "036"
+        ],
+        "provides": [
+          "merchant_erp_workspaces",
+          "merchant_erp_staff_members",
+          "merchant_erp_pdv_terminals",
+          "merchant_erp_pdv_sessions",
+          "merchant_erp_cash_movements",
+          "merchant_erp_order_pipeline",
+          "merchant_erp_catalog_tasks",
+          "merchant_erp_inventory_tasks",
+          "merchant_erp_metric_snapshots",
+          "merchant_erp_campaigns",
+          "merchant_erp_report_exports",
+          "merchant_erp_financial_closures",
+          "merchant_erp_accounting_entries",
+          "merchant_erp_integration_connections",
+          "merchant_erp_security_events",
+          "merchant_erp_audit_events",
+          "v_merchant_erp_control_tower"
+        ]
       }
     ],
     "mongodb_items": [
@@ -1162,19 +1275,36 @@
           "bio_impact_logs",
           "energy_meter_streams"
         ]
+      },
+      {
+        "id": "mongo-005",
+        "path": "database/mongodb/005_v47_brain_futureproof_enrichment.mongo.js",
+        "purpose_ptbr": "Enriquece validators e indices das colecoes centrais de IA, social, influencer e telemetria com campos futuros de moderacao, compliance, monetizacao e operacao realtime.",
+        "requires": [
+          "mongo-001",
+          "mongo-002",
+          "mongo-003",
+          "mongo-004"
+        ],
+        "provides": [
+          "validator:ai_memory:v2",
+          "validator:social_videos:v2",
+          "validator:influencer_metrics:v2",
+          "validator:telemetry_logs:v2"
+        ]
       }
     ]
   },
   "deployment_summary": {
     "available": true,
-    "generated_at_utc": "2026-04-21T20:19:12.506324+00:00",
-    "total_checks": 321,
+    "generated_at_utc": "2026-05-05T17:18:50.172868+00:00",
+    "total_checks": 353,
     "failed_checks": 0,
     "top_failures": []
   },
   "public_access": {
     "path": "../output/deployment/VALLEY_EXTERNAL_ACCESS.md",
-    "ngrok_config_path": "../config/ngrok/valley-ngrok.yml",
+    "cloudflare_launcher_path": "../scripts/start_termius_cloudflare_tunnel.ps1",
     "preview": "# Valley External Access\nEste runbook publica o painel `admin/` para testes externos fora da rede local usando `ngrok`, com trilha separada para URL dinamica e URL permanente de release.\n## Entrada rapida\n- Checklist de primeira conexao: `config/VALLEY_FIRST_CONNECTION_CHECKLIST.md`\n- Esse checklist resume OAuth MCP, diferenca entre conectores do workspace e da plataforma, e ativacao da URL permanente sem gravar segredo no repositorio.\n## Estado atual do host\n- `ngrok` validado no host em `2026-04-20`\n- versao detectada: `3.37.3`\n- instalacao encontrada via WinGet\n- configuracao global do `ngrok` detectada fora do repositorio\n- `VALLEY_NGROK_ADMIN_DOMAIN` ainda nao esta exportada no ambiente atual\n## Componentes versionados no workspace\n- tunnel dinamico: `config/ngrok/valley-ngrok.yml`\n- template de release com dominio reservado: `config/ngrok/valley-ngrok.release.example.yml`\n..."
   },
   "roadmap": {
@@ -1197,8 +1327,7 @@
     "python scripts/valley_module_automation.py sync",
     "python scripts/valley_db_orchestrator.py check",
     "python scripts/valley_db_orchestrator.py report",
-    "python scripts/valley_db_orchestrator.py apply-compose",
-    "docker compose --profile builder run --rm --build builder"
+    "powershell -ExecutionPolicy Bypass -File scripts/run_valley_compose_builder.ps1"
   ],
   "modules": [
     {
@@ -1218,9 +1347,9 @@
       "integrates_with": [
         "STOCK",
         "MARKETPLACE",
-          "WMS"
+        "WMS"
       ],
-        "description_ptbr": "ERP/WMS para compras, estoque, ordens de servico e faturamento. Integra-se com módulos de estoque, marketplace e gestão de armazéns para otimizar operações logísticas e financeiras.",
+      "description_ptbr": "ERP/WMS para compras, estoque, ordens de servico e faturamento.",
       "slug": "01-reply",
       "status_label": "Parcialmente implantado",
       "paths": {
@@ -1320,9 +1449,9 @@
       "integrates_with": [
         "LOG",
         "UP",
-          "DOCS"
+        "DOCS"
       ],
-        "description_ptbr": "Motor de dropshipping com fornecedores externos, margem padrao e tracking. Conecta-se com módulos de logística, afiliados e documentos para gerenciar o ciclo de vida completo do dropshipping.",
+      "description_ptbr": "Motor de dropshipping com fornecedores externos, margem padrao e tracking.",
       "slug": "02-stock",
       "status_label": "Parcialmente implantado",
       "paths": {
@@ -1421,7 +1550,7 @@
       "integrates_with": [
         "DELIVERY",
         "FOOD",
-          "MOBILITY"
+        "MOBILITY"
       ],
       "description_ptbr": "Rastreamento inteligente de encomendas, transportadoras e rotas.",
       "slug": "03-log",
@@ -1524,7 +1653,7 @@
       "integrates_with": [
         "ORDERS",
         "MOBILITY",
-          "DOCS"
+        "DOCS"
       ],
       "description_ptbr": "Delivery alimentar com split Pay, informacoes nutricionais e taxa operacional.",
       "slug": "04-food",
@@ -1728,7 +1857,7 @@
       "integrates_with": [
         "STOCK",
         "IOT",
-          "BUSINESS"
+        "BUSINESS"
       ],
       "description_ptbr": "Gestao inteligente de armazens, sensores e estoque multi-deposito.",
       "slug": "06-wms",
@@ -1831,7 +1960,7 @@
       "integrates_with": [
         "STOCK",
         "ADS",
-          "UP"
+        "UP"
       ],
       "description_ptbr": "Comercio local centralizado, carrinho, produtos e recomendacoes.",
       "slug": "07-marketplace",
@@ -1932,7 +2061,7 @@
       "integrates_with": [
         "WALLETS",
         "TRANSACTIONS",
-          "EQUITY"
+        "EQUITY"
       ],
       "description_ptbr": "Carteira, ledger atomico, P2P, splits, limites e conciliacao.",
       "slug": "08-pay",
@@ -2034,7 +2163,7 @@
       "integrates_with": [
         "LOG",
         "SECURITY"
-        ],
+      ],
       "description_ptbr": "Gestao de frotas, telemetria, manutencao preventiva e rotas.",
       "slug": "09-fleet",
       "status_label": "Parcialmente implantado",
@@ -2135,7 +2264,7 @@
       "integrates_with": [
         "MARKETPLACE",
         "LEGAL"
-        ],
+      ],
       "description_ptbr": "Servicos profissionais, gigs, contratacao e reputacao.",
       "slug": "10-services",
       "status_label": "Parcialmente implantado",
@@ -2236,7 +2365,7 @@
       "integrates_with": [
         "CREATOR",
         "DOCS"
-        ],
+      ],
       "description_ptbr": "Ativos digitais, NFTs, royalties e custodia tokenizada.",
       "slug": "11-digital",
       "status_label": "Parcialmente implantado",
@@ -2337,7 +2466,7 @@
       "integrates_with": [
         "DIGITAL",
         "DOCS"
-        ],
+      ],
       "description_ptbr": "Imoveis, contratos, tokenizacao e registro de transacoes.",
       "slug": "12-real-estate",
       "status_label": "Parcialmente implantado",
@@ -2437,7 +2566,7 @@
       "integrates_with": [
         "FOOD",
         "FITNESS",
-          "PHARMACY"
+        "PHARMACY"
       ],
       "description_ptbr": "Saude preditiva, cuidados integrados e dados sensiveis.",
       "slug": "13-health",
@@ -2539,7 +2668,7 @@
       "integrates_with": [
         "LOYALTY",
         "JOBS"
-        ],
+      ],
       "description_ptbr": "Educacao, trilhas, cursos e recompensas por aprendizado.",
       "slug": "14-edu",
       "status_label": "Parcialmente implantado",
@@ -2640,7 +2769,7 @@
       "integrates_with": [
         "CONNECT",
         "COMMAND_CENTER"
-        ],
+      ],
       "description_ptbr": "Infra SaaS, API builder, integracoes e plataforma de desenvolvedor.",
       "slug": "15-tech",
       "status_label": "Parcialmente implantado",
@@ -2741,7 +2870,7 @@
       "integrates_with": [
         "EDU",
         "SERVICES"
-        ],
+      ],
       "description_ptbr": "Matching de trabalho, renda, vagas e freelas com IA.",
       "slug": "16-jobs",
       "status_label": "Parcialmente implantado",
@@ -2842,7 +2971,7 @@
       "integrates_with": [
         "CREATOR",
         "ADS"
-        ],
+      ],
       "description_ptbr": "Noticias, podcasts e conteudo editorial.",
       "slug": "17-news-podcast",
       "status_label": "Parcialmente implantado",
@@ -2942,7 +3071,7 @@
       "integrates_with": [
         "MARKETPLACE",
         "ADS_INTELLIGENCE"
-        ],
+      ],
       "description_ptbr": "Anuncios geolocalizados, campanhas, GOLD e midia.",
       "slug": "18-ads",
       "status_label": "Parcialmente implantado",
@@ -3043,7 +3172,7 @@
       "integrates_with": [
         "SOCIAL",
         "ADS"
-        ],
+      ],
       "description_ptbr": "Hub de criadores, metricas, afiliacao e monetizacao.",
       "slug": "19-influencers",
       "status_label": "Parcialmente implantado",
@@ -3143,7 +3272,7 @@
       "integrates_with": [
         "EVENTS",
         "ADS",
-          "CREATOR"
+        "CREATOR"
       ],
       "description_ptbr": "Rede social de bairro, reputacao, posts e moderacao.",
       "slug": "20-social",
@@ -3244,7 +3373,7 @@
       "integrates_with": [
         "LOYALTY",
         "WEARABLES"
-        ],
+      ],
       "description_ptbr": "Fitness, recompensas por movimento e integracao com saude.",
       "slug": "21-fitness",
       "status_label": "Parcialmente implantado",
@@ -3545,7 +3674,7 @@
       "integrates_with": [
         "EVENTS",
         "MOBILITY"
-        ],
+      ],
       "description_ptbr": "Turismo local, experiencias, reservas e exploracao.",
       "slug": "24-tourism",
       "status_label": "Parcialmente implantado",
@@ -3747,7 +3876,7 @@
       "integrates_with": [
         "LOG",
         "FLEET"
-        ],
+      ],
       "description_ptbr": "Corridas urbanas, carpool, riders e taxa de plataforma.",
       "slug": "26-mobility",
       "status_label": "Parcialmente implantado",
@@ -4049,7 +4178,7 @@
       "integrates_with": [
         "DOCS",
         "SECURITY"
-        ],
+      ],
       "description_ptbr": "Contratos, mediacao por IA, fallback PIN e juridico.",
       "slug": "29-legal",
       "status_label": "Parcialmente implantado",
@@ -4350,7 +4479,7 @@
       "integrates_with": [
         "SOCIAL",
         "CREATOR"
-        ],
+      ],
       "description_ptbr": "Jogos, recompensas, comunidades e gamificacao.",
       "slug": "32-gaming",
       "status_label": "Parcialmente implantado",
@@ -4450,7 +4579,7 @@
       "integrates_with": [
         "HOME",
         "FLEET",
-          "SECURITY"
+        "SECURITY"
       ],
       "description_ptbr": "Dispositivos conectados, sensores e hub inteligente.",
       "slug": "33-iot",
@@ -4551,7 +4680,7 @@
       "integrates_with": [
         "IOT",
         "ENERGY"
-        ],
+      ],
       "description_ptbr": "Sustentabilidade, logistica reversa e impacto ambiental.",
       "slug": "34-bio",
       "status_label": "Parcialmente implantado",
@@ -4652,7 +4781,7 @@
       "integrates_with": [
         "SECURITY",
         "ENERGY"
-        ],
+      ],
       "description_ptbr": "Automacao residencial, dispositivos e seguranca domestica.",
       "slug": "35-home",
       "status_label": "Parcialmente implantado",
@@ -4753,7 +4882,7 @@
       "integrates_with": [
         "BIO",
         "HOME"
-        ],
+      ],
       "description_ptbr": "Energia, smart grid, creditos e transacoes P2P.",
       "slug": "36-energy",
       "status_label": "Parcialmente implantado",
@@ -4854,7 +4983,7 @@
       "integrates_with": [
         "SOCIAL",
         "TOURISM"
-        ],
+      ],
       "description_ptbr": "Realidade aumentada, ancoras espaciais e experiencias imersivas.",
       "slug": "37-space",
       "status_label": "Parcialmente implantado",
@@ -4954,7 +5083,7 @@
       "integrates_with": [
         "ADVISOR",
         "CHAT"
-        ],
+      ],
       "description_ptbr": "Agenda, listas inteligentes, memoria Helena e lembretes.",
       "slug": "38-agenda",
       "status_label": "Parcialmente implantado",
@@ -5055,7 +5184,7 @@
       "integrates_with": [
         "FINANCAS",
         "HEALTH",
-          "MOBILITY"
+        "MOBILITY"
       ],
       "description_ptbr": "Consultoria de IA com recomendacoes e consentimento de execucao.",
       "slug": "39-advisor",
@@ -5157,7 +5286,7 @@
       "integrates_with": [
         "ADVISOR",
         "BUSINESS"
-        ],
+      ],
       "description_ptbr": "Financas pessoais, metas, micro-negocios e round-up.",
       "slug": "40-financas",
       "status_label": "Parcialmente implantado",
@@ -5359,7 +5488,7 @@
       "integrates_with": [
         "INVOICES",
         "PAYROLLS"
-        ],
+      ],
       "description_ptbr": "ERP integrado para empresas, fiscais, estoque e folha.",
       "slug": "42-business",
       "status_label": "Parcialmente implantado",
@@ -5560,7 +5689,7 @@
       "integrates_with": [
         "INFLUENCERS",
         "LOYALTY"
-        ],
+      ],
       "description_ptbr": "Afiliados, indicacoes, comissoes e links de atribuicao.",
       "slug": "44-up",
       "status_label": "Parcialmente implantado",
@@ -5661,7 +5790,7 @@
       "integrates_with": [
         "SOCIAL",
         "ADS"
-        ],
+      ],
       "description_ptbr": "Painel de criadores, uploads, monetizacao e distribuicao de conteudo.",
       "slug": "45-media",
       "status_label": "Parcialmente implantado",
@@ -5762,7 +5891,7 @@
       "integrates_with": [
         "AGENDA",
         "ADVISOR"
-        ],
+      ],
       "description_ptbr": "Mensageria com contexto Helena pessoal/profissional e retencao segura.",
       "slug": "46-chat",
       "status_label": "Parcialmente implantado",
@@ -5864,7 +5993,7 @@
       "integrates_with": [
         "ORDERS",
         "TRANSACTIONS"
-        ],
+      ],
       "description_ptbr": "Geracao de documentos, recibos, checksums e registros imutaveis.",
       "slug": "47-docs",
       "status_label": "Parcialmente implantado",

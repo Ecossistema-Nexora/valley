@@ -1,4 +1,11 @@
-# Front-end sofisticado - versao final para o usuario
+<!--
+PROPOSITO: Definir a visão de produto para a interface final do Valley.
+CONTEXTO: Documento de especificação para o Super App focado no usuário final.
+REGRAS: Seguir a nova hierarquia de diretórios V2 e utilizar linguagem premium.
+-->
+
+# Proposta Front-end Final - Valley
+## Versão sofisticada para o usuário
 
 ## Objetivo
 
@@ -401,8 +408,28 @@ Quando a interface estiver pronta, a percepcao do usuario deve ser:
 
 ## Alinhamento com o repositiorio
 
-Esta proposta deve ser implementada em sintonia com:
+Esta proposta deve ser implementada em sintonia com os blueprints em `docs/design/` e as políticas em `config/`.
 
-- `docs/specs/valley-frontend-flutter-visual-identity.md`
-- `docs/specs/valley-stitch-figma-frontend-workflow.md`
-- `config/design/VALLEY_FRONTEND_DESIGN_POLICY.json`
+## Mapeamento da Nova Hierarquia de Diretórios (Padronização V2)
+
+Para garantir a escalabilidade e a manutenção do Super App, o repositório Valley segue esta estrutura padronizada em `snake_case`:
+
+- **`/config`**: Registro canônico e manifestos de execução (ex: `mvp/manifesto_mvp_v1.json`).
+- **`/database`**: Persistência híbrida (PostgreSQL + MongoDB) e controle de banco de dados.
+- **`/docs`**: Documentação técnica e estratégica.
+    - **`/design`**: Blueprints visuais (ex: `blueprint_stitch_v036.md`).
+    - **`/specs`**: Especificações de produto (ex: `proposta_frontend_final.md`).
+- **`/frontend`**: Aplicação Super App desenvolvida em Flutter.
+    - `lib/src/ui/valley_home_shell.dart`: Interface central de navegação.
+- **`/manual_online`**: Base de conhecimento ativa (`manual_principal.md`).
+- **`/modules`**: Artefatos individuais para os 47 módulos do ecossistema.
+- **`/output`**: Relatórios operacionais, roadmaps e manual em PDF.
+- **`/scripts`**: Motores de automação e utilitários de orquestração.
+    - `automacao_sincronizador_modulos.py`
+    - `automacao_gerador_pdf.py`
+    - `codex_refactor_guide.py`
+
+Este mapeamento deve ser consultado antes de qualquer alteração estrutural no repositório para evitar fragmentação.
+
+---
+*Nota: Este documento foi atualizado para refletir a nova estrutura de diretórios e padrões de nomenclatura do projeto Valley.*

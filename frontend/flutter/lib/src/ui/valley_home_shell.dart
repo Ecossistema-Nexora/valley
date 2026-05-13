@@ -3,19 +3,16 @@ import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:valley_super_app/src/data/product_api_models.dart';
-import 'package:valley_super_app/src/data/product_api_repository.dart';
-import 'package:valley_super_app/src/data/valley_models.dart';
-import 'package:valley_super_app/src/ui/ui_components.dart';
-import 'package:valley_super_app/valley_brand_theme.dart';
 
-/// VALLEY HOME SHELL
-/// =================
-/// Funcionalidade: Hub central de navegação e integração de sinais /me/home.
-/// Decisão: Agrupamento de 47 módulos em 6 destinos de navegação para reduzir carga cognitiva.
-/// Integração: ProductApiRepository para carregar UserModuleTrails (jornadas reais).
-/// Caminho Físico: C:\Users\ereta\.codex\worktrees\VALLEY\frontend\flutter\lib\src\ui\valley_home_shell.dart
+/**
+ * VALLEY HOME SHELL - INTERFACE PRINCIPAL
+ * =======================================
+ * Propósito: Hub central de navegação e integração de sinais /me/home.
+ * Contexto: Interface premium do Super App que agrupa os 47 módulos em 6 destinos principais.
+ * Regras:
+ * 1. Redução de carga cognitiva via agrupamento semântico.
+ * 2. Persistência de preferências do usuário via SharedPreferences.
+ */
 
 const String _homeModulePrefsKey = 'valley.home.visible_modules.v1';
 

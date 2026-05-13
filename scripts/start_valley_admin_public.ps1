@@ -22,6 +22,7 @@ $EnvExamplePath = Join-Path $RepoRoot '.env.example'
 $ReleaseEnvExamplePath = Join-Path $RepoRoot 'config\VALLEY_RELEASE_ENV.example'
 $EnvPath = Join-Path $RepoRoot '.env'
 $CodexCloudEnvPath = Join-Path $RuntimeDir 'codex-cloud-secrets.env'
+$TunnelTokenEnvPath = Join-Path $RuntimeDir 'valley-cloudflare-named-tunnel.env'
 $ServeStdoutLog = Join-Path $RuntimeDir 'valley-admin-http.live.out.log'
 $ServeStderrLog = Join-Path $RuntimeDir 'valley-admin-http.live.err.log'
 $CloudflareStdoutLog = Join-Path $RuntimeDir 'valley-admin-cloudflare.live.out.log'
@@ -82,11 +83,20 @@ function Parse-EnvFile {
 }
 
 function Import-ValleyEnv {
-    param([string[]]$Paths)
+    param(
+        [string[]]$Paths,
+        [string[]]$OverrideKeys = @()
+    )
 
     foreach ($Path in $Paths) {
         foreach ($Entry in (Parse-EnvFile -Path $Path).GetEnumerator()) {
-            if ([string]::IsNullOrWhiteSpace([Environment]::GetEnvironmentVariable($Entry.Key, 'Process'))) {
+            if ([string]::IsNullOrWhiteSpace($Entry.Value)) {
+                continue
+            }
+
+            $CurrentValue = [Environment]::GetEnvironmentVariable($Entry.Key, 'Process')
+            $ShouldOverride = $OverrideKeys -contains $Entry.Key
+            if ([string]::IsNullOrWhiteSpace($CurrentValue) -or $ShouldOverride) {
                 [Environment]::SetEnvironmentVariable($Entry.Key, $Entry.Value, 'Process')
             }
         }
@@ -350,7 +360,14 @@ function Write-ProductManifests {
     )
 }
 
-Import-ValleyEnv -Paths @($EnvExamplePath, $ReleaseEnvExamplePath, $EnvPath, $CodexCloudEnvPath)
+Import-ValleyEnv `
+    -Paths @($EnvExamplePath, $ReleaseEnvExamplePath, $EnvPath, $CodexCloudEnvPath, $TunnelTokenEnvPath) `
+    -OverrideKeys @(
+        'CLOUDFLARED_TOKEN',
+        'VALLEY_ADMIN_PUBLIC_URL',
+        'VALLEY_CLOUDFLARE_PUBLIC_URL',
+        'VALLEY_PRODUCT_PUBLIC_URL'
+    )
 
 if (-not $PSBoundParameters.ContainsKey('CloudflaredToken')) {
     $CloudflaredToken = $env:CLOUDFLARED_TOKEN

@@ -44,7 +44,7 @@ def read_json(path: Path) -> dict[str, object] | None:
         return None
 
     try:
-        content = json.loads(path.read_text(encoding='utf-8'))
+        content = json.loads(path.read_text(encoding='utf-8-sig'))
     except (OSError, json.JSONDecodeError):
         return None
 

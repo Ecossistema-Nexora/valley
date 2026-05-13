@@ -1,0 +1,26 @@
+{
+  "policy_name": "valley_module_activity_policy",
+  "version": "1.0.0",
+  "required_engine": "scripts/valley_module_automation.py",
+  "mandatory": true,
+  "default_mode": "validate",
+  "activity_wrapper": "scripts/invoke_valley_module_activity.ps1",
+  "runtime_status_path": "tmp/runtime/valley-module-activity-automation-status.json",
+  "runtime_ledger_path": "tmp/runtime/valley-module-activity-automation-ledger.jsonl",
+  "rules": [
+    "Every Codex activity checkpoint must invoke the Valley Module Automation Engine through the wrapper.",
+    "Use validate for lightweight checkpoints.",
+    "Use admin when web panels or admin datasets are changed.",
+    "Use sync only when module documentation, contracts, roadmap, or delivery packages must be regenerated.",
+    "Record every invocation in the runtime ledger without storing secrets."
+  ],
+  "mode_commands": {
+    "validate": ["validate"],
+    "checkpoint": ["validate"],
+    "admin": ["validate", "admin"],
+    "release": ["validate", "admin"],
+    "sync": ["validate", "sync"],
+    "sql": ["validate", "sql"],
+    "packages": ["validate", "packages"]
+  }
+}

@@ -1,28 +1,15 @@
-{
-  "status": "ok",
-  "service": "valley-admin-public",
-  "provider": "cloudflare_named_tunnel",
-  "public_url": "https://admin.brasildesconto.com.br",
-  "local_url": "http://192.168.1.2:8085",
-  "generated_at_utc": "2026-05-12T01:21:00Z",
-  "temporary": false,
-  "permanence": "fixed_external",
-  "provider_status": "healthy",
-  "smoke_endpoints": {
-    "healthz": "https://admin.brasildesconto.com.br/healthz",
-    "admin_data": "https://admin.brasildesconto.com.br/api/admin-data",
-    "product": "https://admin.brasildesconto.com.br/product",
-    "product_shell": "https://admin.brasildesconto.com.br/api/product-shell"
-  },
-  "local_smoke_endpoints": {
-    "public_root_redirect": "http://127.0.0.1:8085/",
-    "healthz": "http://127.0.0.1:8085/healthz"
-  },
-  "cloudflare": {
-    "mode": "named",
-    "tunnel_id": "80a75594-5129-469f-8cce-4a938ac48e06",
-    "connector_id": "fe7c69f8-e14e-4696-9638-cec6180c7db9",
-    "origin": "http://192.168.1.2:8085",
-    "module_tls_note": "Official zero-cost HTTPS module links use first-level aliases like stock-admin.brasildesconto.com.br and lojista.brasildesconto.com.br, covered by Universal SSL."
-  }
+﻿{
+    "status":  "ok",
+    "service":  "valley-admin-public",
+    "provider":  "ngrok_reserved_domain",
+    "public_url":  "https://grilled-uncurrently-shaunta.ngrok-free.dev",
+    "local_url":  "http://127.0.0.1:8085",
+    "generated_at_utc":  "2026-05-13T09:47:14Z",
+    "temporary":  false,
+    "permanence":  "release_gate_validated_persistent",
+    "provider_status":  "healthy",
+    "smoke_endpoints":  {
+                            "admin_data":  "https://grilled-uncurrently-shaunta.ngrok-free.dev/api/admin-data",
+                            "healthz":  "https://grilled-uncurrently-shaunta.ngrok-free.dev/healthz"
+                        }
 }
