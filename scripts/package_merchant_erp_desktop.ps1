@@ -329,10 +329,26 @@ if (Test-Path -LiteralPath $linuxTar) { Remove-Item -LiteralPath $linuxTar -Forc
 $tarExe = (Get-Command tar.exe -ErrorAction Stop).Source
 & $tarExe -czf $linuxTar -C (Join-Path $releaseRootFull "linux") "ValleyERP-Lojista-Linux-x64"
 
+$manifestVersion = $Version.ToUpperInvariant()
+$blueprintSource = Join-Path $repoRoot "docs/runtime/valley-merchant-release-blueprint-$Version.md"
+$blueprintName = "VALLEY_MERCHANT_RELEASE_BLUEPRINT_$manifestVersion.md"
+$blueprintPath = Join-Path $releaseRootFull $blueprintName
+if (Test-Path -LiteralPath $blueprintSource) {
+  Copy-Item -LiteralPath $blueprintSource -Destination $blueprintPath -Force
+}
+
 $publicBase = "https://admin.brasildesconto.com.br/downloads/$Version"
 $artifacts = @()
 $artifacts += Get-ArtifactInfo -Path $windowsZip -PublicUrl "$publicBase/$windowsPackageName.zip" -Kind "windows_x64_zip"
 $artifacts += Get-ArtifactInfo -Path $linuxTar -PublicUrl "$publicBase/$linuxPackageName.tar.gz" -Kind "linux_x64_tar_gz"
+if (Test-Path -LiteralPath $blueprintPath) {
+  $artifacts += Get-ArtifactInfo -Path $blueprintPath -PublicUrl "$publicBase/$blueprintName" -Kind "release_blueprint"
+}
+$blueprintPdfName = "VALLEY_ERP_LOJISTA_RELEASE_BLUEPRINT_$manifestVersion.pdf"
+$blueprintPdfPath = Join-Path $releaseRootFull $blueprintPdfName
+if (Test-Path -LiteralPath $blueprintPdfPath) {
+  $artifacts += Get-ArtifactInfo -Path $blueprintPdfPath -PublicUrl "$publicBase/$blueprintPdfName" -Kind "release_blueprint_pdf"
+}
 
 $manifest = [ordered]@{
   product = "Valley ERP Lojista"
@@ -345,9 +361,10 @@ $manifest = [ordered]@{
   linux_install = "bash install-valley-erp-lojista-linux.sh"
   artifacts = $artifacts
 }
-$manifestPath = Join-Path $releaseRootFull "VALLEY_ERP_LOJISTA_DESKTOP_INSTALLERS_V047.json"
+$manifestName = "VALLEY_ERP_LOJISTA_DESKTOP_INSTALLERS_$manifestVersion.json"
+$manifestPath = Join-Path $releaseRootFull $manifestName
 Write-Utf8File -Path $manifestPath -Content (($manifest | ConvertTo-Json -Depth 8) + "`n")
-Get-ArtifactInfo -Path $manifestPath -PublicUrl "$publicBase/VALLEY_ERP_LOJISTA_DESKTOP_INSTALLERS_V047.json" -Kind "manifest" | Out-Null
+Get-ArtifactInfo -Path $manifestPath -PublicUrl "$publicBase/$manifestName" -Kind "manifest" | Out-Null
 
 Write-Host "Desktop installers packaged in $releaseRootFull"
 Write-Host "Windows: $windowsZip"

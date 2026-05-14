@@ -1,0 +1,44 @@
+{
+    "product":  "Valley ERP Lojista",
+    "version":  "v048",
+    "generated_at":  "2026-05-14T00:59:23.3294254-03:00",
+    "api_base_url":  "https://admin.brasildesconto.com.br",
+    "flutter_entrypoint":  "frontend/flutter/lib/merchant_erp_desktop_main.dart",
+    "release_root":  "admin/downloads/v048",
+    "windows_install":  "PowerShell: .\\\\install-valley-erp-lojista-windows.ps1",
+    "linux_install":  "bash install-valley-erp-lojista-linux.sh",
+    "artifacts":  [
+                      {
+                          "kind":  "windows_x64_zip",
+                          "name":  "ValleyERP-Lojista-Windows-x64-v048.zip",
+                          "bytes":  14484415,
+                          "sha1":  "812B1C940681E8EFC5DCDF4B0F824C9B1A42B2B6",
+                          "sha256":  "0B3EC92D8D142B04F4FCB1BE9C9D1FFB003E738D28B47B67D327FBA628513601",
+                          "public_url":  "https://admin.brasildesconto.com.br/downloads/v048/ValleyERP-Lojista-Windows-x64-v048.zip"
+                      },
+                      {
+                          "kind":  "linux_x64_tar_gz",
+                          "name":  "ValleyERP-Lojista-Linux-x64-v048.tar.gz",
+                          "bytes":  1558,
+                          "sha1":  "B417F2D0054DF0273286674F52568EE1B6A55582",
+                          "sha256":  "BB162B3DDCBC9517AC47FE1A209E6E38B649A882D1AB7D5ACF61405186420A60",
+                          "public_url":  "https://admin.brasildesconto.com.br/downloads/v048/ValleyERP-Lojista-Linux-x64-v048.tar.gz"
+                      },
+                      {
+                          "kind":  "release_blueprint",
+                          "name":  "VALLEY_MERCHANT_RELEASE_BLUEPRINT_V048.md",
+                          "bytes":  2598,
+                          "sha1":  "F570781513D884ED6E5A6A12B5F768C4F5A6B958",
+                          "sha256":  "DC0F4C2D86DAEF5C7B0813949D08E6BA4EB0C53862E6226C6885DC07907E291B",
+                          "public_url":  "https://admin.brasildesconto.com.br/downloads/v048/VALLEY_MERCHANT_RELEASE_BLUEPRINT_V048.md"
+                      },
+                      {
+                          "kind":  "release_blueprint_pdf",
+                          "name":  "VALLEY_ERP_LOJISTA_RELEASE_BLUEPRINT_V048.pdf",
+                          "bytes":  3043,
+                          "sha1":  "44344003E795D56C85863F7920B9307029306031",
+                          "sha256":  "336754471805A1619FD014FAD13D9FE41886DD2EF2B597D0FFD3D359A662E6F4",
+                          "public_url":  "https://admin.brasildesconto.com.br/downloads/v048/VALLEY_ERP_LOJISTA_RELEASE_BLUEPRINT_V048.pdf"
+                      }
+                  ]
+}

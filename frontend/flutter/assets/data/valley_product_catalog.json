@@ -1,7 +1,7 @@
 {
   "status": "ok",
   "service": "valley-product",
-  "generated_at_utc": "2026-05-14T02:06:29.336406Z",
+  "generated_at_utc": "2026-05-14T03:56:28.883865Z",
   "title": "Valley Stock | Catalogo proprietario",
   "subtitle": "Seleção Valley com catálogo real multi-provedor, agrupado por categoria e taxonomia Google, com sincronização de estoque, preço e tracking sem exposição pública da origem operacional.",
   "public_runtime": {
@@ -45,7 +45,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para audio com estoque sincronizado. Categoria fonte: Earphones & Headphones. 1 unidades em estoque. 9312 listagens sincronizadas.",
+      "description": "Seleção Valley para audio com estoque sincronizado. Categoria fonte: Earphones & Headphones. 1 unidades em estoque. 9314 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/20200816/4308771404175.jpg"
       ],
@@ -53,7 +53,7 @@
       "features": [
         "Estoque global sincronizado",
         "1 unidades disponíveis",
-        "9312 listagens ativas",
+        "9314 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -77,7 +77,7 @@
       "google_product_category_path": "Electronics > Audio > Audio Components > Headphones & Headsets > Headphones",
       "google_product_category": "Electronics > Audio > Audio Components > Headphones & Headsets > Headphones",
       "price_band": "Ate R$ 99",
-      "offer_count": 9312,
+      "offer_count": 9314,
       "availability_label": "1 em estoque",
       "shipping_free": false
     },
@@ -164,7 +164,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para creator gear com estoque sincronizado. Categoria fonte: Camera & Photo Accessories. 47654 unidades em estoque. 3952 listagens sincronizadas.",
+      "description": "Seleção Valley para creator gear com estoque sincronizado. Categoria fonte: Camera & Photo Accessories. 47654 unidades em estoque. 3953 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/203009/551396807467.jpg"
       ],
@@ -172,7 +172,7 @@
       "features": [
         "Estoque global sincronizado",
         "47654 unidades disponíveis",
-        "3952 listagens ativas",
+        "3953 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -196,7 +196,7 @@
       "google_product_category_path": "Cameras & Optics > Photography > Lighting & Studio",
       "google_product_category": "Cameras & Optics > Photography > Lighting & Studio",
       "price_band": "Ate R$ 99",
-      "offer_count": 3952,
+      "offer_count": 3953,
       "availability_label": "47654 em estoque",
       "shipping_free": false
     },
@@ -224,7 +224,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para premium tech com estoque sincronizado. Categoria fonte: Chargers. 168283 unidades em estoque. 24137 listagens sincronizadas.",
+      "description": "Seleção Valley para premium tech com estoque sincronizado. Categoria fonte: Chargers. 168283 unidades em estoque. 24138 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/fff10a96-1ead-4c85-a759-a3de932d9637.jpg"
       ],
@@ -232,7 +232,7 @@
       "features": [
         "Estoque global sincronizado",
         "168283 unidades disponíveis",
-        "24137 listagens ativas",
+        "24138 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -256,7 +256,7 @@
       "google_product_category_path": "Electronics > Electronics Accessories > Power > Power Adapters & Chargers",
       "google_product_category": "Electronics > Electronics Accessories > Power > Power Adapters & Chargers",
       "price_band": "Ate R$ 99",
-      "offer_count": 24137,
+      "offer_count": 24138,
       "availability_label": "168283 em estoque",
       "shipping_free": false
     },
@@ -284,7 +284,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para smart living com estoque sincronizado. Categoria fonte: Surveillance Products. 23953 unidades em estoque. 4021 listagens sincronizadas.",
+      "description": "Seleção Valley para smart living com estoque sincronizado. Categoria fonte: Surveillance Products. 23953 unidades em estoque. 4022 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/15096384/3702915589_1056000276.400x400.jpg"
       ],
@@ -292,7 +292,7 @@
       "features": [
         "Estoque global sincronizado",
         "23953 unidades disponíveis",
-        "4021 listagens ativas",
+        "4022 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -316,7 +316,7 @@
       "google_product_category_path": "Hardware > Power & Electrical Supplies > Home Automation Kits",
       "google_product_category": "Hardware > Power & Electrical Supplies > Home Automation Kits",
       "price_band": "R$ 100-249",
-      "offer_count": 4021,
+      "offer_count": 4022,
       "availability_label": "23953 em estoque",
       "shipping_free": false
     },
@@ -463,7 +463,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para audio com estoque sincronizado. Categoria fonte: Earphones & Headphones. 2 unidades em estoque. 5433 listagens sincronizadas.",
+      "description": "Seleção Valley para audio com estoque sincronizado. Categoria fonte: Earphones & Headphones. 2 unidades em estoque. 5434 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/15942240/2435993274459.jpg"
       ],
@@ -471,7 +471,7 @@
       "features": [
         "Estoque global sincronizado",
         "2 unidades disponíveis",
-        "5433 listagens ativas",
+        "5434 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -495,7 +495,7 @@
       "google_product_category_path": "Electronics > Audio > Audio Components > Headphones & Headsets > Headphones",
       "google_product_category": "Electronics > Audio > Audio Components > Headphones & Headsets > Headphones",
       "price_band": "Ate R$ 99",
-      "offer_count": 5433,
+      "offer_count": 5434,
       "availability_label": "2 em estoque",
       "shipping_free": false
     },
@@ -1152,43 +1152,48 @@
       "shipping_free": false
     },
     {
-      "id": "efe5083e-3f3d-56fa-a32d-e99d72b96362",
+      "id": "656ed79b-a105-5bf4-92e8-2e34c700698c",
       "module_id": "STOCK",
-      "title": "C24 Unlocked Phone Smartphone 8GB 256GB Android14.0 6800mAh 6.8inch 5G",
+      "title": "Folding Treadmill For Home Office Use,Under Desk Treadmill,1-6KM H, Portable Walking Running Machine With Bluetooth Speaker, Remote Control, LCD Display, Phone Holder.",
       "brand": "Valley Edge",
       "category": "Smartphones",
-      "price_brl": 491.13,
-      "compare_at_brl": 491.13,
-      "stock": 163,
+      "price_brl": 725.23,
+      "compare_at_brl": 725.23,
+      "stock": 43,
       "merchant_name": "Valley",
-      "image_url": "https://cf.cjdropshipping.com/79925cbb-b6af-49db-9843-9469c4e13ec5.jpg",
+      "image_url": "https://cf.cjdropshipping.com/17550432/1955547138910064640.jpg",
       "video_url": "",
       "video_count": 0,
-      "status": "163 em estoque • tracking ativo",
+      "status": "43 em estoque • tracking ativo",
       "tags": [
         "Catalogo real",
         "Smartphones",
-        "Octa Core",
+        "Furniture",
         "Operacao ativa"
       ],
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para smartphones com estoque sincronizado. Categoria fonte: Octa Core. 163 unidades em estoque. 95 listagens sincronizadas.",
+      "description": "Seleção Valley para smartphones com estoque sincronizado. Categoria fonte: Furniture. 43 unidades em estoque. 173 listagens sincronizadas. Specification Product Information Item Code:MS299008AAB Product Type :Single Box Product Product Name:[New] Folding Treadmill for Home Office Use,Under Desk Treadmill,1-6KM/H, Portable Walking Running Machine with Blueto",
       "gallery_urls": [
-        "https://cf.cjdropshipping.com/79925cbb-b6af-49db-9843-9469c4e13ec5.jpg"
+        "https://cf.cjdropshipping.com/17550432/1955547138910064640.jpg",
+        "https://cf.cjdropshipping.com/17550432/1955547139635679232.jpg",
+        "https://cf.cjdropshipping.com/17550432/1955547140130607104.jpg",
+        "https://cf.cjdropshipping.com/ab5bfb26-66b1-46dc-bbce-110a50e9ecc8.jpg",
+        "https://cf.cjdropshipping.com/c80be5ac-7f21-4d0f-8266-ca8dd1eea635.jpg",
+        "https://cf.cjdropshipping.com/e1a75bea-74f2-4813-a1c4-40594a47fdcc.jpg"
       ],
       "profile_id": "",
       "features": [
         "Estoque global sincronizado",
-        "163 unidades disponíveis",
-        "95 listagens ativas",
+        "43 unidades disponíveis",
+        "173 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
         "name": "Loja Valley",
         "headline": "Oferta sincronizada com estoque e tracking automatizados.",
-        "avatar_url": "https://cf.cjdropshipping.com/79925cbb-b6af-49db-9843-9469c4e13ec5.jpg",
+        "avatar_url": "https://cf.cjdropshipping.com/17550432/1955547138910064640.jpg",
         "rating": 4.7,
         "city": "Operação global"
       },
@@ -1201,13 +1206,13 @@
       },
       "raw_badge": "STOCK",
       "collection_label": "Valley Edge",
-      "model_name": "Octa Core",
+      "model_name": "Furniture",
       "google_product_category_id": "267",
       "google_product_category_path": "Electronics > Communications > Telephony > Mobile Phones",
       "google_product_category": "Electronics > Communications > Telephony > Mobile Phones",
-      "price_band": "R$ 250-499",
-      "offer_count": 95,
-      "availability_label": "163 em estoque",
+      "price_band": "R$ 500-999",
+      "offer_count": 173,
+      "availability_label": "43 em estoque",
       "shipping_free": false
     },
     {
@@ -1568,43 +1573,46 @@
       "shipping_free": false
     },
     {
-      "id": "4230ca00-32e6-5d0b-b132-7352360054a7",
+      "id": "d0183fd4-5bf7-56ef-9024-ad1f9516a0ed",
       "module_id": "STOCK",
-      "title": "Non-smartphone Flip Mobile Elder People Mobile",
+      "title": "LED Coffee Table For Living Room, Modern Coffee Table With Storage With LED Lights, 2 Tiers And 2 Drawers, Large Living Room Center Tables Black",
       "brand": "Valley Edge",
       "category": "Smartphones",
-      "price_brl": 77.36,
-      "compare_at_brl": 77.36,
-      "stock": 120111,
+      "price_brl": 520.6,
+      "compare_at_brl": 520.6,
+      "stock": 10,
       "merchant_name": "Valley",
-      "image_url": "https://oss-cf.cjdropshipping.com/product/2025/09/08/03/e4ede866-b2f7-4b19-8b6a-3a201f66b48f_trans.jpeg",
+      "image_url": "https://cf.cjdropshipping.com/1277a165-dee8-4473-b923-7caf3fcf6e3e.jpg",
       "video_url": "",
       "video_count": 0,
-      "status": "120111 em estoque • tracking ativo",
+      "status": "10 em estoque • tracking ativo",
       "tags": [
         "Catalogo real",
         "Smartphones",
-        "Single SIM Card",
+        "Furniture",
         "Operacao ativa"
       ],
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para smartphones com estoque sincronizado. Categoria fonte: Single SIM Card. 120111 unidades em estoque. 74 listagens sincronizadas.",
+      "description": "Seleção Valley para smartphones com estoque sincronizado. Categoria fonte: Furniture. 10 unidades em estoque. 102 listagens sincronizadas. Specification Product Information Item Code:N605P225560B Product Type :Single Box Product Product Name:LED Coffee Table for Living Room, Modern Coffee Table with Storage with LED Lights, 2 Tiers and 2 Drawers, Large Livi",
       "gallery_urls": [
-        "https://oss-cf.cjdropshipping.com/product/2025/09/08/03/e4ede866-b2f7-4b19-8b6a-3a201f66b48f_trans.jpeg"
+        "https://cf.cjdropshipping.com/1277a165-dee8-4473-b923-7caf3fcf6e3e.jpg",
+        "https://cf.cjdropshipping.com/bc3a1c31-9629-4e9c-9bca-d8ee69922d3f.jpg",
+        "https://cf.cjdropshipping.com/4e30a4d3-ef98-49e6-882d-648f818dacba.jpg",
+        "https://cf.cjdropshipping.com/2b5ed73b-e29c-4aab-bf22-296ef84f2a8f.jpg"
       ],
       "profile_id": "",
       "features": [
         "Estoque global sincronizado",
-        "120111 unidades disponíveis",
-        "74 listagens ativas",
+        "10 unidades disponíveis",
+        "102 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
         "name": "Loja Valley",
         "headline": "Oferta sincronizada com estoque e tracking automatizados.",
-        "avatar_url": "https://oss-cf.cjdropshipping.com/product/2025/09/08/03/e4ede866-b2f7-4b19-8b6a-3a201f66b48f_trans.jpeg",
+        "avatar_url": "https://cf.cjdropshipping.com/1277a165-dee8-4473-b923-7caf3fcf6e3e.jpg",
         "rating": 4.7,
         "city": "Operação global"
       },
@@ -1617,13 +1625,13 @@
       },
       "raw_badge": "STOCK",
       "collection_label": "Valley Edge",
-      "model_name": "Single SIM Card",
+      "model_name": "Furniture",
       "google_product_category_id": "267",
       "google_product_category_path": "Electronics > Communications > Telephony > Mobile Phones",
       "google_product_category": "Electronics > Communications > Telephony > Mobile Phones",
-      "price_band": "Ate R$ 99",
-      "offer_count": 74,
-      "availability_label": "120111 em estoque",
+      "price_band": "R$ 500-999",
+      "offer_count": 102,
+      "availability_label": "10 em estoque",
       "shipping_free": false
     },
     {
@@ -1946,7 +1954,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para smart living com estoque sincronizado. Categoria fonte: Surveillance Products. 80000 unidades em estoque. 1796 listagens sincronizadas.",
+      "description": "Seleção Valley para smart living com estoque sincronizado. Categoria fonte: Surveillance Products. 80000 unidades em estoque. 1797 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/2041/128849607092.jpg"
       ],
@@ -1954,7 +1962,7 @@
       "features": [
         "Estoque global sincronizado",
         "80000 unidades disponíveis",
-        "1796 listagens ativas",
+        "1797 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -1978,48 +1986,48 @@
       "google_product_category_path": "Hardware > Power & Electrical Supplies > Home Automation Kits",
       "google_product_category": "Hardware > Power & Electrical Supplies > Home Automation Kits",
       "price_band": "Ate R$ 99",
-      "offer_count": 1796,
+      "offer_count": 1797,
       "availability_label": "80000 em estoque",
       "shipping_free": false
     },
     {
-      "id": "cbeacb35-a0e0-5be0-8ac3-37c254bcc6dd",
+      "id": "efe5083e-3f3d-56fa-a32d-e99d72b96362",
       "module_id": "STOCK",
-      "title": "Mobile Phone Attachment Lens, Mobile Zoom Lens, Mobile Camera And Accessories, 8X, 12X, 20X, Smartphone And Tablet Long Focus Telephoto With Clip, Black",
+      "title": "C24 Unlocked Phone Smartphone 8GB 256GB Android14.0 6800mAh 6.8inch 5G",
       "brand": "Valley Edge",
       "category": "Smartphones",
-      "price_brl": 166.71,
-      "compare_at_brl": 166.71,
-      "stock": 690,
+      "price_brl": 491.13,
+      "compare_at_brl": 491.13,
+      "stock": 163,
       "merchant_name": "Valley",
-      "image_url": "https://cf.cjdropshipping.com/17657568/0463aa45-6022-4177-8924-65d4735a6e93.jpg",
+      "image_url": "https://cf.cjdropshipping.com/79925cbb-b6af-49db-9843-9469c4e13ec5.jpg",
       "video_url": "",
       "video_count": 0,
-      "status": "690 em estoque • tracking ativo",
+      "status": "163 em estoque • tracking ativo",
       "tags": [
         "Catalogo real",
         "Smartphones",
-        "5-inch Display",
+        "Octa Core",
         "Operacao ativa"
       ],
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para smartphones com estoque sincronizado. Categoria fonte: 5-inch Display. 690 unidades em estoque. 68 listagens sincronizadas.",
+      "description": "Seleção Valley para smartphones com estoque sincronizado. Categoria fonte: Octa Core. 163 unidades em estoque. 95 listagens sincronizadas.",
       "gallery_urls": [
-        "https://cf.cjdropshipping.com/17657568/0463aa45-6022-4177-8924-65d4735a6e93.jpg"
+        "https://cf.cjdropshipping.com/79925cbb-b6af-49db-9843-9469c4e13ec5.jpg"
       ],
       "profile_id": "",
       "features": [
         "Estoque global sincronizado",
-        "690 unidades disponíveis",
-        "68 listagens ativas",
+        "163 unidades disponíveis",
+        "95 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
         "name": "Loja Valley",
         "headline": "Oferta sincronizada com estoque e tracking automatizados.",
-        "avatar_url": "https://cf.cjdropshipping.com/17657568/0463aa45-6022-4177-8924-65d4735a6e93.jpg",
+        "avatar_url": "https://cf.cjdropshipping.com/79925cbb-b6af-49db-9843-9469c4e13ec5.jpg",
         "rating": 4.7,
         "city": "Operação global"
       },
@@ -2032,13 +2040,13 @@
       },
       "raw_badge": "STOCK",
       "collection_label": "Valley Edge",
-      "model_name": "5-inch Display",
+      "model_name": "Octa Core",
       "google_product_category_id": "267",
       "google_product_category_path": "Electronics > Communications > Telephony > Mobile Phones",
       "google_product_category": "Electronics > Communications > Telephony > Mobile Phones",
-      "price_band": "R$ 100-249",
-      "offer_count": 68,
-      "availability_label": "690 em estoque",
+      "price_band": "R$ 250-499",
+      "offer_count": 95,
+      "availability_label": "163 em estoque",
       "shipping_free": false
     },
     {
@@ -2396,43 +2404,81 @@
       "shipping_free": false
     },
     {
-      "id": "f1633adc-9142-57f6-9b49-4942e3bd2250",
+      "id": "00d31d48-32d1-54bc-928b-14e7628c13af",
       "module_id": "STOCK",
-      "title": "C26 Ultra 5G Unlocked Smartphone, 8GB RAM 256GB Storage Android 15 Cell Phone, 6.9inch FHD Display, 8000mAh Long Battery, Dual SIM, Face & Fingerprint Unlock, GPS, Built-in Stylus",
+      "title": "80 Sectional Sofa Couch With Removable Storage Ottoman, Fabric Sofa For Living Room Apartment, L-Shaped Sofa With 2 Pillows For Home Apartment Office Living Room",
       "brand": "Valley Edge",
       "category": "Smartphones",
-      "price_brl": 491.13,
-      "compare_at_brl": 491.13,
-      "stock": 593,
+      "price_brl": 1763.63,
+      "compare_at_brl": 1763.63,
+      "stock": 122,
       "merchant_name": "Valley",
-      "image_url": "https://cf.cjdropshipping.com/b20f0715-52ea-42f0-a8d1-83697c60d242.jpg",
+      "image_url": "https://cf.cjdropshipping.com/17cf9a6f-ff38-44cb-bd50-7a75b44dad6e.jpg",
       "video_url": "",
       "video_count": 0,
-      "status": "593 em estoque • tracking ativo",
+      "status": "122 em estoque • tracking ativo",
       "tags": [
         "Catalogo real",
         "Smartphones",
-        "Octa Core",
+        "Furniture",
         "Operacao ativa"
       ],
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para smartphones com estoque sincronizado. Categoria fonte: Octa Core. 593 unidades em estoque. 67 listagens sincronizadas.",
+      "description": "Seleção Valley para smartphones com estoque sincronizado. Categoria fonte: Furniture. 122 unidades em estoque. 80 listagens sincronizadas. Specification Product Information Item Code:N605P244911121314B Product Type :Combo Item Product Name:80\" Sectional Sofa Couch with Removable Storage Ottoman, Fabric Sofa for Living Room Apartment, L-Shaped Sofa with 2 Pi",
       "gallery_urls": [
-        "https://cf.cjdropshipping.com/b20f0715-52ea-42f0-a8d1-83697c60d242.jpg"
+        "https://cf.cjdropshipping.com/17cf9a6f-ff38-44cb-bd50-7a75b44dad6e.jpg",
+        "https://oss-cf.cjdropshipping.com/product/2025/09/26/02/be6b9cc0-df38-4d41-9fbb-e2bd054706ed.jpg",
+        "https://cf.cjdropshipping.com/8c245c8e-d77a-4fa5-8c62-7b129d140a88.jpg",
+        "https://cf.cjdropshipping.com/f2c2d42c-bc81-47f7-a5ff-347c8e2eaa73.jpg",
+        "https://cf.cjdropshipping.com/4c5f4d30-2181-47d0-adf9-6a16d49370b3.jpg",
+        "https://cf.cjdropshipping.com/ace718c9-f42d-4390-b5b0-15ab270f8449.jpg",
+        "https://cf.cjdropshipping.com/a11eb070-4ba7-49bf-9f3f-686a08375ab5.jpg",
+        "https://cf.cjdropshipping.com/09b48d58-49cf-4042-ab99-a458c48ee2ef.jpg",
+        "https://cf.cjdropshipping.com/f852e29e-6c0b-47b7-9cd8-f3e21414da11.jpg",
+        "https://cf.cjdropshipping.com/f6db89a0-8fdb-43fd-b775-fcf16f2687ce.jpg",
+        "https://cf.cjdropshipping.com/7bce0bdd-0557-484e-8c06-9654b51a9285.jpg",
+        "https://cf.cjdropshipping.com/e9a608ea-2743-4c55-8262-9aa6afa865c2.jpg",
+        "https://cf.cjdropshipping.com/f908a3c2-a9dd-43e1-b4b0-bd212ff78d76.jpg",
+        "https://oss-cf.cjdropshipping.com/product/2025/09/26/02/4cdc7a4e-0174-4b05-b484-3b1f7818ec3f.jpg",
+        "https://oss-cf.cjdropshipping.com/product/2025/09/26/02/b3c8716a-8b93-4815-b2a3-06d1776233de.jpg",
+        "https://oss-cf.cjdropshipping.com/product/2025/09/26/02/39cf29ba-6d8a-47ef-a212-609d26135566.jpg",
+        "https://oss-cf.cjdropshipping.com/product/2025/09/26/02/5ef236aa-1184-4052-ad99-67a29f141fc7.jpg",
+        "https://oss-cf.cjdropshipping.com/product/2025/09/26/02/544a1c78-16e8-4dc2-a24f-9a466a531971.jpg",
+        "https://oss-cf.cjdropshipping.com/product/2025/09/26/02/37b457ec-b343-4dfd-97be-68ab7da88fc9.jpg",
+        "https://oss-cf.cjdropshipping.com/product/2025/09/26/02/b5d8eafd-72dc-43a8-8a93-79f7394f6137.jpg",
+        "https://oss-cf.cjdropshipping.com/product/2025/09/26/02/cfef60d0-7db8-4006-9d21-2c0dec7efe64.jpg",
+        "https://oss-cf.cjdropshipping.com/product/2025/09/26/02/38220c86-c3d7-4a9c-8dcd-053c1a9f0de7.jpg",
+        "https://oss-cf.cjdropshipping.com/product/2025/09/26/02/f9755e05-98f2-42b8-b529-160d1e8cd0a2.jpg",
+        "https://oss-cf.cjdropshipping.com/product/2025/09/26/02/7f9c680a-e61f-469e-9be7-449f3e5568aa.jpg",
+        "https://oss-cf.cjdropshipping.com/product/2025/09/26/02/dadc5167-107e-493f-a5cc-dd1b3fd8b7e4.jpg",
+        "https://oss-cf.cjdropshipping.com/product/2025/09/26/02/7b788da4-e647-4f11-bc41-3ab1fc3853b3.jpg",
+        "https://oss-cf.cjdropshipping.com/product/2025/09/26/02/ac67c54d-bb6c-45c3-9c0a-718f3645a9c8.jpg",
+        "https://oss-cf.cjdropshipping.com/product/2025/09/26/02/c064f947-bf65-4082-98d4-051444a2e059.jpg",
+        "https://oss-cf.cjdropshipping.com/product/2025/09/26/02/ad5f0b5d-ba4e-44c9-80ff-dcdfb019c012.jpg",
+        "https://oss-cf.cjdropshipping.com/product/2025/09/26/02/f6a537df-33d1-4653-8438-8043283b298b.jpg",
+        "https://oss-cf.cjdropshipping.com/product/2025/09/26/02/b1309acc-7a45-4961-948e-bafc2a64c666.jpg",
+        "https://oss-cf.cjdropshipping.com/product/2025/09/26/02/60a5da64-b91e-4a1f-98d5-c4b5d8fdc92a.jpg",
+        "https://oss-cf.cjdropshipping.com/product/2025/09/26/02/fcb6e787-2f27-4394-94fd-96f3f9230779.jpg",
+        "https://oss-cf.cjdropshipping.com/product/2025/09/26/02/dd266f27-fd18-41a3-91e1-6d5d5691f8aa.jpg",
+        "https://oss-cf.cjdropshipping.com/product/2025/09/26/02/68814666-d897-40b9-b5e4-b14357d3cf6a.jpg",
+        "https://oss-cf.cjdropshipping.com/product/2025/09/26/02/e9589881-fadb-4bff-a96b-b13e411b4776.jpg",
+        "https://oss-cf.cjdropshipping.com/product/2025/09/26/02/5b9faae7-60b6-4049-978b-8c00a67d7b35.jpg",
+        "https://oss-cf.cjdropshipping.com/product/2025/09/26/02/a95a2d17-9d3a-41da-848a-f48d3e9dec30.jpg",
+        "https://oss-cf.cjdropshipping.com/product/2025/09/26/02/508d50e1-7a51-4888-85df-5a9e655eb0b5.jpg"
       ],
       "profile_id": "",
       "features": [
         "Estoque global sincronizado",
-        "593 unidades disponíveis",
-        "67 listagens ativas",
+        "122 unidades disponíveis",
+        "80 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
         "name": "Loja Valley",
         "headline": "Oferta sincronizada com estoque e tracking automatizados.",
-        "avatar_url": "https://cf.cjdropshipping.com/b20f0715-52ea-42f0-a8d1-83697c60d242.jpg",
+        "avatar_url": "https://cf.cjdropshipping.com/17cf9a6f-ff38-44cb-bd50-7a75b44dad6e.jpg",
         "rating": 4.7,
         "city": "Operação global"
       },
@@ -2445,13 +2491,13 @@
       },
       "raw_badge": "STOCK",
       "collection_label": "Valley Edge",
-      "model_name": "Octa Core",
+      "model_name": "Furniture",
       "google_product_category_id": "267",
       "google_product_category_path": "Electronics > Communications > Telephony > Mobile Phones",
       "google_product_category": "Electronics > Communications > Telephony > Mobile Phones",
-      "price_band": "R$ 250-499",
-      "offer_count": 67,
-      "availability_label": "593 em estoque",
+      "price_band": "R$ 1.000-1.999",
+      "offer_count": 80,
+      "availability_label": "122 em estoque",
       "shipping_free": false
     },
     {
@@ -2811,43 +2857,69 @@
       "shipping_free": false
     },
     {
-      "id": "51274458-4df0-583f-9f8a-0f5df534d6cb",
+      "id": "036d1f80-3c2f-5236-84bf-556e43fa906e",
       "module_id": "STOCK",
-      "title": "C24 Ultra 5G Unlocked Smartphone Android 14 Phone, 12GB 512GB 6800mAh 6.8in",
+      "title": "Rocking Chair Rocker Chair Single Recliner Casual Lounger Lounge Chair Cushion For Living Room Bedroom",
       "brand": "Valley Edge",
       "category": "Smartphones",
-      "price_brl": 491.13,
-      "compare_at_brl": 491.13,
-      "stock": 300,
+      "price_brl": 618.1,
+      "compare_at_brl": 618.1,
+      "stock": 47,
       "merchant_name": "Valley",
-      "image_url": "https://cf.cjdropshipping.com/117d23da-adad-41d2-9238-275d395cfddf.jpg",
+      "image_url": "https://cf.cjdropshipping.com/a3f5b586-eda3-41de-802a-490dc1957abe.png",
       "video_url": "",
       "video_count": 0,
-      "status": "300 em estoque • tracking ativo",
+      "status": "47 em estoque • tracking ativo",
       "tags": [
         "Catalogo real",
         "Smartphones",
-        "Octa Core",
+        "Furniture",
         "Operacao ativa"
       ],
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para smartphones com estoque sincronizado. Categoria fonte: Octa Core. 300 unidades em estoque. 66 listagens sincronizadas.",
+      "description": "Seleção Valley para smartphones com estoque sincronizado. Categoria fonte: Furniture. 47 unidades em estoque. 76 listagens sincronizadas. Specification Product Information Item Code:N605P181515W Product Type :Single Box Product Product Name:Rocking Chair Rocker Chair Single Recliner Casual Lounger Lounge Chair Cushion for Living Room Bedroom Main Color:Whi",
       "gallery_urls": [
-        "https://cf.cjdropshipping.com/117d23da-adad-41d2-9238-275d395cfddf.jpg"
+        "https://cf.cjdropshipping.com/a3f5b586-eda3-41de-802a-490dc1957abe.png",
+        "https://cf.cjdropshipping.com/08d57be3-3549-4ea3-b172-96d44ba58e79.png",
+        "https://cf.cjdropshipping.com/884e8879-e474-40a3-b013-e450b5c1ed3c.png",
+        "https://cf.cjdropshipping.com/4fd631db-922d-49fa-a900-8bc030d1c4da.png",
+        "https://cf.cjdropshipping.com/49086fa8-1c62-4bb5-a643-58081ced8e77.png",
+        "https://cf.cjdropshipping.com/4750e662-cff5-42f8-b094-531411b33e6f.png",
+        "https://cf.cjdropshipping.com/a15631ae-b932-4f6a-b211-947a5f93b69c.png",
+        "https://cf.cjdropshipping.com/78898114-4ab1-4e33-b496-513835e88f45.png",
+        "https://cf.cjdropshipping.com/47f88215-90ad-438b-92a0-b27071827ad9.png",
+        "https://cf.cjdropshipping.com/b75d24bd-49de-453a-b995-2d7be504bb7b.png",
+        "https://cf.cjdropshipping.com/f42c2ce8-19c5-4d2e-ad88-3e564981b835.png",
+        "https://cf.cjdropshipping.com/b1dfe9fa-166f-46f9-920a-29e8829e6fb9.png",
+        "https://cf.cjdropshipping.com/ddb59e0d-db80-4388-ab92-a4d60786b60e.png",
+        "https://cf.cjdropshipping.com/5e2daa10-01b0-400c-9338-34a09407dd3e.png",
+        "https://cf.cjdropshipping.com/75e21f18-6b84-4ead-9740-6ec3d77f2522.png",
+        "https://cf.cjdropshipping.com/5c4f394c-bcd7-4d1b-a661-da29a0f15621.png",
+        "https://cf.cjdropshipping.com/686fa1b4-82c1-47b0-95c2-a599aabd1f72.png",
+        "https://cf.cjdropshipping.com/c3806c86-6551-49f3-92d5-6cae33d5dca1.png",
+        "https://cf.cjdropshipping.com/d954bf34-df0b-475f-9435-78a943681a16.png",
+        "https://cf.cjdropshipping.com/cb8ddb94-e569-4e1c-9d2d-a2b560a10fe2.png",
+        "https://cf.cjdropshipping.com/62b9d384-bf64-47d3-92c0-6bbf56bdc226.png",
+        "https://cf.cjdropshipping.com/e20d43b6-402d-4f69-9e2c-673319b8beb0.png",
+        "https://cf.cjdropshipping.com/a162ad41-b610-4049-a582-d4331e9b9155.png",
+        "https://cf.cjdropshipping.com/564aa36f-ccb1-4e01-aab0-97946d7772ba.png",
+        "https://cf.cjdropshipping.com/974591ba-67fd-405d-9065-0196d6c73560.png",
+        "https://cf.cjdropshipping.com/85f9e6c7-8bcd-47a0-a181-439cd440db7c.png",
+        "https://cf.cjdropshipping.com/b60921d7-7b91-4ff8-9513-27dd29bb0c10.png"
       ],
       "profile_id": "",
       "features": [
         "Estoque global sincronizado",
-        "300 unidades disponíveis",
-        "66 listagens ativas",
+        "47 unidades disponíveis",
+        "76 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
         "name": "Loja Valley",
         "headline": "Oferta sincronizada com estoque e tracking automatizados.",
-        "avatar_url": "https://cf.cjdropshipping.com/117d23da-adad-41d2-9238-275d395cfddf.jpg",
+        "avatar_url": "https://cf.cjdropshipping.com/a3f5b586-eda3-41de-802a-490dc1957abe.png",
         "rating": 4.7,
         "city": "Operação global"
       },
@@ -2860,13 +2932,13 @@
       },
       "raw_badge": "STOCK",
       "collection_label": "Valley Edge",
-      "model_name": "Octa Core",
+      "model_name": "Furniture",
       "google_product_category_id": "267",
       "google_product_category_path": "Electronics > Communications > Telephony > Mobile Phones",
       "google_product_category": "Electronics > Communications > Telephony > Mobile Phones",
-      "price_band": "R$ 250-499",
-      "offer_count": 66,
-      "availability_label": "300 em estoque",
+      "price_band": "R$ 500-999",
+      "offer_count": 76,
+      "availability_label": "47 em estoque",
       "shipping_free": false
     },
     {
@@ -3224,43 +3296,49 @@
       "shipping_free": false
     },
     {
-      "id": "1d75c776-2e00-5c86-ab48-a94f64c14441",
+      "id": "cc3b6b1f-b2f0-5957-96a4-ecebbcb636d1",
       "module_id": "STOCK",
-      "title": "6.3inch HOT40 Unlocked Phone Dual SIM 4G Phone, Android Smartphone 4GB 128GB Rom",
+      "title": "Hydraulic Lift Top Coffee Table, LED Coffee Tables With Storage For Living Room, Coffee Table With 2 Drawers & LED Light For Dining Reception Room, White",
       "brand": "Valley Edge",
       "category": "Smartphones",
-      "price_brl": 343.78,
-      "compare_at_brl": 343.78,
-      "stock": 133,
+      "price_brl": 502.97,
+      "compare_at_brl": 502.97,
+      "stock": 10,
       "merchant_name": "Valley",
-      "image_url": "https://cf.cjdropshipping.com/4428c2b8-7d35-47e4-b2d6-5dea879a6b6f.jpg",
+      "image_url": "https://cf.cjdropshipping.com/d17e85e9-d462-445b-b94c-8ea1d7bbdca7.jpg",
       "video_url": "",
       "video_count": 0,
-      "status": "133 em estoque • tracking ativo",
+      "status": "10 em estoque • tracking ativo",
       "tags": [
         "Catalogo real",
         "Smartphones",
-        "Octa Core",
+        "Furniture",
         "Operacao ativa"
       ],
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para smartphones com estoque sincronizado. Categoria fonte: Octa Core. 133 unidades em estoque. 63 listagens sincronizadas.",
+      "description": "Seleção Valley para smartphones com estoque sincronizado. Categoria fonte: Furniture. 10 unidades em estoque. 76 listagens sincronizadas. Specification Product Information Item Code:N605P22556364W Product Type :Combo Item Product Name:Hydraulic Lift Top Coffee Table, LED Coffee Tables with Storage for Living Room, Coffee Table with 2 Drawers &amp; LED Ligh",
       "gallery_urls": [
-        "https://cf.cjdropshipping.com/4428c2b8-7d35-47e4-b2d6-5dea879a6b6f.jpg"
+        "https://cf.cjdropshipping.com/d17e85e9-d462-445b-b94c-8ea1d7bbdca7.jpg",
+        "https://cf.cjdropshipping.com/6613ecad-a570-458f-9f90-759d0bc30f04.jpg",
+        "https://cf.cjdropshipping.com/5b791de8-145a-4dcc-94aa-42f71101e496.jpg",
+        "https://cf.cjdropshipping.com/ce3d47c9-e22b-428b-ac2f-4517777eae91.jpg",
+        "https://cf.cjdropshipping.com/b9d91b23-694b-46c8-adfb-60e8ab09fb11.jpg",
+        "https://cf.cjdropshipping.com/b33f3c42-ba6e-4a55-b799-086c8c95a5d8.jpg",
+        "https://cf.cjdropshipping.com/8823b62d-e04d-4b0e-946b-fa800c29da13.jpg"
       ],
       "profile_id": "",
       "features": [
         "Estoque global sincronizado",
-        "133 unidades disponíveis",
-        "63 listagens ativas",
+        "10 unidades disponíveis",
+        "76 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
         "name": "Loja Valley",
         "headline": "Oferta sincronizada com estoque e tracking automatizados.",
-        "avatar_url": "https://cf.cjdropshipping.com/4428c2b8-7d35-47e4-b2d6-5dea879a6b6f.jpg",
+        "avatar_url": "https://cf.cjdropshipping.com/d17e85e9-d462-445b-b94c-8ea1d7bbdca7.jpg",
         "rating": 4.7,
         "city": "Operação global"
       },
@@ -3273,13 +3351,13 @@
       },
       "raw_badge": "STOCK",
       "collection_label": "Valley Edge",
-      "model_name": "Octa Core",
+      "model_name": "Furniture",
       "google_product_category_id": "267",
       "google_product_category_path": "Electronics > Communications > Telephony > Mobile Phones",
       "google_product_category": "Electronics > Communications > Telephony > Mobile Phones",
-      "price_band": "R$ 250-499",
-      "offer_count": 63,
-      "availability_label": "133 em estoque",
+      "price_band": "R$ 500-999",
+      "offer_count": 76,
+      "availability_label": "10 em estoque",
       "shipping_free": false
     },
     {
@@ -3638,43 +3716,44 @@
       "shipping_free": false
     },
     {
-      "id": "06e9b6c7-f40f-534f-b9bb-9f298fc8d307",
+      "id": "584c15e5-6e20-5814-a288-4af89f503c29",
       "module_id": "STOCK",
-      "title": "C25 Ultra Unlocked Phone,5G Smartphone 8GB 256GB 7.3-inch Android 14 Cell Phone 6800mAh Large Battery Dual SIM Face GPS",
+      "title": "Kids Single Bed Frames Toddler Beds Storage Underneath 3FT Single Bed With Storage Solid Pine Wood House Tree Canopy Bed For Children Girls And Boys Toddler Bed Wood",
       "brand": "Valley Edge",
       "category": "Smartphones",
-      "price_brl": 540.25,
-      "compare_at_brl": 540.25,
-      "stock": 80,
+      "price_brl": 1133.1,
+      "compare_at_brl": 1133.1,
+      "stock": 91,
       "merchant_name": "Valley",
-      "image_url": "https://cf.cjdropshipping.com/98efe319-d82e-4c1b-bd16-31bd595901d9.png",
+      "image_url": "https://cf.cjdropshipping.com/43f45446-6ad7-478b-be8e-f16aafdca0b3.jpg",
       "video_url": "",
       "video_count": 0,
-      "status": "80 em estoque • tracking ativo",
+      "status": "91 em estoque • tracking ativo",
       "tags": [
         "Catalogo real",
         "Smartphones",
-        "Octa Core",
+        "Furniture",
         "Operacao ativa"
       ],
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para smartphones com estoque sincronizado. Categoria fonte: Octa Core. 80 unidades em estoque. 59 listagens sincronizadas.",
+      "description": "Seleção Valley para smartphones com estoque sincronizado. Categoria fonte: Furniture. 91 unidades em estoque. 75 listagens sincronizadas. Specification Product Information Item Code:602627AAW Product Type :Combo Item Product Name:Kids Single Bed Frames Toddler Beds Storage Underneath 3FT Single Bed with Storage Solid Pine Wood House Tree Canopy Bed for Chi",
       "gallery_urls": [
-        "https://cf.cjdropshipping.com/98efe319-d82e-4c1b-bd16-31bd595901d9.png"
+        "https://cf.cjdropshipping.com/43f45446-6ad7-478b-be8e-f16aafdca0b3.jpg",
+        "https://cf.cjdropshipping.com/88c7535d-8cc9-4e90-8123-e9e338164074.jpg"
       ],
       "profile_id": "",
       "features": [
         "Estoque global sincronizado",
-        "80 unidades disponíveis",
-        "59 listagens ativas",
+        "91 unidades disponíveis",
+        "75 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
         "name": "Loja Valley",
         "headline": "Oferta sincronizada com estoque e tracking automatizados.",
-        "avatar_url": "https://cf.cjdropshipping.com/98efe319-d82e-4c1b-bd16-31bd595901d9.png",
+        "avatar_url": "https://cf.cjdropshipping.com/43f45446-6ad7-478b-be8e-f16aafdca0b3.jpg",
         "rating": 4.7,
         "city": "Operação global"
       },
@@ -3687,13 +3766,13 @@
       },
       "raw_badge": "STOCK",
       "collection_label": "Valley Edge",
-      "model_name": "Octa Core",
+      "model_name": "Furniture",
       "google_product_category_id": "267",
       "google_product_category_path": "Electronics > Communications > Telephony > Mobile Phones",
       "google_product_category": "Electronics > Communications > Telephony > Mobile Phones",
-      "price_band": "R$ 500-999",
-      "offer_count": 59,
-      "availability_label": "80 em estoque",
+      "price_band": "R$ 1.000-1.999",
+      "offer_count": 75,
+      "availability_label": "91 em estoque",
       "shipping_free": false
     },
     {
@@ -4052,43 +4131,43 @@
       "shipping_free": false
     },
     {
-      "id": "7d34af69-4533-503f-a310-0f799b244db8",
+      "id": "4230ca00-32e6-5d0b-b132-7352360054a7",
       "module_id": "STOCK",
-      "title": "C25 Unlocked Phone Smartphone 8GB 256GB Android14.0 6800mAh 6.8inch 5G",
+      "title": "Non-smartphone Flip Mobile Elder People Mobile",
       "brand": "Valley Edge",
       "category": "Smartphones",
-      "price_brl": 540.25,
-      "compare_at_brl": 540.25,
-      "stock": 194,
+      "price_brl": 77.36,
+      "compare_at_brl": 77.36,
+      "stock": 120111,
       "merchant_name": "Valley",
-      "image_url": "https://cf.cjdropshipping.com/4c88e7f4-ea34-49d8-a4a2-a98faa28b660.jpg",
+      "image_url": "https://oss-cf.cjdropshipping.com/product/2025/09/08/03/e4ede866-b2f7-4b19-8b6a-3a201f66b48f_trans.jpeg",
       "video_url": "",
       "video_count": 0,
-      "status": "194 em estoque • tracking ativo",
+      "status": "120111 em estoque • tracking ativo",
       "tags": [
         "Catalogo real",
         "Smartphones",
-        "Quad Core",
+        "Single SIM Card",
         "Operacao ativa"
       ],
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para smartphones com estoque sincronizado. Categoria fonte: Quad Core. 194 unidades em estoque. 40 listagens sincronizadas.",
+      "description": "Seleção Valley para smartphones com estoque sincronizado. Categoria fonte: Single SIM Card. 120111 unidades em estoque. 74 listagens sincronizadas.",
       "gallery_urls": [
-        "https://cf.cjdropshipping.com/4c88e7f4-ea34-49d8-a4a2-a98faa28b660.jpg"
+        "https://oss-cf.cjdropshipping.com/product/2025/09/08/03/e4ede866-b2f7-4b19-8b6a-3a201f66b48f_trans.jpeg"
       ],
       "profile_id": "",
       "features": [
         "Estoque global sincronizado",
-        "194 unidades disponíveis",
-        "40 listagens ativas",
+        "120111 unidades disponíveis",
+        "74 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
         "name": "Loja Valley",
         "headline": "Oferta sincronizada com estoque e tracking automatizados.",
-        "avatar_url": "https://cf.cjdropshipping.com/4c88e7f4-ea34-49d8-a4a2-a98faa28b660.jpg",
+        "avatar_url": "https://oss-cf.cjdropshipping.com/product/2025/09/08/03/e4ede866-b2f7-4b19-8b6a-3a201f66b48f_trans.jpeg",
         "rating": 4.7,
         "city": "Operação global"
       },
@@ -4101,13 +4180,13 @@
       },
       "raw_badge": "STOCK",
       "collection_label": "Valley Edge",
-      "model_name": "Quad Core",
+      "model_name": "Single SIM Card",
       "google_product_category_id": "267",
       "google_product_category_path": "Electronics > Communications > Telephony > Mobile Phones",
       "google_product_category": "Electronics > Communications > Telephony > Mobile Phones",
-      "price_band": "R$ 500-999",
-      "offer_count": 40,
-      "availability_label": "194 em estoque",
+      "price_band": "Ate R$ 99",
+      "offer_count": 74,
+      "availability_label": "120111 em estoque",
       "shipping_free": false
     },
     {
@@ -4192,7 +4271,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para audio com estoque sincronizado. Categoria fonte: Earphones & Headphones. 47545 unidades em estoque. 1927 listagens sincronizadas.",
+      "description": "Seleção Valley para audio com estoque sincronizado. Categoria fonte: Earphones & Headphones. 47545 unidades em estoque. 1928 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/580771dd-9a82-43c1-8bbd-f0f7fd853985.jpg"
       ],
@@ -4200,7 +4279,7 @@
       "features": [
         "Estoque global sincronizado",
         "47545 unidades disponíveis",
-        "1927 listagens ativas",
+        "1928 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -4224,7 +4303,7 @@
       "google_product_category_path": "Electronics > Audio > Audio Components > Headphones & Headsets > Headphones",
       "google_product_category": "Electronics > Audio > Audio Components > Headphones & Headsets > Headphones",
       "price_band": "Ate R$ 99",
-      "offer_count": 1927,
+      "offer_count": 1928,
       "availability_label": "47545 em estoque",
       "shipping_free": false
     },
@@ -4465,43 +4544,44 @@
       "shipping_free": false
     },
     {
-      "id": "781814f5-9ae1-5c17-ba50-fad99145bf90",
+      "id": "dd550238-03be-5075-8d63-96701be7ef0d",
       "module_id": "STOCK",
-      "title": "XS15 Portable Mini Phone 35-inch 2GB16GB Android Smartphone",
+      "title": "Bunk Bed, Twin Sleeper Bed With Ladder, Solid Wood Frame 3FT Single Bed, Gaming Bed, Castle-shaped Bed 90 X 190 Cm Children's Bed Room Furniture, Wooden Bed Frame For Kids Children White",
       "brand": "Valley Edge",
       "category": "Smartphones",
-      "price_brl": 120.54,
-      "compare_at_brl": 120.54,
-      "stock": 39987,
+      "price_brl": 1383.8,
+      "compare_at_brl": 1383.8,
+      "stock": 118,
       "merchant_name": "Valley",
-      "image_url": "https://cf.cjdropshipping.com/quick/product/c31f793d-63be-4925-9014-11de5285257e.jpg",
+      "image_url": "https://cf.cjdropshipping.com/7840cfec-ec58-40a5-b58c-c4df9a06928a.jpg",
       "video_url": "",
       "video_count": 0,
-      "status": "39987 em estoque • tracking ativo",
+      "status": "118 em estoque • tracking ativo",
       "tags": [
         "Catalogo real",
         "Smartphones",
-        "3GB RAM",
+        "Furniture",
         "Operacao ativa"
       ],
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para smartphones com estoque sincronizado. Categoria fonte: 3GB RAM. 39987 unidades em estoque. 33 listagens sincronizadas.",
+      "description": "Seleção Valley para smartphones com estoque sincronizado. Categoria fonte: Furniture. 118 unidades em estoque. 74 listagens sincronizadas. Specification Product Information Item Code:686970AAW Product Type :Combo Item Product Name:Bunk Bed, Twin Sleeper Bed with Ladder, Solid Wood Frame 3FT Single bed, Gaming Bed, Castle-shaped Bed 90 x 190 cm Children's Be",
       "gallery_urls": [
-        "https://cf.cjdropshipping.com/quick/product/c31f793d-63be-4925-9014-11de5285257e.jpg"
+        "https://cf.cjdropshipping.com/7840cfec-ec58-40a5-b58c-c4df9a06928a.jpg",
+        "https://cf.cjdropshipping.com/9c4f0470-04c5-4cb1-96ab-698ec69b9b02.jpg"
       ],
       "profile_id": "",
       "features": [
         "Estoque global sincronizado",
-        "39987 unidades disponíveis",
-        "33 listagens ativas",
+        "118 unidades disponíveis",
+        "74 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
         "name": "Loja Valley",
         "headline": "Oferta sincronizada com estoque e tracking automatizados.",
-        "avatar_url": "https://cf.cjdropshipping.com/quick/product/c31f793d-63be-4925-9014-11de5285257e.jpg",
+        "avatar_url": "https://cf.cjdropshipping.com/7840cfec-ec58-40a5-b58c-c4df9a06928a.jpg",
         "rating": 4.7,
         "city": "Operação global"
       },
@@ -4514,13 +4594,13 @@
       },
       "raw_badge": "STOCK",
       "collection_label": "Valley Edge",
-      "model_name": "3GB RAM",
+      "model_name": "Furniture",
       "google_product_category_id": "267",
       "google_product_category_path": "Electronics > Communications > Telephony > Mobile Phones",
       "google_product_category": "Electronics > Communications > Telephony > Mobile Phones",
-      "price_band": "R$ 100-249",
-      "offer_count": 33,
-      "availability_label": "39987 em estoque",
+      "price_band": "R$ 1.000-1.999",
+      "offer_count": 74,
+      "availability_label": "118 em estoque",
       "shipping_free": false
     },
     {
@@ -4606,7 +4686,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para audio com estoque sincronizado. Categoria fonte: Earphones & Headphones. 180873 unidades em estoque. 1919 listagens sincronizadas.",
+      "description": "Seleção Valley para audio com estoque sincronizado. Categoria fonte: Earphones & Headphones. 180873 unidades em estoque. 1920 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/00494394-6be7-42e3-bd5f-6d6b9c5cb4f9.jpg"
       ],
@@ -4614,7 +4694,7 @@
       "features": [
         "Estoque global sincronizado",
         "180873 unidades disponíveis",
-        "1919 listagens ativas",
+        "1920 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -4638,7 +4718,7 @@
       "google_product_category_path": "Electronics > Audio > Audio Components > Headphones & Headsets > Headphones",
       "google_product_category": "Electronics > Audio > Audio Components > Headphones & Headsets > Headphones",
       "price_band": "Ate R$ 99",
-      "offer_count": 1919,
+      "offer_count": 1920,
       "availability_label": "180873 em estoque",
       "shipping_free": false
     },
@@ -4986,7 +5066,7 @@
     }
   ],
   "summary": {
-    "products": 1192,
+    "products": 1210,
     "visible_products": 84,
     "real_supplier_products": 1209,
     "marketplace_merchants": 4,

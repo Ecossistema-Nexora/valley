@@ -86,6 +86,7 @@ USER_MODULE_TRAILS_PATH = RUNTIME_DIR / "valley-user-module-trails.jsonl"
 MOVE_TELEMETRY_PATH = RUNTIME_DIR / "move-telemetry.jsonl"
 USER_AUTH_RUNTIME_PATH = RUNTIME_DIR / "valley-user-auth-runtime.json"
 USER_AUTH_EVENTS_PATH = RUNTIME_DIR / "valley-user-auth-events.jsonl"
+MERCHANT_ERP_EVENTS_PATH = RUNTIME_DIR / "valley-merchant-erp-events.jsonl"
 AUTH_COOKIE_NAME = "valley_session"
 AUTH_COOKIE_DOMAIN = ".brasildesconto.com.br"
 HOME_DEFAULT_VISIBLE_MODULES = ("PAY", "MARKETPLACE", "STOCK", "CHAT", "DOCS", "PLUG")
@@ -829,6 +830,10 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             self._write_json(HTTPStatus.OK, self._product_shell_payload())
             return
 
+        if route == "/api/merchant-erp/blueprint":
+            self._write_json(*self._merchant_erp_blueprint_response())
+            return
+
         if route == "/api/stock-catalog":
             self._write_json(HTTPStatus.OK, self._stock_catalog_payload())
             return
@@ -1015,6 +1020,10 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 payload,
                 extra_headers={"Set-Cookie": cookie_header} if cookie_header else None,
             )
+            return
+
+        if route == "/api/merchant-erp/action":
+            self._write_json(*self._merchant_erp_action_response())
             return
 
         if route == "/api/actions/poll-bridge":
@@ -4382,6 +4391,422 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             "top_inventory_value_item": top_inventory_value_item,
             "stock_module": stock_summary,
         }
+
+    def _merchant_erp_blueprint_response(self) -> tuple[HTTPStatus, dict[str, Any]]:
+        auth_user, auth_session = self._resolve_active_auth_session(scope="merchant")
+        if auth_user is None or auth_session is None:
+            return (
+                HTTPStatus.UNAUTHORIZED,
+                {
+                    "status": "unauthorized",
+                    "service": "valley-merchant-erp-blueprint",
+                    "detail": "Sessao de lojista obrigatoria.",
+                },
+            )
+
+        modules = self._merchant_erp_blueprint_modules(auth_user)
+        return (
+            HTTPStatus.OK,
+            {
+                "status": "ok",
+                "service": "valley-merchant-erp-blueprint",
+                "release_version": "v048",
+                "generated_at_utc": utc_now_iso(),
+                "api_base_url": self._public_admin_base_url(),
+                "user": self._auth_public_user(auth_user),
+                "session": self._auth_public_session(auth_session, auth_user),
+                "persistence": {
+                    "mode": "append_only_runtime",
+                    "event_log": str(MERCHANT_ERP_EVENTS_PATH.relative_to(ROOT)),
+                    "action_endpoint": "/api/merchant-erp/action",
+                },
+                "modules": modules,
+                "recent_events": load_jsonl_tail(MERCHANT_ERP_EVENTS_PATH, limit=10),
+            },
+        )
+
+    def _merchant_erp_action_response(self) -> tuple[HTTPStatus, dict[str, Any]]:
+        auth_user, auth_session = self._resolve_active_auth_session(scope="merchant")
+        if auth_user is None or auth_session is None:
+            return (
+                HTTPStatus.UNAUTHORIZED,
+                {
+                    "status": "unauthorized",
+                    "service": "valley-merchant-erp-action",
+                    "detail": "Sessao de lojista obrigatoria.",
+                },
+            )
+
+        payload = self._read_json_body()
+        if not isinstance(payload, dict):
+            return (
+                HTTPStatus.BAD_REQUEST,
+                {
+                    "status": "invalid_payload",
+                    "service": "valley-merchant-erp-action",
+                    "detail": "Expected JSON object.",
+                },
+            )
+
+        action = str(payload.get("action") or "").strip().lower()
+        module_key = str(payload.get("module_key") or payload.get("module") or "").strip().lower()
+        allowed_actions = {"save", "sync", "refresh", "export", "open"}
+        if action not in allowed_actions or not module_key:
+            return (
+                HTTPStatus.BAD_REQUEST,
+                {
+                    "status": "invalid_action",
+                    "service": "valley-merchant-erp-action",
+                    "detail": "Informe module_key e action valida.",
+                    "allowed_actions": sorted(allowed_actions),
+                },
+            )
+
+        public_user = self._auth_public_user(auth_user)
+        event = {
+            "event_id": str(uuid.uuid4()),
+            "received_at_utc": utc_now_iso(),
+            "service": "valley-merchant-erp-action",
+            "release_version": "v048",
+            "module_key": module_key,
+            "action": action,
+            "user_id": public_user["user_id"],
+            "merchant_slug": public_user["merchant_slug"],
+            "merchant_code": public_user["merchant_code"],
+            "session_id": str(auth_session.get("session_id") or ""),
+            "payload": {
+                key: value
+                for key, value in payload.items()
+                if key not in {"password", "token", "session_token"}
+            },
+        }
+        MERCHANT_ERP_EVENTS_PATH.parent.mkdir(parents=True, exist_ok=True)
+        with MERCHANT_ERP_EVENTS_PATH.open("a", encoding="utf-8") as handle:
+            handle.write(json.dumps(event, ensure_ascii=False, separators=(",", ":")) + "\n")
+
+        return (
+            HTTPStatus.OK,
+            {
+                "status": "ok",
+                "service": "valley-merchant-erp-action",
+                "event_id": event["event_id"],
+                "saved_at_utc": event["received_at_utc"],
+                "message": f"Acao {action} do modulo {module_key} registrada no runtime.",
+                "event_log": str(MERCHANT_ERP_EVENTS_PATH.relative_to(ROOT)),
+            },
+        )
+
+    def _merchant_erp_blueprint_modules(self, auth_user: dict[str, Any]) -> list[dict[str, Any]]:
+        now = utc_now_iso()
+        public_user = self._auth_public_user(auth_user)
+        merchant_owner = public_user.get("merchant_code") or public_user.get("merchant_slug") or "ERP Lojista"
+        pricing_payload = self._admin_imported_products_pricing_payload()
+        stock_payload = self._stock_catalog_payload()
+        summary_payload = self._product_catalog_summary_payload()
+        checkout_payload = self._mercadopago_checkout_status_payload(force_refresh=False)
+        bridge_payload = self._bridge_status_payload()
+        integrations_payload = self._admin_integrations_payload()
+        dropshipping_payload = load_json_file(DROPSHIPPING_STATUS_PATH) or {}
+
+        def as_float(value: Any) -> float:
+            try:
+                return float(value or 0)
+            except (TypeError, ValueError):
+                return 0.0
+
+        def record(
+            code: str,
+            title: str,
+            *,
+            status: str = "OK",
+            owner: str | None = None,
+            updated_at: str | None = None,
+        ) -> dict[str, str]:
+            return {
+                "code": code,
+                "title": title,
+                "status": status,
+                "owner": owner or str(merchant_owner),
+                "updated_at": updated_at or now,
+            }
+
+        def product_records(limit: int = 8) -> list[dict[str, str]]:
+            rows = pricing_payload.get("items") if isinstance(pricing_payload.get("items"), list) else []
+            records: list[dict[str, str]] = []
+            for row in rows[:limit]:
+                if not isinstance(row, dict):
+                    continue
+                item_id = str(row.get("id") or row.get("source_item_id") or "sku").strip()
+                price = as_float(row.get("suggested_sale_price_brl") or row.get("price_brl"))
+                pub = str(row.get("publication_status_label") or row.get("publication_status") or "").lower()
+                status = "ATENCAO" if "nao" in pub or "review" in pub or not row.get("enabled", True) else "OK"
+                records.append(
+                    record(
+                        f"SKU-{item_id[:8].upper()}",
+                        f"{row.get('title') or 'Produto'} - R$ {price:.2f}",
+                        status=status,
+                        owner=str(row.get("supplier_name") or row.get("provider_key") or merchant_owner),
+                        updated_at=str(pricing_payload.get("generated_at_utc") or now),
+                    )
+                )
+            return records
+
+        def stock_records(limit: int = 8) -> list[dict[str, str]]:
+            rows = stock_payload.get("items") if isinstance(stock_payload.get("items"), list) else []
+            records: list[dict[str, str]] = []
+            for row in rows[:limit]:
+                if not isinstance(row, dict):
+                    continue
+                stock = as_float(row.get("stock"))
+                title = str(row.get("title") or "Item de estoque")
+                records.append(
+                    record(
+                        f"EST-{str(row.get('id') or title)[:8].upper()}",
+                        f"{title} - {stock:.0f} un.",
+                        status="OK" if stock > 0 else "ATENCAO",
+                        owner=str(row.get("supplier_name") or row.get("merchant_name") or merchant_owner),
+                        updated_at=str(stock_payload.get("generated_at_utc") or now),
+                    )
+                )
+            return records
+
+        def checkout_records() -> list[dict[str, str]]:
+            attempts = load_jsonl_tail(MERCADOPAGO_CHECKOUT_ATTEMPTS_PATH, limit=6)
+            records = []
+            for attempt in attempts:
+                attempt_status = str(attempt.get("status") or "ok").lower()
+                records.append(
+                    record(
+                        f"CHK-{str(attempt.get('attempt_id') or attempt.get('event_id') or uuid.uuid4())[:8].upper()}",
+                        str(attempt.get("detail") or attempt.get("message") or "Tentativa de checkout registrada"),
+                        status="ATENCAO" if attempt_status in {"failed", "error"} else "OK",
+                        owner="Checkout",
+                        updated_at=str(attempt.get("received_at_utc") or attempt.get("created_at_utc") or now),
+                    )
+                )
+            mp_ready = checkout_payload.get("status") == "ok"
+            records.append(
+                record(
+                    "PAY-RUNTIME",
+                    "Checkout online com PIX, cartao e retorno controlado",
+                    status="OK" if mp_ready else "ATENCAO",
+                    owner="Checkout",
+                    updated_at=str(checkout_payload.get("generated_at_utc") or now),
+                )
+            )
+            return records
+
+        def supplier_order_records() -> list[dict[str, str]]:
+            orders = load_jsonl_tail(SUPPLIER_ORDERS_PATH, limit=6)
+            records = []
+            for order in orders:
+                order_id = str(order.get("supplier_order_id") or order.get("order_id") or uuid.uuid4())
+                records.append(
+                    record(
+                        f"PED-{order_id[:8].upper()}",
+                        str(order.get("title") or order.get("detail") or "Pedido fornecedor registrado"),
+                        status="OK" if str(order.get("status") or "").lower() not in {"failed", "error"} else "ATENCAO",
+                        owner=str(order.get("provider_key") or "Pedidos"),
+                        updated_at=str(order.get("received_at_utc") or order.get("created_at_utc") or now),
+                    )
+                )
+            if not records:
+                records.append(record("PED-PIPE", "Pipeline de pedidos conectado ao checkout e fornecedor", owner="Pedidos"))
+            return records
+
+        def provider_records() -> list[dict[str, str]]:
+            rows = integrations_payload if isinstance(integrations_payload, list) else []
+            records = []
+            for row in rows[:8]:
+                if not isinstance(row, dict):
+                    continue
+                enabled = bool(row.get("enabled"))
+                provider = str(row.get("name") or row.get("label") or row.get("key") or "Provider")
+                records.append(
+                    record(
+                        f"CAN-{str(row.get('key') or provider)[:8].upper()}",
+                        f"{provider} - {row.get('environment') or 'runtime'}",
+                        status="OK" if enabled else "ATENCAO",
+                        owner="Marketplace",
+                    )
+                )
+            providers = dropshipping_payload.get("providers") if isinstance(dropshipping_payload.get("providers"), list) else []
+            for provider in providers[:6]:
+                if not isinstance(provider, dict):
+                    continue
+                status_text = str(provider.get("status") or provider.get("runtime_status") or "").lower()
+                records.append(
+                    record(
+                        f"FOR-{str(provider.get('key') or provider.get('name') or 'provider')[:8].upper()}",
+                        str(provider.get("name") or provider.get("key") or "Fornecedor"),
+                        status="ATENCAO" if status_text in {"failed", "blocked", "external_auth_pending"} else "OK",
+                        owner="Fornecedores",
+                    )
+                )
+            return records or [record("CAN-RUNTIME", "Canais e fornecedores sincronizados no runtime", owner="Marketplace")]
+
+        def user_records() -> list[dict[str, str]]:
+            auth_payload = self._auth_runtime_payload()
+            users = auth_payload.get("users") if isinstance(auth_payload.get("users"), list) else []
+            customers = [
+                user for user in users
+                if isinstance(user, dict) and str(user.get("primary_role") or "").upper() == "CUSTOMER"
+            ]
+            merchants = [
+                user for user in users
+                if isinstance(user, dict) and str(user.get("primary_role") or "").upper() == "MERCHANT"
+            ]
+            return [
+                record("CLI-ACTIVE", f"{len(customers)} clientes cadastrados no auth runtime", owner="Clientes"),
+                record("USR-MERCH", f"{len(merchants)} usuarios lojistas com acesso online", owner="Seguranca"),
+                record("PERM-ERP", f"{len(public_user.get('permissions') or [])} permissoes efetivas no ERP", owner="RBAC"),
+            ]
+
+        product_recs = product_records()
+        stock_recs = stock_records()
+        checkout_recs = checkout_records()
+        order_recs = supplier_order_records()
+        provider_recs = provider_records()
+        user_recs = user_records()
+        stock_module = summary_payload.get("stock_module") if isinstance(summary_payload.get("stock_module"), dict) else {}
+        inventory_value = as_float(summary_payload.get("inventory_value_brl"))
+        margin_value = as_float(summary_payload.get("margin_potential_brl"))
+        items_total = int(as_float(summary_payload.get("items_total")))
+        event_count = len(load_jsonl_tail(MERCHANT_ERP_EVENTS_PATH, limit=1000))
+
+        return [
+            {
+                "key": "sales",
+                "label": "Vendas",
+                "subtitle": "PDV, carrinho e fechamento com registro online",
+                "icon": "point_of_sale",
+                "color": "#0F766E",
+                "status": "active",
+                "records": [
+                    record("PDV-ONLINE", "PDV conectado ao endpoint persistente do ERP", owner="PDV"),
+                    record("PDV-AUDIT", f"{event_count} eventos de operacao gravados", owner="Auditoria"),
+                    *checkout_recs[:3],
+                ],
+            },
+            {
+                "key": "products",
+                "label": "Produtos",
+                "subtitle": f"{len(product_recs)} SKUs prontos a partir do catalogo importado",
+                "icon": "inventory",
+                "color": "#2563EB",
+                "status": "active",
+                "records": product_recs or [record("SKU-RUNTIME", "Catalogo de produtos conectado ao runtime", owner="Produtos")],
+            },
+            {
+                "key": "stock",
+                "label": "Estoque",
+                "subtitle": f"{items_total} itens com estoque, custo e margem",
+                "icon": "qr_code",
+                "color": "#7C3AED",
+                "status": "active",
+                "records": stock_recs or [record("EST-RUNTIME", "Estoque runtime disponivel para leitura", owner="Estoque")],
+            },
+            {
+                "key": "orders",
+                "label": "Pedidos",
+                "subtitle": "Separacao, status e entrega conectados ao checkout",
+                "icon": "receipt",
+                "color": "#B45309",
+                "status": "active",
+                "records": order_recs,
+            },
+            {
+                "key": "customers",
+                "label": "Clientes",
+                "subtitle": "Cadastro, historico e suporte via auth runtime",
+                "icon": "groups",
+                "color": "#0891B2",
+                "status": "active",
+                "records": user_recs[:2],
+            },
+            {
+                "key": "finance",
+                "label": "Financeiro",
+                "subtitle": f"Valor de inventario R$ {inventory_value:.2f}",
+                "icon": "wallet",
+                "color": "#16A34A",
+                "status": "active",
+                "records": [
+                    record("FIN-INV", f"Inventario atual R$ {inventory_value:.2f}", owner="Financeiro"),
+                    record("FIN-MRG", f"Margem potencial R$ {margin_value:.2f}", owner="Financeiro"),
+                    *checkout_recs[:2],
+                ],
+            },
+            {
+                "key": "checkout",
+                "label": "Checkout",
+                "subtitle": "Faturas, pagamento e comprovante com status online",
+                "icon": "payments",
+                "color": "#4F46E5",
+                "status": "active",
+                "records": checkout_recs,
+            },
+            {
+                "key": "delivery",
+                "label": "Entregas",
+                "subtitle": "Frete, etiqueta e rastreio por fornecedor",
+                "icon": "local_shipping",
+                "color": "#DC2626",
+                "status": "active",
+                "records": [
+                    record("FRT-QUOTE", "Cotacao de frete ativa em /api/actions/shipping-quote", owner="Logistica"),
+                    *order_recs[:4],
+                ],
+            },
+            {
+                "key": "marketplace",
+                "label": "Marketplace",
+                "subtitle": "Canais, anuncios e publicacao sem cabecalho externo",
+                "icon": "hub",
+                "color": "#9333EA",
+                "status": "active",
+                "records": provider_recs,
+            },
+            {
+                "key": "reports",
+                "label": "Relatorios",
+                "subtitle": "Margem, ruptura e ranking calculados do runtime",
+                "icon": "bar_chart",
+                "color": "#475569",
+                "status": "active",
+                "records": [
+                    record("REL-ITENS", f"{items_total} itens consolidados", owner="Relatorios"),
+                    record("REL-STOCK", f"Modulo STOCK: {stock_module.get('items_total') or 0} itens", owner="Relatorios"),
+                    record("REL-EVENT", f"{event_count} acoes recentes do ERP", owner="Auditoria"),
+                ],
+            },
+            {
+                "key": "settings",
+                "label": "Configuracoes",
+                "subtitle": "Loja, usuarios e permissoes com RBAC ativo",
+                "icon": "admin_panel",
+                "color": "#0F172A",
+                "status": "active",
+                "records": user_recs,
+            },
+            {
+                "key": "support",
+                "label": "Suporte Helena",
+                "subtitle": "Atendimento e chamados no bridge operacional",
+                "icon": "support_agent",
+                "color": "#0B6B4B",
+                "status": "active",
+                "records": [
+                    record(
+                        "HEL-BRIDGE",
+                        f"Bridge {bridge_payload.get('status') or 'monitorado'}",
+                        status="OK" if bridge_payload.get("status") in {"ok", "ready", "running"} else "ATENCAO",
+                        owner="Helena",
+                    ),
+                    record("HEL-ACTION", "Chamados do ERP gravam evento persistente", owner="Helena"),
+                ],
+            },
+        ]
 
     def _admin_imported_products_pricing_payload(self) -> dict[str, Any]:
         runtime_catalog = self._load_stock_runtime_catalog()

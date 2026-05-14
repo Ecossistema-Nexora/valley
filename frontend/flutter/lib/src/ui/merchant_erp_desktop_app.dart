@@ -108,7 +108,7 @@ class _MerchantErpDesktopShellState extends State<MerchantErpDesktopShell> {
     }
     return _MerchantMenuScreen(
       session: session,
-      modules: _merchantModules,
+      modules: session.modules,
       onOpenModule: _openModule,
       onLogout: _logout,
     );
@@ -131,7 +131,8 @@ class _MerchantLoginScreenState extends State<_MerchantLoginScreen> {
   final TextEditingController _password = TextEditingController();
   bool _rememberDevice = true;
   bool _loading = false;
-  String _status = 'Sessao local pronta para o ERP Lojista.';
+  String _status =
+      'Informe as credenciais do lojista para carregar o release online.';
   bool _statusDanger = false;
 
   @override
@@ -180,9 +181,14 @@ class _MerchantLoginScreenState extends State<_MerchantLoginScreen> {
       if (response.statusCode >= 200 &&
           response.statusCode < 300 &&
           payload['status'] == 'ok') {
-        widget.onSessionReady(
+        setState(() {
+          _status = 'Carregando release blueprint online...';
+          _statusDanger = false;
+        });
+        final _MerchantSession session = await _loadReleaseBlueprint(
           _MerchantSession.fromApi(identifier: identifier, payload: payload),
         );
+        widget.onSessionReady(session);
         return;
       }
       setState(() {
@@ -191,12 +197,16 @@ class _MerchantLoginScreenState extends State<_MerchantLoginScreen> {
         _statusDanger = true;
       });
     } on TimeoutException {
-      _openLocalSession(identifier, 'API sem resposta no tempo limite');
-    } on Object {
-      _openLocalSession(
-        identifier,
-        'Sessao local criada para ambiente offline',
-      );
+      setState(() {
+        _status =
+            'Servidor online nao respondeu no tempo limite. O ERP nao abre em modo demo.';
+        _statusDanger = true;
+      });
+    } on Object catch (error) {
+      setState(() {
+        _status = 'Falha ao abrir o release online: $error';
+        _statusDanger = true;
+      });
     } finally {
       if (mounted) {
         setState(() => _loading = false);
@@ -204,19 +214,37 @@ class _MerchantLoginScreenState extends State<_MerchantLoginScreen> {
     }
   }
 
-  void _openDemoSession() {
-    _openLocalSession('lojista.demo@valley.local', 'Sessao demonstracao local');
-  }
-
-  void _openLocalSession(String identifier, String reason) {
-    widget.onSessionReady(
-      _MerchantSession(
-        displayName: 'Lojista Demo',
-        merchantName: 'Loja Valley Demo',
-        identifier: identifier,
-        syncStatus: reason,
-        token: '',
-      ),
+  Future<_MerchantSession> _loadReleaseBlueprint(
+    _MerchantSession session,
+  ) async {
+    final http.Response response = await http
+        .get(
+          Uri.parse('$_apiBaseUrl/api/merchant-erp/blueprint'),
+          headers: <String, String>{
+            'Accept': 'application/json',
+            'Authorization': 'Bearer ${session.token}',
+          },
+        )
+        .timeout(const Duration(seconds: 8));
+    final Object? decoded = jsonDecode(response.body);
+    final Map<String, Object?> payload = _asMap(decoded);
+    if (response.statusCode < 200 ||
+        response.statusCode >= 300 ||
+        payload['status'] != 'ok') {
+      throw StateError(
+        '${payload['detail'] ?? payload['message'] ?? 'Blueprint indisponivel.'}',
+      );
+    }
+    final List<_MerchantModule> modules = _parseMerchantModules(
+      payload['modules'],
+    );
+    if (modules.isEmpty) {
+      throw StateError('Blueprint online sem modulos operacionais.');
+    }
+    return session.copyWith(
+      syncStatus:
+          'Release ${payload['release_version'] ?? 'online'} validado em ${payload['generated_at_utc'] ?? 'runtime'}',
+      modules: modules,
     );
   }
 
@@ -300,12 +328,6 @@ class _MerchantLoginScreenState extends State<_MerchantLoginScreen> {
                           label: Text(_loading ? 'Validando' : 'Entrar no ERP'),
                         ),
                         const SizedBox(height: 10),
-                        OutlinedButton.icon(
-                          onPressed: _loading ? null : _openDemoSession,
-                          icon: const Icon(Icons.monitor_heart_outlined),
-                          label: const Text('Abrir sessao local'),
-                        ),
-                        const SizedBox(height: 16),
                         _StatusLine(text: _status, danger: _statusDanger),
                       ],
                     ),
@@ -413,7 +435,72 @@ class _MerchantModuleScreen extends StatefulWidget {
 
 class _MerchantModuleScreenState extends State<_MerchantModuleScreen> {
   String _filter = '';
-  String _notice = 'Pronto para operar.';
+  String _notice = 'Modulo online pronto para operar.';
+  bool _noticeDanger = false;
+  bool _submitting = false;
+
+  Future<void> _submitModuleAction(String action) async {
+    setState(() {
+      _submitting = true;
+      _notice = action == 'sync'
+          ? 'Sincronizando modulo no servidor...'
+          : 'Salvando evento operacional no servidor...';
+      _noticeDanger = false;
+    });
+    try {
+      final http.Response response = await http
+          .post(
+            Uri.parse('$_apiBaseUrl/api/merchant-erp/action'),
+            headers: <String, String>{
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              'Authorization': 'Bearer ${widget.session.token}',
+            },
+            body: jsonEncode(<String, Object?>{
+              'module_key': widget.module.key,
+              'module_label': widget.module.label,
+              'action': action,
+              'filter': _filter,
+              'record_count': widget.module.records.length,
+              'record_codes': widget.module.records
+                  .map((_ModuleRecord record) => record.code)
+                  .take(50)
+                  .toList(),
+            }),
+          )
+          .timeout(const Duration(seconds: 8));
+      final Map<String, Object?> payload = _asMap(jsonDecode(response.body));
+      if (response.statusCode >= 200 &&
+          response.statusCode < 300 &&
+          payload['status'] == 'ok') {
+        setState(() {
+          _notice =
+              '${payload['message'] ?? 'Acao registrada no servidor.'} (${payload['event_id'] ?? 'sem-id'})';
+          _noticeDanger = false;
+        });
+        return;
+      }
+      setState(() {
+        _notice =
+            '${payload['detail'] ?? payload['message'] ?? 'Acao recusada pelo servidor.'}';
+        _noticeDanger = true;
+      });
+    } on TimeoutException {
+      setState(() {
+        _notice = 'Servidor nao confirmou a acao no tempo limite.';
+        _noticeDanger = true;
+      });
+    } on Object catch (error) {
+      setState(() {
+        _notice = 'Falha ao registrar acao: $error';
+        _noticeDanger = true;
+      });
+    } finally {
+      if (mounted) {
+        setState(() => _submitting = false);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -480,30 +567,24 @@ class _MerchantModuleScreenState extends State<_MerchantModuleScreen> {
                   ),
                   const SizedBox(width: 12),
                   FilledButton.icon(
-                    onPressed: () {
-                      setState(
-                        () => _notice =
-                            '${widget.module.label}: alteracoes salvas.',
-                      );
-                    },
+                    onPressed: _submitting
+                        ? null
+                        : () => _submitModuleAction('save'),
                     icon: const Icon(Icons.save_outlined),
-                    label: const Text('Salvar'),
+                    label: Text(_submitting ? 'Enviando' : 'Salvar'),
                   ),
                   const SizedBox(width: 8),
                   OutlinedButton.icon(
-                    onPressed: () {
-                      setState(
-                        () => _notice =
-                            '${widget.module.label}: sincronizacao enviada.',
-                      );
-                    },
+                    onPressed: _submitting
+                        ? null
+                        : () => _submitModuleAction('sync'),
                     icon: const Icon(Icons.sync_rounded),
                     label: const Text('Sincronizar'),
                   ),
                 ],
               ),
               const SizedBox(height: 14),
-              _StatusLine(text: _notice),
+              _StatusLine(text: _notice, danger: _noticeDanger),
               const SizedBox(height: 14),
               Expanded(
                 child: _Panel(
@@ -836,6 +917,7 @@ class _RecordStatusBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     final Color color = switch (status) {
       'OK' => _valleyGreen,
+      'ATIVO' => _valleyGreen,
       'ATENCAO' => const Color(0xFFB45309),
       _ => const Color(0xFF334155),
     };
@@ -850,6 +932,7 @@ class _MerchantSession {
     required this.identifier,
     required this.syncStatus,
     required this.token,
+    required this.modules,
   });
 
   factory _MerchantSession.fromApi({
@@ -857,19 +940,21 @@ class _MerchantSession {
     required Map<String, Object?> payload,
   }) {
     final Object? rawSession = payload['session'];
-    final Map<String, Object?> session = rawSession is Map<String, Object?>
-        ? rawSession
-        : <String, Object?>{};
-    final Object? rawUser = session['user'];
-    final Map<String, Object?> user = rawUser is Map<String, Object?>
-        ? rawUser
-        : <String, Object?>{};
+    final Map<String, Object?> session = _asMap(rawSession);
+    final Map<String, Object?> user = _asMap(session['user']);
+    final String merchantCode = '${user['merchant_code'] ?? ''}'.trim();
+    final String merchantSlug = '${user['merchant_slug'] ?? ''}'.trim();
     return _MerchantSession(
       displayName: '${user['display_name'] ?? user['name'] ?? 'Lojista'}',
-      merchantName: '${user['merchant_name'] ?? 'Loja Valley'}',
+      merchantName: merchantCode.isNotEmpty
+          ? merchantCode
+          : merchantSlug.isNotEmpty
+          ? merchantSlug
+          : 'Loja Valley',
       identifier: identifier,
       syncStatus: 'Sessao online validada',
       token: '${session['token'] ?? ''}',
+      modules: const <_MerchantModule>[],
     );
   }
 
@@ -878,6 +963,25 @@ class _MerchantSession {
   final String identifier;
   final String syncStatus;
   final String token;
+  final List<_MerchantModule> modules;
+
+  _MerchantSession copyWith({
+    String? displayName,
+    String? merchantName,
+    String? identifier,
+    String? syncStatus,
+    String? token,
+    List<_MerchantModule>? modules,
+  }) {
+    return _MerchantSession(
+      displayName: displayName ?? this.displayName,
+      merchantName: merchantName ?? this.merchantName,
+      identifier: identifier ?? this.identifier,
+      syncStatus: syncStatus ?? this.syncStatus,
+      token: token ?? this.token,
+      modules: modules ?? this.modules,
+    );
+  }
 }
 
 class _MerchantModule {
@@ -896,6 +1000,32 @@ class _MerchantModule {
   final IconData icon;
   final Color color;
   final List<_ModuleRecord> records;
+
+  factory _MerchantModule.fromMap(Map<String, Object?> map) {
+    final String key = _text(map['key'], 'module');
+    final List<_ModuleRecord> records = _asList(map['records'])
+        .map((Object? value) => _ModuleRecord.fromMap(_asMap(value)))
+        .where((_ModuleRecord record) => record.code.isNotEmpty)
+        .toList();
+    return _MerchantModule(
+      key: key,
+      label: _text(map['label'], key.toUpperCase()),
+      subtitle: _text(map['subtitle'], 'Modulo online do ERP Lojista'),
+      icon: _iconFor(_text(map['icon'], ''), key),
+      color: _colorFromHex(map['color'], _valleyGreen),
+      records: records.isNotEmpty
+          ? records
+          : <_ModuleRecord>[
+              _ModuleRecord(
+                code: '${key.toUpperCase()}-ONLINE',
+                title: 'Modulo online sem pendencias registradas',
+                status: 'OK',
+                owner: 'Valley Runtime',
+                updatedAt: 'agora',
+              ),
+            ],
+    );
+  }
 }
 
 class _ModuleRecord {
@@ -912,134 +1042,71 @@ class _ModuleRecord {
   final String status;
   final String owner;
   final String updatedAt;
+
+  factory _ModuleRecord.fromMap(Map<String, Object?> map) {
+    return _ModuleRecord(
+      code: _text(map['code'], ''),
+      title: _text(map['title'], 'Registro operacional'),
+      status: _text(map['status'], 'OK').toUpperCase(),
+      owner: _text(map['owner'], 'Valley Runtime'),
+      updatedAt: _text(map['updated_at'] ?? map['updatedAt'], 'agora'),
+    );
+  }
 }
 
-const List<_ModuleRecord> _defaultRecords = <_ModuleRecord>[
-  _ModuleRecord(
-    code: 'VL-1001',
-    title: 'Pedido marketplace sincronizado',
-    status: 'OK',
-    owner: 'Operacao',
-    updatedAt: 'Hoje 09:10',
-  ),
-  _ModuleRecord(
-    code: 'VL-1002',
-    title: 'SKU aguardando imagem final',
-    status: 'ATENCAO',
-    owner: 'Produtos',
-    updatedAt: 'Hoje 09:24',
-  ),
-  _ModuleRecord(
-    code: 'VL-1003',
-    title: 'Reposicao de estoque aprovada',
-    status: 'OK',
-    owner: 'Estoque',
-    updatedAt: 'Hoje 10:02',
-  ),
-  _ModuleRecord(
-    code: 'VL-1004',
-    title: 'Conciliacao de fatura pendente',
-    status: 'ATENCAO',
-    owner: 'Financeiro',
-    updatedAt: 'Hoje 10:18',
-  ),
-];
+Map<String, Object?> _asMap(Object? value) {
+  if (value is Map) {
+    return <String, Object?>{
+      for (final MapEntry<dynamic, dynamic> entry in value.entries)
+        '${entry.key}': entry.value,
+    };
+  }
+  return <String, Object?>{};
+}
 
-final List<_MerchantModule> _merchantModules = <_MerchantModule>[
-  _MerchantModule(
-    key: 'sales',
-    label: 'Vendas',
-    subtitle: 'PDV, carrinho e fechamento',
-    icon: Icons.point_of_sale_rounded,
-    color: const Color(0xFF0F766E),
-    records: _defaultRecords,
-  ),
-  _MerchantModule(
-    key: 'products',
-    label: 'Produtos',
-    subtitle: 'SKU, preco, imagens e canais',
-    icon: Icons.inventory_2_outlined,
-    color: const Color(0xFF2563EB),
-    records: _defaultRecords,
-  ),
-  _MerchantModule(
-    key: 'stock',
-    label: 'Estoque',
-    subtitle: 'Entradas, saidas e inventario',
-    icon: Icons.qr_code_scanner_rounded,
-    color: const Color(0xFF7C3AED),
-    records: _defaultRecords,
-  ),
-  _MerchantModule(
-    key: 'orders',
-    label: 'Pedidos',
-    subtitle: 'Separacao, status e entrega',
-    icon: Icons.receipt_long_rounded,
-    color: const Color(0xFFB45309),
-    records: _defaultRecords,
-  ),
-  _MerchantModule(
-    key: 'customers',
-    label: 'Clientes',
-    subtitle: 'Cadastro, historico e suporte',
-    icon: Icons.groups_2_outlined,
-    color: const Color(0xFF0891B2),
-    records: _defaultRecords,
-  ),
-  _MerchantModule(
-    key: 'finance',
-    label: 'Financeiro',
-    subtitle: 'Recebiveis, taxas e repasses',
-    icon: Icons.account_balance_wallet_outlined,
-    color: const Color(0xFF16A34A),
-    records: _defaultRecords,
-  ),
-  _MerchantModule(
-    key: 'checkout',
-    label: 'Checkout',
-    subtitle: 'Faturas, pagamento e comprovante',
-    icon: Icons.payments_outlined,
-    color: const Color(0xFF4F46E5),
-    records: _defaultRecords,
-  ),
-  _MerchantModule(
-    key: 'delivery',
-    label: 'Entregas',
-    subtitle: 'Frete, etiqueta e rastreio',
-    icon: Icons.local_shipping_outlined,
-    color: const Color(0xFFDC2626),
-    records: _defaultRecords,
-  ),
-  _MerchantModule(
-    key: 'marketplace',
-    label: 'Marketplace',
-    subtitle: 'Canais, anuncios e publicacao',
-    icon: Icons.hub_outlined,
-    color: const Color(0xFF9333EA),
-    records: _defaultRecords,
-  ),
-  _MerchantModule(
-    key: 'reports',
-    label: 'Relatorios',
-    subtitle: 'Margem, ruptura e ranking',
-    icon: Icons.bar_chart_rounded,
-    color: const Color(0xFF475569),
-    records: _defaultRecords,
-  ),
-  _MerchantModule(
-    key: 'settings',
-    label: 'Configuracoes',
-    subtitle: 'Loja, usuarios e permissoes',
-    icon: Icons.admin_panel_settings_outlined,
-    color: const Color(0xFF0F172A),
-    records: _defaultRecords,
-  ),
-  _MerchantModule(
-    key: 'support',
-    label: 'Suporte Helena',
-    subtitle: 'Atendimento e chamados',
-    icon: Icons.support_agent_rounded,
-    color: _valleyGreen,
-    records: _defaultRecords,
-  ),
-];
+List<Object?> _asList(Object? value) {
+  if (value is List) {
+    return value.cast<Object?>();
+  }
+  return const <Object?>[];
+}
+
+String _text(Object? value, String fallback) {
+  final String text = '${value ?? ''}'.trim();
+  return text.isEmpty ? fallback : text;
+}
+
+List<_MerchantModule> _parseMerchantModules(Object? value) {
+  return _asList(value)
+      .map((Object? item) => _MerchantModule.fromMap(_asMap(item)))
+      .where((_MerchantModule module) => module.key.isNotEmpty)
+      .toList(growable: false);
+}
+
+Color _colorFromHex(Object? value, Color fallback) {
+  String hex = _text(value, '').replaceAll('#', '').trim();
+  if (hex.length == 6) {
+    hex = 'FF$hex';
+  }
+  final int? parsed = int.tryParse(hex, radix: 16);
+  return parsed == null ? fallback : Color(parsed);
+}
+
+IconData _iconFor(String icon, String key) {
+  final String normalized = icon.isEmpty ? key : icon;
+  return switch (normalized) {
+    'point_of_sale' || 'sales' => Icons.point_of_sale_rounded,
+    'inventory' || 'products' => Icons.inventory_2_outlined,
+    'qr_code' || 'stock' => Icons.qr_code_scanner_rounded,
+    'receipt' || 'orders' => Icons.receipt_long_rounded,
+    'groups' || 'customers' => Icons.groups_2_outlined,
+    'wallet' || 'finance' => Icons.account_balance_wallet_outlined,
+    'payments' || 'checkout' => Icons.payments_outlined,
+    'local_shipping' || 'delivery' => Icons.local_shipping_outlined,
+    'hub' || 'marketplace' => Icons.hub_outlined,
+    'bar_chart' || 'reports' => Icons.bar_chart_rounded,
+    'admin_panel' || 'settings' => Icons.admin_panel_settings_outlined,
+    'support_agent' || 'support' => Icons.support_agent_rounded,
+    _ => Icons.apps_rounded,
+  };
+}
