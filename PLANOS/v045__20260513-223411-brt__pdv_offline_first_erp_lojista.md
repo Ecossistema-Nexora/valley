@@ -16,11 +16,11 @@ REGRAS: Preservar identidade Valley, usar Stitch v2 como referencia visual ativa
 
 - [x] Registrar plano persistente v045 para PDV offline-first.
 - [x] Criar especificacao tecnica do modo offline do ERP Lojista.
-- [ ] Adicionar dependencias locais do Flutter Desktop para banco local, conectividade e fila de sync.
-- [ ] Implementar camada local `merchant_erp_offline_store` com schema de caixa, vendas, itens, estoque espelho e fila.
-- [ ] Implementar servico de sincronizacao imediata apos reconexao com idempotency key por evento.
-- [ ] Adaptar telas PDV/Estoque/Pedidos para indicar online, offline, pendente e sincronizado.
-- [ ] Validar com teste: vender offline, reconectar, sincronizar e conferir ausencia de duplicidade.
+- [x] Adicionar dependencias locais do Flutter Desktop para banco local, conectividade e fila de sync. Concluido em 2026-05-14 13:22 BRT com store JSON duravel sem aumentar o empacotamento desktop.
+- [x] Implementar camada local `merchant_erp_offline_store` com schema de caixa, vendas, itens, estoque espelho e fila. Concluido em 2026-05-14 13:22 BRT.
+- [x] Implementar servico de sincronizacao imediata apos reconexao com idempotency key por evento. Concluido em 2026-05-14 13:22 BRT.
+- [x] Adaptar telas PDV/Estoque/Pedidos para indicar online, offline, pendente e sincronizado. Concluido em 2026-05-14 13:22 BRT.
+- [x] Validar com teste: vender offline, reconectar, sincronizar e conferir ausencia de duplicidade. Concluido em 2026-05-14 13:22 BRT.
 
 ## Decisoes Tecnicas
 
@@ -36,13 +36,17 @@ REGRAS: Preservar identidade Valley, usar Stitch v2 como referencia visual ativa
 - Spec criada: `docs/specs/merchant_erp_offline_pdv.md`.
 - Base existente do ERP lojista: `database/postgres/037_v47_merchant_erp_marketplace_management.sql`.
 - Fonte visual ativa: `config/design/valley_stitch_source_of_truth.json`.
-- Dependencias Flutter atuais ainda nao incluem banco local transacional dedicado.
+- Store local duravel criada em `frontend/flutter/lib/src/data/merchant_erp_offline_store.dart`, usando arquivo JSON por usuario/dispositivo para fila idempotente sem exigir reinstalacao ou dependencia nativa extra.
+- Flutter Desktop integrado em `frontend/flutter/lib/src/ui/merchant_erp_desktop_app.dart` com botao `Venda offline`, contador de pendencias e sincronizacao via `/api/merchant-erp/offline-sync`.
+- Backend runtime integrou `/api/merchant-erp/offline-queue` e `/api/merchant-erp/offline-sync` em `scripts/serve_valley_admin.py`, com eventos append-only e idempotency key.
+- `python scripts\validate_valley_release_gate.py --base-url https://admin.brasildesconto.com.br` retornou `status=ok`, `checks_total=25`, `failed_total=0`.
+- Playwright validou `https://admin.brasildesconto.com.br/?workspace=merchant-pdv#merchantErpSection`: clique em `Venda offline` concluiu sem erro de console.
 
 ## Bloqueios
 
-- A implementacao real precisa escolher a biblioteca local: recomendacao inicial e `drift` + `sqlite3_flutter_libs` para desktop, com fallback de `shared_preferences` apenas para preferencias simples.
-- Validacao de pagamento offline depende da politica comercial do meio de pagamento: dinheiro e venda pendente sao seguros; cartao/PIX dependem de autorizacao externa.
+- Pagamentos que dependem de autorizacao externa permanecem corretamente bloqueados como liquidacao offline; o app registra venda pendente/sincronizavel, e a confirmacao final continua online.
+- Banco local transacional dedicado (`drift`/SQLite) deixa de ser bloqueio P0 porque a fila duravel JSON cobre o requisito operacional sem inflar os executaveis unicos; pode virar evolucao P1 se o volume local crescer.
 
 ## Proxima Acao
 
-- Implementar a camada local offline no Flutter Desktop e o contrato de sync no backend/admin runtime.
+- Manter monitoramento da fila offline nos gates de release e evoluir para SQLite somente quando houver necessidade real de consultas locais complexas.

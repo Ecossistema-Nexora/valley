@@ -1,0 +1,54 @@
+{
+    "product":  "Valley ERP Lojista",
+    "version":  "v050",
+    "generated_at":  "2026-05-14T04:11:40.4305768-03:00",
+    "api_base_url":  "https://admin.brasildesconto.com.br",
+    "release_root":  "admin/downloads/v050",
+    "primary_artifacts":  [
+                              "Valley-ERP.exe",
+                              "Valley-ERP-Linux.run"
+                          ],
+    "cloudflare_public_health":  "https://admin.brasildesconto.com.br/healthz",
+    "artifacts":  [
+                      {
+                          "kind":  "windows_single_exe",
+                          "name":  "Valley-ERP.exe",
+                          "bytes":  87897640,
+                          "sha1":  "066CF922299478FCC34074A8BF15489244EF33FE",
+                          "sha256":  "9BF8B12AC18E70FB16932DFBBAFB656DE57C4EA5B655F04B238188B5D585521B",
+                          "public_url":  "https://admin.brasildesconto.com.br/downloads/v050/Valley-ERP.exe"
+                      },
+                      {
+                          "kind":  "linux_single_run",
+                          "name":  "Valley-ERP-Linux.run",
+                          "bytes":  3822,
+                          "sha1":  "B333867629B64628947F1E22B66FA9C4309841F3",
+                          "sha256":  "FD640832FC67ED06B1F7D2939463349D24C1CE5E7F601041C4ADFDC93D8DBC3F",
+                          "public_url":  "https://admin.brasildesconto.com.br/downloads/v050/Valley-ERP-Linux.run"
+                      },
+                      {
+                          "kind":  "windows_support_zip",
+                          "name":  "ValleyERP-Lojista-Windows-x64-v050.zip",
+                          "bytes":  14484409,
+                          "sha1":  "D4E8180FC9DE976A6EFF96F0E00E20B860B886ED",
+                          "sha256":  "F24BDF09FC6149FB0F2AB99DD348C122F86916C445A2DB7483EF7B060B105A92",
+                          "public_url":  "https://admin.brasildesconto.com.br/downloads/v050/ValleyERP-Lojista-Windows-x64-v050.zip"
+                      },
+                      {
+                          "kind":  "linux_support_tar_gz",
+                          "name":  "ValleyERP-Lojista-Linux-x64-v050.tar.gz",
+                          "bytes":  1559,
+                          "sha1":  "E1FE1F5AE4713EFEAE49FBEB8B5FE44F53DBF927",
+                          "sha256":  "B33D1CFB73CB9210D6592EA371D8F001543F16A2EBD56795A2A3E1E5DF35D12C",
+                          "public_url":  "https://admin.brasildesconto.com.br/downloads/v050/ValleyERP-Lojista-Linux-x64-v050.tar.gz"
+                      },
+                      {
+                          "kind":  "single_executables_markdown",
+                          "name":  "VALLEY_ERP_SINGLE_EXECUTABLES_V050.md",
+                          "bytes":  928,
+                          "sha1":  "D57049A774B2E2E14C564C9C198B804C985FB7D5",
+                          "sha256":  "39C935DCD8F69545D3859C9506DAF58457ABC453C165411D1828F4FF920567FA",
+                          "public_url":  "https://admin.brasildesconto.com.br/downloads/v050/VALLEY_ERP_SINGLE_EXECUTABLES_V050.md"
+                      }
+                  ]
+}

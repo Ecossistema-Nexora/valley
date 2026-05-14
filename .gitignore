@@ -24,3 +24,5 @@ frontend/flutter/android/local.properties
 frontend/flutter/android/key.properties
 frontend/flutter/android/app/*.jks
 frontend/flutter/*.iml
+tools/valley_erp_single_windows/bin/
+tools/valley_erp_single_windows/obj/

@@ -1,0 +1,46 @@
+{
+  "service": "valley-banking-api-connectors",
+  "version": "v051",
+  "updated_at_utc": "2026-05-14T00:00:00Z",
+  "secrets_policy": "runtime_vault_only",
+  "connectors": [
+    {
+      "key": "pix_gateway",
+      "label": "PIX e confirmacao instantanea",
+      "scope": "pix,webhook,reconciliation",
+      "enabled": true,
+      "environment": "sandbox_and_production_ready",
+      "required_secret_refs": [
+        "BANK_PIX_CLIENT_ID",
+        "BANK_PIX_CLIENT_SECRET",
+        "BANK_PIX_WEBHOOK_SECRET"
+      ],
+      "runtime_action": "bank-api-sync"
+    },
+    {
+      "key": "open_finance",
+      "label": "Open Finance contas e extrato",
+      "scope": "accounts,balances,transactions",
+      "enabled": true,
+      "environment": "sandbox_and_production_ready",
+      "required_secret_refs": [
+        "OPEN_FINANCE_CLIENT_ID",
+        "OPEN_FINANCE_CLIENT_SECRET",
+        "OPEN_FINANCE_CERT_REF"
+      ],
+      "runtime_action": "bank-api-register"
+    },
+    {
+      "key": "receivables_reconciliation",
+      "label": "Recebiveis e conciliacao de checkout",
+      "scope": "receivables,settlements,chargebacks",
+      "enabled": true,
+      "environment": "sandbox_and_production_ready",
+      "required_secret_refs": [
+        "BANK_RECEIVABLES_API_KEY",
+        "BANK_RECEIVABLES_WEBHOOK_SECRET"
+      ],
+      "runtime_action": "bank-reconcile"
+    }
+  ]
+}

@@ -1,0 +1,85 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+APP_ID="valley-erp-lojista"
+APP_NAME="Valley ERP Lojista"
+API_BASE_URL="https://admin.brasildesconto.com.br"
+PAYLOAD_LINE=$(awk '/^__VALLEY_PAYLOAD_BELOW__/ {print NR + 1; exit 0;}' "$0")
+if [ -z "$PAYLOAD_LINE" ]; then
+  echo "Payload nao encontrado no executavel." >&2
+  exit 1
+fi
+
+WORKDIR=$(mktemp -d)
+trap 'rm -rf "$WORKDIR"' EXIT
+tail -n +"$PAYLOAD_LINE" "$0" | base64 -d > "$WORKDIR/payload.tar.gz"
+tar -xzf "$WORKDIR/payload.tar.gz" -C "$WORKDIR"
+PACKAGE_DIR="$WORKDIR/ValleyERP-Lojista-Linux-x64"
+
+if [ ! -d "$PACKAGE_DIR" ]; then
+  echo "Pacote Linux interno nao encontrado." >&2
+  exit 1
+fi
+
+if SOURCE_ROOT="${SOURCE_ROOT:-}" bash "$PACKAGE_DIR/install-valley-erp-lojista-linux.sh"; then
+  if command -v valley-erp-lojista >/dev/null 2>&1; then
+    exec valley-erp-lojista
+  fi
+  if [ -x "$HOME/.local/bin/valley-erp-lojista" ]; then
+    exec "$HOME/.local/bin/valley-erp-lojista"
+  fi
+  exit 0
+fi
+
+mkdir -p "$HOME/.local/bin" "$HOME/.local/share/applications"
+LAUNCHER="$HOME/.local/bin/valley-erp-lojista"
+cat > "$LAUNCHER" <<'LAUNCHER_EOF'
+#!/usr/bin/env bash
+set -euo pipefail
+URL="https://admin.brasildesconto.com.br"
+if command -v xdg-open >/dev/null 2>&1; then exec xdg-open "$URL"; fi
+if command -v sensible-browser >/dev/null 2>&1; then exec sensible-browser "$URL"; fi
+echo "Abra: $URL"
+LAUNCHER_EOF
+chmod +x "$LAUNCHER"
+cat > "$HOME/.local/share/applications/valley-erp-lojista.desktop" <<DESKTOP_EOF
+[Desktop Entry]
+Type=Application
+Name=$APP_NAME
+Comment=ERP Lojista Valley
+Exec=$LAUNCHER
+Terminal=false
+Categories=Office;Finance;
+DESKTOP_EOF
+echo "$APP_NAME instalado como launcher unico. Comando: $LAUNCHER"
+exec "$LAUNCHER"
+
+__VALLEY_PAYLOAD_BELOW__
+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
+tnVPe9rTnva0pH8AEv4ofgAiAAA=

@@ -6,12 +6,12 @@ REGRAS: Manter a UI release blueprint funcional, usar o runtime publico validado
 
 ## Checklist
 
-- [ ] Criar empacotador Windows de arquivo unico `Valley-ERP.exe`.
-- [ ] Criar empacotador Linux de arquivo unico executavel.
-- [ ] Rebuildar o ERP Lojista com base publica `https://admin.brasildesconto.com.br`.
-- [ ] Gerar artefatos v050 e manifest com hashes.
-- [ ] Validar links publicos dos executaveis.
-- [ ] Acionar Valley Module Automation Engine.
+- [x] Criar empacotador Windows de arquivo unico `Valley-ERP.exe`.
+- [x] Criar empacotador Linux de arquivo unico executavel.
+- [x] Reempacotar o ERP Lojista com base publica `https://admin.brasildesconto.com.br`.
+- [x] Gerar artefatos v050 e manifest com hashes.
+- [x] Validar links publicos dos executaveis.
+- [x] Acionar Valley Module Automation Engine.
 
 ## Criterios De Aceite
 

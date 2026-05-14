@@ -23,6 +23,9 @@ param(
     [ValidateRange(1, 3600)]
     [int]$SleepSeconds = 60,
 
+    [ValidateRange(30, 1800)]
+    [int]$TimeoutSeconds = 180,
+
     [ValidateSet('checkpoint', 'admin', 'release', 'sync')]
     [string]$EngineMode = 'checkpoint'
 )
@@ -43,7 +46,7 @@ function Write-WatchdogLog {
     Add-Content -LiteralPath $LogPath -Value "[$Timestamp] $Message" -Encoding UTF8
 }
 
-Write-WatchdogLog "start command=$Command batch=$BatchSize cycles=$MaxCycles engine=$EngineMode"
+Write-WatchdogLog "start command=$Command batch=$BatchSize cycles=$MaxCycles engine=$EngineMode timeout=$TimeoutSeconds"
 
 $ArgsList = @(
     $PythonScript,
@@ -54,12 +57,36 @@ $ArgsList = @(
     '--engine-mode', $EngineMode
 )
 
-& python @ArgsList 2>&1 | ForEach-Object {
-    Write-Output $_
-    Write-WatchdogLog $_
+$Job = Start-Job -Name 'ValleyGeminiRefactorLoopCycle' -ScriptBlock {
+    param(
+        [string]$WorkingDirectory,
+        [string[]]$PythonArgs
+    )
+
+    Set-Location -LiteralPath $WorkingDirectory
+    $Output = & python @PythonArgs 2>&1
+    [pscustomobject]@{
+        exit_code = $LASTEXITCODE
+        output = @($Output)
+    }
+} -ArgumentList $Root, $ArgsList
+
+$Completed = Wait-Job -Job $Job -Timeout $TimeoutSeconds
+if (-not $Completed) {
+    Stop-Job -Job $Job -Force | Out-Null
+    Remove-Job -Job $Job -Force | Out-Null
+    Write-WatchdogLog "timeout seconds=$TimeoutSeconds; next scheduled cycle will retry"
+    exit 0
 }
 
-$ExitCode = $LASTEXITCODE
+$Result = Receive-Job -Job $Job
+Remove-Job -Job $Job -Force | Out-Null
+foreach ($Line in @($Result.output)) {
+    Write-Output $Line
+    Write-WatchdogLog $Line
+}
+
+$ExitCode = [int]$Result.exit_code
 Write-WatchdogLog "finish exit_code=$ExitCode"
 
 if ($ExitCode -eq 0 -or $ExitCode -eq 2) {

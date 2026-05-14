@@ -5,9 +5,9 @@
 
 - Regra: cada item de checklist dos planos conta como uma etapa.
 - Atualize este indice depois de cada acao concluida com `python scripts\update_planos_progress.py`.
-- Etapas concluidas desde o primeiro plano do indice: `286/301`.
-- Produzido desde o Plano 1: `95.0%`.
-- Falta produzir para a conclusao final acumulada: `5.0%`.
+- Etapas concluidas desde o primeiro plano do indice: `298/307`.
+- Produzido desde o Plano 1: `97.1%`.
+- Falta produzir para a conclusao final acumulada: `2.9%`.
 <!-- progresso:fim -->
 
 | versao | criado_em_brt | arquivo | status | escopo | etapas | produzido | falta_produzir | ultima_atualizacao_brt |
@@ -60,7 +60,8 @@
 | v046 | 2026-05-13 22:37:11 BRT | [v046__20260513-223711-brt__base_privilegios_usuarios_erp_lojista.md](./v046__20260513-223711-brt__base_privilegios_usuarios_erp_lojista.md) | em_andamento | Base de privilegios e usuarios do ERP Lojista gerenciada pelo administrador lojista | 3/6 | 50.0% | 50.0% | 2026-05-13 22:37:11 BRT |
 | v047 | 2026-05-13 23:00:00 BRT | [v047__20260513-230000-brt__instaladores_erp_lojista_windows_linux.md](./v047__20260513-230000-brt__instaladores_erp_lojista_windows_linux.md) | concluido | Instaladores ERP Lojista Windows/Linux com login, menu por botoes e modulos sem links globais | 7/7 | 100.0% | 0.0% | 2026-05-13 23:38:00 BRT |
 | v048 | 2026-05-14 00:21:29 BRT | [v048__20260514-002129-brt__release_blueprint_erp_lojista_funcional.md](./v048__20260514-002129-brt__release_blueprint_erp_lojista_funcional.md) | concluido | Release blueprint do ERP Lojista funcional, autenticado e persistente | 10/10 | 100.0% | 0.0% | 2026-05-14 00:53:56 BRT |
-| v049 | 2026-05-14 01:35:46 BRT | [v049__20260514-013546-brt__cadastro_checkout_cpf_cep_destinatario.md](./v049__20260514-013546-brt__cadastro_checkout_cpf_cep_destinatario.md) | em_andamento | Cadastro e checkout com CPF, CEP, endereco principal e destinatario | 10/10 | 100.0% | 0.0% | 2026-05-14 01:35:46 BRT |
-| v050 | 2026-05-14 02:30:00 BRT | [v050__20260514-023000-brt__erp_lojista_executaveis_unicos.md](./v050__20260514-023000-brt__erp_lojista_executaveis_unicos.md) | em_andamento | ERP Lojista em executaveis unicos Windows e Linux | 0/6 | 0.0% | 100.0% | 2026-05-14 02:30:00 BRT |
+| v049 | 2026-05-14 01:35:46 BRT | [v049__20260514-013546-brt__cadastro_checkout_cpf_cep_destinatario.md](./v049__20260514-013546-brt__cadastro_checkout_cpf_cep_destinatario.md) | concluido | Cadastro e checkout com CPF, CEP, endereco principal e destinatario | 10/10 | 100.0% | 0.0% | 2026-05-14 04:13:00 BRT |
+| v050 | 2026-05-14 02:30:00 BRT | [v050__20260514-023000-brt__erp_lojista_executaveis_unicos.md](./v050__20260514-023000-brt__erp_lojista_executaveis_unicos.md) | concluido | ERP Lojista em executaveis unicos Windows e Linux | 6/6 | 100.0% | 0.0% | 2026-05-14 04:13:00 BRT |
+| v051 | 2026-05-14 04:15:00 BRT | [v051__20260514-041500-brt__gate_funcional_visual_pdv_banking.md](./v051__20260514-041500-brt__gate_funcional_visual_pdv_banking.md) | concluido | Gate funcional visual com PDV, maquina de pagamento, checkout confirmado e APIs bancarias | 6/6 | 100.0% | 0.0% | 2026-05-14 04:39:00 BRT |
 | v019 | 2026-05-05 17:52:38 BRT | [v019__20260505-175238-brt__passo_1_nucleo_relacional_nexora_v40.md](./v019__20260505-175238-brt__passo_1_nucleo_relacional_nexora_v40.md) | concluido | PASSO 1 do banco hibrido Nexora V40 com nucleo relacional de identidade, perfis, wallets e LED Cards | 0/0 | 100.0% | 0.0% | 2026-05-05 17:52:38 BRT |
 | v020 | 2026-05-05 17:55:49 BRT | [v020__20260505-175549-brt__passo_2_ledger_financeiro_smart_equity.md](./v020__20260505-175549-brt__passo_2_ledger_financeiro_smart_equity.md) | concluido | PASSO 2 do banco hibrido Nexora V40 com ledger financeiro, Smart Equity e orders mestre | 0/0 | 100.0% | 0.0% | 2026-05-05 17:55:49 BRT |

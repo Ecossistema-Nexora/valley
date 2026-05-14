@@ -85,8 +85,11 @@ def read_index_rows() -> list[IndexRow]:
             continue
         if not re.fullmatch(r"v\d{3}", cells[0]):
             continue
+        plan_path = plan_path_from_cell(cells[2])
+        if plan_path is None or not plan_path.exists():
+            continue
         ultima_atualizacao = cells[8] if len(cells) >= 9 else cells[5]
-        done, total = checklist_counts(plan_path_from_cell(cells[2]))
+        done, total = checklist_counts(plan_path)
         rows.append(
             IndexRow(
                 versao=cells[0],

@@ -87,6 +87,13 @@ MOVE_TELEMETRY_PATH = RUNTIME_DIR / "move-telemetry.jsonl"
 USER_AUTH_RUNTIME_PATH = RUNTIME_DIR / "valley-user-auth-runtime.json"
 USER_AUTH_EVENTS_PATH = RUNTIME_DIR / "valley-user-auth-events.jsonl"
 MERCHANT_ERP_EVENTS_PATH = RUNTIME_DIR / "valley-merchant-erp-events.jsonl"
+MERCHANT_ERP_PDV_EVENTS_PATH = RUNTIME_DIR / "valley-merchant-erp-pdv-events.jsonl"
+MERCHANT_ERP_BANKING_EVENTS_PATH = RUNTIME_DIR / "valley-merchant-erp-banking-events.jsonl"
+MERCHANT_ERP_PRIVILEGES_PATH = RUNTIME_DIR / "valley-merchant-erp-privileges.json"
+MERCHANT_ERP_PRIVILEGE_EVENTS_PATH = RUNTIME_DIR / "valley-merchant-erp-privilege-events.jsonl"
+MERCHANT_ERP_OFFLINE_QUEUE_PATH = RUNTIME_DIR / "valley-merchant-erp-offline-queue.json"
+MERCHANT_ERP_OFFLINE_EVENTS_PATH = RUNTIME_DIR / "valley-merchant-erp-offline-events.jsonl"
+BANKING_API_CONNECTORS_PATH = ROOT / "config" / "integrations" / "valley_banking_api_connectors.json"
 AUTH_COOKIE_NAME = "valley_session"
 AUTH_COOKIE_DOMAIN = ".brasildesconto.com.br"
 HOME_DEFAULT_VISIBLE_MODULES = ("PAY", "MARKETPLACE", "STOCK", "CHAT", "DOCS", "PLUG")
@@ -365,7 +372,7 @@ DEFAULT_AUTH_USERS: tuple[dict[str, Any], ...] = (
         "permissions": [],
         "merchant_slug": "lojista-demo",
         "merchant_code": "MER-LOJISTA-DEMO",
-        "password_hash": "pbkdf2_sha256$310000$qrEtzftN633HfFPUZSR-vA$rnU42H1UqyIYimIJKrRhzTCVLgSxW2qaqvG3q0bhesY",
+        "password_hash": "pbkdf2_sha256$310000$IXIzuuYOEjCc-dTtHGbF-A$8NO4QDMYBhps_aV2Cwdf2uO_JpcDSSoSZRcXQohIeSQ",
         "password_algo": "pbkdf2_sha256_310000",
     },
 )
@@ -835,6 +842,14 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             self._write_json(*self._merchant_erp_blueprint_response())
             return
 
+        if route == "/api/merchant-erp/privileges":
+            self._write_json(*self._merchant_erp_privileges_response())
+            return
+
+        if route == "/api/merchant-erp/offline-queue":
+            self._write_json(*self._merchant_erp_offline_queue_response())
+            return
+
         if route == "/api/stock-catalog":
             self._write_json(HTTPStatus.OK, self._stock_catalog_payload())
             return
@@ -1025,6 +1040,14 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
 
         if route == "/api/merchant-erp/action":
             self._write_json(*self._merchant_erp_action_response())
+            return
+
+        if route == "/api/merchant-erp/privileges":
+            self._write_json(*self._merchant_erp_privileges_mutation_response())
+            return
+
+        if route == "/api/merchant-erp/offline-sync":
+            self._write_json(*self._merchant_erp_offline_sync_response())
             return
 
         if route == "/api/actions/poll-bridge":
@@ -4556,6 +4579,553 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             "stock_module": stock_summary,
         }
 
+    def _merchant_erp_unauthorized(self, service: str) -> tuple[HTTPStatus, dict[str, Any]]:
+        return (
+            HTTPStatus.UNAUTHORIZED,
+            {
+                "status": "unauthorized",
+                "service": service,
+                "detail": "Sessao de lojista obrigatoria.",
+            },
+        )
+
+    def _default_merchant_privilege_catalog(self) -> list[dict[str, Any]]:
+        return [
+            {
+                "key": "pdv.sale.offline",
+                "label": "Registrar venda offline",
+                "module_key": "merchant-pdv",
+                "risk": "medium",
+                "requires_online": False,
+            },
+            {
+                "key": "pdv.checkout.confirm",
+                "label": "Confirmar checkout e maquina",
+                "module_key": "merchant-pdv",
+                "risk": "high",
+                "requires_online": True,
+            },
+            {
+                "key": "stock.movement",
+                "label": "Movimentar estoque",
+                "module_key": "merchant-inventory",
+                "risk": "medium",
+                "requires_online": False,
+            },
+            {
+                "key": "orders.manage",
+                "label": "Gerenciar pedidos",
+                "module_key": "merchant-orders",
+                "risk": "medium",
+                "requires_online": False,
+            },
+            {
+                "key": "finance.close",
+                "label": "Fechar financeiro",
+                "module_key": "merchant-finance",
+                "risk": "critical",
+                "requires_online": True,
+            },
+            {
+                "key": "banking.configure",
+                "label": "Configurar APIs bancarias",
+                "module_key": "merchant-banking",
+                "risk": "critical",
+                "requires_online": True,
+            },
+            {
+                "key": "team.manage",
+                "label": "Gerenciar equipe",
+                "module_key": "merchant-team",
+                "risk": "high",
+                "requires_online": True,
+            },
+            {
+                "key": "security.manage",
+                "label": "Gerenciar seguranca",
+                "module_key": "merchant-security",
+                "risk": "critical",
+                "requires_online": True,
+            },
+        ]
+
+    def _default_merchant_roles(self) -> list[dict[str, Any]]:
+        return [
+            {
+                "role_key": "owner",
+                "label": "Administrador lojista",
+                "privileges": ["*"],
+                "can_grant": True,
+            },
+            {
+                "role_key": "cashier",
+                "label": "Caixa/PDV",
+                "privileges": ["pdv.sale.offline", "pdv.checkout.confirm"],
+                "can_grant": False,
+            },
+            {
+                "role_key": "stock_operator",
+                "label": "Estoque e pedidos",
+                "privileges": ["stock.movement", "orders.manage"],
+                "can_grant": False,
+            },
+            {
+                "role_key": "finance_operator",
+                "label": "Financeiro",
+                "privileges": ["finance.close"],
+                "can_grant": False,
+            },
+        ]
+
+    def _merchant_staff_id(self, merchant_slug: str, user_id: str) -> str:
+        seed = f"{merchant_slug}:{user_id or 'unknown'}"
+        return f"staff-{hashlib.sha256(seed.encode('utf-8')).hexdigest()[:12]}"
+
+    def _ensure_merchant_privileges_store(
+        self,
+        public_user: dict[str, Any],
+    ) -> tuple[dict[str, Any], dict[str, Any]]:
+        now = utc_now_iso()
+        merchant_slug = str(public_user.get("merchant_slug") or "valley-demo")
+        user_id = str(public_user.get("user_id") or "merchant-owner")
+        staff_id = self._merchant_staff_id(merchant_slug, user_id)
+        payload = load_json_file(MERCHANT_ERP_PRIVILEGES_PATH) or {
+            "service": "valley-merchant-erp-privileges-store",
+            "release_version": "v046",
+            "created_at_utc": now,
+            "merchants": {},
+        }
+        merchants = payload.setdefault("merchants", {})
+        if not isinstance(merchants, dict):
+            merchants = {}
+            payload["merchants"] = merchants
+        merchant = merchants.setdefault(
+            merchant_slug,
+            {
+                "merchant_slug": merchant_slug,
+                "merchant_code": str(public_user.get("merchant_code") or merchant_slug.upper()),
+                "catalog": self._default_merchant_privilege_catalog(),
+                "roles": self._default_merchant_roles(),
+                "staff_members": [],
+                "direct_grants": [],
+                "policy": {
+                    "scope": "merchant_only",
+                    "grant_owner_role_required": True,
+                    "audit_mode": "append_only_jsonl",
+                    "view_contract": "v_merchant_erp_staff_effective_privileges",
+                },
+            },
+        )
+        staff_members = merchant.setdefault("staff_members", [])
+        if not isinstance(staff_members, list):
+            staff_members = []
+            merchant["staff_members"] = staff_members
+        if not any(str(item.get("staff_id") or "") == staff_id for item in staff_members if isinstance(item, dict)):
+            staff_members.append(
+                {
+                    "staff_id": staff_id,
+                    "user_id": user_id,
+                    "email": str(public_user.get("email") or ""),
+                    "display_name": str(public_user.get("display_name") or public_user.get("full_name") or "Administrador lojista"),
+                    "roles": ["owner"],
+                    "status": "active",
+                    "created_at_utc": now,
+                    "last_seen_at_utc": now,
+                }
+            )
+        for staff in staff_members:
+            if not isinstance(staff, dict):
+                continue
+            if str(staff.get("staff_id") or "") == staff_id:
+                staff["last_seen_at_utc"] = now
+                staff.setdefault("roles", ["owner"])
+                staff.setdefault("status", "active")
+        merchant.setdefault("catalog", self._default_merchant_privilege_catalog())
+        merchant.setdefault("roles", self._default_merchant_roles())
+        merchant.setdefault("direct_grants", [])
+        payload["updated_at_utc"] = now
+        write_json_file(MERCHANT_ERP_PRIVILEGES_PATH, payload)
+        return payload, merchant
+
+    def _merchant_effective_privileges(self, merchant: dict[str, Any]) -> list[dict[str, Any]]:
+        catalog = merchant.get("catalog") if isinstance(merchant.get("catalog"), list) else []
+        catalog_keys = [str(item.get("key") or "") for item in catalog if isinstance(item, dict)]
+        roles = merchant.get("roles") if isinstance(merchant.get("roles"), list) else []
+        roles_by_key = {str(role.get("role_key") or ""): role for role in roles if isinstance(role, dict)}
+        direct_grants = merchant.get("direct_grants") if isinstance(merchant.get("direct_grants"), list) else []
+        effective: list[dict[str, Any]] = []
+        for staff in merchant.get("staff_members", []) if isinstance(merchant.get("staff_members"), list) else []:
+            if not isinstance(staff, dict) or str(staff.get("status") or "active") != "active":
+                continue
+            privilege_keys: set[str] = set()
+            for role_key in staff.get("roles", []) if isinstance(staff.get("roles"), list) else []:
+                role = roles_by_key.get(str(role_key))
+                role_privileges = role.get("privileges") if isinstance(role, dict) and isinstance(role.get("privileges"), list) else []
+                if "*" in role_privileges:
+                    privilege_keys.update(catalog_keys)
+                else:
+                    privilege_keys.update(str(item) for item in role_privileges)
+            for grant in direct_grants:
+                if not isinstance(grant, dict):
+                    continue
+                if str(grant.get("staff_id") or "") != str(staff.get("staff_id") or ""):
+                    continue
+                if str(grant.get("status") or "active") == "active":
+                    privilege_keys.add(str(grant.get("privilege_key") or ""))
+            for privilege_key in sorted(key for key in privilege_keys if key):
+                catalog_item = next(
+                    (item for item in catalog if isinstance(item, dict) and str(item.get("key") or "") == privilege_key),
+                    {},
+                )
+                effective.append(
+                    {
+                        "staff_id": str(staff.get("staff_id") or ""),
+                        "user_id": str(staff.get("user_id") or ""),
+                        "email": str(staff.get("email") or ""),
+                        "display_name": str(staff.get("display_name") or ""),
+                        "roles": staff.get("roles") if isinstance(staff.get("roles"), list) else [],
+                        "privilege_key": privilege_key,
+                        "label": str(catalog_item.get("label") or privilege_key),
+                        "module_key": str(catalog_item.get("module_key") or ""),
+                        "risk": str(catalog_item.get("risk") or "medium"),
+                        "requires_online": bool(catalog_item.get("requires_online")),
+                    }
+                )
+        return effective
+
+    def _merchant_erp_privileges_response(self) -> tuple[HTTPStatus, dict[str, Any]]:
+        auth_user, auth_session = self._resolve_active_auth_session(scope="merchant")
+        if auth_user is None or auth_session is None:
+            return self._merchant_erp_unauthorized("valley-merchant-erp-privileges")
+
+        public_user = self._auth_public_user(auth_user)
+        _, merchant = self._ensure_merchant_privileges_store(public_user)
+        return (
+            HTTPStatus.OK,
+            {
+                "status": "ok",
+                "service": "valley-merchant-erp-privileges",
+                "release_version": "v046",
+                "generated_at_utc": utc_now_iso(),
+                "merchant_slug": merchant.get("merchant_slug"),
+                "merchant_code": merchant.get("merchant_code"),
+                "catalog": merchant.get("catalog") if isinstance(merchant.get("catalog"), list) else [],
+                "roles": merchant.get("roles") if isinstance(merchant.get("roles"), list) else [],
+                "staff_members": merchant.get("staff_members") if isinstance(merchant.get("staff_members"), list) else [],
+                "direct_grants": merchant.get("direct_grants") if isinstance(merchant.get("direct_grants"), list) else [],
+                "effective_privileges": self._merchant_effective_privileges(merchant),
+                "policy": merchant.get("policy") if isinstance(merchant.get("policy"), dict) else {},
+                "audit_events": load_jsonl_tail(MERCHANT_ERP_PRIVILEGE_EVENTS_PATH, limit=12),
+                "persistence": {
+                    "store": str(MERCHANT_ERP_PRIVILEGES_PATH.relative_to(ROOT)),
+                    "event_log": str(MERCHANT_ERP_PRIVILEGE_EVENTS_PATH.relative_to(ROOT)),
+                    "database_view": "v_merchant_erp_staff_effective_privileges",
+                },
+            },
+        )
+
+    def _merchant_erp_privileges_mutation_response(self) -> tuple[HTTPStatus, dict[str, Any]]:
+        auth_user, auth_session = self._resolve_active_auth_session(scope="merchant")
+        if auth_user is None or auth_session is None:
+            return self._merchant_erp_unauthorized("valley-merchant-erp-privileges")
+
+        request_payload = self._read_json_body()
+        if not isinstance(request_payload, dict):
+            return HTTPStatus.BAD_REQUEST, {"status": "invalid_payload", "detail": "Expected JSON object."}
+        public_user = self._auth_public_user(auth_user)
+        store_payload, merchant = self._ensure_merchant_privileges_store(public_user)
+        now = utc_now_iso()
+        action = str(request_payload.get("action") or "grant").strip().lower()
+        staff_members = merchant.get("staff_members") if isinstance(merchant.get("staff_members"), list) else []
+        direct_grants = merchant.get("direct_grants") if isinstance(merchant.get("direct_grants"), list) else []
+        catalog_keys = {
+            str(item.get("key") or "")
+            for item in merchant.get("catalog", [])
+            if isinstance(item, dict) and item.get("key")
+        }
+        target_staff_id = str(request_payload.get("staff_id") or "").strip()
+        target_email = str(request_payload.get("email") or "").strip().lower()
+        if not target_staff_id and target_email:
+            match = next(
+                (
+                    staff
+                    for staff in staff_members
+                    if isinstance(staff, dict) and str(staff.get("email") or "").lower() == target_email
+                ),
+                None,
+            )
+            target_staff_id = str((match or {}).get("staff_id") or "")
+        if not target_staff_id and staff_members:
+            target_staff_id = str(staff_members[0].get("staff_id") or "")
+        privilege_key = str(request_payload.get("privilege_key") or "pdv.sale.offline").strip()
+        mutation_event = {
+            "event_id": str(uuid.uuid4()),
+            "received_at_utc": now,
+            "service": "valley-merchant-erp-privileges",
+            "release_version": "v046",
+            "action": action,
+            "merchant_slug": merchant.get("merchant_slug"),
+            "target_staff_id": target_staff_id,
+            "privilege_key": privilege_key,
+            "actor_user_id": public_user.get("user_id"),
+            "session_id": str(auth_session.get("session_id") or ""),
+        }
+
+        if action == "invite":
+            email = target_email or f"operador-{uuid.uuid4().hex[:6]}@valley.local"
+            target_staff_id = f"staff-{hashlib.sha256(f'{merchant.get('merchant_slug')}:{email}'.encode('utf-8')).hexdigest()[:12]}"
+            if not any(isinstance(staff, dict) and str(staff.get("staff_id") or "") == target_staff_id for staff in staff_members):
+                staff_members.append(
+                    {
+                        "staff_id": target_staff_id,
+                        "user_id": "",
+                        "email": email,
+                        "display_name": str(request_payload.get("display_name") or "Operador ERP"),
+                        "roles": request_payload.get("roles") if isinstance(request_payload.get("roles"), list) else ["cashier"],
+                        "status": "active",
+                        "created_at_utc": now,
+                        "last_seen_at_utc": "",
+                    }
+                )
+            mutation_event["target_staff_id"] = target_staff_id
+        elif action == "set_role":
+            roles = request_payload.get("roles") if isinstance(request_payload.get("roles"), list) else []
+            for staff in staff_members:
+                if isinstance(staff, dict) and str(staff.get("staff_id") or "") == target_staff_id:
+                    staff["roles"] = [str(role) for role in roles if str(role).strip()] or ["cashier"]
+                    staff["updated_at_utc"] = now
+                    break
+        elif action in {"grant", "revoke"}:
+            if privilege_key not in catalog_keys:
+                return (
+                    HTTPStatus.BAD_REQUEST,
+                    {
+                        "status": "invalid_privilege",
+                        "service": "valley-merchant-erp-privileges",
+                        "detail": "Privilegio inexistente no catalogo do lojista.",
+                        "privilege_key": privilege_key,
+                    },
+                )
+            if action == "grant":
+                exists = any(
+                    isinstance(grant, dict)
+                    and str(grant.get("staff_id") or "") == target_staff_id
+                    and str(grant.get("privilege_key") or "") == privilege_key
+                    and str(grant.get("status") or "active") == "active"
+                    for grant in direct_grants
+                )
+                if not exists:
+                    direct_grants.append(
+                        {
+                            "grant_id": str(uuid.uuid4()),
+                            "staff_id": target_staff_id,
+                            "privilege_key": privilege_key,
+                            "status": "active",
+                            "granted_by_user_id": public_user.get("user_id"),
+                            "granted_at_utc": now,
+                        }
+                    )
+            else:
+                for grant in direct_grants:
+                    if (
+                        isinstance(grant, dict)
+                        and str(grant.get("staff_id") or "") == target_staff_id
+                        and str(grant.get("privilege_key") or "") == privilege_key
+                        and str(grant.get("status") or "active") == "active"
+                    ):
+                        grant["status"] = "revoked"
+                        grant["revoked_by_user_id"] = public_user.get("user_id")
+                        grant["revoked_at_utc"] = now
+        else:
+            return (
+                HTTPStatus.BAD_REQUEST,
+                {
+                    "status": "invalid_action",
+                    "service": "valley-merchant-erp-privileges",
+                    "detail": "Use invite, set_role, grant ou revoke.",
+                },
+            )
+
+        merchant["staff_members"] = staff_members
+        merchant["direct_grants"] = direct_grants
+        store_payload["updated_at_utc"] = now
+        write_json_file(MERCHANT_ERP_PRIVILEGES_PATH, store_payload)
+        self._append_jsonl(MERCHANT_ERP_PRIVILEGE_EVENTS_PATH, mutation_event)
+        status, response = self._merchant_erp_privileges_response()
+        response["mutation_event_id"] = mutation_event["event_id"]
+        return status, response
+
+    def _ensure_merchant_offline_queue(
+        self,
+        public_user: dict[str, Any],
+    ) -> tuple[dict[str, Any], dict[str, Any]]:
+        now = utc_now_iso()
+        merchant_slug = str(public_user.get("merchant_slug") or "valley-demo")
+        payload = load_json_file(MERCHANT_ERP_OFFLINE_QUEUE_PATH) or {
+            "service": "valley-merchant-erp-offline-queue-store",
+            "release_version": "v045",
+            "created_at_utc": now,
+            "merchants": {},
+        }
+        merchants = payload.setdefault("merchants", {})
+        if not isinstance(merchants, dict):
+            merchants = {}
+            payload["merchants"] = merchants
+        merchant = merchants.setdefault(
+            merchant_slug,
+            {
+                "merchant_slug": merchant_slug,
+                "merchant_code": str(public_user.get("merchant_code") or merchant_slug.upper()),
+                "authorized_devices": [
+                    {
+                        "device_id": f"PDV-{str(public_user.get('merchant_code') or 'VALLEY')}",
+                        "label": "Terminal principal",
+                        "status": "authorized",
+                    }
+                ],
+                "policy": {
+                    "offline_allowed": True,
+                    "allowed_offline_payment_methods": ["cash", "pending_authorization"],
+                    "external_authorization_methods": ["card_terminal", "pix"],
+                    "idempotency_required": True,
+                    "append_only": True,
+                    "sync_after_reconnect": True,
+                },
+                "local_schema": {
+                    "cash_sessions": "append_only",
+                    "sales": "local_sale_id + idempotency_key",
+                    "items": "sku + quantity + price_brl",
+                    "stock_mirror": "sku + available_qty + reserved_qty",
+                    "sync_queue": "event_type + idempotency_key + payload_hash",
+                },
+                "synced_idempotency_keys": [],
+                "synced_events": [],
+            },
+        )
+        merchant.setdefault("synced_idempotency_keys", [])
+        merchant.setdefault("synced_events", [])
+        payload["updated_at_utc"] = now
+        write_json_file(MERCHANT_ERP_OFFLINE_QUEUE_PATH, payload)
+        return payload, merchant
+
+    def _merchant_erp_offline_queue_response(self) -> tuple[HTTPStatus, dict[str, Any]]:
+        auth_user, auth_session = self._resolve_active_auth_session(scope="merchant")
+        if auth_user is None or auth_session is None:
+            return self._merchant_erp_unauthorized("valley-merchant-erp-offline-queue")
+
+        public_user = self._auth_public_user(auth_user)
+        _, merchant = self._ensure_merchant_offline_queue(public_user)
+        return (
+            HTTPStatus.OK,
+            {
+                "status": "ok",
+                "service": "valley-merchant-erp-offline-queue",
+                "release_version": "v045",
+                "generated_at_utc": utc_now_iso(),
+                "merchant_slug": merchant.get("merchant_slug"),
+                "merchant_code": merchant.get("merchant_code"),
+                "policy": merchant.get("policy") if isinstance(merchant.get("policy"), dict) else {},
+                "local_schema": merchant.get("local_schema") if isinstance(merchant.get("local_schema"), dict) else {},
+                "authorized_devices": merchant.get("authorized_devices") if isinstance(merchant.get("authorized_devices"), list) else [],
+                "synced_events": merchant.get("synced_events") if isinstance(merchant.get("synced_events"), list) else [],
+                "recent_events": load_jsonl_tail(MERCHANT_ERP_OFFLINE_EVENTS_PATH, limit=12),
+                "persistence": {
+                    "store": str(MERCHANT_ERP_OFFLINE_QUEUE_PATH.relative_to(ROOT)),
+                    "event_log": str(MERCHANT_ERP_OFFLINE_EVENTS_PATH.relative_to(ROOT)),
+                    "sync_endpoint": "/api/merchant-erp/offline-sync",
+                },
+            },
+        )
+
+    def _merchant_erp_offline_sync_response(self) -> tuple[HTTPStatus, dict[str, Any]]:
+        auth_user, auth_session = self._resolve_active_auth_session(scope="merchant")
+        if auth_user is None or auth_session is None:
+            return self._merchant_erp_unauthorized("valley-merchant-erp-offline-sync")
+
+        request_payload = self._read_json_body()
+        if not isinstance(request_payload, dict):
+            return HTTPStatus.BAD_REQUEST, {"status": "invalid_payload", "detail": "Expected JSON object."}
+        raw_events = request_payload.get("events")
+        events = raw_events if isinstance(raw_events, list) else [request_payload]
+        public_user = self._auth_public_user(auth_user)
+        store_payload, merchant = self._ensure_merchant_offline_queue(public_user)
+        now = utc_now_iso()
+        known_keys = set(
+            str(item)
+            for item in merchant.get("synced_idempotency_keys", [])
+            if str(item).strip()
+        )
+        accepted: list[dict[str, Any]] = []
+        duplicates: list[dict[str, Any]] = []
+        for raw_event in events:
+            if not isinstance(raw_event, dict):
+                continue
+            safe_payload = {
+                key: value
+                for key, value in raw_event.items()
+                if key not in {"password", "token", "session_token"}
+            }
+            idempotency_key = str(safe_payload.get("idempotency_key") or "").strip()
+            if not idempotency_key:
+                encoded = json.dumps(safe_payload, ensure_ascii=False, sort_keys=True).encode("utf-8")
+                idempotency_key = hashlib.sha256(encoded).hexdigest()
+            if idempotency_key in known_keys:
+                duplicates.append(
+                    {
+                        "idempotency_key": idempotency_key,
+                        "sync_status": "duplicate_ignored",
+                        "local_sale_id": str(safe_payload.get("local_sale_id") or ""),
+                    }
+                )
+                continue
+            payment_method = str(safe_payload.get("payment_method") or "pending_authorization").strip()
+            requires_authorization = payment_method in {"card_terminal", "pix"}
+            event = {
+                "sync_event_id": str(uuid.uuid4()),
+                "received_at_utc": now,
+                "service": "valley-merchant-erp-offline-sync",
+                "release_version": "v045",
+                "merchant_slug": merchant.get("merchant_slug"),
+                "merchant_code": merchant.get("merchant_code"),
+                "user_id": public_user.get("user_id"),
+                "session_id": str(auth_session.get("session_id") or ""),
+                "device_id": str(safe_payload.get("device_id") or f"PDV-{merchant.get('merchant_code')}"),
+                "local_sale_id": str(safe_payload.get("local_sale_id") or f"SALE-{uuid.uuid4().hex[:10]}"),
+                "idempotency_key": idempotency_key,
+                "event_type": str(safe_payload.get("event_type") or "pdv_sale"),
+                "amount_brl": round(float(safe_payload.get("amount_brl") or 0), 2),
+                "payment_method": payment_method,
+                "payment_status": "PENDENTE_AUTORIZACAO" if requires_authorization else "ACEITO_OFFLINE",
+                "sync_status": "synced",
+                "authorization_required": requires_authorization,
+                "payload_hash": hashlib.sha256(
+                    json.dumps(safe_payload, ensure_ascii=False, sort_keys=True).encode("utf-8")
+                ).hexdigest(),
+            }
+            known_keys.add(idempotency_key)
+            accepted.append(event)
+            self._append_jsonl(MERCHANT_ERP_OFFLINE_EVENTS_PATH, event)
+
+        merchant["synced_idempotency_keys"] = sorted(known_keys)[-500:]
+        synced_events = merchant.get("synced_events") if isinstance(merchant.get("synced_events"), list) else []
+        merchant["synced_events"] = [*reversed(accepted), *synced_events][:200]
+        store_payload["updated_at_utc"] = now
+        write_json_file(MERCHANT_ERP_OFFLINE_QUEUE_PATH, store_payload)
+        return (
+            HTTPStatus.OK,
+            {
+                "status": "ok",
+                "service": "valley-merchant-erp-offline-sync",
+                "release_version": "v045",
+                "accepted_total": len(accepted),
+                "duplicate_total": len(duplicates),
+                "accepted": accepted,
+                "duplicates": duplicates,
+                "store": str(MERCHANT_ERP_OFFLINE_QUEUE_PATH.relative_to(ROOT)),
+                "event_log": str(MERCHANT_ERP_OFFLINE_EVENTS_PATH.relative_to(ROOT)),
+            },
+        )
+
     def _merchant_erp_blueprint_response(self) -> tuple[HTTPStatus, dict[str, Any]]:
         auth_user, auth_session = self._resolve_active_auth_session(scope="merchant")
         if auth_user is None or auth_session is None:
@@ -4569,20 +5139,39 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             )
 
         modules = self._merchant_erp_blueprint_modules(auth_user)
+        public_user = self._auth_public_user(auth_user)
+        _, privilege_store = self._ensure_merchant_privileges_store(public_user)
+        _, offline_store = self._ensure_merchant_offline_queue(public_user)
         return (
             HTTPStatus.OK,
             {
                 "status": "ok",
                 "service": "valley-merchant-erp-blueprint",
-                "release_version": "v048",
+                "release_version": "v051",
                 "generated_at_utc": utc_now_iso(),
                 "api_base_url": self._public_admin_base_url(),
-                "user": self._auth_public_user(auth_user),
+                "user": public_user,
                 "session": self._auth_public_session(auth_session, auth_user),
                 "persistence": {
                     "mode": "append_only_runtime",
                     "event_log": str(MERCHANT_ERP_EVENTS_PATH.relative_to(ROOT)),
+                    "pdv_event_log": str(MERCHANT_ERP_PDV_EVENTS_PATH.relative_to(ROOT)),
+                    "banking_event_log": str(MERCHANT_ERP_BANKING_EVENTS_PATH.relative_to(ROOT)),
+                    "privilege_store": str(MERCHANT_ERP_PRIVILEGES_PATH.relative_to(ROOT)),
+                    "offline_queue_store": str(MERCHANT_ERP_OFFLINE_QUEUE_PATH.relative_to(ROOT)),
                     "action_endpoint": "/api/merchant-erp/action",
+                    "privileges_endpoint": "/api/merchant-erp/privileges",
+                    "offline_sync_endpoint": "/api/merchant-erp/offline-sync",
+                },
+                "privileges": {
+                    "staff_total": len(privilege_store.get("staff_members") if isinstance(privilege_store.get("staff_members"), list) else []),
+                    "effective_total": len(self._merchant_effective_privileges(privilege_store)),
+                    "database_view": "v_merchant_erp_staff_effective_privileges",
+                },
+                "offline_queue": {
+                    "policy": offline_store.get("policy") if isinstance(offline_store.get("policy"), dict) else {},
+                    "synced_total": len(offline_store.get("synced_events") if isinstance(offline_store.get("synced_events"), list) else []),
+                    "sync_endpoint": "/api/merchant-erp/offline-sync",
                 },
                 "modules": modules,
                 "recent_events": load_jsonl_tail(MERCHANT_ERP_EVENTS_PATH, limit=10),
@@ -4614,24 +5203,30 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
 
         action = str(payload.get("action") or "").strip().lower()
         module_key = str(payload.get("module_key") or payload.get("module") or "").strip().lower()
-        allowed_actions = {"save", "sync", "refresh", "export", "open"}
-        if action not in allowed_actions or not module_key:
+        action_is_safe = bool(re.fullmatch(r"[a-z0-9][a-z0-9:_-]{1,80}", action))
+        if not action_is_safe or not module_key:
             return (
                 HTTPStatus.BAD_REQUEST,
                 {
                     "status": "invalid_action",
                     "service": "valley-merchant-erp-action",
                     "detail": "Informe module_key e action valida.",
-                    "allowed_actions": sorted(allowed_actions),
+                    "allowed_pattern": "[a-z0-9][a-z0-9:_-]{1,80}",
                 },
             )
+
+        def as_float(value: Any) -> float:
+            try:
+                return float(str(value).replace(",", "."))
+            except (TypeError, ValueError):
+                return 0.0
 
         public_user = self._auth_public_user(auth_user)
         event = {
             "event_id": str(uuid.uuid4()),
             "received_at_utc": utc_now_iso(),
             "service": "valley-merchant-erp-action",
-            "release_version": "v048",
+            "release_version": "v051",
             "module_key": module_key,
             "action": action,
             "user_id": public_user["user_id"],
@@ -4644,9 +5239,78 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 if key not in {"password", "token", "session_token"}
             },
         }
-        MERCHANT_ERP_EVENTS_PATH.parent.mkdir(parents=True, exist_ok=True)
-        with MERCHANT_ERP_EVENTS_PATH.open("a", encoding="utf-8") as handle:
-            handle.write(json.dumps(event, ensure_ascii=False, separators=(",", ":")) + "\n")
+        self._append_jsonl(MERCHANT_ERP_EVENTS_PATH, event)
+
+        pdv_event: dict[str, Any] | None = None
+        if (
+            module_key in {"sales", "checkout", "merchant-pdv"}
+            or action
+            in {
+                "pdv-sale",
+                "pdv-close",
+                "checkout-confirm",
+                "payment-terminal-sync",
+                "payment-terminal-confirm",
+                "finance-close",
+            }
+        ):
+            amount_brl = as_float(payload.get("amount_brl") or payload.get("amount") or 0)
+            pdv_event = {
+                "event_id": str(uuid.uuid4()),
+                "received_at_utc": event["received_at_utc"],
+                "service": "valley-merchant-erp-pdv",
+                "parent_event_id": event["event_id"],
+                "release_version": "v051",
+                "module_key": module_key,
+                "action": action,
+                "user_id": public_user["user_id"],
+                "merchant_slug": public_user["merchant_slug"],
+                "terminal_provider": str(payload.get("terminal_provider") or "valley_plug").strip(),
+                "terminal_id": str(payload.get("terminal_id") or f"PDV-{public_user['merchant_code']}").strip(),
+                "payment_method": str(payload.get("payment_method") or "card_terminal").strip(),
+                "checkout_reference": str(payload.get("checkout_reference") or event["event_id"]).strip(),
+                "amount_brl": round(amount_brl, 2),
+                "confirmation_status": "confirmed"
+                if action in {"checkout-confirm", "payment-terminal-confirm", "finance-close"}
+                else "queued",
+                "machine_integration": {
+                    "mode": "provider_adapter_ready",
+                    "supports_card": True,
+                    "supports_pix": True,
+                    "supports_checkout_confirmation": True,
+                    "requires_external_terminal_credentials": True,
+                },
+            }
+            self._append_jsonl(MERCHANT_ERP_PDV_EVENTS_PATH, pdv_event)
+
+        banking_event: dict[str, Any] | None = None
+        if (
+            module_key in {"finance", "banking", "settings", "merchant-finance", "merchant-banking"}
+            or action in {"bank-api-sync", "bank-api-register", "bank-reconcile", "finance-close"}
+        ):
+            banking_event = {
+                "event_id": str(uuid.uuid4()),
+                "received_at_utc": event["received_at_utc"],
+                "service": "valley-merchant-erp-banking",
+                "parent_event_id": event["event_id"],
+                "release_version": "v051",
+                "module_key": module_key,
+                "action": action,
+                "user_id": public_user["user_id"],
+                "merchant_slug": public_user["merchant_slug"],
+                "connector_key": str(payload.get("connector_key") or "banking_api_slot").strip(),
+                "bank_environment": str(payload.get("bank_environment") or "sandbox_and_production_ready").strip(),
+                "banking_contract": {
+                    "open_finance": True,
+                    "pix": True,
+                    "boleto": True,
+                    "receivables": True,
+                    "reconciliation": True,
+                    "webhook_signature_required": True,
+                    "secrets_policy": "runtime_vault_only",
+                },
+            }
+            self._append_jsonl(MERCHANT_ERP_BANKING_EVENTS_PATH, banking_event)
 
         return (
             HTTPStatus.OK,
@@ -4654,9 +5318,13 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 "status": "ok",
                 "service": "valley-merchant-erp-action",
                 "event_id": event["event_id"],
+                "pdv_event_id": pdv_event["event_id"] if pdv_event else "",
+                "banking_event_id": banking_event["event_id"] if banking_event else "",
                 "saved_at_utc": event["received_at_utc"],
                 "message": f"Acao {action} do modulo {module_key} registrada no runtime.",
                 "event_log": str(MERCHANT_ERP_EVENTS_PATH.relative_to(ROOT)),
+                "pdv_event_log": str(MERCHANT_ERP_PDV_EVENTS_PATH.relative_to(ROOT)),
+                "banking_event_log": str(MERCHANT_ERP_BANKING_EVENTS_PATH.relative_to(ROOT)),
             },
         )
 
@@ -4664,6 +5332,9 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
         now = utc_now_iso()
         public_user = self._auth_public_user(auth_user)
         merchant_owner = public_user.get("merchant_code") or public_user.get("merchant_slug") or "ERP Lojista"
+        _, privilege_store = self._ensure_merchant_privileges_store(public_user)
+        _, offline_store = self._ensure_merchant_offline_queue(public_user)
+        effective_privileges = self._merchant_effective_privileges(privilege_store)
         pricing_payload = self._admin_imported_products_pricing_payload()
         stock_payload = self._stock_catalog_payload()
         summary_payload = self._product_catalog_summary_payload()
@@ -4671,6 +5342,7 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
         bridge_payload = self._bridge_status_payload()
         integrations_payload = self._admin_integrations_payload()
         dropshipping_payload = load_json_file(DROPSHIPPING_STATUS_PATH) or {}
+        banking_connectors_payload = load_json_file(BANKING_API_CONNECTORS_PATH) or {}
 
         def as_float(value: Any) -> float:
             try:
@@ -4823,7 +5495,7 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             return [
                 record("CLI-ACTIVE", f"{len(customers)} clientes cadastrados no auth runtime", owner="Clientes"),
                 record("USR-MERCH", f"{len(merchants)} usuarios lojistas com acesso online", owner="Seguranca"),
-                record("PERM-ERP", f"{len(public_user.get('permissions') or [])} permissoes efetivas no ERP", owner="RBAC"),
+                record("PERM-ERP", f"{len(effective_privileges)} privilegios efetivos no ERP", owner="RBAC"),
             ]
 
         product_recs = product_records()
@@ -4837,6 +5509,74 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
         margin_value = as_float(summary_payload.get("margin_potential_brl"))
         items_total = int(as_float(summary_payload.get("items_total")))
         event_count = len(load_jsonl_tail(MERCHANT_ERP_EVENTS_PATH, limit=1000))
+        pdv_events = load_jsonl_tail(MERCHANT_ERP_PDV_EVENTS_PATH, limit=12)
+        banking_events = load_jsonl_tail(MERCHANT_ERP_BANKING_EVENTS_PATH, limit=12)
+        banking_connectors = (
+            banking_connectors_payload.get("connectors")
+            if isinstance(banking_connectors_payload.get("connectors"), list)
+            else []
+        )
+
+        def pdv_records() -> list[dict[str, str]]:
+            offline_synced = len(
+                offline_store.get("synced_events")
+                if isinstance(offline_store.get("synced_events"), list)
+                else []
+            )
+            records = [
+                record("PDV-ONLINE", "PDV conectado ao endpoint persistente do ERP", owner="PDV"),
+                record("PDV-OFF", f"Fila offline idempotente com {offline_synced} eventos sincronizados", owner="PDV"),
+                record("PDV-MAQ", "Slot de maquina de pagamento pronto para provider adapter", owner="Valley Plug"),
+                record("PDV-CHECK", "Confirmacao de checkout grava evento auditavel", owner="Checkout"),
+                record("PDV-AUDIT", f"{event_count} eventos de operacao gravados", owner="Auditoria"),
+            ]
+            for pdv_event in pdv_events[:4]:
+                records.append(
+                    record(
+                        f"PDV-{str(pdv_event.get('event_id') or uuid.uuid4())[:8].upper()}",
+                        f"{pdv_event.get('terminal_provider') or 'terminal'} · {pdv_event.get('confirmation_status') or 'queued'}",
+                        status="OK" if str(pdv_event.get("confirmation_status") or "") == "confirmed" else "ATENCAO",
+                        owner=str(pdv_event.get("terminal_id") or "PDV"),
+                        updated_at=str(pdv_event.get("received_at_utc") or now),
+                    )
+                )
+            return records
+
+        def banking_records() -> list[dict[str, str]]:
+            records: list[dict[str, str]] = []
+            for connector in banking_connectors:
+                if not isinstance(connector, dict):
+                    continue
+                records.append(
+                    record(
+                        f"BANK-{str(connector.get('key') or connector.get('name') or 'api')[:8].upper()}",
+                        str(connector.get("label") or connector.get("name") or "Conector bancario"),
+                        status="OK" if connector.get("enabled") else "ATENCAO",
+                        owner=str(connector.get("scope") or "Banking API"),
+                        updated_at=str(connector.get("updated_at_utc") or now),
+                    )
+                )
+            records.extend(
+                [
+                    record("BANK-PIX", "Espaco PIX com webhook assinado e conciliacao", owner="APIs Bancarias"),
+                    record("BANK-OPEN", "Contrato Open Finance para contas, saldo e extrato", owner="APIs Bancarias"),
+                    record("BANK-REC", "Recebiveis e conciliacao financeira por pedido", owner="Financeiro"),
+                ]
+            )
+            for banking_event in banking_events[:4]:
+                records.append(
+                    record(
+                        f"BANK-{str(banking_event.get('event_id') or uuid.uuid4())[:8].upper()}",
+                        f"{banking_event.get('connector_key') or 'banking_api_slot'} · {banking_event.get('action') or 'sync'}",
+                        status="OK",
+                        owner=str(banking_event.get("bank_environment") or "Banking API"),
+                        updated_at=str(banking_event.get("received_at_utc") or now),
+                    )
+                )
+            return records
+
+        pdv_recs = pdv_records()
+        banking_recs = banking_records()
 
         return [
             {
@@ -4846,11 +5586,7 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 "icon": "point_of_sale",
                 "color": "#0F766E",
                 "status": "active",
-                "records": [
-                    record("PDV-ONLINE", "PDV conectado ao endpoint persistente do ERP", owner="PDV"),
-                    record("PDV-AUDIT", f"{event_count} eventos de operacao gravados", owner="Auditoria"),
-                    *checkout_recs[:3],
-                ],
+                "records": [*pdv_recs, *checkout_recs[:3]],
             },
             {
                 "key": "products",
@@ -4891,15 +5627,25 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             {
                 "key": "finance",
                 "label": "Financeiro",
-                "subtitle": f"Valor de inventario R$ {inventory_value:.2f}",
+                "subtitle": f"Valor de inventario R$ {inventory_value:.2f} com APIs bancarias preparadas",
                 "icon": "wallet",
                 "color": "#16A34A",
                 "status": "active",
                 "records": [
                     record("FIN-INV", f"Inventario atual R$ {inventory_value:.2f}", owner="Financeiro"),
                     record("FIN-MRG", f"Margem potencial R$ {margin_value:.2f}", owner="Financeiro"),
+                    *banking_recs[:3],
                     *checkout_recs[:2],
                 ],
+            },
+            {
+                "key": "banking",
+                "label": "APIs Bancarias",
+                "subtitle": "PIX, Open Finance, recebiveis e conciliacao prontos para providers",
+                "icon": "account_balance",
+                "color": "#0369A1",
+                "status": "active",
+                "records": banking_recs,
             },
             {
                 "key": "checkout",
@@ -4952,6 +5698,43 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 "color": "#0F172A",
                 "status": "active",
                 "records": user_recs,
+            },
+            {
+                "key": "team",
+                "label": "Equipe",
+                "subtitle": "Usuarios, papeis e concessoes por lojista",
+                "icon": "groups",
+                "color": "#4F46E5",
+                "status": "active",
+                "records": [
+                    record(
+                        f"STAFF-{str(staff.get('staff_id') or uuid.uuid4())[-6:].upper()}",
+                        f"{staff.get('display_name') or staff.get('email') or 'Operador'} - {', '.join(staff.get('roles') if isinstance(staff.get('roles'), list) else [])}",
+                        status="OK" if str(staff.get("status") or "active") == "active" else "ATENCAO",
+                        owner="Equipe",
+                        updated_at=str(staff.get("last_seen_at_utc") or now),
+                    )
+                    for staff in (
+                        privilege_store.get("staff_members")
+                        if isinstance(privilege_store.get("staff_members"), list)
+                        else []
+                    )
+                    if isinstance(staff, dict)
+                ]
+                or [record("STAFF-RBAC", "Equipe pronta para convite e papeis", owner="Equipe")],
+            },
+            {
+                "key": "security",
+                "label": "Seguranca",
+                "subtitle": "MFA, sessoes, auditoria e privilegios efetivos",
+                "icon": "security",
+                "color": "#DC2626",
+                "status": "active",
+                "records": [
+                    record("SEC-RBAC", f"{len(effective_privileges)} privilegios efetivos calculados", owner="Seguranca"),
+                    record("SEC-AUDIT", "Concessoes gravadas em trilha append-only", owner="Auditoria"),
+                    record("SEC-VIEW", "View v_merchant_erp_staff_effective_privileges registrada", owner="Banco"),
+                ],
             },
             {
                 "key": "support",

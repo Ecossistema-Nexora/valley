@@ -293,3 +293,645 @@ Traceback (most recent call last):
     self._sock.sendall(b)
 ConnectionResetError: [WinError 10054] Foi forçado o cancelamento de uma conexão existente pelo host remoto
 ----------------------------------------
+----------------------------------------
+----------------------------------------Exception occurred during processing of request from
+Exception occurred during processing of request from----------------------------------------
+  --------------------------------------------------------------------------------Exception occurred during processing of request from ('192.168.1.2', 54629)
+--------------------------------------------------------------------------------
+('192.168.1.2', 54627)--------------------------------------------------------------------------------('192.168.1.2', 54632)
+----------------------------------------
+Exception occurred during processing of request from ----------------------------------------
+
+
+Exception occurred during processing of request from 
+----------------------------------------
+Exception occurred during processing of request from ('192.168.1.2', 54636)
+Exception occurred during processing of request fromException occurred during processing of request from
+Exception occurred during processing of request from('192.168.1.2', 54638)Exception occurred during processing of request from
+Traceback (most recent call last):
+Exception occurred during processing of request from('192.168.1.2', 54624)
+Traceback (most recent call last):
+   Traceback (most recent call last):
+
+ Exception occurred during processing of request from 
+Traceback (most recent call last):
+('192.168.1.2', 54641)('192.168.1.2', 54637)('192.168.1.2', 54634)Traceback (most recent call last):
+('192.168.1.2', 54639)   File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 697, in process_request_thread
+    self.finish_request(request, client_address)
+('192.168.1.2', 54625)Traceback (most recent call last):
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 697, in process_request_thread
+    self.finish_request(request, client_address)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 697, in process_request_thread
+    self.finish_request(request, client_address)
+
+
+
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 697, in process_request_thread
+    self.finish_request(request, client_address)
+
+('192.168.1.2', 54640)
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 697, in process_request_thread
+    self.finish_request(request, client_address)
+Traceback (most recent call last):
+
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 697, in process_request_thread
+    self.finish_request(request, client_address)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+Traceback (most recent call last):
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 697, in process_request_thread
+    self.finish_request(request, client_address)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 697, in process_request_thread
+    self.finish_request(request, client_address)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 697, in process_request_thread
+    self.finish_request(request, client_address)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 697, in process_request_thread
+    self.finish_request(request, client_address)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 752, in __init__
+    super().__init__(*args, directory=directory, **kwargs)
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 752, in __init__
+    super().__init__(*args, directory=directory, **kwargs)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 752, in __init__
+    super().__init__(*args, directory=directory, **kwargs)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 697, in process_request_thread
+    self.finish_request(request, client_address)
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 752, in __init__
+    super().__init__(*args, directory=directory, **kwargs)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 697, in process_request_thread
+    self.finish_request(request, client_address)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 752, in __init__
+    super().__init__(*args, directory=directory, **kwargs)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 752, in __init__
+    super().__init__(*args, directory=directory, **kwargs)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 752, in __init__
+    super().__init__(*args, directory=directory, **kwargs)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 766, in __init__
+    self.handle()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 436, in handle
+    self.handle_one_request()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 766, in __init__
+    self.handle()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 752, in __init__
+    super().__init__(*args, directory=directory, **kwargs)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 766, in __init__
+    self.handle()
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 752, in __init__
+    super().__init__(*args, directory=directory, **kwargs)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 752, in __init__
+    super().__init__(*args, directory=directory, **kwargs)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 766, in __init__
+    self.handle()
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 752, in __init__
+    super().__init__(*args, directory=directory, **kwargs)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 436, in handle
+    self.handle_one_request()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 766, in __init__
+    self.handle()
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 752, in __init__
+    super().__init__(*args, directory=directory, **kwargs)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 424, in handle_one_request
+    method()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 766, in __init__
+    self.handle()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 766, in __init__
+    self.handle()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 436, in handle
+    self.handle_one_request()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 766, in __init__
+    self.handle()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 436, in handle
+    self.handle_one_request()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 424, in handle_one_request
+    method()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 766, in __init__
+    self.handle()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 424, in handle_one_request
+    method()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 436, in handle
+    self.handle_one_request()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 766, in __init__
+    self.handle()
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 1213, in do_POST
+    self._write_cjdropshipping_notification_event()
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 1213, in do_POST
+    self._write_cjdropshipping_notification_event()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 436, in handle
+    self.handle_one_request()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 766, in __init__
+    self.handle()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 766, in __init__
+    self.handle()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 424, in handle_one_request
+    method()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 436, in handle
+    self.handle_one_request()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 424, in handle_one_request
+    method()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 436, in handle
+    self.handle_one_request()
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 1213, in do_POST
+    self._write_cjdropshipping_notification_event()
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 7621, in _write_cjdropshipping_notification_event
+    self._write_json(
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 436, in handle
+    self.handle_one_request()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 424, in handle_one_request
+    method()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 436, in handle
+    self.handle_one_request()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 424, in handle_one_request
+    method()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 424, in handle_one_request
+    method()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 436, in handle
+    self.handle_one_request()
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 7621, in _write_cjdropshipping_notification_event
+    self._write_json(
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 424, in handle_one_request
+    method()
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 7621, in _write_cjdropshipping_notification_event
+    self._write_json(
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 1213, in do_POST
+    self._write_cjdropshipping_notification_event()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 424, in handle_one_request
+    method()
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 1213, in do_POST
+    self._write_cjdropshipping_notification_event()
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 7621, in _write_cjdropshipping_notification_event
+    self._write_json(
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 8068, in _write_json
+    self.end_headers()
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 8068, in _write_json
+    self.end_headers()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 436, in handle
+    self.handle_one_request()
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 7621, in _write_cjdropshipping_notification_event
+    self._write_json(
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 1213, in do_POST
+    self._write_cjdropshipping_notification_event()
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 1213, in do_POST
+    self._write_cjdropshipping_notification_event()
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 1213, in do_POST
+    self._write_cjdropshipping_notification_event()
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 7621, in _write_cjdropshipping_notification_event
+    self._write_json(
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 424, in handle_one_request
+    method()
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 1213, in do_POST
+    self._write_cjdropshipping_notification_event()
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 8068, in _write_json
+    self.end_headers()
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 7621, in _write_cjdropshipping_notification_event
+    self._write_json(
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 1213, in do_POST
+    self._write_cjdropshipping_notification_event()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 424, in handle_one_request
+    method()
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 8068, in _write_json
+    self.end_headers()
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 761, in end_headers
+    super().end_headers()
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 8068, in _write_json
+    self.end_headers()
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 761, in end_headers
+    super().end_headers()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 538, in end_headers
+    self.flush_headers()
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 8068, in _write_json
+    self.end_headers()
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 1213, in do_POST
+    self._write_cjdropshipping_notification_event()
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 7621, in _write_cjdropshipping_notification_event
+    self._write_json(
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 761, in end_headers
+    super().end_headers()
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 761, in end_headers
+    super().end_headers()
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 1213, in do_POST
+    self._write_cjdropshipping_notification_event()
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 7621, in _write_cjdropshipping_notification_event
+    self._write_json(
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 7621, in _write_cjdropshipping_notification_event
+    self._write_json(
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 8068, in _write_json
+    self.end_headers()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 538, in end_headers
+    self.flush_headers()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 538, in end_headers
+    self.flush_headers()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 538, in end_headers
+    self.flush_headers()
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 7621, in _write_cjdropshipping_notification_event
+    self._write_json(
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 761, in end_headers
+    super().end_headers()
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 761, in end_headers
+    super().end_headers()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 542, in flush_headers
+    self.wfile.write(b"".join(self._headers_buffer))
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 8068, in _write_json
+    self.end_headers()
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 761, in end_headers
+    super().end_headers()
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 8068, in _write_json
+    self.end_headers()
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 7621, in _write_cjdropshipping_notification_event
+    self._write_json(
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 8068, in _write_json
+    self.end_headers()
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 8068, in _write_json
+    self.end_headers()
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 761, in end_headers
+    super().end_headers()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 542, in flush_headers
+    self.wfile.write(b"".join(self._headers_buffer))
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 542, in flush_headers
+    self.wfile.write(b"".join(self._headers_buffer))
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 542, in flush_headers
+    self.wfile.write(b"".join(self._headers_buffer))
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 8068, in _write_json
+    self.end_headers()
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 761, in end_headers
+    super().end_headers()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 538, in end_headers
+    self.flush_headers()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 845, in write
+    self._sock.sendall(b)
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 761, in end_headers
+    super().end_headers()
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 761, in end_headers
+    super().end_headers()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 538, in end_headers
+    self.flush_headers()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 538, in end_headers
+    self.flush_headers()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 538, in end_headers
+    self.flush_headers()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 542, in flush_headers
+    self.wfile.write(b"".join(self._headers_buffer))
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 845, in write
+    self._sock.sendall(b)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 542, in flush_headers
+    self.wfile.write(b"".join(self._headers_buffer))
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 761, in end_headers
+    super().end_headers()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 845, in write
+    self._sock.sendall(b)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 845, in write
+    self._sock.sendall(b)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 845, in write
+    self._sock.sendall(b)
+ConnectionResetError: [WinError 10054] Foi forçado o cancelamento de uma conexão existente pelo host remoto
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 542, in flush_headers
+    self.wfile.write(b"".join(self._headers_buffer))
+ConnectionResetError: [WinError 10054] Foi forçado o cancelamento de uma conexão existente pelo host remoto
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 538, in end_headers
+    self.flush_headers()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 845, in write
+    self._sock.sendall(b)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 542, in flush_headers
+    self.wfile.write(b"".join(self._headers_buffer))
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 538, in end_headers
+    self.flush_headers()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 542, in flush_headers
+    self.wfile.write(b"".join(self._headers_buffer))
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 845, in write
+    self._sock.sendall(b)
+ConnectionResetError: [WinError 10054] Foi forçado o cancelamento de uma conexão existente pelo host remoto
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 845, in write
+    self._sock.sendall(b)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 538, in end_headers
+    self.flush_headers()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 538, in end_headers
+    self.flush_headers()
+ConnectionResetError: [WinError 10054] Foi forçado o cancelamento de uma conexão existente pelo host remoto
+ConnectionResetError: [WinError 10054] Foi forçado o cancelamento de uma conexão existente pelo host remoto
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 845, in write
+    self._sock.sendall(b)
+--------------------------------------------------------------------------------  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 542, in flush_headers
+    self.wfile.write(b"".join(self._headers_buffer))
+ConnectionResetError: [WinError 10054] Foi forçado o cancelamento de uma conexão existente pelo host remoto
+ConnectionResetError: [WinError 10054] Foi forçado o cancelamento de uma conexão existente pelo host remoto
+ConnectionResetError: [WinError 10054] Foi forçado o cancelamento de uma conexão existente pelo host remoto
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 542, in flush_headers
+    self.wfile.write(b"".join(self._headers_buffer))
+------------------------------------------------------------------------------------------------------------------------ConnectionResetError: [WinError 10054] Foi forçado o cancelamento de uma conexão existente pelo host remoto
+
+
+----------------------------------------
+
+
+
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 845, in write
+    self._sock.sendall(b)
+--------------------------------------------------------------------------------  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 542, in flush_headers
+    self.wfile.write(b"".join(self._headers_buffer))
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 845, in write
+    self._sock.sendall(b)
+ConnectionResetError: [WinError 10054] Foi forçado o cancelamento de uma conexão existente pelo host remoto
+
+
+----------------------------------------ConnectionResetError: [WinError 10054] Foi forçado o cancelamento de uma conexão existente pelo host remoto
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 845, in write
+    self._sock.sendall(b)
+
+----------------------------------------
+ConnectionResetError: [WinError 10054] Foi forçado o cancelamento de uma conexão existente pelo host remoto
+----------------------------------------
+----------------------------------------
+----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 58662)
+Traceback (most recent call last):
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 697, in process_request_thread
+    self.finish_request(request, client_address)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 752, in __init__
+    super().__init__(*args, directory=directory, **kwargs)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 766, in __init__
+    self.handle()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 436, in handle
+    self.handle_one_request()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 424, in handle_one_request
+    method()
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 1213, in do_POST
+    self._write_cjdropshipping_notification_event()
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 7621, in _write_cjdropshipping_notification_event
+    self._write_json(
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 8068, in _write_json
+    self.end_headers()
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 761, in end_headers
+    super().end_headers()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 538, in end_headers
+    self.flush_headers()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 542, in flush_headers
+    self.wfile.write(b"".join(self._headers_buffer))
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 845, in write
+    self._sock.sendall(b)
+ConnectionResetError: [WinError 10054] Foi forçado o cancelamento de uma conexão existente pelo host remoto
+----------------------------------------
+----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 58698)
+Traceback (most recent call last):
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 697, in process_request_thread
+    self.finish_request(request, client_address)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 752, in __init__
+    super().__init__(*args, directory=directory, **kwargs)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 766, in __init__
+    self.handle()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 436, in handle
+    self.handle_one_request()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 424, in handle_one_request
+    method()
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 988, in do_GET
+    super().do_GET()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 679, in do_GET
+    self.copyfile(f, self.wfile)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 878, in copyfile
+    shutil.copyfileobj(source, outputfile)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\shutil.py", line 204, in copyfileobj
+    fdst_write(buf)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 845, in write
+    self._sock.sendall(b)
+ConnectionResetError: [WinError 10054] Foi forçado o cancelamento de uma conexão existente pelo host remoto
+----------------------------------------
+----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 49367)
+Traceback (most recent call last):
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 731, in send_head
+    f = open(path, 'rb')
+        ^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\ereta\\.codex\\worktrees\\VALLEY\\admin\\wp-config-sample.php'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 697, in process_request_thread
+    self.finish_request(request, client_address)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 752, in __init__
+    super().__init__(*args, directory=directory, **kwargs)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 766, in __init__
+    self.handle()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 436, in handle
+    self.handle_one_request()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 424, in handle_one_request
+    method()
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 988, in do_GET
+    super().do_GET()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 676, in do_GET
+    f = self.send_head()
+        ^^^^^^^^^^^^^^^^
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 733, in send_head
+    self.send_error(HTTPStatus.NOT_FOUND, "File not found")
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 488, in send_error
+    self.end_headers()
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 761, in end_headers
+    super().end_headers()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 538, in end_headers
+    self.flush_headers()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 542, in flush_headers
+    self.wfile.write(b"".join(self._headers_buffer))
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 845, in write
+    self._sock.sendall(b)
+ConnectionResetError: [WinError 10054] Foi forçado o cancelamento de uma conexão existente pelo host remoto
+----------------------------------------
+----------------------------------------
+Exception occurred during processing of request from --------------------------------------------------------------------------------('127.0.0.1', 63205)
+
+Exception occurred during processing of request from ('127.0.0.1', 63208)Exception occurred during processing of request from
+
+ ('127.0.0.1', 63209)
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 697, in process_request_thread
+    self.finish_request(request, client_address)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 697, in process_request_thread
+    self.finish_request(request, client_address)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 697, in process_request_thread
+    self.finish_request(request, client_address)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 752, in __init__
+    self.data_path = data_path or DEFAULT_DATA_PATH
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 752, in __init__
+    self.data_path = data_path or DEFAULT_DATA_PATH
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 752, in __init__
+    self.data_path = data_path or DEFAULT_DATA_PATH
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 766, in __init__
+    self.handle()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 436, in handle
+    self.handle_one_request()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 766, in __init__
+    self.handle()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 436, in handle
+    self.handle_one_request()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 766, in __init__
+    self.handle()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 424, in handle_one_request
+    method()
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 1213, in do_POST
+    return
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 424, in handle_one_request
+    method()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 436, in handle
+    self.handle_one_request()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 424, in handle_one_request
+    method()
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 1213, in do_POST
+    return
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 7621, in _write_cjdropshipping_notification_event
+    "sellerId": seller_id,
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 8068, in _write_json
+    "detail": "Preferencia Mercado Pago criada com sucesso.",
+    ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 7621, in _write_cjdropshipping_notification_event
+    "sellerId": seller_id,
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 1213, in do_POST
+    return
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 8068, in _write_json
+    "detail": "Preferencia Mercado Pago criada com sucesso.",
+    ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 761, in end_headers
+    self.send_header("Access-Control-Allow-Origin", "*")
+    ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 7621, in _write_cjdropshipping_notification_event
+    "sellerId": seller_id,
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 761, in end_headers
+    self.send_header("Access-Control-Allow-Origin", "*")
+    ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 538, in end_headers
+    self.flush_headers()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 538, in end_headers
+    self.flush_headers()
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 8068, in _write_json
+    "detail": "Preferencia Mercado Pago criada com sucesso.",
+    ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 761, in end_headers
+    self.send_header("Access-Control-Allow-Origin", "*")
+    ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 542, in flush_headers
+    self.wfile.write(b"".join(self._headers_buffer))
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 542, in flush_headers
+    self.wfile.write(b"".join(self._headers_buffer))
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 845, in write
+    self._sock.sendall(b)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 845, in write
+    self._sock.sendall(b)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 538, in end_headers
+    self.flush_headers()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 542, in flush_headers
+    self.wfile.write(b"".join(self._headers_buffer))
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 845, in write
+    self._sock.sendall(b)
+ConnectionResetError: [WinError 10054] Foi forçado o cancelamento de uma conexão existente pelo host remoto
+ConnectionResetError: [WinError 10054] Foi forçado o cancelamento de uma conexão existente pelo host remoto
+ConnectionResetError: [WinError 10054] Foi forçado o cancelamento de uma conexão existente pelo host remoto
+------------------------------------------------------------------------------------------------------------------------
+
+
+----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 50305)
+Traceback (most recent call last):
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 697, in process_request_thread
+    self.finish_request(request, client_address)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 752, in __init__
+    self.data_path = data_path or DEFAULT_DATA_PATH
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 766, in __init__
+    self.handle()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 436, in handle
+    self.handle_one_request()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 424, in handle_one_request
+    method()
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 1213, in do_POST
+    return
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 7621, in _write_cjdropshipping_notification_event
+    "sellerId": seller_id,
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 8068, in _write_json
+    "detail": "Preferencia Mercado Pago criada com sucesso.",
+    ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 761, in end_headers
+    self.send_header("Access-Control-Allow-Origin", "*")
+    ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 538, in end_headers
+    self.flush_headers()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 542, in flush_headers
+    self.wfile.write(b"".join(self._headers_buffer))
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 845, in write
+    self._sock.sendall(b)
+ConnectionResetError: [WinError 10054] Foi forçado o cancelamento de uma conexão existente pelo host remoto
+----------------------------------------

@@ -1,0 +1,28 @@
+{
+    "product":  "Valley ERP Lojista",
+    "version":  "v051",
+    "generated_at":  "2026-05-14T05:01:48.3758806-03:00",
+    "api_base_url":  "https://admin.brasildesconto.com.br",
+    "flutter_entrypoint":  "frontend/flutter/lib/merchant_erp_desktop_main.dart",
+    "release_root":  "admin/downloads/v051",
+    "windows_install":  "PowerShell: .\\\\install-valley-erp-lojista-windows.ps1",
+    "linux_install":  "bash install-valley-erp-lojista-linux.sh",
+    "artifacts":  [
+                      {
+                          "kind":  "windows_x64_zip",
+                          "name":  "ValleyERP-Lojista-Windows-x64-v051.zip",
+                          "bytes":  14484409,
+                          "sha1":  "10B102CAE3460CD0557E630FE42737ED39B167FB",
+                          "sha256":  "77CA0FD924FFC4FE5E1CD226AE5C7256DCED92152F717D031D29AFC144A0242A",
+                          "public_url":  "https://admin.brasildesconto.com.br/downloads/v051/ValleyERP-Lojista-Windows-x64-v051.zip"
+                      },
+                      {
+                          "kind":  "linux_x64_tar_gz",
+                          "name":  "ValleyERP-Lojista-Linux-x64-v051.tar.gz",
+                          "bytes":  1559,
+                          "sha1":  "68D7EC862FC87307897CB62153DBDB685FCDDA35",
+                          "sha256":  "907EB7138038C1F995B08B1E200F02D2A132F1D819E8739E16AD90B39D8FA3E1",
+                          "public_url":  "https://admin.brasildesconto.com.br/downloads/v051/ValleyERP-Lojista-Linux-x64-v051.tar.gz"
+                      }
+                  ]
+}

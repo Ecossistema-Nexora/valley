@@ -50,6 +50,7 @@ MERCHANT_ERP_WORKSPACES = [
     {"key": "merchant-campaigns", "title": "Campanhas", "host": "campanhas-lojista"},
     {"key": "merchant-reports", "title": "Relatorios", "host": "relatorios-lojista"},
     {"key": "merchant-finance", "title": "Financeiro", "host": "financeiro-lojista"},
+    {"key": "merchant-banking", "title": "APIs Bancarias", "host": "bancos-lojista"},
     {"key": "merchant-registration", "title": "Cadastro", "host": "cadastro-lojista"},
     {"key": "merchant-profile", "title": "Perfil", "host": "perfil-lojista"},
     {"key": "merchant-accounting", "title": "Contabil", "host": "contabil-lojista"},

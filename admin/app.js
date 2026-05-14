@@ -268,6 +268,7 @@
     { key: "merchant-campaigns", title: "Campanhas", subdomain: "campanhas-lojista", costZeroHost: "campanhas-lojista", sectionId: "settingsSection", copy: "Promocoes, cupons, anuncios, canais e calendario comercial." },
     { key: "merchant-reports", title: "Relatorios", subdomain: "relatorios-lojista", costZeroHost: "relatorios-lojista", sectionId: "performanceDashboard", copy: "Relatorios executivos, exportacoes e acompanhamento por periodo." },
     { key: "merchant-finance", title: "Financeiro Lojista", subdomain: "financeiro-lojista", costZeroHost: "financeiro-lojista", sectionId: "financialDashboard", copy: "Recebiveis, taxas, repasses, margem, fees e fechamento financeiro." },
+    { key: "merchant-banking", title: "APIs Bancarias", subdomain: "bancos-lojista", costZeroHost: "bancos-lojista", sectionId: "financialDashboard", forceAdminHost: true, copy: "PIX, Open Finance, recebiveis, extratos, conciliacao e webhooks bancarios." },
     { key: "merchant-registration", title: "Cadastro", subdomain: "cadastro-lojista", costZeroHost: "cadastro-lojista", sectionId: "modulesWorkspace", copy: "Dados comerciais, lojas, usuarios, permissoes e documentos." },
     { key: "merchant-profile", title: "Perfil", subdomain: "perfil-lojista", costZeroHost: "perfil-lojista", sectionId: "modulesWorkspace", copy: "Perfil da empresa, identidade visual, atendimento e politicas." },
     { key: "merchant-accounting", title: "Contabil", subdomain: "contabil-lojista", costZeroHost: "contabil-lojista", sectionId: "financialDashboard", copy: "Notas, impostos, centros de custo, conciliacao e livros auxiliares." },
@@ -409,6 +410,12 @@
     moduleWorkspaceTabs: loadModuleWorkspaceTabs(),
     activeAdminSurfaceTab: loadAdminSurfaceTab(),
     merchantErpDraft: loadMerchantErpDraft(),
+    merchantErpRuntime: {
+      loading: true,
+      privileges: null,
+      offline: null,
+      error: "",
+    },
     activeMerchantErpFeature: loadMerchantErpFeature(),
     adminSession: null,
   };
@@ -525,6 +532,17 @@
     } catch (_error) {
       return;
     }
+  }
+
+  function adminAuthHeaders(extra = {}) {
+    const token = readAdminAuthToken();
+    return token
+      ? {
+          ...extra,
+          "Authorization": `Bearer ${token}`,
+          "X-Valley-Session": token,
+        }
+      : extra;
   }
 
   function setAdminAuthStatus(message, tone = "muted") {
@@ -2243,6 +2261,46 @@
     }
   }
 
+  async function loadMerchantErpRuntime() {
+    try {
+      const [privilegeResponse, offlineResponse] = await Promise.all([
+        fetch("/api/merchant-erp/privileges", {
+          cache: "no-store",
+          credentials: "same-origin",
+          headers: adminAuthHeaders({ Accept: "application/json" }),
+        }),
+        fetch("/api/merchant-erp/offline-queue", {
+          cache: "no-store",
+          credentials: "same-origin",
+          headers: adminAuthHeaders({ Accept: "application/json" }),
+        }),
+      ]);
+      const privileges = await privilegeResponse.json();
+      const offline = await offlineResponse.json();
+      if (!privilegeResponse.ok || privileges.status !== "ok") {
+        throw new Error(privileges.detail || privileges.message || `HTTP ${privilegeResponse.status}`);
+      }
+      if (!offlineResponse.ok || offline.status !== "ok") {
+        throw new Error(offline.detail || offline.message || `HTTP ${offlineResponse.status}`);
+      }
+      state.merchantErpRuntime = {
+        loading: false,
+        privileges,
+        offline,
+        error: "",
+      };
+    } catch (error) {
+      state.merchantErpRuntime = {
+        loading: false,
+        privileges: null,
+        offline: null,
+        error: error instanceof Error ? error.message : "falha ao carregar runtime do ERP",
+      };
+    } finally {
+      renderMerchantErp();
+    }
+  }
+
   function renderImportedPricingDesk() {
     if (
       !elements.importedPricingSummary ||
@@ -2923,9 +2981,18 @@
     return normalized.startsWith("admin.") ? normalized.slice("admin.".length) : normalized;
   }
 
+  function workspaceShouldUseAdminHost(workspace) {
+    return (
+      workspace.key === "home" ||
+      workspace.forceAdminHost ||
+      workspace.workspaceKind === "merchant_erp" ||
+      isMerchantErpWorkspaceKey(workspace.key)
+    );
+  }
+
   function workspaceHttpsAliasHost(workspace) {
     const adminHost = activeAdminHost().hostname;
-    if (workspace.key === "home" || isLocalAdminHostname(adminHost)) {
+    if (workspaceShouldUseAdminHost(workspace) || isLocalAdminHostname(adminHost)) {
       return adminHost;
     }
     const publicRootHost = publicRootHostFromAdminHost(adminHost);
@@ -2950,6 +3017,9 @@
     const adminHost = activeAdminHost();
     if (workspace.key === "home") {
       return `${adminHost.protocol}//${adminHost.host}/`;
+    }
+    if (workspaceShouldUseAdminHost(workspace)) {
+      return `${adminHost.protocol}//${adminHost.host}/?workspace=${workspace.key}#${workspace.sectionId}`;
     }
 
     if (!isLocalAdminHostname(adminHost.hostname) && adminHost.hostname.includes(".")) {
@@ -3610,6 +3680,15 @@
         queue: ["Recebiveis", "Taxas", "Repasses", "Chargeback"],
         table: ["Periodo", "Bruto", "Taxas", "Liquido"],
       },
+      "merchant-banking": {
+        code: "BANK",
+        title: "APIs Bancarias",
+        accent: "#0369a1",
+        icon: "API",
+        focus: "PIX, Open Finance, extrato, recebiveis, webhooks e conciliacao bancaria.",
+        queue: ["PIX", "Open Finance", "Recebiveis", "Webhook"],
+        table: ["Conector", "Escopo", "Ambiente", "Status"],
+      },
       "merchant-registration": {
         code: "CAD",
         title: "Cadastro",
@@ -3761,13 +3840,13 @@
 
   function activeMerchantErpWorkspace() {
     const current = activeWorkspace();
-    if (current?.workspaceKind === "merchant_erp") {
-      return current;
-    }
-
     const saved = state.activeMerchantErpFeature && workspaceByKey(state.activeMerchantErpFeature);
     if (saved?.workspaceKind === "merchant_erp") {
       return saved;
+    }
+
+    if (current?.workspaceKind === "merchant_erp") {
+      return current;
     }
 
     return workspaceByKey("merchant-erp") || merchantErpWorkspaces()[0] || null;
@@ -3780,6 +3859,9 @@
     }
     state.activeMerchantErpFeature = workspace.key;
     persistMerchantErpFeature(workspace.key);
+    if (window.history?.replaceState) {
+      window.history.replaceState(null, "", `/?workspace=${workspace.key}#${MERCHANT_ERP_SECTION_ID}`);
+    }
     renderMerchantErp();
     announce(`${workspace.title} aberto no ERP lojista.`);
   }
@@ -3795,6 +3877,11 @@
     const activeIntegrations = integrations.filter((item) => item.enabled !== false).length;
     const checkout = checkoutHealthState.payload || {};
     const draft = state.merchantErpDraft || {};
+    const privileges = state.merchantErpRuntime?.privileges || {};
+    const offline = state.merchantErpRuntime?.offline || {};
+    const effectivePrivileges = Array.isArray(privileges.effective_privileges) ? privileges.effective_privileges : [];
+    const staffMembers = Array.isArray(privileges.staff_members) ? privileges.staff_members : [];
+    const syncedOfflineEvents = Array.isArray(offline.synced_events) ? offline.synced_events : [];
 
     return {
       itemsTotal: Number(pricing.items_total || supplierTotal || 0),
@@ -3807,6 +3894,10 @@
       activeIntegrations,
       checkoutReady: Boolean(checkout.checkout_ready),
       checkoutStatus: checkout.checkout_ready ? "checkout pronto" : String(checkout.status || "checkout pendente"),
+      effectivePrivilegesTotal: effectivePrivileges.length,
+      staffTotal: staffMembers.length,
+      offlineSyncedTotal: syncedOfflineEvents.length,
+      runtimeError: state.merchantErpRuntime?.error || "",
       lastSavedAt: draft.lastSavedAt || "",
       lastSyncAt: draft.lastSyncAt || "",
       lastReportAt: draft.lastReportAt || "",
@@ -3819,6 +3910,8 @@
       { label: "Receita potencial", value: formatMoney(summary.revenue), meta: `${formatMoney(summary.netRevenue)} liquido estimado` },
       { label: "Integracoes", value: `${formatCount(summary.activeIntegrations)}/${formatCount(MARKETPLACE_API_PROVIDERS.length)}`, meta: "marketplaces e fornecedores" },
       { label: "Checkout", value: summary.checkoutReady ? "Pronto" : "Pendente", meta: summary.checkoutStatus },
+      { label: "Acessos", value: formatCount(summary.effectivePrivilegesTotal), meta: `${formatCount(summary.staffTotal)} usuario(s) lojista` },
+      { label: "PDV offline", value: formatCount(summary.offlineSyncedTotal), meta: summary.runtimeError || "fila idempotente ativa" },
     ];
   }
 
@@ -3861,6 +3954,54 @@
     };
 
     const profiles = {
+      "merchant-pdv": {
+        title: "PDV, maquina e checkout confirmado",
+        copy: "Venda presencial, Tap-to-Pay, maquina de pagamento, carrinho e confirmacao persistente de checkout.",
+        lanes: [
+          ["Caixa", "Aberto", "terminal ativo"],
+          ["Maquina", "Adapter", "provider pronto"],
+          ["Checkout", summary.checkoutReady ? "OK" : "Pendente", "gateway online"],
+          ["Auditoria", summary.lastSyncAt ? formatTimestamp(summary.lastSyncAt) : "nova", "eventos"],
+        ],
+        actions: [
+          ["pdv-sale", "Registrar venda", "Grava venda presencial no runtime."],
+          ["payment-terminal-confirm", "Confirmar maquina", "Registra confirmacao do terminal."],
+          ["checkout-confirm", "Confirmar checkout", "Fecha o checkout com comprovante auditavel."],
+          ["finance-close", "Conciliar caixa", "Vincula PDV ao financeiro."],
+        ],
+        columns: ["Terminal", "Turno", "Vendas", "Status"],
+        records: [
+          ["PDV-001", "Manha", summary.checkoutReady ? "checkout ok" : "validar", "aberto"],
+          ["Maquina", "Cartao/PIX", "provider adapter", "pronto"],
+          ["Comprovante", "Webhook", "persistente", "auditavel"],
+          ["Caixa", "D+0", "conciliacao", "fila"],
+        ],
+        timeline: ["Venda iniciada", "Maquina confirmada", "Checkout aprovado", "Comprovante salvo"],
+      },
+      "merchant-banking": {
+        title: "APIs bancarias e conciliacao",
+        copy: "Espaco de integracao para PIX, Open Finance, extrato, recebiveis, webhooks assinados e conciliacao.",
+        lanes: [
+          ["PIX", "Pronto", "webhook assinado"],
+          ["Open Finance", "Pronto", "contas e extrato"],
+          ["Recebiveis", "Pronto", "repasse e settlement"],
+          ["Cofre", "Obrigatorio", "segredos fora do git"],
+        ],
+        actions: [
+          ["bank-api-sync", "Sincronizar bancos", "Grava evento de sincronizacao bancaria."],
+          ["bank-api-register", "Registrar conector", "Prepara contrato de provider bancario."],
+          ["bank-reconcile", "Conciliar recebiveis", "Liga checkout, PDV e extrato."],
+          ["finance-close", "Fechar ciclo", "Gera evento financeiro consolidado."],
+        ],
+        columns: ["Conector", "Escopo", "Ambiente", "Status"],
+        records: [
+          ["PIX Gateway", "pix/webhook", "sandbox+producao", "ativo"],
+          ["Open Finance", "contas/extrato", "sandbox+producao", "ativo"],
+          ["Recebiveis", "repasse/chargeback", "sandbox+producao", "ativo"],
+          ["Cofre", "secret refs", "runtime", "obrigatorio"],
+        ],
+        timeline: ["Provider registrado", "Webhook assinado", "Extrato lido", "Conciliacao fechada"],
+      },
       "merchant-orders": {
         title: "Pedidos, SLA e pos-venda",
         copy: "Mesa de pedidos com entrada, separacao, cancelamento, devolucao e atendimento.",
@@ -4027,7 +4168,150 @@
     return profiles[key] || (key === "merchant-warehouse" || key === "merchant-carrier-cross-docking" ? profiles["merchant-logistics"] : base);
   }
 
-  function runMerchantErpP0Action(actionKey) {
+  async function persistMerchantErpRuntimeAction(actionKey, extraPayload = {}) {
+    const activeWorkspace = activeMerchantErpWorkspace();
+    const feature = merchantErpBlueprint(activeWorkspace?.key);
+    const action = String(actionKey || "").trim();
+    if (!activeWorkspace || !action) {
+      return null;
+    }
+    try {
+      const response = await fetch("/api/merchant-erp/action", {
+        method: "POST",
+        headers: {
+          ...adminAuthHeaders({
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+          }),
+        },
+        credentials: "same-origin",
+        body: JSON.stringify({
+          module_key: activeWorkspace.key,
+          module_label: activeWorkspace.title,
+          workspace_host: workspaceHostLabel(activeWorkspace),
+          action,
+          feature_code: feature.code,
+          store_name: state.merchantErpDraft?.storeName || "",
+          operator: state.merchantErpDraft?.operator || "",
+          terminal_provider: "valley_plug",
+          connector_key: activeWorkspace.key === "merchant-banking" ? "banking_api_slot" : "",
+          ...extraPayload,
+        }),
+      });
+      const payload = await response.json();
+      if (!response.ok || payload.status !== "ok") {
+        throw new Error(payload.detail || payload.message || `HTTP ${response.status}`);
+      }
+      return payload;
+    } catch (error) {
+      announce(`Falha ao persistir acao do ERP: ${error.message || error}`);
+      return null;
+    }
+  }
+
+  function merchantErpOfflineQueue() {
+    const queue = Array.isArray(state.merchantErpDraft?.offlineQueue) ? state.merchantErpDraft.offlineQueue : [];
+    return queue.filter((item) => item && typeof item === "object");
+  }
+
+  function queueMerchantErpOfflineEvent(actionKey, summary) {
+    const activeWorkspace = activeMerchantErpWorkspace();
+    const now = new Date().toISOString();
+    const localSaleId = `sale-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
+    const idempotencyKey = `${activeWorkspace?.key || "merchant-pdv"}:${actionKey}:${localSaleId}`;
+    const event = {
+      created_at: now,
+      local_sale_id: localSaleId,
+      device_id: "PDV-VALLEY-001",
+      event_type: actionKey || "pdv_sale",
+      amount_brl: Number(summary.netRevenue || 19.9),
+      payment_method: actionKey === "pdv-sale" ? "pending_authorization" : "card_terminal",
+      idempotency_key: idempotencyKey,
+      sync_status: "pending",
+    };
+    state.merchantErpDraft = {
+      ...(state.merchantErpDraft || {}),
+      offlineQueue: [event, ...merchantErpOfflineQueue()].slice(0, 30),
+    };
+    persistMerchantErpDraft();
+    return event;
+  }
+
+  async function syncMerchantErpOfflineQueue() {
+    const queue = merchantErpOfflineQueue();
+    const pending = queue.filter((item) => item.sync_status !== "synced");
+    if (!pending.length) {
+      announce("Fila offline do PDV sem pendencias.");
+      return null;
+    }
+    try {
+      const response = await fetch("/api/merchant-erp/offline-sync", {
+        method: "POST",
+        credentials: "same-origin",
+        headers: {
+          ...adminAuthHeaders({
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+          }),
+        },
+        body: JSON.stringify({ events: pending }),
+      });
+      const payload = await response.json();
+      if (!response.ok || payload.status !== "ok") {
+        throw new Error(payload.detail || payload.message || `HTTP ${response.status}`);
+      }
+      const syncedKeys = new Set([
+        ...(Array.isArray(payload.accepted) ? payload.accepted : []),
+        ...(Array.isArray(payload.duplicates) ? payload.duplicates : []),
+      ].map((item) => String(item.idempotency_key || "")).filter(Boolean));
+      state.merchantErpDraft = {
+        ...(state.merchantErpDraft || {}),
+        lastOfflineSyncAt: new Date().toISOString(),
+        offlineQueue: queue.map((item) => syncedKeys.has(String(item.idempotency_key || "")) ? { ...item, sync_status: "synced" } : item),
+      };
+      persistMerchantErpDraft();
+      await loadMerchantErpRuntime();
+      announce(`${formatCount(payload.accepted_total || 0)} evento(s) offline sincronizado(s), ${formatCount(payload.duplicate_total || 0)} duplicado(s) ignorado(s).`);
+      return payload;
+    } catch (error) {
+      announce(`Fila offline mantida localmente: ${error.message || error}`);
+      return null;
+    }
+  }
+
+  async function mutateMerchantErpPrivilege(action, extraPayload = {}) {
+    try {
+      const response = await fetch("/api/merchant-erp/privileges", {
+        method: "POST",
+        credentials: "same-origin",
+        headers: {
+          ...adminAuthHeaders({
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+          }),
+        },
+        body: JSON.stringify({ action, ...extraPayload }),
+      });
+      const payload = await response.json();
+      if (!response.ok || payload.status !== "ok") {
+        throw new Error(payload.detail || payload.message || `HTTP ${response.status}`);
+      }
+      state.merchantErpRuntime = {
+        ...(state.merchantErpRuntime || {}),
+        loading: false,
+        privileges: payload,
+        error: "",
+      };
+      renderMerchantErp();
+      announce("Privilegios do ERP lojista atualizados.");
+      return payload;
+    } catch (error) {
+      announce(`Falha ao atualizar privilegios: ${error.message || error}`);
+      return null;
+    }
+  }
+
+  async function runMerchantErpP0Action(actionKey) {
     const activeWorkspace = activeMerchantErpWorkspace();
     const feature = merchantErpBlueprint(activeWorkspace?.key);
     const summary = merchantErpRuntimeSummary();
@@ -4048,8 +4332,28 @@
       p0History: [entry, ...history].slice(0, 8),
     };
     persistMerchantErpDraft();
+    const persisted = await persistMerchantErpRuntimeAction(action[0], {
+      action_label: action[1],
+      action_detail: action[2],
+      amount_brl: summary.netRevenue || 0,
+    });
+    if (activeWorkspace?.key === "merchant-pdv" || ["pdv-sale", "payment-terminal-confirm", "checkout-confirm", "finance-close"].includes(action[0])) {
+      queueMerchantErpOfflineEvent(action[0], summary);
+      await syncMerchantErpOfflineQueue();
+    }
+    if (persisted?.event_id) {
+      state.merchantErpDraft = {
+        ...(state.merchantErpDraft || {}),
+        lastRuntimeEventId: persisted.event_id,
+      };
+      persistMerchantErpDraft();
+    }
     renderMerchantErp();
-    announce(`${action[1]} registrado no ERP lojista.`);
+    announce(
+      persisted?.event_id
+        ? `${action[1]} registrado no runtime do ERP.`
+        : `${action[1]} registrado localmente; runtime exige sessao de lojista.`,
+    );
   }
 
   function merchantErpFormFields(workspace, feature) {
@@ -4072,31 +4376,52 @@
     ];
   }
 
-  function runMerchantErpAction(action) {
+  async function runMerchantErpAction(action) {
     const now = new Date().toISOString();
+    if (String(action || "").startsWith("grant:")) {
+      await mutateMerchantErpPrivilege("grant", {
+        privilege_key: String(action).slice(6),
+      });
+      return;
+    }
+    if (action === "invite-staff") {
+      await mutateMerchantErpPrivilege("invite", {
+        display_name: "Operador PDV",
+        email: `operador.${Date.now()}@valley.local`,
+        roles: ["cashier"],
+      });
+      return;
+    }
+    if (action === "sync-offline") {
+      await syncMerchantErpOfflineQueue();
+      return;
+    }
     if (String(action || "").startsWith("p0:")) {
-      runMerchantErpP0Action(String(action).slice(3));
+      await runMerchantErpP0Action(String(action).slice(3));
       return;
     }
     if (action === "save") {
       state.merchantErpDraft = { ...(state.merchantErpDraft || {}), lastSavedAt: now };
       persistMerchantErpDraft();
+      await persistMerchantErpRuntimeAction("save");
       renderMerchantErp();
-      announce("Configuração do ERP lojista salva localmente.");
+      announce("Configuração do ERP lojista salva e enviada ao runtime.");
       return;
     }
     if (action === "sync") {
       state.merchantErpDraft = { ...(state.merchantErpDraft || {}), lastSyncAt: now, syncStatus: "queued" };
       persistMerchantErpDraft();
+      await persistMerchantErpRuntimeAction("sync");
       renderMerchantErp();
-      announce("Sincronização do ERP lojista enfileirada no painel.");
+      announce("Sincronização do ERP lojista enfileirada no runtime.");
       return;
     }
     if (action === "report") {
       state.merchantErpDraft = { ...(state.merchantErpDraft || {}), lastReportAt: now, reportStatus: "READY" };
       persistMerchantErpDraft();
+      await persistMerchantErpRuntimeAction("report");
       renderMerchantErp();
-      announce("Relatório executivo do lojista gerado no estado local.");
+      announce("Relatório executivo do lojista gerado e persistido.");
       return;
     }
     if (action === "copy") {
@@ -4111,6 +4436,107 @@
       [field]: value,
     };
     persistMerchantErpDraft();
+  }
+
+  function merchantErpRuntimePanelMarkup(activeWorkspace, summary) {
+    const privileges = state.merchantErpRuntime?.privileges || {};
+    const offline = state.merchantErpRuntime?.offline || {};
+    const staffMembers = Array.isArray(privileges.staff_members) ? privileges.staff_members : [];
+    const effective = Array.isArray(privileges.effective_privileges) ? privileges.effective_privileges : [];
+    const syncedEvents = Array.isArray(offline.synced_events) ? offline.synced_events : [];
+    const localQueue = merchantErpOfflineQueue();
+    const runtimeError = state.merchantErpRuntime?.error || "";
+    const showPrivilegeControls = ["merchant-team", "merchant-security", "merchant-erp", "merchant-settings"].includes(activeWorkspace?.key);
+    const showOfflineControls = activeWorkspace?.key === "merchant-pdv";
+
+    if (!showPrivilegeControls && !showOfflineControls) {
+      return "";
+    }
+
+    const staffRows = staffMembers.slice(0, 6).map((staff) => {
+      const roleLabel = Array.isArray(staff.roles) ? staff.roles.join(", ") : "";
+      const privilegeCount = effective.filter((item) => item.staff_id === staff.staff_id).length;
+      return `
+        <tr>
+          <td>${escapeHtml(staff.display_name || staff.email || "Operador")}</td>
+          <td>${escapeHtml(roleLabel || "sem papel")}</td>
+          <td>${escapeHtml(formatCount(privilegeCount))}</td>
+          <td>${escapeHtml(staff.status || "active")}</td>
+        </tr>
+      `;
+    }).join("");
+
+    const offlineRows = localQueue.slice(0, 6).map((entry) => `
+      <tr>
+        <td>${escapeHtml(entry.local_sale_id || "venda local")}</td>
+        <td>${escapeHtml(entry.event_type || "pdv_sale")}</td>
+        <td>${escapeHtml(formatMoney(entry.amount_brl || 0))}</td>
+        <td>${escapeHtml(entry.sync_status || "pending")}</td>
+      </tr>
+    `).join("");
+
+    return `
+      <section class="erp-specific-panel merchant-runtime-guard-panel">
+        <div class="erp-specific-head">
+          <div>
+            <span class="small-label">Runtime persistente</span>
+            <h4>${showOfflineControls ? "PDV offline-first e sync" : "Equipe, seguranca e privilegios efetivos"}</h4>
+            <p class="muted-copy">${escapeHtml(runtimeError || "Contratos online carregados do runtime do ERP lojista.")}</p>
+          </div>
+          <div class="pill-row">
+            ${rowPill(`${formatCount(summary.effectivePrivilegesTotal)} privilegios`, "pill-navy")}
+            ${rowPill(`${formatCount(summary.offlineSyncedTotal)} sync PDV`, "pill-accent")}
+          </div>
+        </div>
+        ${showOfflineControls ? `
+          <div class="merchant-p0-action-grid">
+            <button type="button" class="merchant-p0-action" data-merchant-action="p0:pdv-sale">
+              <strong>Venda offline</strong>
+              <span>Cria venda local e sincroniza quando houver sessao.</span>
+            </button>
+            <button type="button" class="merchant-p0-action" data-merchant-action="sync-offline">
+              <strong>Sincronizar fila</strong>
+              <span>Reenvia pendencias com idempotency key.</span>
+            </button>
+          </div>
+          <div class="erp-table-wrap">
+            <table class="erp-data-table">
+              <thead><tr><th>Venda local</th><th>Evento</th><th>Valor</th><th>Status</th></tr></thead>
+              <tbody>${offlineRows || `<tr><td colspan="4">Fila local vazia. Registre uma venda para testar o modo offline.</td></tr>`}</tbody>
+            </table>
+          </div>
+          <div class="merchant-p0-history">
+            ${syncedEvents.slice(0, 4).map((event) => `
+              <article>
+                <strong>${escapeHtml(event.local_sale_id || "sync")}</strong>
+                <span>${escapeHtml(event.payment_status || "sincronizado")} · ${escapeHtml(formatTimestamp(event.received_at_utc))}</span>
+              </article>
+            `).join("") || `<article><strong>Nenhum sync remoto</strong><span>O primeiro sync sera registrado no runtime.</span></article>`}
+          </div>
+        ` : `
+          <div class="merchant-p0-action-grid">
+            <button type="button" class="merchant-p0-action" data-merchant-action="invite-staff">
+              <strong>Criar operador</strong>
+              <span>Adiciona operador de caixa ao lojista atual.</span>
+            </button>
+            <button type="button" class="merchant-p0-action" data-merchant-action="grant:pdv.sale.offline">
+              <strong>Liberar PDV offline</strong>
+              <span>Concede venda offline ao primeiro colaborador.</span>
+            </button>
+            <button type="button" class="merchant-p0-action" data-merchant-action="grant:stock.movement">
+              <strong>Liberar estoque</strong>
+              <span>Concede movimentacao de estoque auditavel.</span>
+            </button>
+          </div>
+          <div class="erp-table-wrap">
+            <table class="erp-data-table">
+              <thead><tr><th>Pessoa</th><th>Papel</th><th>Privilegios</th><th>Status</th></tr></thead>
+              <tbody>${staffRows || `<tr><td colspan="4">Nenhum usuario lojista carregado.</td></tr>`}</tbody>
+            </table>
+          </div>
+        `}
+      </section>
+    `;
   }
 
   function renderMerchantErp() {
@@ -4229,6 +4655,7 @@
               `).join("")}
             </div>
           </section>
+          ${merchantErpRuntimePanelMarkup(activeWorkspace, summary)}
           <div class="erp-ops-grid">
             <section class="erp-canvas-card">
               <div class="erp-card-head">
@@ -7449,6 +7876,7 @@
     loadCheckoutHealth();
     loadMarketplaceApiConfig();
     loadImportedPricing();
+    loadMerchantErpRuntime();
   }
 
   bootstrapAdminGate();

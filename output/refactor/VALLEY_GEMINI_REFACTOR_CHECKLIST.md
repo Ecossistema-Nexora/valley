@@ -1,9 +1,9 @@
 # Valley - Gemini Refactor Checklist
 
-- Gerado em UTC: `2026-05-14T06:50:14Z`
-- Arquivos varridos: `1499`
-- Pendencias: `162`
-- Digest: `44d5c6ab8382a4f806aa7dda33e35f280259a4b82f823f9f2d103ce2c9294be5`
+- Gerado em UTC: `2026-05-14T16:23:21Z`
+- Arquivos varridos: `1611`
+- Pendencias: `164`
+- Digest: `ed4d6557d3fd96dca2edb7f20323b5731d1e98cccc5e9061696502cb5b1a5372`
 
 ## Regras
 
@@ -166,13 +166,15 @@
 - [ ] 150. `structured_header_missing` em `scripts/start_valley_tailscale_runtime.ps1` - Headers ausentes: PROPOSITO:, CONTEXTO:, REGRAS: Acao: Adicionar comentario/header no formato correto do arquivo com PROPOSITO, CONTEXTO e REGRAS.
 - [ ] 151. `structured_header_missing` em `scripts/start_whatsapp_web_login.ps1` - Headers ausentes: PROPOSITO:, CONTEXTO:, REGRAS: Acao: Adicionar comentario/header no formato correto do arquivo com PROPOSITO, CONTEXTO e REGRAS.
 - [ ] 152. `structured_header_missing` em `scripts/sync_codex_cloud_environment.ps1` - Headers ausentes: PROPOSITO:, CONTEXTO:, REGRAS: Acao: Adicionar comentario/header no formato correto do arquivo com PROPOSITO, CONTEXTO e REGRAS.
-- [ ] 153. `structured_header_missing` em `scripts/tailscale_docker_status.ps1` - Headers ausentes: PROPOSITO:, CONTEXTO:, REGRAS: Acao: Adicionar comentario/header no formato correto do arquivo com PROPOSITO, CONTEXTO e REGRAS.
-- [ ] 154. `structured_header_missing` em `scripts/termius_prereq_check.ps1` - Headers ausentes: PROPOSITO:, CONTEXTO:, REGRAS: Acao: Adicionar comentario/header no formato correto do arquivo com PROPOSITO, CONTEXTO e REGRAS.
-- [ ] 155. `structured_header_missing` em `scripts/termius_tailscale_status.ps1` - Headers ausentes: PROPOSITO:, CONTEXTO:, REGRAS: Acao: Adicionar comentario/header no formato correto do arquivo com PROPOSITO, CONTEXTO e REGRAS.
-- [ ] 156. `structured_header_missing` em `scripts/translate_stock_catalog_ptbr.py` - Headers ausentes: PROPOSITO:, CONTEXTO:, REGRAS: Acao: Adicionar comentario/header no formato correto do arquivo com PROPOSITO, CONTEXTO e REGRAS.
-- [ ] 157. `structured_header_missing` em `scripts/update_planos_progress.py` - Headers ausentes: PROPOSITO:, CONTEXTO:, REGRAS: Acao: Adicionar comentario/header no formato correto do arquivo com PROPOSITO, CONTEXTO e REGRAS.
-- [ ] 158. `structured_header_missing` em `scripts/valley_admin_builder.py` - Headers ausentes: PROPOSITO:, CONTEXTO:, REGRAS: Acao: Adicionar comentario/header no formato correto do arquivo com PROPOSITO, CONTEXTO e REGRAS.
-- [ ] 159. `structured_header_missing` em `scripts/valley_codex_token_budget.py` - Headers ausentes: PROPOSITO:, CONTEXTO:, REGRAS: Acao: Adicionar comentario/header no formato correto do arquivo com PROPOSITO, CONTEXTO e REGRAS.
-- [ ] 160. `structured_header_missing` em `scripts/valley_communication_bridge.py` - Headers ausentes: PROPOSITO:, CONTEXTO:, REGRAS: Acao: Adicionar comentario/header no formato correto do arquivo com PROPOSITO, CONTEXTO e REGRAS.
-- [ ] 161. `structured_header_missing` em `scripts/valley_db_orchestrator.py` - Headers ausentes: PROPOSITO:, CONTEXTO:, REGRAS: Acao: Adicionar comentario/header no formato correto do arquivo com PROPOSITO, CONTEXTO e REGRAS.
-- [ ] 162. `structured_header_missing` em `scripts/valley_module_automation.py` - Headers ausentes: PROPOSITO:, CONTEXTO:, REGRAS: Acao: Adicionar comentario/header no formato correto do arquivo com PROPOSITO, CONTEXTO e REGRAS.
+- [ ] 153. `structured_header_missing` em `scripts/sync_valley_brand_icons.py` - Headers ausentes: PROPOSITO:, CONTEXTO:, REGRAS: Acao: Adicionar comentario/header no formato correto do arquivo com PROPOSITO, CONTEXTO e REGRAS.
+- [ ] 154. `structured_header_missing` em `scripts/tailscale_docker_status.ps1` - Headers ausentes: PROPOSITO:, CONTEXTO:, REGRAS: Acao: Adicionar comentario/header no formato correto do arquivo com PROPOSITO, CONTEXTO e REGRAS.
+- [ ] 155. `structured_header_missing` em `scripts/termius_prereq_check.ps1` - Headers ausentes: PROPOSITO:, CONTEXTO:, REGRAS: Acao: Adicionar comentario/header no formato correto do arquivo com PROPOSITO, CONTEXTO e REGRAS.
+- [ ] 156. `structured_header_missing` em `scripts/termius_tailscale_status.ps1` - Headers ausentes: PROPOSITO:, CONTEXTO:, REGRAS: Acao: Adicionar comentario/header no formato correto do arquivo com PROPOSITO, CONTEXTO e REGRAS.
+- [ ] 157. `structured_header_missing` em `scripts/translate_stock_catalog_ptbr.py` - Headers ausentes: PROPOSITO:, CONTEXTO:, REGRAS: Acao: Adicionar comentario/header no formato correto do arquivo com PROPOSITO, CONTEXTO e REGRAS.
+- [ ] 158. `structured_header_missing` em `scripts/update_planos_progress.py` - Headers ausentes: PROPOSITO:, CONTEXTO:, REGRAS: Acao: Adicionar comentario/header no formato correto do arquivo com PROPOSITO, CONTEXTO e REGRAS.
+- [ ] 159. `structured_header_missing` em `scripts/validate_valley_release_gate.py` - Headers ausentes: PROPOSITO:, CONTEXTO:, REGRAS: Acao: Adicionar comentario/header no formato correto do arquivo com PROPOSITO, CONTEXTO e REGRAS.
+- [ ] 160. `structured_header_missing` em `scripts/valley_admin_builder.py` - Headers ausentes: PROPOSITO:, CONTEXTO:, REGRAS: Acao: Adicionar comentario/header no formato correto do arquivo com PROPOSITO, CONTEXTO e REGRAS.
+- [ ] 161. `structured_header_missing` em `scripts/valley_codex_token_budget.py` - Headers ausentes: PROPOSITO:, CONTEXTO:, REGRAS: Acao: Adicionar comentario/header no formato correto do arquivo com PROPOSITO, CONTEXTO e REGRAS.
+- [ ] 162. `structured_header_missing` em `scripts/valley_communication_bridge.py` - Headers ausentes: PROPOSITO:, CONTEXTO:, REGRAS: Acao: Adicionar comentario/header no formato correto do arquivo com PROPOSITO, CONTEXTO e REGRAS.
+- [ ] 163. `structured_header_missing` em `scripts/valley_db_orchestrator.py` - Headers ausentes: PROPOSITO:, CONTEXTO:, REGRAS: Acao: Adicionar comentario/header no formato correto do arquivo com PROPOSITO, CONTEXTO e REGRAS.
+- [ ] 164. `structured_header_missing` em `scripts/valley_module_automation.py` - Headers ausentes: PROPOSITO:, CONTEXTO:, REGRAS: Acao: Adicionar comentario/header no formato correto do arquivo com PROPOSITO, CONTEXTO e REGRAS.

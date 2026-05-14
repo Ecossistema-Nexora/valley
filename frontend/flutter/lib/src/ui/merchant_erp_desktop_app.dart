@@ -4,6 +4,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+import '../data/merchant_erp_offline_store.dart';
+
 const String _apiBaseUrl = String.fromEnvironment(
   'VALLEY_PRODUCT_API_BASE_URL',
   defaultValue: 'https://admin.brasildesconto.com.br',
@@ -434,10 +436,145 @@ class _MerchantModuleScreen extends StatefulWidget {
 }
 
 class _MerchantModuleScreenState extends State<_MerchantModuleScreen> {
+  final MerchantErpOfflineStore _offlineStore = MerchantErpOfflineStore();
   String _filter = '';
   String _notice = 'Modulo online pronto para operar.';
   bool _noticeDanger = false;
   bool _submitting = false;
+  MerchantErpOfflineSnapshot _offlineSnapshot =
+      const MerchantErpOfflineSnapshot(events: <MerchantErpOfflineEvent>[]);
+
+  @override
+  void initState() {
+    super.initState();
+    _loadOfflineSnapshot();
+  }
+
+  Future<void> _loadOfflineSnapshot() async {
+    final MerchantErpOfflineSnapshot snapshot = await _offlineStore.load();
+    if (!mounted) {
+      return;
+    }
+    setState(() => _offlineSnapshot = snapshot);
+  }
+
+  List<Widget> _moduleActionButtons() {
+    final List<Widget> buttons = <Widget>[
+      FilledButton.icon(
+        onPressed: _submitting ? null : () => _submitModuleAction('save'),
+        icon: const Icon(Icons.save_outlined),
+        label: Text(_submitting ? 'Enviando' : 'Salvar'),
+      ),
+      OutlinedButton.icon(
+        onPressed: _submitting ? null : () => _submitModuleAction('sync'),
+        icon: const Icon(Icons.sync_rounded),
+        label: const Text('Sincronizar'),
+      ),
+      OutlinedButton.icon(
+        onPressed: _submitting ? null : () => _submitModuleAction('report'),
+        icon: const Icon(Icons.summarize_outlined),
+        label: const Text('Relatorio'),
+      ),
+    ];
+    if (widget.module.key == 'sales' || widget.module.key == 'checkout') {
+      buttons.addAll(<Widget>[
+        OutlinedButton.icon(
+          onPressed: _submitting ? null : _queueOfflineSale,
+          icon: const Icon(Icons.cloud_off_rounded),
+          label: const Text('Venda offline'),
+        ),
+        OutlinedButton.icon(
+          onPressed: _submitting
+              ? null
+              : () => _submitModuleAction('checkout-confirm'),
+          icon: const Icon(Icons.verified_rounded),
+          label: const Text('Confirmar checkout'),
+        ),
+        OutlinedButton.icon(
+          onPressed: _submitting
+              ? null
+              : () => _submitModuleAction('payment-terminal-confirm'),
+          icon: const Icon(Icons.point_of_sale_rounded),
+          label: const Text('Maquina'),
+        ),
+      ]);
+    }
+    if (widget.module.key == 'finance' || widget.module.key == 'banking') {
+      buttons.add(
+        OutlinedButton.icon(
+          onPressed: _submitting
+              ? null
+              : () => _submitModuleAction('bank-api-sync'),
+          icon: const Icon(Icons.account_balance_rounded),
+          label: const Text('API bancaria'),
+        ),
+      );
+    }
+    return buttons;
+  }
+
+  Future<void> _queueOfflineSale() async {
+    setState(() {
+      _submitting = true;
+      _notice = 'Registrando venda na fila local do PDV...';
+      _noticeDanger = false;
+    });
+    try {
+      final MerchantErpOfflineEvent event = await _offlineStore.queueSale(
+        deviceId: 'PDV-${widget.session.merchantName}',
+        amountBrl: 19.9,
+        paymentMethod: 'pending_authorization',
+      );
+      final http.Response response = await http
+          .post(
+            Uri.parse('$_apiBaseUrl/api/merchant-erp/offline-sync'),
+            headers: <String, String>{
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              'Authorization': 'Bearer ${widget.session.token}',
+            },
+            body: jsonEncode(<String, Object?>{
+              'events': <Map<String, Object?>>[event.toJson()],
+            }),
+          )
+          .timeout(const Duration(seconds: 8));
+      final Map<String, Object?> payload = _asMap(jsonDecode(response.body));
+      if (response.statusCode >= 200 &&
+          response.statusCode < 300 &&
+          payload['status'] == 'ok') {
+        await _offlineStore.markSynced(<String>{event.idempotencyKey});
+        await _loadOfflineSnapshot();
+        setState(() {
+          _notice =
+              'Venda offline sincronizada sem duplicidade (${payload['accepted_total'] ?? 0} nova, ${payload['duplicate_total'] ?? 0} duplicada).';
+          _noticeDanger = false;
+        });
+        return;
+      }
+      await _loadOfflineSnapshot();
+      setState(() {
+        _notice =
+            'Venda salva localmente; sync recusado: ${payload['detail'] ?? payload['message'] ?? response.statusCode}.';
+        _noticeDanger = true;
+      });
+    } on TimeoutException {
+      await _loadOfflineSnapshot();
+      setState(() {
+        _notice = 'Venda salva localmente; sincronizacao aguardando reconexao.';
+        _noticeDanger = false;
+      });
+    } on Object catch (error) {
+      await _loadOfflineSnapshot();
+      setState(() {
+        _notice = 'Venda salva localmente; sync pendente: $error';
+        _noticeDanger = false;
+      });
+    } finally {
+      if (mounted) {
+        setState(() => _submitting = false);
+      }
+    }
+  }
 
   Future<void> _submitModuleAction(String action) async {
     setState(() {
@@ -565,26 +702,21 @@ class _MerchantModuleScreenState extends State<_MerchantModuleScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 12),
-                  FilledButton.icon(
-                    onPressed: _submitting
-                        ? null
-                        : () => _submitModuleAction('save'),
-                    icon: const Icon(Icons.save_outlined),
-                    label: Text(_submitting ? 'Enviando' : 'Salvar'),
-                  ),
-                  const SizedBox(width: 8),
-                  OutlinedButton.icon(
-                    onPressed: _submitting
-                        ? null
-                        : () => _submitModuleAction('sync'),
-                    icon: const Icon(Icons.sync_rounded),
-                    label: const Text('Sincronizar'),
-                  ),
                 ],
               ),
+              const SizedBox(height: 10),
+              Wrap(spacing: 8, runSpacing: 8, children: _moduleActionButtons()),
               const SizedBox(height: 14),
               _StatusLine(text: _notice, danger: _noticeDanger),
+              if (widget.module.key == 'sales' ||
+                  widget.module.key == 'checkout') ...<Widget>[
+                const SizedBox(height: 10),
+                _StatusLine(
+                  text:
+                      'Fila offline local: ${_offlineSnapshot.events.length} evento(s), ${_offlineSnapshot.pending.length} pendente(s).',
+                  danger: _offlineSnapshot.pending.isNotEmpty,
+                ),
+              ],
               const SizedBox(height: 14),
               Expanded(
                 child: _Panel(
@@ -645,14 +777,19 @@ class _LoginBrandPanel extends StatelessWidget {
           Container(
             width: 62,
             height: 62,
+            clipBehavior: Clip.antiAlias,
             decoration: BoxDecoration(
               color: _valleyGreen,
               borderRadius: BorderRadius.circular(14),
             ),
-            child: const Icon(
-              Icons.auto_awesome_rounded,
-              color: Colors.white,
-              size: 34,
+            child: Image.asset(
+              'assets/brand/logo-valley-official.png',
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) => const Icon(
+                Icons.auto_awesome_rounded,
+                color: Colors.white,
+                size: 34,
+              ),
             ),
           ),
           const SizedBox(height: 28),
@@ -679,6 +816,7 @@ class _LoginBrandPanel extends StatelessWidget {
               _DarkPill(label: 'Estoque'),
               _DarkPill(label: 'Pedidos'),
               _DarkPill(label: 'Financeiro'),
+              _DarkPill(label: 'Bancos'),
               _DarkPill(label: 'Marketplace'),
             ],
           ),
@@ -1102,6 +1240,7 @@ IconData _iconFor(String icon, String key) {
     'groups' || 'customers' => Icons.groups_2_outlined,
     'wallet' || 'finance' => Icons.account_balance_wallet_outlined,
     'payments' || 'checkout' => Icons.payments_outlined,
+    'account_balance' || 'banking' => Icons.account_balance_outlined,
     'local_shipping' || 'delivery' => Icons.local_shipping_outlined,
     'hub' || 'marketplace' => Icons.hub_outlined,
     'bar_chart' || 'reports' => Icons.bar_chart_rounded,
