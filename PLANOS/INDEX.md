@@ -5,9 +5,9 @@
 
 - Regra: cada item de checklist dos planos conta como uma etapa.
 - Atualize este indice depois de cada acao concluida com `python scripts\update_planos_progress.py`.
-- Etapas concluidas desde o primeiro plano do indice: `240/241`.
-- Produzido desde o Plano 1: `99.6%`.
-- Falta produzir para a conclusao final acumulada: `0.4%`.
+- Etapas concluidas desde o primeiro plano do indice: `257/268`.
+- Produzido desde o Plano 1: `95.9%`.
+- Falta produzir para a conclusao final acumulada: `4.1%`.
 <!-- progresso:fim -->
 
 | versao | criado_em_brt | arquivo | status | escopo | etapas | produzido | falta_produzir | ultima_atualizacao_brt |
@@ -54,5 +54,9 @@
 | v040 | 2026-05-13 09:07:10 BRT | [v040__20260513-090710-brt__release_templates_stitch_apk_pdf.md](./v040__20260513-090710-brt__release_templates_stitch_apk_pdf.md) | concluido | Release web dos templates Stitch com PDF e APK atualizados | 5/5 | 100.0% | 0.0% | 2026-05-13 09:20:00 BRT |
 | v041 | 2026-05-13 09:51:47 BRT | [v041__20260513-095147-brt__onda1_p0_stitch_telas_executaveis.md](./v041__20260513-095147-brt__onda1_p0_stitch_telas_executaveis.md) | concluido | Onda 1 P0 Stitch em telas executaveis web, Flutter e APK | 6/6 | 100.0% | 0.0% | 2026-05-13 10:38:20 BRT |
 | v042 | 2026-05-13 17:57:00 BRT | [v042__20260513-175700-brt__onda2_erp_lojista_p0p1_executavel.md](./v042__20260513-175700-brt__onda2_erp_lojista_p0p1_executavel.md) | concluido | Onda 2 ERP lojista P0/P1 executavel no painel web | 6/6 | 100.0% | 0.0% | 2026-05-13 18:36:00 BRT |
+| v043 | 2026-05-13 19:09:00 BRT | [v043__20260513-190900-brt__stitch_visivel_mandatorio_web_apk.md](./v043__20260513-190900-brt__stitch_visivel_mandatorio_web_apk.md) | concluido | Stitch visivel mandatorio web e APK substituido pela fonte v2 | 6/6 | 100.0% | 0.0% | 2026-05-13 21:55:00 BRT |
+| v044 | 2026-05-13 21:55:00 BRT | [v044__20260513-215500-brt__stitch_v2_fonte_da_verdade_web_apk.md](./v044__20260513-215500-brt__stitch_v2_fonte_da_verdade_web_apk.md) | em_andamento | Stitch v2 como fonte da verdade ativa para web, APK, PDF e Telegram | 6/8 | 75.0% | 25.0% | 2026-05-13 21:55:00 BRT |
+| v045 | 2026-05-13 22:34:11 BRT | [v045__20260513-223411-brt__pdv_offline_first_erp_lojista.md](./v045__20260513-223411-brt__pdv_offline_first_erp_lojista.md) | em_andamento | PDV offline-first do ERP Lojista com fila local e sync automatico | 2/7 | 28.6% | 71.4% | 2026-05-13 22:34:11 BRT |
+| v046 | 2026-05-13 22:37:11 BRT | [v046__20260513-223711-brt__base_privilegios_usuarios_erp_lojista.md](./v046__20260513-223711-brt__base_privilegios_usuarios_erp_lojista.md) | em_andamento | Base de privilegios e usuarios do ERP Lojista gerenciada pelo administrador lojista | 3/6 | 50.0% | 50.0% | 2026-05-13 22:37:11 BRT |
 | v019 | 2026-05-05 17:52:38 BRT | [v019__20260505-175238-brt__passo_1_nucleo_relacional_nexora_v40.md](./v019__20260505-175238-brt__passo_1_nucleo_relacional_nexora_v40.md) | concluido | PASSO 1 do banco hibrido Nexora V40 com nucleo relacional de identidade, perfis, wallets e LED Cards | 0/0 | 100.0% | 0.0% | 2026-05-05 17:52:38 BRT |
 | v020 | 2026-05-05 17:55:49 BRT | [v020__20260505-175549-brt__passo_2_ledger_financeiro_smart_equity.md](./v020__20260505-175549-brt__passo_2_ledger_financeiro_smart_equity.md) | concluido | PASSO 2 do banco hibrido Nexora V40 com ledger financeiro, Smart Equity e orders mestre | 0/0 | 100.0% | 0.0% | 2026-05-05 17:55:49 BRT |

@@ -1,9 +1,9 @@
 # Valley - Gemini Refactor Checklist
 
-- Gerado em UTC: `2026-05-14T00:23:13Z`
-- Arquivos varridos: `1359`
+- Gerado em UTC: `2026-05-14T01:34:48Z`
+- Arquivos varridos: `1347`
 - Pendencias: `160`
-- Digest: `d41b6e1231bc4eb7a6ef57aadd5a379b4cf73f99885e34e9f2a82d065e6136f8`
+- Digest: `c6768c147ab7259de762d21c129b37bf9f1a65595f604d3aa3833fa0fa5429ca`
 
 ## Regras
 
@@ -21,7 +21,7 @@
 - [ ] 5. `structured_header_missing` em `docs/auth-multitenancy.md` - Headers ausentes: PROPOSITO:, CONTEXTO:, REGRAS: Acao: Adicionar comentario/header no formato correto do arquivo com PROPOSITO, CONTEXTO e REGRAS.
 - [ ] 6. `structured_header_missing` em `docs/cluster-addons.md` - Headers ausentes: PROPOSITO:, CONTEXTO:, REGRAS: Acao: Adicionar comentario/header no formato correto do arquivo com PROPOSITO, CONTEXTO e REGRAS.
 - [ ] 7. `structured_header_missing` em `docs/deployment-order.md` - Headers ausentes: PROPOSITO:, CONTEXTO:, REGRAS: Acao: Adicionar comentario/header no formato correto do arquivo com PROPOSITO, CONTEXTO e REGRAS.
-- [ ] 8. `structured_header_missing` em `docs/design/stitch_exports/20260513_valley_erp/stitch_valley_erp/valley/DESIGN.md` - Headers ausentes: PROPOSITO:, CONTEXTO:, REGRAS: Acao: Adicionar comentario/header no formato correto do arquivo com PROPOSITO, CONTEXTO e REGRAS.
+- [ ] 8. `structured_header_missing` em `docs/design/stitch_exports/20260513_valley_erp_v2/stitch_valley_erp/valley/DESIGN.md` - Headers ausentes: PROPOSITO:, CONTEXTO:, REGRAS: Acao: Adicionar comentario/header no formato correto do arquivo com PROPOSITO, CONTEXTO e REGRAS.
 - [ ] 9. `structured_header_missing` em `docs/design/valley-mobile-release-blueprint-v037.md` - Headers ausentes: PROPOSITO:, CONTEXTO:, REGRAS: Acao: Adicionar comentario/header no formato correto do arquivo com PROPOSITO, CONTEXTO e REGRAS.
 - [ ] 10. `structured_header_missing` em `docs/design/valley-stitch-template-blueprint-release-v036.md` - Headers ausentes: PROPOSITO:, CONTEXTO:, REGRAS: Acao: Adicionar comentario/header no formato correto do arquivo com PROPOSITO, CONTEXTO e REGRAS.
 - [ ] 11. `structured_header_missing` em `docs/github-actions.md` - Headers ausentes: PROPOSITO:, CONTEXTO:, REGRAS: Acao: Adicionar comentario/header no formato correto do arquivo com PROPOSITO, CONTEXTO e REGRAS.

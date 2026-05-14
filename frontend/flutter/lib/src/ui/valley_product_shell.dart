@@ -45,7 +45,7 @@ Color _mediaStageColor(BuildContext context) => _useLightTemplate(context)
     ? const Color(0xFFF4F7FF)
     : const Color(0xFF0E1323);
 
-const String _stitchSourceVersion = '20260513_valley_erp';
+const String _stitchSourceVersion = '20260513_valley_erp_v2';
 const String _stitchSourceRule =
     'Stitch e a fonte da verdade ativa; variacoes anteriores ficam como legado.';
 

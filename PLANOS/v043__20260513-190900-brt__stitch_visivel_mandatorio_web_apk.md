@@ -18,8 +18,8 @@ REGRAS: Tornar Stitch a primeira tela visivel, invalidar estado legado, nao deix
 - [x] Corrigir cache-buster e prova Stitch no login web.
 - [x] Forcar aba Stitch P0 como entrada padrao e invalidar `localStorage` legado.
 - [x] Tornar Stitch P0 mobile a tela inicial do APK com botoes funcionais.
-- [ ] Validar web, Flutter e links publicos.
-- [ ] Gerar, publicar e enviar APK/PDF v043 pelo Telegram.
+- [x] Validar web, Flutter e links publicos. Substituido pela validacao v044 com fonte Stitch v2.
+- [x] Gerar, publicar e enviar APK/PDF v043 pelo Telegram. Substituido pela release v044 com fonte Stitch v2.
 
 ## Evidencias
 
@@ -31,6 +31,10 @@ REGRAS: Tornar Stitch a primeira tela visivel, invalidar estado legado, nao deix
 
 - Nenhum bloqueio tecnico local nesta etapa.
 
+## Substituicao
+
+- A v043 foi absorvida pela v044 porque o usuario forneceu `stitch_valley_erp (2).zip` como nova fonte da verdade antes da conclusao da entrega v043.
+
 ## Proxima Acao
 
-- Validar e publicar a release v043.
+- Concluir a release v044 com a fonte Stitch v2.

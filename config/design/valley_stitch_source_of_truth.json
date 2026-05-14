@@ -2,20 +2,24 @@
   "status": "active",
   "mandatory": true,
   "source_name": "Stitch Valley ERP",
-  "source_version": "20260513_valley_erp",
-  "source_zip": "stitch_valley_erp (1).zip",
-  "source_export_dir": "docs/design/stitch_exports/20260513_valley_erp/stitch_valley_erp",
-  "public_gallery_path": "/stitch/20260513_valley_erp/",
-  "public_manifest_path": "/stitch/20260513_valley_erp/manifest.json",
-  "public_gallery_url": "https://admin.brasildesconto.com.br/stitch/20260513_valley_erp/",
-  "public_manifest_url": "https://admin.brasildesconto.com.br/stitch/20260513_valley_erp/manifest.json",
-  "templates_total": 131,
-  "p0_total": 21,
-  "rule": "The Stitch 20260513 Valley ERP export is the mandatory source of truth for web panels and APK UI surfaces. Earlier UI variations are legacy and must not be treated as active product reference.",
+  "source_version": "20260513_valley_erp_v2",
+  "source_zip": "stitch_valley_erp (2).zip",
+  "source_zip_sha1": "ECC3D8A453E23BB013F96AE265F8BEEBCE11093B",
+  "source_export_dir": "docs/design/stitch_exports/20260513_valley_erp_v2/stitch_valley_erp",
+  "public_gallery_path": "/stitch/20260513_valley_erp_v2/",
+  "public_manifest_path": "/stitch/20260513_valley_erp_v2/manifest.json",
+  "public_gallery_url": "https://admin.brasildesconto.com.br/stitch/20260513_valley_erp_v2/",
+  "public_manifest_url": "https://admin.brasildesconto.com.br/stitch/20260513_valley_erp_v2/manifest.json",
+  "templates_total": 121,
+  "p0_total": 19,
+  "rule": "The Stitch 20260513 Valley ERP v2 export is the mandatory source of truth for web panels and APK UI surfaces. Earlier UI variations are obsolete and must not be treated as active product reference.",
+  "obsolete_versions": [
+    "20260513_valley_erp"
+  ],
   "active_web_surfaces": [
     "admin/app.js",
     "admin/styles.css",
-    "admin/stitch/20260513_valley_erp"
+    "admin/stitch/20260513_valley_erp_v2"
   ],
   "active_mobile_surfaces": [
     "frontend/flutter/lib/src/ui/valley_product_shell.dart",
@@ -31,7 +35,15 @@
     "valley_login",
     "valley_login_e_cadastro_mobile",
     "valley_login_lojista",
-    "valley_checkout_e_pagamento_mobile",
-    "valley_minhas_compras_mobile"
+    "valley_login_pt_br",
+    "valley_erp_cadastro_de_sku_mobile",
+    "valley_erp_cadastro_de_sku_mobile_pt_br",
+    "valley_erp_checkout_e_faturas_pt_br",
+    "valley_erp_checkout_lojista_pt_br",
+    "valley_erp_checkout_mobile_pt_br",
+    "valley_erp_gest_o_de_estoque_mobile",
+    "valley_erp_gest_o_de_estoque_mobile_pt_br",
+    "valley_gest_o_de_estoque_pt_br",
+    "valley_portal_p_blico_pt_br"
   ]
 }

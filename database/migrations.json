@@ -262,6 +262,13 @@
       "purpose_ptbr": "Materializa o ERP do lojista para marketplace com workspaces, PDV, armazem, metricas, campanhas, relatorios, financeiro, contabil/fiscal, integracoes, equipe, seguranca e auditoria.",
       "requires": ["008", "010", "019", "035", "036"],
       "provides": ["merchant_erp_workspaces", "merchant_erp_staff_members", "merchant_erp_pdv_terminals", "merchant_erp_pdv_sessions", "merchant_erp_cash_movements", "merchant_erp_order_pipeline", "merchant_erp_catalog_tasks", "merchant_erp_inventory_tasks", "merchant_erp_metric_snapshots", "merchant_erp_campaigns", "merchant_erp_report_exports", "merchant_erp_financial_closures", "merchant_erp_accounting_entries", "merchant_erp_integration_connections", "merchant_erp_security_events", "merchant_erp_audit_events", "v_merchant_erp_control_tower"]
+    },
+    {
+      "id": "038",
+      "path": "database/postgres/038_v47_merchant_erp_privileges_rbac.sql",
+      "purpose_ptbr": "Cria a base RBAC do ERP Lojista com catalogo de privilegios, perfis por papel, concessoes por usuario, visao efetiva e auditoria append-only gerenciada pelo administrador lojista.",
+      "requires": ["037"],
+      "provides": ["merchant_erp_privileges", "merchant_erp_role_profiles", "merchant_erp_role_profile_privileges", "merchant_erp_staff_privilege_grants", "merchant_erp_privilege_audit_events", "v_merchant_erp_staff_effective_privileges"]
     }
   ],
   "mongodb": [

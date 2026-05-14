@@ -5415,7 +5415,7 @@
         elements.heroSubcopy.textContent = `${workspace.copy} O painel permanece conectado ao manifesto, ao runtime publico e aos dashboards comerciais sem trocar de shell.`;
       } else {
         elements.heroTitle.textContent = "Stitch Valley ERP e a tela ativa do painel";
-        elements.heroSubcopy.textContent = "O pacote Stitch 20260513 Valley ERP substitui as variacoes antigas como referencia visual e funcional. A entrada padrao abre os templates P0 executaveis, com botoes conectados para ERP, SKU, pedidos, estoque, checkout e integracoes.";
+        elements.heroSubcopy.textContent = "O pacote Stitch 20260513 Valley ERP v2 substitui as variacoes antigas como referencia visual e funcional. A entrada padrao abre os templates P0 executaveis, com botoes conectados para ERP, SKU, pedidos, estoque, checkout e integracoes.";
       }
     }
 

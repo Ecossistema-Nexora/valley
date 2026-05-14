@@ -1,32 +1,32 @@
 PROPOSITO: Registrar a decisao mandataria de fonte da verdade visual e funcional para os paineis web e APK Valley.
-CONTEXTO: O export Stitch `stitch_valley_erp (1).zip` foi versionado, publicado e convertido em superficies executaveis na Onda 1; a Onda 2 passa a descartar variacoes anteriores como referencia ativa.
-REGRAS: Usar Stitch `20260513_valley_erp` como fonte obrigatoria, validar web antes de APK, manter artefatos publicos e nao reintroduzir telas antigas como produto ativo.
+CONTEXTO: O export Stitch `stitch_valley_erp (2).zip` foi versionado, publicado e convertido em superficies executaveis na Onda 1; a Onda 2 passa a descartar variacoes anteriores como referencia ativa.
+REGRAS: Usar Stitch `20260513_valley_erp_v2` como fonte obrigatoria, validar web antes de APK, manter artefatos publicos e nao reintroduzir telas antigas como produto ativo.
 
 # Stitch Valley Source Of Truth
 
 ## Decisao
 
-O pacote Stitch `20260513_valley_erp` passa a ser a fonte da verdade obrigatoria para:
+O pacote Stitch `20260513_valley_erp_v2` passa a ser a fonte da verdade obrigatoria para:
 
 - paineis web em `admin/`;
 - ERP lojista executavel;
 - trilhas mobile embarcadas no APK;
 - PDF de links e release publico.
 
-Qualquer variacao anterior de tela, copy, layout ou fluxo deixa de ser referencia ativa de produto. Ela pode permanecer no repositorio apenas como legado tecnico ou evidencia historica, mas nao deve guiar novas entregas.
+Qualquer variacao anterior de tela, copy, layout ou fluxo deixa de ser referencia ativa de produto. O pacote `20260513_valley_erp` fica obsoleto e nao deve ser usado por painel web, APK, PDF ou release.
 
 ## Artefatos Canonicos
 
 - Configuracao persistente: `config/design/valley_stitch_source_of_truth.json`.
-- Manifesto publico: `admin/stitch/20260513_valley_erp/manifest.json`.
-- Galeria publica: `admin/stitch/20260513_valley_erp/`.
+- Manifesto publico: `admin/stitch/20260513_valley_erp_v2/manifest.json`.
+- Galeria publica: `admin/stitch/20260513_valley_erp_v2/`.
 - Flutter asset: `frontend/flutter/assets/data/valley_stitch_source_of_truth.json`.
 - Painel executavel: `admin/app.js` e `admin/styles.css`.
 - APK executavel: `frontend/flutter/lib/src/ui/valley_product_shell.dart`.
 
 ## Hierarquia de Diretórios
 
-- `admin/stitch/20260513_valley_erp/`: publicacao canonica dos templates Stitch.
+- `admin/stitch/20260513_valley_erp_v2/`: publicacao canonica dos templates Stitch.
 - `admin/app.js`: aplicacao das telas web executaveis a partir do manifesto Stitch.
 - `admin/styles.css`: densidade visual e responsividade das superficies executaveis.
 - `config/design/`: contratos persistentes de fonte da verdade e design.
