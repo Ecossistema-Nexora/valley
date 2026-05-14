@@ -308,7 +308,41 @@
       action: "open-erp",
       detail: "Pedidos, SKU, estoque, PDV, financeiro, integracoes e rotinas salvas.",
     },
+    {
+      key: "valley_erp_cadastro_de_sku",
+      title: "Cadastro de SKU",
+      target: "ERP lojista",
+      pane: "merchant",
+      action: "open-sku",
+      detail: "Cadastro, preco, foto, variacao, estoque minimo e publicacao.",
+    },
+    {
+      key: "valley_erp_gest_o_de_pedidos_pt_br",
+      title: "Gestao de pedidos",
+      target: "ERP lojista",
+      pane: "merchant",
+      action: "open-orders",
+      detail: "Pedido, separacao, pagamento, etiqueta, cancelamento e pos-venda.",
+    },
+    {
+      key: "valley_erp_painel_de_controle_lojista",
+      title: "Painel de controle lojista",
+      target: "ERP lojista",
+      pane: "merchant",
+      action: "open-inventory",
+      detail: "Estoque, ruptura, reserva, integracoes, financeiro e indicadores.",
+    },
   ];
+  const STITCH_SOURCE_OF_TRUTH = {
+    version: "20260513_valley_erp",
+    mode: "mandatory",
+    templatesTotal: 131,
+    p0Total: 21,
+    publicManifestPath: "/stitch/20260513_valley_erp/manifest.json",
+    publicGalleryPath: "/stitch/20260513_valley_erp/",
+    sourceExportDir: "docs/design/stitch_exports/20260513_valley_erp/stitch_valley_erp",
+    rule: "Templates Stitch sao a fonte da verdade ativa para paineis web e APK; variacoes anteriores ficam descartadas como referencia ativa.",
+  };
   const PRICING_EDITABLE_FIELDS = [
     "target_net_revenue_pct",
     "platform_fee_pct",
@@ -3229,8 +3263,12 @@
     const catalogModulesTotal = catalogModules().length || allModules.length;
 
     return {
-      templatesTotal: 131,
-      p0Total: 21,
+      sourceVersion: STITCH_SOURCE_OF_TRUTH.version,
+      sourceMode: STITCH_SOURCE_OF_TRUTH.mode,
+      sourceRule: STITCH_SOURCE_OF_TRUTH.rule,
+      sourceManifestPath: STITCH_SOURCE_OF_TRUTH.publicManifestPath,
+      templatesTotal: STITCH_SOURCE_OF_TRUTH.templatesTotal,
+      p0Total: STITCH_SOURCE_OF_TRUTH.p0Total,
       webConverted: STITCH_P0_WEB_SCREENS.length,
       modulesTotal: release.modules_total || allModules.length,
       modulesCompleted: release.modules_completed || allModules.filter((module) => (module.checklist?.pending || 0) === 0).length,
@@ -3244,7 +3282,7 @@
       checkoutReady: Boolean(checkout.checkout_ready),
       adminUrl: activeAdminPublicUrl() || "https://admin.brasildesconto.com.br/",
       productUrl: activeProductPublicUrl() || "https://brasildesconto.com.br/product/",
-      galleryUrl: "/stitch/20260513_valley_erp/",
+      galleryUrl: STITCH_SOURCE_OF_TRUTH.publicGalleryPath,
     };
   }
 
@@ -3270,9 +3308,9 @@
       <section class="stitch-execution-shell">
         <div class="stitch-execution-topbar">
           <div>
-            <span class="small-label">Release web</span>
-            <strong>Onda 1 P0 ativa</strong>
-            <p class="muted-copy">A galeria Stitch virou uma camada operacional com telas reais, dados do runtime e ações executáveis.</p>
+            <span class="small-label">Fonte da verdade obrigatoria</span>
+            <strong>Stitch ${escapeHtml(summary.sourceVersion)}</strong>
+            <p class="muted-copy">${escapeHtml(summary.sourceRule)}</p>
           </div>
           <div class="stitch-execution-actions">
             <button type="button" class="secondary-button" data-stitch-action="sync-data">Sincronizar dados</button>
@@ -3282,16 +3320,17 @@
         </div>
         <div class="stitch-execution-hero">
           <div>
-            <span class="small-label">Admin Central 1/2</span>
-            <h3>Controle executivo conectado ao painel Valley</h3>
+            <span class="small-label">Admin Central, ERP lojista e mobile</span>
+            <h3>Templates Stitch assumidos como fonte ativa</h3>
             <p>
-              KPIs, workspaces, checkout, catálogo, integrações e ERP lojista agora estão organizados como uma tela P0 executável,
-              mantendo os templates Stitch como referência visual auditável.
+              KPIs, workspaces, checkout, catalogo, integracoes e ERP lojista ficam amarrados ao pacote Stitch publicado.
+              Qualquer tela anterior deixa de ser referencia de produto e passa a ser apenas legado tecnico.
             </p>
             <div class="pill-row">
               ${rowPill(`${formatCount(summary.templatesTotal)} templates publicados`, "pill-navy")}
               ${rowPill(`${formatCount(summary.p0Total)} P0`, "pill-accent")}
-              ${rowPill(`${formatCount(summary.webConverted)} web executáveis`, "pill-warn")}
+              ${rowPill(`${formatCount(summary.webConverted)} web executaveis`, "pill-warn")}
+              ${rowPill("variacoes antigas descartadas", "pill-danger")}
             </div>
           </div>
           <div class="stitch-url-stack">
@@ -3304,13 +3343,17 @@
               <strong>${escapeHtml(summary.productUrl)}</strong>
             </article>
             <article>
-              <span class="small-label">Stitch</span>
+              <span class="small-label">Manifesto fonte</span>
+              <strong>${escapeHtml(summary.sourceManifestPath)}</strong>
+            </article>
+            <article>
+              <span class="small-label">Galeria Stitch</span>
               <strong>${escapeHtml(summary.galleryUrl)}</strong>
             </article>
           </div>
         </div>
         <div class="stitch-kpi-grid">
-          ${summaryTileMarkup("Templates", formatCount(summary.templatesTotal), `${formatCount(summary.p0Total)} P0 publicados`)}
+          ${summaryTileMarkup("Templates", formatCount(summary.templatesTotal), `${formatCount(summary.p0Total)} P0 como fonte`)}
           ${summaryTileMarkup("Módulos", `${formatCount(summary.modulesCompleted)}/${formatCount(summary.modulesTotal)}`, "release operacional")}
           ${summaryTileMarkup("Catálogo", formatCount(summary.itemsTotal), `${formatCount(summary.approvedTotal)} aprovados`)}
           ${summaryTileMarkup("Checkout", summary.checkoutReady ? "Pronto" : "Pendente", "gate de compra")}
@@ -3431,7 +3474,20 @@
         return;
       case "open-erp":
         openAdminPaneSection("merchant", "merchantErpSection");
+        setActiveMerchantErpFeature("merchant-erp");
         announce("ERP do lojista aberto.");
+        return;
+      case "open-sku":
+        openAdminPaneSection("merchant", "merchantErpSection");
+        setActiveMerchantErpFeature("merchant-products");
+        return;
+      case "open-orders":
+        openAdminPaneSection("merchant", "merchantErpSection");
+        setActiveMerchantErpFeature("merchant-orders");
+        return;
+      case "open-inventory":
+        openAdminPaneSection("merchant", "merchantErpSection");
+        setActiveMerchantErpFeature("merchant-inventory");
         return;
       case "open-pricing":
         openAdminPaneSection("catalog", "importedPricingSection");
@@ -3754,6 +3810,226 @@
     ];
   }
 
+  function merchantErpOnda2Profile(key, feature, summary) {
+    const base = {
+      title: "Torre operacional P0/P1",
+      copy: "Rotinas criticas do lojista conectadas ao catalogo, checkout, publicacao e integracoes.",
+      lanes: [
+        ["Pedidos", formatCount(summary.reviewTotal + summary.approvedTotal), "entrada e revisao"],
+        ["SKU", formatCount(summary.itemsTotal), "catalogo sincronizado"],
+        ["Financeiro", formatMoney(summary.netRevenue), "liquido estimado"],
+        ["Integracoes", formatCount(summary.activeIntegrations), "conectores ativos"],
+      ],
+      actions: [
+        ["create-order", "Registrar pedido", "Abre uma tarefa operacional de pedido no painel."],
+        ["sku-draft", "Preparar SKU", "Marca o proximo SKU para cadastro e publicacao."],
+        ["stock-reserve", "Reservar estoque", "Cria uma reserva de estoque para conferencia."],
+        ["finance-close", "Conciliar financeiro", "Prepara o fechamento financeiro do ciclo."],
+        ["integration-sync", "Sincronizar conectores", "Enfileira marketplaces e fornecedores."],
+        ["logistics-label", "Gerar etiqueta", "Prepara fluxo de coleta e rastreio."],
+      ],
+      columns: ["Fila", "Responsavel", "Metrica", "Status"],
+      records: [
+        ["Pedidos novos", "Atendimento", `${formatCount(summary.reviewTotal)} em revisao`, summary.checkoutReady ? "checkout ok" : "checkout pendente"],
+        ["Catalogo SKU", "Operacao", `${formatCount(summary.itemsTotal)} itens`, `${formatCount(summary.blockedTotal)} bloqueios`],
+        ["Recebiveis", "Financeiro", formatMoney(summary.netRevenue), "estimado"],
+        ["Conectores", "Integracoes", `${formatCount(summary.activeIntegrations)} ativos`, "sync disponivel"],
+      ],
+      timeline: ["Pedido recebido", "SKU conferido", "Estoque reservado", "Pagamento conciliado"],
+    };
+
+    const profiles = {
+      "merchant-orders": {
+        title: "Pedidos, SLA e pos-venda",
+        copy: "Mesa de pedidos com entrada, separacao, cancelamento, devolucao e atendimento.",
+        lanes: [
+          ["Novos", formatCount(Math.max(1, summary.reviewTotal)), "aguardam aceite"],
+          ["Separacao", formatCount(Math.max(2, summary.suppliersTotal)), "em picking"],
+          ["SLA", summary.checkoutReady ? "OK" : "Atencao", "pagamento e entrega"],
+          ["Pos-venda", formatCount(summary.blockedTotal), "ocorrencias abertas"],
+        ],
+        actions: [
+          ["create-order", "Registrar pedido", "Cria uma tarefa de pedido com SLA."],
+          ["stock-reserve", "Separar estoque", "Reserva itens para picking."],
+          ["logistics-label", "Preparar envio", "Gera etapa de etiqueta e coleta."],
+        ],
+        columns: ["Pedido", "Cliente", "Etapa", "SLA"],
+        records: [
+          ["PED-1042", "Cliente recorrente", "Separacao", "2h"],
+          ["PED-1043", "Primeira compra", "Pagamento", summary.checkoutReady ? "OK" : "pendente"],
+          ["PED-1044", "Retirada", "Conferencia", "hoje"],
+          ["PED-1045", "Entrega", "Etiqueta", "fila"],
+        ],
+        timeline: ["Pedido aprovado", "Picking iniciado", "Pagamento validado", "Rastreio liberado"],
+      },
+      "merchant-products": {
+        title: "Cadastro de SKU e publicacao",
+        copy: "Ficha comercial de produto com fotos, variacoes, preco, estoque e status de publicacao.",
+        lanes: [
+          ["SKUs", formatCount(summary.itemsTotal), "catalogo importado"],
+          ["Revisao", formatCount(summary.reviewTotal), "curadoria"],
+          ["Aprovados", formatCount(summary.approvedTotal), "publicaveis"],
+          ["Bloqueios", formatCount(summary.blockedTotal), "corrigir antes de publicar"],
+        ],
+        actions: [
+          ["sku-draft", "Preparar SKU", "Cria rascunho de cadastro."],
+          ["stock-reserve", "Validar estoque", "Confere saldo e minimo."],
+          ["integration-sync", "Enviar marketplace", "Enfileira sync do produto."],
+        ],
+        columns: ["SKU", "Titulo", "Preco", "Status"],
+        records: [
+          ["SKU-VAL-001", "Produto validado", formatMoney(summary.revenue / Math.max(1, summary.itemsTotal)), "pronto"],
+          ["SKU-VAL-002", "Sem foto principal", "corrigir", "revisao"],
+          ["SKU-VAL-003", "Preco competitivo", "OK", "publicar"],
+          ["SKU-VAL-004", "Estoque minimo", "baixo", "alerta"],
+        ],
+        timeline: ["Titulo conferido", "Foto validada", "Preco calculado", "Publicacao agendada"],
+      },
+      "merchant-inventory": {
+        title: "Estoque, reserva e ruptura",
+        copy: "Saldo por SKU, reserva, reposicao, minimo, transferencia e baixa operacional.",
+        lanes: [
+          ["Disponivel", formatCount(summary.itemsTotal), "itens mapeados"],
+          ["Reservado", formatCount(summary.approvedTotal), "para pedidos"],
+          ["Minimo", formatCount(summary.blockedTotal), "alertas"],
+          ["Reposicao", formatCount(summary.suppliersTotal), "fornecedores"],
+        ],
+        actions: [
+          ["stock-reserve", "Reservar estoque", "Cria reserva para pedido."],
+          ["sku-draft", "Abrir SKU", "Leva o item para cadastro."],
+          ["integration-sync", "Atualizar saldo", "Sincroniza saldo com fornecedor."],
+        ],
+        columns: ["SKU", "Disponivel", "Reservado", "Minimo"],
+        records: [
+          ["SKU-VAL-001", formatCount(42), formatCount(8), formatCount(10)],
+          ["SKU-VAL-002", formatCount(12), formatCount(4), formatCount(15)],
+          ["SKU-VAL-003", formatCount(98), formatCount(18), formatCount(20)],
+          ["SKU-VAL-004", formatCount(7), formatCount(2), formatCount(12)],
+        ],
+        timeline: ["Saldo lido", "Reserva criada", "Minimo comparado", "Reposicao sugerida"],
+      },
+      "merchant-stock-count": {
+        title: "Inventario fisico e ajuste",
+        copy: "Contagem por codigo de barras ou QR Code, divergencia, avaria, alta e baixa.",
+        lanes: [
+          ["Leituras", formatCount(128), "QR/barcode"],
+          ["Divergencias", formatCount(Math.max(1, summary.blockedTotal)), "validar"],
+          ["Avarias", formatCount(3), "baixa assistida"],
+          ["Ajustes", formatCount(9), "pendentes"],
+        ],
+        actions: [
+          ["stock-reserve", "Abrir contagem", "Registra ciclo de inventario."],
+          ["sku-draft", "Corrigir cadastro", "Liga divergencia ao SKU."],
+          ["finance-close", "Lancar ajuste", "Prepara impacto financeiro."],
+        ],
+        columns: ["Produto", "Esperado", "Inventariado", "Diferenca"],
+        records: [
+          ["SKU-VAL-001", "42", "42", "0"],
+          ["SKU-VAL-002", "12", "10", "-2"],
+          ["SKU-VAL-003", "98", "101", "+3"],
+          ["SKU-VAL-004", "7", "6", "-1"],
+        ],
+        timeline: ["Ciclo aberto", "Leitura executada", "Divergencia registrada", "Ajuste preparado"],
+      },
+      "merchant-finance": {
+        title: "Financeiro, repasse e margem",
+        copy: "Recebiveis, taxas, repasses, margem, chargeback e fechamento financeiro.",
+        lanes: [
+          ["Bruto", formatMoney(summary.revenue), "receita sugerida"],
+          ["Liquido", formatMoney(summary.netRevenue), "estimado"],
+          ["Taxas", formatMoney(Math.max(0, summary.revenue - summary.netRevenue)), "fees e impostos"],
+          ["Checkout", summary.checkoutReady ? "Pronto" : "Pendente", "pagamento"],
+        ],
+        actions: [
+          ["finance-close", "Conciliar financeiro", "Registra fechamento do ciclo."],
+          ["create-order", "Auditar pedido", "Liga pedido ao repasse."],
+          ["integration-sync", "Sincronizar gateway", "Revalida notificacoes financeiras."],
+        ],
+        columns: ["Periodo", "Bruto", "Taxas", "Liquido"],
+        records: [
+          ["Hoje", formatMoney(summary.revenue * 0.08), formatMoney(summary.revenue * 0.012), formatMoney(summary.netRevenue * 0.08)],
+          ["7 dias", formatMoney(summary.revenue * 0.31), formatMoney(summary.revenue * 0.045), formatMoney(summary.netRevenue * 0.31)],
+          ["30 dias", formatMoney(summary.revenue), formatMoney(summary.revenue - summary.netRevenue), formatMoney(summary.netRevenue)],
+          ["Proximo repasse", "D+2", "sem bloqueio", summary.checkoutReady ? "apto" : "revisar"],
+        ],
+        timeline: ["Gateway validado", "Taxas calculadas", "Repasse previsto", "DRE pronta"],
+      },
+      "merchant-integrations": {
+        title: "Integracoes e webhooks",
+        copy: "Marketplaces, webhooks, seller IDs, tokens, scopes e sincronizacao de fornecedores.",
+        lanes: [
+          ["Ativos", formatCount(summary.activeIntegrations), "conectores"],
+          ["Fornecedores", formatCount(summary.suppliersTotal), "com catalogo"],
+          ["Sync", summary.lastSyncAt ? formatTimestamp(summary.lastSyncAt) : "Aguardando", "ultima fila"],
+          ["Checkout", summary.checkoutReady ? "OK" : "Pendente", "gateway"],
+        ],
+        actions: [
+          ["integration-sync", "Sincronizar conectores", "Enfileira todos os conectores ativos."],
+          ["sku-draft", "Enviar SKU", "Prepara payload de produto."],
+          ["finance-close", "Validar gateway", "Checa eventos de pagamento."],
+        ],
+        columns: ["Provider", "Escopo", "Ultimo sync", "Status"],
+        records: [
+          ["Mercado Pago", "checkout/webhook", summary.lastSyncAt ? formatTimestamp(summary.lastSyncAt) : "novo", summary.checkoutReady ? "OK" : "pendente"],
+          ["Fornecedor A", "catalogo/preco", "fila", "ativo"],
+          ["Marketplace B", "pedido/SKU", "manual", "revisar"],
+          ["ERP externo", "estoque/fiscal", "fila", "sandbox"],
+        ],
+        timeline: ["Webhook registrado", "Token validado", "Catalogo enfileirado", "Callback monitorado"],
+      },
+      "merchant-logistics": {
+        title: "Logistica, frete e rastreio",
+        copy: "Frete, etiqueta, coleta, entrega, SLA, rastreio e ocorrencias de ultima milha.",
+        lanes: [
+          ["Coletas", formatCount(6), "para hoje"],
+          ["Etiquetas", formatCount(18), "prontas"],
+          ["Ocorrencias", formatCount(Math.max(1, summary.blockedTotal)), "prioridade"],
+          ["SLA", "94%", "entrega no prazo"],
+        ],
+        actions: [
+          ["logistics-label", "Gerar etiqueta", "Cria tarefa de coleta e rastreio."],
+          ["create-order", "Abrir pedido", "Consulta pedido logistica."],
+          ["integration-sync", "Atualizar transportadora", "Sincroniza eventos de envio."],
+        ],
+        columns: ["Envio", "Transportadora", "Prazo", "Status"],
+        records: [
+          ["ENV-7001", "Correios", "D+3", "etiqueta"],
+          ["ENV-7002", "Transportadora", "D+2", "coleta"],
+          ["ENV-7003", "Motoboy", "hoje", "rota"],
+          ["ENV-7004", "Retirada", "balcao", "aguarda"],
+        ],
+        timeline: ["Etiqueta criada", "Coleta confirmada", "Rota atualizada", "Entrega monitorada"],
+      },
+    };
+
+    return profiles[key] || (key === "merchant-warehouse" || key === "merchant-carrier-cross-docking" ? profiles["merchant-logistics"] : base);
+  }
+
+  function runMerchantErpP0Action(actionKey) {
+    const activeWorkspace = activeMerchantErpWorkspace();
+    const feature = merchantErpBlueprint(activeWorkspace?.key);
+    const summary = merchantErpRuntimeSummary();
+    const profile = merchantErpOnda2Profile(activeWorkspace?.key, feature, summary);
+    const action = profile.actions.find((item) => item[0] === actionKey) || profile.actions[0];
+    const now = new Date().toISOString();
+    const history = Array.isArray(state.merchantErpDraft?.p0History) ? state.merchantErpDraft.p0History : [];
+    const entry = {
+      at: now,
+      workspace: activeWorkspace?.title || "ERP Lojista",
+      action: action[1],
+      status: "registrado",
+    };
+    state.merchantErpDraft = {
+      ...(state.merchantErpDraft || {}),
+      lastP0ActionAt: now,
+      lastP0Action: action[1],
+      p0History: [entry, ...history].slice(0, 8),
+    };
+    persistMerchantErpDraft();
+    renderMerchantErp();
+    announce(`${action[1]} registrado no ERP lojista.`);
+  }
+
   function merchantErpFormFields(workspace, feature) {
     const draft = state.merchantErpDraft || {};
     const values = {
@@ -3776,6 +4052,10 @@
 
   function runMerchantErpAction(action) {
     const now = new Date().toISOString();
+    if (String(action || "").startsWith("p0:")) {
+      runMerchantErpP0Action(String(action).slice(3));
+      return;
+    }
     if (action === "save") {
       state.merchantErpDraft = { ...(state.merchantErpDraft || {}), lastSavedAt: now };
       persistMerchantErpDraft();
@@ -3828,6 +4108,8 @@
     const kpis = merchantErpKpis(summary);
     const rows = merchantErpRows(feature, summary);
     const formFields = merchantErpFormFields(activeWorkspace, feature);
+    const p0Profile = merchantErpOnda2Profile(activeWorkspace.key, feature, summary);
+    const p0History = Array.isArray(state.merchantErpDraft?.p0History) ? state.merchantErpDraft.p0History : [];
     const activeHost = workspaceHostLabel(activeWorkspace);
     const chartHeights = [44, 62, 54, 78, 68, 86];
 
@@ -3865,6 +4147,18 @@
             <strong>${escapeHtml(activeHost)}</strong>
             <span>${escapeHtml(feature.focus)}</span>
           </div>
+          <section class="merchant-source-truth-banner">
+            <div>
+              <span class="small-label">Fonte da verdade ativa</span>
+              <strong>Stitch ${escapeHtml(STITCH_SOURCE_OF_TRUTH.version)}</strong>
+              <p class="muted-copy">${escapeHtml(STITCH_SOURCE_OF_TRUTH.rule)}</p>
+            </div>
+            <div class="pill-row">
+              ${rowPill(`${formatCount(STITCH_SOURCE_OF_TRUTH.templatesTotal)} templates`, "pill-navy")}
+              ${rowPill(`${formatCount(STITCH_SOURCE_OF_TRUTH.p0Total)} P0`, "pill-accent")}
+              ${rowPill("legado descartado", "pill-danger")}
+            </div>
+          </section>
           <div class="merchant-erp-app-grid">
             ${workspaces.slice(0, 12).map((workspace) => {
               const item = merchantErpBlueprint(workspace.key);
@@ -3886,6 +4180,33 @@
               </article>
             `).join("")}
           </div>
+          <section class="merchant-p0-command-center">
+            <div class="erp-specific-head">
+              <div>
+                <span class="small-label">Onda 2 P0/P1 executavel</span>
+                <h4>${escapeHtml(p0Profile.title)}</h4>
+                <p class="muted-copy">${escapeHtml(p0Profile.copy)}</p>
+              </div>
+              ${rowPill(state.merchantErpDraft?.lastP0Action ? `Ultima: ${state.merchantErpDraft.lastP0Action}` : "sem fila aberta", state.merchantErpDraft?.lastP0Action ? "pill-accent" : "pill-warn")}
+            </div>
+            <div class="merchant-p0-lane-grid">
+              ${p0Profile.lanes.map((lane) => `
+                <article class="merchant-p0-lane">
+                  <span class="small-label">${escapeHtml(lane[0])}</span>
+                  <strong>${escapeHtml(lane[1])}</strong>
+                  <p class="muted-copy">${escapeHtml(lane[2])}</p>
+                </article>
+              `).join("")}
+            </div>
+            <div class="merchant-p0-action-grid">
+              ${p0Profile.actions.map((action) => `
+                <button type="button" class="merchant-p0-action" data-merchant-action="p0:${escapeHtml(action[0])}">
+                  <strong>${escapeHtml(action[1])}</strong>
+                  <span>${escapeHtml(action[2])}</span>
+                </button>
+              `).join("")}
+            </div>
+          </section>
           <div class="erp-ops-grid">
             <section class="erp-canvas-card">
               <div class="erp-card-head">
@@ -3979,6 +4300,47 @@
                   `).join("")}
                 </tbody>
               </table>
+            </div>
+          </section>
+          <section class="erp-specific-panel merchant-p0-runtime-panel">
+            <div class="erp-specific-head">
+              <div>
+                <span class="small-label">Fonte Stitch materializada</span>
+                <h4>${escapeHtml(p0Profile.title)} sem variação paralela</h4>
+              </div>
+              ${rowPill(`${formatCount(p0Profile.records.length)} linhas`, "pill-navy")}
+            </div>
+            <div class="merchant-p0-timeline">
+              ${p0Profile.timeline.map((item, index) => `
+                <article>
+                  <span>${formatCount(index + 1)}</span>
+                  <strong>${escapeHtml(item)}</strong>
+                </article>
+              `).join("")}
+            </div>
+            <div class="erp-table-wrap">
+              <table class="erp-data-table">
+                <thead>
+                  <tr>
+                    ${p0Profile.columns.map((column) => `<th>${escapeHtml(column)}</th>`).join("")}
+                  </tr>
+                </thead>
+                <tbody>
+                  ${p0Profile.records.map((row) => `
+                    <tr>
+                      ${row.map((cell) => `<td>${escapeHtml(cell)}</td>`).join("")}
+                    </tr>
+                  `).join("")}
+                </tbody>
+              </table>
+            </div>
+            <div class="merchant-p0-history">
+              ${p0History.length ? p0History.map((entry) => `
+                <article>
+                  <strong>${escapeHtml(entry.action || "Acao")}</strong>
+                  <span>${escapeHtml(entry.workspace || "ERP Lojista")} · ${escapeHtml(formatTimestamp(entry.at))}</span>
+                </article>
+              `).join("") : `<article><strong>Nenhuma acao registrada</strong><span>Use os comandos P0/P1 acima para abrir uma trilha operacional.</span></article>`}
             </div>
           </section>
           <section class="erp-specific-panel">

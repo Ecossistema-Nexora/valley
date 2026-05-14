@@ -1,0 +1,43 @@
+{
+  "status": "active",
+  "mandatory": true,
+  "source_name": "Stitch Valley ERP",
+  "source_version": "20260513_valley_erp",
+  "public_manifest_url": "https://admin.brasildesconto.com.br/stitch/20260513_valley_erp/manifest.json",
+  "public_gallery_url": "https://admin.brasildesconto.com.br/stitch/20260513_valley_erp/",
+  "templates_total": 131,
+  "p0_total": 21,
+  "mobile_rule": "This APK must treat Stitch 20260513 Valley ERP as the active UI source of truth. Earlier variations are legacy.",
+  "mobile_p0": [
+    {
+      "key": "login",
+      "template": "valley_login",
+      "surface": "flutter_mobile"
+    },
+    {
+      "key": "checkout",
+      "template": "valley_checkout_e_pagamento_mobile",
+      "surface": "usuario_publico"
+    },
+    {
+      "key": "purchases",
+      "template": "valley_minhas_compras_mobile",
+      "surface": "usuario_publico"
+    },
+    {
+      "key": "tracking",
+      "template": "valley_minhas_compras_mobile",
+      "surface": "usuario_publico"
+    },
+    {
+      "key": "sku",
+      "template": "valley_erp_cadastro_de_sku_mobile",
+      "surface": "flutter_mobile"
+    },
+    {
+      "key": "inventory",
+      "template": "valley_erp_gest_o_de_estoque_mobile",
+      "surface": "flutter_mobile"
+    }
+  ]
+}

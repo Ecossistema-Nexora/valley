@@ -14,7 +14,7 @@
 - [x] Classificar Onda 1 P0 por superficie Valley: Flutter, admin web, ERP lojista e usuario publico. Concluido em 2026-05-13 08:56:50 BRT.
 - [x] Versionar assets brutos Stitch em `docs/design/stitch_exports/20260513_valley_erp`. Concluido em 2026-05-13 09:00:56 BRT.
 - [x] Publicar todos os 131 templates Stitch em `admin/stitch/20260513_valley_erp`. Concluido em 2026-05-13 09:06:58 BRT.
-- [ ] Promover P0 para handoff Figma e iniciar conversao controlada das primeiras telas executaveis.
+- [x] Promover P0 para handoff Figma e iniciar conversao controlada das primeiras telas executaveis. Concluido em 2026-05-13 17:56:56 BRT via v041.
 
 ## Evidencias
 
@@ -28,9 +28,9 @@
 
 ## Bloqueios
 
-- Handoff Figma ainda nao foi executado porque nao ha arquivo Figma ou alvo remoto informado nesta rodada.
-- A publicacao dos templates deve passar pelo gate Cloudflare antes da nova remessa APK.
+- Handoff Figma remoto ainda depende de alvo Figma autenticado, mas a conversao executavel P0 foi concluida no painel web e Flutter pelo plano v041.
+- Gate publico e APK da Onda 1 foram validados e publicados no v041.
 
 ## Proxima Acao
 
-- Converter a primeira fatia P0 executavel: admin central e ERP lojista desktop em `admin/app.js`/`admin/styles.css`, validando com browser antes de mexer no APK.
+- Continuar pela Onda 2 P0/P1 do ERP lojista: pedidos, SKU, estoque, financeiro, integracoes e logistica no painel web antes de qualquer novo APK.

@@ -45,6 +45,10 @@ Color _mediaStageColor(BuildContext context) => _useLightTemplate(context)
     ? const Color(0xFFF4F7FF)
     : const Color(0xFF0E1323);
 
+const String _stitchSourceVersion = '20260513_valley_erp';
+const String _stitchSourceRule =
+    'Stitch e a fonte da verdade ativa; variacoes anteriores ficam como legado.';
+
 const List<_StitchP0MobileStep> _stitchP0MobileSteps = <_StitchP0MobileStep>[
   _StitchP0MobileStep(
     key: 'login',
@@ -69,6 +73,18 @@ const List<_StitchP0MobileStep> _stitchP0MobileSteps = <_StitchP0MobileStep>[
     icon: Icons.local_shipping_rounded,
     title: 'Rastreio',
     detail: 'linha da entrega',
+  ),
+  _StitchP0MobileStep(
+    key: 'sku',
+    icon: Icons.inventory_2_rounded,
+    title: 'SKU',
+    detail: 'cadastro lojista',
+  ),
+  _StitchP0MobileStep(
+    key: 'inventory',
+    icon: Icons.qr_code_scanner_rounded,
+    title: 'Estoque',
+    detail: 'inventario e reserva',
   ),
 ];
 
@@ -5330,6 +5346,25 @@ class _StitchP0MobileRail extends StatelessWidget {
               ),
             ],
           ),
+          const SizedBox(height: 12),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: <Widget>[
+              _SourceChip(label: 'Fonte Stitch $_stitchSourceVersion'),
+              const _SourceChip(label: 'Mandatorio'),
+              const _SourceChip(label: 'Legado descartado'),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(
+            _stitchSourceRule,
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+              fontWeight: FontWeight.w700,
+              height: 1.25,
+            ),
+          ),
           const SizedBox(height: 14),
           LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
@@ -5351,6 +5386,34 @@ class _StitchP0MobileRail extends StatelessWidget {
             },
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _SourceChip extends StatelessWidget {
+  const _SourceChip({required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        color: ValleyBrandColors.cyan.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(
+          color: ValleyBrandColors.cyan.withValues(alpha: 0.22),
+        ),
+      ),
+      child: Text(
+        label,
+        style: theme.textTheme.labelSmall?.copyWith(
+          color: ValleyBrandColors.cyan,
+          fontWeight: FontWeight.w900,
+        ),
       ),
     );
   }

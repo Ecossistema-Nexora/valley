@@ -1,5 +1,5 @@
 window.VALLEY_ADMIN_DATA = {
-  "generated_at_utc": "2026-05-13T13:34:36.195162+00:00",
+  "generated_at_utc": "2026-05-13T21:35:55.516984+00:00",
   "registry_name": "Valley Omniverse V47 - Registro Canonico de Modulos",
   "source": "Esquema Consolidado do Valley Omniverse v47.pdf",
   "language_policy": "pt-BR simples com termos tecnicos em ingles quando forem padroes",
@@ -467,7 +467,7 @@ window.VALLEY_ADMIN_DATA = {
     "path": "../tmp/runtime/valley-admin-public-runtime.json",
     "status": "ok",
     "public_url": "https://admin.brasildesconto.com.br",
-    "permanence": "fixed_external",
+    "permanence": "release_gate_validated_persistent",
     "smoke_endpoints": {
       "healthz": "https://admin.brasildesconto.com.br/healthz",
       "admin_data": "https://admin.brasildesconto.com.br/api/admin-data"

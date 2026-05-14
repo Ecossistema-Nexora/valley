@@ -1,0 +1,65 @@
+{
+  "version": "v042",
+  "app_version": "1.0.10+57",
+  "generated_at_utc": "2026-05-13T21:32:49Z",
+  "product_api_base_url": "https://admin.brasildesconto.com.br",
+  "apk_strategy": "split-per-abi",
+  "recommended_android": "app-arm64-v8a-release.apk",
+  "stitch_source_of_truth": {
+    "version": "20260513_valley_erp",
+    "mandatory": true,
+    "public_manifest_url": "https://admin.brasildesconto.com.br/stitch/20260513_valley_erp/manifest.json",
+    "rule": "Templates Stitch sao a fonte da verdade ativa para paineis web e APK; variacoes anteriores ficam descartadas como referencia ativa."
+  },
+  "artifacts": [
+    {
+      "name": "app-arm64-v8a-release.apk",
+      "file": "app-arm64-v8a-release.apk",
+      "bytes": 20909563,
+      "sha1": "E1F70A84A91A4CC6F7C95F5CBA5FC43B097B76EB",
+      "public_url": "https://admin.brasildesconto.com.br/downloads/v042/app-arm64-v8a-release.apk"
+    },
+    {
+      "name": "app-armeabi-v7a-release.apk",
+      "file": "app-armeabi-v7a-release.apk",
+      "bytes": 18425379,
+      "sha1": "20C79FFCE1C01B2FF2449735B931E30874A82B65",
+      "public_url": "https://admin.brasildesconto.com.br/downloads/v042/app-armeabi-v7a-release.apk"
+    },
+    {
+      "name": "app-x86_64-release.apk",
+      "file": "app-x86_64-release.apk",
+      "bytes": 22336591,
+      "sha1": "DFF7F006D292556FE9056E20CFFB818D3461BB49",
+      "public_url": "https://admin.brasildesconto.com.br/downloads/v042/app-x86_64-release.apk"
+    }
+  ],
+  "web_validation": {
+    "public_url": "https://admin.brasildesconto.com.br/",
+    "playwright_console_errors": 0,
+    "screenshots": [
+      "output/playwright/v042_stitch_source_truth_erp_desktop.png",
+      "output/playwright/v042_stitch_source_truth_erp_mobile.png"
+    ]
+  },
+  "mobile_p0": [
+    "login",
+    "checkout",
+    "minhas_compras",
+    "rastreio",
+    "cadastro_sku",
+    "inventario"
+  ],
+  "release_documents": [
+    {
+      "name": "VALLEY_RELEASE_LINKS_MODULOS_ABNT.pdf",
+      "file": "VALLEY_RELEASE_LINKS_MODULOS_ABNT.pdf",
+      "public_url": "https://admin.brasildesconto.com.br/downloads/v042/VALLEY_RELEASE_LINKS_MODULOS_ABNT.pdf"
+    },
+    {
+      "name": "VALLEY_RELEASE_LINKS_MODULOS_ABNT.md",
+      "file": "VALLEY_RELEASE_LINKS_MODULOS_ABNT.md",
+      "public_url": "https://admin.brasildesconto.com.br/downloads/v042/VALLEY_RELEASE_LINKS_MODULOS_ABNT.md"
+    }
+  ]
+}

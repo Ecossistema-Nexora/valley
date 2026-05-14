@@ -2,17 +2,17 @@
 
 <!--
 PROPOSITO: Mapear a conversao das telas Stitch para Valley.
-CONTEXTO: Este mapa orienta Figma handoff, Flutter e admin web sem sobrescrever superficies existentes.
-REGRAS: Implementar por ondas, validar em browser/Flutter e manter tokens Valley/Helena/V-Coin.
+CONTEXTO: Este mapa orienta Figma handoff, Flutter e admin web usando Stitch como fonte obrigatoria.
+REGRAS: Implementar por ondas, validar em browser/Flutter, manter tokens Valley/Helena/V-Coin e descartar variacoes anteriores como referencia ativa.
 -->
 
 ## Decisao
 
-- Fonte primaria de design: export Stitch `stitch_valley_erp (1).zip`.
+- Fonte da verdade mandataria: export Stitch `stitch_valley_erp (1).zip`, versao `20260513_valley_erp`.
 - Assets brutos versionados: `docs/design/stitch_exports/20260513_valley_erp/`.
 - Staging local ignorado: `tmp/stitch-import/`.
-- Handoff de design: promover P0 para Figma antes de codificar grandes superficies.
-- Implementacao: converter componentes e fluxos, mantendo HTML bruto apenas como galeria de referencia.
+- Handoff de design: promover P0 para Figma quando houver alvo autenticado, sem bloquear a conversao web/APK ja aprovada.
+- Implementacao: converter componentes e fluxos a partir do manifesto Stitch; HTML bruto fica como evidencia publica e variacoes antigas ficam descartadas como referencia de produto.
 
 ## Onda 1 - P0
 
@@ -48,6 +48,6 @@ REGRAS: Implementar por ondas, validar em browser/Flutter e manter tokens Valley
 ## Guardrails
 
 - Nao introduzir referencias proibidas de produto; usar Valley, Helena e V-Coin.
-- Manter assets brutos versionados e publicados apenas como referencia de handoff.
+- Manter assets brutos versionados e publicados como fonte auditavel do produto.
 - Nao quebrar o APK v038 nem o gate Cloudflare validado.
 - Rodar Playwright/browser para admin web e build Flutter quando tocar UI executavel.

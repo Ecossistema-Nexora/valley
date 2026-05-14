@@ -100,8 +100,8 @@ Documento fonte do PDF ABNT com links clicáveis separados em Admin, Lojista e U
 |---|---|---|---|
 | ADMIN | Runtime operacional atual | [https://admin.brasildesconto.com.br](https://admin.brasildesconto.com.br) | Painel web ativo validado para testes externos enquanto o dominio fixo aguarda reparo do tunnel. |
 | USUARIO | Portal público Valley | [brasildesconto.com.br](https://brasildesconto.com.br/) | Entrada oficial da marca e catálogo público |
-| USUARIO | Produto web/mobile operacional atual | [https://admin.brasildesconto.com.br](https://admin.brasildesconto.com.br) | Catálogo, checkout, rastreio e conta do usuário na rota pública validada. |
-| API | API pública operacional atual | [https://admin.brasildesconto.com.br/api/product-shell](https://admin.brasildesconto.com.br/api/product-shell/) | Endpoint público validado para shell de produto e ações do aplicativo. |
+| USUARIO | Produto web/mobile operacional atual | [https://brasildesconto.com.br](https://brasildesconto.com.br) | Catálogo, checkout, rastreio e conta do usuário na rota pública validada. |
+| API | API pública operacional atual | [https://brasildesconto.com.br/api/product-shell](https://brasildesconto.com.br/api/product-shell/) | Endpoint público validado para shell de produto e ações do aplicativo. |
 | USUARIO | Produto web/mobile | [brasildesconto.com.br/product](https://brasildesconto.com.br/product/) | Catálogo, checkout, rastreio e conta do usuário |
 
 ## Templates Stitch
@@ -245,7 +245,7 @@ Documento fonte do PDF ABNT com links clicáveis separados em Admin, Lojista e U
 
 | Módulo | Tela/Painel | Link | Relação |
 |---|---|---|---|
-| APK | APK Android recomendado | [https://admin.brasildesconto.com.br/downloads/v041/app-arm64-v8a-release.apk](https://admin.brasildesconto.com.br/downloads/v041/app-arm64-v8a-release.apk) | v041 / 1.0.9+56 / 20908757 bytes / SHA1 9B1DD76DC353C3BE18AFCB6CD9C45F0E2B536945 |
-| APK | APK Android armeabi-v7a | [https://admin.brasildesconto.com.br/downloads/v041/app-armeabi-v7a-release.apk](https://admin.brasildesconto.com.br/downloads/v041/app-armeabi-v7a-release.apk) | v041 / 1.0.9+56 / 18424577 bytes / SHA1 4BFD5E593D1400348FCEF394382F83C5B5FD9B0B |
-| APK | APK Android x86_64 | [https://admin.brasildesconto.com.br/downloads/v041/app-x86_64-release.apk](https://admin.brasildesconto.com.br/downloads/v041/app-x86_64-release.apk) | v041 / 1.0.9+56 / 22335793 bytes / SHA1 BF0729B22323244529E5581DC534655D7EC2661C |
-| APK | Manifest release APK | [https://admin.brasildesconto.com.br/downloads/v041/VALLEY_APK_RELEASE_ABI_V041.json](https://admin.brasildesconto.com.br/downloads/v041/VALLEY_APK_RELEASE_ABI_V041.json) | Manifest ABI com hashes, URL publica e build embarcado. |
+| APK | APK Android recomendado | [https://admin.brasildesconto.com.br/downloads/v042/app-arm64-v8a-release.apk](https://admin.brasildesconto.com.br/downloads/v042/app-arm64-v8a-release.apk) | v042 / 1.0.10+57 / 20909563 bytes / SHA1 E1F70A84A91A4CC6F7C95F5CBA5FC43B097B76EB |
+| APK | APK Android armeabi-v7a | [https://admin.brasildesconto.com.br/downloads/v042/app-armeabi-v7a-release.apk](https://admin.brasildesconto.com.br/downloads/v042/app-armeabi-v7a-release.apk) | v042 / 1.0.10+57 / 18425379 bytes / SHA1 20C79FFCE1C01B2FF2449735B931E30874A82B65 |
+| APK | APK Android x86_64 | [https://admin.brasildesconto.com.br/downloads/v042/app-x86_64-release.apk](https://admin.brasildesconto.com.br/downloads/v042/app-x86_64-release.apk) | v042 / 1.0.10+57 / 22336591 bytes / SHA1 DFF7F006D292556FE9056E20CFFB818D3461BB49 |
+| APK | Manifest release APK | [https://admin.brasildesconto.com.br/downloads/v042/VALLEY_APK_RELEASE_ABI_V042.json](https://admin.brasildesconto.com.br/downloads/v042/VALLEY_APK_RELEASE_ABI_V042.json) | Manifest ABI com hashes, URL publica e build embarcado. |
