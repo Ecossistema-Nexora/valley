@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+# PROPOSITO: Automatizar translate stock catalog ptbr no workspace Valley.
+# CONTEXTO: Este modulo apoia operacao, geracao, validacao ou integracao ligada ao caminho scripts/translate_stock_catalog_ptbr.py.
+# REGRAS: Nao expor segredos, manter comportamento idempotente e preservar contratos usados por release e runtime.
+
 """Traduz o runtime do catalogo STOCK para pt-BR com cache persistente."""
 
 from __future__ import annotations

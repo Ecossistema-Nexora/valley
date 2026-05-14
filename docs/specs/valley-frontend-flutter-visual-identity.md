@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Definir a identidade visual Valley para frontend web e Flutter.
+CONTEXTO: Este documento orienta uso da logomarca, tokens de marca, tema Flutter e superficies visuais do produto.
+REGRAS: Preservar a marca canonica, evitar variacoes obsoletas e manter consistencia entre web, APK e desktop.
+-->
+
 # Valley Frontend And Flutter Visual Identity
 
 ## Proposito

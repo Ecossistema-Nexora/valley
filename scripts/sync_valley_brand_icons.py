@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+# PROPOSITO: Automatizar sync valley brand icons no workspace Valley.
+# CONTEXTO: Este modulo apoia operacao, geracao, validacao ou integracao ligada ao caminho scripts/sync_valley_brand_icons.py.
+# REGRAS: Nao expor segredos, manter comportamento idempotente e preservar contratos usados por release e runtime.
+
 """Sincroniza a logomarca Valley nos icones dos apps e paineis."""
 
 from __future__ import annotations

@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Orientar a geracao das telas MVP Valley no Stitch.
+CONTEXTO: Este memorando descreve telas, corte do MVP e intencao visual para Flutter Web e Android.
+REGRAS: Gerar experiencia de produto real, evitar landing page e manter botoes com destinos funcionais.
+-->
+
 # Memorando Descritivo Para Stitch - Valley MVP
 
 ## Finalidade

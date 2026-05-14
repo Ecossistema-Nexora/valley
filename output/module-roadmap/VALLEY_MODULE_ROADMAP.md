@@ -1,6 +1,6 @@
 # Roadmap Automatizado - Valley Omniverse V47
 
-Este arquivo e gerado de forma deterministica por `scripts/valley_module_automation.py`.
+Este arquivo e gerado de forma deterministica por `scripts/automacao_sincronizador_modulos.py`.
 
 Este roadmap automatiza a evolucao dos 47 modulos a partir do registry `config/modules_v47.json`.
 

@@ -1,3 +1,7 @@
+# PROPOSITO: Automatizar check valley mcp config no workspace Valley.
+# CONTEXTO: Este script apoia operacao local, release, runtime ou manutencao ligada ao caminho scripts/check_valley_mcp_config.ps1.
+# REGRAS: Nao expor segredos, manter execucao idempotente e validar impactos antes de alterar recursos externos.
+
 param(
   [switch]$NoWrite
 )

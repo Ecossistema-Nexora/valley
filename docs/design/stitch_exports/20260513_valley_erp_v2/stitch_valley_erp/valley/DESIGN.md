@@ -1,5 +1,8 @@
 ---
 name: Valley
+PROPOSITO: Preservar os tokens visuais exportados pelo Stitch como referencia de design Valley.
+CONTEXTO: Este arquivo alimenta a aplicacao visual dos templates ERP, admin e superficies web/mobile.
+REGRAS: Manter tokens coerentes com a identidade Valley e evitar alteracoes manuais sem nova validacao visual.
 colors:
   surface: '#fcf8fa'
   surface-dim: '#dcd9db'

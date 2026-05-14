@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar v006 20260505 091900 brt fix tunnel logs e validacao sequencial docker no escopo operacional do Valley.
+CONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho PLANOS/v006__20260505-091900-brt__fix_tunnel_logs_e_validacao_sequencial_docker.md.
+REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.
+-->
+
 # v006 - Fix Tunnel Logs E Validacao Sequencial Docker
 
 ## Resumo

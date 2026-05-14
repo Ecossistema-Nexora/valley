@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Reunir contexto para solicitar aumento de quota da API CJDropshipping.
+CONTEXTO: O Valley usa a CJ como fornecedor real para catalogo, estoque e importacao incremental.
+REGRAS: Nao versionar CPF, documentos pessoais, tokens, API keys ou anexos sensiveis.
+-->
+
 # Briefing Persistente: Pedido de Aumento de Quota da API CJDropshipping
 
 ## Objetivo

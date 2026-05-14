@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Registrar o escopo atual de categorias autorizadas para importacao dropshipping Valley.
+CONTEXTO: Este documento consolida categorias por fornecedor e status dos conectores reais disponiveis.
+REGRAS: Usar apenas APIs, feeds ou caches autorizados e manter scraping nao autorizado bloqueado.
+-->
+
 # Escopo Atual De Categorias Para Importacao Dropshipping
 
 Gerado a partir de `tmp/runtime/valley-dropshipping-source-categories.json`.

@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Consolidar a visao institucional e tecnica do ecossistema Valley.
+CONTEXTO: Este documento resume modulos, dominios, contratos, pacotes de entrega e eixo transacional.
+REGRAS: Manter metricas rastreaveis, atualizar evidencias ao mudar contratos e evitar linguagem obsoleta.
+-->
+
 # Valley Vision
 
 ## Executive Snapshot

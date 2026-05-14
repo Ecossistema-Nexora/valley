@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+# PROPOSITO: Automatizar serve valley admin no workspace Valley.
+# CONTEXTO: Este modulo apoia operacao, geracao, validacao ou integracao ligada ao caminho scripts/serve_valley_admin.py.
+# REGRAS: Nao expor segredos, manter comportamento idempotente e preservar contratos usados por release e runtime.
+
 """Servidor HTTP endurecido para o painel admin do Valley."""
 
 from __future__ import annotations

@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar v027 20260505 210642 brt endpoint autenticado assistant enablement no escopo operacional do Valley.
+CONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho PLANOS/v027__20260505-210642-brt__endpoint_autenticado_assistant_enablement.md.
+REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.
+-->
+
 # v027 - Endpoint Autenticado Assistant Enablement
 
 ## Resumo

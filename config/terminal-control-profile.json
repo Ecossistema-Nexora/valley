@@ -12,6 +12,7 @@
   "release_runtime": {
     "database": "powershell -ExecutionPolicy Bypass -File scripts/run_valley_compose_builder.ps1",
     "report": "python scripts/valley_db_orchestrator.py report",
-    "module_sync": "python scripts/valley_module_automation.py sync"
+    "module_sync": "python scripts/automacao_sincronizador_modulos.py sync"
   }
 }
+

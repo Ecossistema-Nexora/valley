@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar v005 20260505 090603 brt configuracao total previewjs e rebuild admin product no escopo operacional do Valley.
+CONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho PLANOS/v005__20260505-090603-brt__configuracao_total_previewjs_e_rebuild_admin_product.md.
+REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.
+-->
+
 # v005 - Configuracao Total Previewjs E Rebuild Admin Product
 
 ## Resumo

@@ -1,3 +1,7 @@
+# PROPOSITO: Automatizar publish valley product web no workspace Valley.
+# CONTEXTO: Este script apoia operacao local, release, runtime ou manutencao ligada ao caminho scripts/publish_valley_product_web.ps1.
+# REGRAS: Nao expor segredos, manter execucao idempotente e validar impactos antes de alterar recursos externos.
+
 param(
     [string]$BaseHref = '/product/',
     [string]$FlutterProject = '',

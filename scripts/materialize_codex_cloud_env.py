@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+# PROPOSITO: Automatizar materialize codex cloud env no workspace Valley.
+# CONTEXTO: Este modulo apoia operacao, geracao, validacao ou integracao ligada ao caminho scripts/materialize_codex_cloud_env.py.
+# REGRAS: Nao expor segredos, manter comportamento idempotente e preservar contratos usados por release e runtime.
+
 """Materialize Codex Cloud setup secrets into local runtime files.
 
 Codex Cloud secrets are available during the setup script phase. This script is

@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar v033 20260507 030102 brt gate producao apk cliente catalogo 10k no escopo operacional do Valley.
+CONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho PLANOS/v033__20260507-030102-brt__gate_producao_apk_cliente_catalogo_10k.md.
+REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.
+-->
+
 # v033 - Gate Producao APK Cliente Catalogo 10k
 
 ## Resumo

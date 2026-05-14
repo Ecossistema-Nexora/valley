@@ -1,3 +1,7 @@
+# PROPOSITO: Automatizar update planos progress no workspace Valley.
+# CONTEXTO: Este modulo apoia operacao, geracao, validacao ou integracao ligada ao caminho scripts/update_planos_progress.py.
+# REGRAS: Nao expor segredos, manter comportamento idempotente e preservar contratos usados por release e runtime.
+
 """Recalculate PLANOS progress columns from per-plan checklists."""
 
 from __future__ import annotations

@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar v015 20260505 165207 brt timeline visual por jornada na home flutter no escopo operacional do Valley.
+CONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho PLANOS/v015__20260505-165207-brt__timeline_visual_por_jornada_na_home_flutter.md.
+REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.
+-->
+
 # v015 - Timeline Visual Por Jornada Na Home Flutter
 
 ## Resumo

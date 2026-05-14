@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Registrar a politica do Java Language Server no workspace Valley.
+CONTEXTO: Este documento evita importacoes Java/Gradle indevidas e fixa o uso de JDK compativel com Flutter/Android.
+REGRAS: Nao reativar autodeteccao conflitante de JDKs e manter builds Android sob controle do Flutter/Gradle.
+-->
+
 # Valley Java Language Server Workspace Policy
 
 ## Contexto

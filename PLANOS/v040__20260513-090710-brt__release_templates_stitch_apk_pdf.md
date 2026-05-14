@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar v040 20260513 090710 brt release templates stitch apk pdf no escopo operacional do Valley.
+CONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho PLANOS/v040__20260513-090710-brt__release_templates_stitch_apk_pdf.md.
+REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.
+-->
+
 # v040 - Release Templates Stitch, APK e PDF
 
 ## Resumo

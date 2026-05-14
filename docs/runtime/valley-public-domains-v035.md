@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar dominios publicos oficiais e workspaces Valley.
+CONTEXTO: Este roteiro consolida DNS, Cloudflare Tunnel, origem local e validacoes por subdominio.
+REGRAS: Nao versionar tokens Cloudflare e validar healthcheck publico apos qualquer mudanca de DNS/tunnel.
+-->
+
 # Valley Public Domains v035
 
 ## Objetivo

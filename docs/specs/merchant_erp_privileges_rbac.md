@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Definir a matriz RBAC do ERP Lojista Valley.
+CONTEXTO: Este documento orienta usuarios, papeis, privilegios efetivos e administracao por lojista.
+REGRAS: Isolar lojistas, auditar mudancas de permissao e impedir vazamento de privilegios entre tenants.
+-->
+
 # ERP Lojista Valley - Privilegios e Usuarios
 
 ## Objetivo

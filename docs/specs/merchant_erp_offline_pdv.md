@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Definir o PDV offline-first do ERP Lojista Valley.
+CONTEXTO: Este documento orienta fila local, sincronizacao idempotente, estados offline e venda sem duplicidade.
+REGRAS: Manter eventos append-only, evitar duplicidade de caixa/estoque e preservar confirmacao quando reconectar.
+-->
+
 # ERP Lojista Valley - PDV Offline First
 
 ## Objetivo

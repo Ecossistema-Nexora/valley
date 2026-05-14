@@ -1,6 +1,6 @@
 # 32. Valley Gaming
 
-Este arquivo e gerado pela automacao `scripts/valley_module_automation.py`.
+Este arquivo e gerado pela automacao `scripts/automacao_sincronizador_modulos.py`.
 
 Ele descreve o modulo em linguagem simples e serve como ponto inicial para desenvolvimento, implantacao e evolucao continua.
 

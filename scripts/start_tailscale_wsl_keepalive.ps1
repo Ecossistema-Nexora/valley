@@ -1,3 +1,7 @@
+# PROPOSITO: Automatizar start tailscale wsl keepalive no workspace Valley.
+# CONTEXTO: Este script apoia operacao local, release, runtime ou manutencao ligada ao caminho scripts/start_tailscale_wsl_keepalive.ps1.
+# REGRAS: Nao expor segredos, manter execucao idempotente e validar impactos antes de alterar recursos externos.
+
 param(
     [string]$Distro = '',
     [string]$User = 'root'

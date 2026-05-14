@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Definir o workflow oficial Stitch, Figma e Flutter para layouts Valley.
+CONTEXTO: Este documento orienta geracao, inspecao, handoff e implementacao de telas front-end.
+REGRAS: Manter segredos fora do git, usar Stitch como origem visual e validar handoff antes da implementacao.
+-->
+
 # Valley Stitch + Figma Front-end Workflow
 
 ## Objetivo

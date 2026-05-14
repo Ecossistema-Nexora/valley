@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar v024 20260505 210012 brt congelamento do mapa operacional de recomendacoes no escopo operacional do Valley.
+CONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho PLANOS/v024__20260505-210012-brt__congelamento_do_mapa_operacional_de_recomendacoes.md.
+REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.
+-->
+
 # v024 - Congelamento Do Mapa Operacional De Recomendacoes
 
 ## Resumo

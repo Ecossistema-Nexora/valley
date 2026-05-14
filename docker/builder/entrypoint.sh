@@ -29,7 +29,7 @@ case "${command_name}" in
     ;;
   sync-modules)
     shift || true
-    python scripts/valley_module_automation.py sync "$@"
+    python scripts/automacao_sincronizador_modulos.py sync "$@"
     ;;
   shell)
     shift || true
@@ -39,3 +39,4 @@ case "${command_name}" in
     exec "$@"
     ;;
 esac
+

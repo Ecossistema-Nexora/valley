@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+# PROPOSITO: Automatizar generate valley vision abnt pdf no workspace Valley.
+# CONTEXTO: Este modulo apoia operacao, geracao, validacao ou integracao ligada ao caminho scripts/generate_valley_vision_abnt_pdf.py.
+# REGRAS: Nao expor segredos, manter comportamento idempotente e preservar contratos usados por release e runtime.
+
 """Gera um PDF em formato ABNT a partir de docs/specs/valley_vision.md."""
 
 from __future__ import annotations

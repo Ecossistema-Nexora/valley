@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Registrar o uso de Preview.js com Codex no workspace Valley.
+CONTEXTO: Este documento explica extensao, limites, estado de manutencao e persistencia no repo.
+REGRAS: Nao tratar ferramenta descontinuada como dependencia critica e manter handoff visual documentado.
+-->
+
 # Preview.js + Codex no VALLEY
 
 ## Objetivo

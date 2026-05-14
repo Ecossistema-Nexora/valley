@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar v009 20260505 142113 brt desdobramento execucao mvp por ownership no escopo operacional do Valley.
+CONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho PLANOS/v009__20260505-142113-brt__desdobramento_execucao_mvp_por_ownership.md.
+REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.
+-->
+
 # v009 - Desdobramento Execucao MVP Por Ownership
 
 ## Resumo

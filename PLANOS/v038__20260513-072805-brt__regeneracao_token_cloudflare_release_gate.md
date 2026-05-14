@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar v038 20260513 072805 brt regeneracao token cloudflare release gate no escopo operacional do Valley.
+CONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho PLANOS/v038__20260513-072805-brt__regeneracao_token_cloudflare_release_gate.md.
+REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.
+-->
+
 # v038 - Regeneracao Token Cloudflare Release Gate
 
 ## Resumo

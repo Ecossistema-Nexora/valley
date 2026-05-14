@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+# PROPOSITO: Automatizar valley db orchestrator no workspace Valley.
+# CONTEXTO: Este modulo apoia operacao, geracao, validacao ou integracao ligada ao caminho scripts/valley_db_orchestrator.py.
+# REGRAS: Nao expor segredos, manter comportamento idempotente e preservar contratos usados por release e runtime.
+
 """
 VALLEY DATABASE ORCHESTRATOR
 ============================
@@ -861,7 +865,7 @@ def validate_all() -> list[CheckResult]:
             results.extend(validate_javascript_file(path))
 
     # Valida registry dos 47 modulos usando o motor existente.
-    module_script = ROOT / 'scripts' / 'valley_module_automation.py'
+    module_script = ROOT / 'scripts' / 'automacao_sincronizador_modulos.py'
 
     # Se o script existe, executa validate.
     if module_script.exists():

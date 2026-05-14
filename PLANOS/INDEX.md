@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar INDEX no escopo operacional do Valley.
+CONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho PLANOS/INDEX.md.
+REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.
+-->
+
 # INDEX
 
 <!-- progresso:inicio -->
@@ -5,9 +11,9 @@
 
 - Regra: cada item de checklist dos planos conta como uma etapa.
 - Atualize este indice depois de cada acao concluida com `python scripts\update_planos_progress.py`.
-- Etapas concluidas desde o primeiro plano do indice: `298/307`.
-- Produzido desde o Plano 1: `97.1%`.
-- Falta produzir para a conclusao final acumulada: `2.9%`.
+- Etapas concluidas desde o primeiro plano do indice: `307/307`.
+- Produzido desde o Plano 1: `100.0%`.
+- Falta produzir para a conclusao final acumulada: `0.0%`.
 <!-- progresso:fim -->
 
 | versao | criado_em_brt | arquivo | status | escopo | etapas | produzido | falta_produzir | ultima_atualizacao_brt |
@@ -43,11 +49,11 @@
 | v029 | 2026-05-05 21:35:12 BRT | [v029__20260505-213512-brt__mcp_obrigatorio_persistente.md](./v029__20260505-213512-brt__mcp_obrigatorio_persistente.md) | concluido | Configuracao obrigatoria e persistente de MCP_DOCKER, context7, figma, linear e playwright | 6/6 | 100.0% | 0.0% | 2026-05-05 21:44:29 BRT |
 | v030 | 2026-05-05 21:45:00 BRT | [v030__20260505-214500-brt__nomenclatura_valley_helena_vcoin.md](./v030__20260505-214500-brt__nomenclatura_valley_helena_vcoin.md) | concluido | Nomenclatura canonica Valley, Helena e V-Coin com bloqueio das referencias antigas | 6/6 | 100.0% | 0.0% | 2026-05-05 22:08:02 BRT |
 | v031 | 2026-05-06 14:57:17 BRT | [v031__20260506-145717-brt__action_path_autenticado_em_recent_actions_operacionais.md](./v031__20260506-145717-brt__action_path_autenticado_em_recent_actions_operacionais.md) | concluido | Action path autenticado em recent_actions operacionais quando ja existir endpoint backend real | 4/4 | 100.0% | 0.0% | 2026-05-06 14:58:49 BRT |
-| v032 | 2026-05-07 01:27:35 BRT | [v032__20260507-012735-brt__retomada_gate_mvp_producao.md](./v032__20260507-012735-brt__retomada_gate_mvp_producao.md) | em_andamento | Retomada da sequencia exata para gate MVP Valley em modo de producao | 14/15 | 93.3% | 6.7% | 2026-05-11 09:59:34 BRT |
+| v032 | 2026-05-07 01:27:35 BRT | [v032__20260507-012735-brt__retomada_gate_mvp_producao.md](./v032__20260507-012735-brt__retomada_gate_mvp_producao.md) | concluido | Retomada da sequencia exata para gate MVP Valley em modo de producao | 15/15 | 100.0% | 0.0% | 2026-05-14 13:22:00 BRT |
 | v033 | 2026-05-07 03:01:02 BRT | [v033__20260507-030102-brt__gate_producao_apk_cliente_catalogo_10k.md](./v033__20260507-030102-brt__gate_producao_apk_cliente_catalogo_10k.md) | concluido | Gate de producao do APK cliente com checkout real, white-label e estrategia persistente de catalogo 10k | 12/12 | 100.0% | 0.0% | 2026-05-11 09:59:34 BRT |
 | v034 | 2026-05-11 14:56:24 BRT | [v034__20260511-145624-brt__release_blueprint_stock_apk_paineis_telegram.md](./v034__20260511-145624-brt__release_blueprint_stock_apk_paineis_telegram.md) | concluido | Release blueprint com STOCK sem auto-pause nesta atividade, APK ABI, paineis e Telegram | 6/6 | 100.0% | 0.0% | 2026-05-11 16:25:30 BRT |
 | v035 | 2026-05-11 18:57:58 BRT | [v035__20260511-185758-brt__dominios_publicos_modulos_cloudflare.md](./v035__20260511-185758-brt__dominios_publicos_modulos_cloudflare.md) | concluido | Dominios publicos, workspaces admin por modulo e automacao Cloudflare persistente | 7/7 | 100.0% | 0.0% | 2026-05-12 00:24:45 BRT |
-| v036 | 2026-05-12 00:42:57 BRT | [v036__20260512-004257-brt__erp_lojista_marketplace_operacional.md](./v036__20260512-004257-brt__erp_lojista_marketplace_operacional.md) | em_andamento | ERP lojista marketplace operacional com schema, integracoes, mecanicas e frontend publico | 9/9 | 100.0% | 0.0% | 2026-05-12 00:42:57 BRT |
+| v036 | 2026-05-12 00:42:57 BRT | [v036__20260512-004257-brt__erp_lojista_marketplace_operacional.md](./v036__20260512-004257-brt__erp_lojista_marketplace_operacional.md) | concluido | ERP lojista marketplace operacional com schema, integracoes, mecanicas e frontend publico | 9/9 | 100.0% | 0.0% | 2026-05-14 13:22:00 BRT |
 | v037 | 2026-05-13 04:55:27 BRT | [v037__20260513-045527-brt__blindagem_bootstrap_apk_sem_servidor.md](./v037__20260513-045527-brt__blindagem_bootstrap_apk_sem_servidor.md) | concluido | Blindagem do bootstrap do APK para abrir com catalogo embarcado mesmo com dominio publico fora | 4/4 | 100.0% | 0.0% | 2026-05-13 06:37:16 BRT |
 | v038 | 2026-05-13 07:28:05 BRT | [v038__20260513-072805-brt__regeneracao_token_cloudflare_release_gate.md](./v038__20260513-072805-brt__regeneracao_token_cloudflare_release_gate.md) | concluido | Regeneracao persistente do token Cloudflare e gate fixo para liberar APK | 5/5 | 100.0% | 0.0% | 2026-05-13 08:45:46 BRT |
 | v039 | 2026-05-13 08:57:15 BRT | [v039__20260513-085715-brt__stitch_erp_inventory_handoff.md](./v039__20260513-085715-brt__stitch_erp_inventory_handoff.md) | concluido | Inventario do export Stitch ERP e handoff para Flutter/admin | 7/7 | 100.0% | 0.0% | 2026-05-13 17:57:00 BRT |
@@ -56,12 +62,10 @@
 | v042 | 2026-05-13 17:57:00 BRT | [v042__20260513-175700-brt__onda2_erp_lojista_p0p1_executavel.md](./v042__20260513-175700-brt__onda2_erp_lojista_p0p1_executavel.md) | concluido | Onda 2 ERP lojista P0/P1 executavel no painel web | 6/6 | 100.0% | 0.0% | 2026-05-13 18:36:00 BRT |
 | v043 | 2026-05-13 19:09:00 BRT | [v043__20260513-190900-brt__stitch_visivel_mandatorio_web_apk.md](./v043__20260513-190900-brt__stitch_visivel_mandatorio_web_apk.md) | concluido | Stitch visivel mandatorio web e APK substituido pela fonte v2 | 6/6 | 100.0% | 0.0% | 2026-05-13 21:55:00 BRT |
 | v044 | 2026-05-13 21:55:00 BRT | [v044__20260513-215500-brt__stitch_v2_fonte_da_verdade_web_apk.md](./v044__20260513-215500-brt__stitch_v2_fonte_da_verdade_web_apk.md) | concluido | Stitch v2 como fonte da verdade ativa para web, APK, PDF e Telegram | 8/8 | 100.0% | 0.0% | 2026-05-13 22:58:00 BRT |
-| v045 | 2026-05-13 22:34:11 BRT | [v045__20260513-223411-brt__pdv_offline_first_erp_lojista.md](./v045__20260513-223411-brt__pdv_offline_first_erp_lojista.md) | em_andamento | PDV offline-first do ERP Lojista com fila local e sync automatico | 2/7 | 28.6% | 71.4% | 2026-05-13 22:34:11 BRT |
-| v046 | 2026-05-13 22:37:11 BRT | [v046__20260513-223711-brt__base_privilegios_usuarios_erp_lojista.md](./v046__20260513-223711-brt__base_privilegios_usuarios_erp_lojista.md) | em_andamento | Base de privilegios e usuarios do ERP Lojista gerenciada pelo administrador lojista | 3/6 | 50.0% | 50.0% | 2026-05-13 22:37:11 BRT |
+| v045 | 2026-05-13 22:34:11 BRT | [v045__20260513-223411-brt__pdv_offline_first_erp_lojista.md](./v045__20260513-223411-brt__pdv_offline_first_erp_lojista.md) | concluido | PDV offline-first do ERP Lojista com fila local e sync automatico | 7/7 | 100.0% | 0.0% | 2026-05-14 13:22:00 BRT |
+| v046 | 2026-05-13 22:37:11 BRT | [v046__20260513-223711-brt__base_privilegios_usuarios_erp_lojista.md](./v046__20260513-223711-brt__base_privilegios_usuarios_erp_lojista.md) | concluido | Base de privilegios e usuarios do ERP Lojista gerenciada pelo administrador lojista | 6/6 | 100.0% | 0.0% | 2026-05-14 13:22:00 BRT |
 | v047 | 2026-05-13 23:00:00 BRT | [v047__20260513-230000-brt__instaladores_erp_lojista_windows_linux.md](./v047__20260513-230000-brt__instaladores_erp_lojista_windows_linux.md) | concluido | Instaladores ERP Lojista Windows/Linux com login, menu por botoes e modulos sem links globais | 7/7 | 100.0% | 0.0% | 2026-05-13 23:38:00 BRT |
 | v048 | 2026-05-14 00:21:29 BRT | [v048__20260514-002129-brt__release_blueprint_erp_lojista_funcional.md](./v048__20260514-002129-brt__release_blueprint_erp_lojista_funcional.md) | concluido | Release blueprint do ERP Lojista funcional, autenticado e persistente | 10/10 | 100.0% | 0.0% | 2026-05-14 00:53:56 BRT |
 | v049 | 2026-05-14 01:35:46 BRT | [v049__20260514-013546-brt__cadastro_checkout_cpf_cep_destinatario.md](./v049__20260514-013546-brt__cadastro_checkout_cpf_cep_destinatario.md) | concluido | Cadastro e checkout com CPF, CEP, endereco principal e destinatario | 10/10 | 100.0% | 0.0% | 2026-05-14 04:13:00 BRT |
 | v050 | 2026-05-14 02:30:00 BRT | [v050__20260514-023000-brt__erp_lojista_executaveis_unicos.md](./v050__20260514-023000-brt__erp_lojista_executaveis_unicos.md) | concluido | ERP Lojista em executaveis unicos Windows e Linux | 6/6 | 100.0% | 0.0% | 2026-05-14 04:13:00 BRT |
 | v051 | 2026-05-14 04:15:00 BRT | [v051__20260514-041500-brt__gate_funcional_visual_pdv_banking.md](./v051__20260514-041500-brt__gate_funcional_visual_pdv_banking.md) | concluido | Gate funcional visual com PDV, maquina de pagamento, checkout confirmado e APIs bancarias | 6/6 | 100.0% | 0.0% | 2026-05-14 04:39:00 BRT |
-| v019 | 2026-05-05 17:52:38 BRT | [v019__20260505-175238-brt__passo_1_nucleo_relacional_nexora_v40.md](./v019__20260505-175238-brt__passo_1_nucleo_relacional_nexora_v40.md) | concluido | PASSO 1 do banco hibrido Nexora V40 com nucleo relacional de identidade, perfis, wallets e LED Cards | 0/0 | 100.0% | 0.0% | 2026-05-05 17:52:38 BRT |
-| v020 | 2026-05-05 17:55:49 BRT | [v020__20260505-175549-brt__passo_2_ledger_financeiro_smart_equity.md](./v020__20260505-175549-brt__passo_2_ledger_financeiro_smart_equity.md) | concluido | PASSO 2 do banco hibrido Nexora V40 com ledger financeiro, Smart Equity e orders mestre | 0/0 | 100.0% | 0.0% | 2026-05-05 17:55:49 BRT |

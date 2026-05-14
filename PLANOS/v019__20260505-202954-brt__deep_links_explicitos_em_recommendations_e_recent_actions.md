@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar v019 20260505 202954 brt deep links explicitos em recommendations e recent actions no escopo operacional do Valley.
+CONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho PLANOS/v019__20260505-202954-brt__deep_links_explicitos_em_recommendations_e_recent_actions.md.
+REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.
+-->
+
 # v019 - Deep Links Explicitos Em Recommendations E Recent Actions
 
 ## Resumo

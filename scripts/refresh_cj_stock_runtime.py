@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+# PROPOSITO: Automatizar refresh cj stock runtime no workspace Valley.
+# CONTEXTO: Este modulo apoia operacao, geracao, validacao ou integracao ligada ao caminho scripts/refresh_cj_stock_runtime.py.
+# REGRAS: Nao expor segredos, manter comportamento idempotente e preservar contratos usados por release e runtime.
+
 """Atualiza incrementalmente o runtime do STOCK para itens do CJDropshipping."""
 
 from __future__ import annotations

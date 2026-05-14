@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar v025 20260505 210410 brt endpoint autenticado release pending no escopo operacional do Valley.
+CONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho PLANOS/v025__20260505-210410-brt__endpoint_autenticado_release_pending.md.
+REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.
+-->
+
 # v025 - Endpoint Autenticado Release Pending
 
 ## Resumo

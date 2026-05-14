@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar v013 20260505 163638 brt trilhas reais por usuario em pay stock marketplace no escopo operacional do Valley.
+CONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho PLANOS/v013__20260505-163638-brt__trilhas_reais_por_usuario_em_pay_stock_marketplace.md.
+REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.
+-->
+
 # v013 - Trilhas Reais Por Usuario Em Pay Stock Marketplace
 
 ## Resumo

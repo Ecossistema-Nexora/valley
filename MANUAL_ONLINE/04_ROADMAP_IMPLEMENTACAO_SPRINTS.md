@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar 04 ROADMAP IMPLEMENTACAO SPRINTS no escopo operacional do Valley.
+CONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho MANUAL_ONLINE/04_ROADMAP_IMPLEMENTACAO_SPRINTS.md.
+REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.
+-->
+
 # Roadmap de Implementacao por Sprint
 
 Este roadmap assume sprints de 2 semanas.

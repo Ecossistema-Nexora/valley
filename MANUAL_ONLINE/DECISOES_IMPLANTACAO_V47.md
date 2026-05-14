@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar DECISOES IMPLANTACAO V47 no escopo operacional do Valley.
+CONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho MANUAL_ONLINE/DECISOES_IMPLANTACAO_V47.md.
+REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.
+-->
+
 # Decisoes de Implantacao v47 - Valley
 
 Este documento registra como os PDFs v47 foram analisados e adaptados para esta arvore Valley.
@@ -36,7 +42,7 @@ Ele explica colunas, triggers e integracoes em portugues simples, mantendo termo
 
 `config/modules_v47.json` foi criado como registry canonico dos 47 modulos reais do Esquema Consolidado.
 
-`scripts/valley_module_automation.py` foi criado como motor local de automacao de implantacao, desenvolvimento e evolucao.
+`scripts/automacao_sincronizador_modulos.py` foi criado como motor local de automacao de implantacao, desenvolvimento e evolucao.
 
 `modules/` foi materializado com uma pasta por modulo, cada uma contendo `README.md` e `STATUS.md`.
 
@@ -165,3 +171,4 @@ Depois da evolucao city ops e seguranca, a ordem PostgreSQL passou a incluir `01
 No MongoDB, a ordem passou a ser `mongo-001`, depois `mongo-002` e por fim `mongo-003`.
 
 O relatorio operacional mais recente fica em `output/deployment/VALLEY_DEPLOYMENT_STATUS.md`.
+

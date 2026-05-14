@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar v003 20260505 085147 brt configuracao total superflex codex no escopo operacional do Valley.
+CONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho PLANOS/v003__20260505-085147-brt__configuracao_total_superflex_codex.md.
+REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.
+-->
+
 # v003 - Configuracao Total Superflex Codex
 
 ## Resumo

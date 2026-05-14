@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Definir a frente de identidade unica do MVP Valley.
+CONTEXTO: Este documento orienta Face ID, Voice ID, Identity Score e confianca transversal sem criar modulo paralelo.
+REGRAS: Manter identidade como camada transversal, auditar decisoes sensiveis e respeitar consentimento do usuario.
+-->
+
 # Valley MVP Identity Front
 
 ## Proposito

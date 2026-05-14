@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar v011 20260505 162609 brt sinais reais por dominio na home mvp no escopo operacional do Valley.
+CONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho PLANOS/v011__20260505-162609-brt__sinais_reais_por_dominio_na_home_mvp.md.
+REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.
+-->
+
 # v011 - Sinais Reais Por Dominio Na Home MVP
 
 ## Resumo

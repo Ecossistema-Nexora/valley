@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Registrar diagnostico e reparo do named tunnel Cloudflare do painel Valley.
+CONTEXTO: Este runbook orienta recuperacao do dominio admin.brasildesconto.com.br e do tunnel valley-admin.
+REGRAS: Nao versionar tokens Cloudflare, cert.pem ou segredos de tunnel; validar healthcheck publico apos qualquer troca.
+-->
+
 # Reparo do named tunnel `valley-admin`
 
 ## Estado diagnosticado

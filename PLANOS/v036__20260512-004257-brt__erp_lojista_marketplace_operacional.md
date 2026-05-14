@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar v036 20260512 004257 brt erp lojista marketplace operacional no escopo operacional do Valley.
+CONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho PLANOS/v036__20260512-004257-brt__erp_lojista_marketplace_operacional.md.
+REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.
+-->
+
 # Plano v036 - ERP lojista marketplace operacional
 
 Criado em BRT: 2026-05-12 00:42:57 BRT

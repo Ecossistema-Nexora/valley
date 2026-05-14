@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Desdobrar o MVP Valley em backlog P0 por ownership.
+CONTEXTO: Este documento conecta plano de entrega, squad de agentes e dependencias das frentes criticas.
+REGRAS: Manter ownership explicito, priorizar P0 demonstravel e atualizar dependencias antes de executar mudancas.
+-->
+
 # Valley MVP P0 Ownership Backlog
 
 ## Objetivo

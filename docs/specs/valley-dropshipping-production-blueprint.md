@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Definir o blueprint de producao para dropshipping Valley.
+CONTEXTO: Este documento orienta fornecedores, catalogo, pedidos, tracking, margem e conciliacao operacional.
+REGRAS: Usar apenas integracoes autorizadas, preservar auditoria e nao expor fornecedor ao cliente final.
+-->
+
 # Valley Dropshipping Inteligente - Blueprint De Producao
 
 ## Objetivo

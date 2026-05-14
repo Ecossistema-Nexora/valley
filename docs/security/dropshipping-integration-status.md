@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar status e reparo seguro das integracoes de dropshipping Valley.
+CONTEXTO: Este guia consolida provedores como Amazon, Alibaba, Shopee, AliExpress, CJDropshipping, Magalu e Mercado Livre.
+REGRAS: Exibir apenas status sanitizado e nunca gravar tokens, senhas ou segredos no repositorio.
+-->
+
 # Status e reparo das integracoes de dropshipping
 
 Use este comando para consolidar Amazon, Alibaba, Shopee, AliExpress,

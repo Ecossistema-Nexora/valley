@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+# PROPOSITO: Automatizar generate valley release links abnt pdf no workspace Valley.
+# CONTEXTO: Este modulo apoia operacao, geracao, validacao ou integracao ligada ao caminho scripts/generate_valley_release_links_abnt_pdf.py.
+# REGRAS: Nao expor segredos, manter comportamento idempotente e preservar contratos usados por release e runtime.
+
 """Gera PDF ABNT com links clicaveis dos grupos Admin, Lojista e Usuario."""
 
 from __future__ import annotations

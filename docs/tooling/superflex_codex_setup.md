@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Registrar o uso de Superflex com Codex no workspace Valley.
+CONTEXTO: Este documento orienta extensao, configuracao persistente e alinhamento com o fluxo de design.
+REGRAS: Desativar analytics conforme politica local e manter handoff visual controlado pelo repo.
+-->
+
 # Superflex + Codex no VALLEY
 
 ## Objetivo

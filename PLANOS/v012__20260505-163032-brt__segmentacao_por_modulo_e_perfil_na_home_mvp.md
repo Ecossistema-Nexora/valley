@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar v012 20260505 163032 brt segmentacao por modulo e perfil na home mvp no escopo operacional do Valley.
+CONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho PLANOS/v012__20260505-163032-brt__segmentacao_por_modulo_e_perfil_na_home_mvp.md.
+REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.
+-->
+
 # v012 - Segmentacao Por Modulo E Perfil Na Home MVP
 
 ## Resumo

@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Registrar a fonte da verdade do roteiro de producao Valley.
+CONTEXTO: Este documento define Helena, modulos, interface e regra anti-botao-morto para produto final.
+REGRAS: Preservar identidade visual, manter acoes com destino real e descartar variacoes obsoletas.
+-->
+
 # Valley Product Production Script
 
 ## Objetivo

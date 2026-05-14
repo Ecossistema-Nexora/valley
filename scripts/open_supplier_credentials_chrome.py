@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+# PROPOSITO: Automatizar open supplier credentials chrome no workspace Valley.
+# CONTEXTO: Este modulo apoia operacao, geracao, validacao ou integracao ligada ao caminho scripts/open_supplier_credentials_chrome.py.
+# REGRAS: Nao expor segredos, manter comportamento idempotente e preservar contratos usados por release e runtime.
+
 """Open a local Chrome credential wizard for pending supplier integrations.
 
 The wizard runs only on 127.0.0.1, writes secrets to the local .env file, then

@@ -1,3 +1,7 @@
+# PROPOSITO: Automatizar apply valley db via wsl no workspace Valley.
+# CONTEXTO: Este script apoia operacao local, release, runtime ou manutencao ligada ao caminho scripts/apply_valley_db_via_wsl.ps1.
+# REGRAS: Nao expor segredos, manter execucao idempotente e validar impactos antes de alterar recursos externos.
+
 param(
     [string]$Distro = '',
     [string]$WslUser = 'root',

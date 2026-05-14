@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar v026 20260505 210253 brt endpoint autenticado public runtime temporary no escopo operacional do Valley.
+CONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho PLANOS/v026__20260505-210253-brt__endpoint_autenticado_public_runtime_temporary.md.
+REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.
+-->
+
 # v026 - Endpoint Autenticado Public Runtime Temporary
 
 ## Resumo

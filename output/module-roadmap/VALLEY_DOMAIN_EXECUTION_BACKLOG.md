@@ -1,6 +1,6 @@
 # Backlog Executavel Por Dominio - Valley V47
 
-Este arquivo e gerado por `scripts/valley_module_automation.py`.
+Este arquivo e gerado por `scripts/automacao_sincronizador_modulos.py`.
 
 Ele transforma os blueprints dos 47 modulos em fila acionavel, com prioridade, dependencia interna e evidencias tecnicas esperadas.
 

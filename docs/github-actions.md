@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar os secrets e fluxos de GitHub Actions usados pelo Valley.
+CONTEXTO: Este guia apoia CI, build de imagem, push no ECR e deploy Helm no EKS.
+REGRAS: Manter secrets fora do Git e validar pipeline antes de qualquer publicacao.
+-->
+
 # GitHub Actions
 
 ## Secrets esperados

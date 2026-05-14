@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar README no escopo operacional do Valley.
+CONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho MANUAL_ONLINE/README.md.
+REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.
+-->
+
 # Manual Online - Valley Hybrid DB Bootstrap
 
 Este manual e a fonte viva da documentacao tecnica do banco hibrido Valley.
@@ -80,7 +86,7 @@ Esse arquivo adiciona comentarios nativos para campos, triggers e integracoes cr
 
 `database/postgres/007_v47_module_delivery_automation.sql` implanta a camada de delivery automation dos 47 modulos.
 
-Esse arquivo e gerado automaticamente por `scripts/valley_module_automation.py` a partir de `config/modules_v47.json`.
+Esse arquivo e gerado automaticamente por `scripts/automacao_sincronizador_modulos.py` a partir de `config/modules_v47.json`.
 
 Ele cria `module_delivery_registry`, `module_evolution_backlog` e `module_automation_runs` para controlar implantacao, desenvolvimento e evolucao.
 
@@ -162,11 +168,11 @@ Esse arquivo evita ambiguidade futura e protege o projeto contra retorno acident
 
 `MANUAL_ONLINE/04_ROADMAP_IMPLEMENTACAO_SPRINTS.md` transforma o estado atual em backlog executivo e tecnico por sprint.
 
-`scripts/generate_manual_pdf.py` gera o PDF do manual a partir deste Markdown.
+`scripts/automacao_gerador_pdf.py` gera o PDF do manual a partir deste Markdown.
 
 Esse script usa `reportlab`, consolida todos os arquivos `.md` de `MANUAL_ONLINE` e deve ser executado novamente sempre que este manual mudar.
 
-`scripts/valley_module_automation.py` automatiza o ciclo dos 47 modulos.
+`scripts/automacao_sincronizador_modulos.py` automatiza o ciclo dos 47 modulos.
 
 Esse script valida o registry, gera a documentacao por modulo, gera contratos operacionais, gera roadmap e gera a migration SQL de delivery automation.
 
@@ -287,7 +293,7 @@ Depois de atualizar o Markdown, o PDF deve ser regenerado em `output/pdf/VALLEY_
 O comando padrao para regenerar o PDF e:
 
 ```bash
-python scripts/generate_manual_pdf.py
+python scripts/automacao_gerador_pdf.py
 ```
 
 Se `reportlab` nao estiver instalado, instale a dependencia no ambiente Python antes de gerar o PDF.
@@ -357,12 +363,12 @@ O MongoDB deve aplicar `001_ai_social_telemetry.mongo.js`, depois `002_v47_log_i
 O ciclo padrao de automacao local e:
 
 ```bash
-python scripts/valley_module_automation.py validate
-python scripts/valley_module_automation.py sync
-python scripts/valley_module_automation.py sql
+python scripts/automacao_sincronizador_modulos.py validate
+python scripts/automacao_sincronizador_modulos.py sync
+python scripts/automacao_sincronizador_modulos.py sql
 python scripts/valley_db_orchestrator.py check
 python scripts/valley_db_orchestrator.py report
-python scripts/generate_manual_pdf.py
+python scripts/automacao_gerador_pdf.py
 ```
 
 `validate` garante que existem exatamente 47 modulos numerados de 1 a 47.
@@ -406,7 +412,7 @@ Quando Docker estiver pronto, o fluxo local e:
 ```bash
 python scripts/valley_db_orchestrator.py apply-compose
 python scripts/valley_db_orchestrator.py report
-python scripts/generate_manual_pdf.py
+python scripts/automacao_gerador_pdf.py
 ```
 
 Quando houver banco externo e as variaveis estiverem no ambiente ou em `.env`, o fluxo minimo e:
@@ -424,7 +430,7 @@ Os artefatos `README.md`, `STATUS.md` e `CONTRACT.md` dos 47 modulos tambem fora
 
 O script MongoDB foi validado com `node --check`.
 
-O registry dos 47 modulos foi validado por `scripts/valley_module_automation.py validate`.
+O registry dos 47 modulos foi validado por `scripts/automacao_sincronizador_modulos.py validate`.
 
 O ultimo relatorio operacional fica em `output/deployment/VALLEY_DEPLOYMENT_STATUS.md`.
 
@@ -499,3 +505,4 @@ Os modulos `DELIVERY`, `FLEET`, `SECURITY` e `AGENDA` passaram para `implemented
 `ADVISOR` ja tem camada hibrida real com `advisor_insights`, `financial_goals`, `teletherapy_sessions` e `ai_memory`, alem de integracao natural com `AGENDA` e `CHAT`.
 
 `NEWS_PODCAST` continua `PLANNED` no registry, mas o MVP ja pode nascer sobre `creator_uploads`, `social_videos` e `document_records`, sem criar schema editorial paralelo antes da prova de produto.
+

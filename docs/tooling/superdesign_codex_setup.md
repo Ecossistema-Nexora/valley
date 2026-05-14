@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Registrar o uso de SuperDesign com Codex no workspace Valley.
+CONTEXTO: Este documento orienta instalacao, persistencia no repo e handoff de conceitos visuais.
+REGRAS: Manter artefatos locais fora do git e alinhar geracoes visuais ao fluxo oficial Valley.
+-->
+
 # SuperDesign + Codex no VALLEY
 
 ## Objetivo

@@ -1,3 +1,7 @@
+# PROPOSITO: Automatizar ensure valley release runtime no workspace Valley.
+# CONTEXTO: Este script apoia operacao local, release, runtime ou manutencao ligada ao caminho scripts/ensure_valley_release_runtime.ps1.
+# REGRAS: Nao expor segredos, manter execucao idempotente e validar impactos antes de alterar recursos externos.
+
 param(
     [int]$ApiPort = 8085,
     [string]$PublicUrl = 'https://admin.brasildesconto.com.br',

@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar OPERACAO AUTONOMA no escopo operacional do Valley.
+CONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho MANUAL_ONLINE/OPERACAO_AUTONOMA.md.
+REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.
+-->
+
 # Operacao Autonoma - Valley
 
 Este documento define a esteira autonoma atual do projeto Valley.
@@ -14,7 +20,7 @@ Ela nao deve executar acoes destrutivas, apagar dados, vazar segredo, criar cred
 
 `config/modules_v47.json` e o registry dos 47 modulos.
 
-`scripts/valley_module_automation.py` gera documentacao por modulo, roadmap e migration SQL de delivery registry.
+`scripts/automacao_sincronizador_modulos.py` gera documentacao por modulo, roadmap e migration SQL de delivery registry.
 
 Ele tambem gera `CONTRACT.md` por modulo e a matriz `output/module-roadmap/VALLEY_MODULE_CONTRACTS.md`.
 
@@ -41,13 +47,13 @@ Ele tambem gera `CONTRACT.md` por modulo e a matriz `output/module-roadmap/VALLE
 ## Ciclo Natural
 
 1. Atualizar ou revisar o registry dos 47 modulos.
-2. Rodar `python scripts/valley_module_automation.py validate`.
-3. Rodar `python scripts/valley_module_automation.py sync`.
-4. Rodar `python scripts/valley_module_automation.py sql`.
+2. Rodar `python scripts/automacao_sincronizador_modulos.py validate`.
+3. Rodar `python scripts/automacao_sincronizador_modulos.py sync`.
+4. Rodar `python scripts/automacao_sincronizador_modulos.py sql`.
 5. Rodar `python scripts/valley_db_orchestrator.py check`.
 6. Rodar `python scripts/valley_db_orchestrator.py report`.
 7. Atualizar o Manual Online.
-8. Rodar `python scripts/generate_manual_pdf.py`.
+8. Rodar `python scripts/automacao_gerador_pdf.py`.
 
 `sync` deve manter `README.md`, `STATUS.md`, `CONTRACT.md`, `modules/INDEX.md`, roadmap e matriz de contratos alinhados.
 
@@ -92,7 +98,7 @@ Quando o Docker daemon estiver disponivel, o fluxo local e:
 ```bash
 python scripts/valley_db_orchestrator.py apply-compose
 python scripts/valley_db_orchestrator.py report
-python scripts/generate_manual_pdf.py
+python scripts/automacao_gerador_pdf.py
 ```
 
 Esse fluxo sobe Postgres e Mongo, espera readiness real, executa o service `builder` do Docker Compose, aplica migrations e atualiza a evidencia operacional.
@@ -181,3 +187,4 @@ Na sincronizacao de `2026-04-24`, `admin/valley_admin_data.js` e `admin/valley_a
 Na mesma rodada, os pacotes `database/domain-delivery/priority-domains/<dominio>/ddl_complement.sql` e `operational_seed.sql` dos dominios prioritarios ativos foram regenerados para ficar coerentes com `module_evolution_backlog`, `domain_delivery_artifacts` e `domain_event_contracts`.
 
 Essa troca e deliberada: a esteira agora prefere views e seeds gerados pelo registry canonico a SQL operacional manual que envelhece fora do backlog.
+

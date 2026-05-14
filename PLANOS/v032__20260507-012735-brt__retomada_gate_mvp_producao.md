@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar v032 20260507 012735 brt retomada gate mvp producao no escopo operacional do Valley.
+CONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho PLANOS/v032__20260507-012735-brt__retomada_gate_mvp_producao.md.
+REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.
+-->
+
 # v032 - Retomada Gate MVP Producao
 
 ## Resumo
@@ -21,7 +27,7 @@
 - [x] Validar Android em modo release com split por ABI quando necessario. Concluido em 2026-05-07 02:34:35 BRT.
 - [x] Renovar ou confirmar runtime publico e registrar URL/manifests atualizados. Concluido em 2026-05-07 02:42:00 BRT.
 - [x] Auditar todas as funcoes visiveis do APK/admin e tornar operacionais as que ainda dependerem de implementacao ou integracao real. Concluido em 2026-05-11 09:59:34 BRT.
-- [ ] Registrar evidencias finais e marcar este plano como concluido quando o MVP estiver demonstravel em modo de producao.
+- [x] Registrar evidencias finais e marcar este plano como concluido quando o MVP estiver demonstravel em modo de producao. Concluido em 2026-05-14 13:22 BRT.
 
 ## Evidencias
 
@@ -54,13 +60,15 @@
 - Auditoria de 2026-05-11 fechou a frente visivel de produto/catalogo/checkout: linguagem de cliente final, frete por endereco, Minhas compras, notificacoes, compartilhamento, checkout e white-label sem exposicao de fornecedor original ao cliente.
 - Servidor limpo em `http://127.0.0.1:8099` validou `healthz`, `/api/stock-catalog`, `/api/product-shell` e `POST /api/actions/shipping-quote` com frete e `customer_visible_supplier_name=Valley`.
 - Assets publicos do app foram verificados sem chaves internas de fornecedor/provider/custo/benchmark nos itens STOCK; o runtime interno continua preservando dados operacionais para admin, precificacao e pedido ao provedor.
-- A evidencia final de modo de producao permanece pendente porque o dominio fixo `https://admin.brasildesconto.com.br` ainda retorna erro Cloudflare por token de named tunnel invalido.
+- Evidencia final 2026-05-14 13:22 BRT: named tunnel Cloudflare reiniciado sem expor token; `https://admin.brasildesconto.com.br/healthz` respondeu `status=ok` e `python scripts\validate_valley_release_gate.py --base-url https://admin.brasildesconto.com.br` retornou `status=ok`, `checks_total=25`, `failed_total=0`.
+- Playwright validou o runtime publico em `https://admin.brasildesconto.com.br`: login lojista, PDV, Equipe/Seguranca, criacao de operador, concessao de PDV offline e venda offline executaram sem erro de console.
+- O ERP Lojista publico usa links internos `https://admin.brasildesconto.com.br/?workspace=...#merchantErpSection`, evitando subdominios sem rota e removendo botoes mortos no gate atual.
 - Automacao persistente criada em 2026-05-11 10:32:35 BRT: `scripts/run_valley_mvp_autonomous_closure.ps1` orquestra catalogo 10k quando devido, reparo Cloudflare quando houver token, validacao de runtime e atualizacao dos planos.
 - Tarefa agendada local `\ValleyMvpAutonomousClosure` instalada por `scripts/install_valley_mvp_autonomous_closure_task.ps1`, com execucao a cada 6 horas e proxima janela registrada para 2026-05-11 16:30:00 BRT.
 - Status persistente em `tmp/runtime/valley-mvp-autonomous-closure.json`: runtime local e Tailscale retornaram HTTP 200, dominio fixo retornou HTTP 530 / `error code: 1033`, catalogo atual tem 1089/10000 itens e faltam 8911 para a meta automatizada.
 - Recuperacao local em 2026-05-11 13:34 BRT recompôs `tmp/runtime/valley-stock-real-catalog.json`, `tmp/runtime/valley-stock-real-catalog-ptbr.json`, `frontend/flutter/assets/data/valley_stock_runtime_ptbr.json` e `frontend/flutter/assets/data/valley_product_catalog.json` apos runtime ilegivel e assets vazios; parse JSON validado com runtime/asset em `1089` itens, preview publico em `80` itens e `summary.products=1089`.
 - `scripts/translate_stock_catalog_ptbr.py` agora respeita `config/stock_publication_policy.json` no rebuild do preview publico; `python -m py_compile scripts/translate_stock_catalog_ptbr.py` e `python scripts/translate_stock_catalog_ptbr.py --rebuild-only` passaram com `translated_items_total=1089`, `missing_total=0` e `failed_total=0`.
-- `scripts/run_valley_mvp_autonomous_closure.ps1 -SkipCatalog` reexecutado em 2026-05-11 13:40 BRT: local `http://127.0.0.1:8085/healthz` e Tailscale `http://100.109.240.100:8085/healthz` retornaram HTTP 200; dominio fixo `https://admin.brasildesconto.com.br/healthz` segue HTTP 530 por token Cloudflare ausente.
+- `scripts/run_valley_mvp_autonomous_closure.ps1 -SkipCatalog` reexecutado em 2026-05-11 13:40 BRT: local `http://127.0.0.1:8085/healthz` e Tailscale `http://100.109.240.100:8085/healthz` retornaram HTTP 200; em 2026-05-14 13:22 BRT o dominio fixo `https://admin.brasildesconto.com.br/healthz` voltou a responder `status=ok` apos reinicio do named tunnel.
 - Validacoes HTTP pos-recuperacao: `GET /api/product-catalog-summary` retornou `items_total=1089`; `GET /api/stock-catalog` retornou `status=ok`, `service=valley-stock-catalog`, `provider=cjdropshipping`, `items_total=1089` e `1089` itens.
 - Validacao autonoma de 2026-05-11 13:58 BRT reforcou `scripts/run_valley_mvp_autonomous_closure.ps1`: a rotina agora valida `local_product_shell`, `tailscale_product_shell` e `persistent_public_fallback`, registrando `provider=tailscale`, admin em `http://100.109.240.100:8085` e produto em `http://100.109.240.100:8085/product`.
 - Cloudflare API conectada confirmou o tunnel `valley-admin` (`80a75594-5129-469f-8cce-4a938ac48e06`) como `down` e com `0` conexoes; o endpoint de token retornou erro de autenticacao/escopo, entao o reparo automatico continua aguardando `CLOUDFLARE_API_TOKEN`/`CF_API_TOKEN` com permissao de tunnel.
@@ -76,9 +84,9 @@
 - Nenhum `CLOUDFLARE_API_TOKEN`, `CF_API_TOKEN`, `CLOUDFLARE_ZONE_ID` ou `CLOUDFLARE_ACCOUNT_ID` esta carregado no ambiente atual. A aplicacao real dos DNS fica bloqueada ate existir token API/zone ID seguro fora do git.
 - `flutter analyze` completo ficou mais de 5 minutos em execucao e estourou timeout; a validacao segmentada dos arquivos centrais passou, e o build web release concluiu.
 - Nesta sessao, `flutter analyze --no-pub` e `dart analyze` segmentados tambem excederam timeout; `python -m py_compile`, `dart format`, parse do script PowerShell, parse do JSON de politica e validacao HTTP local passaram.
-- A automacao recorrente esta ativa localmente, mas nao consegue reparar Cloudflare sem `CLOUDFLARE_API_TOKEN`/`CF_API_TOKEN`; quando o token existir no ambiente, a rotina executa o reparo sem gravar segredo no Git.
+- A automacao recorrente esta ativa localmente; reparos Cloudflare que exijam alteracao de conta ainda dependem de `CLOUDFLARE_API_TOKEN`/`CF_API_TOKEN` com escopo correto fora do Git.
 - A automacao nativa do Codex foi tentada para a mesma rotina, mas a criacao retornou falha sem detalhe; o fallback persistente ativo ficou no Windows Task Scheduler.
 
 ## Proxima acao
 
-- A rotina `\ValleyMvpAutonomousClosure` continuara tentando automaticamente; para fechar a evidencia final, o proximo passo natural externo e disponibilizar `CLOUDFLARE_API_TOKEN`/`CF_API_TOKEN` com permissao de tunnel ou renovar o token do named tunnel no Cloudflare Zero Trust.
+- Manter o gate publico `25/25` como evidencia final do MVP em producao e reexecutar a rotina autonoma antes de cada release.

@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar v008 20260505 142113 brt plano entrega mvp valley no escopo operacional do Valley.
+CONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho PLANOS/v008__20260505-142113-brt__plano_entrega_mvp_valley.md.
+REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.
+-->
+
 # v008 - Plano Entrega MVP Valley
 
 ## Resumo

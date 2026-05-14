@@ -1,3 +1,7 @@
+# PROPOSITO: Automatizar termius tailscale status no workspace Valley.
+# CONTEXTO: Este script apoia operacao local, release, runtime ou manutencao ligada ao caminho scripts/termius_tailscale_status.ps1.
+# REGRAS: Nao expor segredos, manter execucao idempotente e validar impactos antes de alterar recursos externos.
+
 param()
 
 $ErrorActionPreference = 'Stop'

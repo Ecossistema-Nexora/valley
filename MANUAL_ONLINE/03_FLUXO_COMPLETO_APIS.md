@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar 03 FLUXO COMPLETO APIS no escopo operacional do Valley.
+CONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho MANUAL_ONLINE/03_FLUXO_COMPLETO_APIS.md.
+REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.
+-->
+
 # Fluxo Completo de APIs
 
 Este documento descreve a superficie de API recomendada para o estado atual do Valley.

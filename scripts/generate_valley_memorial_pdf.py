@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+# PROPOSITO: Automatizar generate valley memorial pdf no workspace Valley.
+# CONTEXTO: Este modulo apoia operacao, geracao, validacao ou integracao ligada ao caminho scripts/generate_valley_memorial_pdf.py.
+# REGRAS: Nao expor segredos, manter comportamento idempotente e preservar contratos usados por release e runtime.
+
 from __future__ import annotations
 
 import json
@@ -25,7 +29,7 @@ ROADMAP_MD = ROOT / "output" / "module-roadmap" / "VALLEY_MODULE_ROADMAP.md"
 DEPLOYMENT_MD = ROOT / "output" / "deployment" / "VALLEY_DEPLOYMENT_STATUS.md"
 PROD_MODE_MD = ROOT / "output" / "deployment" / "VALLEY_PRODUCTION_MODE.md"
 VISION_MD = ROOT / "docs" / "specs" / "valley_vision.md"
-HELENA_MD = ROOT / "docs" / "specs" / "valley-helena-master-spec.md"
+HELENA_MD = ROOT / "docs" / "specs" / "helena_especificacao_mestra.md"
 POSTGRES_DIR = ROOT / "database" / "postgres"
 MONGO_DIR = ROOT / "database" / "mongodb"
 PRIORITY_DOMAINS_DIR = ROOT / "database" / "domain-delivery" / "priority-domains"
@@ -87,7 +91,7 @@ KEY_ARTIFACTS = [
     "output/deployment/VALLEY_DEPLOYMENT_STATUS.md",
     "output/deployment/VALLEY_PRODUCTION_MODE.md",
     "docs/specs/valley_vision.md",
-    "docs/specs/valley-helena-master-spec.md",
+    "docs/specs/helena_especificacao_mestra.md",
     "output/pdf/VALLEY_MANUAL_ONLINE.pdf",
     "output/pdf/VALLEY_MEMORANDO_ESTRUTURADO_MODULOS_ECONOMIA.pdf",
 ]

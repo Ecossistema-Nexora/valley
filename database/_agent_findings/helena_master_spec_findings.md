@@ -1,6 +1,6 @@
 # Helena Master Spec - Findings
 
-Escopo: leitura do `C:\Users\ereta\Downloads\000 - VALLEY\valley-helena-master-spec.md` e comparação com `database/`.
+Escopo: leitura do `C:\Users\ereta\Downloads\000 - VALLEY\helena_especificacao_mestra.md` e comparação com `database/`.
 
 ## Requisitos Extraidos
 
@@ -40,4 +40,5 @@ Escopo: leitura do `C:\Users\ereta\Downloads\000 - VALLEY\valley-helena-master-s
 - `database/postgres/010_v47_rule_growth_marketplace_runtime.sql`
 - `database/postgres/024_v47_ai_memory_operations_business_ddl.sql`
 - `database/mongodb/001_ai_social_telemetry.mongo.js`
+
 

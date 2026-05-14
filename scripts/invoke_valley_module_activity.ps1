@@ -1,3 +1,7 @@
+# PROPOSITO: Automatizar invoke valley module activity no workspace Valley.
+# CONTEXTO: Este script apoia operacao local, release, runtime ou manutencao ligada ao caminho scripts/invoke_valley_module_activity.ps1.
+# REGRAS: Nao expor segredos, manter execucao idempotente e validar impactos antes de alterar recursos externos.
+
 param(
     [Parameter(Mandatory = $true)]
     [string]$ActivityName,
@@ -14,7 +18,7 @@ $PolicyPath = Join-Path $RepoRoot 'config\automation\valley_module_activity_poli
 $RuntimeDir = Join-Path $RepoRoot 'tmp\runtime'
 $StatusPath = Join-Path $RuntimeDir 'valley-module-activity-automation-status.json'
 $LedgerPath = Join-Path $RuntimeDir 'valley-module-activity-automation-ledger.jsonl'
-$EnginePath = Join-Path $RepoRoot 'scripts\valley_module_automation.py'
+$EnginePath = Join-Path $RepoRoot 'scripts\automacao_sincronizador_modulos.py'
 
 New-Item -ItemType Directory -Path $RuntimeDir -Force | Out-Null
 

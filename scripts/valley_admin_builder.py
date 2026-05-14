@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+# PROPOSITO: Automatizar valley admin builder no workspace Valley.
+# CONTEXTO: Este modulo apoia operacao, geracao, validacao ou integracao ligada ao caminho scripts/valley_admin_builder.py.
+# REGRAS: Nao expor segredos, manter comportamento idempotente e preservar contratos usados por release e runtime.
+
 """Gera o painel admin estatico a partir dos artefatos canonicos do Valley."""
 
 import argparse
@@ -496,7 +500,7 @@ def build_payload() -> dict[str, object]:
             'python scripts/serve_valley_admin.py --port 8080',
             'powershell -ExecutionPolicy Bypass -File scripts/start_valley_admin_public.ps1',
             'python scripts/show_valley_public_urls.py',
-            'python scripts/valley_module_automation.py sync',
+            'python scripts/automacao_sincronizador_modulos.py sync',
             'python scripts/valley_db_orchestrator.py check',
             'python scripts/valley_db_orchestrator.py report',
             'powershell -ExecutionPolicy Bypass -File scripts/run_valley_compose_builder.ps1',

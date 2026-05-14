@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Consolidar o plano economico Valley V47.
+CONTEXTO: Este documento orienta sustentabilidade financeira, modulos, margens, tokens e fases de crescimento.
+REGRAS: Manter premissas rastreaveis, separar simulacao de operacao real e revisar impactos antes de release.
+-->
+
 # Valley v47 - Plano Economico para 100 Mil
 
 > **Função:** Define a viabilidade financeira e as regras de governança para o crescimento sustentável.

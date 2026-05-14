@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Definir a politica segura para credenciais de fornecedores e marketplaces Valley.
+CONTEXTO: Este guia orienta variaveis locais, CI/CD protegido e secret manager para provedores externos.
+REGRAS: Nunca versionar login, senha, token OAuth, client secret ou refresh token.
+-->
+
 # Credenciais de fornecedores e marketplaces
 
 Este projeto nao deve versionar login, senha, token OAuth, client secret ou refresh token.

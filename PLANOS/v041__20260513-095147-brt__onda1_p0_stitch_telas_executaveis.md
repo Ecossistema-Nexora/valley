@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar v041 20260513 095147 brt onda1 p0 stitch telas executaveis no escopo operacional do Valley.
+CONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho PLANOS/v041__20260513-095147-brt__onda1_p0_stitch_telas_executaveis.md.
+REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.
+-->
+
 # v041 - Onda 1 P0 Stitch Telas Executaveis
 
 ## Resumo

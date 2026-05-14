@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar NORMA UNIFICADA V47 no escopo operacional do Valley.
+CONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho MANUAL_ONLINE/NORMA_UNIFICADA_V47.md.
+REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.
+-->
+
 # Norma Unificada V47
 
 Esta norma consolida os PDFs oficiais do Valley Omniverse e resolve conflitos de diretriz pela regra que mais protege estabilidade, seguranca, continuidade de entrega, privacidade e coerencia arquitetural.

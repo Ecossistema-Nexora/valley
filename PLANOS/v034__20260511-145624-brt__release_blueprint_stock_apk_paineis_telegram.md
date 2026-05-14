@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar v034 20260511 145624 brt release blueprint stock apk paineis telegram no escopo operacional do Valley.
+CONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho PLANOS/v034__20260511-145624-brt__release_blueprint_stock_apk_paineis_telegram.md.
+REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.
+-->
+
 # v034 - Release Blueprint STOCK, APK, Paineis e Telegram
 
 ## Resumo

@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar rotas alternativas de runtime publico para Valley.
+CONTEXTO: Este guia registra localhost.run, Tailscale e arquivos de manifesto usados quando o dominio fixo nao esta disponivel.
+REGRAS: Preferir dominio publico oficial para release e usar rotas alternativas apenas como contingencia operacional.
+-->
+
 # Valley public runtime via localhost.run and Tailscale
 
 ## Current stable route

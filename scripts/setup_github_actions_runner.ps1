@@ -1,3 +1,7 @@
+# PROPOSITO: Automatizar setup github actions runner no workspace Valley.
+# CONTEXTO: Este script apoia operacao local, release, runtime ou manutencao ligada ao caminho scripts/setup_github_actions_runner.ps1.
+# REGRAS: Nao expor segredos, manter execucao idempotente e validar impactos antes de alterar recursos externos.
+
 param(
   [string]$RunnerRoot = "C:\actions-runner",
   [string]$RepoUrl = "https://github.com/Ecossistema-Nexora/valley",

@@ -1,3 +1,7 @@
+# PROPOSITO: Automatizar plan valley module subdomains no workspace Valley.
+# CONTEXTO: Este modulo apoia operacao, geracao, validacao ou integracao ligada ao caminho scripts/plan_valley_module_subdomains.py.
+# REGRAS: Nao expor segredos, manter comportamento idempotente e preservar contratos usados por release e runtime.
+
 """Generate or apply Cloudflare DNS records for Valley module workspaces."""
 
 from __future__ import annotations

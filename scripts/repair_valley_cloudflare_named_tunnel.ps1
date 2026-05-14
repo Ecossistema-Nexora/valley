@@ -1,3 +1,7 @@
+# PROPOSITO: Automatizar repair valley cloudflare named tunnel no workspace Valley.
+# CONTEXTO: Este script apoia operacao local, release, runtime ou manutencao ligada ao caminho scripts/repair_valley_cloudflare_named_tunnel.ps1.
+# REGRAS: Nao expor segredos, manter execucao idempotente e validar impactos antes de alterar recursos externos.
+
 param(
     [string]$AccountId = '',
     [string]$TunnelId = '80a75594-5129-469f-8cce-4a938ac48e06',

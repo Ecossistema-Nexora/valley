@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Definir o blueprint de release mobile e web responsivo do Valley.
+CONTEXTO: Este documento orienta APK, runtime publico, fallback embarcado e superficies mobile.
+REGRAS: Usar rotas publicas oficiais, preservar identidade Valley e evitar textos tecnicos para usuario final.
+-->
+
 # Valley Mobile Release Blueprint
 
 Criado em BRT: 2026-05-12

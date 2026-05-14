@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar v010 20260505 144807 brt implementacao contratos me e integracao home flutter no escopo operacional do Valley.
+CONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho PLANOS/v010__20260505-144807-brt__implementacao_contratos_me_e_integracao_home_flutter.md.
+REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.
+-->
+
 # v010 - Implementacao Contratos Me E Integracao Home Flutter
 
 ## Resumo

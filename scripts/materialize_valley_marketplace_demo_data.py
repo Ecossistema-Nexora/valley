@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+# PROPOSITO: Automatizar materialize valley marketplace demo data no workspace Valley.
+# CONTEXTO: Este modulo apoia operacao, geracao, validacao ou integracao ligada ao caminho scripts/materialize_valley_marketplace_demo_data.py.
+# REGRAS: Nao expor segredos, manter comportamento idempotente e preservar contratos usados por release e runtime.
+
 """Materializa dados comerciais ficticios para o modulo Marketplace."""
 
 from __future__ import annotations

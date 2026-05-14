@@ -1,3 +1,7 @@
+# PROPOSITO: Automatizar run valley mvp autonomous closure no workspace Valley.
+# CONTEXTO: Este script apoia operacao local, release, runtime ou manutencao ligada ao caminho scripts/run_valley_mvp_autonomous_closure.ps1.
+# REGRAS: Nao expor segredos, manter execucao idempotente e validar impactos antes de alterar recursos externos.
+
 param(
     [switch]$ForceCatalog,
     [switch]$SkipCatalog,

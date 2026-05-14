@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+# PROPOSITO: Automatizar repair dropshipping integrations no workspace Valley.
+# CONTEXTO: Este modulo apoia operacao, geracao, validacao ou integracao ligada ao caminho scripts/repair_dropshipping_integrations.py.
+# REGRAS: Nao expor segredos, manter comportamento idempotente e preservar contratos usados por release e runtime.
+
 """Repair and audit Valley dropshipping integrations without leaking secrets.
 
 The script fixes local runtime configuration that can be fixed autonomously:

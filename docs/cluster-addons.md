@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Registrar os addons Kubernetes esperados para o cluster Valley.
+CONTEXTO: Este guia orienta instalacao de ingress, DNS, certificados e metricas no ambiente EKS.
+REGRAS: Validar dependencias de IAM, OIDC, Route53 e certificados antes de publicar cargas publicas.
+-->
+
 # Cluster Addons
 
 Este kit assume os seguintes addons no EKS:

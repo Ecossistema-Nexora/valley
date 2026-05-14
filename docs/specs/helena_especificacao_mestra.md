@@ -1,8 +1,14 @@
+<!--
+PROPOSITO: Consolidar a especificacao mestra da Helena dentro do ecossistema Valley.
+CONTEXTO: Este documento orienta memoria, agenda, chat e consultoria assistida nos modulos AGENDA, ADVISOR e CHAT.
+REGRAS: Preservar consentimento, explicabilidade, isolamento de contexto e governanca cross-module antes de ampliar automacoes.
+-->
+
 # Valley Helena Master Spec
 
 ## 1. Proposito
 
-Esta especificacao define a frente institucional `valley-helena-master-spec` como camada mestra para os modulos `AGENDA`, `ADVISOR` e `CHAT` dentro do dominio `ai_memory_operations`.
+Esta especificacao define a frente institucional `helena_especificacao_mestra` como camada mestra para os modulos `AGENDA`, `ADVISOR` e `CHAT` dentro do dominio `ai_memory_operations`.
 
 O objetivo nao e redesenhar o que ja existe no repositorio, e sim:
 

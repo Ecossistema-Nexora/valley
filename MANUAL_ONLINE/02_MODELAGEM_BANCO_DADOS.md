@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar 02 MODELAGEM BANCO DADOS no escopo operacional do Valley.
+CONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho MANUAL_ONLINE/02_MODELAGEM_BANCO_DADOS.md.
+REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.
+-->
+
 # Modelagem de Banco de Dados
 
 Este documento organiza a modelagem atual do Valley por dominio funcional.

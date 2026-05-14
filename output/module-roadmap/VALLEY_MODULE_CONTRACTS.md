@@ -1,6 +1,6 @@
 # Matriz De Contratos Operacionais - Valley V47
 
-Este arquivo e gerado por `scripts/valley_module_automation.py`.
+Este arquivo e gerado por `scripts/automacao_sincronizador_modulos.py`.
 
 A matriz resume a fronteira tecnica dos 47 modulos para orientar desenvolvimento continuo.
 

@@ -1,6 +1,6 @@
 # Contrato Operacional - 14. Valley Edu
 
-Este arquivo e gerado pela automacao `scripts/valley_module_automation.py`.
+Este arquivo e gerado pela automacao `scripts/automacao_sincronizador_modulos.py`.
 
 Ele define a fronteira inicial do modulo para guiar desenvolvimento, implantacao e evolucao sem quebrar o nucleo Valley.
 

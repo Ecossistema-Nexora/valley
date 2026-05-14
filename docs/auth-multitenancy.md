@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar o modelo minimo de autenticacao e isolamento multitenant do Valley.
+CONTEXTO: Este guia orienta tenants, usuarios, claims JWT e trilhas de auditoria para paineis e APIs.
+REGRAS: Todo acesso a dados de negocio deve ser filtrado por tenant_id, com administracao global separada da administracao do tenant.
+-->
+
 # Auth e Multi-Tenancy
 
 ## Modelo sugerido

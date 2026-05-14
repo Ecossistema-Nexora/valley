@@ -40,13 +40,14 @@
     "exposicao de token, senha ou chave"
   ],
   "natural_safe_cycle": [
-    "python scripts/valley_module_automation.py validate",
-    "python scripts/valley_module_automation.py sync",
-    "python scripts/valley_module_automation.py sql",
-    "python scripts/valley_module_automation.py admin",
+    "python scripts/automacao_sincronizador_modulos.py validate",
+    "python scripts/automacao_sincronizador_modulos.py sync",
+    "python scripts/automacao_sincronizador_modulos.py sql",
+    "python scripts/automacao_sincronizador_modulos.py admin",
     "python scripts/valley_db_orchestrator.py check",
     "python scripts/valley_db_orchestrator.py report",
-    "python scripts/generate_manual_pdf.py",
+    "python scripts/automacao_gerador_pdf.py",
     "python scripts/valley_codex_token_budget.py"
   ]
 }
+

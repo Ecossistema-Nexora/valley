@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar v022 20260505 205437 brt guarda backend para action path nao comercial no escopo operacional do Valley.
+CONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho PLANOS/v022__20260505-205437-brt__guarda_backend_para_action_path_nao_comercial.md.
+REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.
+-->
+
 # v022 - Guarda Backend Para Action Path Nao Comercial
 
 ## Resumo

@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Definir a ordem operacional de deploy do Valley.
+CONTEXTO: Este roteiro conecta Terraform, EKS, Helm, banco hibrido, webhooks e validacoes finais.
+REGRAS: Seguir a sequencia antes de validar health checks, jobs, admin e migracoes do banco.
+-->
+
 # Ordem de Deploy
 
 1. Provisionar base AWS com Terraform.

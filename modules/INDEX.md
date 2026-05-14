@@ -1,6 +1,6 @@
 # Indice Automatizado Dos 47 Modulos Valley
 
-Este indice e gerado por `scripts/valley_module_automation.py`.
+Este indice e gerado por `scripts/automacao_sincronizador_modulos.py`.
 
 A saida e deterministica para evitar ruido em automacoes recorrentes.
 

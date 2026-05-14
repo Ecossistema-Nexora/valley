@@ -1,3 +1,7 @@
+# PROPOSITO: Automatizar check valley brand terms no workspace Valley.
+# CONTEXTO: Este script apoia operacao local, release, runtime ou manutencao ligada ao caminho scripts/check_valley_brand_terms.ps1.
+# REGRAS: Nao expor segredos, manter execucao idempotente e validar impactos antes de alterar recursos externos.
+
 param(
   [switch]$Json
 )
@@ -83,9 +87,53 @@ function Test-AllowedLine {
   return $false
 }
 
-$matches = [System.Collections.Generic.List[object]]::new()
+function Get-RepoRelativePath {
+  param([string]$Path)
 
-$files = Get-ChildItem -LiteralPath $repoRoot -Recurse -File -Force |
+  $normalizedRoot = $repoRoot.TrimEnd('\', '/')
+  if ($Path.StartsWith($normalizedRoot, [System.StringComparison]::OrdinalIgnoreCase)) {
+    return $Path.Substring($normalizedRoot.Length).TrimStart('\', '/')
+  }
+  return $Path
+}
+
+$violations = [System.Collections.Generic.List[object]]::new()
+
+function Get-TrackedFiles {
+  $trackedPaths = @()
+  try {
+    $trackedPaths = & git -C $repoRoot ls-files 2>$null
+  }
+  catch {
+    $trackedPaths = @()
+  }
+
+  if ($LASTEXITCODE -ne 0 -or -not $trackedPaths) {
+    return $null
+  }
+
+  $items = [System.Collections.Generic.List[object]]::new()
+  foreach ($trackedPath in $trackedPaths) {
+    try {
+      $fullPath = Join-Path $repoRoot $trackedPath
+      if (Test-Path -LiteralPath $fullPath -PathType Leaf) {
+        $items.Add((Get-Item -LiteralPath $fullPath)) | Out-Null
+      }
+    }
+    catch {
+      continue
+    }
+  }
+
+  return $items
+}
+
+$files = Get-TrackedFiles
+if ($null -eq $files) {
+  $files = Get-ChildItem -LiteralPath $repoRoot -Recurse -File -Force
+}
+
+$files = $files |
   Where-Object {
     -not (Test-ExcludedPath -Path $_.FullName) -and
     ($extensions -contains $_.Extension -or $_.Name.EndsWith('.mongo.js'))
@@ -107,41 +155,41 @@ foreach ($file in $files) {
 
     foreach ($entry in $forbiddenPatterns) {
       if ($line -match $entry.pattern) {
-        $relativePath = [System.IO.Path]::GetRelativePath($repoRoot, $file.FullName)
-        $matches.Add([pscustomobject]@{
+        $relativePath = Get-RepoRelativePath -Path $file.FullName
+        $violations.Add([pscustomobject]@{
             path = $relativePath
             line = $index + 1
             term = $entry.name
             text = $line.Trim()
-          })
+          }) | Out-Null
       }
     }
   }
 }
 
 $result = [pscustomobject]@{
-  ok = $matches.Count -eq 0
+  ok = $violations.Count -eq 0
   checked_at = [DateTime]::UtcNow.ToString('o')
   canonical_terms = [pscustomobject]@{
     ecosystem = 'Valley'
     assistant = 'Helena'
     token = 'V-Coin'
   }
-  matches = $matches
+  matches = $violations
 }
 
 if ($Json) {
   $result | ConvertTo-Json -Depth 6
 }
 else {
-  if ($matches.Count -eq 0) {
+  if ($violations.Count -eq 0) {
     Write-Output 'ok=true'
   }
   else {
-    $matches | Format-Table -AutoSize
+    $violations | Format-Table -AutoSize
   }
 }
 
-if ($matches.Count -gt 0) {
+if ($violations.Count -gt 0) {
   exit 1
 }

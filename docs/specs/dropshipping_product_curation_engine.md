@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Definir o motor de curadoria de produtos dropshipping do Valley.
+CONTEXTO: Este documento orienta fontes, comparadores, criterios de aprovacao e restricoes operacionais.
+REGRAS: Aprovar produtos apenas com dados permitidos, margem defensavel e fornecedor legalmente integrado.
+-->
+
 # Dropshipping Product Curation Engine
 
 ## Escopo

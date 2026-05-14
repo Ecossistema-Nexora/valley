@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+# PROPOSITO: Automatizar import real stock catalog no workspace Valley.
+# CONTEXTO: Este modulo apoia operacao, geracao, validacao ou integracao ligada ao caminho scripts/import_real_stock_catalog.py.
+# REGRAS: Nao expor segredos, manter comportamento idempotente e preservar contratos usados por release e runtime.
+
 """Materializa o catalogo real do STOCK em modo multi-provedor.
 
 Mantem o shell embarcado leve com uma vitrine reduzida e sanitizada para o

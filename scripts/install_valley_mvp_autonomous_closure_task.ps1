@@ -1,3 +1,7 @@
+# PROPOSITO: Automatizar install valley mvp autonomous closure task no workspace Valley.
+# CONTEXTO: Este script apoia operacao local, release, runtime ou manutencao ligada ao caminho scripts/install_valley_mvp_autonomous_closure_task.ps1.
+# REGRAS: Nao expor segredos, manter execucao idempotente e validar impactos antes de alterar recursos externos.
+
 param(
     [string]$TaskName = 'ValleyMvpAutonomousClosure',
     [string]$TaskFolder = '\',

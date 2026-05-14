@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar v030 20260505 214500 brt nomenclatura valley helena vcoin no escopo operacional do Valley.
+CONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho PLANOS/v030__20260505-214500-brt__nomenclatura_valley_helena_vcoin.md.
+REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.
+-->
+
 # Nomenclatura canonica Valley, Helena e V-Coin
 
 ## Resumo

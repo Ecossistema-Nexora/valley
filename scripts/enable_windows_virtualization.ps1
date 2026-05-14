@@ -1,3 +1,7 @@
+# PROPOSITO: Automatizar enable windows virtualization no workspace Valley.
+# CONTEXTO: Este script apoia operacao local, release, runtime ou manutencao ligada ao caminho scripts/enable_windows_virtualization.ps1.
+# REGRAS: Nao expor segredos, manter execucao idempotente e validar impactos antes de alterar recursos externos.
+
 #requires -RunAsAdministrator
 <#
 Enables the mandatory local virtualization stack for Valley:

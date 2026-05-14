@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar v007 20260505 092400 brt entrypoint canonico apply compose builder no escopo operacional do Valley.
+CONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho PLANOS/v007__20260505-092400-brt__entrypoint_canonico_apply_compose_builder.md.
+REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.
+-->
+
 # v007 - Entrypoint Canonico Apply Compose Builder
 
 ## Resumo

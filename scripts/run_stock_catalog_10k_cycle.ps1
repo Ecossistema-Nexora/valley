@@ -1,3 +1,7 @@
+# PROPOSITO: Automatizar run stock catalog 10k cycle no workspace Valley.
+# CONTEXTO: Este script apoia operacao local, release, runtime ou manutencao ligada ao caminho scripts/run_stock_catalog_10k_cycle.ps1.
+# REGRAS: Nao expor segredos, manter execucao idempotente e validar impactos antes de alterar recursos externos.
+
 param(
   [int]$TargetItems = 10000,
   [int]$MaxCategories = 200,

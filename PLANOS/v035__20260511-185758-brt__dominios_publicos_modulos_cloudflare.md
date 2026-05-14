@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar v035 20260511 185758 brt dominios publicos modulos cloudflare no escopo operacional do Valley.
+CONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho PLANOS/v035__20260511-185758-brt__dominios_publicos_modulos_cloudflare.md.
+REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.
+-->
+
 # v035 - Dominios Publicos, Modulos Admin e Cloudflare Persistente
 
 ## Resumo

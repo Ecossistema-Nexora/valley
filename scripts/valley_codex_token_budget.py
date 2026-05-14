@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+# PROPOSITO: Automatizar valley codex token budget no workspace Valley.
+# CONTEXTO: Este modulo apoia operacao, geracao, validacao ou integracao ligada ao caminho scripts/valley_codex_token_budget.py.
+# REGRAS: Nao expor segredos, manter comportamento idempotente e preservar contratos usados por release e runtime.
+
 """Gera estimativa segura de consumo de tokens e ordem de retomada.
 
 Nao consulta saldo real do Codex porque essa informacao nao e exposta ao

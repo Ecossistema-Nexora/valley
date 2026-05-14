@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+# PROPOSITO: Automatizar bootstrap mercadopago checkout no workspace Valley.
+# CONTEXTO: Este modulo apoia operacao, geracao, validacao ou integracao ligada ao caminho scripts/bootstrap_mercadopago_checkout.py.
+# REGRAS: Nao expor segredos, manter comportamento idempotente e preservar contratos usados por release e runtime.
+
 """Bootstrap and validate Mercado Pago checkout credentials for Valley.
 
 Reads credentials from .env, tmp/runtime/codex-cloud-secrets.env, or process

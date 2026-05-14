@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar o provisionamento do GitHub Actions self-hosted runner para o Valley.
+CONTEXTO: Este guia apoia configuracao local Windows com token efemero de registro.
+REGRAS: Usar apenas GITHUB_RUNNER_TOKEN local e nunca gravar tokens em arquivos versionados.
+-->
+
 # GitHub Actions Self-Hosted Runner
 
 Provisionamento local do runner Windows para `Ecossistema-Nexora/valley`.

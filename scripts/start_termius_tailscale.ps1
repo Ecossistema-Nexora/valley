@@ -1,3 +1,7 @@
+# PROPOSITO: Automatizar start termius tailscale no workspace Valley.
+# CONTEXTO: Este script apoia operacao local, release, runtime ou manutencao ligada ao caminho scripts/start_termius_tailscale.ps1.
+# REGRAS: Nao expor segredos, manter execucao idempotente e validar impactos antes de alterar recursos externos.
+
 param(
     [string]$Hostname = 'valley-codex',
     [switch]$EnableSsh

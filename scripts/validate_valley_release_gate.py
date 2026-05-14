@@ -1,5 +1,14 @@
 #!/usr/bin/env python3
-"""Valida o gate funcional/visual do release Valley."""
+"""PROPOSITO: Validar o gate funcional e visual do release Valley.
+
+CONTEXTO: O script verifica arquivos locais, identidade visual Stitch, runtime
+publico, ERP Lojista, PDV offline-first, RBAC e conectores bancarios antes de
+considerar um release pronto.
+
+REGRAS: Nao gravar segredos, nao mascarar falhas reais, tolerar apenas
+oscilacoes transitorias de tunnel em chamadas seguras e nunca repetir acoes
+mutaveis do ERP automaticamente.
+"""
 
 from __future__ import annotations
 
@@ -8,6 +17,7 @@ import hashlib
 import json
 import os
 import sys
+import time
 from pathlib import Path
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
@@ -17,6 +27,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_BASE_URL = "https://admin.brasildesconto.com.br"
 STATUS_PATH = ROOT / "tmp" / "runtime" / "valley-release-gate-validation.json"
 STITCH_VERSION = "20260513_valley_erp_v2"
+TRANSIENT_REMOTE_STATUS_CODES = {0, 408, 425, 429, 500, 502, 503, 504}
 REQUIRED_MODULE_KEYS = {
     "sales",
     "products",
@@ -45,7 +56,7 @@ def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def request_json(
+def _request_json_once(
     url: str,
     *,
     method: str = "GET",
@@ -75,6 +86,36 @@ def request_json(
         return error.code, body
     except (OSError, URLError, json.JSONDecodeError) as error:
         return 0, {"status": "request_failed", "detail": str(error)}
+
+
+def request_json(
+    url: str,
+    *,
+    method: str = "GET",
+    payload: dict | None = None,
+    token: str = "",
+    timeout: int = 15,
+    retries: int = 3,
+    retry_delay_seconds: float = 1.5,
+) -> tuple[int, dict]:
+    method_upper = method.upper()
+    retry_allowed = method_upper == "GET" or url.rstrip("/").endswith("/api/auth/login")
+    attempts = max(1, retries if retry_allowed else 1)
+    status = 0
+    body: dict = {}
+    for attempt in range(attempts):
+        status, body = _request_json_once(
+            url,
+            method=method,
+            payload=payload,
+            token=token,
+            timeout=timeout,
+        )
+        if status not in TRANSIENT_REMOTE_STATUS_CODES:
+            return status, body
+        if attempt < attempts - 1:
+            time.sleep(retry_delay_seconds * (attempt + 1))
+    return status, body
 
 
 def local_file_checks() -> list[dict]:

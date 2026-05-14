@@ -2,6 +2,10 @@
 """
 GERADOR DE MANUAL PDF - VALLEY
 ==============================
+PROPOSITO: Converter a documentacao viva em Markdown (MANUAL_ONLINE) para PDF executivo.
+CONTEXTO: Utilizado para compartilhamento com stakeholders e leitura offline da arquitetura tecnica.
+REGRAS: Renderizar com reportlab, preservar identidade visual Valley e gravar o artefato em output/pdf.
+
 Propósito: Converter a documentação viva em Markdown (MANUAL_ONLINE) para um formato PDF executivo.
 Contexto: Utilizado para compartilhamento com stakeholders e leitura offline da arquitetura técnica.
 Regras:

@@ -1,3 +1,7 @@
+# PROPOSITO: Automatizar start valley admin public no workspace Valley.
+# CONTEXTO: Este script apoia operacao local, release, runtime ou manutencao ligada ao caminho scripts/start_valley_admin_public.ps1.
+# REGRAS: Nao expor segredos, manter execucao idempotente e validar impactos antes de alterar recursos externos.
+
 param(
     [string]$BindHost = '127.0.0.1',
     [int]$AdminPort = 8085,

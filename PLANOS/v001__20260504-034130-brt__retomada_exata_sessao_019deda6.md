@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar v001 20260504 034130 brt retomada exata sessao 019deda6 no escopo operacional do Valley.
+CONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho PLANOS/v001__20260504-034130-brt__retomada_exata_sessao_019deda6.md.
+REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.
+-->
+
 # v001 - Retomada Exata Da Sessao 019deda6
 
 ## Resumo

@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar v020 20260505 203958 brt action path itemizado para recomendacoes pay e marketplace no escopo operacional do Valley.
+CONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho PLANOS/v020__20260505-203958-brt__action_path_itemizado_para_recomendacoes_pay_e_marketplace.md.
+REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.
+-->
+
 # v020 - Action Path Itemizado Para Recomendacoes Pay E Marketplace
 
 ## Resumo

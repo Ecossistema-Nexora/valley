@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar v014 20260505 164248 brt enriquecimento das trilhas de dominio pay stock marketplace no escopo operacional do Valley.
+CONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho PLANOS/v014__20260505-164248-brt__enriquecimento_das_trilhas_de_dominio_pay_stock_marketplace.md.
+REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.
+-->
+
 # v014 - Enriquecimento Das Trilhas De Dominio Pay Stock Marketplace
 
 ## Resumo

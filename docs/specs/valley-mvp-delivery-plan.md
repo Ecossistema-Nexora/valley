@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Transformar o escopo MVP Valley em plano de entrega executavel.
+CONTEXTO: Este documento organiza prioridades, backlog P0, criterios de aceite, sequencia de execucao e riscos.
+REGRAS: Manter entregas demonstraveis, validar criterios de aceite e nao promover funcionalidades sem integracao real.
+-->
+
 # Valley MVP Delivery Plan
 
 ## Objetivo

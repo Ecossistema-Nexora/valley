@@ -29,8 +29,10 @@ FILE_MAPPING = {
 }
 
 DEFAULT_CHECK_FILES = (
-    "docs/specs/valley-front-end-final-product-proposal.md",
     "docs/specs/proposta_frontend_final.md",
+    "docs/specs/helena_especificacao_mestra.md",
+    "scripts/automacao_gerador_pdf.py",
+    "scripts/automacao_sincronizador_modulos.py",
     "scripts/codex_refactor_guide.py",
 )
 

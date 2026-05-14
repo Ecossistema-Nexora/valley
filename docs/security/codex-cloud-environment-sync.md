@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Descrever a sincronizacao segura do ambiente Codex Cloud para o Valley.
+CONTEXTO: Este guia usa scripts locais para materializar env, setup script e secrets em runtime privado.
+REGRAS: Manter secrets fora do Git e usar tmp/runtime como area local nao versionada.
+-->
+
 # Sincronizacao do ambiente Codex Cloud
 
 O script de execucao unica para Windows e:

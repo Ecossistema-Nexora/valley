@@ -1,7 +1,7 @@
 {
   "policy_name": "valley_module_activity_policy",
   "version": "1.0.0",
-  "required_engine": "scripts/valley_module_automation.py",
+  "required_engine": "scripts/automacao_sincronizador_modulos.py",
   "mandatory": true,
   "default_mode": "validate",
   "activity_wrapper": "scripts/invoke_valley_module_activity.ps1",
@@ -24,3 +24,4 @@
     "packages": ["validate", "packages"]
   }
 }
+

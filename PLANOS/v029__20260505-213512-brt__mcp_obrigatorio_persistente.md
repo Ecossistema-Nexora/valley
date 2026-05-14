@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar v029 20260505 213512 brt mcp obrigatorio persistente no escopo operacional do Valley.
+CONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho PLANOS/v029__20260505-213512-brt__mcp_obrigatorio_persistente.md.
+REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.
+-->
+
 # Configuracao MCP obrigatoria e persistente
 
 ## Resumo

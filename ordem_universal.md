@@ -38,13 +38,13 @@ Reserva antes de pausar: 12000 tokens.
 Previsao de retomada: 2026-04-24T19:10:11Z.
 
 Executar somente comandos seguros do ciclo natural:
-- `python scripts/valley_module_automation.py validate`
-- `python scripts/valley_module_automation.py sync`
-- `python scripts/valley_module_automation.py sql`
-- `python scripts/valley_module_automation.py admin`
+- `python scripts/automacao_sincronizador_modulos.py validate`
+- `python scripts/automacao_sincronizador_modulos.py sync`
+- `python scripts/automacao_sincronizador_modulos.py sql`
+- `python scripts/automacao_sincronizador_modulos.py admin`
 - `python scripts/valley_db_orchestrator.py check`
 - `python scripts/valley_db_orchestrator.py report`
-- `python scripts/generate_manual_pdf.py`
+- `python scripts/automacao_gerador_pdf.py`
 
 Nao executar deploy, push, apply em banco, pagamentos, delecao, reset, rotação de segredos ou operacoes destrutivas sem revisao manual.
 
@@ -67,13 +67,13 @@ Reserva antes de pausar: 12000 tokens.
 Previsao de retomada: 2026-04-24T19:11:29Z.
 
 Executar somente comandos seguros do ciclo natural:
-- `python scripts/valley_module_automation.py validate`
-- `python scripts/valley_module_automation.py sync`
-- `python scripts/valley_module_automation.py sql`
-- `python scripts/valley_module_automation.py admin`
+- `python scripts/automacao_sincronizador_modulos.py validate`
+- `python scripts/automacao_sincronizador_modulos.py sync`
+- `python scripts/automacao_sincronizador_modulos.py sql`
+- `python scripts/automacao_sincronizador_modulos.py admin`
 - `python scripts/valley_db_orchestrator.py check`
 - `python scripts/valley_db_orchestrator.py report`
-- `python scripts/generate_manual_pdf.py`
+- `python scripts/automacao_gerador_pdf.py`
 
 Nao executar deploy, push, apply em banco, pagamentos, delecao, reset, rotação de segredos ou operacoes destrutivas sem revisao manual.
 
@@ -96,13 +96,13 @@ Reserva antes de pausar: 12000 tokens.
 Previsao de retomada: 2026-04-24T19:17:18Z.
 
 Executar somente comandos seguros do ciclo natural:
-- `python scripts/valley_module_automation.py validate`
-- `python scripts/valley_module_automation.py sync`
-- `python scripts/valley_module_automation.py sql`
-- `python scripts/valley_module_automation.py admin`
+- `python scripts/automacao_sincronizador_modulos.py validate`
+- `python scripts/automacao_sincronizador_modulos.py sync`
+- `python scripts/automacao_sincronizador_modulos.py sql`
+- `python scripts/automacao_sincronizador_modulos.py admin`
 - `python scripts/valley_db_orchestrator.py check`
 - `python scripts/valley_db_orchestrator.py report`
-- `python scripts/generate_manual_pdf.py`
+- `python scripts/automacao_gerador_pdf.py`
 
 Nao executar deploy, push, apply em banco, pagamentos, delecao, reset, rotação de segredos ou operacoes destrutivas sem revisao manual.
 
@@ -125,13 +125,13 @@ Reserva antes de pausar: 12000 tokens.
 Previsao de retomada: 2026-04-24T20:07:17Z.
 
 Executar somente comandos seguros do ciclo natural:
-- `python scripts/valley_module_automation.py validate`
-- `python scripts/valley_module_automation.py sync`
-- `python scripts/valley_module_automation.py sql`
-- `python scripts/valley_module_automation.py admin`
+- `python scripts/automacao_sincronizador_modulos.py validate`
+- `python scripts/automacao_sincronizador_modulos.py sync`
+- `python scripts/automacao_sincronizador_modulos.py sql`
+- `python scripts/automacao_sincronizador_modulos.py admin`
 - `python scripts/valley_db_orchestrator.py check`
 - `python scripts/valley_db_orchestrator.py report`
-- `python scripts/generate_manual_pdf.py`
+- `python scripts/automacao_gerador_pdf.py`
 
 Nao executar deploy, push, apply em banco, pagamentos, delecao, reset, rotação de segredos ou operacoes destrutivas sem revisao manual.
 
@@ -154,12 +154,13 @@ Reserva antes de pausar: 12000 tokens.
 Previsao de retomada: 2026-04-24T21:07:52Z.
 
 Executar somente comandos seguros do ciclo natural:
-- `python scripts/valley_module_automation.py validate`
-- `python scripts/valley_module_automation.py sync`
-- `python scripts/valley_module_automation.py sql`
-- `python scripts/valley_module_automation.py admin`
+- `python scripts/automacao_sincronizador_modulos.py validate`
+- `python scripts/automacao_sincronizador_modulos.py sync`
+- `python scripts/automacao_sincronizador_modulos.py sql`
+- `python scripts/automacao_sincronizador_modulos.py admin`
 - `python scripts/valley_db_orchestrator.py check`
 - `python scripts/valley_db_orchestrator.py report`
-- `python scripts/generate_manual_pdf.py`
+- `python scripts/automacao_gerador_pdf.py`
 
 Nao executar deploy, push, apply em banco, pagamentos, delecao, reset, rotação de segredos ou operacoes destrutivas sem revisao manual.
+

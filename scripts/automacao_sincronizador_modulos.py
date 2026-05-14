@@ -2,6 +2,10 @@
 """
 AUTOMAÇÃO DE MÓDULOS VALLEY (Sincronizador)
 ===========================================
+PROPOSITO: Sincronizar o registry canonico de modulos Valley com documentacao, roadmap e migrations.
+CONTEXTO: Este script materializa a evolucao modular a partir de config/modules_v47.json e blueprints relacionados.
+REGRAS: Validar obrigatoriamente os 47 modulos, manter saidas deterministicas e acionar apenas artefatos locais controlados.
+
 Propósito: Sincronizar o registro canônico (modules_v47.json) com a estrutura física de diretórios e schemas.
 Contexto: Este script é o coração da evolução modular do projeto Valley, garantindo que o DDL e o Roadmap estejam alinhados.
 Regras de Negócio:
@@ -9,9 +13,9 @@ Regras de Negócio:
 2. Consistência: Valida obrigatoriamente a existência dos 47 módulos.
 
 Instruções de Uso:
-1. python valley_module_automation.py validate  -> Valida a integridade dos 47 módulos.
-2. python valley_module_automation.py sync      -> Gera READMEs, STATUS e CONTRACTS em /modules.
-3. python valley_module_automation.py sql       -> Gera a migration 007_v47_module_delivery_automation.sql.
+1. python automacao_sincronizador_modulos.py validate  -> Valida a integridade dos 47 módulos.
+2. python automacao_sincronizador_modulos.py sync      -> Gera READMEs, STATUS e CONTRACTS em /modules.
+3. python automacao_sincronizador_modulos.py sql       -> Gera a migration 007_v47_module_delivery_automation.sql.
 """
 
 # argparse cria uma CLI simples para rodar sync, validate e roadmap.
@@ -812,7 +816,7 @@ def build_priority_domain_delivery_plan(modules: list[ValleyModule]) -> str:
     lines = [
         '# Priority Domain Delivery Plan - Valley V47',
         '',
-        'Este arquivo e gerado por `scripts/valley_module_automation.py`.',
+        'Este arquivo e gerado por `scripts/automacao_sincronizador_modulos.py`.',
         '',
         'Ele transforma o backlog executavel por dominio em pacotes fisicos por camada, com DDL complementar, seed operacional e contrato de evento exportado.',
         '',
@@ -1028,7 +1032,7 @@ def build_domain_seed_sql(packages: list[DomainDeliveryPackage]) -> str:
     BEGIN;
 
     -- Seed operacional idempotente dos pacotes fisicos por dominio prioritario.
-    -- Gerado automaticamente por scripts/valley_module_automation.py.
+    -- Gerado automaticamente por scripts/automacao_sincronizador_modulos.py.
 
     WITH package_source (
         package_key,
@@ -1459,7 +1463,7 @@ def module_readme(module: ValleyModule) -> str:
     lines = [
         f'# {module.number:02d}. {module.name}',
         '',
-        'Este arquivo e gerado pela automacao `scripts/valley_module_automation.py`.',
+        'Este arquivo e gerado pela automacao `scripts/automacao_sincronizador_modulos.py`.',
         '',
         'Ele descreve o modulo em linguagem simples e serve como ponto inicial para desenvolvimento, implantacao e evolucao continua.',
         '',
@@ -1633,7 +1637,7 @@ def module_contract(module: ValleyModule) -> str:
     lines = [
         f'# Contrato Operacional - {module.number:02d}. {module.name}',
         '',
-        'Este arquivo e gerado pela automacao `scripts/valley_module_automation.py`.',
+        'Este arquivo e gerado pela automacao `scripts/automacao_sincronizador_modulos.py`.',
         '',
         'Ele define a fronteira inicial do modulo para guiar desenvolvimento, implantacao e evolucao sem quebrar o nucleo Valley.',
         '',
@@ -1717,7 +1721,7 @@ def contracts_summary(modules: list[ValleyModule]) -> str:
     lines = [
         '# Matriz De Contratos Operacionais - Valley V47',
         '',
-        'Este arquivo e gerado por `scripts/valley_module_automation.py`.',
+        'Este arquivo e gerado por `scripts/automacao_sincronizador_modulos.py`.',
         '',
         'A matriz resume a fronteira tecnica dos 47 modulos para orientar desenvolvimento continuo.',
         '',
@@ -1852,7 +1856,7 @@ def modules_index(modules: list[ValleyModule]) -> str:
     lines = [
         '# Indice Automatizado Dos 47 Modulos Valley',
         '',
-        'Este indice e gerado por `scripts/valley_module_automation.py`.',
+        'Este indice e gerado por `scripts/automacao_sincronizador_modulos.py`.',
         '',
         'A saida e deterministica para evitar ruido em automacoes recorrentes.',
         '',
@@ -1884,7 +1888,7 @@ def build_roadmap(modules: list[ValleyModule]) -> str:
     lines = [
         '# Roadmap Automatizado - Valley Omniverse V47',
         '',
-        'Este arquivo e gerado de forma deterministica por `scripts/valley_module_automation.py`.',
+        'Este arquivo e gerado de forma deterministica por `scripts/automacao_sincronizador_modulos.py`.',
         '',
         'Este roadmap automatiza a evolucao dos 47 modulos a partir do registry `config/modules_v47.json`.',
         '',
@@ -1963,7 +1967,7 @@ def build_domain_execution_backlog(modules: list[ValleyModule]) -> str:
     lines = [
         '# Backlog Executavel Por Dominio - Valley V47',
         '',
-        'Este arquivo e gerado por `scripts/valley_module_automation.py`.',
+        'Este arquivo e gerado por `scripts/automacao_sincronizador_modulos.py`.',
         '',
         'Ele transforma os blueprints dos 47 modulos em fila acionavel, com prioridade, dependencia interna e evidencias tecnicas esperadas.',
         '',
@@ -2136,7 +2140,7 @@ def build_delivery_sql(modules: list[ValleyModule]) -> str:
     # Retorna SQL completo com comentarios em portugues.
     return dedent(f"""\
     -- Valley Hybrid DB Bootstrap - Automacao de delivery dos 47 modulos.
-    -- Este arquivo e gerado por scripts/valley_module_automation.py a partir de config/modules_v47.json e config/modules_v47_blueprints.json.
+    -- Este arquivo e gerado por scripts/automacao_sincronizador_modulos.py a partir de config/modules_v47.json e config/modules_v47_blueprints.json.
     -- Ele persiste o estado de implantacao, desenvolvimento e evolucao dos modulos no PostgreSQL.
     -- Execute depois de 001, 002, 004 e 005.
 
@@ -2365,7 +2369,7 @@ def build_blueprint_registry_patch_sql(modules: list[ValleyModule]) -> str:
 
     return dedent(f"""\
     -- Valley Hybrid DB Patch - Blueprints detalhados dos 47 modulos.
-    -- Este arquivo e gerado por scripts/valley_module_automation.py.
+    -- Este arquivo e gerado por scripts/automacao_sincronizador_modulos.py.
     -- Ele evolui module_delivery_registry sem recriar a tabela existente.
 
     BEGIN;
@@ -2425,7 +2429,7 @@ def build_execution_backlog_patch_sql(modules: list[ValleyModule]) -> str:
 
     return dedent(f"""\
     -- Valley Hybrid DB Patch - Backlog executavel dos 47 modulos.
-    -- Este arquivo e gerado por scripts/valley_module_automation.py.
+    -- Este arquivo e gerado por scripts/automacao_sincronizador_modulos.py.
     -- Ele evolui module_evolution_backlog para uma fila acionavel por dominio.
 
     BEGIN;
@@ -2732,3 +2736,4 @@ def main() -> None:
 if __name__ == '__main__':
     # Inicia automacao.
     main()
+

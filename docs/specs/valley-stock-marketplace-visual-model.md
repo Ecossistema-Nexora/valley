@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Definir o modelo visual do STOCK Marketplace Valley.
+CONTEXTO: Este documento orienta catalogo, busca, ofertas, reputacao, checkout e identidade visual propria.
+REGRAS: Nao copiar concorrentes, manter identidade Valley e conectar acoes comerciais a fluxos reais.
+-->
+
 # Valley Stock Marketplace Visual Model
 
 ## Diretriz

@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Registrar o blueprint de release do painel administrativo Valley v034.
+CONTEXTO: Este documento consolida URL publica, healthcheck, APIs operacionais, tunnel e gates de release.
+REGRAS: Validar Cloudflare, healthz, API admin e ausencia de segredos antes de distribuir artefatos.
+-->
+
 # Valley Admin Release Blueprint v034
 
 ## Escopo

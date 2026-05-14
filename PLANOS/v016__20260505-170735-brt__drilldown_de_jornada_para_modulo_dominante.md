@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar v016 20260505 170735 brt drilldown de jornada para modulo dominante no escopo operacional do Valley.
+CONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho PLANOS/v016__20260505-170735-brt__drilldown_de_jornada_para_modulo_dominante.md.
+REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.
+-->
+
 # v016 - Drilldown De Jornada Para Modulo Dominante
 
 ## Resumo

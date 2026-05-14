@@ -1,7 +1,7 @@
 BEGIN;
 
 -- Seed operacional idempotente dos pacotes fisicos por dominio prioritario.
--- Gerado automaticamente por scripts/valley_module_automation.py.
+-- Gerado automaticamente por scripts/automacao_sincronizador_modulos.py.
 
 WITH package_source (
     package_key,

@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar v017 20260505 171614 brt eventos da timeline com acao contextual no escopo operacional do Valley.
+CONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho PLANOS/v017__20260505-171614-brt__eventos_da_timeline_com_acao_contextual.md.
+REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.
+-->
+
 # v017 - Eventos Da Timeline Com Acao Contextual
 
 ## Resumo

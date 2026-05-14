@@ -1,3 +1,7 @@
+# PROPOSITO: Automatizar generate delivery summary pdf no workspace Valley.
+# CONTEXTO: Este modulo apoia operacao, geracao, validacao ou integracao ligada ao caminho scripts/generate_delivery_summary_pdf.py.
+# REGRAS: Nao expor segredos, manter comportamento idempotente e preservar contratos usados por release e runtime.
+
 from __future__ import annotations
 
 import html

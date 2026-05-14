@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar v018 20260505 172302 brt deep links explicitos no payload da home no escopo operacional do Valley.
+CONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho PLANOS/v018__20260505-172302-brt__deep_links_explicitos_no_payload_da_home.md.
+REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.
+-->
+
 # v018 - Deep Links Explicitos No Payload Da Home
 
 ## Resumo

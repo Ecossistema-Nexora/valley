@@ -1,3 +1,7 @@
+# PROPOSITO: Automatizar start valley communication bridge no workspace Valley.
+# CONTEXTO: Este script apoia operacao local, release, runtime ou manutencao ligada ao caminho scripts/start_valley_communication_bridge.ps1.
+# REGRAS: Nao expor segredos, manter execucao idempotente e validar impactos antes de alterar recursos externos.
+
 param(
   [int]$IntervalSeconds = 30
 )

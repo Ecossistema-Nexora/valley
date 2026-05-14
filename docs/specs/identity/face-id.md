@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Especificar a camada de Face ID do Valley para operacoes sensiveis.
+CONTEXTO: Este documento define consentimento, enrolment, dados permitidos e limites do MVP.
+REGRAS: Nao armazenar biometria bruta fora da governanca SECURITY e manter trilha auditavel.
+-->
+
 # Face ID - MVP Spec
 
 ## Objetivo

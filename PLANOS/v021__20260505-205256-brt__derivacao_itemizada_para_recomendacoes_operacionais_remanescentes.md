@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar v021 20260505 205256 brt derivacao itemizada para recomendacoes operacionais remanescentes no escopo operacional do Valley.
+CONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho PLANOS/v021__20260505-205256-brt__derivacao_itemizada_para_recomendacoes_operacionais_remanescentes.md.
+REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.
+-->
+
 # v021 - Derivacao Itemizada Para Recomendacoes Operacionais Remanescentes
 
 ## Resumo

@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar 01 ARQUITETURA TECNICA MICROSSERVICOS EVENTOS no escopo operacional do Valley.
+CONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho MANUAL_ONLINE/01_ARQUITETURA_TECNICA_MICROSSERVICOS_EVENTOS.md.
+REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.
+-->
+
 # Arquitetura Tecnica - Microservices e Eventos
 
 Este documento transforma o banco atual do Valley em uma arquitetura tecnica de servicos, contratos sincronos e eventos assincronos.

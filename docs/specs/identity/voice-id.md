@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Especificar a camada de Voice ID do Valley para operacoes sensiveis.
+CONTEXTO: Este documento define consentimento, enrolment, dados permitidos e limites do MVP.
+REGRAS: Nao armazenar audio bruto fora da governanca SECURITY e manter trilha auditavel.
+-->
+
 # Voice ID - MVP Spec
 
 ## Objetivo

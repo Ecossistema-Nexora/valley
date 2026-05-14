@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar v004 20260505 085405 brt retirar benchmark como gate de varejo no escopo operacional do Valley.
+CONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho PLANOS/v004__20260505-085405-brt__retirar_benchmark_como_gate_de_varejo.md.
+REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.
+-->
+
 # v004 - Retirar Benchmark Como Gate De Varejo
 
 ## Resumo

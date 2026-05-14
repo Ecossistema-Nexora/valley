@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Registrar o blueprint de release da superficie lojista Valley.
+CONTEXTO: Este documento orienta URL publica, APIs de produto/catalogo e gates do fluxo lojista.
+REGRAS: Preservar runtime fixo, vitrine sem segredos de fornecedor e checkout funcional.
+-->
+
 # Valley Lojista Release Blueprint v034
 
 ## Escopo

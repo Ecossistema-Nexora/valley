@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar v031 20260506 145717 brt action path autenticado em recent actions operacionais no escopo operacional do Valley.
+CONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho PLANOS/v031__20260506-145717-brt__action_path_autenticado_em_recent_actions_operacionais.md.
+REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.
+-->
+
 # v031 - Action Path Autenticado Em Recent Actions Operacionais
 
 ## Resumo

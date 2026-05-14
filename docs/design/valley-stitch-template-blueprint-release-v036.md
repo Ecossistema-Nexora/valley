@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Orientar a geracao dos templates web Valley no Stitch.
+CONTEXTO: Este blueprint descreve admin, ERP lojista, paineis por modulo, portal publico e fluxos de login.
+REGRAS: Aplicar identidade Valley, navegacao operacional real e evitar telas promocionais ou placeholders.
+-->
+
 # Valley Release Blueprint - Templates Web para Stitch
 
 Criado em BRT: 2026-05-12

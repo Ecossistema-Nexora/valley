@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar v023 20260505 205650 brt resolvedor operacional explicito para recomendacoes nao comerciais no escopo operacional do Valley.
+CONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho PLANOS/v023__20260505-205650-brt__resolvedor_operacional_explicito_para_recomendacoes_nao_comerciais.md.
+REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.
+-->
+
 # v023 - Resolvedor Operacional Explicito Para Recomendacoes Nao Comerciais
 
 ## Resumo

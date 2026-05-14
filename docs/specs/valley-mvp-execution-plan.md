@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Definir o roadmap tecnico e estrategico para o MVP Valley.
+CONTEXTO: Este documento conecta metas de negocio, modulos prioritarios e sequencia operacional de ativacao.
+REGRAS: Priorizar receita, baixo custo operacional e validacao real antes de expandir modulos secundarios.
+-->
+
 # VALLEY MVP EXECUTION PLAN
 
 > **Função:** Este documento serve como o roadmap estratégico e técnico para o lançamento inicial do Valley Omniverse.

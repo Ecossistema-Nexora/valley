@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar v028 20260505 210841 brt endpoint autenticado stock runtime attention no escopo operacional do Valley.
+CONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho PLANOS/v028__20260505-210841-brt__endpoint_autenticado_stock_runtime_attention.md.
+REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.
+-->
+
 # v028 - Endpoint Autenticado Stock Runtime Attention
 
 ## Resumo

@@ -1,6 +1,6 @@
 # Priority Domain Delivery Plan - Valley V47
 
-Este arquivo e gerado por `scripts/valley_module_automation.py`.
+Este arquivo e gerado por `scripts/automacao_sincronizador_modulos.py`.
 
 Ele transforma o backlog executavel por dominio em pacotes fisicos por camada, com DDL complementar, seed operacional e contrato de evento exportado.
 

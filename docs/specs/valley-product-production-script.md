@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Definir o roteiro de produto final Valley para simulacao funcional.
+CONTEXTO: Este documento orienta telas premium, Helena, modulos, fluxos e dados persistentes para implementacao.
+REGRAS: Nao exibir artefatos de desenvolvimento, nao deixar botoes mortos e seguir fluxo Stitch, Figma e Flutter.
+-->
+
 # Valley Product Production Script
 
 ## Objetivo

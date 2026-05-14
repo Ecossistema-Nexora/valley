@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar v002 20260505 084936 brt configuracao total superdesign codex no escopo operacional do Valley.
+CONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho PLANOS/v002__20260505-084936-brt__configuracao_total_superdesign_codex.md.
+REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.
+-->
+
 # v002 - Configuracao Total SuperDesign Codex
 
 ## Resumo

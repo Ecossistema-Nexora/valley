@@ -1,3 +1,7 @@
+# PROPOSITO: Automatizar run valley safe autonomous cycle no workspace Valley.
+# CONTEXTO: Este script apoia operacao local, release, runtime ou manutencao ligada ao caminho scripts/run_valley_safe_autonomous_cycle.ps1.
+# REGRAS: Nao expor segredos, manter execucao idempotente e validar impactos antes de alterar recursos externos.
+
 param(
     [int]$TotalTokenBudget = 258000,
     [int]$UsedTokens = 171000,
@@ -41,13 +45,13 @@ $env:CODEX_TOTAL_TOKEN_BUDGET = [string]$TotalTokenBudget
 $env:CODEX_USED_TOKENS = [string]$UsedTokens
 
 try {
-    Invoke-SafeStep 'module_validate' @('python', 'scripts/valley_module_automation.py', 'validate')
-    Invoke-SafeStep 'module_sync' @('python', 'scripts/valley_module_automation.py', 'sync')
-    Invoke-SafeStep 'module_sql' @('python', 'scripts/valley_module_automation.py', 'sql')
-    Invoke-SafeStep 'module_admin' @('python', 'scripts/valley_module_automation.py', 'admin')
+    Invoke-SafeStep 'module_validate' @('python', 'scripts/automacao_sincronizador_modulos.py', 'validate')
+    Invoke-SafeStep 'module_sync' @('python', 'scripts/automacao_sincronizador_modulos.py', 'sync')
+    Invoke-SafeStep 'module_sql' @('python', 'scripts/automacao_sincronizador_modulos.py', 'sql')
+    Invoke-SafeStep 'module_admin' @('python', 'scripts/automacao_sincronizador_modulos.py', 'admin')
     Invoke-SafeStep 'db_check' @('python', 'scripts/valley_db_orchestrator.py', 'check')
     Invoke-SafeStep 'db_report' @('python', 'scripts/valley_db_orchestrator.py', 'report')
-    Invoke-SafeStep 'manual_pdf' @('python', 'scripts/generate_manual_pdf.py')
+    Invoke-SafeStep 'manual_pdf' @('python', 'scripts/automacao_gerador_pdf.py')
     Invoke-SafeStep 'token_budget' @('python', 'scripts/valley_codex_token_budget.py')
 
     $CompletedAt = Get-Date

@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar v039 20260513 085715 brt stitch erp inventory handoff no escopo operacional do Valley.
+CONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho PLANOS/v039__20260513-085715-brt__stitch_erp_inventory_handoff.md.
+REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.
+-->
+
 # v039 - Stitch ERP Inventory Handoff
 
 ## Resumo

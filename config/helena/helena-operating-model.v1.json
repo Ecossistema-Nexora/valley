@@ -1,5 +1,5 @@
 {
-  "front": "valley-helena-master-spec",
+  "front": "helena_especificacao_mestra",
   "version": "1.0.0",
   "domain_key": "ai_memory_operations",
   "generated_on": "2026-04-21",
@@ -414,3 +414,4 @@
     }
   ]
 }
+

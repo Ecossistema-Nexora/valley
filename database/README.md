@@ -242,6 +242,7 @@ Use `.env.example` como baseline local e `.env` para overrides reais da sua maqu
 
 `admin/index.html` e um console web estatico dirigido por `admin/valley_admin_data.js`.
 
-Esse dataset e regenerado automaticamente por `scripts/valley_module_automation.py sync` e por `python scripts/valley_db_orchestrator.py report`.
+Esse dataset e regenerado automaticamente por `scripts/automacao_sincronizador_modulos.py sync` e por `python scripts/valley_db_orchestrator.py report`.
 
 Abra o painel diretamente no navegador quando quiser acompanhar modulo, checklist, docs, roadmap, relatorio e comandos operacionais sem depender de backend adicional.
+

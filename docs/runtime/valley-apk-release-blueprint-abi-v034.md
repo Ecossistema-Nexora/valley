@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Registrar o blueprint de release do APK Valley por ABI.
+CONTEXTO: Este documento orienta build Android, base publica, gates de release e distribuicao Telegram/download.
+REGRAS: Validar runtime publico, catalogo embarcado e artefatos APK antes de enviar ao usuario.
+-->
+
 # Valley APK Release Blueprint ABI v034
 
 ## Escopo

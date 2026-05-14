@@ -1,3 +1,9 @@
+<!--
+PROPOSITO: Documentar v037 20260513 045527 brt blindagem bootstrap apk sem servidor no escopo operacional do Valley.
+CONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho PLANOS/v037__20260513-045527-brt__blindagem_bootstrap_apk_sem_servidor.md.
+REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.
+-->
+
 # v037 - Blindagem Bootstrap APK Sem Servidor
 
 ## Resumo
