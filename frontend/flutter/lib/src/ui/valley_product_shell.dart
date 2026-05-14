@@ -157,7 +157,13 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
     final Set<String> moduleIds = _data.modules
         .map((ProductModule module) => module.id)
         .toSet();
-    final List<_PrimaryNavItem> items = <_PrimaryNavItem>[];
+    final List<_PrimaryNavItem> items = <_PrimaryNavItem>[
+      const _PrimaryNavItem(
+        icon: Icons.view_quilt_rounded,
+        label: 'Stitch',
+        surface: 'stitch_p0',
+      ),
+    ];
     if (moduleIds.contains('MARKETPLACE')) {
       items.add(
         const _PrimaryNavItem(
@@ -215,6 +221,9 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
   }
 
   int _navIndexForSurface(String surface) {
+    if (surface == 'stitch_p0') {
+      return _navIndexForSurfaceItem('stitch_p0');
+    }
     if (surface == 'chat') {
       return _navIndexForModule('CHAT');
     }
@@ -233,6 +242,7 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
   void initState() {
     super.initState();
     _data = widget.initialData;
+    _surface = 'stitch_p0';
     if (_data.modules.any((ProductModule module) => module.id == 'STOCK')) {
       _selectedModuleId = 'STOCK';
     } else if (_data.modules.any(
@@ -242,7 +252,7 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
     } else if (_data.modules.isNotEmpty) {
       _selectedModuleId = _data.modules.first.id;
     }
-    _navIndex = _navIndexForModule(_selectedModuleId);
+    _navIndex = _navIndexForSurface('stitch_p0');
     _restoreAuthSession();
   }
 
@@ -1137,6 +1147,22 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
     ProductModule? module,
     List<ProductItem> recentItems,
   ) {
+    if (_surface == 'stitch_p0') {
+      final ProductItem? featuredItem = items.isEmpty
+          ? (_data.items.isEmpty ? null : _data.items.first)
+          : items.first;
+      return _StitchMandatoryHomeScreen(
+        featuredItem: featuredItem,
+        onLogin: () => _openIdentity(returnItem: featuredItem),
+        onCheckout: _openCheckoutFromPrimaryNav,
+        onPurchases: () => _openSurface('client'),
+        onTracking: () => _openSurface('client'),
+        onSku: () => _showModule('STOCK'),
+        onInventory: () => _showModule('STOCK'),
+        onMarketplace: () => _showModule('MARKETPLACE'),
+        onStock: () => _showModule('STOCK'),
+      );
+    }
     if (_surface == 'detail' && _selectedItem != null) {
       return _ProductDetailScreen(
         item: _selectedItem!,
@@ -5275,6 +5301,172 @@ class _CheckoutScreenState extends State<_CheckoutScreen> {
           ),
         );
       },
+    );
+  }
+}
+
+class _StitchMandatoryHomeScreen extends StatelessWidget {
+  const _StitchMandatoryHomeScreen({
+    required this.featuredItem,
+    required this.onLogin,
+    required this.onCheckout,
+    required this.onPurchases,
+    required this.onTracking,
+    required this.onSku,
+    required this.onInventory,
+    required this.onMarketplace,
+    required this.onStock,
+  });
+
+  final ProductItem? featuredItem;
+  final VoidCallback onLogin;
+  final VoidCallback onCheckout;
+  final VoidCallback onPurchases;
+  final VoidCallback onTracking;
+  final VoidCallback onSku;
+  final VoidCallback onInventory;
+  final VoidCallback onMarketplace;
+  final VoidCallback onStock;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final String title = featuredItem?.titlePtBr ?? 'Vitrine Valley';
+    final String price = featuredItem == null
+        ? 'catalogo embarcado'
+        : 'R\$ ${featuredItem!.priceBrl.toStringAsFixed(2)}';
+    return ValleyPanel(
+      radius: 30,
+      padding: const EdgeInsets.all(22),
+      glowColor: ValleyBrandColors.cyan,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          _StitchP0MobileRail(
+            activeKeys: const <String>{
+              'login',
+              'checkout',
+              'purchases',
+              'tracking',
+              'sku',
+              'inventory',
+            },
+            title: 'Templates Stitch ativos no APK',
+            subtitle:
+                'Login, checkout, compras, rastreio, SKU e estoque abrem como primeira experiencia da release.',
+          ),
+          const SizedBox(height: 20),
+          Text(
+            'Fonte obrigatoria Stitch',
+            style: theme.textTheme.headlineSmall?.copyWith(
+              fontWeight: FontWeight.w900,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Esta tela substitui a entrada antiga do app. Todas as acoes abaixo navegam para superficies reais do APK.',
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+          ),
+          const SizedBox(height: 18),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(18),
+            decoration: BoxDecoration(
+              color: _softContainerColor(context),
+              borderRadius: BorderRadius.circular(22),
+              border: Border.all(color: _softBorderColor(context)),
+            ),
+            child: Row(
+              children: <Widget>[
+                Container(
+                  width: 54,
+                  height: 54,
+                  decoration: BoxDecoration(
+                    color: ValleyBrandColors.cyan.withValues(alpha: 0.18),
+                    borderRadius: BorderRadius.circular(18),
+                  ),
+                  child: const Icon(
+                    Icons.verified_rounded,
+                    color: ValleyBrandColors.cyan,
+                  ),
+                ),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        title,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        '$price · Stitch $_stitchSourceVersion',
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 18),
+          Wrap(
+            spacing: 10,
+            runSpacing: 10,
+            children: <Widget>[
+              FilledButton.icon(
+                onPressed: onLogin,
+                icon: const Icon(Icons.login_rounded),
+                label: const Text('Login'),
+              ),
+              FilledButton.icon(
+                onPressed: onCheckout,
+                icon: const Icon(Icons.shopping_cart_checkout_rounded),
+                label: const Text('Checkout'),
+              ),
+              OutlinedButton.icon(
+                onPressed: onPurchases,
+                icon: const Icon(Icons.receipt_long_rounded),
+                label: const Text('Minhas compras'),
+              ),
+              OutlinedButton.icon(
+                onPressed: onTracking,
+                icon: const Icon(Icons.local_shipping_rounded),
+                label: const Text('Rastreio'),
+              ),
+              OutlinedButton.icon(
+                onPressed: onSku,
+                icon: const Icon(Icons.inventory_2_rounded),
+                label: const Text('SKU'),
+              ),
+              OutlinedButton.icon(
+                onPressed: onInventory,
+                icon: const Icon(Icons.qr_code_scanner_rounded),
+                label: const Text('Estoque'),
+              ),
+              TextButton.icon(
+                onPressed: onMarketplace,
+                icon: const Icon(Icons.storefront_rounded),
+                label: const Text('Marketplace'),
+              ),
+              TextButton.icon(
+                onPressed: onStock,
+                icon: const Icon(Icons.warehouse_rounded),
+                label: const Text('Stock'),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

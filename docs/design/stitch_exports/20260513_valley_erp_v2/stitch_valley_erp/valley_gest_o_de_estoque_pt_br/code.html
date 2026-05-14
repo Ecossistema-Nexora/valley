@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Valley Merchant ERP - Gestão de Estoque</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-bright": "#fcf8fa",
+                    "on-primary": "#ffffff",
+                    "primary": "#000000",
+                    "on-background": "#1b1b1d",
+                    "secondary": "#006c49",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "on-error": "#ffffff",
+                    "surface-container": "#f0edef",
+                    "on-surface-variant": "#45464d",
+                    "on-primary-container": "#7c839b",
+                    "primary-fixed-dim": "#bec6e0",
+                    "error-container": "#ffdad6",
+                    "error": "#ba1a1a",
+                    "secondary-container": "#6cf8bb",
+                    "on-tertiary-fixed-variant": "#004395",
+                    "inverse-on-surface": "#f3f0f2",
+                    "on-tertiary-container": "#3980f4",
+                    "primary-container": "#131b2e",
+                    "on-tertiary": "#ffffff",
+                    "background": "#fcf8fa",
+                    "tertiary-fixed-dim": "#adc6ff",
+                    "surface-container-high": "#eae7e9",
+                    "on-primary-fixed-variant": "#3f465c",
+                    "primary-fixed": "#dae2fd",
+                    "outline-variant": "#c6c6cd",
+                    "on-surface": "#1b1b1d",
+                    "surface-tint": "#565e74",
+                    "outline": "#76777d",
+                    "inverse-surface": "#303032",
+                    "on-error-container": "#93000a",
+                    "inverse-primary": "#bec6e0",
+                    "on-primary-fixed": "#131b2e",
+                    "tertiary-container": "#001a42",
+                    "surface-dim": "#dcd9db",
+                    "secondary-fixed": "#6ffbbe",
+                    "on-secondary-fixed": "#002113",
+                    "on-secondary-container": "#00714d",
+                    "tertiary-fixed": "#d8e2ff",
+                    "surface-variant": "#e4e2e4",
+                    "surface-container-highest": "#e4e2e4",
+                    "tertiary": "#000000",
+                    "on-secondary-fixed-variant": "#005236",
+                    "on-tertiary-fixed": "#001a42",
+                    "secondary-fixed-dim": "#4edea3",
+                    "surface-container-low": "#f6f3f5",
+                    "surface": "#fcf8fa"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "container-padding": "1.5rem",
+                    "unit": "4px",
+                    "gutter": "1rem",
+                    "max-width": "1600px",
+                    "dense-gap": "0.5rem"
+            },
+            "fontFamily": {
+                    "title-sm": ["Inter"],
+                    "mono-sm": ["JetBrains Mono"],
+                    "label-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "label-bold": ["Inter"]
+            },
+            "fontSize": {
+                    "title-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "mono-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "display-lg": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                    "label-bold": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e4e2e4; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex">
+<!-- SideNavBar -->
+<aside class="hidden lg:flex flex-col border-r border-outline-variant h-screen fixed w-[240px] left-0 top-0 bg-surface">
+<div class="p-6">
+<div class="flex items-center gap-3 mb-1">
+<div class="w-8 h-8 bg-primary-container rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary text-[20px]" style="font-variation-settings: 'FILL' 1;">landscape</span>
+</div>
+<h1 class="font-headline-md text-headline-md font-extrabold text-primary">Valley ERP</h1>
+</div>
+<p class="font-label-md text-label-md text-on-surface-variant px-1 opacity-70 uppercase tracking-widest text-[10px]">Console Corporativo</p>
+</div>
+<nav class="flex-1 px-4 space-y-1">
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container px-4 py-2 font-label-md text-label-md transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Início</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container px-4 py-2 font-label-md text-label-md transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+<span>Gestão de Pedidos</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container px-4 py-2 font-label-md text-label-md transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="local_shipping">local_shipping</span>
+<span>Logística</span>
+</a>
+<a class="flex items-center gap-3 bg-secondary-container text-on-secondary-container rounded-xl font-bold px-4 py-2 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="storefront" style="font-variation-settings: 'FILL' 1;">storefront</span>
+<span>Portal do Lojista</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container px-4 py-2 font-label-md text-label-md transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span>Financeiro</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container px-4 py-2 font-label-md text-label-md transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span>Logs do Sistema</span>
+</a>
+</nav>
+<div class="px-4 py-6 border-t border-outline-variant space-y-1">
+<button class="w-full flex items-center justify-center gap-2 bg-primary text-on-primary py-2.5 rounded-lg font-label-bold text-label-bold hover:opacity-90 transition-all mb-4">
+<span class="material-symbols-outlined text-[18px]">sync</span>
+            Sincronização Rápida
+        </button>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container px-4 py-2 font-label-md text-label-md transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="contact_support">contact_support</span>
+<span>Suporte</span>
+</a>
+<a class="flex items-center gap-3 text-error hover:bg-error-container/20 px-4 py-2 font-label-md text-label-md transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span>Sair</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 lg:ml-[240px] flex flex-col min-h-screen">
+<!-- TopNavBar -->
+<header class="h-14 w-full bg-primary-container flex items-center justify-between px-container-padding sticky top-0 z-50">
+<div class="flex items-center gap-8">
+<span class="font-display-lg text-display-lg font-bold text-on-primary tracking-tight">Valley</span>
+<nav class="hidden md:flex items-center gap-6">
+<a class="font-title-sm text-title-sm text-on-primary-container hover:text-on-primary transition-colors" href="#">Painel</a>
+<a class="font-title-sm text-title-sm text-on-primary-container hover:text-on-primary transition-colors" href="#">Operações</a>
+<a class="font-title-sm text-title-sm text-on-primary border-b-2 border-secondary font-bold" href="#">Inventário</a>
+<a class="font-title-sm text-title-sm text-on-primary-container hover:text-on-primary transition-colors" href="#">Análise</a>
+<a class="font-title-sm text-title-sm text-on-primary-container hover:text-on-primary transition-colors" href="#">Lojistas</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden sm:flex items-center bg-white/10 rounded px-3 py-1.5 gap-2 border border-white/5">
+<span class="material-symbols-outlined text-on-primary/60 text-[18px]">search</span>
+<input class="bg-transparent border-none text-on-primary placeholder:text-on-primary/40 focus:ring-0 text-sm w-48" placeholder="Pesquisa global..." type="text"/>
+</div>
+<button class="text-on-primary-container hover:text-on-primary p-1">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="text-on-primary-container hover:text-on-primary p-1">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<button class="bg-secondary text-on-secondary px-4 py-1.5 rounded font-label-bold text-label-bold hover:opacity-90 transition-all">
+                Criar Novo
+            </button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-white/20">
+<img alt="User profile avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAetcyYAEA3pkSN6nucNwxCd8Ty9Jz4nxw3P0dTN8G_WVrzhRUqBVpmJUc3wGXULQrZnxEgyhTbkzoXhpsDmirJ1nf8hpYYj8etoNtBjWsP8c7xdE9skrKDA2dy5x1jzLV4j4aaGocffV1nHEvgavG2TAp_Vmmur7ghoXZdR1l2FW8uLK1clvRTks2-A-80CrffFDqksZCd0etmQ07DslE3Md6K55CU1BTqkzdNK1zliUkg6Te9dAZfqigLyyBd6jCHzFLUbtzcxmqy"/>
+</div>
+</div>
+</header>
+<!-- WorkspaceHeader -->
+<div class="bg-surface-bright border-b border-outline-variant px-container-padding py-6">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 max-w-max-width mx-auto w-full">
+<div>
+<nav class="flex items-center gap-2 mb-1">
+<span class="font-label-md text-label-md text-on-surface-variant opacity-60">Portal do Lojista</span>
+<span class="material-symbols-outlined text-[14px] opacity-40">chevron_right</span>
+<span class="font-label-md text-label-md text-on-surface-variant">Inventário</span>
+</nav>
+<h2 class="font-display-lg text-display-lg text-on-surface">Gestão de Estoque</h2>
+</div>
+<div class="flex items-center gap-dense-gap">
+<button class="flex items-center gap-2 bg-surface-container-lowest border border-outline-variant px-4 py-2 rounded font-label-bold text-label-bold text-on-surface hover:bg-surface-variant/10 transition-colors">
+<span class="material-symbols-outlined text-[18px]">upload</span>
+                    Exportar CSV
+                </button>
+<button class="flex items-center gap-2 bg-primary text-on-primary px-5 py-2.5 rounded font-label-bold text-label-bold hover:opacity-90 transition-all shadow-sm">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                    Adicionar Produto
+                </button>
+</div>
+</div>
+</div>
+<!-- Filter & KPI Strip -->
+<div class="bg-surface-container-low/50 border-b border-outline-variant py-3">
+<div class="max-w-max-width mx-auto px-container-padding flex flex-wrap items-center justify-between gap-4">
+<div class="flex items-center gap-3">
+<span class="font-label-bold text-label-bold text-on-surface-variant uppercase text-[10px] tracking-widest mr-2">Filtros:</span>
+<button class="px-4 py-1.5 bg-primary text-on-primary rounded-full font-label-md text-label-md">Todos os Produtos</button>
+<button class="px-4 py-1.5 bg-surface-container-high text-on-surface-variant hover:bg-outline-variant/30 rounded-full font-label-md text-label-md transition-colors">Em Estoque</button>
+<button class="px-4 py-1.5 bg-surface-container-high text-on-surface-variant hover:bg-outline-variant/30 rounded-full font-label-md text-label-md transition-colors flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-orange-500"></span>
+                    Baixo Estoque
+                </button>
+<button class="px-4 py-1.5 bg-surface-container-high text-on-surface-variant hover:bg-outline-variant/30 rounded-full font-label-md text-label-md transition-colors flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-error"></span>
+                    Esgotado
+                </button>
+<div class="h-6 w-px bg-outline-variant mx-2"></div>
+<button class="flex items-center gap-1 text-secondary font-label-bold text-label-bold text-[11px] uppercase tracking-wider">
+<span class="material-symbols-outlined text-[16px]">filter_list</span>
+                    Mais Filtros
+                </button>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface-variant opacity-60">Valor Total</span>
+<span class="font-title-sm text-title-sm text-on-surface">R$ 1.24M</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface-variant opacity-60">Total de SKUs</span>
+<span class="font-title-sm text-title-sm text-on-surface">1.482</span>
+</div>
+</div>
+</div>
+</div>
+<!-- DataTable Container -->
+<section class="flex-1 p-container-padding bg-surface overflow-hidden">
+<div class="max-w-max-width mx-auto bg-surface-container-lowest border border-outline-variant rounded shadow-sm overflow-hidden flex flex-col h-full">
+<div class="overflow-x-auto custom-scrollbar">
+<table class="w-full text-left border-collapse min-w-[1000px]">
+<thead>
+<tr class="bg-surface-container-low border-b border-outline-variant">
+<th class="p-4 font-label-bold text-label-bold text-on-surface-variant uppercase tracking-wider w-12">
+<input class="rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/>
+</th>
+<th class="p-4 font-label-bold text-label-bold text-on-surface-variant uppercase tracking-wider">Nome do Produto</th>
+<th class="p-4 font-label-bold text-label-bold text-on-surface-variant uppercase tracking-wider">SKU</th>
+<th class="p-4 font-label-bold text-label-bold text-on-surface-variant uppercase tracking-wider text-right">Preço Unitário</th>
+<th class="p-4 font-label-bold text-label-bold text-on-surface-variant uppercase tracking-wider text-center">Nível de Estoque</th>
+<th class="p-4 font-label-bold text-label-bold text-on-surface-variant uppercase tracking-wider">Situação</th>
+<th class="p-4 font-label-bold text-label-bold text-on-surface-variant uppercase tracking-wider">Categoria</th>
+<th class="p-4 font-label-bold text-label-bold text-on-surface-variant uppercase tracking-wider text-right">Ações</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-bright transition-colors group">
+<td class="p-4"><input class="rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/></td>
+<td class="p-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-surface-container rounded overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A professional product shot of a sleek red athletic sneaker against a minimalist grey background. High-key lighting highlights the technical mesh texture and modern design." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB1HqpQB9mZzSnKjZIfDQDQpzIY9zP_OWKghM61CWS2sO5DoPtx0upuWJO5CG6039RWKFFPLCA4HC-g-ENLiprK6gJxc-kgd_v8hGif7USe5p0ZjDPBV3IhwDHEg28_pIh9s_q7fR4YPoXMiAlL3UJLxLFBQ8q-zL07cBg9UyKPpoTCmuKw2oqdPRPUcZmZmkqWRUN4cNSuBBZAC-COR4m8azl95-HCzg_Kw6tVD_PBTgKodeU-Bz5y7JIURsn51lNjr0RLR2F0BEej"/>
+</div>
+<div>
+<p class="font-title-sm text-title-sm text-on-surface">Apex Runner Gen 2</p>
+<p class="font-mono-sm text-mono-sm text-on-surface-variant/60">Esportes e Lazer</p>
+</div>
+</div>
+</td>
+<td class="p-4 font-mono-sm text-mono-sm text-on-surface-variant">VLY-772-APX</td>
+<td class="p-4 text-right font-title-sm text-title-sm">R$ 129,00</td>
+<td class="p-4">
+<div class="w-full max-w-[120px] mx-auto">
+<div class="flex justify-between mb-1">
+<span class="font-mono-sm text-mono-sm text-on-surface-variant">42/100</span>
+<span class="font-mono-sm text-mono-sm text-on-surface-variant">42%</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-[42%]"></div>
+</div>
+</div>
+</td>
+<td class="p-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-label-bold bg-secondary-container text-on-secondary-container border border-secondary/20">
+                                EM ESTOQUE
+                            </span>
+</td>
+<td class="p-4 font-body-sm text-body-sm text-on-surface-variant">Calçados</td>
+<td class="p-4 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-bright transition-colors group">
+<td class="p-4"><input class="rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/></td>
+<td class="p-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-surface-container rounded overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A studio photograph of a premium minimalist white wristwatch with a light tan leather strap." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtHICuUHbbdTXXj9aOo6OBdBLeQLtvfiEGNUkQxcxGgajussQVDK8b0MMZXI8fnZeYdZToaN3rjbRNwFiSDscGid24AYuxcSxmvmTfBrCFn-5TmuCkS-D4KAgl9idD5uvk5Nt3HcgxMe6Bj7KSYMYHVzUimyQ425VySYII634uxf46kQplnzddkdz29AAWDHgCkd_OMRTsMXpztki7wl7YOaBk5prsaetgULE9OT_z-ZZ5fqsbdiA9vkqMWq2v4hGaKuTPhTVZ5F6_"/>
+</div>
+<div>
+<p class="font-title-sm text-title-sm text-on-surface">Luna Chrono Gold</p>
+<p class="font-mono-sm text-mono-sm text-on-surface-variant/60">Acessórios</p>
+</div>
+</div>
+</td>
+<td class="p-4 font-mono-sm text-mono-sm text-on-surface-variant">VLY-010-LNA</td>
+<td class="p-4 text-right font-title-sm text-title-sm">R$ 350,00</td>
+<td class="p-4">
+<div class="w-full max-w-[120px] mx-auto">
+<div class="flex justify-between mb-1">
+<span class="font-mono-sm text-mono-sm text-on-surface-variant text-error font-bold">4/100</span>
+<span class="font-mono-sm text-mono-sm text-error font-bold">4%</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-error w-[4%]"></div>
+</div>
+</div>
+</td>
+<td class="p-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-label-bold bg-error-container text-on-error-container border border-error/20">
+                                BAIXO ESTOQUE
+                            </span>
+</td>
+<td class="p-4 font-body-sm text-body-sm text-on-surface-variant">Relojoaria</td>
+<td class="p-4 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-bright transition-colors group">
+<td class="p-4"><input class="rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/></td>
+<td class="p-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-surface-container rounded overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="High-resolution product photography of black noise-canceling headphones featuring gold accents." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgLzORKkoC20_TcokgnCha1JyjgJU0wirWq06omFWIF36LH3-iXZakcRY1RFTFH16-UPBNq9jHGK8lPLFZ6In0nCCX-nM12ZE1mReDh98-8IvdUoXvAsFHBB91fPeX-R_gg3vQS_oSRUBynzTgv1g29rD9KaLsgj0f6MLcdJmoDM9tkMH5ZqCzCYFQAyqjmUWpRaE7hDJ7_KTZB_bhZYu7CxnS27cK8hzXHo6QZVIR_gAonDsvs78j329tGZq7EIfd0-FWWCkAB7-w"/>
+</div>
+<div>
+<p class="font-title-sm text-title-sm text-on-surface">Sonic Over-Ear Pro</p>
+<p class="font-mono-sm text-mono-sm text-on-surface-variant/60">Eletrônicos</p>
+</div>
+</div>
+</td>
+<td class="p-4 font-mono-sm text-mono-sm text-on-surface-variant">VLY-242-SNC</td>
+<td class="p-4 text-right font-title-sm text-title-sm">R$ 249,00</td>
+<td class="p-4">
+<div class="w-full max-w-[120px] mx-auto">
+<div class="flex justify-between mb-1">
+<span class="font-mono-sm text-mono-sm text-on-surface-variant">0/50</span>
+<span class="font-mono-sm text-mono-sm text-on-surface-variant">0%</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-outline-variant w-0"></div>
+</div>
+</div>
+</td>
+<td class="p-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-label-bold bg-surface-variant text-on-surface-variant border border-outline-variant/30">
+                                ESGOTADO
+                            </span>
+</td>
+<td class="p-4 font-body-sm text-body-sm text-on-surface-variant">Áudio</td>
+<td class="p-4 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-surface-bright transition-colors group">
+<td class="p-4"><input class="rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/></td>
+<td class="p-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-surface-container rounded overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Modern studio photograph of a set of classic black and white canvas sneakers." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAUTjusUuT6nx_p5gKU6ftsczPlJB_Q2jcHSB4EGiUqMqMsE444fiQ9IEzXdrwu-sIEra07-KkaZNPlAC15C9Z4LTGlmEdPAjFj-Ok0ktcLDfJLaQtLhqhx1xHWWQLFZkqZE-eJS9V5-NP96bDYpWNKNFU9x0hVS0zykXiXOxyVLAkZoFWDrusafUfQcBSFk4ZJlJCsBtjKt2tBoddILMXAjSuW2vyGNCxOeiRY3Ptx5kWWWJFPRtPT3cus5eO2HgH6QFdSeRV6xdi"/>
+</div>
+<div>
+<p class="font-title-sm text-title-sm text-on-surface">Urban Canvas Mid</p>
+<p class="font-mono-sm text-mono-sm text-on-surface-variant/60">Esportes e Lazer</p>
+</div>
+</div>
+</td>
+<td class="p-4 font-mono-sm text-mono-sm text-on-surface-variant">VLY-991-URB</td>
+<td class="p-4 text-right font-title-sm text-title-sm">R$ 85,00</td>
+<td class="p-4">
+<div class="w-full max-w-[120px] mx-auto">
+<div class="flex justify-between mb-1">
+<span class="font-mono-sm text-mono-sm text-on-surface-variant">88/100</span>
+<span class="font-mono-sm text-mono-sm text-on-surface-variant">88%</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-[88%]"></div>
+</div>
+</div>
+</td>
+<td class="p-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-label-bold bg-secondary-container text-on-secondary-container border border-secondary/20">
+                                EM ESTOQUE
+                            </span>
+</td>
+<td class="p-4 font-body-sm text-body-sm text-on-surface-variant">Calçados</td>
+<td class="p-4 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Table Footer/Pagination -->
+<div class="mt-auto bg-surface-container-low border-t border-outline-variant p-4 flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface-variant">Exibindo 1-10 de 1.482 produtos</span>
+<div class="flex items-center gap-2">
+<button class="p-2 border border-outline-variant rounded hover:bg-surface-variant/10 disabled:opacity-30" disabled="">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center font-label-bold text-label-bold bg-primary text-on-primary rounded">1</button>
+<button class="w-8 h-8 flex items-center justify-center font-label-bold text-label-bold text-on-surface hover:bg-surface-variant/20 rounded">2</button>
+<button class="w-8 h-8 flex items-center justify-center font-label-bold text-label-bold text-on-surface hover:bg-surface-variant/20 rounded">3</button>
+<span class="px-1 text-on-surface-variant opacity-40">...</span>
+<button class="w-8 h-8 flex items-center justify-center font-label-bold text-label-bold text-on-surface hover:bg-surface-variant/20 rounded">149</button>
+<button class="p-2 border border-outline-variant rounded hover:bg-surface-variant/10">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="w-full py-gutter px-container-padding flex flex-col md:flex-row justify-between items-center max-w-max-width mx-auto border-t border-outline-variant bg-surface-container-lowest">
+<div class="flex flex-col items-center md:items-start gap-1">
+<span class="font-title-sm text-title-sm font-black text-on-surface uppercase">CONSOLE OPERACIONAL VALLEY</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant opacity-70">© 2024 Valley Commercial Operations. Todos os direitos reservados.</p>
+</div>
+<nav class="flex items-center gap-6 mt-4 md:mt-0">
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary underline transition-all" href="#">Política de Privacidade</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary underline transition-all" href="#">Termos de Serviço</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary underline transition-all" href="#">Segurança</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary underline transition-all" href="#">Documentação da API</a>
+</nav>
+</footer>
+</main>
+</body></html>

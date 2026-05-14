@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Valley - Brasil Desconto</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary": "#ffffff",
+                        "secondary-container": "#6cf8bb",
+                        "outline-variant": "#c6c6cd",
+                        "outline": "#76777d",
+                        "surface-variant": "#e4e2e4",
+                        "on-secondary-container": "#00714d",
+                        "on-surface-variant": "#45464d",
+                        "tertiary-container": "#001a42",
+                        "on-tertiary-fixed": "#001a42",
+                        "error-container": "#ffdad6",
+                        "tertiary": "#000000",
+                        "surface-bright": "#fcf8fa",
+                        "primary": "#000000",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-fixed": "#d8e2ff",
+                        "surface-tint": "#565e74",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-container": "#3980f4",
+                        "surface-dim": "#dcd9db",
+                        "primary-fixed-dim": "#bec6e0",
+                        "on-tertiary-fixed-variant": "#004395",
+                        "on-primary-fixed": "#131b2e",
+                        "secondary-fixed-dim": "#4edea3",
+                        "on-surface": "#1b1b1d",
+                        "surface-container-low": "#f6f3f5",
+                        "surface-container-highest": "#e4e2e4",
+                        "on-background": "#1b1b1d",
+                        "error": "#ba1a1a",
+                        "inverse-surface": "#303032",
+                        "inverse-on-surface": "#f3f0f2",
+                        "on-primary-container": "#7c839b",
+                        "primary-container": "#131b2e",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-high": "#eae7e9",
+                        "on-secondary-fixed-variant": "#005236",
+                        "on-error": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed": "#6ffbbe",
+                        "secondary": "#006c49",
+                        "on-secondary-fixed": "#002113",
+                        "inverse-primary": "#bec6e0",
+                        "surface-container": "#f0edef",
+                        "surface": "#fcf8fa",
+                        "primary-fixed": "#dae2fd",
+                        "tertiary-fixed-dim": "#adc6ff",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "background": "#fcf8fa"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "max-width": "1600px",
+                        "dense-gap": "0.5rem",
+                        "container-padding": "1.5rem",
+                        "gutter": "1rem"
+                    },
+                    "fontFamily": {
+                        "body-sm": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "label-bold": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "title-sm": ["Inter"],
+                        "mono-sm": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                        "display-lg": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-bold": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "headline-md": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "title-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                        "mono-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md overflow-x-hidden pb-20">
+<!-- TopAppBar -->
+<header class="bg-surface sticky top-0 z-40 border-b border-outline-variant">
+<div class="flex justify-between items-center h-16 px-container-padding w-full max-w-max-width mx-auto">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary cursor-pointer">menu</span>
+<h1 class="font-display-lg text-display-lg text-tertiary-container tracking-tight">Valley</h1>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary cursor-pointer">search</span>
+<span class="material-symbols-outlined text-primary cursor-pointer">shopping_bag</span>
+</div>
+</div>
+</header>
+<main class="w-full">
+<!-- Search and CEP Selector -->
+<section class="px-container-padding py-4 bg-surface-container-low space-y-4">
+<div class="relative group">
+<input class="w-full h-12 bg-surface-container-lowest border border-outline-variant rounded-lg px-12 focus:ring-1 focus:ring-primary focus:border-primary text-body-md transition-all" placeholder="O que você está procurando?" type="text"/>
+<span class="material-symbols-outlined absolute left-4 top-3 text-outline">search</span>
+<span class="material-symbols-outlined absolute right-4 top-3 text-outline">photo_camera</span>
+</div>
+<div class="flex items-center gap-2 px-1">
+<span class="material-symbols-outlined text-secondary text-sm" data-weight="fill" style="font-variation-settings: 'FILL' 1;">location_on</span>
+<span class="text-label-md font-label-md text-on-surface-variant">Enviar para: <strong class="text-on-surface">São Paulo 01000-000</strong></span>
+<span class="material-symbols-outlined text-outline text-[16px]">expand_more</span>
+</div>
+</section>
+<!-- Quick Actions -->
+<section class="flex gap-2 px-container-padding py-4 overflow-x-auto no-scrollbar">
+<button class="flex-shrink-0 flex items-center gap-2 bg-primary-container text-on-primary rounded-lg px-4 py-2 transition-all active:scale-95">
+<span class="material-symbols-outlined text-[20px]">storefront</span>
+<span class="text-label-bold font-label-bold">Sou Lojista</span>
+</button>
+<button class="flex-shrink-0 flex items-center gap-2 bg-surface-container-highest text-on-surface-variant rounded-lg px-4 py-2 border border-outline-variant transition-all active:scale-95">
+<span class="material-symbols-outlined text-[20px]">person</span>
+<span class="text-label-bold font-label-bold">Entrar</span>
+</button>
+</section>
+<!-- Category Carousel -->
+<section class="py-4">
+<div class="flex items-center justify-between px-container-padding mb-4">
+<h2 class="text-title-sm font-title-sm">Departamentos</h2>
+<span class="text-label-md font-label-md text-secondary">Ver todos</span>
+</div>
+<div class="flex gap-4 px-container-padding overflow-x-auto no-scrollbar">
+<div class="flex flex-col items-center gap-2 flex-shrink-0">
+<div class="w-14 h-14 rounded-full bg-secondary-container/20 flex items-center justify-center border border-secondary-container/30">
+<span class="material-symbols-outlined text-secondary">devices</span>
+</div>
+<span class="text-label-md font-label-md">Eletrônicos</span>
+</div>
+<div class="flex flex-col items-center gap-2 flex-shrink-0">
+<div class="w-14 h-14 rounded-full bg-secondary-container/20 flex items-center justify-center border border-secondary-container/30">
+<span class="material-symbols-outlined text-secondary">checkroom</span>
+</div>
+<span class="text-label-md font-label-md">Moda</span>
+</div>
+<div class="flex flex-col items-center gap-2 flex-shrink-0">
+<div class="w-14 h-14 rounded-full bg-secondary-container/20 flex items-center justify-center border border-secondary-container/30">
+<span class="material-symbols-outlined text-secondary">chair</span>
+</div>
+<span class="text-label-md font-label-md">Casa</span>
+</div>
+<div class="flex flex-col items-center gap-2 flex-shrink-0">
+<div class="w-14 h-14 rounded-full bg-secondary-container/20 flex items-center justify-center border border-secondary-container/30">
+<span class="material-symbols-outlined text-secondary">fitness_center</span>
+</div>
+<span class="text-label-md font-label-md">Esportes</span>
+</div>
+<div class="flex flex-col items-center gap-2 flex-shrink-0">
+<div class="w-14 h-14 rounded-full bg-secondary-container/20 flex items-center justify-center border border-secondary-container/30">
+<span class="material-symbols-outlined text-secondary">health_and_beauty</span>
+</div>
+<span class="text-label-md font-label-md">Beleza</span>
+</div>
+</div>
+</section>
+<!-- Recommended Offers Bento/Grid -->
+<section class="px-container-padding py-6">
+<div class="flex items-center justify-between mb-4">
+<h2 class="text-title-sm font-title-sm">Ofertas Recomendadas</h2>
+<div class="bg-error text-on-error text-[10px] px-2 py-0.5 rounded-full font-bold animate-pulse">LIVE</div>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<!-- Product Card 1 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden flex flex-col group transition-all hover:border-secondary">
+<div class="relative aspect-square">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="A high-end pair of professional studio headphones resting on a sleek dark wooden surface. The lighting is dramatic and moody, utilizing cool-blue and subtle purple highlights to emphasize the clean metallic textures and premium build quality. The background is softly blurred to ensure the product remains the central focus, reflecting a corporate modern and technologically advanced aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDq7HmNhG__hx4Xkdzv6PSqBaCW4TWnMNflTEvI4gEUo8gT62Hk1LulhdlDpHL0FpIj5wtxaGH55tY3piGcj31cg42rVmJgzuy0rvIqCnoAaVjl3AuL8fuHFR8pmQo6G-d0fBvUVLaCGM5sg9XJs-El3oCSLFoumKcx07IEV6pnvCBzLhm_rc0OW1S8SuppoOAEq30O87wOxVrZRiAJv__s7vL4ev58w_XqhQGBRpOw6IG3oGib4yEy5lPJaBDvJmbfMcBMvB0YSqRD"/>
+<span class="absolute top-2 left-2 bg-secondary text-on-secondary text-[10px] font-bold px-2 py-0.5 rounded">15% OFF</span>
+<button class="absolute top-2 right-2 w-8 h-8 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px]">favorite</span>
+</button>
+</div>
+<div class="p-3 space-y-1">
+<h3 class="text-body-sm font-body-sm text-on-surface line-clamp-2">Fone de Ouvido Wireless Pro V2</h3>
+<div class="flex flex-col">
+<span class="text-outline line-through text-[11px]">R$ 899,00</span>
+<span class="text-title-sm font-title-sm text-on-surface">R$ 764,15</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-secondary-fixed-dim text-[14px]" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-label-md font-label-md text-outline">4.9 (1.2k)</span>
+</div>
+</div>
+</div>
+<!-- Product Card 2 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden flex flex-col group transition-all hover:border-secondary">
+<div class="relative aspect-square">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="A minimalist designer wristwatch with a white dial and silver mesh strap, positioned vertically on a clean architectural pedestal. The scene is illuminated by bright, natural light-mode studio lighting that creates soft, refined shadows. The overall atmosphere is elegant and precise, utilizing a palette of silver and white to convey structural integrity and professional reliability." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRmeWfh3Of2e7JUwnhx1MaF0TMk1kkVGGPeBDbQnNczYU3sRKVH-z598mxT0mQmKrE78oT92vNRWUM_1m9-VH0t87MjvUvbISRVDneHjiEy0spU5aTrIDBhHOdsEN1ZQO02FXoQT6_a2q1HPjj2kAJd8bOLDtTXwko3s8rks7U6mIDcS7Q_rfPkHpcg3AeotW1vcEKOi9kNdm3rd4hycFSccPflXkl-528KLNmce-2ZkDBc_NBEg9j5TIw9LUJj6iFZVhmEGBAnCA0"/>
+<span class="absolute top-2 left-2 bg-secondary text-on-secondary text-[10px] font-bold px-2 py-0.5 rounded">BLACK FRIDAY</span>
+<button class="absolute top-2 right-2 w-8 h-8 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px]">favorite</span>
+</button>
+</div>
+<div class="p-3 space-y-1">
+<h3 class="text-body-sm font-body-sm text-on-surface line-clamp-2">Relógio Minimalist Silver Series</h3>
+<div class="flex flex-col">
+<span class="text-outline line-through text-[11px]">R$ 450,00</span>
+<span class="text-title-sm font-title-sm text-on-surface">R$ 320,00</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-secondary-fixed-dim text-[14px]" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-label-md font-label-md text-outline">4.7 (850)</span>
+</div>
+</div>
+</div>
+<!-- Product Card 3 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden flex flex-col group transition-all hover:border-secondary">
+<div class="relative aspect-square">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="A pair of vibrant red sports sneakers displayed against a clean, cool-grey industrial background. The lighting is sharp and dynamic, focusing on the sleek aerodynamic design and material texture. High-contrast shadows and surgical precision in the shot evoke a sense of high performance and modern enterprise athletic style, consistent with a tech-forward edge." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBG7RIOfDfJ_ZSsyYgGJpsJ8M8uJZahZcjBvBjcU3hHQ2z84-xOe-pjHB6a5jU3zGDJM4TYl6oQCDzrUGqvQRn5OzjzcUvzrW3uo4_m-QjrNx5FyglzfhovQQwfRFEKcmQcaNVriPiX7zR0cMD3UQUROafZMJKSs2CreFS6DuEWQQArVmmNYj_-_OoFe2ywDORKxZiP8OYaDVFinwetPIg39F7G21fRpLvTjjA2f__zzUUmH6Ko7_XqTBfitN_79PvRiPnOwNlOGTOz"/>
+<span class="absolute top-2 left-2 bg-secondary text-on-secondary text-[10px] font-bold px-2 py-0.5 rounded">FRETE GRÁTIS</span>
+<button class="absolute top-2 right-2 w-8 h-8 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px]">favorite</span>
+</button>
+</div>
+<div class="p-3 space-y-1">
+<h3 class="text-body-sm font-body-sm text-on-surface line-clamp-2">Tênis Performance Run Pro</h3>
+<div class="flex flex-col">
+<span class="text-outline line-through text-[11px]">R$ 599,00</span>
+<span class="text-title-sm font-title-sm text-on-surface">R$ 489,90</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-secondary-fixed-dim text-[14px]" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-label-md font-label-md text-outline">4.8 (2.4k)</span>
+</div>
+</div>
+</div>
+<!-- Product Card 4 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden flex flex-col group transition-all hover:border-secondary">
+<div class="relative aspect-square">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="A professional vintage-style digital camera with premium leather grip, set on a white marble surface. The lighting is soft and even, highlighting the intricate mechanical details and precision engineering. The color palette is composed of deep blacks and neutral greys with subtle metallic accents, maintaining a corporate modern aesthetic that balances tradition with modern tech." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCf5w_2NOALHx3xwR6ocgC4J-U38uri9MAu249oNSekL_1YwVQtGvbSeVyuK94-ypho9uJqsACzblzVL7D7_FUpKc-xOwf4Xzr4BqgrpF1wu8JF-pdT1pSJ0lqYVHDiTQ3CD0-xm7sMvXmnAk_YZ2kgMq7yz4PYMw20gtdmHnsd64Xc1_xZ-56LXNedijAbkAXBU_d7Cz3D5HvXuMpV7X25gdne2MEgwAMHX_B38EyQ5DRjXrn9yuXRIu7Vu_NcQYzKUc7qKhsd4cEr"/>
+<span class="absolute top-2 left-2 bg-secondary text-on-secondary text-[10px] font-bold px-2 py-0.5 rounded">NOVIDADE</span>
+<button class="absolute top-2 right-2 w-8 h-8 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px]">favorite</span>
+</button>
+</div>
+<div class="p-3 space-y-1">
+<h3 class="text-body-sm font-body-sm text-on-surface line-clamp-2">Câmera Digital Retro-Tech X1</h3>
+<div class="flex flex-col">
+<span class="text-outline line-through text-[11px]">R$ 2.450,00</span>
+<span class="text-title-sm font-title-sm text-on-surface">R$ 1.990,00</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-secondary-fixed-dim text-[14px]" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-label-md font-label-md text-outline">5.0 (120)</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Promotional Banner -->
+<section class="px-container-padding py-2">
+<div class="relative h-40 w-full rounded-xl overflow-hidden bg-primary-container">
+<div class="absolute inset-0 bg-gradient-to-r from-primary-container to-transparent z-10 p-6 flex flex-col justify-center">
+<span class="text-secondary font-label-bold text-[10px] uppercase tracking-widest mb-1">Oferta do Dia</span>
+<h2 class="text-on-primary font-display-lg text-[22px] leading-tight mb-2">Renove sua casa com até 40% OFF</h2>
+<button class="bg-secondary-container text-on-secondary-container text-label-bold px-4 py-1.5 rounded-full w-fit active:scale-95 transition-transform">Confira</button>
+</div>
+<img class="absolute right-0 top-0 h-full w-2/3 object-cover" data-alt="A beautifully styled modern living room featuring a minimalist velvet sofa in deep navy, an architectural coffee table, and soft indoor plants. The lighting is warm and inviting, flooding in from large windows to create a high-end structural atmosphere. The scene communicates reliability and comfort through a restrained palette of neutrals and sophisticated blue accents." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqyz8SYYfyRMWvk0KbKs1H57VS0keagTlQyJrH8oneAs51yJhhYWQmiOUYBJIIS_EKFbEZr_sN8hAtqIk4sdzrh5u8HJdUScqVU06CELeB93EzWMnUJSWDftNMe5VFluF6ckMNNwwiXucxBlmAEXOSJvsEii_95wQcI7un_Bw78pMPITOqBUcT9lWKfHzGowM9UaX5Ua-F6mew28OMTnpIfZrOZUr8YQ94wIOrqjiQX1Qjesfra88mv6cM6daJyRkjzAyBpt8nQ4sa"/>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center h-16 px-4 pb-safe bg-surface/90 backdrop-blur-md border-t border-outline-variant z-50">
+<!-- Home (Active) -->
+<a class="flex flex-col items-center justify-center text-secondary dark:text-on-secondary-container bg-secondary-container/20 dark:bg-secondary-container/40 rounded-full px-4 py-1 scale-90 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined" data-weight="fill" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="text-label-md font-label-md">Home</span>
+</a>
+<!-- Catálogo -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">grid_view</span>
+<span class="text-label-md font-label-md">Catálogo</span>
+</a>
+<!-- Compras -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">shopping_bag</span>
+<span class="text-label-md font-label-md">Compras</span>
+</a>
+<!-- Perfil -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-label-md font-label-md">Perfil</span>
+</a>
+</nav>
+<!-- FAB Suppression Logic: User is on Home, but FAB is only for specific primary actions like 'Create' or 'Book'. 
+         Since this is a public discovery home, we omit a specific FAB to keep focus on product exploration as per ERP rules. -->
+</body></html>

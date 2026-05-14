@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Valley Admin - Análise Avançada</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-container": "#131b2e",
+                    "on-background": "#1b1b1d",
+                    "secondary-fixed": "#6ffbbe",
+                    "on-primary": "#ffffff",
+                    "on-surface-variant": "#45464d",
+                    "secondary-container": "#6cf8bb",
+                    "on-tertiary-container": "#3980f4",
+                    "on-tertiary-fixed": "#001a42",
+                    "on-secondary-fixed": "#002113",
+                    "surface-dim": "#dcd9db",
+                    "on-tertiary-fixed-variant": "#004395",
+                    "surface-container-highest": "#e4e2e4",
+                    "on-primary-container": "#7c839b",
+                    "surface": "#fcf8fa",
+                    "on-surface": "#1b1b1d",
+                    "outline": "#76777d",
+                    "on-secondary": "#ffffff",
+                    "primary": "#000000",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary": "#000000",
+                    "surface-bright": "#fcf8fa",
+                    "inverse-surface": "#303032",
+                    "error": "#ba1a1a",
+                    "tertiary-container": "#001a42",
+                    "on-tertiary": "#ffffff",
+                    "tertiary-fixed": "#d8e2ff",
+                    "on-error": "#ffffff",
+                    "surface-container-low": "#f6f3f5",
+                    "on-primary-fixed": "#131b2e",
+                    "on-primary-fixed-variant": "#3f465c",
+                    "surface-variant": "#e4e2e4",
+                    "on-secondary-container": "#00714d",
+                    "on-error-container": "#93000a",
+                    "inverse-primary": "#bec6e0",
+                    "error-container": "#ffdad6",
+                    "background": "#fcf8fa",
+                    "secondary": "#006c49",
+                    "primary-fixed": "#dae2fd",
+                    "inverse-on-surface": "#f3f0f2",
+                    "surface-tint": "#565e74",
+                    "surface-container": "#f0edef",
+                    "tertiary-fixed-dim": "#adc6ff",
+                    "surface-container-high": "#eae7e9",
+                    "on-secondary-fixed-variant": "#005236",
+                    "primary-fixed-dim": "#bec6e0",
+                    "secondary-fixed-dim": "#4edea3",
+                    "outline-variant": "#c6c6cd"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "unit": "4px",
+                    "gutter": "1rem",
+                    "container-padding": "1.5rem",
+                    "max-width": "1600px",
+                    "dense-gap": "0.5rem"
+            },
+            "fontFamily": {
+                    "body-md": ["Inter"],
+                    "label-md": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "title-sm": ["Inter"],
+                    "mono-sm": ["JetBrains Mono"],
+                    "label-bold": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "display-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                    "title-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "mono-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                    "label-bold": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "display-lg": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body {
+            background-color: #f8fafc;
+        }
+    </style>
+</head>
+<body class="font-body-md text-on-background selection:bg-secondary-container">
+<!-- TopNavBar -->
+<header class="bg-primary-container docked full-width top-0 z-50 border-b border-outline-variant">
+<div class="flex justify-between items-center h-14 w-full px-container-padding max-w-max-width mx-auto">
+<div class="flex items-center gap-8">
+<span class="font-display-lg text-display-lg font-bold text-on-primary tracking-tight">Valley</span>
+<nav class="hidden md:flex gap-6 items-center">
+<a class="font-title-sm text-title-sm text-on-primary-container hover:text-on-primary transition-colors" href="#">Painel</a>
+<a class="font-title-sm text-title-sm text-on-primary-container hover:text-on-primary transition-colors" href="#">Operações</a>
+<a class="font-title-sm text-title-sm text-on-primary-container hover:text-on-primary transition-colors" href="#">Estoque</a>
+<a class="font-title-sm text-title-sm text-on-primary border-b-2 border-secondary font-bold" href="#">Análise</a>
+<a class="font-title-sm text-title-sm text-on-primary-container hover:text-on-primary transition-colors" href="#">Lojistas</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2">
+<button class="p-2 text-on-primary-container hover:bg-surface-variant/10 rounded-full transition-all">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-on-primary-container hover:bg-surface-variant/10 rounded-full transition-all">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<button class="p-2 text-on-primary-container hover:bg-surface-variant/10 rounded-full transition-all">
+<span class="material-symbols-outlined">help</span>
+</button>
+</div>
+<button class="bg-secondary text-on-secondary px-4 py-1.5 rounded-lg font-title-sm text-title-sm hover:opacity-90 transition-all">Criar Novo</button>
+<div class="w-8 h-8 rounded-full bg-surface-variant overflow-hidden border border-outline-variant">
+<img alt="Avatar de perfil do usuário" data-alt="A professional headshot of a corporate executive in a modern, brightly lit office environment. The lighting is soft and high-key, emphasizing a clean and efficient professional atmosphere. The subject is wearing a crisp white shirt, fitting the light-mode UI aesthetic of Valley's corporate brand. The background shows blurred architectural details of a contemporary workspace." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA86r-YtqC-txBBuUwgbH9tEhD1DhFOgFVpF_iksEt_u5dQKv-t0q6XbjsJkIXL_2EPBpJ-DSb9dJbiL05sdb7f8Uj_HtrHyURVabyt649NGFfNOc19IdZs7j57vc2-GXoULMVrPOrEUw7sPJJL8IRNBqI0iSktdoxCSEOqjSL4Uatcy2g8cUgKeIl0IomZD-cTlCZlgWjtW0Y34tfDLViOU7ELwLz9jFXyJloHxlRtYmyUYshjscDbxuj6YiYLBdnVGPLvV4MfyMRQ"/>
+</div>
+</div>
+</div>
+</header>
+<div class="flex min-h-screen pt-14">
+<!-- SideNavBar -->
+<aside class="hidden lg:flex flex-col border-r border-outline-variant h-[calc(100vh-3.5rem)] w-[240px] sticky top-14 bg-surface shrink-0 overflow-y-auto">
+<div class="p-container-padding flex flex-col gap-6">
+<div>
+<h2 class="font-headline-md text-headline-md font-extrabold text-primary">Valley ERP</h2>
+<p class="font-label-md text-label-md text-on-surface-variant">Console Corporativo</p>
+</div>
+<div class="flex flex-col gap-1">
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container px-4 py-2 transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Início</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container px-4 py-2 transition-colors" href="#">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span class="font-label-md text-label-md">Gestão de Pedidos</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container px-4 py-2 transition-colors" href="#">
+<span class="material-symbols-outlined">local_shipping</span>
+<span class="font-label-md text-label-md">Logística</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container px-4 py-2 transition-colors" href="#">
+<span class="material-symbols-outlined">storefront</span>
+<span class="font-label-md text-label-md">Portal do Lojista</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container px-4 py-2 transition-colors" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-label-md text-label-md">Financeiro</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container px-4 py-2 transition-colors" href="#">
+<span class="material-symbols-outlined">history</span>
+<span class="font-label-md text-label-md">Logs do Sistema</span>
+</a>
+</div>
+<div class="pt-6 border-t border-outline-variant flex flex-col gap-4">
+<span class="font-label-bold text-label-bold text-on-surface-variant uppercase px-4">Relatórios Salvos</span>
+<div class="flex flex-col gap-1">
+<a class="flex items-center gap-3 bg-secondary-container text-on-secondary-container rounded-xl font-bold px-4 py-2" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-md text-label-md">Revisão de Vendas Q4</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container px-4 py-2 transition-colors" href="#">
+<span class="material-symbols-outlined">summarize</span>
+<span class="font-label-md text-label-md">Fluxo de Estoque</span>
+</a>
+</div>
+</div>
+<button class="mt-4 w-full border border-secondary text-secondary py-2 rounded-lg font-label-md text-label-md hover:bg-secondary-container/10 transition-colors">Sincronização Rápida</button>
+</div>
+<div class="mt-auto p-container-padding border-t border-outline-variant flex flex-col gap-1">
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container px-4 py-2 transition-colors" href="#">
+<span class="material-symbols-outlined">contact_support</span>
+<span class="font-label-md text-label-md">Suporte</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container px-4 py-2 transition-colors" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-label-md text-label-md">Sair</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 overflow-x-hidden bg-[#F8FAFC]">
+<!-- WorkspaceHeader -->
+<div class="px-container-padding py-6 max-w-max-width mx-auto">
+<nav class="mb-2">
+<ol class="flex items-center font-label-md text-label-md text-on-surface-variant">
+<li><a class="hover:text-primary" href="#">Análise</a></li>
+<li class="mx-2"><span class="material-symbols-outlined text-[14px]">chevron_right</span></li>
+<li class="text-primary font-bold">Relatórios Avançados</li>
+</ol>
+</nav>
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<h1 class="font-display-lg text-display-lg font-bold tracking-tight">Comparativo Regional de Vendas</h1>
+<div class="flex items-center gap-2">
+<button class="flex items-center gap-2 border border-outline-variant bg-surface px-4 py-2 rounded-lg font-label-md text-label-md hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined">file_download</span>
+                        Exportar CSV
+                    </button>
+<button class="flex items-center gap-2 bg-primary text-on-primary px-4 py-2 rounded-lg font-label-md text-label-md hover:opacity-90 transition-all shadow-sm">
+<span class="material-symbols-outlined">schedule</span>
+                        Agendar Relatório
+                    </button>
+</div>
+</div>
+</div>
+<!-- FilterBar -->
+<div class="bg-surface-container px-container-padding py-3 border-y border-outline-variant">
+<div class="max-w-max-width mx-auto flex flex-wrap items-center gap-4">
+<div class="flex items-center gap-2 bg-surface border border-outline-variant px-3 py-1.5 rounded-lg">
+<span class="material-symbols-outlined text-on-surface-variant">category</span>
+<select class="bg-transparent border-none p-0 font-label-md text-label-md focus:ring-0">
+<option>Todas as Categorias</option>
+<option>Eletrônicos</option>
+<option>Hardware Industrial</option>
+<option>Serviços de Nuvem</option>
+</select>
+</div>
+<div class="flex items-center gap-2 bg-surface border border-outline-variant px-3 py-1.5 rounded-lg">
+<span class="material-symbols-outlined text-on-surface-variant">public</span>
+<select class="bg-transparent border-none p-0 font-label-md text-label-md focus:ring-0">
+<option>Múltiplas Regiões (4)</option>
+<option>América do Norte</option>
+<option>EMEA</option>
+<option>APAC</option>
+</select>
+</div>
+<div class="flex items-center gap-2 bg-surface border border-outline-variant px-3 py-1.5 rounded-lg">
+<span class="material-symbols-outlined text-on-surface-variant">calendar_today</span>
+<span class="font-label-md text-label-md">Últimos 12 Meses</span>
+</div>
+<div class="h-6 w-px bg-outline-variant"></div>
+<div class="flex flex-wrap items-center gap-2">
+<span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full font-label-md text-label-md flex items-center gap-1">
+                        Apenas Enterprise
+                        <span class="material-symbols-outlined text-[14px] cursor-pointer">close</span>
+</span>
+<span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full font-label-md text-label-md flex items-center gap-1">
+                        USD &gt; 50k
+                        <span class="material-symbols-outlined text-[14px] cursor-pointer">close</span>
+</span>
+<button class="text-secondary font-label-md text-label-md hover:underline">+ Adicionar Filtro</button>
+</div>
+</div>
+</div>
+<!-- Analytics Content -->
+<div class="px-container-padding py-8 max-w-max-width mx-auto">
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-6">
+<!-- KPI Row -->
+<div class="col-span-12 grid grid-cols-1 md:grid-cols-4 gap-6">
+<div class="bg-surface-container-lowest border border-outline-variant p-5 rounded-xl">
+<p class="font-label-bold text-label-bold text-on-surface-variant uppercase mb-2">Receita Regional Total</p>
+<div class="flex items-baseline justify-between">
+<h3 class="font-display-lg text-display-lg font-bold">$12.4M</h3>
+<span class="bg-secondary-fixed text-on-secondary-fixed px-2 py-0.5 rounded font-mono-sm text-mono-sm font-bold">+12.4%</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-5 rounded-xl">
+<p class="font-label-bold text-label-bold text-on-surface-variant uppercase mb-2">Contratos Ativos</p>
+<div class="flex items-baseline justify-between">
+<h3 class="font-display-lg text-display-lg font-bold">1,842</h3>
+<span class="bg-error-container text-on-error-container px-2 py-0.5 rounded font-mono-sm text-mono-sm font-bold">-2.1%</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-5 rounded-xl">
+<p class="font-label-bold text-label-bold text-on-surface-variant uppercase mb-2">Velocidade Média de Ciclo</p>
+<div class="flex items-baseline justify-between">
+<h3 class="font-display-lg text-display-lg font-bold">42 Dias</h3>
+<span class="bg-secondary-fixed text-on-secondary-fixed px-2 py-0.5 rounded font-mono-sm text-mono-sm font-bold">+5.8%</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-5 rounded-xl">
+<p class="font-label-bold text-label-bold text-on-surface-variant uppercase mb-2">Eficiência de Margem</p>
+<div class="flex items-baseline justify-between">
+<h3 class="font-display-lg text-display-lg font-bold">24.8%</h3>
+<span class="bg-secondary-fixed text-on-secondary-fixed px-2 py-0.5 rounded font-mono-sm text-mono-sm font-bold">+0.4%</span>
+</div>
+</div>
+</div>
+<!-- Main Chart Panel -->
+<div class="col-span-12 lg:col-span-8">
+<div class="bg-surface-container-lowest border border-outline-variant p-6 rounded-xl h-full shadow-sm">
+<div class="flex items-center justify-between mb-8">
+<div>
+<h4 class="font-title-sm text-title-sm">Distribuição de Receita por Região</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Análise comparativa entre EMEA, APAC e América do Norte</p>
+</div>
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-1.5">
+<div class="w-3 h-3 rounded-full bg-primary"></div>
+<span class="font-label-md text-label-md">NA</span>
+</div>
+<div class="flex items-center gap-1.5">
+<div class="w-3 h-3 rounded-full bg-secondary"></div>
+<span class="font-label-md text-label-md">EMEA</span>
+</div>
+<div class="flex items-center gap-1.5">
+<div class="w-3 h-3 rounded-full bg-tertiary-container"></div>
+<span class="font-label-md text-label-md">APAC</span>
+</div>
+</div>
+</div>
+<!-- Visual Chart Placeholder -->
+<div class="relative h-80 w-full flex items-end justify-between px-2 pt-4 group">
+<div class="absolute inset-0 flex flex-col justify-between py-4">
+<div class="border-t border-outline-variant w-full opacity-30"></div>
+<div class="border-t border-outline-variant w-full opacity-30"></div>
+<div class="border-t border-outline-variant w-full opacity-30"></div>
+<div class="border-t border-outline-variant w-full opacity-30"></div>
+<div class="border-t border-outline-variant w-full opacity-30"></div>
+</div>
+<!-- Mock Line Chart using SVG Paths -->
+<svg class="absolute inset-0 w-full h-full" preserveaspectratio="none">
+<path d="M0 280 Q 200 120 400 200 T 800 50" fill="none" stroke="#000000" stroke-width="3"></path>
+<path d="M0 250 Q 150 180 300 150 T 800 120" fill="none" stroke="#006c49" stroke-width="3"></path>
+<path d="M0 290 Q 250 250 500 180 T 800 220" fill="none" stroke="#3980f4" stroke-width="3"></path>
+</svg>
+<!-- Interactive Hover Point -->
+<div class="absolute top-1/2 left-[40%] group-hover:block hidden">
+<div class="bg-inverse-surface text-inverse-on-surface p-3 rounded shadow-lg text-label-md relative -top-16 -left-16 whitespace-nowrap">
+<p class="font-bold border-b border-white/20 mb-1 pb-1">Ago 2024</p>
+<p>NA: $1.2M</p>
+<p>EMEA: $0.9M</p>
+<p>APAC: $0.4M</p>
+</div>
+<div class="w-4 h-4 bg-primary border-4 border-white rounded-full"></div>
+</div>
+</div>
+<div class="flex justify-between mt-4 font-mono-sm text-mono-sm text-on-surface-variant px-2">
+<span>JAN</span><span>MAR</span><span>MAI</span><span>JUL</span><span>SET</span><span>NOV</span>
+</div>
+</div>
+</div>
+<!-- Right Panel: Scheduled Exports & Top Performers -->
+<div class="col-span-12 lg:col-span-4 flex flex-col gap-6">
+<div class="bg-primary-container text-on-primary p-6 rounded-xl h-fit">
+<div class="flex items-center justify-between mb-4">
+<h4 class="font-title-sm text-title-sm">Exportações Agendadas</h4>
+<span class="material-symbols-outlined text-secondary-fixed">auto_schedule</span>
+</div>
+<div class="space-y-4">
+<div class="flex items-center justify-between border-b border-on-primary-container/30 pb-3">
+<div>
+<p class="font-label-bold text-label-bold">Desempenho Semanal</p>
+<p class="font-mono-sm text-mono-sm text-on-primary-container">Segunda-feira @ 08:00</p>
+</div>
+<span class="material-symbols-outlined text-on-primary-container cursor-pointer">more_vert</span>
+</div>
+<div class="flex items-center justify-between border-b border-on-primary-container/30 pb-3">
+<div>
+<p class="font-label-bold text-label-bold">Reconciliação Fiscal Mensal</p>
+<p class="font-mono-sm text-mono-sm text-on-primary-container">Dia 1 do Mês @ 00:00</p>
+</div>
+<span class="material-symbols-outlined text-on-primary-container cursor-pointer">more_vert</span>
+</div>
+<button class="w-full bg-white/10 hover:bg-white/20 py-2 rounded font-label-md text-label-md transition-colors">+ Novo Agendamento</button>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-6 rounded-xl flex-1 shadow-sm">
+<h4 class="font-title-sm text-title-sm mb-4">Ranking Regional</h4>
+<div class="space-y-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center font-bold text-label-md">1</div>
+<div class="flex-1">
+<p class="font-label-bold text-label-bold">Grande Nova York</p>
+<div class="w-full bg-surface-container h-1.5 rounded-full mt-1">
+<div class="bg-primary h-full rounded-full" style="width: 85%"></div>
+</div>
+</div>
+<span class="font-mono-sm text-mono-sm font-bold">$4.2M</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center font-bold text-label-md">2</div>
+<div class="flex-1">
+<p class="font-label-bold text-label-bold">Região DACH</p>
+<div class="w-full bg-surface-container h-1.5 rounded-full mt-1">
+<div class="bg-secondary h-full rounded-full" style="width: 62%"></div>
+</div>
+</div>
+<span class="font-mono-sm text-mono-sm font-bold">$2.8M</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center font-bold text-label-md">3</div>
+<div class="flex-1">
+<p class="font-label-bold text-label-bold">Sudeste Asiático</p>
+<div class="w-full bg-surface-container h-1.5 rounded-full mt-1">
+<div class="bg-tertiary-container h-full rounded-full" style="width: 45%"></div>
+</div>
+</div>
+<span class="font-mono-sm text-mono-sm font-bold">$1.9M</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Wide Table/Analysis -->
+<div class="col-span-12">
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+<div class="px-6 py-4 border-b border-outline-variant flex justify-between items-center bg-surface">
+<h4 class="font-title-sm text-title-sm">Histórico Operacional</h4>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant">search</span>
+<input class="bg-transparent border-none p-0 font-label-md text-label-md focus:ring-0" placeholder="Buscar logs..." type="text"/>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left font-body-sm text-body-sm">
+<thead class="bg-surface-container-low text-on-surface-variant font-label-bold uppercase">
+<tr>
+<th class="px-6 py-3 border-b border-outline-variant">ID</th>
+<th class="px-6 py-3 border-b border-outline-variant">Região</th>
+<th class="px-6 py-3 border-b border-outline-variant">Status</th>
+<th class="px-6 py-3 border-b border-outline-variant">Responsável</th>
+<th class="px-6 py-3 border-b border-outline-variant text-right">Valor</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<tr class="hover:bg-surface-container transition-colors">
+<td class="px-6 py-3 font-mono-sm text-mono-sm text-primary">OP-8291</td>
+<td class="px-6 py-3">EMEA - Hub Londres</td>
+<td class="px-6 py-3"><span class="flex items-center gap-1.5"><div class="w-2 h-2 rounded-full bg-secondary"></div> Ativo</span></td>
+<td class="px-6 py-3">Sarah Jenkins</td>
+<td class="px-6 py-3 text-right font-bold">$142,000</td>
+</tr>
+<tr class="hover:bg-surface-container transition-colors">
+<td class="px-6 py-3 font-mono-sm text-mono-sm text-primary">OP-8290</td>
+<td class="px-6 py-3">NA - Palo Alto</td>
+<td class="px-6 py-3"><span class="flex items-center gap-1.5"><div class="w-2 h-2 rounded-full bg-secondary"></div> Ativo</span></td>
+<td class="px-6 py-3">Michael Chen</td>
+<td class="px-6 py-3 text-right font-bold">$892,500</td>
+</tr>
+<tr class="hover:bg-surface-container transition-colors">
+<td class="px-6 py-3 font-mono-sm text-mono-sm text-primary">OP-8289</td>
+<td class="px-6 py-3">APAC - Singapura</td>
+<td class="px-6 py-3"><span class="flex items-center gap-1.5"><div class="w-2 h-2 rounded-full bg-outline"></div> Pendente</span></td>
+<td class="px-6 py-3">Lydia Wong</td>
+<td class="px-6 py-3 text-right font-bold">$34,200</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest border-t border-outline-variant w-full py-gutter px-container-padding">
+<div class="max-w-max-width mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+<div class="flex items-center gap-4">
+<span class="font-title-sm text-title-sm font-black text-primary">Valley</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">© 2024 Valley Commercial Operations. Todos os direitos reservados.</p>
+</div>
+<div class="flex gap-6 items-center">
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary underline transition-all" href="#">Política de Privacidade</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary underline transition-all" href="#">Termos de Serviço</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary underline transition-all" href="#">Segurança</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary underline transition-all" href="#">Documentação da API</a>
+</div>
+</div>
+</footer>
+</body></html>

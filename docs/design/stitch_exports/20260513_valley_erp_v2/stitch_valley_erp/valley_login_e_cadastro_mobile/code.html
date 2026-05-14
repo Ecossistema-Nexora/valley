@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Valley - Acesso</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary": "#ffffff",
+                        "secondary-container": "#6cf8bb",
+                        "outline-variant": "#c6c6cd",
+                        "outline": "#76777d",
+                        "surface-variant": "#e4e2e4",
+                        "on-secondary-container": "#00714d",
+                        "on-surface-variant": "#45464d",
+                        "tertiary-container": "#001a42",
+                        "on-tertiary-fixed": "#001a42",
+                        "error-container": "#ffdad6",
+                        "tertiary": "#000000",
+                        "surface-bright": "#fcf8fa",
+                        "primary": "#000000",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-fixed": "#d8e2ff",
+                        "surface-tint": "#565e74",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-container": "#3980f4",
+                        "surface-dim": "#dcd9db",
+                        "primary-fixed-dim": "#bec6e0",
+                        "on-tertiary-fixed-variant": "#004395",
+                        "on-primary-fixed": "#131b2e",
+                        "secondary-fixed-dim": "#4edea3",
+                        "on-surface": "#1b1b1d",
+                        "surface-container-low": "#f6f3f5",
+                        "surface-container-highest": "#e4e2e4",
+                        "on-background": "#1b1b1d",
+                        "error": "#ba1a1a",
+                        "inverse-surface": "#303032",
+                        "inverse-on-surface": "#f3f0f2",
+                        "on-primary-container": "#7c839b",
+                        "primary-container": "#131b2e",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-high": "#eae7e9",
+                        "on-secondary-fixed-variant": "#005236",
+                        "on-error": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed": "#6ffbbe",
+                        "secondary": "#006c49",
+                        "on-secondary-fixed": "#002113",
+                        "inverse-primary": "#bec6e0",
+                        "surface-container": "#f0edef",
+                        "surface": "#fcf8fa",
+                        "primary-fixed": "#dae2fd",
+                        "tertiary-fixed-dim": "#adc6ff",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "background": "#fcf8fa"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "max-width": "1600px",
+                        "dense-gap": "0.5rem",
+                        "container-padding": "1.5rem",
+                        "gutter": "1rem"
+                    },
+                    "fontFamily": {
+                        "body-sm": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "label-bold": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "title-sm": ["Inter"],
+                        "mono-sm": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                        "display-lg": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-bold": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "headline-md": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "title-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                        "mono-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col items-center justify-center p-container-padding">
+<!-- Top Bar Placeholder (Logo only for transactional page) -->
+<header class="w-full max-w-md flex justify-center mb-8">
+<h1 class="font-display-lg text-display-lg text-primary tracking-tight">Valley</h1>
+</header>
+<main class="w-full max-w-md flex flex-col gap-8">
+<!-- Login Form Canvas -->
+<section class="bg-surface-container-lowest border border-outline-variant p-8 rounded-lg shadow-sm">
+<div class="mb-6">
+<h2 class="font-headline-md text-headline-md text-on-surface mb-2">Bem-vindo de volta</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Acesse sua conta para continuar.</p>
+</div>
+<form class="flex flex-col gap-4">
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface-variant" for="email">E-mail</label>
+<input class="w-full h-11 px-4 border border-outline rounded bg-surface focus:border-secondary focus:ring-1 focus:ring-secondary transition-all font-body-md text-body-md" id="email" placeholder="nome@exemplo.com" type="email"/>
+</div>
+<div class="flex flex-col gap-2">
+<div class="flex justify-between items-center">
+<label class="font-label-md text-label-md text-on-surface-variant" for="password">Senha</label>
+<a class="font-label-md text-label-md text-secondary hover:underline" href="#">Esqueci minha senha</a>
+</div>
+<div class="relative">
+<input class="w-full h-11 px-4 border border-outline rounded bg-surface focus:border-secondary focus:ring-1 focus:ring-secondary transition-all font-body-md text-body-md" id="password" placeholder="••••••••" type="password"/>
+<button class="absolute right-3 top-2.5 text-on-surface-variant" type="button">
+<span class="material-symbols-outlined text-[20px]" data-icon="visibility">visibility</span>
+</button>
+</div>
+</div>
+<button class="w-full h-12 bg-primary text-on-primary font-title-sm text-title-sm rounded-lg hover:opacity-90 active:scale-[0.98] transition-all mt-4" type="submit">
+                    Entrar
+                </button>
+</form>
+<!-- Social Login Divider -->
+<div class="relative my-8">
+<div class="absolute inset-0 flex items-center">
+<div class="w-full border-t border-outline-variant"></div>
+</div>
+<div class="relative flex justify-center">
+<span class="bg-surface-container-lowest px-4 font-label-md text-label-md text-outline">Ou entrar com</span>
+</div>
+</div>
+<!-- Social Buttons -->
+<div class="grid grid-cols-2 gap-4">
+<button class="flex items-center justify-center gap-2 h-11 border border-outline rounded hover:bg-surface-container-low transition-colors font-label-bold text-label-bold text-on-surface">
+<img alt="Google" class="w-5 h-5" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5pmVcLsZAFr1-eJjVU3cZKzVUo6B36PjYXGXUhemwtX6__7iJt0fQoTvaT6AxmPE1xHMLi2GwQRG8GmAlA_ijTXd_NSs41nZ4hUO1npg14_ThCieQ1rkD_xoGFJ3yxJog2NUe-GBldi6upflijFKaKfDGBBtEfzsCw11IGZHKtGaq6V3f_fhEoxdmo6_5dANUjCC548iDCQPCh-9ObpgdfswFCbRs2SkH19zDzR_Q3g4hor5L8i8chSF3JuLrDAe-8dzol3quLovW"/>
+                    Google
+                </button>
+<button class="flex items-center justify-center gap-2 h-11 border border-outline rounded hover:bg-surface-container-low transition-colors font-label-bold text-label-bold text-on-surface">
+<span class="material-symbols-outlined text-[20px] text-blue-600" data-icon="facebook" style="font-variation-settings: 'FILL' 1;">social_leaderboard</span>
+                    Facebook
+                </button>
+</div>
+</section>
+<!-- Registration Section (Bento Inspired Mini-Card) -->
+<section class="bg-surface-container border border-outline-variant p-6 rounded-lg flex flex-col items-center gap-4">
+<div class="text-center">
+<p class="font-body-md text-body-md text-on-surface">Não tem conta?</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Crie seu perfil de Pessoa Física em segundos.</p>
+</div>
+<button class="w-full h-11 border border-secondary text-secondary font-title-sm text-title-sm rounded-lg hover:bg-secondary-container/10 transition-colors" onclick="document.getElementById('signup-form').classList.remove('hidden'); this.closest('section').classList.add('hidden'); document.querySelector('section').classList.add('hidden');">
+                Cadastre-se
+            </button>
+</section>
+<!-- Hidden Registration Form (Simulated toggle state) -->
+<section class="hidden bg-surface-container-lowest border border-outline-variant p-8 rounded-lg shadow-sm" id="signup-form">
+<div class="flex items-center gap-2 mb-6 cursor-pointer" onclick="location.reload()">
+<span class="material-symbols-outlined text-secondary" data-icon="arrow_back">arrow_back</span>
+<span class="font-label-md text-label-md text-secondary">Voltar ao login</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-surface mb-6">Criar Conta PF</h2>
+<form class="flex flex-col gap-4">
+<div class="flex flex-col gap-1">
+<label class="font-label-md text-label-md text-on-surface-variant">Nome Completo</label>
+<input class="h-11 border border-outline rounded bg-surface px-4 font-body-md" type="text"/>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="flex flex-col gap-1">
+<label class="font-label-md text-label-md text-on-surface-variant">CPF</label>
+<input class="h-11 border border-outline rounded bg-surface px-4 font-body-md" placeholder="000.000.000-00" type="text"/>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-md text-label-md text-on-surface-variant">Telefone</label>
+<input class="h-11 border border-outline rounded bg-surface px-4 font-body-md" placeholder="(00) 00000-0000" type="tel"/>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-md text-label-md text-on-surface-variant">E-mail</label>
+<input class="h-11 border border-outline rounded bg-surface px-4 font-body-md" type="email"/>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-md text-label-md text-on-surface-variant">Senha</label>
+<input class="h-11 border border-outline rounded bg-surface px-4 font-body-md" type="password"/>
+</div>
+<button class="w-full h-12 bg-secondary text-on-secondary font-title-sm text-title-sm rounded-lg mt-4 shadow-sm hover:opacity-95" type="submit">
+                    Criar Conta
+                </button>
+</form>
+</section>
+<!-- Security Footer -->
+<footer class="flex items-center justify-center gap-2 py-4">
+<span class="material-symbols-outlined text-outline text-[18px]" data-icon="encrypted">encrypted</span>
+<span class="font-label-md text-label-md text-outline uppercase tracking-widest">Ambiente Criptografado</span>
+</footer>
+</main>
+<!-- Background Decoration (Subtle Enterprise Patterns) -->
+<div class="fixed inset-0 -z-10 opacity-40 pointer-events-none">
+<div class="absolute top-0 right-0 w-[400px] h-[400px] bg-secondary-container/20 rounded-full blur-[100px]"></div>
+<div class="absolute bottom-0 left-0 w-[400px] h-[400px] bg-tertiary-fixed/30 rounded-full blur-[100px]"></div>
+</div>
+</body></html>

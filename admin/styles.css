@@ -3318,6 +3318,34 @@ body.admin-auth-locked .shell {
   opacity: 0.72;
 }
 
+.admin-auth-stitch-proof {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 16px;
+  padding: 12px;
+  border: 1px solid rgba(47, 211, 199, 0.22);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.07);
+  color: #dffcff;
+  font-size: 0.84rem;
+  font-weight: 800;
+}
+
+.admin-auth-stitch-proof a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: rgba(47, 211, 199, 0.14);
+  color: #83fff2;
+  text-decoration: none;
+  box-shadow: inset 0 0 0 1px rgba(47, 211, 199, 0.18);
+}
+
 .admin-auth-status {
   margin-top: 14px;
   min-height: 1.4em;

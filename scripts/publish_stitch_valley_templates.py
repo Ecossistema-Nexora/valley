@@ -11,6 +11,7 @@ segredos e nao altera endpoints API existentes.
 from __future__ import annotations
 
 import html
+import argparse
 import json
 import shutil
 from collections import Counter
@@ -30,6 +31,22 @@ RUNTIME_STATUS_PATH = ROOT / "tmp" / "runtime" / "valley-stitch-template-publica
 PUBLICATION_MD = ROOT / "docs" / "design" / "STITCH_VALLEY_TEMPLATE_PUBLICATION.md"
 PUBLIC_HOST = "https://admin.brasildesconto.com.br"
 PUBLIC_BASE_PATH = f"/stitch/{VERSION}"
+
+
+def configure_paths(version: str, public_host: str) -> None:
+    global VERSION
+    global SOURCE_EXPORT_ROOT
+    global PUBLIC_ROOT
+    global PUBLIC_EXPORT_ROOT
+    global PUBLIC_HOST
+    global PUBLIC_BASE_PATH
+
+    VERSION = version
+    SOURCE_EXPORT_ROOT = ROOT / "docs" / "design" / "stitch_exports" / VERSION / "stitch_valley_erp"
+    PUBLIC_ROOT = ROOT / "admin" / "stitch" / VERSION
+    PUBLIC_EXPORT_ROOT = PUBLIC_ROOT / "stitch_valley_erp"
+    PUBLIC_HOST = public_host.rstrip("/")
+    PUBLIC_BASE_PATH = f"/stitch/{VERSION}"
 
 
 def utc_now() -> str:
@@ -319,6 +336,12 @@ def write_latest_redirect() -> None:
 
 
 def main() -> int:
+    parser = argparse.ArgumentParser(description="Publica templates Stitch Valley como assets web.")
+    parser.add_argument("--version", default=VERSION, help="Versao Stitch a publicar.")
+    parser.add_argument("--public-host", default=PUBLIC_HOST, help="Host publico usado no manifesto.")
+    args = parser.parse_args()
+
+    configure_paths(version=args.version, public_host=args.public_host)
     copy_export()
     manifest = build_manifest()
     write_json(PUBLIC_ROOT / "manifest.json", manifest)

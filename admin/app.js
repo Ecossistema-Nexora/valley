@@ -47,6 +47,8 @@
   const MARKETPLACE_API_STORAGE_KEY = "valley.marketplaceApiIntegrations.v1";
   const MODULE_WORKSPACE_TAB_STORAGE_KEY = "valley.moduleWorkspaceTabs.v1";
   const ADMIN_SURFACE_TAB_STORAGE_KEY = "valley.adminSurfaceTab.v1";
+  const STITCH_VISIBLE_RELEASE_KEY = "valley.stitchSourceTruth.visibleRelease.v1";
+  const STITCH_VISIBLE_RELEASE_VERSION = "v044-stitch-v2-mandatory";
   const MERCHANT_ERP_STORAGE_KEY = "valley.merchantErp.v1";
   const MERCHANT_ERP_SECTION_ID = "merchantErpSection";
   const ADMIN_SURFACE_TABS = [
@@ -334,13 +336,13 @@
     },
   ];
   const STITCH_SOURCE_OF_TRUTH = {
-    version: "20260513_valley_erp",
+    version: "20260513_valley_erp_v2",
     mode: "mandatory",
-    templatesTotal: 131,
-    p0Total: 21,
-    publicManifestPath: "/stitch/20260513_valley_erp/manifest.json",
-    publicGalleryPath: "/stitch/20260513_valley_erp/",
-    sourceExportDir: "docs/design/stitch_exports/20260513_valley_erp/stitch_valley_erp",
+    templatesTotal: 121,
+    p0Total: 19,
+    publicManifestPath: "/stitch/20260513_valley_erp_v2/manifest.json",
+    publicGalleryPath: "/stitch/20260513_valley_erp_v2/",
+    sourceExportDir: "docs/design/stitch_exports/20260513_valley_erp_v2/stitch_valley_erp",
     rule: "Templates Stitch sao a fonte da verdade ativa para paineis web e APK; variacoes anteriores ficam descartadas como referencia ativa.",
   };
   const PRICING_EDITABLE_FIELDS = [
@@ -564,10 +566,16 @@
 
   function loadAdminSurfaceTab() {
     try {
+      const appliedRelease = String(window.localStorage.getItem(STITCH_VISIBLE_RELEASE_KEY) || "").trim();
+      if (appliedRelease !== STITCH_VISIBLE_RELEASE_VERSION) {
+        window.localStorage.setItem(ADMIN_SURFACE_TAB_STORAGE_KEY, "stitch");
+        window.localStorage.setItem(`${MERCHANT_ERP_STORAGE_KEY}.activeFeature`, "merchant-erp");
+        return "stitch";
+      }
       const saved = String(window.localStorage.getItem(ADMIN_SURFACE_TAB_STORAGE_KEY) || "").trim().toLowerCase();
-      return ADMIN_SURFACE_TABS.some((tab) => tab.key === saved) ? saved : "overview";
+      return ADMIN_SURFACE_TABS.some((tab) => tab.key === saved) ? saved : "stitch";
     } catch (_error) {
-      return "overview";
+      return "stitch";
     }
   }
 
@@ -591,9 +599,23 @@
   function loadMerchantErpFeature() {
     try {
       const saved = String(window.localStorage.getItem(`${MERCHANT_ERP_STORAGE_KEY}.activeFeature`) || "").trim();
-      return saved || "";
+      return saved || "merchant-erp";
     } catch (_error) {
-      return "";
+      return "merchant-erp";
+    }
+  }
+
+  function markStitchVisibleReleaseApplied() {
+    try {
+      window.localStorage.setItem(STITCH_VISIBLE_RELEASE_KEY, STITCH_VISIBLE_RELEASE_VERSION);
+      if (!window.localStorage.getItem(ADMIN_SURFACE_TAB_STORAGE_KEY)) {
+        window.localStorage.setItem(ADMIN_SURFACE_TAB_STORAGE_KEY, "stitch");
+      }
+      if (!window.localStorage.getItem(`${MERCHANT_ERP_STORAGE_KEY}.activeFeature`)) {
+        window.localStorage.setItem(`${MERCHANT_ERP_STORAGE_KEY}.activeFeature`, "merchant-erp");
+      }
+    } catch (_error) {
+      return;
     }
   }
 
@@ -3249,7 +3271,7 @@
   }
 
   function stitchTemplatePath(key, fileName = "code.html") {
-    return `/stitch/20260513_valley_erp/stitch_valley_erp/${encodeURIComponent(key)}/${fileName}`;
+    return `${STITCH_SOURCE_OF_TRUTH.publicGalleryPath}stitch_valley_erp/${encodeURIComponent(key)}/${fileName}`;
   }
 
   function stitchP0RuntimeSummary() {
@@ -3461,7 +3483,7 @@
         );
         return;
       case "open-gallery":
-        window.open("/stitch/20260513_valley_erp/", "_blank", "noopener");
+        window.open(STITCH_SOURCE_OF_TRUTH.publicGalleryPath, "_blank", "noopener");
         announce("Galeria Stitch aberta.");
         return;
       case "open-admin-central":
@@ -5392,8 +5414,8 @@
         elements.heroTitle.textContent = `${workspace.title} em modo de producao`;
         elements.heroSubcopy.textContent = `${workspace.copy} O painel permanece conectado ao manifesto, ao runtime publico e aos dashboards comerciais sem trocar de shell.`;
       } else {
-        elements.heroTitle.textContent = "Painel de producao para 47 modulos";
-        elements.heroSubcopy.textContent = "Supervisao executiva, gestao comercial e leitura operacional em uma unica superficie. O painel cruza modulos, contratos, catalogo, checkout, lojistas, usuarios e exposicao publica Cloudflare.";
+        elements.heroTitle.textContent = "Stitch Valley ERP e a tela ativa do painel";
+        elements.heroSubcopy.textContent = "O pacote Stitch 20260513 Valley ERP substitui as variacoes antigas como referencia visual e funcional. A entrada padrao abre os templates P0 executaveis, com botoes conectados para ERP, SKU, pedidos, estoque, checkout e integracoes.";
       }
     }
 
@@ -5410,6 +5432,9 @@
     elements.reportHealth.className = reportHealthClass(report);
 
     elements.heroTags.innerHTML = [
+      rowPill("stitch fonte da verdade", "pill-accent"),
+      rowPill(STITCH_SOURCE_OF_TRUTH.version, "pill-navy"),
+      rowPill("legado descartado", "pill-warn"),
       rowPill("modo producao", "pill-accent"),
       rowPill(`${formatCount(modules.length)} modulos visiveis`, "pill-navy"),
       rowPill(`${formatPercent(readiness)} prontidao media`, "pill-accent"),
@@ -7414,6 +7439,7 @@
       return;
     }
     appBootstrapped = true;
+    markStitchVisibleReleaseApplied();
     readHashSelection();
     populateFilters();
     bindEvents();

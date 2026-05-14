@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Valley ERP - Marketplace de Integrações</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "primary-container": "#131b2e",
+                      "on-background": "#1b1b1d",
+                      "secondary-fixed": "#6ffbbe",
+                      "on-primary": "#ffffff",
+                      "on-surface-variant": "#45464d",
+                      "secondary-container": "#6cf8bb",
+                      "on-tertiary-container": "#3980f4",
+                      "on-tertiary-fixed": "#001a42",
+                      "on-secondary-fixed": "#002113",
+                      "surface-dim": "#dcd9db",
+                      "on-tertiary-fixed-variant": "#004395",
+                      "surface-container-highest": "#e4e2e4",
+                      "on-primary-container": "#7c839b",
+                      "surface": "#fcf8fa",
+                      "on-surface": "#1b1b1d",
+                      "outline": "#76777d",
+                      "on-secondary": "#ffffff",
+                      "primary": "#000000",
+                      "surface-container-lowest": "#ffffff",
+                      "tertiary": "#000000",
+                      "surface-bright": "#fcf8fa",
+                      "inverse-surface": "#303032",
+                      "error": "#ba1a1a",
+                      "tertiary-container": "#001a42",
+                      "on-tertiary": "#ffffff",
+                      "tertiary-fixed": "#d8e2ff",
+                      "on-error": "#ffffff",
+                      "surface-container-low": "#f6f3f5",
+                      "on-primary-fixed": "#131b2e",
+                      "on-primary-fixed-variant": "#3f465c",
+                      "surface-variant": "#e4e2e4",
+                      "on-secondary-container": "#00714d",
+                      "on-error-container": "#93000a",
+                      "inverse-primary": "#bec6e0",
+                      "error-container": "#ffdad6",
+                      "background": "#fcf8fa",
+                      "secondary": "#006c49",
+                      "primary-fixed": "#dae2fd",
+                      "inverse-on-surface": "#f3f0f2",
+                      "surface-tint": "#565e74",
+                      "surface-container": "#f0edef",
+                      "tertiary-fixed-dim": "#adc6ff",
+                      "surface-container-high": "#eae7e9",
+                      "on-secondary-fixed-variant": "#005236",
+                      "primary-fixed-dim": "#bec6e0",
+                      "secondary-fixed-dim": "#4edea3",
+                      "outline-variant": "#c6c6cd"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "unit": "4px",
+                      "gutter": "1rem",
+                      "container-padding": "1.5rem",
+                      "max-width": "1600px",
+                      "dense-gap": "0.5rem"
+              },
+              "fontFamily": {
+                      "body-md": ["Inter"],
+                      "label-md": ["Inter"],
+                      "body-sm": ["Inter"],
+                      "title-sm": ["Inter"],
+                      "mono-sm": ["JetBrains Mono"],
+                      "label-bold": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "display-lg": ["Inter"]
+              },
+              "fontSize": {
+                      "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "label-md": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                      "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                      "title-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                      "mono-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                      "label-bold": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "headline-md": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "display-lg": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .sheet-pane {
+            background-color: #ffffff;
+            border: 1px solid #E2E8F0;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md text-body-md antialiased">
+<!-- TopNavBar -->
+<header class="bg-primary-container dark:bg-black fixed docked full-width top-0 z-50 border-b border-outline-variant">
+<div class="flex justify-between items-center h-14 w-full px-container-padding max-w-max-width mx-auto">
+<div class="flex items-center gap-8">
+<span class="font-display-lg text-display-lg font-bold text-on-primary tracking-tight">Valley</span>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-on-primary-container hover:text-on-primary transition-colors font-title-sm text-title-sm" href="#">Dashboard</a>
+<a class="text-on-primary-container hover:text-on-primary transition-colors font-title-sm text-title-sm" href="#">Operações</a>
+<a class="text-on-primary-container hover:text-on-primary transition-colors font-title-sm text-title-sm" href="#">Estoque</a>
+<a class="text-on-primary-container hover:text-on-primary transition-colors font-title-sm text-title-sm" href="#">Analytics</a>
+<a class="text-on-primary border-b-2 border-secondary font-bold font-title-sm text-title-sm" href="#">Lojistas</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2">
+<button class="p-2 text-on-primary-container hover:bg-surface-variant/10 rounded-full transition-all">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-on-primary-container hover:bg-surface-variant/10 rounded-full transition-all">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<button class="p-2 text-on-primary-container hover:bg-surface-variant/10 rounded-full transition-all">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+</button>
+</div>
+<button class="bg-secondary text-on-secondary px-4 py-2 rounded-xl font-label-bold text-label-bold hover:opacity-80 transition-all">Criar Novo</button>
+<div class="h-8 w-8 rounded-full bg-surface-container overflow-hidden border border-outline-variant">
+<img alt="User profile avatar" data-alt="A professional headshot of a corporate executive in a crisp navy blue suit. The lighting is soft and studio-quality, emphasizing a bright and clean light-mode aesthetic. The background is a minimalist, neutral gray that complements the corporate modern UI style. The mood is authoritative yet approachable." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDpsZQZltv0ywiUYtHHMU4TbAZJUNG4GbhpI8ie8NvvuA51O61e_OAVsS57hzVQYJNA9-sXDbfElfX-gFSdVo1aJavSek88IO0_abeKSwrrWoLy3ybsx6zve8mbhwToDw6lMrQV7c6sw_OKZMk4puoZVCHLu-agvg_p9QHKZty_GDfpBTYgIyqmyI96Af9tQh9w6r5fsAOlmQ5Bg2fqfnlibDJEKvOMoMXRmJVi16xlMvpn2nNV7gMD1CwkoJ90hU17_iFKL7j0sADc"/>
+</div>
+</div>
+</div>
+</header>
+<div class="flex pt-14">
+<!-- SideNavBar -->
+<aside class="hidden lg:flex flex-col border-r border-outline-variant h-[calc(100vh-56px)] fixed w-[240px] left-0 bg-surface dark:bg-surface-dim">
+<div class="p-gutter flex flex-col gap-1">
+<div class="mb-6 px-4">
+<h2 class="font-headline-md text-headline-md font-extrabold text-primary">Valley ERP</h2>
+<p class="text-on-surface-variant font-label-md text-label-md">Console Empresarial</p>
+</div>
+<nav class="flex flex-col gap-1">
+<a class="text-on-surface-variant hover:bg-surface-container px-4 py-2 flex items-center gap-3 transition-colors rounded-xl group" href="#">
+<span class="material-symbols-outlined group-hover:scale-95 duration-150" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Início</span>
+</a>
+<a class="bg-secondary-container text-on-secondary-container rounded-xl font-bold px-4 py-2 flex items-center gap-3" href="#">
+<span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+<span class="font-label-md text-label-md">Gestão de Pedidos</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-container px-4 py-2 flex items-center gap-3 transition-colors rounded-xl group" href="#">
+<span class="material-symbols-outlined group-hover:scale-95 duration-150" data-icon="local_shipping">local_shipping</span>
+<span class="font-label-md text-label-md">Logística</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-container px-4 py-2 flex items-center gap-3 transition-colors rounded-xl group" href="#">
+<span class="material-symbols-outlined group-hover:scale-95 duration-150" data-icon="storefront">storefront</span>
+<span class="font-label-md text-label-md">Portal do Lojista</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-container px-4 py-2 flex items-center gap-3 transition-colors rounded-xl group" href="#">
+<span class="material-symbols-outlined group-hover:scale-95 duration-150" data-icon="payments">payments</span>
+<span class="font-label-md text-label-md">Financeiro</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-container px-4 py-2 flex items-center gap-3 transition-colors rounded-xl group" href="#">
+<span class="material-symbols-outlined group-hover:scale-95 duration-150" data-icon="history">history</span>
+<span class="font-label-md text-label-md">Logs do Sistema</span>
+</a>
+</nav>
+</div>
+<div class="mt-auto p-gutter border-t border-outline-variant flex flex-col gap-1">
+<button class="w-full bg-primary text-on-primary py-2 rounded-xl mb-4 font-label-bold text-label-bold hover:opacity-90">Sincronização Rápida</button>
+<a class="text-on-surface-variant hover:bg-surface-container px-4 py-2 flex items-center gap-3 transition-colors rounded-xl" href="#">
+<span class="material-symbols-outlined" data-icon="contact_support">contact_support</span>
+<span class="font-label-md text-label-md">Suporte</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-container px-4 py-2 flex items-center gap-3 transition-colors rounded-xl" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-label-md text-label-md">Sair</span>
+</a>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 lg:ml-[240px] px-container-padding py-gutter max-w-max-width mx-auto">
+<!-- Breadcrumbs & Workspace Header -->
+<div class="mb-gutter flex justify-between items-end">
+<div>
+<nav class="flex items-center gap-2 mb-2">
+<span class="font-label-md text-label-md text-on-surface-variant">Lojistas</span>
+<span class="material-symbols-outlined text-[14px] text-outline" data-icon="chevron_right">chevron_right</span>
+<span class="font-label-md text-label-md text-on-surface">Integrações</span>
+</nav>
+<h1 class="font-display-lg text-display-lg font-extrabold text-primary">Marketplace de Integrações</h1>
+</div>
+<div class="flex gap-dense-gap">
+<button class="sheet-pane px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-surface-container-high transition-all">
+<span class="material-symbols-outlined text-[18px]" data-icon="sync">sync</span>
+<span class="font-label-bold text-label-bold">Sincronizar Tudo</span>
+</button>
+<button class="bg-primary text-on-primary px-4 py-2 rounded-lg flex items-center gap-2 hover:opacity-90 transition-all">
+<span class="material-symbols-outlined text-[18px]" data-icon="add">add</span>
+<span class="font-label-bold text-label-bold">API Personalizada</span>
+</button>
+</div>
+</div>
+<!-- Connected Apps Highlight (KpiGrid Style) -->
+<section class="grid grid-cols-1 md:grid-cols-4 gap-gutter mb-gutter">
+<div class="sheet-pane p-4 rounded-xl">
+<p class="font-label-bold text-label-bold text-on-surface-variant uppercase mb-2">Sincronizações Ativas</p>
+<div class="flex items-center justify-between">
+<span class="font-display-lg text-display-lg font-bold">12</span>
+<span class="px-2 py-1 bg-secondary-container text-on-secondary-container rounded-full text-xs font-bold">+2 Hoje</span>
+</div>
+</div>
+<div class="sheet-pane p-4 rounded-xl">
+<p class="font-label-bold text-label-bold text-on-surface-variant uppercase mb-2">Volume de Dados</p>
+<div class="flex items-center justify-between">
+<span class="font-display-lg text-display-lg font-bold">1.2 TB</span>
+<span class="text-secondary material-symbols-outlined" data-icon="trending_up">trending_up</span>
+</div>
+</div>
+<div class="sheet-pane p-4 rounded-xl">
+<p class="font-label-bold text-label-bold text-on-surface-variant uppercase mb-2">Erros de Sincro</p>
+<div class="flex items-center justify-between">
+<span class="font-display-lg text-display-lg font-bold text-error">0</span>
+<span class="text-secondary material-symbols-outlined" data-icon="check_circle">check_circle</span>
+</div>
+</div>
+<div class="sheet-pane p-4 rounded-xl">
+<p class="font-label-bold text-label-bold text-on-surface-variant uppercase mb-2">Última Atualização</p>
+<div class="flex items-center justify-between">
+<span class="font-title-sm text-title-sm font-mono-sm">08:42:01 AM</span>
+<span class="text-on-surface-variant material-symbols-outlined" data-icon="schedule">schedule</span>
+</div>
+</div>
+</section>
+<!-- Filter Bar -->
+<div class="bg-surface-container-low p-3 mb-gutter rounded-lg flex items-center justify-between border border-outline-variant">
+<div class="flex items-center gap-dense-gap">
+<span class="font-label-bold text-label-bold px-3">Filtrar:</span>
+<button class="bg-surface-container-lowest px-3 py-1 rounded-full border border-secondary text-secondary font-label-bold text-label-bold flex items-center gap-1">
+                    Todas as Categorias <span class="material-symbols-outlined text-[16px]" data-icon="close">close</span>
+</button>
+<button class="bg-surface-container-highest px-3 py-1 rounded-full text-on-surface-variant font-label-md text-label-md border border-transparent hover:border-outline-variant">E-commerce</button>
+<button class="bg-surface-container-highest px-3 py-1 rounded-full text-on-surface-variant font-label-md text-label-md border border-transparent hover:border-outline-variant">Pagamentos</button>
+<button class="bg-surface-container-highest px-3 py-1 rounded-full text-on-surface-variant font-label-md text-label-md border border-transparent hover:border-outline-variant">Logística</button>
+</div>
+<div class="flex items-center gap-3">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline" data-icon="search">search</span>
+<input class="bg-surface-container-lowest border border-outline-variant rounded-lg pl-10 pr-4 py-1.5 text-body-sm w-64 focus:ring-1 focus:ring-primary outline-none" placeholder="Buscar no marketplace..." type="text"/>
+</div>
+</div>
+</div>
+<!-- Integration Grid (Bento Style) -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+<!-- Shopify -->
+<div class="sheet-pane p-6 rounded-xl flex flex-col hover:border-secondary-fixed duration-300 group">
+<div class="flex justify-between items-start mb-6">
+<div class="w-16 h-16 rounded-xl bg-surface-container p-3 flex items-center justify-center border border-outline-variant overflow-hidden">
+<img alt="Shopify Logo" data-alt="A clean, minimalist 3D rendering of a green shopping bag icon representing Shopify, set against a pristine white background. The lighting is bright and architectural, consistent with a high-end enterprise SaaS dashboard. The icon has a soft shadow and subtle reflections, conveying professional quality and modern tech aesthetics." src="https://lh3.googleusercontent.com/aida-public/AB6AXuADIRZKAlmUW0VhexqzpTm-giHEcjtu9MEIKCe1VtnEUV8AW5wfJAZp5bdEYBHVYDRB20hiVGRo2DX4ui_rV2kw0J89va8g3PQRejYrNpDU1wkLtKsKElmGqXzqlbXGXRnjSeO8IDhtdCj5DzmWcecx-txrr-62n5ZYufEEENvv5dMA8F7hDeeLE8EMFEo5vgs4-VUKl5suMYjXFpBZ1nKdM512AFnhMINOkBJ8KEscOGxreqTqO7puQaoAbIk1oNhKmbIIgwpJQ3Pk"/>
+</div>
+<span class="px-3 py-1 bg-secondary-container text-on-secondary-container rounded-full text-xs font-bold">Conectado</span>
+</div>
+<h3 class="font-title-sm text-title-sm mb-2">Shopify Plus</h3>
+<p class="text-on-surface-variant font-body-sm text-body-sm mb-6 flex-1">
+                    Sincronização de inventário em tempo real, gestão de pedidos e fluxos de atendimento automatizados para lojistas de alto volume.
+                </p>
+<div class="flex items-center justify-between pt-6 border-t border-outline-variant">
+<div class="flex flex-col">
+<span class="text-[10px] text-outline uppercase font-bold tracking-widest">Última Sincro</span>
+<span class="font-mono-sm text-mono-sm">2 min atrás</span>
+</div>
+<button class="sheet-pane px-4 py-2 rounded-lg font-label-bold text-label-bold group-hover:bg-primary group-hover:text-on-primary transition-all">Configurar</button>
+</div>
+</div>
+<!-- Amazon -->
+<div class="sheet-pane p-6 rounded-xl flex flex-col hover:border-secondary-fixed duration-300 group">
+<div class="flex justify-between items-start mb-6">
+<div class="w-16 h-16 rounded-xl bg-surface-container p-3 flex items-center justify-center border border-outline-variant overflow-hidden">
+<img alt="Amazon Logo" data-alt="The iconic Amazon arrow logo rendered in high-definition against a crisp white surface. The visual style is corporate and polished, with precise shadows and a clean, high-key lighting setup that matches a modern light-mode interface. The composition is centered and minimalist, focusing on brand authority." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFQAmPWtewf1rF2nJg0QaX-BjMiu5Rh2sSZmef6yr18u3WRcDRehYj9Em7wEYOaSK2ObqXIzuhoKIl4IcsOQ6zdpqtErwxLtzuL27cHTf5tKKushgjrrpSJWZVUjDob-sD7Kck7QVteC7ne6ApH0eqkU-i1cunI1cd2hr2uKyiw9OsExGdhLzpIt8RmyQIJjUcacmV902zbHy_XFtCVegd_H6jFs8B5sXJGHufNoQojYgKIuw8JkaOtgZ815irzxjVsP1F3rLhSAZw"/>
+</div>
+<span class="px-3 py-1 bg-surface-container-highest text-on-surface-variant rounded-full text-xs font-bold">Pronto</span>
+</div>
+<h3 class="font-title-sm text-title-sm mb-2">Amazon Seller Central</h3>
+<p class="text-on-surface-variant font-body-sm text-body-sm mb-6 flex-1">
+                    Integração abrangente para listagens FBA e FBM. Sincronize dados do marketplace global e relatórios fiscais automatizados.
+                </p>
+<div class="flex items-center justify-between pt-6 border-t border-outline-variant">
+<div class="flex flex-col">
+<span class="text-[10px] text-outline uppercase font-bold tracking-widest">Preço</span>
+<span class="font-mono-sm text-mono-sm">Plano Enterprise</span>
+</div>
+<button class="bg-primary text-on-primary px-6 py-2 rounded-lg font-label-bold text-label-bold hover:opacity-90 transition-all">Instalar</button>
+</div>
+</div>
+<!-- Stripe -->
+<div class="sheet-pane p-6 rounded-xl flex flex-col border-2 border-secondary-fixed bg-secondary-fixed/5 group">
+<div class="flex justify-between items-start mb-6">
+<div class="w-16 h-16 rounded-xl bg-white p-3 flex items-center justify-center border border-outline-variant overflow-hidden">
+<img alt="Stripe Logo" data-alt="A sleek, digital representation of the Stripe logo in its signature purple hue, set within a glowing white container. The lighting is diffused and professional, creating a tech-forward atmosphere. The aesthetic is clean, minimalist, and perfectly aligned with a premium commercial operations cockpit interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtSKbVMcnBipskNIUqAKix39l8lehuagAvzLSLljRTPSgh84qeXSCmX1oyDF2PO6qS9rMArORpziFMrMpC6uVEUGZpHPOF3QZ2PBbINJedJSW5KZQNRdewqsIp-5T2xiOJZXdY2NEdeeYcmRZT4wbdRvalWwPZ5gSPd0Nct-SH3KZsQhhy-tTkeG7QwTg8aWBN4Dgr24eNEViaeoHAm-g998iJx9n-cRUWg3e7ywNrNLJv5_W0icsixguYGZbEDoXWxQeBKgT4Geku"/>
+</div>
+<div class="flex flex-col items-end">
+<span class="px-3 py-1 bg-secondary-container text-on-secondary-container rounded-full text-xs font-bold">Ativo</span>
+<span class="text-[10px] text-secondary font-bold mt-1">Modo Live</span>
+</div>
+</div>
+<h3 class="font-title-sm text-title-sm mb-2">Stripe Payments</h3>
+<p class="text-on-surface-variant font-body-sm text-body-sm mb-6 flex-1">
+                    Processamento de pagamentos unificado, faturamento de assinaturas e reconciliação automatizada direto no seu livro-razão.
+                </p>
+<div class="flex items-center justify-between pt-6 border-t border-outline-variant">
+<div class="flex flex-col">
+<span class="text-[10px] text-outline uppercase font-bold tracking-widest">Saúde</span>
+<span class="font-mono-sm text-mono-sm text-secondary">Operacional</span>
+</div>
+<button class="sheet-pane px-4 py-2 rounded-lg font-label-bold text-label-bold hover:bg-surface-container transition-all">Gerenciar</button>
+</div>
+</div>
+<!-- ERP-X -->
+<div class="sheet-pane p-6 rounded-xl flex flex-col hover:border-secondary-fixed duration-300 group">
+<div class="flex justify-between items-start mb-6">
+<div class="w-16 h-16 rounded-xl bg-primary-container p-3 flex items-center justify-center border border-outline-variant overflow-hidden">
+<span class="text-on-primary font-black text-xl">X</span>
+</div>
+<span class="px-3 py-1 bg-surface-container-highest text-on-surface-variant rounded-full text-xs font-bold">Recomendado</span>
+</div>
+<h3 class="font-title-sm text-title-sm mb-2">ERP-X Bridge</h3>
+<p class="text-on-surface-variant font-body-sm text-body-sm mb-6 flex-1">
+                    Sincronização bidirecional de sistemas legados. Migre dados operacionais com tempo de inatividade zero e mapeamento customizado.
+                </p>
+<div class="flex items-center justify-between pt-6 border-t border-outline-variant">
+<div class="flex flex-col">
+<span class="text-[10px] text-outline uppercase font-bold tracking-widest">Tipo</span>
+<span class="font-mono-sm text-mono-sm">Middleware</span>
+</div>
+<button class="bg-primary text-on-primary px-6 py-2 rounded-lg font-label-bold text-label-bold hover:opacity-90 transition-all">Instalar</button>
+</div>
+</div>
+<!-- Salesforce -->
+<div class="sheet-pane p-6 rounded-xl flex flex-col hover:border-secondary-fixed duration-300 group opacity-70">
+<div class="flex justify-between items-start mb-6">
+<div class="w-16 h-16 rounded-xl bg-surface-container p-3 flex items-center justify-center border border-outline-variant overflow-hidden">
+<img alt="Salesforce Logo" data-alt="A professional rendering of a blue cloud logo against a bright, minimalist studio backdrop. The lighting is high-key and commercial, reflecting a light-mode enterprise environment. The mood is stable and corporate, emphasizing enterprise-scale reliability through clean lines and a sophisticated blue and white palette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCz4gFnqkOcN3RYyQESJBBlA5qsG10f_hTk2utalyAdcIRt0Npa6Z1m4kBphqGuGPr129rVi70kRbIR8h1J6-L2kSthDJ2lLHrIxkfEDalEatVG665HEa1Ong3cUvO7ExZAY0EfXDqA-dI78YwzoOF8uAegfJPtS-8mX5cMe71RjTv1pjZkhV4oe6SJbJ6w9fd1UAnuWRAZuZhTzzG4L6vHEC-gXO2_XHGT2jXE7WUBlEshQvMSSN959teNuYRBFiTEzYbZ_n2WdprQ"/>
+</div>
+<span class="px-3 py-1 bg-error-container text-on-error-container rounded-full text-xs font-bold">Manutenção</span>
+</div>
+<h3 class="font-title-sm text-title-sm mb-2">Salesforce CRM</h3>
+<p class="text-on-surface-variant font-body-sm text-body-sm mb-6 flex-1">
+                    Conecte pipelines de vendas com atendimento operacional. Sincronização de dados do cliente em tempo real para lojistas locais.
+                </p>
+<div class="flex items-center justify-between pt-6 border-t border-outline-variant">
+<div class="flex flex-col">
+<span class="text-[10px] text-outline uppercase font-bold tracking-widest">Status</span>
+<span class="font-mono-sm text-mono-sm text-error">Atualizando...</span>
+</div>
+<button class="bg-surface-dim text-outline cursor-not-allowed px-6 py-2 rounded-lg font-label-bold text-label-bold" disabled="">Bloqueado</button>
+</div>
+</div>
+<!-- Webhooks -->
+<div class="sheet-pane p-6 rounded-xl flex flex-col bg-surface-container-low border-dashed border-2 group hover:border-primary transition-all">
+<div class="flex justify-between items-start mb-6">
+<div class="w-16 h-16 rounded-xl bg-white p-3 flex items-center justify-center border border-outline-variant overflow-hidden">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="terminal">terminal</span>
+</div>
+<span class="px-3 py-1 bg-tertiary-fixed text-on-tertiary-fixed rounded-full text-xs font-bold">Desenvolvedor</span>
+</div>
+<h3 class="font-title-sm text-title-sm mb-2">Webhooks Customizados</h3>
+<p class="text-on-surface-variant font-body-sm text-body-sm mb-6 flex-1">
+                    Construa sua própria arquitetura baseada em eventos. Acione ações no ecossistema Valley usando endpoints HTTPS seguros.
+                </p>
+<div class="flex items-center justify-between pt-6 border-t border-outline-variant">
+<div class="flex flex-col">
+<span class="text-[10px] text-outline uppercase font-bold tracking-widest">Segurança</span>
+<span class="font-mono-sm text-mono-sm">HMAC-SHA256</span>
+</div>
+<button class="sheet-pane px-4 py-2 rounded-lg font-label-bold text-label-bold hover:bg-primary hover:text-on-primary transition-all">Configurar Hook</button>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest dark:bg-inverse-surface border-t border-outline-variant full-width bottom">
+<div class="w-full py-gutter px-container-padding flex justify-between items-center max-w-max-width mx-auto">
+<div class="flex items-center gap-6">
+<span class="font-title-sm text-title-sm font-black text-on-surface dark:text-inverse-on-surface">Valley</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">© 2024 Valley Commercial Operations. Todos os direitos reservados.</span>
+</div>
+<nav class="flex items-center gap-gutter">
+<a class="text-on-surface-variant hover:text-secondary underline transition-all font-body-sm text-body-sm" href="#">Política de Privacidade</a>
+<a class="text-on-surface-variant hover:text-secondary underline transition-all font-body-sm text-body-sm" href="#">Termos de Serviço</a>
+<a class="text-on-surface-variant hover:text-secondary underline transition-all font-body-sm text-body-sm" href="#">Segurança</a>
+<a class="text-on-surface-variant hover:text-secondary underline transition-all font-body-sm text-body-sm" href="#">Documentação da API</a>
+</nav>
+</div>
+</footer>
+</body></html>

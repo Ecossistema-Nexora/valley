@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-fixed-dim": "#bec6e0",
+                    "surface-tint": "#565e74",
+                    "tertiary-fixed-dim": "#adc6ff",
+                    "primary-fixed": "#dae2fd",
+                    "surface": "#fcf8fa",
+                    "outline": "#76777d",
+                    "surface-dim": "#dcd9db",
+                    "secondary-container": "#6cf8bb",
+                    "surface-container-highest": "#e4e2e4",
+                    "secondary-fixed-dim": "#4edea3",
+                    "on-tertiary-fixed": "#001a42",
+                    "on-secondary-fixed-variant": "#005236",
+                    "on-primary-fixed": "#131b2e",
+                    "error-container": "#ffdad6",
+                    "error": "#ba1a1a",
+                    "primary": "#000000",
+                    "surface-container": "#f0edef",
+                    "inverse-surface": "#303032",
+                    "surface-container-lowest": "#ffffff",
+                    "outline-variant": "#c6c6cd",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "tertiary": "#000000",
+                    "on-tertiary-fixed-variant": "#004395",
+                    "surface-bright": "#fcf8fa",
+                    "on-error": "#ffffff",
+                    "on-background": "#1b1b1d",
+                    "surface-variant": "#e4e2e4",
+                    "on-primary-fixed-variant": "#3f465c",
+                    "on-error-container": "#93000a",
+                    "tertiary-container": "#001a42",
+                    "surface-container-high": "#eae7e9",
+                    "on-tertiary-container": "#3980f4",
+                    "secondary-fixed": "#6ffbbe",
+                    "primary-container": "#131b2e",
+                    "inverse-on-surface": "#f3f0f2",
+                    "on-surface": "#1b1b1d",
+                    "on-primary": "#ffffff",
+                    "on-primary-container": "#7c839b",
+                    "on-surface-variant": "#45464d",
+                    "background": "#fcf8fa",
+                    "surface-container-low": "#f6f3f5",
+                    "on-secondary-container": "#00714d",
+                    "tertiary-fixed": "#d8e2ff",
+                    "secondary": "#006c49",
+                    "on-secondary-fixed": "#002113",
+                    "inverse-primary": "#bec6e0"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "gutter": "1rem",
+                    "unit": "4px",
+                    "max-width": "1600px",
+                    "dense-gap": "0.5rem",
+                    "container-padding": "1.5rem"
+            },
+            "fontFamily": {
+                    "mono-sm": ["JetBrains Mono"],
+                    "headline-md": ["Inter"],
+                    "title-sm": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "label-md": ["Inter"],
+                    "label-bold": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "body-md": ["Inter"]
+            },
+            "fontSize": {
+                    "mono-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "title-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "display-lg": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "label-bold": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter h-14 bg-surface border-b border-outline-variant transition-colors duration-200">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="menu">menu</span>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">Valley</h1>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary" data-icon="notifications">notifications</span>
+<div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center border border-outline-variant">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]" data-icon="person">person</span>
+</div>
+</div>
+</header>
+<!-- Content Canvas -->
+<main class="pt-14 pb-20 px-gutter min-h-screen">
+<!-- Welcome Section -->
+<section class="py-6">
+<span class="font-label-bold text-label-bold text-on-surface-variant">HOJE, 24 DE MAIO</span>
+<h2 class="font-display-lg text-display-lg text-primary mt-1">Olá, Valley Ops</h2>
+</section>
+<!-- KPI Grid (Bento Style Mobile) -->
+<section class="grid grid-cols-2 gap-dense-gap mb-8">
+<div class="col-span-2 bg-surface-container-lowest border border-outline-variant p-4 rounded-xl">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-md text-label-md text-on-surface-variant">Faturamento Total</span>
+<span class="bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded-full font-label-md text-[10px]">+12%</span>
+</div>
+<div class="font-display-lg text-display-lg text-primary">R$ 42.850,00</div>
+<div class="mt-2 h-1 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-3/4"></div>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-4 rounded-xl">
+<span class="font-label-md text-label-md text-on-surface-variant">Pedidos</span>
+<div class="font-headline-md text-headline-md text-primary mt-1">128</div>
+<div class="text-secondary font-label-md mt-1">↑ 8 hoje</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-4 rounded-xl">
+<span class="font-label-md text-label-md text-on-surface-variant">Ticket Médio</span>
+<div class="font-headline-md text-headline-md text-primary mt-1">R$ 334</div>
+<div class="text-on-surface-variant font-label-md mt-1">Estável</div>
+</div>
+</section>
+<!-- Quick Actions -->
+<section class="mb-8">
+<h3 class="font-title-sm text-title-sm text-primary mb-4">Atalhos do Dia</h3>
+<div class="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
+<button class="flex-shrink-0 flex flex-col items-center gap-2">
+<div class="w-14 h-14 bg-primary-container text-on-primary-container rounded-xl flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="add_shopping_cart">add_shopping_cart</span>
+</div>
+<span class="font-label-md text-label-md">Novo Pedido</span>
+</button>
+<button class="flex-shrink-0 flex flex-col items-center gap-2">
+<div class="w-14 h-14 bg-surface-container-high text-primary rounded-xl flex items-center justify-center border border-outline-variant">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+</div>
+<span class="font-label-md text-label-md">Estoque</span>
+</button>
+<button class="flex-shrink-0 flex flex-col items-center gap-2">
+<div class="w-14 h-14 bg-surface-container-high text-primary rounded-xl flex items-center justify-center border border-outline-variant">
+<span class="material-symbols-outlined" data-icon="qr_code_scanner">qr_code_scanner</span>
+</div>
+<span class="font-label-md text-label-md">Escaneamento</span>
+</button>
+<button class="flex-shrink-0 flex flex-col items-center gap-2">
+<div class="w-14 h-14 bg-surface-container-high text-primary rounded-xl flex items-center justify-center border border-outline-variant">
+<span class="material-symbols-outlined" data-icon="support_agent">support_agent</span>
+</div>
+<span class="font-label-md text-label-md">Suporte</span>
+</button>
+</div>
+</section>
+<!-- Integrations Status -->
+<section class="mb-8">
+<div class="flex justify-between items-center mb-4">
+<h3 class="font-title-sm text-title-sm text-primary">Status de Integrações</h3>
+<span class="font-label-md text-on-tertiary-container bg-tertiary-fixed-dim px-2 py-1 rounded-lg">4 Ativas</span>
+</div>
+<div class="space-y-dense-gap">
+<div class="flex items-center justify-between p-3 bg-surface-container-low border border-outline-variant rounded-lg">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-surface-container-lowest rounded flex items-center justify-center border border-outline-variant">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="hub">hub</span>
+</div>
+<div>
+<p class="font-body-md text-body-md text-primary font-bold">API Marketplaces</p>
+<p class="font-mono-sm text-mono-sm text-on-surface-variant">Sincronizado há 2m</p>
+</div>
+</div>
+<div class="w-2 h-2 rounded-full bg-secondary"></div>
+</div>
+<div class="flex items-center justify-between p-3 bg-surface-container-low border border-outline-variant rounded-lg">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-surface-container-lowest rounded flex items-center justify-center border border-outline-variant">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="local_shipping">local_shipping</span>
+</div>
+<div>
+<p class="font-body-md text-body-md text-primary font-bold">Logística Valley</p>
+<p class="font-mono-sm text-mono-sm text-on-surface-variant">Sincronizado há 5m</p>
+</div>
+</div>
+<div class="w-2 h-2 rounded-full bg-secondary"></div>
+</div>
+<div class="flex items-center justify-between p-3 bg-surface-container-low border border-outline-variant rounded-lg">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-surface-container-lowest rounded flex items-center justify-center border border-outline-variant">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="payments">payments</span>
+</div>
+<div>
+<p class="font-body-md text-body-md text-primary font-bold">Gateway Pagamentos</p>
+<p class="font-mono-sm text-mono-sm text-error">Erro de Conexão</p>
+</div>
+</div>
+<div class="w-2 h-2 rounded-full bg-error"></div>
+</div>
+</div>
+</section>
+<!-- Recent Activity Chart Simulation -->
+<section class="mb-8 bg-surface-container-lowest border border-outline-variant rounded-xl p-4">
+<h3 class="font-title-sm text-title-sm text-primary mb-4">Fluxo de Caixa (7d)</h3>
+<div class="flex items-end gap-2 h-32 w-full px-2">
+<div class="flex-1 bg-surface-container-high rounded-t-sm" style="height: 40%"></div>
+<div class="flex-1 bg-surface-container-high rounded-t-sm" style="height: 65%"></div>
+<div class="flex-1 bg-surface-container-high rounded-t-sm" style="height: 50%"></div>
+<div class="flex-1 bg-surface-container-high rounded-t-sm" style="height: 85%"></div>
+<div class="flex-1 bg-surface-container-high rounded-t-sm" style="height: 70%"></div>
+<div class="flex-1 bg-primary rounded-t-sm" style="height: 95%"></div>
+<div class="flex-1 bg-surface-container-high rounded-t-sm" style="height: 60%"></div>
+</div>
+<div class="flex justify-between mt-2 px-1">
+<span class="font-mono-sm text-mono-sm text-on-surface-variant">SEG</span>
+<span class="font-mono-sm text-mono-sm text-on-surface-variant">TER</span>
+<span class="font-mono-sm text-mono-sm text-on-surface-variant">QUA</span>
+<span class="font-mono-sm text-mono-sm text-on-surface-variant">QUI</span>
+<span class="font-mono-sm text-mono-sm text-on-surface-variant">SEX</span>
+<span class="font-mono-sm text-mono-sm text-primary font-bold">SAB</span>
+<span class="font-mono-sm text-mono-sm text-on-surface-variant">DOM</span>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-16 px-2 pb-safe bg-surface border-t border-outline-variant">
+<a class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-4 py-1 transition-all duration-200 active:scale-95" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Início</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 transition-all duration-200 active:scale-95 hover:bg-surface-container-low" href="#">
+<span class="material-symbols-outlined" data-icon="token">token</span>
+<span class="font-label-md text-label-md">Operações</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 transition-all duration-200 active:scale-95 hover:bg-surface-container-low" href="#">
+<span class="material-symbols-outlined" data-icon="filter_alt">filter_alt</span>
+<span class="font-label-md text-label-md">Filtros</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 transition-all duration-200 active:scale-95 hover:bg-surface-container-low" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-label-md text-label-md">Relatórios</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 transition-all duration-200 active:scale-95 hover:bg-surface-container-low" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-md text-label-md">Perfil</span>
+</a>
+</nav>
+</body></html>

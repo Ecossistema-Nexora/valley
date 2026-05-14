@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Gestão Fiscal | Valley ERP</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-container": "#3980f4",
+                    "on-error-container": "#93000a",
+                    "error-container": "#ffdad6",
+                    "on-secondary-fixed": "#002113",
+                    "on-secondary": "#ffffff",
+                    "on-primary-fixed": "#131b2e",
+                    "background": "#fcf8fa",
+                    "surface": "#fcf8fa",
+                    "tertiary-container": "#001a42",
+                    "surface-variant": "#e4e2e4",
+                    "on-tertiary-fixed-variant": "#004395",
+                    "on-primary-container": "#7c839b",
+                    "on-background": "#1b1b1d",
+                    "on-surface-variant": "#45464d",
+                    "secondary-fixed": "#6ffbbe",
+                    "secondary": "#006c49",
+                    "primary": "#000000",
+                    "on-primary-fixed-variant": "#3f465c",
+                    "on-error": "#ffffff",
+                    "surface-container-high": "#eae7e9",
+                    "inverse-on-surface": "#f3f0f2",
+                    "secondary-fixed-dim": "#4edea3",
+                    "surface-bright": "#fcf8fa",
+                    "on-primary": "#ffffff",
+                    "on-secondary-fixed-variant": "#005236",
+                    "surface-tint": "#565e74",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary": "#000000",
+                    "secondary-container": "#6cf8bb",
+                    "outline-variant": "#c6c6cd",
+                    "surface-container-low": "#f6f3f5",
+                    "surface-container": "#f0edef",
+                    "inverse-primary": "#bec6e0",
+                    "surface-container-highest": "#e4e2e4",
+                    "primary-container": "#131b2e",
+                    "on-tertiary": "#ffffff",
+                    "primary-fixed-dim": "#bec6e0",
+                    "on-secondary-container": "#00714d",
+                    "tertiary-fixed": "#d8e2ff",
+                    "tertiary-fixed-dim": "#adc6ff",
+                    "primary-fixed": "#dae2fd",
+                    "on-surface": "#1b1b1d",
+                    "on-tertiary-fixed": "#001a42",
+                    "surface-dim": "#dcd9db",
+                    "outline": "#76777d",
+                    "inverse-surface": "#303032",
+                    "error": "#ba1a1a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "unit": "4px",
+                    "max-width": "1600px",
+                    "gutter": "1rem",
+                    "dense-gap": "0.5rem",
+                    "container-padding": "1.5rem"
+            },
+            "fontFamily": {
+                    "body-sm": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "body-md": ["Inter"],
+                    "title-sm": ["Inter"],
+                    "mono-sm": ["JetBrains Mono"],
+                    "display-lg": ["Inter"],
+                    "label-md": ["Inter"],
+                    "label-bold": ["Inter"]
+            },
+            "fontSize": {
+                    "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "title-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "mono-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                    "display-lg": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "label-bold": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body {
+            background-color: #f8fafc; /* Canvas Level 0 */
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body class="font-body-md text-on-surface">
+<!-- Sidebar Navigation (JSON Authority) -->
+<aside class="hidden md:flex flex-col border-r border-outline-variant w-60 h-screen fixed left-0 top-0 z-40 bg-surface">
+<div class="px-container-padding py-6 flex items-center gap-3">
+<div class="w-8 h-8 bg-primary rounded flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined">account_balance</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-black text-on-surface">Valley</h1>
+<p class="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold">Commercial Hub</p>
+</div>
+</div>
+<nav class="flex-1 px-2 py-4 space-y-1">
+<div class="flex items-center gap-dense-gap px-gutter py-3 cursor-pointer hover:bg-surface-container-high transition-all text-on-surface-variant font-label-md">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</div>
+<div class="flex items-center gap-dense-gap px-gutter py-3 cursor-pointer text-secondary border-r-2 border-secondary font-label-bold bg-secondary-container/10">
+<span class="material-symbols-outlined" data-icon="analytics" style="font-variation-settings: 'FILL' 1;">analytics</span>
+<span>Operations</span>
+</div>
+<div class="flex items-center gap-dense-gap px-gutter py-3 cursor-pointer hover:bg-surface-container-high transition-all text-on-surface-variant font-label-md">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span>Inventory</span>
+</div>
+<div class="flex items-center gap-dense-gap px-gutter py-3 cursor-pointer hover:bg-surface-container-high transition-all text-on-surface-variant font-label-md">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span>Finance</span>
+</div>
+<div class="flex items-center gap-dense-gap px-gutter py-3 cursor-pointer hover:bg-surface-container-high transition-all text-on-surface-variant font-label-md">
+<span class="material-symbols-outlined" data-icon="leaderboard">leaderboard</span>
+<span>Analytics</span>
+</div>
+<div class="flex items-center gap-dense-gap px-gutter py-3 cursor-pointer hover:bg-surface-container-high transition-all text-on-surface-variant font-label-md">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span>Settings</span>
+</div>
+</nav>
+<div class="p-4 border-t border-outline-variant">
+<div class="flex items-center gap-3">
+<img alt="User profile" class="w-8 h-8 rounded-full border border-outline-variant" data-alt="Professional corporate headshot of a financial executive in a sharp navy suit, looking confident against a clean, brightly lit modern office background. The style is high-contrast, professional, and follows a corporate light-mode aesthetic with soft shadows and precise focus." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBUTlq4GsCtocEC8MlHmUeN68Rq-pEVV1x7YzxLs7wHbbue_X7an8o9pXFpbpN_KuueF7mvtd5IOTZamiRpI01wd62dHsnfOLSr4NRuZoGG1BfVBeEmhbj038-KYvslET5yOSKpkDjnfzi88hQsg6etsvy8HkDzO1oKnL49PNekdKRDBBTywLH92g-ceFKooENtowdTfWNbaeasEgWdAR5Hx4ZMrZNIMpiteBLDcHoOUwS569roDOU1HwI-LUnfkcYo2vARXh5Uqlzw"/>
+<div class="overflow-hidden">
+<p class="font-label-bold text-on-surface truncate">Admin Fiscal</p>
+<p class="text-[10px] text-on-surface-variant truncate">Unidade São Paulo</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="md:ml-60 min-h-screen pb-20 md:pb-0">
+<!-- TopAppBar (JSON Authority) -->
+<header class="flex justify-between items-center w-full px-container-padding h-16 sticky top-0 z-50 bg-primary-container text-on-primary-container border-b border-outline-variant">
+<div class="flex items-center gap-4">
+<div class="md:hidden">
+<span class="material-symbols-outlined text-on-primary">menu</span>
+</div>
+<div class="hidden md:flex bg-surface-variant/10 rounded px-3 py-1 items-center gap-2 border border-outline-variant/20">
+<span class="material-symbols-outlined text-body-md" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-md w-64 placeholder:text-on-primary-container/50" placeholder="Buscar tributos ou notas..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="hover:bg-surface-variant/10 p-2 rounded-full transition-colors relative">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="hover:bg-surface-variant/10 p-2 rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+</button>
+</div>
+</header>
+<!-- Secondary Navigation (Tabs) -->
+<div class="bg-surface border-b border-outline-variant px-container-padding sticky top-16 z-30 overflow-x-auto no-scrollbar">
+<div class="flex gap-8 h-12 items-center">
+<a class="font-label-bold text-secondary border-b-2 border-secondary h-full flex items-center px-1 whitespace-nowrap" href="#">Resumo Fiscal</a>
+<a class="font-label-md text-on-surface-variant hover:text-on-surface h-full flex items-center px-1 whitespace-nowrap" href="#">Emissão de Notas</a>
+<a class="font-label-md text-on-surface-variant hover:text-on-surface h-full flex items-center px-1 whitespace-nowrap" href="#">Obrigações Acessórias</a>
+<a class="font-label-md text-on-surface-variant hover:text-on-surface h-full flex items-center px-1 whitespace-nowrap" href="#">Apuração de Impostos</a>
+<a class="font-label-md text-on-surface-variant hover:text-on-surface h-full flex items-center px-1 whitespace-nowrap" href="#">Configuração Tributária</a>
+</div>
+</div>
+<!-- Dashboard Content -->
+<div class="p-container-padding max-w-max-width mx-auto space-y-6">
+<!-- Breadcrumbs & Header -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+<div>
+<nav class="flex items-center gap-2 text-label-md text-on-surface-variant mb-1">
+<span>Operações</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-secondary font-medium">Gestão Fiscal</span>
+</nav>
+<h2 class="font-display-lg text-display-lg text-on-surface">Painel de Controle Tributário</h2>
+</div>
+<div class="flex gap-dense-gap">
+<button class="bg-surface border border-outline px-4 py-2 rounded font-label-bold text-on-surface hover:bg-surface-container transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">download</span> Exportar Relatório
+                    </button>
+<button class="bg-secondary text-on-secondary px-4 py-2 rounded font-label-bold hover:opacity-90 transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">sync</span> Sincronizar SEFAZ
+                    </button>
+</div>
+</div>
+<!-- KPI Grid (Bento Style) -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+<!-- ICMS -->
+<div class="bg-surface border border-outline-variant p-4 rounded-lg flex flex-col justify-between h-32 hover:border-secondary transition-colors cursor-default">
+<div class="flex justify-between items-start">
+<span class="font-label-bold text-on-surface-variant uppercase">ICMS a Pagar</span>
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
+</div>
+<div>
+<div class="font-display-lg text-display-lg text-on-surface leading-tight">R$ 45.290,12</div>
+<div class="flex items-center gap-1 text-label-md text-secondary">
+<span class="material-symbols-outlined text-[14px]">trending_up</span> 12% vs mês anterior
+                        </div>
+</div>
+</div>
+<!-- IPI -->
+<div class="bg-surface border border-outline-variant p-4 rounded-lg flex flex-col justify-between h-32 hover:border-secondary transition-colors cursor-default">
+<div class="flex justify-between items-start">
+<span class="font-label-bold text-on-surface-variant uppercase">IPI Acumulado</span>
+<span class="material-symbols-outlined text-on-tertiary-container">inventory</span>
+</div>
+<div>
+<div class="font-display-lg text-display-lg text-on-surface leading-tight">R$ 12.840,00</div>
+<div class="flex items-center gap-1 text-label-md text-error">
+<span class="material-symbols-outlined text-[14px]">trending_down</span> 4.2% vs mês anterior
+                        </div>
+</div>
+</div>
+<!-- PIS/COFINS -->
+<div class="bg-surface border border-outline-variant p-4 rounded-lg flex flex-col justify-between h-32 hover:border-secondary transition-colors cursor-default">
+<div class="flex justify-between items-start">
+<span class="font-label-bold text-on-surface-variant uppercase">PIS/COFINS</span>
+<span class="material-symbols-outlined text-secondary">analytics</span>
+</div>
+<div>
+<div class="font-display-lg text-display-lg text-on-surface leading-tight">R$ 22.150,45</div>
+<div class="flex items-center gap-1 text-label-md text-secondary">
+<span class="material-symbols-outlined text-[14px]">check_circle</span> Em conformidade
+                        </div>
+</div>
+</div>
+<!-- Próximo Vencimento -->
+<div class="bg-primary-container p-4 rounded-lg flex flex-col justify-between h-32">
+<div class="flex justify-between items-start">
+<span class="font-label-bold text-on-primary-container uppercase">Próximo Vencimento</span>
+<span class="material-symbols-outlined text-on-primary" data-weight="fill" style="font-variation-settings: 'FILL' 1;">event</span>
+</div>
+<div>
+<div class="font-display-lg text-display-lg text-on-primary leading-tight">20 Mai</div>
+<div class="text-label-md text-on-primary-container">DAS - Simples Nacional</div>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- NF-e Transmission Status -->
+<div class="lg:col-span-2 space-y-4">
+<div class="bg-surface border border-outline-variant rounded-xl overflow-hidden">
+<div class="px-gutter py-4 border-b border-outline-variant bg-surface-container-low flex justify-between items-center">
+<h3 class="font-title-sm text-title-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">send</span>
+                                Status de Transmissão de Notas (Últimas 24h)
+                            </h3>
+<div class="flex gap-2">
+<span class="px-2 py-1 bg-secondary-container/20 text-secondary text-[10px] font-bold rounded">ONLINE</span>
+</div>
+</div>
+<div class="p-gutter grid grid-cols-1 md:grid-cols-3 gap-4">
+<!-- NF-e -->
+<div class="p-4 bg-surface-container rounded border border-outline-variant/30 flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined">description</span>
+</div>
+<div>
+<p class="text-label-md text-on-surface-variant">NF-e</p>
+<p class="font-headline-md text-headline-md">1.240 <span class="text-label-md font-normal text-secondary">Autorizadas</span></p>
+</div>
+</div>
+<!-- NFS-e -->
+<div class="p-4 bg-surface-container rounded border border-outline-variant/30 flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-tertiary-fixed flex items-center justify-center text-on-tertiary-fixed-variant">
+<span class="material-symbols-outlined">storefront</span>
+</div>
+<div>
+<p class="text-label-md text-on-surface-variant">NFS-e</p>
+<p class="font-headline-md text-headline-md">452 <span class="text-label-md font-normal text-secondary">Processadas</span></p>
+</div>
+</div>
+<!-- Erros -->
+<div class="p-4 bg-error-container/20 rounded border border-error/20 flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-error-container flex items-center justify-center text-error">
+<span class="material-symbols-outlined">warning</span>
+</div>
+<div>
+<p class="text-label-md text-on-surface-variant">Rejeições</p>
+<p class="font-headline-md text-headline-md text-error">03 <span class="text-label-md font-normal">Pendentes</span></p>
+</div>
+</div>
+</div>
+<!-- Simple Chart Visualization Placeholder -->
+<div class="px-gutter pb-4">
+<div class="h-32 w-full bg-surface-container-lowest rounded border border-outline-variant flex items-end justify-between px-6 pb-2">
+<div class="w-8 bg-secondary h-[40%] rounded-t-sm" title="08:00 - 150 notas"></div>
+<div class="w-8 bg-secondary h-[65%] rounded-t-sm" title="10:00 - 240 notas"></div>
+<div class="w-8 bg-secondary h-[90%] rounded-t-sm" title="12:00 - 410 notas"></div>
+<div class="w-8 bg-secondary h-[55%] rounded-t-sm" title="14:00 - 200 notas"></div>
+<div class="w-8 bg-secondary-container h-[75%] rounded-t-sm" title="16:00 - 320 notas"></div>
+<div class="w-8 bg-secondary h-[45%] rounded-t-sm" title="18:00 - 180 notas"></div>
+<div class="w-8 bg-secondary h-[20%] rounded-t-sm" title="20:00 - 60 notas"></div>
+</div>
+<div class="flex justify-between px-2 mt-1 text-[10px] text-on-surface-variant font-mono-sm">
+<span>08:00</span><span>10:00</span><span>12:00</span><span>14:00</span><span>16:00</span><span>18:00</span><span>20:00</span>
+</div>
+</div>
+</div>
+<!-- Detailed Table: Obrigações Acessórias -->
+<div class="bg-surface border border-outline-variant rounded-xl overflow-hidden">
+<div class="px-gutter py-4 border-b border-outline-variant flex justify-between items-center">
+<h3 class="font-title-sm text-title-sm uppercase tracking-wider">Obrigações Acessórias</h3>
+<button class="text-secondary font-label-bold text-label-md hover:underline">Ver todas</button>
+</div>
+<div class="overflow-x-auto custom-scrollbar">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low border-b border-outline-variant">
+<tr>
+<th class="px-gutter py-3 font-label-bold text-on-surface-variant uppercase text-[10px]">Obrigação</th>
+<th class="px-gutter py-3 font-label-bold text-on-surface-variant uppercase text-[10px]">Competência</th>
+<th class="px-gutter py-3 font-label-bold text-on-surface-variant uppercase text-[10px]">Vencimento</th>
+<th class="px-gutter py-3 font-label-bold text-on-surface-variant uppercase text-[10px]">Status</th>
+<th class="px-gutter py-3 font-label-bold text-on-surface-variant uppercase text-[10px] text-right">Ação</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/30">
+<tr class="hover:bg-surface-container-high/50 transition-colors">
+<td class="px-gutter py-3">
+<p class="font-label-bold text-on-surface">EFD ICMS IPI</p>
+<p class="text-[10px] text-on-surface-variant">Sped Fiscal</p>
+</td>
+<td class="px-gutter py-3 font-mono-sm text-body-sm">Abril/2024</td>
+<td class="px-gutter py-3 font-mono-sm text-body-sm">20/05/2024</td>
+<td class="px-gutter py-3">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-secondary-container/30 text-on-secondary-container text-[10px] font-bold">
+<span class="w-1.5 h-1.5 bg-secondary rounded-full"></span> TRANSMITIDO
+                                            </span>
+</td>
+<td class="px-gutter py-3 text-right">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-secondary">visibility</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-high/50 transition-colors">
+<td class="px-gutter py-3">
+<p class="font-label-bold text-on-surface">EFD Contribuições</p>
+<p class="text-[10px] text-on-surface-variant">PIS/COFINS</p>
+</td>
+<td class="px-gutter py-3 font-mono-sm text-body-sm">Abril/2024</td>
+<td class="px-gutter py-3 font-mono-sm text-body-sm">15/06/2024</td>
+<td class="px-gutter py-3">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container-highest text-on-surface-variant text-[10px] font-bold">
+<span class="w-1.5 h-1.5 bg-outline rounded-full"></span> PENDENTE
+                                            </span>
+</td>
+<td class="px-gutter py-3 text-right">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-secondary">cloud_upload</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-high/50 transition-colors">
+<td class="px-gutter py-3">
+<p class="font-label-bold text-on-surface">DCTF Mensal</p>
+<p class="text-[10px] text-on-surface-variant">Débitos e Créditos Federais</p>
+</td>
+<td class="px-gutter py-3 font-mono-sm text-body-sm">Março/2024</td>
+<td class="px-gutter py-3 font-mono-sm text-body-sm">22/05/2024</td>
+<td class="px-gutter py-3">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-error-container/30 text-error text-[10px] font-bold">
+<span class="w-1.5 h-1.5 bg-error rounded-full"></span> EM ATRASO
+                                            </span>
+</td>
+<td class="px-gutter py-3 text-right">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-secondary">priority_high</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- Fiscal Calendar & Alerts -->
+<div class="space-y-6">
+<!-- Mini Calendar -->
+<div class="bg-surface border border-outline-variant rounded-xl p-gutter">
+<div class="flex justify-between items-center mb-4">
+<h3 class="font-label-bold text-on-surface uppercase tracking-wider">Calendário Fiscal</h3>
+<div class="flex gap-2">
+<button class="material-symbols-outlined text-body-md">chevron_left</button>
+<button class="material-symbols-outlined text-body-md">chevron_right</button>
+</div>
+</div>
+<div class="grid grid-cols-7 gap-1 text-center text-[10px] font-label-bold text-on-surface-variant mb-2">
+<span>D</span><span>S</span><span>T</span><span>Q</span><span>Q</span><span>S</span><span>S</span>
+</div>
+<div class="grid grid-cols-7 gap-1 text-center">
+<!-- Simple Mock Days -->
+<span class="py-2 text-on-surface-variant/30 font-body-sm">28</span>
+<span class="py-2 text-on-surface-variant/30 font-body-sm">29</span>
+<span class="py-2 text-on-surface-variant/30 font-body-sm">30</span>
+<span class="py-2 font-body-sm hover:bg-surface-container rounded cursor-pointer">1</span>
+<span class="py-2 font-body-sm hover:bg-surface-container rounded cursor-pointer">2</span>
+<span class="py-2 font-body-sm hover:bg-surface-container rounded cursor-pointer">3</span>
+<span class="py-2 font-body-sm hover:bg-surface-container rounded cursor-pointer">4</span>
+<span class="py-2 font-body-sm hover:bg-surface-container rounded cursor-pointer">5</span>
+<span class="py-2 font-body-sm hover:bg-surface-container rounded cursor-pointer">6</span>
+<span class="py-2 font-body-sm hover:bg-surface-container rounded cursor-pointer">7</span>
+<span class="py-2 font-body-sm hover:bg-surface-container rounded cursor-pointer">8</span>
+<span class="py-2 font-body-sm hover:bg-surface-container rounded cursor-pointer">9</span>
+<span class="py-2 font-body-sm hover:bg-surface-container rounded cursor-pointer">10</span>
+<span class="py-2 font-body-sm hover:bg-surface-container rounded cursor-pointer">11</span>
+<span class="py-2 font-body-sm hover:bg-surface-container rounded cursor-pointer">12</span>
+<span class="py-2 font-body-sm hover:bg-surface-container rounded cursor-pointer">13</span>
+<span class="py-2 font-body-sm hover:bg-surface-container rounded cursor-pointer">14</span>
+<span class="py-2 font-body-sm hover:bg-surface-container rounded cursor-pointer bg-error text-on-error relative">15<span class="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 bg-on-error rounded-full mb-0.5"></span></span>
+<span class="py-2 font-body-sm hover:bg-surface-container rounded cursor-pointer">16</span>
+<span class="py-2 font-body-sm hover:bg-surface-container rounded cursor-pointer">17</span>
+<span class="py-2 font-body-sm hover:bg-surface-container rounded cursor-pointer">18</span>
+<span class="py-2 font-body-sm hover:bg-surface-container rounded cursor-pointer">19</span>
+<span class="py-2 font-body-sm hover:bg-surface-container rounded cursor-pointer bg-secondary-container text-on-secondary-container border border-secondary font-bold">20</span>
+<span class="py-2 font-body-sm hover:bg-surface-container rounded cursor-pointer">21</span>
+<span class="py-2 font-body-sm hover:bg-surface-container rounded cursor-pointer bg-secondary-container/50">22</span>
+</div>
+</div>
+<!-- Integration Card -->
+<div class="bg-surface border border-outline-variant rounded-xl p-4 space-y-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-[#005cff] rounded-lg flex items-center justify-center p-1">
+<img alt="Sefaz Logo" class="w-full h-full object-contain brightness-0 invert" data-alt="Modern logo of a government tax authority digital portal, featuring minimalist architectural lines and official blue colors. The style is sharp vector-like digital art on a clean background, conveying security and authority in a tech-forward corporate environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBOIsJi1qvdmKe4keolmaUuEXgmzsX_c8BZ-uteKRk0KAm3Hk-krwET5910UjWvofUlEgMAbbNbgNWKwLjcR1ciPd3fvtxFiCgI6tVumzqNMlAIrmLdb_aI9PeE-5koI0pLRWO95PEMOWmyseUTlnYfKDCuEpLjdYlLvca1V8gPdUbZzttT5Iog_U8IhbmkhvuFTPYZGiUNCtspQrmMW6sy838C5D7nZP4Ap4wmPGA7lCICrsz2PAUHDIEW82ghz_O0J1lCV7yXr59M"/>
+</div>
+<div>
+<h4 class="font-label-bold text-on-surface">Conexão SEFAZ</h4>
+<p class="font-mono-sm text-[10px] text-on-surface-variant">Last Synced: 14:32:01</p>
+</div>
+</div>
+<div class="flex items-center justify-between p-3 bg-surface-container rounded border border-outline-variant/30">
+<span class="text-body-sm font-medium">Auto-Sync Certificado A1</span>
+<div class="w-8 h-4 bg-secondary rounded-full relative cursor-pointer">
+<div class="absolute right-0.5 top-0.5 w-3 h-3 bg-on-secondary rounded-full"></div>
+</div>
+</div>
+<button class="w-full py-2 bg-surface-container-high hover:bg-surface-container-highest transition-all rounded font-label-bold text-label-md">Configurar Certificados</button>
+</div>
+<!-- Operational History -->
+<div class="space-y-3">
+<h3 class="font-label-bold text-on-surface-variant uppercase text-[10px] tracking-widest pl-2">Logs Recentes</h3>
+<div class="space-y-0 relative before:content-[''] before:absolute before:left-4 before:top-0 before:bottom-0 before:w-px before:bg-outline-variant">
+<div class="relative pl-10 pb-4">
+<div class="absolute left-3 top-1 w-2 h-2 rounded-full bg-secondary border-2 border-surface"></div>
+<p class="text-body-sm font-medium">EFD Reinf transmitida com sucesso</p>
+<p class="text-[10px] text-on-surface-variant font-mono-sm">Hoje, 10:45 • Admin Fiscal</p>
+</div>
+<div class="relative pl-10 pb-4">
+<div class="absolute left-3 top-1 w-2 h-2 rounded-full bg-error border-2 border-surface"></div>
+<p class="text-body-sm font-medium">Alerta: Erro de Schema na NF-e #4502</p>
+<p class="text-[10px] text-on-surface-variant font-mono-sm">Hoje, 09:12 • Sistema</p>
+</div>
+<div class="relative pl-10">
+<div class="absolute left-3 top-1 w-2 h-2 rounded-full bg-on-tertiary-container border-2 border-surface"></div>
+<p class="text-body-sm font-medium">Nova regra tributária aplicada (Lei 123/24)</p>
+<p class="text-[10px] text-on-surface-variant font-mono-sm">Ontem, 16:50 • Jurídico</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (JSON Authority - Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 bg-surface border-t border-outline-variant shadow-lg rounded-t-xl">
+<div class="flex flex-col items-center justify-center text-secondary font-label-bold bg-secondary-container rounded-full px-4 py-1 active:scale-95 transition-transform cursor-pointer">
+<span class="material-symbols-outlined" data-icon="home" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="text-[10px]">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container transition-colors active:scale-95 cursor-pointer p-2">
+<span class="material-symbols-outlined" data-icon="assignment">assignment</span>
+<span class="text-[10px]">Tasks</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container transition-colors active:scale-95 cursor-pointer p-2">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+<span class="text-[10px]">Orders</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container transition-colors active:scale-95 cursor-pointer p-2">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+<span class="text-[10px]">More</span>
+</div>
+</nav>
+<!-- Contextual FAB (Restricted to Dashboard screens) -->
+<button class="fixed right-6 bottom-20 md:bottom-6 w-14 h-14 bg-secondary text-on-secondary rounded-full shadow-xl flex items-center justify-center hover:scale-105 active:scale-95 transition-all z-40">
+<span class="material-symbols-outlined text-[32px]">add</span>
+</button>
+</body></html>

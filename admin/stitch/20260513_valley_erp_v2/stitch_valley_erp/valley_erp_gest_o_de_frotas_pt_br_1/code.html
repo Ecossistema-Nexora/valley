@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-variant": "#e4e2e4",
+                        "surface-container-high": "#eae7e9",
+                        "tertiary-fixed-dim": "#adc6ff",
+                        "surface-container": "#f0edef",
+                        "on-tertiary-container": "#3980f4",
+                        "background": "#fcf8fa",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "inverse-surface": "#303032",
+                        "on-tertiary-fixed": "#001a42",
+                        "primary": "#000000",
+                        "on-error-container": "#93000a",
+                        "on-background": "#1b1b1d",
+                        "outline": "#76777d",
+                        "on-primary-fixed": "#131b2e",
+                        "inverse-primary": "#bec6e0",
+                        "tertiary": "#000000",
+                        "surface-tint": "#565e74",
+                        "outline-variant": "#c6c6cd",
+                        "secondary-fixed": "#6ffbbe",
+                        "surface-bright": "#fcf8fa",
+                        "on-secondary-container": "#00714d",
+                        "secondary": "#006c49",
+                        "on-tertiary-fixed-variant": "#004395",
+                        "surface-container-low": "#f6f3f5",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "tertiary-container": "#001a42",
+                        "secondary-container": "#6cf8bb",
+                        "on-surface-variant": "#45464d",
+                        "surface-dim": "#dcd9db",
+                        "tertiary-fixed": "#d8e2ff",
+                        "surface-container-highest": "#e4e2e4",
+                        "primary-fixed": "#dae2fd",
+                        "primary-fixed-dim": "#bec6e0",
+                        "secondary-fixed-dim": "#4edea3",
+                        "inverse-on-surface": "#f3f0f2",
+                        "on-error": "#ffffff",
+                        "on-secondary-fixed": "#002113",
+                        "on-primary-container": "#7c839b",
+                        "surface": "#fcf8fa",
+                        "on-secondary-fixed-variant": "#005236",
+                        "on-primary": "#ffffff",
+                        "on-surface": "#1b1b1d",
+                        "on-tertiary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "primary-container": "#131b2e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "dense-gap": "0.5rem",
+                        "gutter": "1rem",
+                        "container-padding": "1.5rem",
+                        "max-width": "1600px",
+                        "unit": "4px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "mono-sm": ["JetBrains Mono"],
+                        "display-lg": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "title-sm": ["Inter"],
+                        "label-bold": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "mono-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                        "display-lg": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "headline-md": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "title-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                        "label-bold": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md overflow-x-hidden">
+<!-- TopNavBar (Large) -->
+<header class="hidden md:flex justify-between items-center w-full px-container-padding h-16 z-50 fixed top-0 bg-primary-container dark:bg-primary-container border-b border-on-primary-container">
+<div class="flex items-center gap-8">
+<span class="font-headline-md text-headline-md font-bold text-on-primary">Valley</span>
+<nav class="flex gap-6 h-full items-center">
+<a class="text-on-primary-container font-medium hover:bg-on-primary-fixed-variant transition-colors px-2 py-1" href="#">Dashboard</a>
+<a class="text-on-primary font-bold border-b-2 border-secondary-fixed px-2 py-1" href="#">Logística</a>
+<a class="text-on-primary-container font-medium hover:bg-on-primary-fixed-variant transition-colors px-2 py-1" href="#">Frota</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-primary cursor-pointer hover:bg-on-primary-fixed-variant p-2 rounded" data-icon="notifications">notifications</span>
+<span class="material-symbols-outlined text-on-primary cursor-pointer hover:bg-on-primary-fixed-variant p-2 rounded" data-icon="help">help</span>
+<span class="material-symbols-outlined text-on-primary cursor-pointer hover:bg-on-primary-fixed-variant p-2 rounded" data-icon="settings">settings</span>
+<img alt="Avatar do Usuário" class="w-8 h-8 rounded-full border border-outline-variant" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDc0avAr0E5N6b0qFjqffuuYf4KYIOqpOQctJq6vkFT6M1MhX33YljdgN_eT0entxrY7SKD1_GczlabtCGya5B9gAQeJ3_rvnytSLV7wVvCMt0NItQZmoTGGy-L6DiHyJKoV3UhmC1BFyVj-eYIzOhvdQ4xd-cTyCBklo0mGywm3ywBC_dkkebIr1SI3QvJjWwCH2e_ev78QiBmAO6acQ3Mr_5_BKpKtSGufjTZrzOYD4dk1DyEj74TX80EMxUWgKq-dbWeK14zSmqJ"/>
+</div>
+</header>
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col pt-20 pb-4 px-4 fixed left-0 top-0 h-full w-60 bg-surface border-r border-outline-variant z-40">
+<div class="mb-6 flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="local_shipping">local_shipping</span>
+<div>
+<h2 class="font-title-sm text-title-sm text-primary">Valley ERP</h2>
+<p class="font-label-md text-label-md text-on-surface-variant">Gestão de Frotas</p>
+</div>
+</div>
+<button class="mb-8 w-full bg-primary text-on-primary py-2 rounded-lg font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+            Novo Registro
+        </button>
+<nav class="space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 bg-secondary-container text-on-secondary-container rounded-lg font-bold scale-95 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Painel Geral</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-low transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="route">route</span>
+<span class="font-label-md text-label-md">Rotas Ativas</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-low transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="commute">commute</span>
+<span class="font-label-md text-label-md">Veículos</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-low transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-md text-label-md">Motoristas</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-low transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="warning">warning</span>
+<span class="font-label-md text-label-md">Alertas</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-low transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-label-md text-label-md">Relatórios</span>
+</a>
+</nav>
+</aside>
+<!-- Mobile TopAppBar -->
+<header class="md:hidden flex justify-between items-center w-full px-4 h-14 fixed top-0 z-50 bg-primary-container text-on-primary shadow-md">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+<span class="font-headline-md text-headline-md">Valley</span>
+<div class="flex gap-4">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</div>
+</header>
+<!-- Main Content -->
+<main class="md:ml-60 pt-16 md:pt-16 pb-20 md:pb-4 min-h-screen bg-background">
+<div class="max-w-[1600px] mx-auto px-4 md:px-container-padding py-6">
+<!-- Workspace Header -->
+<div class="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
+<div>
+<nav class="flex text-on-surface-variant font-label-md text-label-md gap-1 items-center mb-1">
+<span>Logística</span>
+<span class="material-symbols-outlined text-xs" data-icon="chevron_right">chevron_right</span>
+<span class="text-primary font-bold">Gestão de Frotas</span>
+</nav>
+<h1 class="font-display-lg text-display-lg">Visão Geral da Operação</h1>
+</div>
+<div class="flex items-center gap-2">
+<button class="bg-surface border border-outline-variant px-4 py-2 flex items-center gap-2 hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined" data-icon="filter_list">filter_list</span>
+                        Filtros
+                    </button>
+<button class="bg-primary text-on-primary px-4 py-2 flex items-center gap-2 font-bold shadow-sm hover:opacity-90">
+<span class="material-symbols-outlined" data-icon="sync">sync</span>
+                        Sincronizar
+                    </button>
+</div>
+</div>
+<!-- KPI Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+<div class="bg-surface border border-outline-variant p-4 rounded shadow-sm">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-bold text-label-bold text-on-surface-variant">VEÍCULOS EM ROTA</span>
+<span class="text-secondary font-bold text-xs">+12%</span>
+</div>
+<p class="font-display-lg text-display-lg">42 / 50</p>
+<div class="w-full bg-surface-container h-1 mt-2">
+<div class="bg-secondary h-1" style="width: 84%"></div>
+</div>
+</div>
+<div class="bg-surface border border-outline-variant p-4 rounded shadow-sm">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-bold text-label-bold text-on-surface-variant">CONSUMO MÉDIO</span>
+<span class="text-error font-bold text-xs">+4.2%</span>
+</div>
+<p class="font-display-lg text-display-lg">11,2 L/km</p>
+<p class="text-on-surface-variant font-body-sm text-body-sm mt-1">Comparado ao mês anterior</p>
+</div>
+<div class="bg-surface border border-outline-variant p-4 rounded shadow-sm">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-bold text-label-bold text-on-surface-variant">ENTREGAS NO PRAZO</span>
+<span class="text-secondary font-bold text-xs">98.4%</span>
+</div>
+<p class="font-display-lg text-display-lg">1.240</p>
+<p class="text-on-surface-variant font-body-sm text-body-sm mt-1">Eficiência de SLA mantida</p>
+</div>
+<div class="bg-surface border border-outline-variant p-4 rounded shadow-sm border-l-4 border-l-error">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-bold text-label-bold text-on-surface-variant">ALERTAS CRÍTICOS</span>
+<span class="bg-error text-on-error px-2 rounded-full text-[10px] font-bold">AGORA</span>
+</div>
+<p class="font-display-lg text-display-lg">04</p>
+<p class="text-error font-body-sm text-body-sm mt-1">Ações de manutenção pendentes</p>
+</div>
+</div>
+<!-- Main Operational Area (Bento Grid Style) -->
+<div class="grid grid-cols-12 gap-6">
+<!-- Real-time Map Area -->
+<div class="col-span-12 lg:col-span-8 bg-surface border border-outline-variant rounded relative overflow-hidden h-[500px]">
+<div class="absolute top-4 left-4 z-10 bg-surface/90 backdrop-blur-sm border border-outline-variant p-2 flex gap-2">
+<span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded font-bold text-xs flex items-center gap-1">
+<span class="w-2 h-2 bg-secondary rounded-full animate-pulse"></span> Em Movimento
+                        </span>
+<span class="bg-surface-container text-on-surface-variant px-3 py-1 rounded font-bold text-xs">Ocioso</span>
+</div>
+<div class="w-full h-full bg-surface-container flex items-center justify-center relative">
+<img class="w-full h-full object-cover opacity-80" data-alt="A highly detailed professional fleet tracking map UI interface showing a metropolitan area with stylized minimalist roads. Various small colored icons representing delivery trucks are distributed across the city grid, some with small movement paths. The aesthetic is clean and high-tech with a professional color palette of muted greys, soft blues, and vibrant tracking indicators. Soft overhead laboratory-style lighting reflects off the interface components." data-location="São Paulo, Brazil" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFBlBEXJL3q0MBpz42TWhxfVuB0v1JNKfvDmh4kn2mSaK0XVoFdSPH-078iXebO9tNmiXtbu0D-kzN92h4xJE10y3G6qNuE9hC1bKdUzrr0sAGV0te7CD2aoTcja7NY3ShB-gNDJhSWgdjstwOpkCbXmxDWpriyagtJGZos7ProBW3RVoIKulOHnfs7aY6XvNNZ2TrZkc0ZvEi9WWdQSsFoH59LMRp8kAYDe8XO2lfotB_Bq0MWb9iWn77arZkT33r4daNWX_gKB7Y"/>
+<!-- Floating Data Tooltip -->
+<div class="absolute bottom-10 right-10 bg-primary-container p-4 rounded shadow-lg text-on-primary border border-outline w-64">
+<div class="flex items-center gap-3 mb-2">
+<img class="w-8 h-8 rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqH5ePzznnRDEythTDb4QyQ-Ks7NtDwegSzyammSx4TNLFRTVrNr5gYSwHSJ1DXLGraH0Nda4mr0BCpcC2dfs6fSHd6zoOmuHwT87EdftZR6KvYyI0r3x_EkjmEj6atO2-47ARhzW9H2FCWOXu2cOD4-x2LfMjJgyj1w7YxkS5UAp6n6eEkonA7bvtGU9uDIu_fuqa1A96HX-K6SEB0ZlOxc2QdmWyDFcv0l8lnILKetL7u7HeaK8S6Ub5iYg2-SSkvQL9ds8S9fLa"/>
+<div>
+<p class="font-bold text-sm">Ricardo Mendes</p>
+<p class="text-[10px] text-on-primary-container">Placa: BRA-2E19</p>
+</div>
+</div>
+<div class="space-y-2 text-xs">
+<div class="flex justify-between"><span>Status:</span> <span class="text-secondary-fixed">Em Trânsito</span></div>
+<div class="flex justify-between"><span>Destino:</span> <span>Centro Distribuição 02</span></div>
+<div class="flex justify-between"><span>ETA:</span> <span class="font-mono-sm">14:45 (22 min)</span></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Active Drivers/Routes List -->
+<div class="col-span-12 lg:col-span-4 flex flex-col gap-6">
+<div class="bg-surface border border-outline-variant rounded flex-1 overflow-hidden flex flex-col">
+<div class="p-4 border-b border-outline-variant bg-surface-container-low flex justify-between items-center">
+<h3 class="font-title-sm text-title-sm">Motoristas Ativos</h3>
+<span class="material-symbols-outlined cursor-pointer hover:bg-surface-container-high p-1 rounded" data-icon="more_vert">more_vert</span>
+</div>
+<div class="overflow-y-auto max-h-[440px]">
+<!-- Driver Card -->
+<div class="p-4 border-b border-outline-variant hover:bg-surface-container-lowest transition-colors cursor-pointer group">
+<div class="flex items-start justify-between">
+<div class="flex gap-3">
+<div class="relative">
+<img class="w-10 h-10 rounded-full border-2 border-secondary-container" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBbihXkc4AKfopTs9iwZLGYPYMnzqSBXCdrf7jvVgNVJJTewqHG0KvtQRfcev6kRXMVuYBW9wGeMzqsWveFQoVZXtQ6XM1Upw4S2glgs6HVlUKj2L_t7apZX2yn7A4Fy4mAFqfDi-YN-9k_RNQ6E3Qs7bT6u1AcILNsRRjikMfuOeaYXuG4xTU5jYYJrCkt37M0MLbNX76hAhlOypKja6zYPGPXAX1TJcCEpu71MK6qZ5xU3bFJBADMStA75m9_2UsAPL37tUDF3e9x"/>
+<span class="absolute bottom-0 right-0 w-3 h-3 bg-secondary border-2 border-surface rounded-full"></span>
+</div>
+<div>
+<p class="font-bold text-sm">Carlos Oliveira</p>
+<p class="text-xs text-on-surface-variant font-mono-sm">VUC-4022 | Rota Sul</p>
+</div>
+</div>
+<span class="text-xs font-bold text-secondary">A caminho</span>
+</div>
+<div class="mt-3 flex items-center justify-between">
+<div class="flex -space-x-2">
+<div class="w-6 h-6 rounded-full bg-surface-container border border-outline-variant flex items-center justify-center text-[10px] font-bold">P1</div>
+<div class="w-6 h-6 rounded-full bg-surface-container border border-outline-variant flex items-center justify-center text-[10px] font-bold">P2</div>
+<div class="w-6 h-6 rounded-full bg-on-primary-fixed-variant text-on-primary border border-outline-variant flex items-center justify-center text-[10px] font-bold">+3</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-colors" data-icon="open_in_new">open_in_new</span>
+</div>
+</div>
+<!-- Driver Card 2 -->
+<div class="p-4 border-b border-outline-variant hover:bg-surface-container-lowest transition-colors cursor-pointer group">
+<div class="flex items-start justify-between">
+<div class="flex gap-3">
+<div class="relative">
+<img class="w-10 h-10 rounded-full border-2 border-surface-container" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBgZazGGGf8Fb9oNGLvPSZ7kUqpJ6dEMv_S8KbYSNkP2JoAbFW9HK_Bb7teHZdn4p9JEOIIGPf_qN-3bhiJfJKz1YccayhjwboSuz8rWPBZnU6YOTzaGH1bf9C8oaN9p0z5TUkQxX-lGXSROp3FTOwcJGHSkcOE6LjjPXjEekmkMam2FGMf1FhNAh1Jk1jHAXrzQGDBeTeX5OK61EfjTtBeMGtreC-T15TVQUHEIRmy0LGaW3qko2VacHfd4P-nzgoSxbjucy97HT96"/>
+<span class="absolute bottom-0 right-0 w-3 h-3 bg-surface-tint border-2 border-surface rounded-full"></span>
+</div>
+<div>
+<p class="font-bold text-sm">Mariana Costa</p>
+<p class="text-xs text-on-surface-variant font-mono-sm">CAR-5521 | Rota Norte</p>
+</div>
+</div>
+<span class="text-xs font-bold text-on-surface-variant">Em Pausa</span>
+</div>
+<div class="mt-3 bg-surface-container-high rounded-full h-1 w-full overflow-hidden">
+<div class="bg-primary h-1" style="width: 60%"></div>
+</div>
+</div>
+<!-- Driver Card 3 -->
+<div class="p-4 border-b border-outline-variant hover:bg-surface-container-lowest transition-colors cursor-pointer group">
+<div class="flex items-start justify-between">
+<div class="flex gap-3">
+<div class="relative">
+<img class="w-10 h-10 rounded-full border-2 border-error-container" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBs8MEyt_l4zpTMmc6GP17XXUZEYCjIfH-rl4Dvrz2GqMA1TYM5YnuWbw16eKYQ35ZsYYc2aw0LuhX0AzcvaAoTH2dLqFY5hv2cWVt1jOJB_9qwMRH2e_x8h_K7cI-sQl1fSacZ8EsyyKPbEyNUIJZd2Or8qCqk4BD2Oz_w0ejpB1IJuZXcscijcPb4Y-Hj32TW5t2toKSyh30fYrUS5t4bE0UUuHczG7vTPrFYgp2IHy717ewNOl44k_iwuNEsO856vno9lGwQ78SO"/>
+<span class="absolute bottom-0 right-0 w-3 h-3 bg-error border-2 border-surface rounded-full"></span>
+</div>
+<div>
+<p class="font-bold text-sm">João Pedro</p>
+<p class="text-xs text-on-surface-variant font-mono-sm">TRU-9099 | Intermunicipal</p>
+</div>
+</div>
+<span class="text-xs font-bold text-error">Atrasado</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Row Table and Integration Cards -->
+<div class="col-span-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Data Table -->
+<div class="md:col-span-2 bg-surface border border-outline-variant rounded">
+<div class="p-4 border-b border-outline-variant bg-surface-container-low flex justify-between items-center">
+<h3 class="font-title-sm text-title-sm">Status da Frota em Tempo Real</h3>
+<div class="flex gap-2">
+<span class="material-symbols-outlined text-outline cursor-pointer hover:text-primary" data-icon="search">search</span>
+<span class="material-symbols-outlined text-outline cursor-pointer hover:text-primary" data-icon="download">download</span>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container text-on-surface-variant font-label-bold text-label-bold uppercase">
+<tr>
+<th class="px-4 py-3">Veículo</th>
+<th class="px-4 py-3">Status</th>
+<th class="px-4 py-3">Última Revisão</th>
+<th class="px-4 py-3">Próx. Alerta</th>
+<th class="px-4 py-3 text-right">Ação</th>
+</tr>
+</thead>
+<tbody class="font-body-sm text-body-sm">
+<tr class="border-b border-outline-variant hover:bg-surface-container-low transition-colors h-12">
+<td class="px-4 font-mono-sm font-bold">SCAF-1029</td>
+<td class="px-4"><span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-secondary"></span> Ativo</span></td>
+<td class="px-4 text-on-surface-variant">15/10/2023</td>
+<td class="px-4"><span class="bg-surface-container-highest px-2 py-0.5 rounded text-[11px] font-bold">120 dias</span></td>
+<td class="px-4 text-right"><button class="text-primary hover:underline font-bold">Detalhes</button></td>
+</tr>
+<tr class="border-b border-outline-variant hover:bg-surface-container-low transition-colors h-12">
+<td class="px-4 font-mono-sm font-bold">FERR-5541</td>
+<td class="px-4"><span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-error"></span> Manutenção</span></td>
+<td class="px-4 text-on-surface-variant">02/01/2024</td>
+<td class="px-4"><span class="bg-error-container text-on-error-container px-2 py-0.5 rounded text-[11px] font-bold">VENCIDO</span></td>
+<td class="px-4 text-right"><button class="text-primary hover:underline font-bold">Detalhes</button></td>
+</tr>
+<tr class="border-b border-outline-variant hover:bg-surface-container-low transition-colors h-12">
+<td class="px-4 font-mono-sm font-bold">MERC-8872</td>
+<td class="px-4"><span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-tertiary-fixed-dim"></span> Ocioso</span></td>
+<td class="px-4 text-on-surface-variant">10/12/2023</td>
+<td class="px-4"><span class="bg-surface-container-highest px-2 py-0.5 rounded text-[11px] font-bold">45 dias</span></td>
+<td class="px-4 text-right"><button class="text-primary hover:underline font-bold">Detalhes</button></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Maintenance Alerts -->
+<div class="bg-surface border border-outline-variant rounded flex flex-col">
+<div class="p-4 border-b border-outline-variant bg-surface-container-low">
+<h3 class="font-title-sm text-title-sm">Alertas de Manutenção</h3>
+</div>
+<div class="p-4 space-y-4">
+<div class="flex gap-3 items-start">
+<div class="w-8 h-8 bg-error-container rounded flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-error-container text-sm" data-icon="oil_barrel">oil_barrel</span>
+</div>
+<div>
+<p class="font-bold text-xs">Troca de Óleo - BRA-2E19</p>
+<p class="text-[11px] text-on-surface-variant mb-1">Restam apenas 500km para o limite.</p>
+<span class="text-[10px] bg-surface-variant px-2 py-0.5 rounded">Alta Prioridade</span>
+</div>
+</div>
+<div class="flex gap-3 items-start">
+<div class="w-8 h-8 bg-secondary-container rounded flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-secondary-container text-sm" data-icon="tire_repair">tire_repair</span>
+</div>
+<div>
+<p class="font-bold text-xs">Rodízio de Pneus - TRU-9099</p>
+<p class="text-[11px] text-on-surface-variant mb-1">Agendado para amanhã às 08:00.</p>
+<span class="text-[10px] bg-surface-variant px-2 py-0.5 rounded">Programado</span>
+</div>
+</div>
+<div class="flex gap-3 items-start">
+<div class="w-8 h-8 bg-tertiary-fixed rounded flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-tertiary-fixed-variant text-sm" data-icon="verified_user">verified_user</span>
+</div>
+<div>
+<p class="font-bold text-xs">Vencimento de Seguro</p>
+<p class="text-[11px] text-on-surface-variant mb-1">Apólice #8829 vence em 15 dias.</p>
+<button class="text-[10px] text-primary underline font-bold">Renovar Agora</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center bg-surface py-2 border-t border-outline-variant shadow-lg">
+<div class="flex flex-col items-center justify-center text-secondary font-bold scale-110 duration-200">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-md text-label-md">Início</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant active:bg-surface-container">
+<span class="material-symbols-outlined" data-icon="sell">sell</span>
+<span class="font-label-md text-label-md">Vendas</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant active:bg-surface-container">
+<span class="material-symbols-outlined" data-icon="box">box</span>
+<span class="font-label-md text-label-md">Estoque</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant active:bg-surface-container">
+<span class="material-symbols-outlined" data-icon="account_balance_wallet">account_balance_wallet</span>
+<span class="font-label-md text-label-md">Finanças</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant active:bg-surface-container">
+<span class="material-symbols-outlined" data-icon="more_horiz">more_horiz</span>
+<span class="font-label-md text-label-md">Mais</span>
+</div>
+</nav>
+<!-- Footer (Desktop Only) -->
+<footer class="hidden md:flex justify-between items-center w-full px-container-padding py-4 ml-60 bg-surface-container-low border-t border-outline-variant">
+<span class="font-body-sm text-body-sm text-on-surface-variant">© 2024 Valley ERP. Todos os direitos reservados.</span>
+<div class="flex gap-6">
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary" href="#">Privacidade</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary" href="#">Termos</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary" href="#">Suporte</a>
+</div>
+</footer>
+<!-- FAB Contextual -->
+<button class="fixed bottom-8 right-8 w-14 h-14 bg-primary text-on-primary rounded-full shadow-lg flex items-center justify-center hover:scale-105 transition-transform z-50 md:bottom-24">
+<span class="material-symbols-outlined text-2xl" data-icon="chat">chat</span>
+</button>
+</body></html>

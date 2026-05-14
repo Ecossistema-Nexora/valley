@@ -231,6 +231,8 @@ def build_inventory(export_dir: Path, zip_path: Path, staging_dir: Path) -> tupl
 
 def write_inventory(screens: list[StitchScreen], summary: dict[str, object], design_tokens: dict[str, object]) -> None:
     DOCS_DIR.mkdir(parents=True, exist_ok=True)
+    source_zip_name = Path(str(summary["source_zip"])).name
+    export_dir = str(summary["versioned_export_dir"])
     INVENTORY_JSON.write_text(
         json.dumps(
             {
@@ -294,17 +296,17 @@ def write_inventory(screens: list[StitchScreen], summary: dict[str, object], des
         "",
         "<!--",
         "PROPOSITO: Mapear a conversao das telas Stitch para Valley.",
-        "CONTEXTO: Este mapa orienta Figma handoff, Flutter e admin web sem sobrescrever superficies existentes.",
+        "CONTEXTO: Este mapa orienta Figma handoff, Flutter e admin web a partir da fonte Stitch ativa.",
         "REGRAS: Implementar por ondas, validar em browser/Flutter e manter tokens Valley/Helena/V-Coin.",
         "-->",
         "",
         "## Decisao",
         "",
-        "- Fonte primaria de design: export Stitch `stitch_valley_erp (1).zip`.",
-        "- Assets brutos versionados: `docs/design/stitch_exports/20260513_valley_erp/`.",
+        f"- Fonte primaria de design: export Stitch `{source_zip_name}`.",
+        f"- Assets brutos versionados: `{export_dir}/`.",
         "- Staging local ignorado: `tmp/stitch-import/`.",
         "- Handoff de design: promover P0 para Figma antes de codificar grandes superficies.",
-        "- Implementacao: converter componentes e fluxos, mantendo HTML bruto apenas como galeria de referencia.",
+        "- Implementacao: converter componentes e fluxos, mantendo HTML bruto como galeria de referencia e fonte ativa de inspecao.",
         "",
         "## Onda 1 - P0",
         "",
@@ -326,7 +328,7 @@ def write_inventory(screens: list[StitchScreen], summary: dict[str, object], des
         "## Guardrails",
         "",
         "- Nao introduzir referencias proibidas de produto; usar Valley, Helena e V-Coin.",
-        "- Manter assets brutos versionados e publicados apenas como referencia de handoff.",
+        "- Manter assets brutos versionados e publicados como referencia de handoff e fonte ativa de inspecao.",
         "- Nao quebrar o APK v038 nem o gate Cloudflare validado.",
         "- Rodar Playwright/browser para admin web e build Flutter quando tocar UI executavel.",
     ])
@@ -347,6 +349,10 @@ def main() -> int:
     zip_path = Path(args.zip)
     staging_dir = Path(args.staging)
     versioned_export_dir = Path(args.versioned_export)
+    if not staging_dir.is_absolute():
+        staging_dir = ROOT / staging_dir
+    if not versioned_export_dir.is_absolute():
+        versioned_export_dir = ROOT / versioned_export_dir
     if not zip_path.exists():
         raise SystemExit(f"ZIP nao encontrado: {zip_path}")
 

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Central de Notificações</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline": "#76777d",
+                        "on-background": "#1b1b1d",
+                        "on-tertiary-fixed": "#001a42",
+                        "surface-bright": "#fcf8fa",
+                        "tertiary-fixed-dim": "#adc6ff",
+                        "surface-container-low": "#f6f3f5",
+                        "surface": "#fcf8fa",
+                        "secondary-fixed": "#6ffbbe",
+                        "outline-variant": "#c6c6cd",
+                        "inverse-on-surface": "#f3f0f2",
+                        "on-error": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "inverse-primary": "#bec6e0",
+                        "surface-container-lowest": "#ffffff",
+                        "primary": "#000000",
+                        "inverse-surface": "#303032",
+                        "background": "#fcf8fa",
+                        "surface-container": "#f0edef",
+                        "on-primary": "#ffffff",
+                        "on-secondary-fixed": "#002113",
+                        "surface-tint": "#565e74",
+                        "on-surface": "#1b1b1d",
+                        "tertiary": "#000000",
+                        "tertiary-container": "#001a42",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed-dim": "#4edea3",
+                        "secondary": "#006c49",
+                        "primary-fixed": "#dae2fd",
+                        "surface-dim": "#dcd9db",
+                        "primary-container": "#131b2e",
+                        "surface-variant": "#e4e2e4",
+                        "on-primary-container": "#7c839b",
+                        "tertiary-fixed": "#d8e2ff",
+                        "on-tertiary-container": "#3980f4",
+                        "secondary-container": "#6cf8bb",
+                        "on-tertiary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "surface-container-highest": "#e4e2e4",
+                        "on-secondary-fixed-variant": "#005236",
+                        "on-primary-fixed": "#131b2e",
+                        "on-secondary": "#ffffff",
+                        "surface-container-high": "#eae7e9",
+                        "on-tertiary-fixed-variant": "#004395",
+                        "primary-fixed-dim": "#bec6e0",
+                        "on-surface-variant": "#45464d",
+                        "on-secondary-container": "#00714d",
+                        "on-primary-fixed-variant": "#3f465c"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background">
+<!-- Design Root Container -->
+<div class="relative flex h-auto min-h-screen w-full flex-col bg-surface overflow-x-hidden max-w-md mx-auto border-x border-outline-variant">
+<!-- Header Section -->
+<div class="flex items-center bg-surface p-4 pb-2 justify-between sticky top-0 z-10 border-b border-surface-container">
+<div class="text-on-surface flex size-10 shrink-0 items-center cursor-pointer" data-icon="ArrowLeft" data-size="24px" data-weight="regular">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<h2 class="text-on-surface text-lg font-bold leading-tight tracking-[-0.015em] flex-1 px-2">Notificações</h2>
+<div class="flex items-center justify-end">
+<button class="text-on-primary-fixed-variant text-body-sm font-label-bold shrink-0 hover:text-primary">
+                    Marcar todas como lidas
+                </button>
+</div>
+</div>
+<!-- Filter Tabs -->
+<div class="bg-surface sticky top-[57px] z-10">
+<div class="flex border-b border-outline-variant px-4 gap-6 overflow-x-auto no-scrollbar">
+<a class="flex flex-col items-center justify-center border-b-[3px] border-primary text-on-surface pb-[13px] pt-4 whitespace-nowrap" href="#">
+<p class="text-sm font-bold">Tudo</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-[3px] border-transparent text-on-surface-variant pb-[13px] pt-4 whitespace-nowrap" href="#">
+<p class="text-sm font-medium">Pedidos</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-[3px] border-transparent text-on-surface-variant pb-[13px] pt-4 whitespace-nowrap" href="#">
+<p class="text-sm font-medium">Promoções</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-[3px] border-transparent text-on-surface-variant pb-[13px] pt-4 whitespace-nowrap" href="#">
+<p class="text-sm font-medium">Segurança</p>
+</a>
+</div>
+</div>
+<!-- Preferences Banner -->
+<div class="p-4">
+<div class="flex flex-col items-start justify-between gap-4 rounded border border-outline-variant bg-surface-container-low p-4">
+<div class="flex flex-col gap-1">
+<p class="text-on-surface text-sm font-bold leading-tight">Configurações</p>
+<p class="text-on-surface-variant text-xs font-normal leading-normal">Personalize seus alertas de push e e-mail para não perder nada.</p>
+</div>
+<button class="flex w-full cursor-pointer items-center justify-center rounded h-9 px-4 bg-primary text-on-primary text-sm font-medium leading-normal hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined text-[18px] mr-2">settings</span>
+                    Ajustar Preferências
+                </button>
+</div>
+</div>
+<!-- Notification List -->
+<div class="flex flex-col">
+<!-- Section: Today -->
+<div class="px-4 py-2 bg-surface-container-low border-y border-outline-variant">
+<h3 class="text-on-surface-variant text-xs font-bold uppercase tracking-wider">Hoje</h3>
+</div>
+<!-- Pedido Notification -->
+<div class="flex gap-4 p-4 border-b border-surface-container hover:bg-surface-container-lowest transition-colors relative">
+<div class="flex-shrink-0 size-12 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined" data-weight="fill" style="font-variation-settings: 'FILL' 1;">local_shipping</span>
+</div>
+<div class="flex flex-col flex-1 gap-1">
+<div class="flex justify-between items-start">
+<p class="text-on-surface text-sm font-bold leading-tight">Seu pedido saiu para entrega!</p>
+<span class="text-on-surface-variant text-[10px] font-mono-sm">09:42</span>
+</div>
+<p class="text-on-surface-variant text-sm leading-normal">O motorista João está a caminho do seu endereço com o pedido #4492.</p>
+<div class="mt-2 inline-flex items-center text-secondary text-xs font-bold cursor-pointer">
+                        Rastrear Pedido <span class="material-symbols-outlined text-[14px] ml-1">chevron_right</span>
+</div>
+</div>
+<div class="absolute right-4 top-1/2 -translate-y-1/2 size-2 bg-on-tertiary-container rounded-full"></div>
+</div>
+<!-- Promoção Notification -->
+<div class="flex gap-4 p-4 border-b border-surface-container hover:bg-surface-container-lowest transition-colors">
+<div class="flex-shrink-0 size-12 rounded-full bg-tertiary-fixed flex items-center justify-center text-on-tertiary-fixed-variant">
+<span class="material-symbols-outlined">sell</span>
+</div>
+<div class="flex flex-col flex-1 gap-1">
+<div class="flex justify-between items-start">
+<p class="text-on-surface text-sm font-bold leading-tight">Oferta exclusiva: 30% OFF</p>
+<span class="text-on-surface-variant text-[10px] font-mono-sm">08:15</span>
+</div>
+<p class="text-on-surface-variant text-sm leading-normal">Selecionamos produtos da sua lista de desejos com descontos imperdíveis.</p>
+</div>
+</div>
+<!-- Segurança Notification -->
+<div class="flex gap-4 p-4 border-b border-surface-container hover:bg-surface-container-lowest transition-colors bg-error-container/10">
+<div class="flex-shrink-0 size-12 rounded-full bg-error-container flex items-center justify-center text-error">
+<span class="material-symbols-outlined">security</span>
+</div>
+<div class="flex flex-col flex-1 gap-1">
+<div class="flex justify-between items-start">
+<p class="text-error text-sm font-bold leading-tight">Novo acesso detectado</p>
+<span class="text-on-surface-variant text-[10px] font-mono-sm">07:30</span>
+</div>
+<p class="text-on-surface-variant text-sm leading-normal">Um novo login foi realizado em um Chrome no Windows (São Paulo, BR).</p>
+<div class="mt-2 flex gap-3">
+<button class="text-error text-xs font-bold px-3 py-1 rounded border border-error">Não fui eu</button>
+<button class="text-on-surface-variant text-xs font-bold px-3 py-1 rounded border border-outline-variant">Fui eu</button>
+</div>
+</div>
+</div>
+<!-- Section: Yesterday -->
+<div class="px-4 py-2 bg-surface-container-low border-y border-outline-variant mt-2">
+<h3 class="text-on-surface-variant text-xs font-bold uppercase tracking-wider">Ontem</h3>
+</div>
+<!-- Pedido Delivered Notification -->
+<div class="flex gap-4 p-4 border-b border-surface-container opacity-70">
+<div class="flex-shrink-0 size-12 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">package_2</span>
+</div>
+<div class="flex flex-col flex-1 gap-1">
+<div class="flex justify-between items-start">
+<p class="text-on-surface text-sm font-bold leading-tight">Pedido entregue com sucesso</p>
+<span class="text-on-surface-variant text-[10px] font-mono-sm">Ontem</span>
+</div>
+<p class="text-on-surface-variant text-sm leading-normal">Seu pedido #4481 foi entregue. Conte-nos o que achou da experiência!</p>
+</div>
+</div>
+<!-- Promo Notification -->
+<div class="flex gap-4 p-4 border-b border-surface-container opacity-70">
+<div class="flex-shrink-0 size-12 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">celebration</span>
+</div>
+<div class="flex flex-col flex-1 gap-1">
+<div class="flex justify-between items-start">
+<p class="text-on-surface text-sm font-bold leading-tight">Seu cupom expira em breve</p>
+<span class="text-on-surface-variant text-[10px] font-mono-sm">Ontem</span>
+</div>
+<p class="text-on-surface-variant text-sm leading-normal">O cupom BEMVINDO30 vence em 24 horas. Aproveite agora.</p>
+</div>
+</div>
+</div>
+<!-- Spacer for nav -->
+<div class="h-20"></div>
+<!-- Shared BottomNavBar -->
+<div class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md bg-surface border-t border-outline-variant z-20">
+<div class="flex gap-2 px-4 pb-3 pt-2">
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-on-surface-variant" href="#">
+<div class="flex h-8 items-center justify-center" data-icon="House" data-size="24px" data-weight="regular">
+<svg fill="currentColor" height="24px" viewbox="0 0 256 256" width="24px" xmlns="http://www.w3.org/2000/svg">
+<path d="M218.83,103.77l-80-75.48a1.14,1.14,0,0,1-.11-.11,16,16,0,0,0-21.53,0l-.11.11L37.17,103.77A16,16,0,0,0,32,115.55V208a16,16,0,0,0,16,16H96a16,16,0,0,0,16-16V160h32v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V115.55A16,16,0,0,0,218.83,103.77ZM208,208H160V160a16,16,0,0,0-16-16H112a16,16,0,0,0-16,16v48H48V115.55l.11-.1L128,40l79.9,75.43.11.1Z"></path>
+</svg>
+</div>
+<p class="text-xs font-medium leading-normal tracking-[0.015em]">Início</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-on-surface-variant" href="#">
+<div class="flex h-8 items-center justify-center" data-icon="Receipt" data-size="24px" data-weight="regular">
+<svg fill="currentColor" height="24px" viewbox="0 0 256 256" width="24px" xmlns="http://www.w3.org/2000/svg">
+<path d="M72,104a8,8,0,0,1,8-8h96a8,8,0,0,1,0,16H80A8,8,0,0,1,72,104Zm8,40h96a8,8,0,0,0,0-16H80a8,8,0,0,0,0,16ZM232,56V208a8,8,0,0,1-11.58,7.15L192,200.94l-28.42,14.21a8,8,0,0,1-7.16,0L128,200.94,99.58,215.15a8,8,0,0,1-7.16,0L64,200.94,35.58,215.15A8,8,0,0,1,24,208V56A16,16,0,0,1,40,40H216A16,16,0,0,1,232,56Zm-16,0H40V195.06l20.42-10.22a8,8,0,0,1,7.16,0L96,199.06l28.42-14.22a8,8,0,0,1,7.16,0L160,199.06l28.42-14.22a8,8,0,0,1,7.16,0L216,195.06Z"></path>
+</svg>
+</div>
+<p class="text-xs font-medium leading-normal tracking-[0.015em]">Pedidos</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 rounded-full text-on-surface" href="#">
+<div class="text-primary flex h-8 items-center justify-center" data-icon="BellZ" data-size="24px" data-weight="fill">
+<svg fill="currentColor" height="24px" viewbox="0 0 256 256" width="24px" xmlns="http://www.w3.org/2000/svg">
+<path d="M221.8,175.94C216.25,166.38,208,139.33,208,104a80,80,0,1,0-160,0c0,35.34-8.26,62.38-13.81,71.94A16,16,0,0,0,48,200H88.81a40,40,0,0,0,78.38,0H208a16,16,0,0,0,13.8-24.06ZM128,216a24,24,0,0,1-22.62-16h45.24A24,24,0,0,1,128,216Zm16-64H112a8,8,0,0,1-6.65-12.44L129.05,104H112a8,8,0,0,1,0-16h32a8,8,0,0,1,6.65,12.44L127,136h17a8,8,0,0,1,0,16Z"></path>
+</svg>
+</div>
+<p class="text-xs font-bold leading-normal tracking-[0.015em]">Alertas</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-on-surface-variant" href="#">
+<div class="flex h-8 items-center justify-center" data-icon="User" data-size="24px" data-weight="regular">
+<svg fill="currentColor" height="24px" viewbox="0 0 256 256" width="24px" xmlns="http://www.w3.org/2000/svg">
+<path d="M230.92,212c-15.23-26.33-38.7-45.21-66.09-54.16a72,72,0,1,0-73.66,0C63.78,166.78,40.31,185.66,25.08,212a8,8,0,1,0,13.85,8c18.84-32.56,52.14-52,89.07-52s70.23,19.44,89.07,52a8,8,0,1,0,13.85-8ZM72,96a56,56,0,1,1,56,56A56.06,56.06,0,0,1,72,96Z"></path>
+</svg>
+</div>
+<p class="text-xs font-medium leading-normal tracking-[0.015em]">Perfil</p>
+</a>
+</div>
+</div>
+</div>
+</body></html>

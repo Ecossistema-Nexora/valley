@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary": "#ffffff",
+                        "secondary-container": "#6cf8bb",
+                        "outline-variant": "#c6c6cd",
+                        "outline": "#76777d",
+                        "surface-variant": "#e4e2e4",
+                        "on-secondary-container": "#00714d",
+                        "on-surface-variant": "#45464d",
+                        "tertiary-container": "#001a42",
+                        "on-tertiary-fixed": "#001a42",
+                        "error-container": "#ffdad6",
+                        "tertiary": "#000000",
+                        "surface-bright": "#fcf8fa",
+                        "primary": "#000000",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-fixed": "#d8e2ff",
+                        "surface-tint": "#565e74",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-container": "#3980f4",
+                        "surface-dim": "#dcd9db",
+                        "primary-fixed-dim": "#bec6e0",
+                        "on-tertiary-fixed-variant": "#004395",
+                        "on-primary-fixed": "#131b2e",
+                        "secondary-fixed-dim": "#4edea3",
+                        "on-surface": "#1b1b1d",
+                        "surface-container-low": "#f6f3f5",
+                        "surface-container-highest": "#e4e2e4",
+                        "on-background": "#1b1b1d",
+                        "error": "#ba1a1a",
+                        "inverse-surface": "#303032",
+                        "inverse-on-surface": "#f3f0f2",
+                        "on-primary-container": "#7c839b",
+                        "primary-container": "#131b2e",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-high": "#eae7e9",
+                        "on-secondary-fixed-variant": "#005236",
+                        "on-error": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed": "#6ffbbe",
+                        "secondary": "#006c49",
+                        "on-secondary-fixed": "#002113",
+                        "inverse-primary": "#bec6e0",
+                        "surface-container": "#f0edef",
+                        "surface": "#fcf8fa",
+                        "primary-fixed": "#dae2fd",
+                        "tertiary-fixed-dim": "#adc6ff",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "background": "#fcf8fa"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "max-width": "1600px",
+                        "dense-gap": "0.5rem",
+                        "container-padding": "1.5rem",
+                        "gutter": "1rem"
+                    },
+                    "fontFamily": {
+                        "body-sm": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "label-bold": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "title-sm": ["Inter"],
+                        "mono-sm": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                        "display-lg": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-bold": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "headline-md": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "title-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                        "mono-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen pb-16">
+<!-- TopAppBar -->
+<header class="bg-surface border-b border-outline-variant sticky top-0 z-50">
+<div class="flex justify-between items-center h-16 px-container-padding w-full max-w-max-width mx-auto">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary">menu</span>
+<h1 class="text-headline-md font-headline-md text-primary">Valley</h1>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary">search</span>
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center overflow-hidden">
+<img alt="Avatar" class="w-full h-full object-cover" data-alt="A professional studio headshot of a smiling young woman with warm features, wearing a modern business-casual outfit. The lighting is soft and flattering against a clean, neutral studio background, reflecting a sophisticated corporate modern aesthetic that aligns with a high-end enterprise application interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAIR5CjnSQJtYcVy-3AVCEZPk_DyZMu9QJO7C17XjKAUfOpsgPzKwB95qyHVLcvjnHQ8SaY6bcHp6dy71pW5ry28Rz9GHcIEYbFucJBFCNJ6AKZD3oxK5-QZdi5Movuw3GBqOVugUkxmUFhGKmli-6inp3QeeWs-yUGccf_gikb7AsVhmsB40aOOXq_VCtMUY7hfmi1DyVDLYRbn6aAuQzZmZdYKFe3JvFAJtabaeO4jkPbdMe6UiwZs4Yt4FhDfFzd46kcpyhKIa42"/>
+</div>
+</div>
+</div>
+</header>
+<main class="max-w-max-width mx-auto px-4 py-6 space-y-8">
+<!-- User Profile Section -->
+<section class="space-y-4">
+<div class="flex items-center justify-between">
+<h2 class="text-headline-md font-headline-md text-primary">Meu Perfil</h2>
+<button class="text-label-md font-label-md text-secondary border border-secondary px-3 py-1 rounded-lg">Editar</button>
+</div>
+<!-- Bento-style Grid for Personal Info -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Personal Data Card -->
+<div class="bg-surface-container-lowest border border-outline-variant p-5 rounded-xl">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-on-secondary-container bg-secondary-container/20 p-2 rounded-lg">person</span>
+<h3 class="text-title-sm font-title-sm">Dados Pessoais</h3>
+</div>
+<div class="space-y-3">
+<div>
+<p class="text-label-md text-outline">Nome Completo</p>
+<p class="text-body-md font-medium">Helena Souza Oliveira</p>
+</div>
+<div>
+<p class="text-label-md text-outline">E-mail</p>
+<p class="text-body-md font-medium">helena.souza@email.com.br</p>
+</div>
+<div>
+<p class="text-label-md text-outline">Telefone</p>
+<p class="text-body-md font-medium">+55 (11) 98765-4321</p>
+</div>
+</div>
+</div>
+<!-- Addresses Card -->
+<div class="bg-surface-container-lowest border border-outline-variant p-5 rounded-xl">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-tertiary-container bg-tertiary-fixed p-2 rounded-lg">location_on</span>
+<h3 class="text-title-sm font-title-sm">Endereços</h3>
+</div>
+<span class="material-symbols-outlined text-outline cursor-pointer">add_circle</span>
+</div>
+<div class="space-y-4">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-outline text-[20px] mt-1">home</span>
+<div>
+<p class="text-body-md font-medium">Principal</p>
+<p class="text-body-sm text-on-surface-variant">Av. Paulista, 1000 - Apto 42</p>
+<p class="text-body-sm text-on-surface-variant">São Paulo - SP, 01310-100</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Payment Methods Card -->
+<div class="md:col-span-2 bg-surface-container-lowest border border-outline-variant p-5 rounded-xl">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-error bg-error-container p-2 rounded-lg">credit_card</span>
+<h3 class="text-title-sm font-title-sm">Cartões Salvos</h3>
+</div>
+<span class="material-symbols-outlined text-outline cursor-pointer">add_circle</span>
+</div>
+<div class="flex flex-wrap gap-4">
+<div class="flex-1 min-w-[280px] bg-primary-container text-on-primary p-4 rounded-xl relative overflow-hidden">
+<div class="relative z-10">
+<div class="flex justify-between items-start mb-6">
+<span class="text-label-md opacity-80 uppercase tracking-widest">Digital Platinum</span>
+<span class="material-symbols-outlined">contactless</span>
+</div>
+<p class="text-title-sm font-mono tracking-[4px] mb-4">**** **** **** 8842</p>
+<div class="flex justify-between items-end">
+<p class="text-label-md">HELENA S OLIVEIRA</p>
+<p class="text-label-md">12/28</p>
+</div>
+</div>
+<div class="absolute -right-4 -bottom-4 w-24 h-24 bg-on-primary-container/20 rounded-full blur-2xl"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Helena Assistant Section (Chat UI) -->
+<section class="space-y-4 pt-4">
+<div class="flex items-center gap-3">
+<div class="relative">
+<div class="w-12 h-12 rounded-full bg-secondary-fixed flex items-center justify-center overflow-hidden border-2 border-secondary">
+<img alt="Helena Virtual Assistant" class="w-full h-full object-cover" data-alt="A professional and friendly virtual assistant avatar, a woman with a warm smile and approachable demeanor. She is styled in modern corporate attire with soft, diffused office lighting. The image conveys helpfulness, expertise, and a tech-forward approach, set against a clean and minimal backdrop that matches the overall application design system." src="https://lh3.googleusercontent.com/aida-public/AB6AXuATT8Mh1sEC9QsarmDnULbFwx0EUNhhcwIOKvCOfgCQ_ScBp2-r6C68OVLXS_dU-yqcRZSX0K-SyYXTw6_uwKil2uFDVOidbU-5yn3FBPwnaDv42WgfTsYNJLwsrrYjjboy7AZb7dpEfm_-S804sgA0X0RBBh1ov-tFHVH71PVKdnnj4uhO8qaLVX3PLpogQt2_N24RoiKUhKPkT-svjmUjbqZyzxaNg92nGPi2-oJFvuO146QGQFUsGChbyjNaUC_5nShGLacndCEO"/>
+</div>
+<div class="absolute bottom-0 right-0 w-3 h-3 bg-secondary rounded-full border-2 border-surface"></div>
+</div>
+<div>
+<h2 class="text-title-sm font-title-sm text-primary">Atendimento Helena</h2>
+<p class="text-body-sm text-on-secondary-container font-medium">Assistente Virtual Ativa</p>
+</div>
+</div>
+<!-- Chat Container -->
+<div class="bg-surface border border-outline-variant rounded-2xl flex flex-col h-[500px] shadow-sm overflow-hidden">
+<!-- Messages Area -->
+<div class="flex-1 overflow-y-auto p-4 space-y-4 bg-surface-container-low/30">
+<!-- Bot Message -->
+<div class="flex items-end gap-2 max-w-[85%]">
+<div class="bg-white border border-outline-variant p-3 rounded-2xl rounded-bl-none shadow-sm">
+<p class="text-body-md">Olá, Helena! Sou a sua assistente virtual. Como posso ajudar você hoje com seus pedidos ou conta?</p>
+<p class="text-[10px] text-outline mt-1 text-right">09:41</p>
+</div>
+</div>
+<!-- Suggestions Chips -->
+<div class="flex flex-wrap gap-2 py-2">
+<button class="bg-surface-container-highest text-on-surface-variant text-label-md px-3 py-2 rounded-full border border-outline-variant hover:bg-secondary-container/20 transition-colors">Onde está meu pedido?</button>
+<button class="bg-surface-container-highest text-on-surface-variant text-label-md px-3 py-2 rounded-full border border-outline-variant hover:bg-secondary-container/20 transition-colors">Trocas e Devoluções</button>
+<button class="bg-surface-container-highest text-on-surface-variant text-label-md px-3 py-2 rounded-full border border-outline-variant hover:bg-secondary-container/20 transition-colors">Falar com humano</button>
+</div>
+<!-- User Message -->
+<div class="flex items-end gap-2 max-w-[85%] ml-auto">
+<div class="bg-primary-container text-on-primary p-3 rounded-2xl rounded-br-none shadow-sm">
+<p class="text-body-md">Gostaria de saber o status do meu último pedido de ontem.</p>
+<p class="text-[10px] text-primary-fixed-dim mt-1 text-right">09:42</p>
+</div>
+</div>
+<!-- Bot Response -->
+<div class="flex items-end gap-2 max-w-[85%]">
+<div class="bg-white border border-outline-variant p-3 rounded-2xl rounded-bl-none shadow-sm">
+<p class="text-body-md">Com certeza! O pedido #VK-9283 está em processamento e a previsão de entrega é para amanhã, dia 24/05. Deseja ver o rastreio detalhado?</p>
+<p class="text-[10px] text-outline mt-1 text-right">09:42</p>
+</div>
+</div>
+</div>
+<!-- Input Area -->
+<div class="p-3 border-t border-outline-variant bg-surface">
+<div class="flex items-center gap-2 bg-surface-container-lowest border border-outline p-1 rounded-full">
+<button class="p-2 text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined">attach_file</span>
+</button>
+<input class="flex-1 bg-transparent border-none focus:ring-0 text-body-md py-2" placeholder="Digite sua mensagem..." type="text"/>
+<button class="bg-secondary text-on-secondary w-10 h-10 rounded-full flex items-center justify-center hover:opacity-90 active:scale-90 transition-all">
+<span class="material-symbols-outlined">send</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center h-16 px-4 pb-safe bg-surface border-t border-outline-variant z-50 backdrop-blur-md">
+<div class="flex flex-col items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">home</span>
+<span class="text-label-md font-label-md">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">grid_view</span>
+<span class="text-label-md font-label-md">Catálogo</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">shopping_bag</span>
+<span class="text-label-md font-label-md">Compras</span>
+</div>
+<div class="flex flex-col items-center justify-center text-secondary bg-secondary-container/20 rounded-full px-4 py-1">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="text-label-md font-label-md">Perfil</span>
+</div>
+</nav>
+</body></html>

@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Valley ERP - Gestão de Devoluções</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-container": "#131b2e",
+                    "on-tertiary-container": "#3980f4",
+                    "on-primary-fixed": "#131b2e",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "on-tertiary-fixed": "#001a42",
+                    "on-error": "#ffffff",
+                    "on-background": "#1b1b1d",
+                    "error": "#ba1a1a",
+                    "on-tertiary-fixed-variant": "#004395",
+                    "tertiary-fixed": "#d8e2ff",
+                    "tertiary-container": "#001a42",
+                    "on-secondary-fixed": "#002113",
+                    "on-primary-fixed-variant": "#3f465c",
+                    "tertiary-fixed-dim": "#adc6ff",
+                    "primary-fixed-dim": "#bec6e0",
+                    "surface": "#fcf8fa",
+                    "on-secondary-container": "#00714d",
+                    "surface-variant": "#e4e2e4",
+                    "outline-variant": "#c6c6cd",
+                    "secondary-fixed": "#6ffbbe",
+                    "surface-container-low": "#f6f3f5",
+                    "primary": "#000000",
+                    "inverse-primary": "#bec6e0",
+                    "on-tertiary": "#ffffff",
+                    "on-surface-variant": "#45464d",
+                    "inverse-surface": "#303032",
+                    "secondary-fixed-dim": "#4edea3",
+                    "secondary-container": "#6cf8bb",
+                    "secondary": "#006c49",
+                    "primary-fixed": "#dae2fd",
+                    "surface-container": "#f0edef",
+                    "error-container": "#ffdad6",
+                    "on-secondary": "#ffffff",
+                    "background": "#fcf8fa",
+                    "surface-tint": "#565e74",
+                    "on-primary-container": "#7c839b",
+                    "surface-dim": "#dcd9db",
+                    "surface-container-highest": "#e4e2e4",
+                    "outline": "#76777d",
+                    "on-surface": "#1b1b1d",
+                    "surface-container-high": "#eae7e9",
+                    "on-secondary-fixed-variant": "#005236",
+                    "tertiary": "#000000",
+                    "surface-bright": "#fcf8fa",
+                    "inverse-on-surface": "#f3f0f2"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "unit": "4px",
+                    "max-width": "1600px",
+                    "gutter": "1rem",
+                    "dense-gap": "0.5rem",
+                    "container-padding": "1.5rem"
+            },
+            "fontFamily": {
+                    "mono-sm": ["JetBrains Mono"],
+                    "label-md": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "title-sm": ["Inter"],
+                    "body-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "label-bold": ["Inter"],
+                    "headline-md": ["Inter"]
+            },
+            "fontSize": {
+                    "mono-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                    "title-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "display-lg": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-bold": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="bg-surface font-body-md text-on-surface antialiased">
+<!-- TopNavBar -->
+<header class="bg-primary-container docked full-width top-0 h-14 w-full px-container-padding flex justify-between items-center border-b border-outline-variant z-50">
+<div class="flex items-center gap-6">
+<span class="font-display-lg text-display-lg font-bold text-on-primary tracking-tight">Valley</span>
+<nav class="hidden md:flex gap-4">
+<a class="text-on-primary-container hover:text-on-primary transition-colors font-title-sm text-title-sm" href="#">Dashboard</a>
+<a class="text-on-primary border-b-2 border-secondary font-bold font-title-sm text-title-sm" href="#">Operations</a>
+<a class="text-on-primary-container hover:text-on-primary transition-colors font-title-sm text-title-sm" href="#">Inventory</a>
+<a class="text-on-primary-container hover:text-on-primary transition-colors font-title-sm text-title-sm" href="#">Analytics</a>
+<a class="text-on-primary-container hover:text-on-primary transition-colors font-title-sm text-title-sm" href="#">Merchants</a>
+</nav>
+</div>
+<div class="flex items-center gap-3">
+<button class="material-symbols-outlined text-on-primary hover:bg-surface-variant/10 p-2 rounded-full">notifications</button>
+<button class="material-symbols-outlined text-on-primary hover:bg-surface-variant/10 p-2 rounded-full">settings</button>
+<button class="material-symbols-outlined text-on-primary hover:bg-surface-variant/10 p-2 rounded-full">help</button>
+<button class="bg-secondary text-on-secondary px-4 py-1.5 rounded-lg font-label-bold text-label-bold hover:bg-secondary/90 transition-all">Create New</button>
+<div class="w-8 h-8 rounded-full bg-surface-container-high overflow-hidden border border-outline-variant">
+<img alt="User profile avatar" data-alt="A professional headshot of a corporate manager in a high-density office setting. The lighting is crisp and modern, featuring soft overhead illumination typical of a premium tech office. The subject has a confident expression, wearing a clean, dark suit that contrasts with the bright, minimalist background of glass partitions and neutral tones. The overall aesthetic is reliable and efficient." src="https://lh3.googleusercontent.com/aida-public/AB6AXuClIrWq4YrlCLZD0aRWddX-3L8smVE9qO579ZA4HGbaQCJ0Vfx_gYOGAj3KmyyN_9f4-5yRIK7uuFz6p0lbKf2VyfFLgyhpiXS5DlWLimFzRw9BBR1RYS7M1XrClgheoHjwrh_YQpafDHwU-2ZEKZLulf9vx3_DZhfG_GkcYd8aXBbSWEJAYT0WhdOz6wL3Vlfl11h2BbU3Cx2bmGci7qApmgq1KpiO3-FqIO8a31wN1d6ujnR2IvOA9qXkjMsZPwbWWrBEbjLWp_LA"/>
+</div>
+</div>
+</header>
+<div class="flex min-h-screen">
+<!-- SideNavBar -->
+<aside class="hidden lg:flex flex-col border-r border-outline-variant h-screen fixed w-[240px] left-0 top-14 bg-surface dark:bg-surface-dim pt-6">
+<div class="px-6 mb-8">
+<h1 class="font-headline-md text-headline-md font-extrabold text-primary">Valley ERP</h1>
+<p class="text-on-surface-variant font-label-md text-label-md">Enterprise Console</p>
+</div>
+<nav class="flex-1 space-y-1 px-3">
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container px-4 py-2 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">dashboard</span> Home
+                </a>
+<a class="flex items-center gap-3 bg-secondary-container text-on-secondary-container rounded-xl font-bold px-4 py-2 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">shopping_cart</span> Order Management
+                </a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container px-4 py-2 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">local_shipping</span> Logistics
+                </a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container px-4 py-2 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">storefront</span> Merchant Portal
+                </a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container px-4 py-2 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">payments</span> Financials
+                </a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container px-4 py-2 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">history</span> System Logs
+                </a>
+</nav>
+<div class="p-4 border-t border-outline-variant">
+<button class="w-full bg-primary-container text-on-primary py-2 rounded-lg font-label-bold text-label-bold mb-4">Quick Sync</button>
+<div class="space-y-1">
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container px-4 py-2 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">contact_support</span> Support
+                    </a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container px-4 py-2 font-label-md text-label-md text-error" href="#">
+<span class="material-symbols-outlined">logout</span> Sign Out
+                    </a>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 lg:ml-[240px] pt-14 pb-12">
+<!-- WorkspaceHeader -->
+<div class="px-container-padding py-6 bg-surface-container-low border-b border-outline-variant">
+<div class="max-w-max-width mx-auto">
+<nav class="flex mb-2">
+<ol class="flex items-center space-x-2 font-label-md text-label-md text-on-surface-variant">
+<li>Operations</li>
+<li class="material-symbols-outlined text-[12px]">chevron_right</li>
+<li>Reverse Logistics</li>
+<li class="material-symbols-outlined text-[12px]">chevron_right</li>
+<li class="text-primary font-bold">Gestão de Devoluções</li>
+</ol>
+</nav>
+<div class="flex justify-between items-center">
+<h2 class="font-display-lg text-display-lg font-bold text-primary">Logística Reversa</h2>
+<div class="flex gap-2">
+<button class="bg-surface border border-outline text-on-surface-variant px-4 py-1.5 rounded-lg font-label-bold text-label-bold flex items-center gap-2 hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[18px]">download</span> Exportar CSV
+                            </button>
+<button class="bg-primary text-on-primary px-4 py-1.5 rounded-lg font-label-bold text-label-bold flex items-center gap-2 shadow-sm active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[18px]">add</span> Nova Devolução
+                            </button>
+</div>
+</div>
+</div>
+</div>
+<div class="max-w-max-width mx-auto px-container-padding mt-6 space-y-6">
+<!-- KPI Grid -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+<div class="bg-surface-container-lowest border border-outline-variant p-4 rounded-lg">
+<p class="font-label-md text-label-md text-on-surface-variant mb-1 uppercase tracking-wider">Total Pendente</p>
+<div class="flex items-end justify-between">
+<h3 class="font-display-lg text-display-lg font-bold">R$ 42.850</h3>
+<span class="text-secondary font-label-bold text-label-bold bg-secondary-container/20 px-2 py-0.5 rounded flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">trending_up</span> 12%
+                            </span>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-4 rounded-lg">
+<p class="font-label-md text-label-md text-on-surface-variant mb-1 uppercase tracking-wider">Em Trânsito</p>
+<div class="flex items-end justify-between">
+<h3 class="font-display-lg text-display-lg font-bold">128</h3>
+<span class="text-on-tertiary-container font-label-bold text-label-bold bg-tertiary-fixed/30 px-2 py-0.5 rounded">Ativo</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-4 rounded-lg">
+<p class="font-label-md text-label-md text-on-surface-variant mb-1 uppercase tracking-wider">Taxa de Processamento</p>
+<div class="flex items-end justify-between">
+<h3 class="font-display-lg text-display-lg font-bold">14.2h</h3>
+<span class="text-error font-label-bold text-label-bold bg-error-container/20 px-2 py-0.5 rounded flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">schedule</span> -4%
+                            </span>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-4 rounded-lg">
+<p class="font-label-md text-label-md text-on-surface-variant mb-1 uppercase tracking-wider">Avaria / Defeito</p>
+<div class="flex items-end justify-between">
+<h3 class="font-display-lg text-display-lg font-bold">8.4%</h3>
+<div class="h-1.5 w-24 bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-[45%]"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- FilterBar -->
+<div class="bg-surface-container p-3 rounded-lg flex flex-wrap items-center gap-4 border border-outline-variant">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant">filter_list</span>
+<span class="font-label-bold text-label-bold text-on-surface-variant uppercase">Filtros:</span>
+</div>
+<div class="flex items-center gap-2 bg-surface-container-lowest px-3 py-1.5 border border-outline-variant rounded-lg">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+<select class="bg-transparent border-none focus:ring-0 font-body-sm text-body-sm p-0">
+<option>Últimos 30 dias</option>
+<option>Últimos 7 dias</option>
+<option>Personalizado</option>
+</select>
+</div>
+<div class="flex items-center gap-2 bg-surface-container-lowest px-3 py-1.5 border border-outline-variant rounded-lg">
+<span class="material-symbols-outlined text-[18px]">category</span>
+<select class="bg-transparent border-none focus:ring-0 font-body-sm text-body-sm p-0">
+<option>Todas Categorias</option>
+<option>Eletrônicos</option>
+<option>Vestuário</option>
+<option>Eletrodomésticos</option>
+</select>
+</div>
+<div class="h-6 w-[1px] bg-outline-variant"></div>
+<div class="flex items-center gap-2">
+<span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full font-label-md text-label-md flex items-center gap-2">
+                            Eletrônicos <button class="material-symbols-outlined text-[14px]">close</button>
+</span>
+<button class="text-primary font-label-bold text-label-bold hover:underline">Limpar Tudo</button>
+</div>
+<div class="ml-auto relative">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-on-surface-variant">search</span>
+<input class="pl-10 pr-4 py-1.5 bg-surface-container-lowest border border-outline-variant rounded-lg text-body-sm w-64 focus:ring-1 focus:ring-primary focus:border-primary" placeholder="Buscar por ID ou Cliente..." type="text"/>
+</div>
+</div>
+<!-- DataTable -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden shadow-sm">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container text-on-surface-variant font-label-bold text-label-bold border-b border-outline-variant uppercase tracking-wider">
+<tr>
+<th class="px-4 py-3 font-medium">ID Devolução</th>
+<th class="px-4 py-3 font-medium">Data</th>
+<th class="px-4 py-3 font-medium">Motivo</th>
+<th class="px-4 py-3 font-medium">Categoria</th>
+<th class="px-4 py-3 font-medium">Status da Mercadoria</th>
+<th class="px-4 py-3 font-medium text-right">Valor</th>
+<th class="px-4 py-3 font-medium"></th>
+</tr>
+</thead>
+<tbody class="text-body-sm font-body-sm divide-y divide-outline-variant">
+<tr class="hover:bg-surface-container-lowest transition-colors group">
+<td class="px-4 py-3 font-mono-sm text-mono-sm font-bold text-primary">DEV-84920</td>
+<td class="px-4 py-3 text-on-surface-variant">12 Mai, 2024</td>
+<td class="px-4 py-3">
+<span class="block font-medium">Defeito de Fabricação</span>
+<span class="text-[11px] text-on-surface-variant">Placa lógica não inicia</span>
+</td>
+<td class="px-4 py-3 text-on-surface-variant">Eletrônicos</td>
+<td class="px-4 py-3">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-secondary-container/30 text-on-secondary-container font-label-bold text-[11px]">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span> RECEBIDO
+                                    </span>
+</td>
+<td class="px-4 py-3 text-right font-bold text-primary">R$ 2.450,00</td>
+<td class="px-4 py-3 text-right">
+<button class="material-symbols-outlined text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity">more_vert</button>
+</td>
+</tr>
+<tr class="bg-surface-container-low hover:bg-surface-container-lowest transition-colors group">
+<td class="px-4 py-3 font-mono-sm text-mono-sm font-bold text-primary">DEV-84915</td>
+<td class="px-4 py-3 text-on-surface-variant">11 Mai, 2024</td>
+<td class="px-4 py-3">
+<span class="block font-medium">Arrependimento</span>
+<span class="text-[11px] text-on-surface-variant">Prazo de 7 dias</span>
+</td>
+<td class="px-4 py-3 text-on-surface-variant">Eletrodomésticos</td>
+<td class="px-4 py-3">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed-variant font-label-bold text-[11px]">
+<span class="w-1.5 h-1.5 rounded-full bg-on-tertiary-container"></span> EM TRÂNSITO
+                                    </span>
+</td>
+<td class="px-4 py-3 text-right font-bold text-primary">R$ 1.890,50</td>
+<td class="px-4 py-3 text-right">
+<button class="material-symbols-outlined text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity">more_vert</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest transition-colors group">
+<td class="px-4 py-3 font-mono-sm text-mono-sm font-bold text-primary">DEV-84910</td>
+<td class="px-4 py-3 text-on-surface-variant">10 Mai, 2024</td>
+<td class="px-4 py-3">
+<span class="block font-medium">Tamanho Incorreto</span>
+<span class="text-[11px] text-on-surface-variant">Troca por número maior</span>
+</td>
+<td class="px-4 py-3 text-on-surface-variant">Vestuário</td>
+<td class="px-4 py-3">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-surface-variant text-on-surface-variant font-label-bold text-[11px]">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span> PROCESSANDO
+                                    </span>
+</td>
+<td class="px-4 py-3 text-right font-bold text-primary">R$ 459,00</td>
+<td class="px-4 py-3 text-right">
+<button class="material-symbols-outlined text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity">more_vert</button>
+</td>
+</tr>
+<tr class="bg-surface-container-low hover:bg-surface-container-lowest transition-colors group">
+<td class="px-4 py-3 font-mono-sm text-mono-sm font-bold text-primary">DEV-84902</td>
+<td class="px-4 py-3 text-on-surface-variant">09 Mai, 2024</td>
+<td class="px-4 py-3">
+<span class="block font-medium">Avaria no Transporte</span>
+<span class="text-[11px] text-on-surface-variant">Embalagem violada</span>
+</td>
+<td class="px-4 py-3 text-on-surface-variant">Eletrônicos</td>
+<td class="px-4 py-3">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-secondary-container/30 text-on-secondary-container font-label-bold text-[11px]">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span> RECEBIDO
+                                    </span>
+</td>
+<td class="px-4 py-3 text-right font-bold text-primary">R$ 5.200,00</td>
+<td class="px-4 py-3 text-right">
+<button class="material-symbols-outlined text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity">more_vert</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest transition-colors group">
+<td class="px-4 py-3 font-mono-sm text-mono-sm font-bold text-primary">DEV-84898</td>
+<td class="px-4 py-3 text-on-surface-variant">08 Mai, 2024</td>
+<td class="px-4 py-3">
+<span class="block font-medium">Item Errado</span>
+<span class="text-[11px] text-on-surface-variant">Voltagem incorreta enviada</span>
+</td>
+<td class="px-4 py-3 text-on-surface-variant">Eletrodomésticos</td>
+<td class="px-4 py-3">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed-variant font-label-bold text-[11px]">
+<span class="w-1.5 h-1.5 rounded-full bg-on-tertiary-container"></span> EM TRÂNSITO
+                                    </span>
+</td>
+<td class="px-4 py-3 text-right font-bold text-primary">R$ 840,00</td>
+<td class="px-4 py-3 text-right">
+<button class="material-symbols-outlined text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity">more_vert</button>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="px-4 py-3 border-t border-outline-variant flex justify-between items-center bg-surface-container-low">
+<span class="font-label-md text-label-md text-on-surface-variant">Exibindo 1-5 de 128 resultados</span>
+<div class="flex gap-1">
+<button class="p-1 rounded border border-outline-variant hover:bg-surface disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="px-3 py-1 rounded border border-primary bg-primary text-on-primary font-label-bold text-label-bold">1</button>
+<button class="px-3 py-1 rounded border border-outline-variant hover:bg-surface font-label-bold text-label-bold">2</button>
+<button class="px-3 py-1 rounded border border-outline-variant hover:bg-surface font-label-bold text-label-bold">3</button>
+<button class="p-1 rounded border border-outline-variant hover:bg-surface">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Integration & Log Section -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="md:col-span-2 bg-surface-container-lowest border border-outline-variant p-5 rounded-lg">
+<h4 class="font-title-sm text-title-sm mb-4">Fluxo de Operações Logísticas</h4>
+<div class="flex items-center justify-between px-8 py-4 relative">
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4/5 h-[1px] bg-outline-variant -z-0"></div>
+<div class="flex flex-col items-center gap-2 z-10 bg-surface-container-lowest p-2">
+<div class="w-10 h-10 rounded-full bg-secondary text-on-secondary flex items-center justify-center">
+<span class="material-symbols-outlined">assignment_return</span>
+</div>
+<span class="font-label-bold text-[10px] uppercase">Solicitado</span>
+</div>
+<div class="flex flex-col items-center gap-2 z-10 bg-surface-container-lowest p-2">
+<div class="w-10 h-10 rounded-full bg-tertiary-container text-on-tertiary-container flex items-center justify-center">
+<span class="material-symbols-outlined">local_shipping</span>
+</div>
+<span class="font-label-bold text-[10px] uppercase">Coleta</span>
+</div>
+<div class="flex flex-col items-center gap-2 z-10 bg-surface-container-lowest p-2">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest text-primary flex items-center justify-center border border-outline">
+<span class="material-symbols-outlined">inventory_2</span>
+</div>
+<span class="font-label-bold text-[10px] uppercase">Triagem</span>
+</div>
+<div class="flex flex-col items-center gap-2 z-10 bg-surface-container-lowest p-2">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest text-primary flex items-center justify-center border border-outline">
+<span class="material-symbols-outlined">check_circle</span>
+</div>
+<span class="font-label-bold text-[10px] uppercase">Concluído</span>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-5 rounded-lg">
+<h4 class="font-title-sm text-title-sm mb-4">Status do Gateway</h4>
+<div class="space-y-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary text-[18px]">hub</span>
+</div>
+<div>
+<p class="font-label-bold text-label-bold">Correios API</p>
+<p class="font-mono-sm text-[10px] text-on-surface-variant uppercase">Sincronizado há 2m</p>
+</div>
+</div>
+<div class="w-2 h-2 rounded-full bg-secondary"></div>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary text-[18px]">account_balance_wallet</span>
+</div>
+<div>
+<p class="font-label-bold text-label-bold">Gateway Reembolso</p>
+<p class="font-mono-sm text-[10px] text-on-surface-variant uppercase">Sincronizado há 15m</p>
+</div>
+</div>
+<div class="w-2 h-2 rounded-full bg-secondary"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Footer -->
+<footer class="w-full py-gutter px-container-padding flex justify-between items-center max-w-max-width mx-auto border-t border-outline-variant bg-surface-container-lowest text-on-surface font-body-sm text-body-sm relative z-50">
+<div class="flex items-center gap-4">
+<span class="font-title-sm text-title-sm font-black">Valley</span>
+<span class="text-on-surface-variant">© 2024 Valley Commercial Operations. All rights reserved.</span>
+</div>
+<div class="flex gap-6">
+<a class="text-on-surface-variant hover:text-secondary underline transition-all" href="#">Privacy Policy</a>
+<a class="text-on-surface-variant hover:text-secondary underline transition-all" href="#">Terms of Service</a>
+<a class="text-on-surface-variant hover:text-secondary underline transition-all" href="#">Security</a>
+<a class="text-on-surface-variant hover:text-secondary underline transition-all" href="#">API Documentation</a>
+</div>
+</footer>
+</body></html>

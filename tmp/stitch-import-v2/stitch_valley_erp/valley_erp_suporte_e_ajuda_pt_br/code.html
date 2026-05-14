@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-container": "#131b2e",
+                    "on-tertiary-container": "#3980f4",
+                    "on-primary-fixed": "#131b2e",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "on-tertiary-fixed": "#001a42",
+                    "on-error": "#ffffff",
+                    "on-background": "#1b1b1d",
+                    "error": "#ba1a1a",
+                    "on-tertiary-fixed-variant": "#004395",
+                    "tertiary-fixed": "#d8e2ff",
+                    "tertiary-container": "#001a42",
+                    "on-secondary-fixed": "#002113",
+                    "on-primary-fixed-variant": "#3f465c",
+                    "tertiary-fixed-dim": "#adc6ff",
+                    "primary-fixed-dim": "#bec6e0",
+                    "surface": "#fcf8fa",
+                    "on-secondary-container": "#00714d",
+                    "surface-variant": "#e4e2e4",
+                    "outline-variant": "#c6c6cd",
+                    "secondary-fixed": "#6ffbbe",
+                    "surface-container-low": "#f6f3f5",
+                    "primary": "#000000",
+                    "inverse-primary": "#bec6e0",
+                    "on-tertiary": "#ffffff",
+                    "on-surface-variant": "#45464d",
+                    "inverse-surface": "#303032",
+                    "secondary-fixed-dim": "#4edea3",
+                    "secondary-container": "#6cf8bb",
+                    "secondary": "#006c49",
+                    "primary-fixed": "#dae2fd",
+                    "surface-container": "#f0edef",
+                    "error-container": "#ffdad6",
+                    "on-secondary": "#ffffff",
+                    "background": "#fcf8fa",
+                    "surface-tint": "#565e74",
+                    "on-primary-container": "#7c839b",
+                    "surface-dim": "#dcd9db",
+                    "surface-container-highest": "#e4e2e4",
+                    "outline": "#76777d",
+                    "on-surface": "#1b1b1d",
+                    "surface-container-high": "#eae7e9",
+                    "on-secondary-fixed-variant": "#005236",
+                    "tertiary": "#000000",
+                    "surface-bright": "#fcf8fa",
+                    "inverse-on-surface": "#f3f0f2"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "unit": "4px",
+                    "max-width": "1600px",
+                    "gutter": "1rem",
+                    "dense-gap": "0.5rem",
+                    "container-padding": "1.5rem"
+            },
+            "fontFamily": {
+                    "mono-sm": ["JetBrains Mono"],
+                    "label-md": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "title-sm": ["Inter"],
+                    "body-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "label-bold": ["Inter"],
+                    "headline-md": ["Inter"]
+            },
+            "fontSize": {
+                    "mono-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                    "title-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "display-lg": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-bold": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        body {
+            background-color: #F8FAFC;
+        }
+    </style>
+</head>
+<body class="font-body-md text-on-surface">
+<!-- TopNavBar -->
+<header class="bg-primary-container text-on-primary fixed full-width top-0 z-50 h-14 w-full border-b border-outline-variant">
+<div class="flex justify-between items-center h-14 w-full px-container-padding max-w-max-width mx-auto">
+<div class="flex items-center gap-8">
+<span class="font-display-lg text-display-lg font-bold text-on-primary tracking-tight">Valley</span>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-on-primary-container hover:text-on-primary transition-colors font-title-sm text-title-sm" href="#">Dashboard</a>
+<a class="text-on-primary-container hover:text-on-primary transition-colors font-title-sm text-title-sm" href="#">Operations</a>
+<a class="text-on-primary-container hover:text-on-primary transition-colors font-title-sm text-title-sm" href="#">Inventory</a>
+<a class="text-on-primary-container hover:text-on-primary transition-colors font-title-sm text-title-sm" href="#">Analytics</a>
+<a class="text-on-primary-container hover:text-on-primary transition-colors font-title-sm text-title-sm" href="#">Merchants</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2">
+<button class="p-2 hover:bg-surface-variant/10 rounded-full transition-all">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 hover:bg-surface-variant/10 rounded-full transition-all">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+</button>
+<button class="p-2 hover:bg-surface-variant/10 rounded-full transition-all">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+</div>
+<button class="bg-secondary text-on-secondary px-4 py-1.5 rounded font-label-bold text-label-bold uppercase tracking-wider hover:opacity-90 transition-all">
+                    Create New
+                </button>
+<div class="h-8 w-8 rounded-full bg-surface-container-high overflow-hidden border border-outline-variant">
+<img alt="User profile avatar" data-alt="A professional headshot of a corporate executive in a sharp business suit, set against a clean, softly lit studio background with neutral grey tones. The lighting is sophisticated and directional, emphasizing professional reliability and authority, fitting a high-end enterprise ERP interface aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5cxg4tLDWBnZTte-vLzOoYfAZpqMdwyxmaNxS7WWdCujUqr4eCWzrXcH39K0vBnx9qSbA7wkLBnpD-QdQbaO7tLP0bMo7Rb2W_AkjbhTiafteKOAJcNf1nuRDWFTeCYjtGv4JLdozsEQDsTDnKY_gphlgJjj7C8XEe9p8bMnn8j3F4Z3ImqlQaDMOLjFOUrKnohye2VfoP1Roko4z8uisl-cq33lKMvW82c0zyTo5PKPDrgrgq1JBXM1wWSjkFaD_GEmVKL5TAESL"/>
+</div>
+</div>
+</div>
+</header>
+<!-- SideNavBar -->
+<aside class="fixed h-full w-[240px] left-0 top-14 bg-surface border-r border-outline-variant hidden lg:flex flex-col">
+<div class="p-6">
+<h2 class="font-headline-md text-headline-md font-extrabold text-primary">Valley ERP</h2>
+<p class="font-label-md text-label-md text-on-surface-variant opacity-70">Enterprise Console</p>
+</div>
+<nav class="flex-1 px-4 space-y-1">
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container px-4 py-2 rounded-xl transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                Home
+            </a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container px-4 py-2 rounded-xl transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+                Order Management
+            </a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container px-4 py-2 rounded-xl transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="local_shipping">local_shipping</span>
+                Logistics
+            </a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container px-4 py-2 rounded-xl transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="storefront">storefront</span>
+                Merchant Portal
+            </a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container px-4 py-2 rounded-xl transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+                Financials
+            </a>
+<a class="flex items-center gap-3 bg-secondary-container text-on-secondary-container rounded-xl font-bold px-4 py-2 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+                Suporte e SAC
+            </a>
+</nav>
+<div class="p-4 border-t border-outline-variant">
+<button class="w-full bg-primary text-on-primary py-2 rounded font-label-bold text-label-bold flex items-center justify-center gap-2 hover:opacity-90 transition-all">
+<span class="material-symbols-outlined text-[18px]" data-icon="sync">sync</span>
+                Quick Sync
+            </button>
+<div class="mt-4 space-y-1">
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container px-4 py-2 rounded transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="contact_support">contact_support</span>
+                    Support
+                </a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container px-4 py-2 rounded transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+                    Sign Out
+                </a>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="lg:ml-[240px] pt-14 min-h-screen">
+<!-- Hero Section / Search -->
+<section class="bg-primary-container text-on-primary py-16 px-container-padding">
+<div class="max-w-4xl mx-auto text-center">
+<h1 class="font-display-lg text-display-lg mb-4">Central de Ajuda e Suporte</h1>
+<p class="font-body-md text-on-primary-container mb-8 max-w-xl mx-auto">Como podemos ajudar sua operação hoje? Pesquise em nossa base de conhecimento ou abra um chamado técnico.</p>
+<div class="relative max-w-2xl mx-auto">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-primary-container" data-icon="search">search</span>
+<input class="w-full bg-white/10 border-white/20 text-white pl-12 pr-4 py-4 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent transition-all placeholder:text-on-primary-container" placeholder="Pesquise por erro de integração, faturamento, logística..." type="text"/>
+</div>
+</div>
+</section>
+<!-- Categories Bento Grid -->
+<section class="max-w-max-width mx-auto px-container-padding -mt-10 mb-12">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Logistics -->
+<div class="bg-white border border-outline-variant p-6 rounded-lg shadow-sm hover:border-secondary transition-all group">
+<div class="w-12 h-12 bg-surface-container rounded-lg flex items-center justify-center mb-4 text-secondary group-hover:bg-secondary-container transition-colors">
+<span class="material-symbols-outlined" data-icon="local_shipping">local_shipping</span>
+</div>
+<h3 class="font-title-sm text-title-sm mb-2">Logística</h3>
+<p class="font-body-sm text-on-surface-variant mb-4">Rastreamento de carga, status de entrega e gestão de frotas operacionais.</p>
+<ul class="space-y-2 mb-6">
+<li><a class="text-secondary font-label-md hover:underline flex items-center gap-1" href="#">Rastreio em tempo real <span class="material-symbols-outlined text-[14px]" data-icon="arrow_forward">arrow_forward</span></a></li>
+<li><a class="text-secondary font-label-md hover:underline flex items-center gap-1" href="#">Gestão de ocorrências <span class="material-symbols-outlined text-[14px]" data-icon="arrow_forward">arrow_forward</span></a></li>
+</ul>
+</div>
+<!-- Financial -->
+<div class="bg-white border border-outline-variant p-6 rounded-lg shadow-sm hover:border-secondary transition-all group">
+<div class="w-12 h-12 bg-surface-container rounded-lg flex items-center justify-center mb-4 text-secondary group-hover:bg-secondary-container transition-colors">
+<span class="material-symbols-outlined" data-icon="account_balance">account_balance</span>
+</div>
+<h3 class="font-title-sm text-title-sm mb-2">Financeiro</h3>
+<p class="font-body-sm text-on-surface-variant mb-4">Faturamento, notas fiscais, estornos e conciliação bancária automatizada.</p>
+<ul class="space-y-2 mb-6">
+<li><a class="text-secondary font-label-md hover:underline flex items-center gap-1" href="#">Prazos de repasse <span class="material-symbols-outlined text-[14px]" data-icon="arrow_forward">arrow_forward</span></a></li>
+<li><a class="text-secondary font-label-md hover:underline flex items-center gap-1" href="#">Emissão de notas <span class="material-symbols-outlined text-[14px]" data-icon="arrow_forward">arrow_forward</span></a></li>
+</ul>
+</div>
+<!-- Integrations -->
+<div class="bg-white border border-outline-variant p-6 rounded-lg shadow-sm hover:border-secondary transition-all group">
+<div class="w-12 h-12 bg-surface-container rounded-lg flex items-center justify-center mb-4 text-secondary group-hover:bg-secondary-container transition-colors">
+<span class="material-symbols-outlined" data-icon="api">api</span>
+</div>
+<h3 class="font-title-sm text-title-sm mb-2">Integrações</h3>
+<p class="font-body-sm text-on-surface-variant mb-4">Documentação de API, Webhooks, chaves de acesso e plugins ERP.</p>
+<ul class="space-y-2 mb-6">
+<li><a class="text-secondary font-label-md hover:underline flex items-center gap-1" href="#">Referência de API <span class="material-symbols-outlined text-[14px]" data-icon="arrow_forward">arrow_forward</span></a></li>
+<li><a class="text-secondary font-label-md hover:underline flex items-center gap-1" href="#">Configurar Webhooks <span class="material-symbols-outlined text-[14px]" data-icon="arrow_forward">arrow_forward</span></a></li>
+</ul>
+</div>
+</div>
+</section>
+<!-- FAQ & Ticket Section -->
+<section class="max-w-max-width mx-auto px-container-padding grid grid-cols-1 lg:grid-cols-12 gap-8 pb-20">
+<!-- Left: FAQs List -->
+<div class="lg:col-span-8">
+<div class="flex items-center justify-between mb-6">
+<h2 class="font-headline-md text-headline-md">Dúvidas Frequentes</h2>
+<a class="text-secondary font-label-bold hover:underline" href="#">Ver todas</a>
+</div>
+<div class="space-y-4">
+<div class="bg-white border border-outline-variant rounded-lg p-4 flex items-start gap-4 hover:bg-surface-container-low transition-colors cursor-pointer">
+<div class="mt-1 text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+</div>
+<div class="flex-1">
+<h4 class="font-title-sm text-title-sm mb-1">Como integrar minha loja VTEX ao Valley?</h4>
+<p class="font-body-sm text-on-surface-variant">Siga o passo a passo para conectar suas credenciais e sincronizar estoque.</p>
+</div>
+<span class="material-symbols-outlined text-outline" data-icon="chevron_right">chevron_right</span>
+</div>
+<div class="bg-white border border-outline-variant rounded-lg p-4 flex items-start gap-4 hover:bg-surface-container-low transition-colors cursor-pointer">
+<div class="mt-1 text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="credit_card">credit_card</span>
+</div>
+<div class="flex-1">
+<h4 class="font-title-sm text-title-sm mb-1">Meu repasse financeiro está atrasado, o que fazer?</h4>
+<p class="font-body-sm text-on-surface-variant">Verifique os status de processamento e os prazos bancários vigentes.</p>
+</div>
+<span class="material-symbols-outlined text-outline" data-icon="chevron_right">chevron_right</span>
+</div>
+<div class="bg-white border border-outline-variant rounded-lg p-4 flex items-start gap-4 hover:bg-surface-container-low transition-colors cursor-pointer">
+<div class="mt-1 text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="rule">rule</span>
+</div>
+<div class="flex-1">
+<h4 class="font-title-sm text-title-sm mb-1">Políticas de devolução e logística reversa</h4>
+<p class="font-body-sm text-on-surface-variant">Entenda como funciona o fluxo de devolução para produtos com defeito.</p>
+</div>
+<span class="material-symbols-outlined text-outline" data-icon="chevron_right">chevron_right</span>
+</div>
+<div class="bg-white border border-outline-variant rounded-lg p-4 flex items-start gap-4 hover:bg-surface-container-low transition-colors cursor-pointer">
+<div class="mt-1 text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="shield">shield</span>
+</div>
+<div class="flex-1">
+<h4 class="font-title-sm text-title-sm mb-1">Configurações de segurança e MFA</h4>
+<p class="font-body-sm text-on-surface-variant">Aumente a proteção da sua conta ativando a autenticação de dois fatores.</p>
+</div>
+<span class="material-symbols-outlined text-outline" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+</div>
+<!-- Right: Support Actions -->
+<div class="lg:col-span-4 space-y-6">
+<div class="bg-surface-container-high border border-outline-variant rounded-lg p-6">
+<h3 class="font-title-sm text-title-sm mb-4">Precisa de atendimento humano?</h3>
+<p class="font-body-sm text-on-surface-variant mb-6">Nossos especialistas estão disponíveis de segunda a sexta, das 09h às 18h.</p>
+<button class="w-full bg-secondary text-on-secondary py-3 rounded font-label-bold text-label-bold flex items-center justify-center gap-2 hover:opacity-90 transition-all mb-4">
+<span class="material-symbols-outlined" data-icon="confirmation_number">confirmation_number</span>
+                        ABRIR NOVO TICKET
+                    </button>
+<button class="w-full bg-white border border-secondary text-secondary py-3 rounded font-label-bold text-label-bold flex items-center justify-center gap-2 hover:bg-secondary/5 transition-all">
+<span class="material-symbols-outlined" data-icon="chat">chat</span>
+                        CHAT EM TEMPO REAL
+                    </button>
+</div>
+<div class="bg-white border border-outline-variant rounded-lg p-6">
+<h4 class="font-label-bold text-label-bold text-on-surface-variant mb-4 uppercase">Status do Sistema</h4>
+<div class="space-y-3">
+<div class="flex items-center justify-between">
+<span class="font-body-sm">API Gateway</span>
+<span class="flex items-center gap-1.5 text-secondary text-[12px] font-bold">
+<span class="w-2 h-2 rounded-full bg-secondary"></span> Operacional
+                            </span>
+</div>
+<div class="flex items-center justify-between">
+<span class="font-body-sm">Checkout Flow</span>
+<span class="flex items-center gap-1.5 text-secondary text-[12px] font-bold">
+<span class="w-2 h-2 rounded-full bg-secondary"></span> Operacional
+                            </span>
+</div>
+<div class="flex items-center justify-between">
+<span class="font-body-sm">Painel do Lojista</span>
+<span class="flex items-center gap-1.5 text-secondary text-[12px] font-bold">
+<span class="w-2 h-2 rounded-full bg-secondary"></span> Operacional
+                            </span>
+</div>
+</div>
+<div class="mt-6 pt-4 border-t border-outline-variant">
+<p class="font-mono-sm text-mono-sm text-on-surface-variant">Tempo médio de resposta: 14 min</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest border-t border-outline-variant w-full py- gutter px-container-padding">
+<div class="max-w-max-width mx-auto flex flex-col md:flex-row justify-between items-center gap-4 py-8">
+<div class="flex items-center gap-4">
+<span class="font-title-sm text-title-sm font-black">Valley</span>
+<p class="font-body-sm text-on-surface-variant">© 2024 Valley Commercial Operations. All rights reserved.</p>
+</div>
+<nav class="flex gap-6">
+<a class="font-body-sm text-on-surface-variant hover:text-secondary underline transition-all" href="#">Privacy Policy</a>
+<a class="font-body-sm text-on-surface-variant hover:text-secondary underline transition-all" href="#">Terms of Service</a>
+<a class="font-body-sm text-on-surface-variant hover:text-secondary underline transition-all" href="#">Security</a>
+<a class="font-body-sm text-on-surface-variant hover:text-secondary underline transition-all" href="#">API Documentation</a>
+</nav>
+</div>
+</footer>
+</body></html>
