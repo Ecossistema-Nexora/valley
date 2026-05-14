@@ -12,10 +12,10 @@ REGRAS: Nao aceitar cadastro sem CPF estruturalmente valido; nao aceitar checkou
 - [x] Incluir tipo do endereco e confirmacao de logradouro no cadastro.
 - [x] Atualizar Flutter para validar CPF/data e buscar CEP automaticamente no cadastro.
 - [x] Atualizar checkout para destinatario separado, endereco principal ou alternativo e busca por CEP.
-- [ ] Validar endpoints localmente.
-- [ ] Validar `flutter analyze` dos arquivos alterados.
-- [ ] Reiniciar servidor admin e validar endpoints no dominio publico.
-- [ ] Acionar Valley Module Automation Engine.
+- [x] Validar endpoints localmente.
+- [x] Validar `flutter analyze` dos arquivos alterados.
+- [x] Reiniciar servidor admin e validar endpoints no dominio publico.
+- [x] Acionar Valley Module Automation Engine.
 
 ## Criterios De Aceite
 
@@ -24,4 +24,3 @@ REGRAS: Nao aceitar cadastro sem CPF estruturalmente valido; nao aceitar checkou
 - Usuario informa numero, complemento e tipo do endereco.
 - Checkout permite usar endereco principal ou informar outro endereco de entrega.
 - Checkout permite destinatario diferente do titular da conta.
-

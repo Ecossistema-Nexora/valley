@@ -8,7 +8,9 @@
   "superflex.analytics": false,
   "files.associations": {
     "*.mongo.js": "javascript",
-    "*.sql": "sql"
+    "*.sql": "sql",
+    "*.tf": "terraform",
+    "*.tfvars": "terraform-vars"
   },
   "search.exclude": {
     "**/.superdesign/**": true,
@@ -21,6 +23,9 @@
     "**/__pycache__/**": true
   },
   "yaml.format.enable": true,
+  "terraform.languageServer.enable": true,
+  "terraform.languageServer.path": "",
+  "terraform.experimentalFeatures.validateOnSave": true,
   "docker.showStartPage": false,
   "jdk.jdkhome": "C:\\Program Files\\Microsoft\\jdk-21.0.10.7-hotspot",
   "java.jdt.ls.java.home": "C:\\Program Files\\Microsoft\\jdk-21.0.10.7-hotspot",

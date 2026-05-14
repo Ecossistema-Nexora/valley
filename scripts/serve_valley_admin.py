@@ -3163,7 +3163,7 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 "detail": "Expected JSON object.",
             }
 
-        full_name = str(payload.get("full_name") or "").strip()
+        full_name = str(payload.get("full_name") or payload.get("name") or "").strip()
         display_name = str(payload.get("display_name") or full_name).strip()
         email = self._normalize_auth_identifier(payload.get("email"))
         password = str(payload.get("password") or "")

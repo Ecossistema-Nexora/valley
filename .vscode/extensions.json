@@ -9,6 +9,7 @@
     "figma.figma-vscode-extension",
     "github.vscode-github-actions",
     "Google.geminicodeassist",
+    "HashiCorp.terraform",
     "ms-ossdata.vscode-pgsql",
     "ms-python.python",
     "ms-python.vscode-pylance",

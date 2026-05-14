@@ -11,6 +11,7 @@
     "figma.figma-vscode-extension",
     "github.vscode-github-actions",
     "Google.geminicodeassist",
+    "HashiCorp.terraform",
     "ms-ossdata.vscode-pgsql",
     "ms-python.python",
     "ms-python.vscode-pylance",
@@ -53,6 +54,17 @@
     {
       "name": "docker",
       "type": "command",
+      "required": true
+    },
+    {
+      "name": "terraform",
+      "type": "command",
+      "required": true
+    },
+    {
+      "name": "Terraform MCP Server",
+      "type": "script",
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install_terraform_mcp_server.ps1",
       "required": true
     },
     {

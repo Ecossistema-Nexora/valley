@@ -8,13 +8,14 @@
       "context7",
       "figma",
       "linear",
-      "playwright"
+      "playwright",
+      "terraform"
     ],
     "validation_script": "scripts/check_valley_mcp_config.ps1",
     "secret_policy": "no_secrets_in_repo",
     "notes": [
       "MCP_DOCKER is platform-managed and must not be duplicated as a workspace endpoint.",
-      "context7, figma, linear and playwright must remain declared in repo-local MCP configuration.",
+      "context7, figma, linear, playwright and terraform must remain declared in repo-local MCP configuration.",
       "OAuth tokens and API keys stay in the local MCP client, environment or secret manager."
     ]
   },
@@ -149,6 +150,34 @@
       "declared_in": [
         ".mcp.json",
         ".vscode/mcp.json"
+      ]
+    },
+    "terraform": {
+      "mode": "workspace-declared",
+      "transport": "stdio",
+      "command": "powershell",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "scripts/start_terraform_mcp_server.ps1"
+      ],
+      "auth": "none_for_public_registry",
+      "mandatory": true,
+      "declared_in": [
+        ".mcp.json",
+        ".vscode/mcp.json",
+        ".codex/config.toml"
+      ],
+      "install_script": "scripts/install_terraform_mcp_server.ps1",
+      "source": "HashiCorp Terraform MCP Server",
+      "secret_policy": "TFE_TOKEN and TFE_ADDRESS local environment only when HCP Terraform or Terraform Enterprise access is required.",
+      "operation_policy": "ENABLE_TF_OPERATIONS stays unset by default; destructive operations require explicit local opt-in.",
+      "notes": [
+        "Use local stdio transport for workspace clients.",
+        "The wrapper prefers tmp/runtime/tools/terraform-mcp-server.exe and falls back to terraform-mcp-server on PATH or Docker.",
+        "Do not commit HCP/TFE tokens, Terraform credentials, plans containing secrets, or state files."
       ]
     }
   }

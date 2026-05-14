@@ -12,7 +12,7 @@ $codexConfigPath = Join-Path $repoRoot '.codex/config.toml'
 $outputPath = Join-Path $repoRoot 'tmp/runtime/mcp-config-check.json'
 
 $requiredPlatformCapabilities = @('MCP_DOCKER')
-$requiredWorkspaceServers = @('context7', 'figma', 'linear', 'playwright')
+$requiredWorkspaceServers = @('context7', 'figma', 'linear', 'playwright', 'terraform')
 $requiredAll = @($requiredPlatformCapabilities + $requiredWorkspaceServers)
 
 $checks = [System.Collections.Generic.List[object]]::new()
@@ -115,6 +115,18 @@ $playwrightCommandOk = $genericMcp.mcpServers.playwright.command -eq 'npx' -and
   $genericPlaywrightArgs -contains '--output-dir=tmp/runtime/playwright-mcp' -and
   $vscodePlaywrightArgs -contains '--output-dir=tmp/runtime/playwright-mcp'
 Add-Check -Name 'command.playwright' -Ok $playwrightCommandOk -Detail 'Playwright MCP uses npx @playwright/mcp@latest with ignored tmp/runtime persistence'
+
+$genericTerraformArgs = @($genericMcp.mcpServers.terraform.args)
+$vscodeTerraformArgs = @($vscodeMcp.servers.terraform.args)
+$terraformCommandOk = $genericMcp.mcpServers.terraform.command -eq 'powershell' -and
+  $vscodeMcp.servers.terraform.command -eq 'powershell' -and
+  $vscodeMcp.servers.terraform.type -eq 'stdio' -and
+  $genericTerraformArgs -contains 'scripts/start_terraform_mcp_server.ps1' -and
+  $vscodeTerraformArgs -contains 'scripts/start_terraform_mcp_server.ps1' -and
+  (Has-Property -Object $manifest.servers -Name 'terraform') -and
+  $manifest.servers.terraform.mandatory -eq $true -and
+  $manifest.servers.terraform.transport -eq 'stdio'
+Add-Check -Name 'command.terraform' -Ok $terraformCommandOk -Detail 'Terraform MCP uses local stdio wrapper with no repo-stored token'
 
 $secretLeakPatterns = @(
   'ctx7sk_[A-Za-z0-9_-]+',

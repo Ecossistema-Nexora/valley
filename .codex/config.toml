@@ -26,3 +26,23 @@ Mandatory brand terminology:
 
 [features]
 experimental_use_rmcp_client = true
+
+[mcp_servers.figma]
+command = "npx"
+args = ["-y", "mcp-remote", "https://mcp.figma.com/mcp"]
+
+[mcp_servers.context7]
+command = "npx"
+args = ["-y", "mcp-remote", "https://mcp.context7.com/mcp/oauth"]
+
+[mcp_servers.linear]
+command = "npx"
+args = ["-y", "mcp-remote", "https://mcp.linear.app/mcp"]
+
+[mcp_servers.playwright]
+command = "npx"
+args = ["-y", "@playwright/mcp@latest", "--user-data-dir=tmp/runtime/playwright-mcp-profile", "--output-dir=tmp/runtime/playwright-mcp"]
+
+[mcp_servers.terraform]
+command = "powershell"
+args = ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "scripts/start_terraform_mcp_server.ps1"]

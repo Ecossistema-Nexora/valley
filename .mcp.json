@@ -1,6 +1,7 @@
 {
   "mcpServers": {
     "figma": {
+      "url": "https://mcp.figma.com/mcp",
       "command": "npx",
       "args": ["-y", "mcp-remote", "https://mcp.figma.com/mcp"],
       "note": "Official remote Figma MCP server. Requires OAuth on first connection."
@@ -17,11 +18,13 @@
       "note": "Official Stitch MCP server. Set STITCH_API_KEY locally or use the OAuth flow documented in config/VALLEY_FIRST_CONNECTION_CHECKLIST.md."
     },
     "context7": {
+      "url": "https://mcp.context7.com/mcp/oauth",
       "command": "npx",
       "args": ["-y", "mcp-remote", "https://mcp.context7.com/mcp/oauth"],
       "note": "Official Context7 remote MCP server. OAuth endpoint avoids versioning CONTEXT7_API_KEY; use https://mcp.context7.com/mcp plus a local CONTEXT7_API_KEY header only in private client config if needed."
     },
     "linear": {
+      "url": "https://mcp.linear.app/mcp",
       "command": "npx",
       "args": ["-y", "mcp-remote", "https://mcp.linear.app/mcp"],
       "note": "Official Linear MCP endpoint. Uses /mcp; the older /sse transport is deprecated."
@@ -40,6 +43,17 @@
       "command": "npx",
       "args": ["-y", "mcp-remote", "https://mcp.cloudflare.com/mcp"],
       "note": "Official Cloudflare API MCP server. Requires OAuth on first connection."
+    },
+    "terraform": {
+      "command": "powershell",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "scripts/start_terraform_mcp_server.ps1"
+      ],
+      "note": "Official HashiCorp Terraform MCP server in local stdio mode. Run scripts/install_terraform_mcp_server.ps1 to install the binary under ignored tmp/runtime/tools; TFE_TOKEN and TFE_ADDRESS stay local only."
     }
   }
 }
