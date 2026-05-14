@@ -60,3 +60,108 @@ Traceback (most recent call last):
     self._sock.sendall(b)
 ConnectionResetError: [WinError 10054] Foi forçado o cancelamento de uma conexão existente pelo host remoto
 ----------------------------------------
+----------------------------------------
+Exception occurred during processing of request from ----------------------------------------('192.168.1.2', 63213)
+
+Exception occurred during processing of request from ('192.168.1.2', 63216)
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 697, in process_request_thread
+    self.finish_request(request, client_address)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 697, in process_request_thread
+    self.finish_request(request, client_address)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 751, in __init__
+    self.started_at_utc = started_at_utc or utc_now_iso()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 751, in __init__
+    self.started_at_utc = started_at_utc or utc_now_iso()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 766, in __init__
+    self.handle()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 436, in handle
+    self.handle_one_request()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 766, in __init__
+    self.handle()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 424, in handle_one_request
+    method()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 436, in handle
+    self.handle_one_request()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 424, in handle_one_request
+    method()
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 1198, in do_POST
+    provider_key="alibaba",
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 7457, in _write_cjdropshipping_notification_event
+    if access_token or refresh_token:
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 1198, in do_POST
+    provider_key="alibaba",
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 7457, in _write_cjdropshipping_notification_event
+    if access_token or refresh_token:
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 7904, in _write_json
+    "message": success_message,
+    ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 760, in end_headers
+    self.send_header("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Valley-Session")
+    ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 7904, in _write_json
+    "message": success_message,
+    ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 760, in end_headers
+    self.send_header("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Valley-Session")
+    ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 538, in end_headers
+    self.flush_headers()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 542, in flush_headers
+    self.wfile.write(b"".join(self._headers_buffer))
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 538, in end_headers
+    self.flush_headers()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 542, in flush_headers
+    self.wfile.write(b"".join(self._headers_buffer))
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 845, in write
+    self._sock.sendall(b)
+ConnectionResetError: [WinError 10054] Foi forçado o cancelamento de uma conexão existente pelo host remoto
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 845, in write
+    self._sock.sendall(b)
+ConnectionResetError: [WinError 10054] Foi forçado o cancelamento de uma conexão existente pelo host remoto
+----------------------------------------
+----------------------------------------
+----------------------------------------
+Exception occurred during processing of request from ('192.168.1.2', 58663)
+Traceback (most recent call last):
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 697, in process_request_thread
+    self.finish_request(request, client_address)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 751, in __init__
+    self.started_at_utc = started_at_utc or utc_now_iso()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 766, in __init__
+    self.handle()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 436, in handle
+    self.handle_one_request()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 424, in handle_one_request
+    method()
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 1198, in do_POST
+    provider_key="alibaba",
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 7457, in _write_cjdropshipping_notification_event
+    if access_token or refresh_token:
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 7904, in _write_json
+    "message": success_message,
+    ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ereta\.codex\worktrees\VALLEY\scripts\serve_valley_admin.py", line 760, in end_headers
+    self.send_header("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Valley-Session")
+    ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 538, in end_headers
+    self.flush_headers()
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 542, in flush_headers
+    self.wfile.write(b"".join(self._headers_buffer))
+  File "C:\Users\ereta\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 845, in write
+    self._sock.sendall(b)
+ConnectionResetError: [WinError 10054] Foi forçado o cancelamento de uma conexão existente pelo host remoto
+----------------------------------------

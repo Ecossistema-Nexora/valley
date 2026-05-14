@@ -126,6 +126,7 @@ SUPPLIER_RUNTIME_PROVIDERS = {"cjdropshipping", "aliexpress", "alibaba"}
 AUTH_SESSION_TTL_SECONDS = 60 * 60 * 24 * 30
 AUTH_LOGIN_LOCK_THRESHOLD = 5
 AUTH_LOGIN_LOCK_SECONDS = 15 * 60
+RECEITA_CPF_PUBLIC_URL = "https://www.gov.br/pt-br/servicos/consultar-cadastro-de-pessoas-fisicas"
 STOCK_INTERNAL_FIELDS = {
     "base_cost_brl",
     "benchmark_provider_key",
@@ -1047,6 +1048,20 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             )
             return
 
+        if route == "/api/actions/validate-cpf":
+            self._write_json(
+                HTTPStatus.OK,
+                self._cpf_validation_payload(),
+            )
+            return
+
+        if route == "/api/actions/cep-lookup":
+            self._write_json(
+                HTTPStatus.OK,
+                self._cep_lookup_payload(query),
+            )
+            return
+
         if route == "/api/actions/open-media":
             self._write_json(
                 HTTPStatus.OK,
@@ -1473,6 +1488,8 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             "display_name": str(user.get("display_name") or user.get("full_name") or ""),
             "email": str(user.get("email") or ""),
             "cpf": str(user.get("document_number") or "") if str(user.get("document_type") or "").upper() == "CPF" else "",
+            "birth_date": str(user.get("birth_date") or ""),
+            "cpf_validation": user.get("cpf_validation") if isinstance(user.get("cpf_validation"), dict) else {},
             "phone": str(profile.get("phone") or user.get("phone") or ""),
             "default_delivery_address": default_address,
             "primary_role": str(user.get("primary_role") or "CUSTOMER"),
@@ -3026,6 +3043,117 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             "preferences": persisted,
         }
 
+    def _cpf_validation_payload(self) -> dict[str, Any]:
+        payload = self._read_json_body()
+        payload = payload if isinstance(payload, dict) else {}
+        cpf = re.sub(r"\D+", "", str(payload.get("cpf") or payload.get("document_number") or ""))
+        birth_date = str(payload.get("birth_date") or payload.get("data_nascimento") or "").strip()
+        local_valid = self._cpf_has_valid_digits(cpf)
+        birth_date_valid = self._birth_date_is_valid(birth_date)
+        return {
+            "status": "ok" if local_valid and birth_date_valid else "failed",
+            "action": "validate-cpf",
+            "payload": {
+                "message": "CPF validado para cadastro."
+                if local_valid and birth_date_valid
+                else "Informe CPF valido e data de nascimento no formato AAAA-MM-DD.",
+                "cpf": cpf,
+                "cpf_digits_valid": local_valid,
+                "birth_date_valid": birth_date_valid,
+                "receita_public_url": RECEITA_CPF_PUBLIC_URL,
+                "receita_status": "official_lookup_requires_receita_session",
+                "receita_detail": "A consulta oficial da Receita usa CPF e data de nascimento no servico publico; este endpoint valida os digitos e preserva o link oficial para comprovacao cadastral.",
+            },
+        }
+
+    def _cep_lookup_payload(self, query: dict[str, list[str]]) -> dict[str, Any]:
+        payload = self._read_json_body()
+        payload = payload if isinstance(payload, dict) else {}
+        postal_code = re.sub(
+            r"\D+",
+            "",
+            str(payload.get("postal_code") or payload.get("cep") or (query.get("cep") or [""])[0]),
+        )
+        if len(postal_code) != 8:
+            return {
+                "status": "failed",
+                "action": "cep-lookup",
+                "payload": {
+                    "message": "Informe um CEP com 8 digitos.",
+                    "postal_code": postal_code,
+                },
+            }
+
+        try:
+            request = Request(
+                f"https://viacep.com.br/ws/{postal_code}/json/",
+                headers={"User-Agent": "Valley/cep-lookup"},
+            )
+            with urlopen(request, timeout=8) as response:
+                lookup = json.loads(response.read().decode("utf-8"))
+        except (OSError, HTTPError, URLError, json.JSONDecodeError) as error:
+            return {
+                "status": "failed",
+                "action": "cep-lookup",
+                "payload": {
+                    "message": "Nao foi possivel consultar o CEP agora.",
+                    "postal_code": postal_code,
+                    "detail": str(error),
+                },
+            }
+
+        if not isinstance(lookup, dict) or lookup.get("erro"):
+            return {
+                "status": "failed",
+                "action": "cep-lookup",
+                "payload": {
+                    "message": "CEP nao encontrado.",
+                    "postal_code": postal_code,
+                },
+            }
+
+        address = {
+            "postal_code": postal_code,
+            "street": str(lookup.get("logradouro") or "").strip(),
+            "neighborhood": str(lookup.get("bairro") or "").strip(),
+            "city": str(lookup.get("localidade") or "").strip(),
+            "state": str(lookup.get("uf") or "").strip().upper(),
+            "country": "BR",
+            "address_lookup_source": "viacep",
+            "address_confirmed": "false",
+        }
+        return {
+            "status": "ok",
+            "action": "cep-lookup",
+            "payload": {
+                "message": "Endereco encontrado. Confirme o logradouro, informe numero, complemento e tipo.",
+                "postal_code": postal_code,
+                "address": address,
+            },
+        }
+
+    def _cpf_has_valid_digits(self, value: str) -> bool:
+        cpf = re.sub(r"\D+", "", str(value or ""))
+        if len(cpf) != 11 or cpf == cpf[0] * 11:
+            return False
+
+        def digit_for(prefix: str) -> str:
+            total = sum(int(number) * weight for number, weight in zip(prefix, range(len(prefix) + 1, 1, -1)))
+            remainder = (total * 10) % 11
+            return "0" if remainder == 10 else str(remainder)
+
+        first_digit = digit_for(cpf[:9])
+        second_digit = digit_for(cpf[:9] + first_digit)
+        return cpf[-2:] == first_digit + second_digit
+
+    def _birth_date_is_valid(self, value: Any) -> bool:
+        parsed = parse_iso_datetime(str(value or "")[:10])
+        if parsed is None:
+            return False
+        now = utc_now_datetime()
+        age = now.year - parsed.year - ((now.month, now.day) < (parsed.month, parsed.day))
+        return 0 <= age <= 120
+
     def _auth_register_response(self) -> tuple[HTTPStatus, dict[str, Any]]:
         payload = self._read_json_body()
         if not isinstance(payload, dict):
@@ -3041,6 +3169,7 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
         password = str(payload.get("password") or "")
         role = str(payload.get("role") or "CUSTOMER").strip().upper()
         cpf = re.sub(r"\D+", "", str(payload.get("cpf") or payload.get("document_number") or ""))
+        birth_date = str(payload.get("birth_date") or payload.get("data_nascimento") or "").strip()[:10]
         phone = re.sub(r"[^\d+]+", "", str(payload.get("phone") or ""))
         default_delivery_address = {
             "recipient_name": full_name,
@@ -3048,6 +3177,8 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             "street": str(payload.get("street") or payload.get("address_line1") or "").strip(),
             "number": str(payload.get("number") or "").strip(),
             "complement": str(payload.get("complement") or "").strip(),
+            "address_type": str(payload.get("address_type") or payload.get("tipo_endereco") or "").strip().lower(),
+            "address_confirmed": str(payload.get("address_confirmed") or "true").strip().lower(),
             "neighborhood": str(payload.get("neighborhood") or "").strip(),
             "city": str(payload.get("city") or "").strip(),
             "state": str(payload.get("state") or "").strip().upper(),
@@ -3062,12 +3193,37 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 "service": "valley-auth",
                 "detail": "Informe nome, email valido e senha com ao menos 8 caracteres.",
             }
-        required_address_fields = ("postal_code", "street", "number", "neighborhood", "city", "state")
-        if len(cpf) != 11 or any(not default_delivery_address[field] for field in required_address_fields):
+        if len(full_name.split()) < 2:
             return HTTPStatus.BAD_REQUEST, {
                 "status": "validation_error",
                 "service": "valley-auth",
-                "detail": "Informe CPF e endereco completo de entrega.",
+                "detail": "Informe o nome completo.",
+            }
+        if not self._cpf_has_valid_digits(cpf) or not self._birth_date_is_valid(birth_date):
+            return HTTPStatus.BAD_REQUEST, {
+                "status": "validation_error",
+                "service": "valley-auth",
+                "detail": "Informe CPF valido e data de nascimento no formato AAAA-MM-DD.",
+                "cpf_validation": {
+                    "cpf": cpf,
+                    "cpf_digits_valid": self._cpf_has_valid_digits(cpf),
+                    "birth_date_valid": self._birth_date_is_valid(birth_date),
+                    "receita_public_url": RECEITA_CPF_PUBLIC_URL,
+                    "receita_status": "official_lookup_requires_receita_session",
+                },
+            }
+        if len(phone) < 10:
+            return HTTPStatus.BAD_REQUEST, {
+                "status": "validation_error",
+                "service": "valley-auth",
+                "detail": "Informe telefone principal com DDD.",
+            }
+        required_address_fields = ("postal_code", "street", "number", "address_type", "neighborhood", "city", "state")
+        if any(not default_delivery_address[field] for field in required_address_fields):
+            return HTTPStatus.BAD_REQUEST, {
+                "status": "validation_error",
+                "service": "valley-auth",
+                "detail": "Informe endereco principal completo com CEP, logradouro, numero, bairro, cidade, UF e tipo.",
             }
 
         runtime = self._auth_runtime_payload()
@@ -3106,6 +3262,13 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             "document_country": "BR",
             "document_type": "CPF",
             "document_number": cpf,
+            "birth_date": birth_date,
+            "cpf_validation": {
+                "cpf_digits_valid": True,
+                "birth_date_valid": True,
+                "receita_public_url": RECEITA_CPF_PUBLIC_URL,
+                "receita_status": "official_lookup_requires_receita_session",
+            },
             "phone": phone,
             "default_delivery_address": default_delivery_address,
             "primary_role": role,
@@ -3894,6 +4057,7 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             "street": str(delivery_address.get("street") or "").strip(),
             "number": str(delivery_address.get("number") or "").strip(),
             "complement": str(delivery_address.get("complement") or "").strip(),
+            "address_type": str(delivery_address.get("address_type") or "").strip().lower(),
             "neighborhood": str(delivery_address.get("neighborhood") or "").strip(),
             "city": str(delivery_address.get("city") or "").strip(),
             "state": str(delivery_address.get("state") or "").strip().upper(),
@@ -3901,7 +4065,7 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
         }
 
     def _delivery_address_complete(self, delivery_address: dict[str, str]) -> bool:
-        required_fields = ("recipient_name", "postal_code", "street", "number", "neighborhood", "city", "state")
+        required_fields = ("recipient_name", "postal_code", "street", "number", "address_type", "neighborhood", "city", "state")
         return all(bool(str(delivery_address.get(field) or "").strip()) for field in required_fields)
 
     def _base_shipping_cost_brl(self, item: dict[str, Any]) -> float:

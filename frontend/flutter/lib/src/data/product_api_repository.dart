@@ -175,6 +175,29 @@ class ProductApiRepository {
     );
   }
 
+  Future<ProductActionResult> validateCpf({
+    required String baseUrl,
+    required String cpf,
+    required String birthDate,
+  }) {
+    return invokePath(
+      baseUrl: baseUrl,
+      path: '/api/actions/validate-cpf',
+      body: <String, dynamic>{'cpf': cpf, 'birth_date': birthDate},
+    );
+  }
+
+  Future<ProductActionResult> lookupCep({
+    required String baseUrl,
+    required String postalCode,
+  }) {
+    return invokePath(
+      baseUrl: baseUrl,
+      path: '/api/actions/cep-lookup',
+      body: <String, dynamic>{'postal_code': postalCode},
+    );
+  }
+
   Future<ProductAuthResult> register({
     required String baseUrl,
     required String fullName,
@@ -183,6 +206,7 @@ class ProductApiRepository {
     required String password,
     required String role,
     required String cpf,
+    required String birthDate,
     required String phone,
     required Map<String, String> defaultDeliveryAddress,
   }) async {
@@ -198,11 +222,15 @@ class ProductApiRepository {
             'password': password,
             'role': role,
             'cpf': cpf,
+            'birth_date': birthDate,
             'phone': phone,
             'postal_code': defaultDeliveryAddress['postal_code'] ?? '',
             'street': defaultDeliveryAddress['street'] ?? '',
             'number': defaultDeliveryAddress['number'] ?? '',
             'complement': defaultDeliveryAddress['complement'] ?? '',
+            'address_type': defaultDeliveryAddress['address_type'] ?? '',
+            'address_confirmed':
+                defaultDeliveryAddress['address_confirmed'] ?? 'true',
             'neighborhood': defaultDeliveryAddress['neighborhood'] ?? '',
             'city': defaultDeliveryAddress['city'] ?? '',
             'state': defaultDeliveryAddress['state'] ?? '',

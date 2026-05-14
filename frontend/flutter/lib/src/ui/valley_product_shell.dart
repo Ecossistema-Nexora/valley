@@ -836,12 +836,15 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
         password: values['password'] ?? '',
         role: values['role'] ?? 'CUSTOMER',
         cpf: values['cpf'] ?? '',
+        birthDate: values['birth_date'] ?? '',
         phone: values['phone'] ?? '',
         defaultDeliveryAddress: <String, String>{
           'postal_code': values['postal_code'] ?? '',
           'street': values['street'] ?? '',
           'number': values['number'] ?? '',
           'complement': values['complement'] ?? '',
+          'address_type': values['address_type'] ?? '',
+          'address_confirmed': values['address_confirmed'] ?? 'true',
           'neighborhood': values['neighborhood'] ?? '',
           'city': values['city'] ?? '',
           'state': values['state'] ?? '',
@@ -1224,6 +1227,8 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
     if (_surface == 'identity') {
       return _IdentityTrustScreen(
         pendingItem: _selectedItem,
+        baseUrl: _data.baseUrl,
+        repository: widget.repository,
         onConfirm: _selectedItem == null
             ? null
             : () => _openCheckout(_selectedItem!),
@@ -4855,9 +4860,14 @@ class _CheckoutScreenState extends State<_CheckoutScreen> {
   late final TextEditingController _cityController;
   late final TextEditingController _stateController;
   Timer? _shippingQuoteTimer;
+  Timer? _cepLookupTimer;
   bool _shippingQuoteBusy = false;
+  bool _cepLookupBusy = false;
   Map<String, dynamic>? _shippingQuote;
   String _lastShippingQuoteKey = '';
+  String _lastCepLookup = '';
+  String _cepLookupStatus = '';
+  late String _addressType;
 
   Map<String, String> get _profileAddress =>
       widget.authSession?.user.defaultDeliveryAddress ??
@@ -4867,6 +4877,7 @@ class _CheckoutScreenState extends State<_CheckoutScreen> {
   void initState() {
     super.initState();
     _useProfileAddress = widget.useProfileAddress && _profileAddress.isNotEmpty;
+    _addressType = _normalizeAddressType(_profileAddress['address_type']);
     _recipientController = TextEditingController(
       text:
           _profileAddress['recipient_name'] ??
@@ -4906,14 +4917,29 @@ class _CheckoutScreenState extends State<_CheckoutScreen> {
     ]) {
       controller.addListener(_scheduleShippingQuote);
     }
+    _postalCodeController.addListener(_scheduleCepLookup);
     WidgetsBinding.instance.addPostFrameCallback(
       (_) => _scheduleShippingQuote(),
     );
   }
 
+  String _normalizeAddressType(String? value) {
+    final String normalized = (value ?? '').trim().toLowerCase();
+    if (<String>{
+      'casa',
+      'apartamento',
+      'comercial',
+      'outro',
+    }.contains(normalized)) {
+      return normalized;
+    }
+    return 'casa';
+  }
+
   @override
   void dispose() {
     _shippingQuoteTimer?.cancel();
+    _cepLookupTimer?.cancel();
     _recipientController.dispose();
     _postalCodeController.dispose();
     _streetController.dispose();
@@ -4927,7 +4953,11 @@ class _CheckoutScreenState extends State<_CheckoutScreen> {
 
   Map<String, String> _deliveryAddress() {
     if (_useProfileAddress && _profileAddress.isNotEmpty) {
-      return Map<String, String>.from(_profileAddress);
+      return <String, String>{
+        ...Map<String, String>.from(_profileAddress),
+        'recipient_name': _recipientController.text,
+        'address_type': _profileAddress['address_type'] ?? _addressType,
+      };
     }
     return <String, String>{
       'recipient_name': _recipientController.text,
@@ -4935,6 +4965,7 @@ class _CheckoutScreenState extends State<_CheckoutScreen> {
       'street': _streetController.text,
       'number': _numberController.text,
       'complement': _complementController.text,
+      'address_type': _addressType,
       'neighborhood': _neighborhoodController.text,
       'city': _cityController.text,
       'state': _stateController.text,
@@ -4948,6 +4979,7 @@ class _CheckoutScreenState extends State<_CheckoutScreen> {
       'postal_code',
       'street',
       'number',
+      'address_type',
       'neighborhood',
       'city',
       'state',
@@ -4965,6 +4997,59 @@ class _CheckoutScreenState extends State<_CheckoutScreen> {
       const Duration(milliseconds: 450),
       _refreshShippingQuote,
     );
+  }
+
+  void _scheduleCepLookup() {
+    if (_useProfileAddress && _profileAddress.isNotEmpty) {
+      return;
+    }
+    _cepLookupTimer?.cancel();
+    _cepLookupTimer = Timer(const Duration(milliseconds: 650), _lookupCep);
+  }
+
+  Future<void> _lookupCep() async {
+    final String postalCode = _postalCodeController.text.replaceAll(
+      RegExp(r'\D+'),
+      '',
+    );
+    if (postalCode.length != 8 || postalCode == _lastCepLookup) {
+      return;
+    }
+    _lastCepLookup = postalCode;
+    setState(() {
+      _cepLookupBusy = true;
+      _cepLookupStatus = 'Buscando endereço pelo CEP...';
+    });
+    try {
+      final ProductActionResult result = await widget.repository.lookupCep(
+        baseUrl: widget.baseUrl,
+        postalCode: postalCode,
+      );
+      final Map<String, dynamic> address =
+          (result.payload['address'] as Map<dynamic, dynamic>? ??
+                  <dynamic, dynamic>{})
+              .cast<String, dynamic>();
+      if (!mounted) {
+        return;
+      }
+      if (result.ok && address.isNotEmpty) {
+        _streetController.text = '${address['street'] ?? ''}';
+        _neighborhoodController.text = '${address['neighborhood'] ?? ''}';
+        _cityController.text = '${address['city'] ?? ''}';
+        _stateController.text = '${address['state'] ?? ''}';
+      }
+      setState(() {
+        _cepLookupBusy = false;
+        _cepLookupStatus = result.message;
+      });
+    } catch (_) {
+      if (mounted) {
+        setState(() {
+          _cepLookupBusy = false;
+          _cepLookupStatus = 'Não foi possível consultar o CEP agora.';
+        });
+      }
+    }
   }
 
   Future<void> _refreshShippingQuote() async {
@@ -5132,6 +5217,12 @@ class _CheckoutScreenState extends State<_CheckoutScreen> {
                 ),
               ),
               const SizedBox(height: 10),
+              _AuthTextField(
+                controller: _recipientController,
+                label: 'Destinatário',
+                hintText: 'Quem irá receber a entrega',
+              ),
+              const SizedBox(height: 10),
               if (_profileAddress.isNotEmpty)
                 SwitchListTile.adaptive(
                   contentPadding: EdgeInsets.zero,
@@ -5148,21 +5239,22 @@ class _CheckoutScreenState extends State<_CheckoutScreen> {
                 ),
               if (!_useProfileAddress || _profileAddress.isEmpty) ...<Widget>[
                 _AuthTextField(
-                  controller: _recipientController,
-                  label: 'Nome do destinatário',
-                  hintText: 'Nome completo',
-                ),
-                const SizedBox(height: 10),
-                _AuthTextField(
                   controller: _postalCodeController,
                   label: 'CEP',
                   hintText: '00000-000',
                   keyboardType: TextInputType.number,
                 ),
+                if (_cepLookupStatus.isNotEmpty) ...<Widget>[
+                  const SizedBox(height: 8),
+                  _InlineValidationStatus(
+                    text: _cepLookupStatus,
+                    busy: _cepLookupBusy,
+                  ),
+                ],
                 const SizedBox(height: 10),
                 _AuthTextField(
                   controller: _streetController,
-                  label: 'Endereço',
+                  label: 'Logradouro confirmado',
                   hintText: 'Rua, avenida ou estrada',
                 ),
                 const SizedBox(height: 10),
@@ -5173,17 +5265,39 @@ class _CheckoutScreenState extends State<_CheckoutScreen> {
                         controller: _numberController,
                         label: 'Número',
                         hintText: 'Número',
+                        keyboardType: TextInputType.number,
                       ),
                     ),
                     const SizedBox(width: 10),
                     Expanded(
                       child: _AuthTextField(
                         controller: _complementController,
-                        label: 'Complemento',
+                        label: 'Complemento numérico',
                         hintText: 'Apto, bloco',
                       ),
                     ),
                   ],
+                ),
+                const SizedBox(height: 10),
+                DropdownButtonFormField<String>(
+                  initialValue: _addressType,
+                  decoration: const InputDecoration(labelText: 'Tipo'),
+                  items: const <DropdownMenuItem<String>>[
+                    DropdownMenuItem(value: 'casa', child: Text('Casa')),
+                    DropdownMenuItem(
+                      value: 'apartamento',
+                      child: Text('Apartamento'),
+                    ),
+                    DropdownMenuItem(
+                      value: 'comercial',
+                      child: Text('Comercial'),
+                    ),
+                    DropdownMenuItem(value: 'outro', child: Text('Outro')),
+                  ],
+                  onChanged: (String? value) {
+                    setState(() => _addressType = value ?? 'casa');
+                    _scheduleShippingQuote();
+                  },
                 ),
                 const SizedBox(height: 10),
                 _AuthTextField(
@@ -6256,6 +6370,8 @@ typedef _AuthRegisterHandler =
 class _IdentityTrustScreen extends StatelessWidget {
   const _IdentityTrustScreen({
     required this.pendingItem,
+    required this.baseUrl,
+    required this.repository,
     required this.onConfirm,
     required this.authSession,
     required this.authBusy,
@@ -6266,6 +6382,8 @@ class _IdentityTrustScreen extends StatelessWidget {
   });
 
   final ProductItem? pendingItem;
+  final String baseUrl;
+  final ProductApiRepository repository;
   final VoidCallback? onConfirm;
   final ProductAuthSession? authSession;
   final bool authBusy;
@@ -6315,6 +6433,8 @@ class _IdentityTrustScreen extends StatelessWidget {
               const SizedBox(height: 20),
               if (authSession == null)
                 _AuthAccessPanel(
+                  baseUrl: baseUrl,
+                  repository: repository,
                   busy: authBusy,
                   feedback: feedback,
                   onLogin: onLogin,
@@ -6398,12 +6518,16 @@ class _IdentityTrustScreen extends StatelessWidget {
 
 class _AuthAccessPanel extends StatefulWidget {
   const _AuthAccessPanel({
+    required this.baseUrl,
+    required this.repository,
     required this.busy,
     required this.feedback,
     required this.onLogin,
     required this.onRegister,
   });
 
+  final String baseUrl;
+  final ProductApiRepository repository;
   final bool busy;
   final String feedback;
   final _AuthLoginHandler onLogin;
@@ -6421,6 +6545,7 @@ class _AuthAccessPanelState extends State<_AuthAccessPanel> {
   late final TextEditingController _registerEmailController;
   late final TextEditingController _registerPasswordController;
   late final TextEditingController _registerCpfController;
+  late final TextEditingController _registerBirthDateController;
   late final TextEditingController _registerPhoneController;
   late final TextEditingController _registerPostalCodeController;
   late final TextEditingController _registerStreetController;
@@ -6430,6 +6555,15 @@ class _AuthAccessPanelState extends State<_AuthAccessPanel> {
   late final TextEditingController _registerCityController;
   late final TextEditingController _registerStateController;
   String _role = 'CUSTOMER';
+  String _registerAddressType = 'casa';
+  Timer? _cpfValidationTimer;
+  Timer? _cepLookupTimer;
+  String _lastCpfValidationKey = '';
+  String _lastCepLookup = '';
+  String _cpfValidationStatus = '';
+  String _cepLookupStatus = '';
+  bool _cpfValidationBusy = false;
+  bool _cepLookupBusy = false;
 
   @override
   void initState() {
@@ -6441,6 +6575,7 @@ class _AuthAccessPanelState extends State<_AuthAccessPanel> {
     _registerEmailController = TextEditingController();
     _registerPasswordController = TextEditingController();
     _registerCpfController = TextEditingController();
+    _registerBirthDateController = TextEditingController();
     _registerPhoneController = TextEditingController();
     _registerPostalCodeController = TextEditingController();
     _registerStreetController = TextEditingController();
@@ -6449,10 +6584,15 @@ class _AuthAccessPanelState extends State<_AuthAccessPanel> {
     _registerNeighborhoodController = TextEditingController();
     _registerCityController = TextEditingController();
     _registerStateController = TextEditingController();
+    _registerCpfController.addListener(_scheduleCpfValidation);
+    _registerBirthDateController.addListener(_scheduleCpfValidation);
+    _registerPostalCodeController.addListener(_scheduleCepLookup);
   }
 
   @override
   void dispose() {
+    _cpfValidationTimer?.cancel();
+    _cepLookupTimer?.cancel();
     _loginIdentifierController.dispose();
     _loginPasswordController.dispose();
     _registerFullNameController.dispose();
@@ -6460,6 +6600,7 @@ class _AuthAccessPanelState extends State<_AuthAccessPanel> {
     _registerEmailController.dispose();
     _registerPasswordController.dispose();
     _registerCpfController.dispose();
+    _registerBirthDateController.dispose();
     _registerPhoneController.dispose();
     _registerPostalCodeController.dispose();
     _registerStreetController.dispose();
@@ -6469,6 +6610,105 @@ class _AuthAccessPanelState extends State<_AuthAccessPanel> {
     _registerCityController.dispose();
     _registerStateController.dispose();
     super.dispose();
+  }
+
+  void _scheduleCpfValidation() {
+    _cpfValidationTimer?.cancel();
+    _cpfValidationTimer = Timer(
+      const Duration(milliseconds: 650),
+      _validateCpf,
+    );
+  }
+
+  Future<void> _validateCpf() async {
+    final String cpf = _registerCpfController.text.replaceAll(
+      RegExp(r'\D+'),
+      '',
+    );
+    final String birthDate = _registerBirthDateController.text.trim();
+    final String key = '$cpf|$birthDate';
+    if (cpf.length != 11 ||
+        birthDate.length < 10 ||
+        key == _lastCpfValidationKey) {
+      return;
+    }
+    _lastCpfValidationKey = key;
+    setState(() {
+      _cpfValidationBusy = true;
+      _cpfValidationStatus = 'Validando CPF e data de nascimento...';
+    });
+    try {
+      final ProductActionResult result = await widget.repository.validateCpf(
+        baseUrl: widget.baseUrl,
+        cpf: cpf,
+        birthDate: birthDate,
+      );
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _cpfValidationBusy = false;
+        _cpfValidationStatus = result.message;
+      });
+    } catch (error) {
+      if (mounted) {
+        setState(() {
+          _cpfValidationBusy = false;
+          _cpfValidationStatus = 'Não foi possível validar o CPF agora.';
+        });
+      }
+    }
+  }
+
+  void _scheduleCepLookup() {
+    _cepLookupTimer?.cancel();
+    _cepLookupTimer = Timer(const Duration(milliseconds: 650), _lookupCep);
+  }
+
+  Future<void> _lookupCep() async {
+    final String postalCode = _registerPostalCodeController.text.replaceAll(
+      RegExp(r'\D+'),
+      '',
+    );
+    if (postalCode.length != 8 || postalCode == _lastCepLookup) {
+      return;
+    }
+    _lastCepLookup = postalCode;
+    setState(() {
+      _cepLookupBusy = true;
+      _cepLookupStatus = 'Buscando endereço pelo CEP...';
+    });
+    try {
+      final ProductActionResult result = await widget.repository.lookupCep(
+        baseUrl: widget.baseUrl,
+        postalCode: postalCode,
+      );
+      final Map<String, dynamic> address =
+          (result.payload['address'] as Map<dynamic, dynamic>? ??
+                  <dynamic, dynamic>{})
+              .cast<String, dynamic>();
+      if (!mounted) {
+        return;
+      }
+      if (result.ok && address.isNotEmpty) {
+        _registerStreetController.text = '${address['street'] ?? ''}';
+        _registerNeighborhoodController.text =
+            '${address['neighborhood'] ?? ''}';
+        _registerCityController.text = '${address['city'] ?? ''}';
+        _registerStateController.text = '${address['state'] ?? ''}';
+      }
+      setState(() {
+        _cepLookupBusy = false;
+        _cepLookupStatus = result.message;
+      });
+    } catch (error) {
+      if (mounted) {
+        setState(() {
+          _cepLookupBusy = false;
+          _cepLookupStatus = 'Não foi possível consultar o CEP agora.';
+        });
+      }
+    }
   }
 
   @override
@@ -6571,6 +6811,20 @@ class _AuthAccessPanelState extends State<_AuthAccessPanel> {
                       ),
                       const SizedBox(height: 12),
                       _AuthTextField(
+                        controller: _registerBirthDateController,
+                        label: 'Data de nascimento',
+                        hintText: 'AAAA-MM-DD',
+                        keyboardType: TextInputType.datetime,
+                      ),
+                      if (_cpfValidationStatus.isNotEmpty) ...<Widget>[
+                        const SizedBox(height: 8),
+                        _InlineValidationStatus(
+                          text: _cpfValidationStatus,
+                          busy: _cpfValidationBusy,
+                        ),
+                      ],
+                      const SizedBox(height: 12),
+                      _AuthTextField(
                         controller: _registerPhoneController,
                         label: 'Telefone',
                         hintText: '(00) 00000-0000',
@@ -6583,23 +6837,60 @@ class _AuthAccessPanelState extends State<_AuthAccessPanel> {
                         hintText: '00000-000',
                         keyboardType: TextInputType.number,
                       ),
+                      if (_cepLookupStatus.isNotEmpty) ...<Widget>[
+                        const SizedBox(height: 8),
+                        _InlineValidationStatus(
+                          text: _cepLookupStatus,
+                          busy: _cepLookupBusy,
+                        ),
+                      ],
                       const SizedBox(height: 12),
                       _AuthTextField(
                         controller: _registerStreetController,
-                        label: 'Endereço',
+                        label: 'Logradouro confirmado',
                         hintText: 'Rua, avenida ou estrada',
                       ),
                       const SizedBox(height: 12),
                       _AuthTextField(
                         controller: _registerNumberController,
                         label: 'Número',
-                        hintText: 'Número',
+                        hintText: 'Número do endereço',
+                        keyboardType: TextInputType.number,
                       ),
                       const SizedBox(height: 12),
                       _AuthTextField(
                         controller: _registerComplementController,
-                        label: 'Complemento',
-                        hintText: 'Apartamento, bloco ou referência',
+                        label: 'Complemento numérico',
+                        hintText: 'Apartamento, sala, bloco ou lote',
+                      ),
+                      const SizedBox(height: 12),
+                      DropdownButtonFormField<String>(
+                        initialValue: _registerAddressType,
+                        decoration: const InputDecoration(
+                          labelText: 'Tipo do endereço',
+                        ),
+                        items: const <DropdownMenuItem<String>>[
+                          DropdownMenuItem(value: 'casa', child: Text('Casa')),
+                          DropdownMenuItem(
+                            value: 'apartamento',
+                            child: Text('Apartamento'),
+                          ),
+                          DropdownMenuItem(
+                            value: 'comercial',
+                            child: Text('Comercial'),
+                          ),
+                          DropdownMenuItem(
+                            value: 'outro',
+                            child: Text('Outro'),
+                          ),
+                        ],
+                        onChanged: widget.busy
+                            ? null
+                            : (String? value) {
+                                setState(() {
+                                  _registerAddressType = value ?? 'casa';
+                                });
+                              },
                       ),
                       const SizedBox(height: 12),
                       _AuthTextField(
@@ -6650,11 +6941,14 @@ class _AuthAccessPanelState extends State<_AuthAccessPanel> {
                       'password': _registerPasswordController.text,
                       'role': _role,
                       'cpf': _registerCpfController.text,
+                      'birth_date': _registerBirthDateController.text,
                       'phone': _registerPhoneController.text,
                       'postal_code': _registerPostalCodeController.text,
                       'street': _registerStreetController.text,
                       'number': _registerNumberController.text,
                       'complement': _registerComplementController.text,
+                      'address_type': _registerAddressType,
+                      'address_confirmed': 'true',
                       'neighborhood': _registerNeighborhoodController.text,
                       'city': _registerCityController.text,
                       'state': _registerStateController.text,
@@ -6771,6 +7065,47 @@ class _AuthTextField extends StatelessWidget {
       obscureText: obscureText,
       keyboardType: keyboardType,
       decoration: InputDecoration(labelText: label, hintText: hintText),
+    );
+  }
+}
+
+class _InlineValidationStatus extends StatelessWidget {
+  const _InlineValidationStatus({required this.text, required this.busy});
+
+  final String text;
+  final bool busy;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    return Row(
+      children: <Widget>[
+        if (busy)
+          const SizedBox(
+            width: 14,
+            height: 14,
+            child: CircularProgressIndicator(strokeWidth: 2),
+          )
+        else
+          Icon(
+            text.toLowerCase().contains('validado') ||
+                    text.toLowerCase().contains('encontrado')
+                ? Icons.check_circle_outline_rounded
+                : Icons.info_outline_rounded,
+            size: 16,
+            color: theme.colorScheme.primary,
+          ),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Text(
+            text,
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
