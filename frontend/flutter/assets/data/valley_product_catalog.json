@@ -1,7 +1,7 @@
 {
   "status": "ok",
   "service": "valley-product",
-  "generated_at_utc": "2026-05-14T04:46:56.411163Z",
+  "generated_at_utc": "2026-05-14T05:20:48.563606Z",
   "title": "Valley Stock | Catalogo proprietario",
   "subtitle": "Seleção Valley com catálogo real multi-provedor, agrupado por categoria e taxonomia Google, com sincronização de estoque, preço e tracking sem exposição pública da origem operacional.",
   "public_runtime": {
@@ -700,7 +700,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para smart living com estoque sincronizado. Categoria fonte: Surveillance Products. 146429 unidades em estoque. 2340 listagens sincronizadas.",
+      "description": "Seleção Valley para smart living com estoque sincronizado. Categoria fonte: Surveillance Products. 146429 unidades em estoque. 2341 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/15948288/1359135284748.jpg"
       ],
@@ -708,7 +708,7 @@
       "features": [
         "Estoque global sincronizado",
         "146429 unidades disponíveis",
-        "2340 listagens ativas",
+        "2341 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -732,7 +732,7 @@
       "google_product_category_path": "Hardware > Power & Electrical Supplies > Home Automation Kits",
       "google_product_category": "Hardware > Power & Electrical Supplies > Home Automation Kits",
       "price_band": "Ate R$ 99",
-      "offer_count": 2340,
+      "offer_count": 2341,
       "availability_label": "146429 em estoque",
       "shipping_free": false
     },
@@ -1115,7 +1115,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para smart living com estoque sincronizado. Categoria fonte: Surveillance Products. 200000 unidades em estoque. 2151 listagens sincronizadas.",
+      "description": "Seleção Valley para smart living com estoque sincronizado. Categoria fonte: Surveillance Products. 200000 unidades em estoque. 2152 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/20200916/2194574152275.jpg"
       ],
@@ -1123,7 +1123,7 @@
       "features": [
         "Estoque global sincronizado",
         "200000 unidades disponíveis",
-        "2151 listagens ativas",
+        "2152 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -1147,7 +1147,7 @@
       "google_product_category_path": "Hardware > Power & Electrical Supplies > Home Automation Kits",
       "google_product_category": "Hardware > Power & Electrical Supplies > Home Automation Kits",
       "price_band": "Ate R$ 99",
-      "offer_count": 2151,
+      "offer_count": 2152,
       "availability_label": "200000 em estoque",
       "shipping_free": false
     },
@@ -3601,7 +3601,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para smart living com estoque sincronizado. Categoria fonte: Surveillance Products. 32220 unidades em estoque. 1278 listagens sincronizadas.",
+      "description": "Seleção Valley para smart living com estoque sincronizado. Categoria fonte: Surveillance Products. 32220 unidades em estoque. 1279 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/da72cf77-30ba-48c6-a550-38635d6cc2cd.jpg"
       ],
@@ -3609,7 +3609,7 @@
       "features": [
         "Estoque global sincronizado",
         "32220 unidades disponíveis",
-        "1278 listagens ativas",
+        "1279 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -3633,7 +3633,7 @@
       "google_product_category_path": "Hardware > Power & Electrical Supplies > Home Automation Kits",
       "google_product_category": "Hardware > Power & Electrical Supplies > Home Automation Kits",
       "price_band": "Ate R$ 99",
-      "offer_count": 1278,
+      "offer_count": 1279,
       "availability_label": "32220 em estoque",
       "shipping_free": false
     },

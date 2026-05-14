@@ -4,15 +4,13 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-/**
- * VALLEY HOME SHELL - INTERFACE PRINCIPAL
- * =======================================
- * Propósito: Hub central de navegação e integração de sinais /me/home.
- * Contexto: Interface premium do Super App que agrupa os 47 módulos em 6 destinos principais.
- * Regras:
- * 1. Redução de carga cognitiva via agrupamento semântico.
- * 2. Persistência de preferências do usuário via SharedPreferences.
- */
+/// VALLEY HOME SHELL - INTERFACE PRINCIPAL
+/// =======================================
+/// Propósito: Hub central de navegação e integração de sinais /me/home.
+/// Contexto: Interface premium do Super App que agrupa os 47 módulos em 6 destinos principais.
+/// Regras:
+/// 1. Redução de carga cognitiva via agrupamento semântico.
+/// 2. Persistência de preferências do usuário via SharedPreferences.
 
 const String _homeModulePrefsKey = 'valley.home.visible_modules.v1';
 

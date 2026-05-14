@@ -1,26 +1,15 @@
-{
+﻿{
     "status":  "ok",
     "service":  "valley-admin-public",
     "provider":  "cloudflare_named_tunnel",
     "public_url":  "https://admin.brasildesconto.com.br",
     "local_url":  "http://127.0.0.1:8085",
-    "generated_at_utc":  "2026-05-14T04:57:22Z",
+    "generated_at_utc":  "2026-05-14T05:17:17Z",
     "temporary":  false,
-    "permanence":  "fixed_external",
+    "permanence":  "release_gate_validated_persistent",
     "provider_status":  "healthy",
     "smoke_endpoints":  {
                             "admin_data":  "https://admin.brasildesconto.com.br/api/admin-data",
                             "healthz":  "https://admin.brasildesconto.com.br/healthz"
-                        },
-    "logs":  {
-                 "cloudflare_stdout":  "C:\\Users\\ereta\\.codex\\worktrees\\VALLEY\\tmp\\runtime\\valley-admin-cloudflare.live.out.log",
-                 "http_stdout":  "C:\\Users\\ereta\\.codex\\worktrees\\VALLEY\\tmp\\runtime\\valley-admin-http.live.out.log",
-                 "cloudflare_stderr":  "C:\\Users\\ereta\\.codex\\worktrees\\VALLEY\\tmp\\runtime\\valley-admin-cloudflare.live.err.log",
-                 "http_stderr":  "C:\\Users\\ereta\\.codex\\worktrees\\VALLEY\\tmp\\runtime\\valley-admin-http.live.err.log"
-             },
-    "cloudflare":  {
-                       "token_present":  true,
-                       "mode":  "named",
-                       "configured_public_url":  "https://admin.brasildesconto.com.br"
-                   }
+                        }
 }
