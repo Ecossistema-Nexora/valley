@@ -21,8 +21,8 @@ REGRAS: Usar somente `20260513_valley_erp_v2` como fonte ativa, descartar refere
 - [x] Remover caminhos ativos da fonte Stitch anterior e marcar v043 como substituida.
 - [x] Validar painel web local e dominio publico com Playwright/HTTP.
 - [x] Rodar checks de codigo, JSON e Flutter.
-- [ ] Gerar release v044 com APK, manifesto, hashes e PDF de links atualizado.
-- [ ] Enviar APK/PDF pelo Telegram e registrar evidencias.
+- [x] Gerar release v044 com APK, manifesto, hashes e PDF de links atualizado.
+- [x] Enviar APK/PDF pelo Telegram e registrar evidencias.
 
 ## Evidencias
 
@@ -36,6 +36,11 @@ REGRAS: Usar somente `20260513_valley_erp_v2` como fonte ativa, descartar refere
 - `node --check admin/app.js`: OK.
 - JSONs de contrato e manifesto v2: OK.
 - `flutter analyze --no-pub lib\src\ui\valley_product_shell.dart`: sem issues.
+- APKs gerados: `admin/downloads/v044/app-arm64-v8a-release.apk`, `app-armeabi-v7a-release.apk`, `app-x86_64-release.apk`.
+- Manifesto release: `admin/downloads/v044/VALLEY_APK_RELEASE_ABI_V044.json`.
+- PDF atualizado: `admin/downloads/v044/VALLEY_RELEASE_LINKS_MODULOS_ABNT.pdf`.
+- Links publicos validados: APK arm64, manifesto v044, PDF v044 e manifesto Stitch v2 retornaram 200.
+- Telegram: APK arm64 e PDF enviados com `ok: true`.
 
 ## Bloqueios
 
@@ -43,4 +48,4 @@ REGRAS: Usar somente `20260513_valley_erp_v2` como fonte ativa, descartar refere
 
 ## Proxima Acao
 
-- Gerar a release v044 com APK, manifesto, hashes e PDF.
+- Iniciar a geracao dos arquivos de instalacao Windows/Linux do ERP Lojista.

@@ -1,0 +1,83 @@
+{
+  "version": "v044",
+  "app_version": "1.0.12+59",
+  "generated_at_utc": "2026-05-14T01:56:30Z",
+  "product_api_base_url": "https://admin.brasildesconto.com.br",
+  "apk_strategy": "split-per-abi",
+  "recommended_android": "app-arm64-v8a-release.apk",
+  "stitch_source_of_truth": {
+    "version": "20260513_valley_erp_v2",
+    "mandatory": true,
+    "source_zip": "stitch_valley_erp (2).zip",
+    "source_zip_sha1": "ECC3D8A453E23BB013F96AE265F8BEEBCE11093B",
+    "templates_total": 121,
+    "p0_total": 19,
+    "public_manifest_url": "https://admin.brasildesconto.com.br/stitch/20260513_valley_erp_v2/manifest.json",
+    "public_gallery_url": "https://admin.brasildesconto.com.br/stitch/20260513_valley_erp_v2/",
+    "obsolete_versions": [
+      "20260513_valley_erp"
+    ],
+    "rule": "The Stitch 20260513 Valley ERP v2 export is the mandatory source of truth for web panels and APK UI surfaces. Earlier UI variations are obsolete and must not be treated as active product reference."
+  },
+  "artifacts": [
+    {
+      "name": "app-arm64-v8a-release.apk",
+      "file": "app-arm64-v8a-release.apk",
+      "bytes": 20909723,
+      "sha1": "1FAF826A76BA5D6A71A9A09BCB3A1EF836F4082E",
+      "sha256": "34B2973A80E25E268A72A6A48FEAE9447BEC7E548875660F01A330F316641B54",
+      "public_url": "https://admin.brasildesconto.com.br/downloads/v044/app-arm64-v8a-release.apk"
+    },
+    {
+      "name": "app-armeabi-v7a-release.apk",
+      "file": "app-armeabi-v7a-release.apk",
+      "bytes": 18441927,
+      "sha1": "980CB78E03C30B3C14C6EEF18E5C35A09A32E174",
+      "sha256": "CEDA9DDA8434684F7F4E11F5ABE780B167D88A28F7E509C8511349EB718AA80A",
+      "public_url": "https://admin.brasildesconto.com.br/downloads/v044/app-armeabi-v7a-release.apk"
+    },
+    {
+      "name": "app-x86_64-release.apk",
+      "file": "app-x86_64-release.apk",
+      "bytes": 22336751,
+      "sha1": "525AF9E0D8877FE21A1646D187E75434E326DF8D",
+      "sha256": "E439845533DA9F7FA46BCAECB3DC3CBEBD4A2E5C6896AA83B7661312C7EA69E5",
+      "public_url": "https://admin.brasildesconto.com.br/downloads/v044/app-x86_64-release.apk"
+    }
+  ],
+  "web_validation": {
+    "public_url": "https://admin.brasildesconto.com.br/",
+    "public_manifest_url": "https://admin.brasildesconto.com.br/stitch/20260513_valley_erp_v2/manifest.json",
+    "http_public_root": 200,
+    "http_public_manifest": 200,
+    "playwright_console_errors": 0,
+    "screenshots": [
+      "output/playwright/v044-stitch-v2-public-dom.png",
+      "output/playwright/v044-stitch-v2-admin.png"
+    ]
+  },
+  "mobile_p0": [
+    "login",
+    "checkout",
+    "minhas_compras",
+    "rastreio",
+    "cadastro_sku",
+    "inventario"
+  ],
+  "release_documents": [
+    {
+      "name": "VALLEY_RELEASE_LINKS_MODULOS_ABNT.pdf",
+      "file": "VALLEY_RELEASE_LINKS_MODULOS_ABNT.pdf",
+      "public_url": "https://admin.brasildesconto.com.br/downloads/v044/VALLEY_RELEASE_LINKS_MODULOS_ABNT.pdf"
+    },
+    {
+      "name": "VALLEY_RELEASE_LINKS_MODULOS_ABNT.md",
+      "file": "VALLEY_RELEASE_LINKS_MODULOS_ABNT.md",
+      "public_url": "https://admin.brasildesconto.com.br/downloads/v044/VALLEY_RELEASE_LINKS_MODULOS_ABNT.md"
+    }
+  ],
+  "desktop_erp_concept": {
+    "image_file": "valley_erp_lojista_desktop_template_concept.png",
+    "public_url": "https://admin.brasildesconto.com.br/downloads/v044/valley_erp_lojista_desktop_template_concept.png"
+  }
+}

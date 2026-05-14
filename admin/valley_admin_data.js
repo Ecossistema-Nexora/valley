@@ -1,5 +1,5 @@
 window.VALLEY_ADMIN_DATA = {
-  "generated_at_utc": "2026-05-13T21:35:55.516984+00:00",
+  "generated_at_utc": "2026-05-14T02:36:57.361105+00:00",
   "registry_name": "Valley Omniverse V47 - Registro Canonico de Modulos",
   "source": "Esquema Consolidado do Valley Omniverse v47.pdf",
   "language_policy": "pt-BR simples com termos tecnicos em ingles quando forem padroes",
@@ -466,15 +466,15 @@ window.VALLEY_ADMIN_DATA = {
     "available": true,
     "path": "../tmp/runtime/valley-admin-public-runtime.json",
     "status": "ok",
-    "public_url": "https://admin.brasildesconto.com.br",
+    "public_url": "https://brasildesconto.com.br",
     "permanence": "release_gate_validated_persistent",
     "smoke_endpoints": {
-      "healthz": "https://admin.brasildesconto.com.br/healthz",
-      "admin_data": "https://admin.brasildesconto.com.br/api/admin-data"
+      "healthz": "https://brasildesconto.com.br/healthz",
+      "admin_data": "https://brasildesconto.com.br/api/admin-data"
     }
   },
   "database_summary": {
-    "postgres_migrations": 37,
+    "postgres_migrations": 38,
     "mongodb_scripts": 5,
     "postgres_items": [
       {
@@ -1210,6 +1210,22 @@ window.VALLEY_ADMIN_DATA = {
           "merchant_erp_security_events",
           "merchant_erp_audit_events",
           "v_merchant_erp_control_tower"
+        ]
+      },
+      {
+        "id": "038",
+        "path": "database/postgres/038_v47_merchant_erp_privileges_rbac.sql",
+        "purpose_ptbr": "Cria a base RBAC do ERP Lojista com catalogo de privilegios, perfis por papel, concessoes por usuario, visao efetiva e auditoria append-only gerenciada pelo administrador lojista.",
+        "requires": [
+          "037"
+        ],
+        "provides": [
+          "merchant_erp_privileges",
+          "merchant_erp_role_profiles",
+          "merchant_erp_role_profile_privileges",
+          "merchant_erp_staff_privilege_grants",
+          "merchant_erp_privilege_audit_events",
+          "v_merchant_erp_staff_effective_privileges"
         ]
       }
     ],

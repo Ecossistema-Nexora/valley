@@ -4,7 +4,7 @@
     "provider":  "cloudflare_named_tunnel",
     "public_url":  "https://admin.brasildesconto.com.br",
     "local_url":  "http://127.0.0.1:8085",
-    "generated_at_utc":  "2026-05-14T01:11:36Z",
+    "generated_at_utc":  "2026-05-14T02:42:39Z",
     "temporary":  false,
     "permanence":  "fixed_external",
     "provider_status":  "healthy",
@@ -13,9 +13,9 @@
                             "healthz":  "https://admin.brasildesconto.com.br/healthz"
                         },
     "logs":  {
-                 "cloudflare_stdout":  "C:\\Users\\ereta\\.codex\\worktrees\\VALLEY\\tmp\\runtime\\valley-admin-cloudflare.live.out.20260513-221055.log",
+                 "cloudflare_stdout":  "C:\\Users\\ereta\\.codex\\worktrees\\VALLEY\\tmp\\runtime\\valley-admin-cloudflare.live.out.log",
                  "http_stdout":  "C:\\Users\\ereta\\.codex\\worktrees\\VALLEY\\tmp\\runtime\\valley-admin-http.live.out.log",
-                 "cloudflare_stderr":  "C:\\Users\\ereta\\.codex\\worktrees\\VALLEY\\tmp\\runtime\\valley-admin-cloudflare.live.err.20260513-221055.log",
+                 "cloudflare_stderr":  "C:\\Users\\ereta\\.codex\\worktrees\\VALLEY\\tmp\\runtime\\valley-admin-cloudflare.live.err.log",
                  "http_stderr":  "C:\\Users\\ereta\\.codex\\worktrees\\VALLEY\\tmp\\runtime\\valley-admin-http.live.err.log"
              },
     "cloudflare":  {
