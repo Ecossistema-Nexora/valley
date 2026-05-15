@@ -5,7 +5,9 @@
 param(
     [string]$BaseHref = '/product/',
     [string]$FlutterProject = '',
-    [string]$OutputDir = ''
+    [string]$OutputDir = '',
+    [string]$ApiBaseUrl = 'https://admin.brasildesconto.com.br',
+    [switch]$EndUserBuild
 )
 
 Set-StrictMode -Version Latest
@@ -39,7 +41,12 @@ if (-not $FlutterCommand) {
 Write-Output "[valley-product-web] Buildando Flutter web com base href $BaseHref"
 Push-Location $FlutterProjectPath
 try {
-    & $FlutterCommand.Source build web --release --base-href $BaseHref
+    $BuildArgs = @('build', 'web', '--release', '--base-href', $BaseHref)
+    if ($EndUserBuild) {
+        $BuildArgs += '--dart-define=VALLEY_END_USER_BUILD=true'
+        $BuildArgs += "--dart-define=VALLEY_PRODUCT_API_BASE_URL=$ApiBaseUrl"
+    }
+    & $FlutterCommand.Source @BuildArgs
     if ($LASTEXITCODE -ne 0) {
         throw "flutter build web falhou com codigo $LASTEXITCODE"
     }

@@ -4,7 +4,7 @@
     {
       "label": "Valley: Sync Modules",
       "type": "shell",
-      "command": "python scripts/valley_module_automation.py sync",
+      "command": "python scripts/automacao_sincronizador_modulos.py sync",
       "problemMatcher": []
     },
     {
@@ -40,7 +40,19 @@
     {
       "label": "Valley: Generate Manual PDF",
       "type": "shell",
-      "command": "python scripts/generate_manual_pdf.py",
+      "command": "python scripts/automacao_gerador_pdf.py",
+      "problemMatcher": []
+    },
+    {
+      "label": "Valley: END-USER-BUILD Validate",
+      "type": "shell",
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/invoke_end_user_build.ps1 -Mode validate",
+      "problemMatcher": []
+    },
+    {
+      "label": "Valley: END-USER-BUILD Release Final",
+      "type": "shell",
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/invoke_end_user_build.ps1 -Mode release-final",
       "problemMatcher": []
     },
     {

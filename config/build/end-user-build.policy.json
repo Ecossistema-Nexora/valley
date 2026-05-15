@@ -1,0 +1,51 @@
+{
+  "keyword": "END-USER-BUILD",
+  "mandatory": true,
+  "version": "2026-05-14",
+  "activity": {
+    "name": "Geracao de Interface em Modo de Producao",
+    "description": "Compilacao da UI final do Valley removendo ferramentas de desenvolvedor, overlays de log e menus de depuracao."
+  },
+  "execution": {
+    "environment": "Production / Release Mode",
+    "command": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts\\invoke_end_user_build.ps1 -Mode release-final",
+    "validate_command": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts\\invoke_end_user_build.ps1 -Mode validate",
+    "release_build_flags": [
+      "--release",
+      "--dart-define=VALLEY_END_USER_BUILD=true",
+      "--dart-define=VALLEY_PRODUCT_API_BASE_URL=https://admin.brasildesconto.com.br"
+    ]
+  },
+  "cleanup": [
+    "debugShowCheckedModeBanner",
+    "LogConsole",
+    "Inspector",
+    "Floating Action Button de suporte tecnico",
+    "overlays de log",
+    "menus de depuracao",
+    "mock de dados como fonte primaria"
+  ],
+  "focus": [
+    "Renderizacao fiel ao design system oficial do Valley",
+    "Jornada exclusiva do usuario final",
+    "Excelencia visual store-ready",
+    "APIs reais ou finais como fonte primaria"
+  ],
+  "mandatory_artifacts": {
+    "web_panels": "admin/product via scripts/publish_valley_product_web.ps1 -EndUserBuild",
+    "android": "admin/downloads/<version>/app-arm64-v8a-release.apk",
+    "windows": "admin/downloads/<version>/Valley-ERP.exe",
+    "linux": "admin/downloads/<version>/Valley-ERP-Linux.run",
+    "pdf": "admin/downloads/<version>/VALLEY_RELEASE_LINKS_MODULOS_ABNT.pdf",
+    "telegram": "Enviar Windows, Linux, APK Android e PDF via scripts/valley_communication_bridge.py send-telegram-document"
+  },
+  "senior_instruction": "Gere o codigo ignorando todas as bibliotecas de desenvolvimento (dev_dependencies). O output deve ser o codigo pronto para publicacao (Store-ready), focando exclusivamente na jornada do usuario final e na excelencia visual.",
+  "five_minute_protocol": {
+    "activity": "Build Producao",
+    "description": "Remocao de logs e UI Clean",
+    "step": "Configuracao de Build",
+    "difficulty": 2,
+    "percent": 0,
+    "time": "--:--"
+  }
+}

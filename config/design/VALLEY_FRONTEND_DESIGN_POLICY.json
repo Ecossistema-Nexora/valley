@@ -24,6 +24,7 @@
     "Use Figma for design inspection and handoff when a design file exists.",
     "Never commit Stitch or Figma secrets.",
     "Keep the Valley home screen modular and user-selectable.",
-    "Expose a universal module dock for all Valley modules."
+    "Expose a universal module dock for all Valley modules.",
+    "When END-USER-BUILD is invoked, run scripts/invoke_end_user_build.ps1 -Mode release-final in Production / Release Mode and update web panels, Android APK, Windows executable, Linux executable, release PDF and Telegram delivery."
   ]
 }

@@ -11,7 +11,7 @@ REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar 
 
 - Regra: cada item de checklist dos planos conta como uma etapa.
 - Atualize este indice depois de cada acao concluida com `python scripts\update_planos_progress.py`.
-- Etapas concluidas desde o primeiro plano do indice: `307/307`.
+- Etapas concluidas desde o primeiro plano do indice: `324/324`.
 - Produzido desde o Plano 1: `100.0%`.
 - Falta produzir para a conclusao final acumulada: `0.0%`.
 <!-- progresso:fim -->
@@ -69,3 +69,6 @@ REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar 
 | v049 | 2026-05-14 01:35:46 BRT | [v049__20260514-013546-brt__cadastro_checkout_cpf_cep_destinatario.md](./v049__20260514-013546-brt__cadastro_checkout_cpf_cep_destinatario.md) | concluido | Cadastro e checkout com CPF, CEP, endereco principal e destinatario | 10/10 | 100.0% | 0.0% | 2026-05-14 04:13:00 BRT |
 | v050 | 2026-05-14 02:30:00 BRT | [v050__20260514-023000-brt__erp_lojista_executaveis_unicos.md](./v050__20260514-023000-brt__erp_lojista_executaveis_unicos.md) | concluido | ERP Lojista em executaveis unicos Windows e Linux | 6/6 | 100.0% | 0.0% | 2026-05-14 04:13:00 BRT |
 | v051 | 2026-05-14 04:15:00 BRT | [v051__20260514-041500-brt__gate_funcional_visual_pdv_banking.md](./v051__20260514-041500-brt__gate_funcional_visual_pdv_banking.md) | concluido | Gate funcional visual com PDV, maquina de pagamento, checkout confirmado e APIs bancarias | 6/6 | 100.0% | 0.0% | 2026-05-14 04:39:00 BRT |
+| v052 | 2026-05-14 15:03:00 BRT | [v052__20260514-150300-brt__fechamento_rotina_gemini_headers.md](./v052__20260514-150300-brt__fechamento_rotina_gemini_headers.md) | concluido | Fechamento da rotina Gemini/Codex de headers estruturados e hardening de validacoes | 5/5 | 100.0% | 0.0% | 2026-05-14 15:03:00 BRT |
+| v053 | 2026-05-14 15:12:00 BRT | [v053__20260514-151200-brt__end_user_build_mandatorio.md](./v053__20260514-151200-brt__end_user_build_mandatorio.md) | concluido | END-USER-BUILD mandatorio para build final em modo producao de usuario | 6/6 | 100.0% | 0.0% | 2026-05-14 15:12:00 BRT |
+| v054 | 2026-05-14 15:20:00 BRT | [v054__20260514-152000-brt__end_user_build_artefatos_telegram.md](./v054__20260514-152000-brt__end_user_build_artefatos_telegram.md) | concluido | END-USER-BUILD ampliado para artefatos finais web, Android, Windows, Linux, PDF e Telegram | 6/6 | 100.0% | 0.0% | 2026-05-14 15:20:00 BRT |

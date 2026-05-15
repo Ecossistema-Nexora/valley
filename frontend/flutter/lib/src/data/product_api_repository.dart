@@ -13,6 +13,10 @@ class ProductApiRepository {
     defaultValue: '',
   );
   static const String _releaseBaseUrl = 'https://brasildesconto.com.br';
+  static const bool _endUserBuild = bool.fromEnvironment(
+    'VALLEY_END_USER_BUILD',
+    defaultValue: false,
+  );
   static const String _bundledStockRuntimeAsset =
       'assets/data/valley_stock_runtime_ptbr.json';
   static const String _sessionTokenKey = 'valley.product.auth.session.v1';
@@ -79,7 +83,7 @@ class ProductApiRepository {
   }
 
   bool _shouldPreferBundledShell() {
-    return true;
+    return !_endUserBuild;
   }
 
   Future<List<ProductItem>> loadStockCatalog({String? preferredBaseUrl}) async {

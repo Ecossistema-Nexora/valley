@@ -1,9 +1,8 @@
 <!--
 PROPOSITO: Documentar REGRA PROGRESSO no escopo operacional do Valley.
-CONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho PLANOS/REGRA_PROGRESSO.md.
-REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.
+CONTEXTO: Este arquivo registra a regra obrigatoria de progresso e checklist dos planos.
+REGRAS: Manter contagem automatizada, preservar rastreabilidade e atualizar apos cada acao concluida.
 -->
-
 # Regra de Progresso dos Planos
 
 ## Regra obrigatoria
@@ -23,6 +22,6 @@ python scripts\update_planos_progress.py
 
 ## Progresso acumulado atual
 
-- Etapas concluidas: `307/307`.
+- Etapas concluidas: `324/324`.
 - Produzido: `100.0%`.
 - Falta produzir: `0.0%`.

@@ -9,6 +9,13 @@ Frontend layout policy:
 - Do not commit Stitch, Figma, OAuth, or API secrets. Keep STITCH_API_KEY and related credentials local only.
 - Flutter implementation must preserve the Valley brand tokens, ship responsive Web + Android surfaces, and keep the home screen modular with user-selectable visible modules plus a full module dock for access.
 
+Mandatory END-USER-BUILD trigger:
+- When the user invokes the exact term END-USER-BUILD, execute `powershell -NoProfile -ExecutionPolicy Bypass -File scripts\\invoke_end_user_build.ps1 -Mode release-final` before finalizing the turn.
+- Ensure that the END-USER-BUILD process triggers the generation of all final artifacts, including web panels, Android APKs, Windows/Linux executables, and the updated PDF documentation.- Treat END-USER-BUILD as Production / Release Mode for end users: remove developer UI, log overlays, debug menus, inspector surfaces, and technical support floating buttons.
+- Release builds must use `--release`, `--dart-define=VALLEY_END_USER_BUILD=true`, and `--dart-define=VALLEY_PRODUCT_API_BASE_URL=https://admin.brasildesconto.com.br`.
+- In END-USER-BUILD work, APIs finais are the primary data source; bundled or mock data may remain only as fallback contingency.
+- END-USER-BUILD must affect web panels, Android APK, Windows executable, Linux executable, updated PDF, and Telegram delivery of all final artifacts.
+
 Mandatory MCP policy:
 - Treat MCP_DOCKER, context7, figma, linear, and playwright as required Valley workspace capabilities.
 - Keep MCP_DOCKER platform-managed; do not duplicate it as a repo-local endpoint.

@@ -20,6 +20,26 @@ CHECK_RE = re.compile(r"^\s*-\s+\[([ xX])\]\s+")
 LINK_RE = re.compile(r"\]\((?:\./)?([^)]+)\)")
 SUMMARY_BEGIN = "<!-- progresso:inicio -->"
 SUMMARY_END = "<!-- progresso:fim -->"
+INDEX_HEADER = "\n".join(
+    [
+        "<!--",
+        "PROPOSITO: Documentar INDEX no escopo operacional do Valley.",
+        "CONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho PLANOS/INDEX.md.",
+        "REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.",
+        "-->",
+        "",
+    ]
+)
+RULE_HEADER = "\n".join(
+    [
+        "<!--",
+        "PROPOSITO: Documentar REGRA PROGRESSO no escopo operacional do Valley.",
+        "CONTEXTO: Este arquivo registra a regra obrigatoria de progresso e checklist dos planos.",
+        "REGRAS: Manter contagem automatizada, preservar rastreabilidade e atualizar apos cada acao concluida.",
+        "-->",
+        "",
+    ]
+)
 
 
 @dataclass
@@ -112,7 +132,7 @@ def read_index_rows() -> list[IndexRow]:
 def build_rule(total_done: int, total_steps: int) -> str:
     produced = (total_done / total_steps * 100) if total_steps else 0.0
     remaining = max(0.0, 100.0 - produced)
-    return "\n".join(
+    return RULE_HEADER + "\n".join(
         [
             "# Regra de Progresso dos Planos",
             "",
@@ -161,6 +181,8 @@ def build_index(rows: list[IndexRow]) -> str:
         ]
     )
     lines = [
+        INDEX_HEADER.rstrip(),
+        "",
         "# INDEX",
         "",
         summary,

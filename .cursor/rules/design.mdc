@@ -17,6 +17,16 @@ Use this rule when SuperDesign or Superflex is generating concepts, or when Prev
 - Do not show finance or IoT-style indicators on the home surface when PAY is inactive.
 - Avoid dead buttons. Every visible action should map to a real flow, route, or explicit placeholder state.
 
+## END-USER-BUILD
+
+When the keyword `END-USER-BUILD` appears, apply Production / Release Mode for end users and run:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts\invoke_end_user_build.ps1 -Mode release-final
+```
+
+This mode removes developer UI, log overlays, inspector surfaces, debug menus and technical support floating buttons. It must prefer final APIs as the primary data source and use bundled data only as fallback contingency. It must update web panels, Android APK, Windows executable, Linux executable, release PDF and Telegram delivery.
+
 ## Helena Constraints
 
 - Helena stays circular and keeps the Valley star identity.
