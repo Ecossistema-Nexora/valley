@@ -65,14 +65,42 @@ function Write-Utf8File {
   [System.IO.File]::WriteAllText($Path, $Content, $encoding)
 }
 
+function Get-ValleyFileHash {
+  param(
+    [Parameter(Mandatory = $true)][ValidateSet('SHA1', 'SHA256')][string]$Algorithm,
+    [Parameter(Mandatory = $true)][string]$Path
+  )
+
+  $resolvedPath = (Resolve-Path -LiteralPath $Path).Path
+  $stream = [System.IO.File]::OpenRead($resolvedPath)
+  try {
+    if ($Algorithm -eq 'SHA1') {
+      $hasher = [System.Security.Cryptography.SHA1]::Create()
+    }
+    else {
+      $hasher = [System.Security.Cryptography.SHA256]::Create()
+    }
+    try {
+      $hashBytes = $hasher.ComputeHash($stream)
+    }
+    finally {
+      $hasher.Dispose()
+    }
+  }
+  finally {
+    $stream.Dispose()
+  }
+  return (($hashBytes | ForEach-Object { $_.ToString('x2') }) -join '').ToUpperInvariant()
+}
+
 function Write-ArtifactHash {
   param([string]$Path)
   if (-not (Test-Path -LiteralPath $Path -PathType Leaf)) {
     return
   }
   $item = Get-Item -LiteralPath $Path
-  $sha1 = (Get-FileHash -Algorithm SHA1 -LiteralPath $Path).Hash
-  $sha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $Path).Hash
+  $sha1 = Get-ValleyFileHash -Algorithm SHA1 -Path $Path
+  $sha256 = Get-ValleyFileHash -Algorithm SHA256 -Path $Path
   Write-Utf8File -Path "$Path.sha1" -Content "$sha1  $($item.Name)`n"
   Write-Utf8File -Path "$Path.sha256" -Content "$sha256  $($item.Name)`n"
 }
@@ -233,7 +261,7 @@ function Send-TelegramArtifact {
     if (-not $PublicUrl) {
       throw "Artefato excede limite de upload Telegram e nao tem link publico: $Path"
     }
-    $sha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $Path).Hash
+    $sha256 = Get-ValleyFileHash -Algorithm SHA256 -Path $Path
     Send-TelegramMessage -Message "$Caption`nArquivo maior que o limite seguro de upload do Telegram Bot.`nLink publico: $PublicUrl`nSHA256: $sha256"
     return [pscustomobject]@{
       path = $Path

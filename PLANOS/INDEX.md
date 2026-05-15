@@ -11,9 +11,9 @@ REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar 
 
 - Regra: cada item de checklist dos planos conta como uma etapa.
 - Atualize este indice depois de cada acao concluida com `python scripts\update_planos_progress.py`.
-- Etapas concluidas desde o primeiro plano do indice: `324/324`.
-- Produzido desde o Plano 1: `100.0%`.
-- Falta produzir para a conclusao final acumulada: `0.0%`.
+- Etapas concluidas desde o primeiro plano do indice: `325/331`.
+- Produzido desde o Plano 1: `98.2%`.
+- Falta produzir para a conclusao final acumulada: `1.8%`.
 <!-- progresso:fim -->
 
 | versao | criado_em_brt | arquivo | status | escopo | etapas | produzido | falta_produzir | ultima_atualizacao_brt |
@@ -72,3 +72,4 @@ REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar 
 | v052 | 2026-05-14 15:03:00 BRT | [v052__20260514-150300-brt__fechamento_rotina_gemini_headers.md](./v052__20260514-150300-brt__fechamento_rotina_gemini_headers.md) | concluido | Fechamento da rotina Gemini/Codex de headers estruturados e hardening de validacoes | 5/5 | 100.0% | 0.0% | 2026-05-14 15:03:00 BRT |
 | v053 | 2026-05-14 15:12:00 BRT | [v053__20260514-151200-brt__end_user_build_mandatorio.md](./v053__20260514-151200-brt__end_user_build_mandatorio.md) | concluido | END-USER-BUILD mandatorio para build final em modo producao de usuario | 6/6 | 100.0% | 0.0% | 2026-05-14 15:12:00 BRT |
 | v054 | 2026-05-14 15:20:00 BRT | [v054__20260514-152000-brt__end_user_build_artefatos_telegram.md](./v054__20260514-152000-brt__end_user_build_artefatos_telegram.md) | concluido | END-USER-BUILD ampliado para artefatos finais web, Android, Windows, Linux, PDF e Telegram | 6/6 | 100.0% | 0.0% | 2026-05-14 15:20:00 BRT |
+| v055 | 2026-05-15 00:00:00 BRT | [v055__20260515-000000-brt__end_user_build_total_windows_linux_apk_pdf_telegram.md](./v055__20260515-000000-brt__end_user_build_total_windows_linux_apk_pdf_telegram.md) | em_andamento | END-USER-BUILD total para Windows, Linux, APK, PDF e Telegram com fallback por link publico | 1/7 | 14.3% | 85.7% | - |
