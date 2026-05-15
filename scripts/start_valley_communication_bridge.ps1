@@ -13,8 +13,15 @@ $runtimeDir = Join-Path $root 'tmp/runtime'
 $stdoutLogPath = Join-Path $runtimeDir 'communication-bridge.out.log'
 $stderrLogPath = Join-Path $runtimeDir 'communication-bridge.err.log'
 $pidPath = Join-Path $runtimeDir 'communication-bridge.pid'
+$hiddenProcessScript = Join-Path $PSScriptRoot 'valley_hidden_process.ps1'
 
 New-Item -ItemType Directory -Force -Path $runtimeDir | Out-Null
+
+if (Test-Path -LiteralPath $hiddenProcessScript -PathType Leaf) {
+  . $hiddenProcessScript
+} else {
+  throw "Launcher oculto nao encontrado: $hiddenProcessScript"
+}
 
 $python = Get-Command python -ErrorAction Stop
 $script = Join-Path $root 'scripts/valley_communication_bridge.py'
@@ -32,14 +39,13 @@ if ($existingBridge) {
   exit 0
 }
 
-$process = Start-Process `
+$process = Start-ValleyHiddenProcess `
   -FilePath $python.Source `
   -ArgumentList @($script, 'watch', '--interval', [string]$IntervalSeconds) `
   -WorkingDirectory $root `
-  -RedirectStandardOutput $stdoutLogPath `
-  -RedirectStandardError $stderrLogPath `
-  -PassThru `
-  -WindowStyle Hidden
+  -StdoutLog $stdoutLogPath `
+  -StderrLog $stderrLogPath `
+  -PassThru
 
 $process.Id | Set-Content -Path $pidPath -Encoding ASCII
 Write-Output "Bridge iniciado. PID=$($process.Id); stdout=$stdoutLogPath; stderr=$stderrLogPath"

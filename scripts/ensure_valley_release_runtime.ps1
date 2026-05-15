@@ -23,8 +23,13 @@ $LocalhostRunStatusPath = Join-Path $RuntimeDir 'valley-localhost-run-status.jso
 $ReleaseGateStatusPath = Join-Path $RuntimeDir 'valley-release-runtime-gate.json'
 $EnsureProductPublicScript = Join-Path $PSScriptRoot 'ensure_valley_product_public.ps1'
 $TaskName = 'ValleyReleaseRuntimeGate'
+$HiddenProcessScript = Join-Path $PSScriptRoot 'valley_hidden_process.ps1'
+$HiddenTaskRunner = Join-Path $PSScriptRoot 'valley_hidden_task_runner.vbs'
 
 New-Item -ItemType Directory -Path $RuntimeDir -Force | Out-Null
+if (Test-Path -LiteralPath $HiddenProcessScript -PathType Leaf) {
+    . $HiddenProcessScript
+}
 
 function Write-Step {
     param([string]$Message)
@@ -162,7 +167,12 @@ function Write-GateStatus {
 }
 
 function Install-ReleaseGateTask {
-    $Command = ('powershell.exe -NoProfile -ExecutionPolicy Bypass -File "{0}" -ReplaceStale' -f $PSCommandPath)
+    $Runner = if (Test-Path -LiteralPath $HiddenTaskRunner -PathType Leaf) { $HiddenTaskRunner } else { '' }
+    $Command = if ($Runner) {
+        'wscript.exe "{0}" "{1}" "{2}"' -f $Runner, $RepoRoot, ('powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "{0}" -ReplaceStale' -f $PSCommandPath)
+    } else {
+        'powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "{0}" -ReplaceStale' -f $PSCommandPath
+    }
     $Result = & schtasks.exe /Create /F /SC MINUTE /MO 5 /TN $TaskName /TR $Command 2>&1
     if ($LASTEXITCODE -ne 0) {
         throw ("Falha ao instalar tarefa agendada {0}: {1}" -f $TaskName, ($Result -join "`n"))
@@ -184,7 +194,18 @@ if ($ReplaceStale) {
 }
 
 Write-Step 'Garantindo runtime publico antes do release.'
-$Result = Start-Process -FilePath 'powershell.exe' -ArgumentList $Args -WorkingDirectory $RepoRoot -Wait -PassThru -WindowStyle Hidden
+if (Get-Command Start-ValleyHiddenProcess -ErrorAction SilentlyContinue) {
+    $Result = Start-ValleyHiddenProcess `
+        -FilePath 'powershell.exe' `
+        -ArgumentList $Args `
+        -WorkingDirectory $RepoRoot `
+        -StdoutLog (Join-Path $RuntimeDir 'valley-release-ensure-public.out.log') `
+        -StderrLog (Join-Path $RuntimeDir 'valley-release-ensure-public.err.log') `
+        -Wait `
+        -PassThru
+} else {
+    $Result = Start-Process -FilePath 'powershell.exe' -ArgumentList $Args -WorkingDirectory $RepoRoot -Wait -PassThru -WindowStyle Hidden
+}
 if ($Result.ExitCode -ne 0) {
     $Status = Write-GateStatus -Status 'blocked' -BaseUrl '' -Details @{ reason = 'ensure_public_runtime_failed'; exit_code = $Result.ExitCode }
     throw ("Runtime publico bloqueado. Status: {0}" -f ($Status | ConvertTo-Json -Compress -Depth 6))

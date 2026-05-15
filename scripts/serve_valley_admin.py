@@ -80,6 +80,12 @@ CJDROPSHIPPING_NOTIFICATIONS_PATH = RUNTIME_DIR / "valley-cjdropshipping-notific
 CJDROPSHIPPING_NOTIFICATIONS_LATEST_PATH = RUNTIME_DIR / "valley-cjdropshipping-notification-latest.json"
 SHOPEE_NOTIFICATIONS_PATH = RUNTIME_DIR / "valley-shopee-notifications.jsonl"
 SHOPEE_NOTIFICATIONS_LATEST_PATH = RUNTIME_DIR / "valley-shopee-notification-latest.json"
+OLX_NOTIFICATIONS_PATH = RUNTIME_DIR / "valley-olx-notifications.jsonl"
+OLX_NOTIFICATIONS_LATEST_PATH = RUNTIME_DIR / "valley-olx-notification-latest.json"
+IFOOD_NOTIFICATIONS_PATH = RUNTIME_DIR / "valley-ifood-notifications.jsonl"
+IFOOD_NOTIFICATIONS_LATEST_PATH = RUNTIME_DIR / "valley-ifood-notification-latest.json"
+ZE_DELIVERY_NOTIFICATIONS_PATH = RUNTIME_DIR / "valley-ze-delivery-notifications.jsonl"
+ZE_DELIVERY_NOTIFICATIONS_LATEST_PATH = RUNTIME_DIR / "valley-ze-delivery-notification-latest.json"
 STOCK_SYNC_STATE_PATH = RUNTIME_DIR / "valley-stock-sync-state.json"
 STOCK_SYNC_EVENTS_PATH = RUNTIME_DIR / "valley-stock-sync-events.jsonl"
 PRODUCT_CATALOG_PATH = ROOT / "frontend" / "flutter" / "assets" / "data" / "valley_product_catalog.json"
@@ -98,6 +104,17 @@ MERCHANT_ERP_PRIVILEGE_EVENTS_PATH = RUNTIME_DIR / "valley-merchant-erp-privileg
 MERCHANT_ERP_OFFLINE_QUEUE_PATH = RUNTIME_DIR / "valley-merchant-erp-offline-queue.json"
 MERCHANT_ERP_OFFLINE_EVENTS_PATH = RUNTIME_DIR / "valley-merchant-erp-offline-events.jsonl"
 BANKING_API_CONNECTORS_PATH = ROOT / "config" / "integrations" / "valley_banking_api_connectors.json"
+MERCHANT_ERP_EXTERNAL_CONNECTORS_PATH = ROOT / "config" / "integrations" / "merchant_erp_external_connectors.json"
+MERCHANT_ERP_CONNECTOR_EVENTS_PATH = RUNTIME_DIR / "valley-merchant-erp-connector-events.jsonl"
+MERCHANT_ERP_NFE_IMPORTS_PATH = RUNTIME_DIR / "valley-merchant-erp-nfe-imports.jsonl"
+MERCHANT_ERP_SERVICE_BOOKINGS_PATH = RUNTIME_DIR / "valley-merchant-erp-service-bookings.jsonl"
+MERCHANT_ERP_DELIVERY_EVENTS_PATH = RUNTIME_DIR / "valley-merchant-erp-delivery-events.jsonl"
+MERCHANT_ERP_DELIVERY_ASSIGNMENTS_PATH = RUNTIME_DIR / "valley-merchant-erp-delivery-assignments.json"
+MERCHANT_ERP_PRODUCT_EVENTS_PATH = RUNTIME_DIR / "valley-merchant-erp-product-events.jsonl"
+MERCHANT_ERP_REPORT_EVENTS_PATH = RUNTIME_DIR / "valley-merchant-erp-report-events.jsonl"
+MERCHANT_ERP_BRANCH_STORE_PATH = RUNTIME_DIR / "valley-merchant-erp-branches.json"
+MERCHANT_ERP_BRANCH_EVENTS_PATH = RUNTIME_DIR / "valley-merchant-erp-branch-events.jsonl"
+MERCHANT_ERP_LABEL_EVENTS_PATH = RUNTIME_DIR / "valley-merchant-erp-label-events.jsonl"
 AUTH_COOKIE_NAME = "valley_session"
 AUTH_COOKIE_DOMAIN = ".brasildesconto.com.br"
 HOME_DEFAULT_VISIBLE_MODULES = ("PAY", "MARKETPLACE", "STOCK", "CHAT", "DOCS", "PLUG")
@@ -778,6 +795,7 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
     def do_GET(self) -> None:  # noqa: N802
         parsed = urlsplit(self.path)
         route = self._normalize_public_route(parsed.path)
+        query = parse_qs(parsed.query)
 
         if self._is_public_site_host() and route in ("/", "/index.html"):
             self.send_response(HTTPStatus.FOUND)
@@ -852,6 +870,34 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
 
         if route == "/api/merchant-erp/offline-queue":
             self._write_json(*self._merchant_erp_offline_queue_response())
+            return
+
+        if route == "/api/merchant-erp/integration-blueprint":
+            self._write_json(*self._merchant_erp_integration_blueprint_response())
+            return
+
+        if route == "/api/merchant-erp/products":
+            self._write_json(*self._merchant_erp_products_response())
+            return
+
+        if route == "/api/merchant-erp/labels":
+            self._write_json(*self._merchant_erp_labels_response())
+            return
+
+        if route == "/api/merchant-erp/reports":
+            self._write_json(*self._merchant_erp_reports_response(query))
+            return
+
+        if route == "/api/merchant-erp/branches":
+            self._write_json(*self._merchant_erp_branches_response())
+            return
+
+        if route == "/api/merchant-erp/service-schedule":
+            self._write_json(*self._merchant_erp_service_schedule_response())
+            return
+
+        if route == "/api/merchant-erp/delivery-tracking":
+            self._write_json(*self._merchant_erp_delivery_tracking_response(query))
             return
 
         if route == "/api/stock-catalog":
@@ -996,6 +1042,30 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             )
             return
 
+        if route == "/integrations/olx/notifications":
+            self._write_marketplace_notification_probe(
+                provider_key="olx",
+                route="/integrations/olx/notifications",
+                detail="Endpoint de notificacoes da OLX ativo.",
+            )
+            return
+
+        if route == "/integrations/ifood/notifications":
+            self._write_marketplace_notification_probe(
+                provider_key="ifood",
+                route="/integrations/ifood/notifications",
+                detail="Endpoint de eventos do iFood ativo.",
+            )
+            return
+
+        if route == "/integrations/ze-delivery/notifications":
+            self._write_marketplace_notification_probe(
+                provider_key="ze_delivery",
+                route="/integrations/ze-delivery/notifications",
+                detail="Endpoint de eventos do Ze Delivery ativo.",
+            )
+            return
+
         if route == "/integrations/mercadolivre/authorize":
             self._redirect_mercadolivre_authorize()
             return
@@ -1052,6 +1122,38 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
 
         if route == "/api/merchant-erp/offline-sync":
             self._write_json(*self._merchant_erp_offline_sync_response())
+            return
+
+        if route == "/api/merchant-erp/integration-event":
+            self._write_json(*self._merchant_erp_integration_event_response())
+            return
+
+        if route == "/api/merchant-erp/nfe-import":
+            self._write_json(*self._merchant_erp_nfe_import_response())
+            return
+
+        if route == "/api/merchant-erp/product-command":
+            self._write_json(*self._merchant_erp_product_command_response())
+            return
+
+        if route == "/api/merchant-erp/label-job":
+            self._write_json(*self._merchant_erp_label_job_response())
+            return
+
+        if route == "/api/merchant-erp/report-query":
+            self._write_json(*self._merchant_erp_report_query_response())
+            return
+
+        if route == "/api/merchant-erp/branch-command":
+            self._write_json(*self._merchant_erp_branch_command_response())
+            return
+
+        if route == "/api/merchant-erp/service-booking":
+            self._write_json(*self._merchant_erp_service_booking_response())
+            return
+
+        if route == "/api/merchant-erp/delivery-event":
+            self._write_json(*self._merchant_erp_delivery_event_response())
             return
 
         if route == "/api/actions/poll-bridge":
@@ -1245,6 +1347,30 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 provider_key="shopee",
                 path=SHOPEE_NOTIFICATIONS_PATH,
                 latest_path=SHOPEE_NOTIFICATIONS_LATEST_PATH,
+            )
+            return
+
+        if route == "/integrations/olx/notifications":
+            self._write_marketplace_notification_event(
+                provider_key="olx",
+                path=OLX_NOTIFICATIONS_PATH,
+                latest_path=OLX_NOTIFICATIONS_LATEST_PATH,
+            )
+            return
+
+        if route == "/integrations/ifood/notifications":
+            self._write_marketplace_notification_event(
+                provider_key="ifood",
+                path=IFOOD_NOTIFICATIONS_PATH,
+                latest_path=IFOOD_NOTIFICATIONS_LATEST_PATH,
+            )
+            return
+
+        if route == "/integrations/ze-delivery/notifications":
+            self._write_marketplace_notification_event(
+                provider_key="ze_delivery",
+                path=ZE_DELIVERY_NOTIFICATIONS_PATH,
+                latest_path=ZE_DELIVERY_NOTIFICATIONS_LATEST_PATH,
             )
             return
 
@@ -4593,6 +4719,65 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             },
         )
 
+    def _merchant_erp_tenant_scope(self, public_user: dict[str, Any]) -> dict[str, Any]:
+        merchant_user_id = str(public_user.get("user_id") or "").strip()
+        merchant_slug = str(public_user.get("merchant_slug") or "").strip()
+        merchant_code = str(public_user.get("merchant_code") or "").strip()
+        return {
+            "merchant_user_id": merchant_user_id,
+            "merchant_slug": merchant_slug,
+            "merchant_code": merchant_code,
+            "tenant_key": merchant_slug or merchant_user_id,
+            "profile_binding_required": True,
+            "data_visibility": "merchant_profile_only",
+            "unscoped_runtime_records_visible": False,
+        }
+
+    def _merchant_erp_item_matches_tenant(self, item: dict[str, Any], tenant_scope: dict[str, Any]) -> bool:
+        if not isinstance(item, dict):
+            return False
+        merchant_user_id = str(tenant_scope.get("merchant_user_id") or "")
+        merchant_slug = str(tenant_scope.get("merchant_slug") or "")
+        item_user_id = str(item.get("merchant_user_id") or item.get("user_id") or "")
+        item_slug = str(item.get("merchant_slug") or "")
+        has_tenant_marker = bool(item_user_id or item_slug)
+        if not has_tenant_marker:
+            return False
+        return bool((merchant_user_id and item_user_id == merchant_user_id) or (merchant_slug and item_slug == merchant_slug))
+
+    def _merchant_erp_jsonl_tail_for_tenant(
+        self,
+        path: Path,
+        public_user: dict[str, Any],
+        *,
+        limit: int = 20,
+        scan_limit: int = 1000,
+    ) -> list[dict[str, Any]]:
+        tenant_scope = self._merchant_erp_tenant_scope(public_user)
+        rows = load_jsonl_tail(path, limit=scan_limit)
+        filtered = [row for row in rows if self._merchant_erp_item_matches_tenant(row, tenant_scope)]
+        return filtered[-limit:]
+
+    def _merchant_erp_scope_payload(
+        self,
+        payload: dict[str, Any],
+        public_user: dict[str, Any],
+    ) -> tuple[dict[str, Any], dict[str, Any]]:
+        scoped_payload = dict(payload)
+        for key in (
+            "merchant_user_id",
+            "merchant_slug",
+            "merchant_code",
+            "tenant_id",
+            "tenant_key",
+            "store_id",
+            "seller_id",
+        ):
+            scoped_payload.pop(key, None)
+        tenant_scope = self._merchant_erp_tenant_scope(public_user)
+        scoped_payload["tenant_scope"] = tenant_scope
+        return scoped_payload, tenant_scope
+
     def _default_merchant_privilege_catalog(self) -> list[dict[str, Any]]:
         return [
             {
@@ -4615,6 +4800,55 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 "module_key": "merchant-inventory",
                 "risk": "medium",
                 "requires_online": False,
+            },
+            {
+                "key": "products.manage",
+                "label": "Cadastrar, editar, suspender e excluir produtos",
+                "module_key": "merchant-products",
+                "risk": "high",
+                "requires_online": True,
+            },
+            {
+                "key": "labels.generate",
+                "label": "Gerar etiquetas QR Code e EAN-13",
+                "module_key": "merchant-labels",
+                "risk": "medium",
+                "requires_online": False,
+            },
+            {
+                "key": "labels.print",
+                "label": "Liberar lote de etiquetas para impressao",
+                "module_key": "merchant-labels",
+                "risk": "medium",
+                "requires_online": False,
+            },
+            {
+                "key": "reports.view",
+                "label": "Visualizar relatorios filtraveis",
+                "module_key": "merchant-reports",
+                "risk": "medium",
+                "requires_online": True,
+            },
+            {
+                "key": "reports.export",
+                "label": "Exportar relatorios operacionais",
+                "module_key": "merchant-reports",
+                "risk": "high",
+                "requires_online": True,
+            },
+            {
+                "key": "branches.manage",
+                "label": "Gerenciar matriz e filiais",
+                "module_key": "merchant-branches",
+                "risk": "critical",
+                "requires_online": True,
+            },
+            {
+                "key": "branches.stock.policy",
+                "label": "Definir estoque global, regional ou local",
+                "module_key": "merchant-branches",
+                "risk": "critical",
+                "requires_online": True,
             },
             {
                 "key": "orders.manage",
@@ -4651,6 +4885,48 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 "risk": "critical",
                 "requires_online": True,
             },
+            {
+                "key": "integrations.sync",
+                "label": "Sincronizar marketplaces e delivery",
+                "module_key": "merchant-integrations",
+                "risk": "high",
+                "requires_online": True,
+            },
+            {
+                "key": "fiscal.nfe.import",
+                "label": "Importar NF-e e gerar estoque",
+                "module_key": "merchant-fiscal",
+                "risk": "critical",
+                "requires_online": True,
+            },
+            {
+                "key": "schedule.manage",
+                "label": "Gerenciar agenda de servicos",
+                "module_key": "merchant-schedule",
+                "risk": "medium",
+                "requires_online": True,
+            },
+            {
+                "key": "schedule.book",
+                "label": "Criar e confirmar agendamento",
+                "module_key": "merchant-schedule",
+                "risk": "medium",
+                "requires_online": True,
+            },
+            {
+                "key": "delivery.track.manage",
+                "label": "Gerenciar rastreio proprio",
+                "module_key": "merchant-delivery",
+                "risk": "high",
+                "requires_online": True,
+            },
+            {
+                "key": "delivery.track.update",
+                "label": "Atualizar rota de entrega",
+                "module_key": "merchant-delivery",
+                "risk": "medium",
+                "requires_online": True,
+            },
         ]
 
     def _default_merchant_roles(self) -> list[dict[str, Any]]:
@@ -4670,13 +4946,73 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             {
                 "role_key": "stock_operator",
                 "label": "Estoque e pedidos",
-                "privileges": ["stock.movement", "orders.manage"],
+                "privileges": [
+                    "stock.movement",
+                    "products.manage",
+                    "labels.generate",
+                    "labels.print",
+                    "orders.manage",
+                    "reports.view",
+                ],
+                "can_grant": False,
+            },
+            {
+                "role_key": "branch_manager",
+                "label": "Gestor de filial",
+                "privileges": [
+                    "branches.manage",
+                    "branches.stock.policy",
+                    "products.manage",
+                    "labels.generate",
+                    "labels.print",
+                    "stock.movement",
+                    "orders.manage",
+                    "finance.close",
+                    "reports.view",
+                    "delivery.track.manage",
+                ],
+                "can_grant": False,
+            },
+            {
+                "role_key": "report_analyst",
+                "label": "Analista de relatorios",
+                "privileges": ["reports.view", "reports.export"],
                 "can_grant": False,
             },
             {
                 "role_key": "finance_operator",
                 "label": "Financeiro",
-                "privileges": ["finance.close"],
+                "privileges": ["finance.close", "reports.view"],
+                "can_grant": False,
+            },
+            {
+                "role_key": "label_operator",
+                "label": "Etiquetas e conferencia",
+                "privileges": ["labels.generate", "labels.print", "stock.movement", "reports.view"],
+                "can_grant": False,
+            },
+            {
+                "role_key": "integration_operator",
+                "label": "Integracoes e fiscal",
+                "privileges": ["integrations.sync", "fiscal.nfe.import"],
+                "can_grant": False,
+            },
+            {
+                "role_key": "service_scheduler",
+                "label": "Agenda de servicos",
+                "privileges": ["schedule.manage", "schedule.book"],
+                "can_grant": False,
+            },
+            {
+                "role_key": "courier",
+                "label": "Entregador",
+                "privileges": ["delivery.track.update"],
+                "can_grant": False,
+            },
+            {
+                "role_key": "logistics_operator",
+                "label": "Logistica e rastreio",
+                "privileges": ["orders.manage", "delivery.track.manage", "delivery.track.update"],
                 "can_grant": False,
             },
         ]
@@ -4744,8 +5080,25 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 staff["last_seen_at_utc"] = now
                 staff.setdefault("roles", ["owner"])
                 staff.setdefault("status", "active")
-        merchant.setdefault("catalog", self._default_merchant_privilege_catalog())
-        merchant.setdefault("roles", self._default_merchant_roles())
+        current_catalog = merchant.get("catalog") if isinstance(merchant.get("catalog"), list) else []
+        catalog_by_key = {
+            str(item.get("key") or ""): item
+            for item in current_catalog
+            if isinstance(item, dict) and str(item.get("key") or "")
+        }
+        for catalog_item in self._default_merchant_privilege_catalog():
+            catalog_by_key.setdefault(str(catalog_item.get("key") or ""), catalog_item)
+        merchant["catalog"] = [catalog_by_key[key] for key in sorted(catalog_by_key)]
+
+        current_roles = merchant.get("roles") if isinstance(merchant.get("roles"), list) else []
+        roles_by_key = {
+            str(item.get("role_key") or ""): item
+            for item in current_roles
+            if isinstance(item, dict) and str(item.get("role_key") or "")
+        }
+        for role_item in self._default_merchant_roles():
+            roles_by_key.setdefault(str(role_item.get("role_key") or ""), role_item)
+        merchant["roles"] = [roles_by_key[key] for key in sorted(roles_by_key)]
         merchant.setdefault("direct_grants", [])
         payload["updated_at_utc"] = now
         write_json_file(MERCHANT_ERP_PRIVILEGES_PATH, payload)
@@ -5130,6 +5483,1209 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             },
         )
 
+    def _merchant_erp_connector_catalog(self) -> dict[str, Any]:
+        payload = load_json_file(MERCHANT_ERP_EXTERNAL_CONNECTORS_PATH) or {}
+        providers = payload.get("providers") if isinstance(payload.get("providers"), list) else []
+        return {
+            "version": str(payload.get("version") or "1.0.0"),
+            "service": str(payload.get("service") or "valley-merchant-erp-external-connectors"),
+            "purpose": str(payload.get("purpose") or ""),
+            "security_rules": payload.get("security_rules") if isinstance(payload.get("security_rules"), list) else [],
+            "bidirectional_contract": payload.get("bidirectional_contract")
+            if isinstance(payload.get("bidirectional_contract"), dict)
+            else {},
+            "providers": [provider for provider in providers if isinstance(provider, dict)],
+            "nfe_import": payload.get("nfe_import") if isinstance(payload.get("nfe_import"), dict) else {},
+            "product_management": payload.get("product_management")
+            if isinstance(payload.get("product_management"), dict)
+            else {},
+            "reports": payload.get("reports") if isinstance(payload.get("reports"), dict) else {},
+            "branches": payload.get("branches") if isinstance(payload.get("branches"), dict) else {},
+            "service_schedule": payload.get("service_schedule") if isinstance(payload.get("service_schedule"), dict) else {},
+            "delivery_tracking": payload.get("delivery_tracking") if isinstance(payload.get("delivery_tracking"), dict) else {},
+            "labels": payload.get("labels") if isinstance(payload.get("labels"), dict) else {},
+        }
+
+    def _merchant_erp_safe_payload(self, payload: dict[str, Any]) -> dict[str, Any]:
+        blocked_keys = {
+            "access_token",
+            "authorization",
+            "client_secret",
+            "password",
+            "refresh_token",
+            "secret",
+            "session_token",
+            "token",
+            "webhook_secret",
+        }
+        return {
+            str(key): value
+            for key, value in payload.items()
+            if str(key).strip().lower() not in blocked_keys
+        }
+
+    def _merchant_erp_payload_hash(self, payload: dict[str, Any]) -> str:
+        encoded = json.dumps(payload, ensure_ascii=False, sort_keys=True, default=str).encode("utf-8")
+        return hashlib.sha256(encoded).hexdigest()
+
+    def _merchant_erp_products_response(self) -> tuple[HTTPStatus, dict[str, Any]]:
+        auth_user, auth_session = self._resolve_active_auth_session(scope="merchant")
+        if auth_user is None or auth_session is None:
+            return self._merchant_erp_unauthorized("valley-merchant-erp-products")
+
+        public_user = self._auth_public_user(auth_user)
+        tenant_scope = self._merchant_erp_tenant_scope(public_user)
+        pricing_payload = self._admin_imported_products_pricing_payload()
+        stock_payload = self._stock_catalog_payload()
+        rows = pricing_payload.get("items") if isinstance(pricing_payload.get("items"), list) else []
+        stock_rows = stock_payload.get("items") if isinstance(stock_payload.get("items"), list) else []
+        stock_by_id = {
+            str(row.get("id") or row.get("source_item_id") or row.get("sku") or ""): row
+            for row in stock_rows
+            if isinstance(row, dict)
+        }
+        scoped_products: list[dict[str, Any]] = []
+        for row in rows[:120]:
+            if not isinstance(row, dict):
+                continue
+            product_id = str(row.get("id") or row.get("source_item_id") or row.get("sku") or "").strip()
+            stock_row = stock_by_id.get(product_id) if product_id else {}
+            scoped_products.append(
+                {
+                    "merchant_user_id": tenant_scope["merchant_user_id"],
+                    "merchant_slug": tenant_scope["merchant_slug"],
+                    "product_id": product_id,
+                    "sku": str(row.get("sku") or row.get("source_item_id") or product_id).strip(),
+                    "title": str(row.get("title") or stock_row.get("title") or "Produto").strip(),
+                    "category": str(row.get("category") or stock_row.get("category") or "geral").strip(),
+                    "brand": str(row.get("brand") or stock_row.get("brand") or "").strip(),
+                    "supplier_name": str(row.get("supplier_name") or stock_row.get("supplier_name") or "").strip(),
+                    "sale_price_brl": row.get("suggested_sale_price_brl") or row.get("price_brl") or stock_row.get("price_brl") or 0,
+                    "cost_price_brl": row.get("cost_price_brl") or stock_row.get("cost_price_brl") or 0,
+                    "stock_total": stock_row.get("stock") or row.get("stock") or 0,
+                    "status": str(row.get("publication_status") or "ACTIVE").upper(),
+                    "branch_scope": "GLOBAL",
+                    "available_actions": [
+                        "create",
+                        "edit",
+                        "delete_soft",
+                        "suspend",
+                        "restore",
+                        "publish",
+                        "unpublish",
+                        "price_update",
+                    "stock_update",
+                    "category_update",
+                    "variant_create",
+                    "variant_update",
+                    "kit_create",
+                    "kit_update",
+                    "label_generate",
+                ],
+                }
+            )
+        events = self._merchant_erp_jsonl_tail_for_tenant(MERCHANT_ERP_PRODUCT_EVENTS_PATH, public_user, limit=30)
+        return (
+            HTTPStatus.OK,
+            {
+                "status": "ok",
+                "service": "valley-merchant-erp-products",
+                "release_version": "v056",
+                "generated_at_utc": utc_now_iso(),
+                "tenant_scope": tenant_scope,
+                "policy": {
+                    "visibility": "Somente produtos vinculados ao perfil do lojista autenticado.",
+                    "delete_mode": "soft_delete_auditavel",
+                    "branch_stock_scope": ["GLOBAL", "REGIONAL", "LOCAL"],
+                },
+                "products_total": len(scoped_products),
+                "products": scoped_products,
+                "recent_product_events": events,
+                "endpoints": {
+                    "list": "/api/merchant-erp/products",
+                    "command": "/api/merchant-erp/product-command",
+                    "reports": "/api/merchant-erp/reports",
+                },
+            },
+        )
+
+    def _merchant_erp_product_command_response(self) -> tuple[HTTPStatus, dict[str, Any]]:
+        auth_user, auth_session = self._resolve_active_auth_session(scope="merchant")
+        if auth_user is None or auth_session is None:
+            return self._merchant_erp_unauthorized("valley-merchant-erp-product-command")
+
+        payload = self._read_json_body()
+        if not isinstance(payload, dict):
+            return HTTPStatus.BAD_REQUEST, {"status": "invalid_payload", "detail": "Expected JSON object."}
+        public_user = self._auth_public_user(auth_user)
+        safe_payload, tenant_scope = self._merchant_erp_scope_payload(self._merchant_erp_safe_payload(payload), public_user)
+        action = str(safe_payload.get("action") or "").strip().lower()
+        allowed_actions = {
+            "create",
+            "edit",
+            "delete",
+            "delete_soft",
+            "suspend",
+            "restore",
+            "publish",
+            "unpublish",
+            "price_update",
+            "stock_update",
+            "category_update",
+            "bulk_branch_sync",
+            "variant_create",
+            "variant_update",
+            "variant_delete",
+            "kit_create",
+            "kit_update",
+            "kit_delete",
+            "label_generate",
+        }
+        if action not in allowed_actions:
+            return HTTPStatus.BAD_REQUEST, {
+                "status": "invalid_product_action",
+                "detail": "Acao de produto invalida.",
+                "allowed_actions": sorted(allowed_actions),
+            }
+        product_id = str(safe_payload.get("product_id") or safe_payload.get("sku") or uuid.uuid4()).strip()
+        next_status = {
+            "delete": "DELETED",
+            "delete_soft": "DELETED",
+            "suspend": "SUSPENDED",
+            "restore": "ACTIVE",
+            "publish": "PUBLISHED",
+            "unpublish": "DRAFT",
+        }.get(action, str(safe_payload.get("next_status") or "ACTIVE").strip().upper())
+        event = {
+            "event_id": str(uuid.uuid4()),
+            "received_at_utc": utc_now_iso(),
+            "service": "valley-merchant-erp-product-command",
+            "release_version": "v056",
+            "merchant_user_id": tenant_scope["merchant_user_id"],
+            "merchant_slug": tenant_scope["merchant_slug"],
+            "session_id": str(auth_session.get("session_id") or ""),
+            "action": action,
+            "product_id": product_id,
+            "sku": str(safe_payload.get("sku") or product_id).strip(),
+            "title": str(safe_payload.get("title") or "").strip(),
+            "category": str(safe_payload.get("category") or "").strip(),
+            "branch_key": str(safe_payload.get("branch_key") or "global").strip(),
+            "stock_scope": str(safe_payload.get("stock_scope") or "GLOBAL").strip().upper(),
+            "next_status": next_status,
+            "payload_hash": self._merchant_erp_payload_hash(safe_payload),
+            "payload_summary": safe_payload,
+        }
+        self._append_jsonl(MERCHANT_ERP_PRODUCT_EVENTS_PATH, event)
+        return (
+            HTTPStatus.OK,
+            {
+                "status": "ok",
+                "service": "valley-merchant-erp-product-command",
+                "event_id": event["event_id"],
+                "product_id": product_id,
+                "next_status": next_status,
+                "tenant_scope": tenant_scope,
+                "event_log": str(MERCHANT_ERP_PRODUCT_EVENTS_PATH.relative_to(ROOT)),
+            },
+        )
+
+    def _merchant_erp_ean13_check_digit(self, body12: str) -> str:
+        digits = re.sub(r"\D+", "", body12)[:12].zfill(12)
+        total = 0
+        for index, raw_digit in enumerate(digits):
+            digit = int(raw_digit)
+            total += digit if index % 2 == 0 else digit * 3
+        return str((10 - (total % 10)) % 10)
+
+    def _merchant_erp_normalize_ean13(self, value: Any, seed: str) -> str:
+        digits = re.sub(r"\D+", "", str(value or ""))
+        if len(digits) == 13:
+            expected = self._merchant_erp_ean13_check_digit(digits[:12])
+            if digits[-1] == expected:
+                return digits
+        if len(digits) >= 12:
+            body12 = digits[:12]
+        else:
+            seed_hash = hashlib.sha256(seed.encode("utf-8")).hexdigest()
+            body12 = "789" + str(int(seed_hash[:12], 16)).zfill(9)[-9:]
+        return body12 + self._merchant_erp_ean13_check_digit(body12)
+
+    def _merchant_erp_labels_response(self) -> tuple[HTTPStatus, dict[str, Any]]:
+        auth_user, auth_session = self._resolve_active_auth_session(scope="merchant")
+        if auth_user is None or auth_session is None:
+            return self._merchant_erp_unauthorized("valley-merchant-erp-labels")
+
+        public_user = self._auth_public_user(auth_user)
+        tenant_scope = self._merchant_erp_tenant_scope(public_user)
+        catalog = self._merchant_erp_connector_catalog()
+        label_contract = catalog.get("labels") if isinstance(catalog.get("labels"), dict) else {}
+        recent_events = self._merchant_erp_jsonl_tail_for_tenant(MERCHANT_ERP_LABEL_EVENTS_PATH, public_user, limit=30)
+        return (
+            HTTPStatus.OK,
+            {
+                "status": "ok",
+                "service": "valley-merchant-erp-labels",
+                "release_version": "v057",
+                "generated_at_utc": utc_now_iso(),
+                "tenant_scope": tenant_scope,
+                "formats": label_contract.get("formats")
+                if isinstance(label_contract.get("formats"), list)
+                else ["QR_CODE", "EAN13"],
+                "job_types": label_contract.get("jobTypes")
+                if isinstance(label_contract.get("jobTypes"), list)
+                else [
+                    "product_identification",
+                    "price_tag",
+                    "stock_receiving",
+                    "shelf_location",
+                    "picking",
+                    "shipping",
+                    "branch_transfer",
+                    "inventory_count",
+                ],
+                "templates": [
+                    {
+                        "template_key": "product_qr",
+                        "label": "Etiqueta de produto com QR Code",
+                        "barcode_type": "QR_CODE",
+                        "recommended_for": ["produto", "garantia", "consulta interna"],
+                    },
+                    {
+                        "template_key": "product_ean13",
+                        "label": "Etiqueta de produto com codigo de barras EAN-13",
+                        "barcode_type": "EAN13",
+                        "recommended_for": ["gondola", "PDV", "leitor de codigo de barras"],
+                    },
+                    {
+                        "template_key": "stock_receiving",
+                        "label": "Etiqueta de entrada de estoque",
+                        "barcode_type": "BOTH",
+                        "recommended_for": ["NF-e", "lote", "validade", "armazenagem"],
+                    },
+                    {
+                        "template_key": "shipping_tracking",
+                        "label": "Etiqueta de separacao e entrega",
+                        "barcode_type": "QR_CODE",
+                        "recommended_for": ["picking", "expedicao", "rastreio"],
+                    },
+                    {
+                        "template_key": "branch_transfer",
+                        "label": "Etiqueta de transferencia entre filiais",
+                        "barcode_type": "BOTH",
+                        "recommended_for": ["estoque regional", "remessa", "conferencia"],
+                    },
+                ],
+                "print_policy": {
+                    "tenant_scoped": True,
+                    "branch_scoped": True,
+                    "supports_batch": True,
+                    "supported_paper": ["A4_3x10", "thermal_58mm", "thermal_80mm", "zebra_zpl"],
+                    "official_ean13_note": "EAN-13 gerado internamente e valido para leitura; GTIN oficial deve vir de cadastro GS1 ou fornecedor.",
+                },
+                "endpoints": {
+                    "labels": "/api/merchant-erp/labels",
+                    "label_job": "/api/merchant-erp/label-job",
+                    "products": "/api/merchant-erp/products",
+                    "nfe_import": "/api/merchant-erp/nfe-import",
+                },
+                "recent_label_jobs": recent_events,
+            },
+        )
+
+    def _merchant_erp_label_job_response(self) -> tuple[HTTPStatus, dict[str, Any]]:
+        auth_user, auth_session = self._resolve_active_auth_session(scope="merchant")
+        if auth_user is None or auth_session is None:
+            return self._merchant_erp_unauthorized("valley-merchant-erp-label-job")
+
+        payload = self._read_json_body()
+        if not isinstance(payload, dict):
+            return HTTPStatus.BAD_REQUEST, {"status": "invalid_payload", "detail": "Expected JSON object."}
+        public_user = self._auth_public_user(auth_user)
+        safe_payload, tenant_scope = self._merchant_erp_scope_payload(self._merchant_erp_safe_payload(payload), public_user)
+        job_type = re.sub(r"[^a-z0-9_-]+", "", str(safe_payload.get("job_type") or "product_identification").strip().lower())
+        barcode_type = str(safe_payload.get("barcode_type") or "QR_CODE").strip().upper().replace("-", "_")
+        if barcode_type in {"EAN_13", "BARCODE13", "CODIGO_BARRAS_13"}:
+            barcode_type = "EAN13"
+        if barcode_type not in {"QR_CODE", "EAN13", "BOTH"}:
+            return HTTPStatus.BAD_REQUEST, {
+                "status": "invalid_barcode_type",
+                "detail": "barcode_type deve ser QR_CODE, EAN13 ou BOTH.",
+                "allowed": ["QR_CODE", "EAN13", "BOTH"],
+            }
+        allowed_job_types = {
+            "product_identification",
+            "price_tag",
+            "stock_receiving",
+            "shelf_location",
+            "picking",
+            "shipping",
+            "branch_transfer",
+            "inventory_count",
+        }
+        if job_type not in allowed_job_types:
+            return HTTPStatus.BAD_REQUEST, {
+                "status": "invalid_label_job_type",
+                "detail": "Tipo de etiqueta invalido.",
+                "allowed_job_types": sorted(allowed_job_types),
+            }
+
+        raw_items = safe_payload.get("items") if isinstance(safe_payload.get("items"), list) else []
+        if not raw_items:
+            raw_items = [
+                {
+                    "sku": safe_payload.get("sku") or safe_payload.get("product_id") or "SKU-DEMO",
+                    "title": safe_payload.get("title") or "Produto",
+                    "quantity": safe_payload.get("quantity") or 1,
+                    "price_brl": safe_payload.get("price_brl"),
+                }
+            ]
+        labels: list[dict[str, Any]] = []
+        for index, raw_item in enumerate(raw_items[:500], start=1):
+            if not isinstance(raw_item, dict):
+                continue
+            sku = str(raw_item.get("sku") or raw_item.get("product_id") or f"SKU-{index:04d}").strip()
+            title = str(raw_item.get("title") or raw_item.get("name") or "Produto").strip()
+            branch_key = str(raw_item.get("branch_key") or safe_payload.get("branch_key") or "matriz").strip()
+            quantity = raw_item.get("quantity") or raw_item.get("qty") or 1
+            seed = f"{tenant_scope['tenant_key']}:{branch_key}:{sku}:{title}"
+            ean13 = self._merchant_erp_normalize_ean13(raw_item.get("ean13") or raw_item.get("barcode"), seed)
+            qr_payload = {
+                "scheme": "valley-label-v1",
+                "tenant_key": tenant_scope["tenant_key"],
+                "branch_key": branch_key,
+                "job_type": job_type,
+                "sku": sku,
+                "ean13": ean13,
+            }
+            labels.append(
+                {
+                    "line": index,
+                    "label_id": str(uuid.uuid4()),
+                    "sku": sku,
+                    "title": title,
+                    "branch_key": branch_key,
+                    "quantity": quantity,
+                    "price_brl": raw_item.get("price_brl"),
+                    "lot": str(raw_item.get("lot") or raw_item.get("batch") or "").strip(),
+                    "expires_at": str(raw_item.get("expires_at") or raw_item.get("valid_until") or "").strip(),
+                    "barcode_type": barcode_type,
+                    "ean13": ean13 if barcode_type in {"EAN13", "BOTH"} else "",
+                    "qr_data": json.dumps(qr_payload, ensure_ascii=False, sort_keys=True)
+                    if barcode_type in {"QR_CODE", "BOTH"}
+                    else "",
+                }
+            )
+        if not labels:
+            return HTTPStatus.BAD_REQUEST, {"status": "empty_label_job", "detail": "Nenhum item valido para etiqueta."}
+
+        event = {
+            "event_id": str(uuid.uuid4()),
+            "received_at_utc": utc_now_iso(),
+            "service": "valley-merchant-erp-label-job",
+            "release_version": "v057",
+            "merchant_user_id": tenant_scope["merchant_user_id"],
+            "merchant_slug": tenant_scope["merchant_slug"],
+            "tenant_scope": tenant_scope,
+            "session_id": str(auth_session.get("session_id") or ""),
+            "job_type": job_type,
+            "barcode_type": barcode_type,
+            "template_key": str(safe_payload.get("template_key") or "").strip(),
+            "branch_key": str(safe_payload.get("branch_key") or labels[0].get("branch_key") or "matriz").strip(),
+            "labels_total": len(labels),
+            "payload_hash": self._merchant_erp_payload_hash(safe_payload),
+            "labels": labels,
+        }
+        self._append_jsonl(MERCHANT_ERP_LABEL_EVENTS_PATH, event)
+        return (
+            HTTPStatus.OK,
+            {
+                "status": "ok",
+                "service": "valley-merchant-erp-label-job",
+                "release_version": "v057",
+                "event_id": event["event_id"],
+                "job_type": job_type,
+                "barcode_type": barcode_type,
+                "labels_total": len(labels),
+                "labels": labels,
+                "print_payload": {
+                    "format": str(safe_payload.get("paper_format") or "A4_3x10").strip(),
+                    "zpl_supported": bool(safe_payload.get("zpl_supported", False)),
+                    "browser_print_supported": True,
+                    "generated_at_utc": event["received_at_utc"],
+                },
+                "tenant_scope": tenant_scope,
+                "event_log": str(MERCHANT_ERP_LABEL_EVENTS_PATH.relative_to(ROOT)),
+            },
+        )
+
+    def _merchant_erp_reports_response(self, query: dict[str, list[str]]) -> tuple[HTTPStatus, dict[str, Any]]:
+        auth_user, auth_session = self._resolve_active_auth_session(scope="merchant")
+        if auth_user is None or auth_session is None:
+            return self._merchant_erp_unauthorized("valley-merchant-erp-reports")
+
+        public_user = self._auth_public_user(auth_user)
+        tenant_scope = self._merchant_erp_tenant_scope(public_user)
+        filters = {
+            "period_from": str((query.get("from") or query.get("period_from") or [""])[0] or ""),
+            "period_to": str((query.get("to") or query.get("period_to") or [""])[0] or ""),
+            "user_id": str((query.get("user_id") or [""])[0] or ""),
+            "product_id": str((query.get("product_id") or [""])[0] or ""),
+            "category": str((query.get("category") or [""])[0] or ""),
+            "branch_key": str((query.get("branch_key") or [""])[0] or ""),
+        }
+        events = self._merchant_erp_jsonl_tail_for_tenant(MERCHANT_ERP_EVENTS_PATH, public_user, limit=200)
+        product_events = self._merchant_erp_jsonl_tail_for_tenant(MERCHANT_ERP_PRODUCT_EVENTS_PATH, public_user, limit=200)
+        report_events = self._merchant_erp_jsonl_tail_for_tenant(MERCHANT_ERP_REPORT_EVENTS_PATH, public_user, limit=50)
+        pricing_payload = self._admin_imported_products_pricing_payload()
+        rows = pricing_payload.get("items") if isinstance(pricing_payload.get("items"), list) else []
+        categories: dict[str, int] = {}
+        for row in rows[:500]:
+            if not isinstance(row, dict):
+                continue
+            category = str(row.get("category") or "geral").strip() or "geral"
+            categories[category] = categories.get(category, 0) + 1
+        return (
+            HTTPStatus.OK,
+            {
+                "status": "ok",
+                "service": "valley-merchant-erp-reports",
+                "release_version": "v056",
+                "generated_at_utc": utc_now_iso(),
+                "tenant_scope": tenant_scope,
+                "filters_applied": filters,
+                "filter_schema": {
+                    "period": ["period_from", "period_to"],
+                    "dimensions": ["user_id", "product_id", "category", "branch_key"],
+                    "export_formats": ["json", "csv", "pdf"],
+                },
+                "reports": [
+                    {"key": "sales_by_period", "label": "Vendas por periodo", "endpoint": "/api/merchant-erp/report-query"},
+                    {"key": "sales_by_user", "label": "Vendas por usuario", "endpoint": "/api/merchant-erp/report-query"},
+                    {"key": "sales_by_product", "label": "Vendas por produto", "endpoint": "/api/merchant-erp/report-query"},
+                    {"key": "stock_by_category", "label": "Estoque por categoria", "endpoint": "/api/merchant-erp/report-query"},
+                    {"key": "branch_finance", "label": "Financeiro por filial", "endpoint": "/api/merchant-erp/report-query"},
+                    {"key": "delivery_sla", "label": "SLA e rastreio de entregas", "endpoint": "/api/merchant-erp/report-query"},
+                ],
+                "summary": {
+                    "operation_events_total": len(events),
+                    "product_events_total": len(product_events),
+                    "categories_total": len(categories),
+                    "top_categories": [{"category": key, "items_total": value} for key, value in sorted(categories.items())[:20]],
+                },
+                "recent_report_queries": report_events,
+            },
+        )
+
+    def _merchant_erp_report_query_response(self) -> tuple[HTTPStatus, dict[str, Any]]:
+        auth_user, auth_session = self._resolve_active_auth_session(scope="merchant")
+        if auth_user is None or auth_session is None:
+            return self._merchant_erp_unauthorized("valley-merchant-erp-report-query")
+
+        payload = self._read_json_body()
+        if not isinstance(payload, dict):
+            return HTTPStatus.BAD_REQUEST, {"status": "invalid_payload", "detail": "Expected JSON object."}
+        public_user = self._auth_public_user(auth_user)
+        safe_payload, tenant_scope = self._merchant_erp_scope_payload(self._merchant_erp_safe_payload(payload), public_user)
+        report_key = re.sub(r"[^a-z0-9_-]+", "", str(safe_payload.get("report_key") or "custom_report").strip().lower())
+        filters = safe_payload.get("filters") if isinstance(safe_payload.get("filters"), dict) else {}
+        event = {
+            "event_id": str(uuid.uuid4()),
+            "received_at_utc": utc_now_iso(),
+            "service": "valley-merchant-erp-report-query",
+            "release_version": "v056",
+            "merchant_user_id": tenant_scope["merchant_user_id"],
+            "merchant_slug": tenant_scope["merchant_slug"],
+            "session_id": str(auth_session.get("session_id") or ""),
+            "report_key": report_key,
+            "filters": filters,
+            "payload_hash": self._merchant_erp_payload_hash(safe_payload),
+        }
+        self._append_jsonl(MERCHANT_ERP_REPORT_EVENTS_PATH, event)
+        return (
+            HTTPStatus.OK,
+            {
+                "status": "ok",
+                "service": "valley-merchant-erp-report-query",
+                "event_id": event["event_id"],
+                "report_key": report_key,
+                "filters": filters,
+                "tenant_scope": tenant_scope,
+                "event_log": str(MERCHANT_ERP_REPORT_EVENTS_PATH.relative_to(ROOT)),
+            },
+        )
+
+    def _ensure_merchant_branch_store(self, public_user: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any]]:
+        now = utc_now_iso()
+        tenant_scope = self._merchant_erp_tenant_scope(public_user)
+        merchant_key = tenant_scope["tenant_key"] or "merchant"
+        store = load_json_file(MERCHANT_ERP_BRANCH_STORE_PATH) or {
+            "service": "valley-merchant-erp-branches",
+            "release_version": "v056",
+            "created_at_utc": now,
+            "merchants": {},
+        }
+        merchants = store.setdefault("merchants", {})
+        if not isinstance(merchants, dict):
+            merchants = {}
+            store["merchants"] = merchants
+        merchant = merchants.setdefault(
+            merchant_key,
+            {
+                "tenant_scope": tenant_scope,
+                "branches": [
+                    {
+                        "branch_key": "matriz",
+                        "branch_type": "MATRIX",
+                        "display_name": "Matriz",
+                        "status": "ACTIVE",
+                        "stock_scope": "GLOBAL",
+                        "region_code": "BR",
+                        "can_view_stock_scopes": ["GLOBAL", "REGIONAL", "LOCAL"],
+                        "auto_sync": True,
+                        "finance_visibility": "ALL_BRANCHES",
+                        "map_center": {"lat": -23.55052, "lng": -46.633308},
+                    },
+                    {
+                        "branch_key": "filial-01",
+                        "branch_type": "BRANCH",
+                        "display_name": "Filial 01",
+                        "status": "ACTIVE",
+                        "stock_scope": "LOCAL",
+                        "region_code": "BR-SP",
+                        "can_view_stock_scopes": ["LOCAL", "REGIONAL"],
+                        "auto_sync": True,
+                        "finance_visibility": "OWN_BRANCH",
+                        "map_center": {"lat": -23.561414, "lng": -46.655881},
+                    },
+                ],
+                "stock_policies": [
+                    {
+                        "policy_key": "global-default",
+                        "source_branch_key": "matriz",
+                        "target_branch_key": "*",
+                        "visibility_mode": "GLOBAL",
+                        "auto_sync_products": True,
+                        "auto_sync_prices": True,
+                        "auto_sync_stock": False,
+                    },
+                    {
+                        "policy_key": "regional-sp",
+                        "source_branch_key": "matriz",
+                        "target_branch_key": "filial-01",
+                        "visibility_mode": "REGIONAL",
+                        "auto_sync_products": True,
+                        "auto_sync_prices": True,
+                        "auto_sync_stock": True,
+                    },
+                ],
+            },
+        )
+        merchant["tenant_scope"] = tenant_scope
+        store["updated_at_utc"] = now
+        write_json_file(MERCHANT_ERP_BRANCH_STORE_PATH, store)
+        return store, merchant
+
+    def _merchant_erp_branches_response(self) -> tuple[HTTPStatus, dict[str, Any]]:
+        auth_user, auth_session = self._resolve_active_auth_session(scope="merchant")
+        if auth_user is None or auth_session is None:
+            return self._merchant_erp_unauthorized("valley-merchant-erp-branches")
+
+        public_user = self._auth_public_user(auth_user)
+        _, merchant = self._ensure_merchant_branch_store(public_user)
+        events = self._merchant_erp_jsonl_tail_for_tenant(MERCHANT_ERP_BRANCH_EVENTS_PATH, public_user, limit=30)
+        return (
+            HTTPStatus.OK,
+            {
+                "status": "ok",
+                "service": "valley-merchant-erp-branches",
+                "release_version": "v056",
+                "generated_at_utc": utc_now_iso(),
+                "tenant_scope": self._merchant_erp_tenant_scope(public_user),
+                "branches": merchant.get("branches") if isinstance(merchant.get("branches"), list) else [],
+                "stock_policies": merchant.get("stock_policies") if isinstance(merchant.get("stock_policies"), list) else [],
+                "contracts": {
+                    "matrix_can_manage_all": True,
+                    "branch_visibility_modes": ["GLOBAL", "REGIONAL", "LOCAL"],
+                    "auto_sync_targets": ["cadastro", "preco", "estoque", "financeiro", "operacoes"],
+                    "branch_endpoint": "/api/merchant-erp/branch-command",
+                },
+                "recent_branch_events": events,
+            },
+        )
+
+    def _merchant_erp_branch_command_response(self) -> tuple[HTTPStatus, dict[str, Any]]:
+        auth_user, auth_session = self._resolve_active_auth_session(scope="merchant")
+        if auth_user is None or auth_session is None:
+            return self._merchant_erp_unauthorized("valley-merchant-erp-branch-command")
+
+        payload = self._read_json_body()
+        if not isinstance(payload, dict):
+            return HTTPStatus.BAD_REQUEST, {"status": "invalid_payload", "detail": "Expected JSON object."}
+        public_user = self._auth_public_user(auth_user)
+        safe_payload, tenant_scope = self._merchant_erp_scope_payload(self._merchant_erp_safe_payload(payload), public_user)
+        action = str(safe_payload.get("action") or "").strip().lower()
+        allowed_actions = {
+            "create_branch",
+            "update_branch",
+            "suspend_branch",
+            "activate_branch",
+            "set_stock_policy",
+            "sync_products",
+            "sync_prices",
+            "sync_stock",
+            "sync_finance",
+        }
+        if action not in allowed_actions:
+            return HTTPStatus.BAD_REQUEST, {
+                "status": "invalid_branch_action",
+                "detail": "Acao de filial invalida.",
+                "allowed_actions": sorted(allowed_actions),
+            }
+        _, merchant = self._ensure_merchant_branch_store(public_user)
+        branches = merchant.get("branches") if isinstance(merchant.get("branches"), list) else []
+        branch_key = re.sub(r"[^a-z0-9_-]+", "", str(safe_payload.get("branch_key") or "filial").strip().lower())
+        branch = next((item for item in branches if isinstance(item, dict) and item.get("branch_key") == branch_key), None)
+        if branch is None and action in {"create_branch", "update_branch"}:
+            branch = {
+                "branch_key": branch_key,
+                "branch_type": str(safe_payload.get("branch_type") or "BRANCH").strip().upper(),
+                "display_name": str(safe_payload.get("display_name") or branch_key).strip(),
+                "status": "ACTIVE",
+                "stock_scope": str(safe_payload.get("stock_scope") or "LOCAL").strip().upper(),
+                "region_code": str(safe_payload.get("region_code") or "").strip(),
+                "can_view_stock_scopes": safe_payload.get("can_view_stock_scopes")
+                if isinstance(safe_payload.get("can_view_stock_scopes"), list)
+                else ["LOCAL"],
+                "auto_sync": bool(safe_payload.get("auto_sync", True)),
+                "finance_visibility": str(safe_payload.get("finance_visibility") or "OWN_BRANCH").strip().upper(),
+            }
+            branches.append(branch)
+        elif branch is None:
+            return HTTPStatus.NOT_FOUND, {"status": "branch_not_found", "branch_key": branch_key}
+
+        if action == "suspend_branch":
+            branch["status"] = "SUSPENDED"
+        elif action == "activate_branch":
+            branch["status"] = "ACTIVE"
+        else:
+            for key in ("display_name", "stock_scope", "region_code", "finance_visibility"):
+                if key in safe_payload:
+                    branch[key] = str(safe_payload.get(key) or branch.get(key) or "").strip()
+            if "auto_sync" in safe_payload:
+                branch["auto_sync"] = bool(safe_payload.get("auto_sync"))
+
+        if action == "set_stock_policy":
+            policies = merchant.get("stock_policies") if isinstance(merchant.get("stock_policies"), list) else []
+            policy = {
+                "policy_key": str(safe_payload.get("policy_key") or f"{branch_key}-policy").strip(),
+                "source_branch_key": str(safe_payload.get("source_branch_key") or "matriz").strip(),
+                "target_branch_key": branch_key,
+                "visibility_mode": str(safe_payload.get("visibility_mode") or "LOCAL").strip().upper(),
+                "auto_sync_products": bool(safe_payload.get("auto_sync_products", True)),
+                "auto_sync_prices": bool(safe_payload.get("auto_sync_prices", True)),
+                "auto_sync_stock": bool(safe_payload.get("auto_sync_stock", False)),
+            }
+            policies = [
+                item
+                for item in policies
+                if not (isinstance(item, dict) and item.get("policy_key") == policy["policy_key"])
+            ]
+            policies.append(policy)
+            merchant["stock_policies"] = policies
+        merchant["branches"] = branches
+        store = load_json_file(MERCHANT_ERP_BRANCH_STORE_PATH) or {"merchants": {}}
+        merchants = store.setdefault("merchants", {})
+        merchants[tenant_scope["tenant_key"]] = merchant
+        store["updated_at_utc"] = utc_now_iso()
+        write_json_file(MERCHANT_ERP_BRANCH_STORE_PATH, store)
+
+        event = {
+            "event_id": str(uuid.uuid4()),
+            "received_at_utc": utc_now_iso(),
+            "service": "valley-merchant-erp-branch-command",
+            "release_version": "v056",
+            "merchant_user_id": tenant_scope["merchant_user_id"],
+            "merchant_slug": tenant_scope["merchant_slug"],
+            "session_id": str(auth_session.get("session_id") or ""),
+            "action": action,
+            "branch_key": branch_key,
+            "payload_hash": self._merchant_erp_payload_hash(safe_payload),
+            "payload_summary": safe_payload,
+        }
+        self._append_jsonl(MERCHANT_ERP_BRANCH_EVENTS_PATH, event)
+        return (
+            HTTPStatus.OK,
+            {
+                "status": "ok",
+                "service": "valley-merchant-erp-branch-command",
+                "event_id": event["event_id"],
+                "branch": branch,
+                "tenant_scope": tenant_scope,
+                "store": str(MERCHANT_ERP_BRANCH_STORE_PATH.relative_to(ROOT)),
+                "event_log": str(MERCHANT_ERP_BRANCH_EVENTS_PATH.relative_to(ROOT)),
+            },
+        )
+
+    def _merchant_erp_integration_blueprint_response(self) -> tuple[HTTPStatus, dict[str, Any]]:
+        auth_user, auth_session = self._resolve_active_auth_session(scope="merchant")
+        if auth_user is None or auth_session is None:
+            return self._merchant_erp_unauthorized("valley-merchant-erp-integration-blueprint")
+
+        catalog = self._merchant_erp_connector_catalog()
+        public_user = self._auth_public_user(auth_user)
+        tenant_scope = self._merchant_erp_tenant_scope(public_user)
+        provider_events = self._merchant_erp_jsonl_tail_for_tenant(
+            MERCHANT_ERP_CONNECTOR_EVENTS_PATH,
+            public_user,
+            limit=30,
+        )
+        return (
+            HTTPStatus.OK,
+            {
+                "status": "ok",
+                "service": "valley-merchant-erp-integration-blueprint",
+                "release_version": "v056",
+                "generated_at_utc": utc_now_iso(),
+                "user": public_user,
+                "session": self._auth_public_session(auth_session, auth_user),
+                "tenant_scope": tenant_scope,
+                "visibility_policy": "Todos os eventos e dados exibidos pertencem somente ao perfil do lojista autenticado.",
+                "providers": catalog["providers"],
+                "suggested_next_platforms": [
+                    "Magalu Marketplace",
+                    "Amazon Brasil SP-API",
+                    "WhatsApp Business Platform",
+                    "Nuvemshop",
+                    "Google Business Profile"
+                ],
+                "contracts": {
+                    "bidirectional": catalog["bidirectional_contract"],
+                    "nfe_import": catalog["nfe_import"],
+                    "product_management": catalog["product_management"],
+                    "reports": catalog["reports"],
+                    "branches": catalog["branches"],
+                    "service_schedule": catalog["service_schedule"],
+                    "delivery_tracking": catalog["delivery_tracking"],
+                    "labels": catalog["labels"],
+                },
+                "endpoints": {
+                    "integration_blueprint": "/api/merchant-erp/integration-blueprint",
+                    "integration_event": "/api/merchant-erp/integration-event",
+                    "nfe_import": "/api/merchant-erp/nfe-import",
+                    "products": "/api/merchant-erp/products",
+                    "product_command": "/api/merchant-erp/product-command",
+                    "labels": "/api/merchant-erp/labels",
+                    "label_job": "/api/merchant-erp/label-job",
+                    "reports": "/api/merchant-erp/reports",
+                    "report_query": "/api/merchant-erp/report-query",
+                    "branches": "/api/merchant-erp/branches",
+                    "branch_command": "/api/merchant-erp/branch-command",
+                    "service_schedule": "/api/merchant-erp/service-schedule",
+                    "service_booking": "/api/merchant-erp/service-booking",
+                    "delivery_tracking": "/api/merchant-erp/delivery-tracking",
+                    "delivery_event": "/api/merchant-erp/delivery-event",
+                },
+                "recent_connector_events": provider_events,
+                "persistence": {
+                    "config": str(MERCHANT_ERP_EXTERNAL_CONNECTORS_PATH.relative_to(ROOT)),
+                    "event_log": str(MERCHANT_ERP_CONNECTOR_EVENTS_PATH.relative_to(ROOT)),
+                    "product_event_log": str(MERCHANT_ERP_PRODUCT_EVENTS_PATH.relative_to(ROOT)),
+                    "report_event_log": str(MERCHANT_ERP_REPORT_EVENTS_PATH.relative_to(ROOT)),
+                    "branch_store": str(MERCHANT_ERP_BRANCH_STORE_PATH.relative_to(ROOT)),
+                    "database_migration": "database/postgres/039_v47_merchant_erp_external_ops_schedule_delivery.sql",
+                },
+            },
+        )
+
+    def _merchant_erp_integration_event_response(self) -> tuple[HTTPStatus, dict[str, Any]]:
+        auth_user, auth_session = self._resolve_active_auth_session(scope="merchant")
+        if auth_user is None or auth_session is None:
+            return self._merchant_erp_unauthorized("valley-merchant-erp-integration-event")
+
+        payload = self._read_json_body()
+        if not isinstance(payload, dict):
+            return HTTPStatus.BAD_REQUEST, {"status": "invalid_payload", "detail": "Expected JSON object."}
+
+        public_user = self._auth_public_user(auth_user)
+        safe_payload, tenant_scope = self._merchant_erp_scope_payload(self._merchant_erp_safe_payload(payload), public_user)
+        provider_key = re.sub(r"[^a-z0-9_-]+", "", str(safe_payload.get("provider_key") or "").strip().lower())
+        object_type = str(safe_payload.get("object_type") or safe_payload.get("event_type") or "external_event").strip()
+        direction = str(safe_payload.get("direction") or "INBOUND").strip().upper()
+        if direction not in {"INBOUND", "OUTBOUND", "BIDIRECTIONAL"}:
+            direction = "INBOUND"
+        if not provider_key or not object_type:
+            return HTTPStatus.BAD_REQUEST, {"status": "invalid_provider", "detail": "provider_key e object_type sao obrigatorios."}
+
+        idempotency_key = str(safe_payload.get("idempotency_key") or "").strip()
+        if not idempotency_key:
+            idempotency_key = self._merchant_erp_payload_hash(safe_payload)
+        event = {
+            "event_id": str(uuid.uuid4()),
+            "received_at_utc": utc_now_iso(),
+            "service": "valley-merchant-erp-integration-event",
+            "release_version": "v056",
+            "merchant_user_id": tenant_scope["merchant_user_id"],
+            "merchant_slug": tenant_scope["merchant_slug"],
+            "tenant_scope": tenant_scope,
+            "session_id": str(auth_session.get("session_id") or ""),
+            "provider_key": provider_key,
+            "direction": direction,
+            "object_type": object_type,
+            "external_object_id": str(safe_payload.get("external_object_id") or ""),
+            "idempotency_key": idempotency_key,
+            "event_status": str(safe_payload.get("event_status") or "RECEIVED").strip().upper(),
+            "payload_hash": self._merchant_erp_payload_hash(safe_payload),
+            "payload_summary": safe_payload,
+        }
+        self._append_jsonl(MERCHANT_ERP_CONNECTOR_EVENTS_PATH, event)
+        return (
+            HTTPStatus.OK,
+            {
+                "status": "ok",
+                "service": "valley-merchant-erp-integration-event",
+                "event_id": event["event_id"],
+                "idempotency_key": idempotency_key,
+                "event_log": str(MERCHANT_ERP_CONNECTOR_EVENTS_PATH.relative_to(ROOT)),
+            },
+        )
+
+    def _merchant_erp_nfe_import_response(self) -> tuple[HTTPStatus, dict[str, Any]]:
+        auth_user, auth_session = self._resolve_active_auth_session(scope="merchant")
+        if auth_user is None or auth_session is None:
+            return self._merchant_erp_unauthorized("valley-merchant-erp-nfe-import")
+
+        payload = self._read_json_body()
+        if not isinstance(payload, dict):
+            return HTTPStatus.BAD_REQUEST, {"status": "invalid_payload", "detail": "Expected JSON object."}
+
+        public_user = self._auth_public_user(auth_user)
+        safe_payload, tenant_scope = self._merchant_erp_scope_payload(self._merchant_erp_safe_payload(payload), public_user)
+        raw_xml = str(safe_payload.get("xml_base64") or safe_payload.get("xml") or "")
+        text_for_key = json.dumps(safe_payload, ensure_ascii=False, sort_keys=True, default=str)
+        access_key = re.sub(r"\D+", "", str(safe_payload.get("access_key") or safe_payload.get("nfe_key") or ""))
+        if len(access_key) != 44:
+            key_match = re.search(r"\b[0-9]{44}\b", text_for_key)
+            access_key = key_match.group(0) if key_match else ""
+        if len(access_key) != 44:
+            return HTTPStatus.BAD_REQUEST, {"status": "invalid_nfe_key", "detail": "Informe chave NF-e com 44 digitos."}
+
+        items = safe_payload.get("items") if isinstance(safe_payload.get("items"), list) else []
+        xml_hash = hashlib.sha256(raw_xml.encode("utf-8")).hexdigest() if raw_xml else ""
+        stock_updates = []
+        for raw_item in items:
+            if not isinstance(raw_item, dict):
+                continue
+            quantity = raw_item.get("quantity") or raw_item.get("qtd") or raw_item.get("qty") or 0
+            stock_updates.append(
+                {
+                    "sku": str(raw_item.get("sku") or raw_item.get("ean") or raw_item.get("description") or "").strip(),
+                    "description": str(raw_item.get("description") or raw_item.get("name") or "Item NF-e").strip(),
+                    "quantity": quantity,
+                    "cfop": str(raw_item.get("cfop") or "").strip(),
+                    "ncm": str(raw_item.get("ncm") or "").strip(),
+                    "movement_type": "NFE_IMPORT_INBOUND",
+                }
+            )
+        event = {
+            "import_id": str(uuid.uuid4()),
+            "received_at_utc": utc_now_iso(),
+            "service": "valley-merchant-erp-nfe-import",
+            "release_version": "v056",
+            "merchant_user_id": tenant_scope["merchant_user_id"],
+            "merchant_slug": tenant_scope["merchant_slug"],
+            "tenant_scope": tenant_scope,
+            "session_id": str(auth_session.get("session_id") or ""),
+            "access_key": access_key,
+            "issuer_cnpj": re.sub(r"\D+", "", str(safe_payload.get("issuer_cnpj") or ""))[:14],
+            "recipient_cnpj": re.sub(r"\D+", "", str(safe_payload.get("recipient_cnpj") or ""))[:14],
+            "xml_payload_hash": xml_hash,
+            "payload_hash": self._merchant_erp_payload_hash(safe_payload),
+            "items_total": len(stock_updates),
+            "stock_updates": stock_updates,
+            "fiscal_status": "RECEIVED",
+            "stock_update_status": "QUEUED",
+        }
+        self._append_jsonl(MERCHANT_ERP_NFE_IMPORTS_PATH, event)
+        return (
+            HTTPStatus.OK,
+            {
+                "status": "ok",
+                "service": "valley-merchant-erp-nfe-import",
+                "import_id": event["import_id"],
+                "access_key": access_key,
+                "items_total": len(stock_updates),
+                "stock_updates": stock_updates,
+                "event_log": str(MERCHANT_ERP_NFE_IMPORTS_PATH.relative_to(ROOT)),
+            },
+        )
+
+    def _merchant_erp_service_schedule_response(self) -> tuple[HTTPStatus, dict[str, Any]]:
+        auth_user, auth_session = self._resolve_active_auth_session(scope="merchant")
+        if auth_user is None or auth_session is None:
+            return self._merchant_erp_unauthorized("valley-merchant-erp-service-schedule")
+
+        public_user = self._auth_public_user(auth_user)
+        tenant_scope = self._merchant_erp_tenant_scope(public_user)
+        bookings = self._merchant_erp_jsonl_tail_for_tenant(MERCHANT_ERP_SERVICE_BOOKINGS_PATH, public_user, limit=30)
+        return (
+            HTTPStatus.OK,
+            {
+                "status": "ok",
+                "service": "valley-merchant-erp-service-schedule",
+                "release_version": "v056",
+                "generated_at_utc": utc_now_iso(),
+                "tenant_scope": tenant_scope,
+                "merchant_user_id": tenant_scope["merchant_user_id"],
+                "resources": [
+                    {
+                        "resource_key": "barber-chair-01",
+                        "resource_type": "chair",
+                        "display_name": "Cadeira 01",
+                        "service_examples": ["corte", "barba", "sobrancelha"],
+                        "slot_minutes": 30,
+                        "branch_key": "matriz",
+                    },
+                    {
+                        "resource_key": "clinic-room-01",
+                        "resource_type": "room",
+                        "display_name": "Sala de atendimento 01",
+                        "service_examples": ["consulta", "avaliacao", "retorno"],
+                        "slot_minutes": 45,
+                        "branch_key": "filial-01",
+                    },
+                ],
+                "available_slots_policy": {
+                    "customer_can_book": True,
+                    "merchant_can_confirm": True,
+                    "provider_can_reschedule": True,
+                    "branch_filter_enabled": True,
+                    "visible_to_customer": "somente_slots_disponiveis_do_lojista",
+                    "timezone": "America/Sao_Paulo",
+                },
+                "recent_bookings": bookings,
+                "persistence": {
+                    "event_log": str(MERCHANT_ERP_SERVICE_BOOKINGS_PATH.relative_to(ROOT)),
+                    "database_view": "v_merchant_erp_service_agenda",
+                },
+            },
+        )
+
+    def _merchant_erp_service_booking_response(self) -> tuple[HTTPStatus, dict[str, Any]]:
+        auth_user, auth_session = self._resolve_active_auth_session(scope="merchant")
+        if auth_user is None or auth_session is None:
+            return self._merchant_erp_unauthorized("valley-merchant-erp-service-booking")
+
+        payload = self._read_json_body()
+        if not isinstance(payload, dict):
+            return HTTPStatus.BAD_REQUEST, {"status": "invalid_payload", "detail": "Expected JSON object."}
+        public_user = self._auth_public_user(auth_user)
+        safe_payload, tenant_scope = self._merchant_erp_scope_payload(self._merchant_erp_safe_payload(payload), public_user)
+        starts_at = str(safe_payload.get("starts_at") or safe_payload.get("start_at") or "").strip()
+        service_key = re.sub(r"[^a-z0-9_-]+", "", str(safe_payload.get("service_key") or "servico").strip().lower())
+        customer_name = str(safe_payload.get("customer_name") or safe_payload.get("name") or "").strip()
+        if not starts_at or not customer_name:
+            return HTTPStatus.BAD_REQUEST, {"status": "invalid_booking", "detail": "customer_name e starts_at sao obrigatorios."}
+
+        booking = {
+            "booking_id": str(uuid.uuid4()),
+            "received_at_utc": utc_now_iso(),
+            "service": "valley-merchant-erp-service-booking",
+            "release_version": "v056",
+            "merchant_user_id": tenant_scope["merchant_user_id"],
+            "merchant_slug": tenant_scope["merchant_slug"],
+            "tenant_scope": tenant_scope,
+            "session_id": str(auth_session.get("session_id") or ""),
+            "resource_key": str(safe_payload.get("resource_key") or "default-resource").strip(),
+            "branch_key": str(safe_payload.get("branch_key") or "matriz").strip(),
+            "service_key": service_key or "servico",
+            "service_label": str(safe_payload.get("service_label") or service_key or "Servico").strip(),
+            "customer_name": customer_name,
+            "customer_phone_e164": str(safe_payload.get("customer_phone_e164") or "").strip(),
+            "customer_email": str(safe_payload.get("customer_email") or "").strip(),
+            "starts_at": starts_at,
+            "ends_at": str(safe_payload.get("ends_at") or safe_payload.get("end_at") or "").strip(),
+            "booking_status": str(safe_payload.get("booking_status") or "REQUESTED").strip().upper(),
+            "source_channel": str(safe_payload.get("source_channel") or "VALLEY_APP").strip(),
+            "payload_hash": self._merchant_erp_payload_hash(safe_payload),
+        }
+        self._append_jsonl(MERCHANT_ERP_SERVICE_BOOKINGS_PATH, booking)
+        return (
+            HTTPStatus.OK,
+            {
+                "status": "ok",
+                "service": "valley-merchant-erp-service-booking",
+                "booking_id": booking["booking_id"],
+                "booking_status": booking["booking_status"],
+                "event_log": str(MERCHANT_ERP_SERVICE_BOOKINGS_PATH.relative_to(ROOT)),
+            },
+        )
+
+    def _merchant_erp_delivery_tracking_response(self, query: dict[str, list[str]] | None = None) -> tuple[HTTPStatus, dict[str, Any]]:
+        auth_user, auth_session = self._resolve_active_auth_session(scope="merchant")
+        if auth_user is None or auth_session is None:
+            return self._merchant_erp_unauthorized("valley-merchant-erp-delivery-tracking")
+
+        public_user = self._auth_public_user(auth_user)
+        tenant_scope = self._merchant_erp_tenant_scope(public_user)
+        branch_filter = ""
+        if isinstance(query, dict):
+            branch_filter = str((query.get("branch_key") or [""])[0] or "").strip()
+        assignments_payload = load_json_file(MERCHANT_ERP_DELIVERY_ASSIGNMENTS_PATH) or {}
+        assignments = assignments_payload.get("assignments") if isinstance(assignments_payload.get("assignments"), list) else []
+        assignments = [
+            assignment
+            for assignment in assignments
+            if isinstance(assignment, dict)
+            and self._merchant_erp_item_matches_tenant(assignment, tenant_scope)
+            and (not branch_filter or str(assignment.get("branch_key") or "") == branch_filter)
+        ]
+        events = self._merchant_erp_jsonl_tail_for_tenant(MERCHANT_ERP_DELIVERY_EVENTS_PATH, public_user, limit=80)
+        if branch_filter:
+            events = [event for event in events if str(event.get("branch_key") or "") == branch_filter]
+        map_points = [
+            {
+                "tracking_code": str(event.get("tracking_code") or ""),
+                "order_id": str(event.get("order_id") or ""),
+                "branch_key": str(event.get("branch_key") or ""),
+                "delivery_status": str(event.get("delivery_status") or ""),
+                "latitude": event.get("latitude"),
+                "longitude": event.get("longitude"),
+                "received_at_utc": str(event.get("received_at_utc") or ""),
+            }
+            for event in events
+            if event.get("latitude") is not None and event.get("longitude") is not None
+        ][-50:]
+        return (
+            HTTPStatus.OK,
+            {
+                "status": "ok",
+                "service": "valley-merchant-erp-delivery-tracking",
+                "release_version": "v056",
+                "generated_at_utc": utc_now_iso(),
+                "tenant_scope": tenant_scope,
+                "merchant_user_id": tenant_scope["merchant_user_id"],
+                "branch_filter": branch_filter,
+                "tracking_panel": {
+                    "button_label": "Rastreio",
+                    "mini_map_toggle": True,
+                    "default_visible": False,
+                    "branch_scoped": True,
+                    "refresh_seconds": 15,
+                },
+                "user_type_contract": {
+                    "type": "courier",
+                    "label": "Entregador",
+                    "association": "order",
+                    "app_surface": "courier_app",
+                },
+                "assignments": assignments[-50:],
+                "recent_events": events,
+                "map_points": map_points,
+                "persistence": {
+                    "assignment_store": str(MERCHANT_ERP_DELIVERY_ASSIGNMENTS_PATH.relative_to(ROOT)),
+                    "event_log": str(MERCHANT_ERP_DELIVERY_EVENTS_PATH.relative_to(ROOT)),
+                    "database_view": "v_merchant_erp_delivery_tracking",
+                },
+            },
+        )
+
+    def _merchant_erp_delivery_event_response(self) -> tuple[HTTPStatus, dict[str, Any]]:
+        auth_user, auth_session = self._resolve_active_auth_session(scope="merchant")
+        if auth_user is None or auth_session is None:
+            return self._merchant_erp_unauthorized("valley-merchant-erp-delivery-event")
+
+        payload = self._read_json_body()
+        if not isinstance(payload, dict):
+            return HTTPStatus.BAD_REQUEST, {"status": "invalid_payload", "detail": "Expected JSON object."}
+        public_user = self._auth_public_user(auth_user)
+        safe_payload, tenant_scope = self._merchant_erp_scope_payload(self._merchant_erp_safe_payload(payload), public_user)
+        order_id = str(safe_payload.get("order_id") or safe_payload.get("order_reference") or "").strip()
+        tracking_code = re.sub(r"[^A-Z0-9_-]+", "", str(safe_payload.get("tracking_code") or "").strip().upper())
+        if not tracking_code:
+            tracking_code = f"VLY-{uuid.uuid4().hex[:10].upper()}"
+        delivery_status = str(safe_payload.get("delivery_status") or safe_payload.get("status") or "ASSIGNED").strip().upper()
+        if delivery_status not in {"ASSIGNED", "ACCEPTED", "PICKED_UP", "IN_TRANSIT", "ARRIVED", "DELIVERED", "FAILED", "RETURNED"}:
+            delivery_status = "IN_TRANSIT"
+
+        store_payload = load_json_file(MERCHANT_ERP_DELIVERY_ASSIGNMENTS_PATH) or {
+            "service": "valley-merchant-erp-delivery-assignments",
+            "release_version": "v056",
+            "assignments": [],
+        }
+        assignments = store_payload.get("assignments") if isinstance(store_payload.get("assignments"), list) else []
+        assignment = next(
+            (
+                item
+                for item in assignments
+                if isinstance(item, dict)
+                and item.get("tracking_code") == tracking_code
+                and self._merchant_erp_item_matches_tenant(item, tenant_scope)
+            ),
+            None,
+        )
+        if assignment is None:
+            assignment = {
+                "assignment_id": str(uuid.uuid4()),
+                "created_at_utc": utc_now_iso(),
+                "merchant_user_id": tenant_scope["merchant_user_id"],
+                "merchant_slug": tenant_scope["merchant_slug"],
+                "tenant_scope": tenant_scope,
+                "tracking_code": tracking_code,
+                "order_id": order_id,
+                "branch_key": str(safe_payload.get("branch_key") or "matriz").strip(),
+            }
+            assignments.append(assignment)
+        assignment.update(
+            {
+                "updated_at_utc": utc_now_iso(),
+                "delivery_status": delivery_status,
+                "branch_key": str(safe_payload.get("branch_key") or assignment.get("branch_key") or "matriz").strip(),
+                "courier_user_id": str(safe_payload.get("courier_user_id") or ""),
+                "courier_name": str(safe_payload.get("courier_name") or "Entregador").strip(),
+                "latitude": safe_payload.get("latitude"),
+                "longitude": safe_payload.get("longitude"),
+                "recipient_name": str(safe_payload.get("recipient_name") or "").strip(),
+            }
+        )
+        store_payload["assignments"] = assignments[-500:]
+        store_payload["updated_at_utc"] = assignment["updated_at_utc"]
+        write_json_file(MERCHANT_ERP_DELIVERY_ASSIGNMENTS_PATH, store_payload)
+
+        event = {
+            "event_id": str(uuid.uuid4()),
+            "received_at_utc": utc_now_iso(),
+            "service": "valley-merchant-erp-delivery-event",
+            "release_version": "v056",
+            "session_id": str(auth_session.get("session_id") or ""),
+            "assignment_id": assignment["assignment_id"],
+            "tracking_code": tracking_code,
+            "order_id": order_id,
+            "merchant_user_id": tenant_scope["merchant_user_id"],
+            "merchant_slug": tenant_scope["merchant_slug"],
+            "tenant_scope": tenant_scope,
+            "branch_key": assignment.get("branch_key"),
+            "courier_user_id": assignment.get("courier_user_id"),
+            "delivery_status": delivery_status,
+            "latitude": safe_payload.get("latitude"),
+            "longitude": safe_payload.get("longitude"),
+            "proof": safe_payload.get("proof") if isinstance(safe_payload.get("proof"), dict) else {},
+            "payload_hash": self._merchant_erp_payload_hash(safe_payload),
+        }
+        self._append_jsonl(MERCHANT_ERP_DELIVERY_EVENTS_PATH, event)
+        return (
+            HTTPStatus.OK,
+            {
+                "status": "ok",
+                "service": "valley-merchant-erp-delivery-event",
+                "event_id": event["event_id"],
+                "assignment_id": assignment["assignment_id"],
+                "tracking_code": tracking_code,
+                "delivery_status": delivery_status,
+                "assignment_store": str(MERCHANT_ERP_DELIVERY_ASSIGNMENTS_PATH.relative_to(ROOT)),
+                "event_log": str(MERCHANT_ERP_DELIVERY_EVENTS_PATH.relative_to(ROOT)),
+            },
+        )
+
     def _merchant_erp_blueprint_response(self) -> tuple[HTTPStatus, dict[str, Any]]:
         auth_user, auth_session = self._resolve_active_auth_session(scope="merchant")
         if auth_user is None or auth_session is None:
@@ -5151,11 +6707,17 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             {
                 "status": "ok",
                 "service": "valley-merchant-erp-blueprint",
-                "release_version": "v051",
+                "release_version": "v056",
                 "generated_at_utc": utc_now_iso(),
                 "api_base_url": self._public_admin_base_url(),
                 "user": public_user,
                 "session": self._auth_public_session(auth_session, auth_user),
+                "tenant_scope": self._merchant_erp_tenant_scope(public_user),
+                "visibility_policy": {
+                    "rule": "merchant_profile_only",
+                    "detail": "Nenhum dado operacional do ERP Lojista e exibido sem vinculo ao perfil do lojista autenticado.",
+                    "unscoped_runtime_records_visible": False,
+                },
                 "persistence": {
                     "mode": "append_only_runtime",
                     "event_log": str(MERCHANT_ERP_EVENTS_PATH.relative_to(ROOT)),
@@ -5163,9 +6725,34 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                     "banking_event_log": str(MERCHANT_ERP_BANKING_EVENTS_PATH.relative_to(ROOT)),
                     "privilege_store": str(MERCHANT_ERP_PRIVILEGES_PATH.relative_to(ROOT)),
                     "offline_queue_store": str(MERCHANT_ERP_OFFLINE_QUEUE_PATH.relative_to(ROOT)),
+                    "connector_event_log": str(MERCHANT_ERP_CONNECTOR_EVENTS_PATH.relative_to(ROOT)),
+                    "nfe_import_log": str(MERCHANT_ERP_NFE_IMPORTS_PATH.relative_to(ROOT)),
+                    "product_event_log": str(MERCHANT_ERP_PRODUCT_EVENTS_PATH.relative_to(ROOT)),
+                    "report_event_log": str(MERCHANT_ERP_REPORT_EVENTS_PATH.relative_to(ROOT)),
+                    "branch_store": str(MERCHANT_ERP_BRANCH_STORE_PATH.relative_to(ROOT)),
+                    "branch_event_log": str(MERCHANT_ERP_BRANCH_EVENTS_PATH.relative_to(ROOT)),
+                    "label_event_log": str(MERCHANT_ERP_LABEL_EVENTS_PATH.relative_to(ROOT)),
+                    "service_booking_log": str(MERCHANT_ERP_SERVICE_BOOKINGS_PATH.relative_to(ROOT)),
+                    "delivery_assignment_store": str(MERCHANT_ERP_DELIVERY_ASSIGNMENTS_PATH.relative_to(ROOT)),
+                    "delivery_event_log": str(MERCHANT_ERP_DELIVERY_EVENTS_PATH.relative_to(ROOT)),
                     "action_endpoint": "/api/merchant-erp/action",
                     "privileges_endpoint": "/api/merchant-erp/privileges",
                     "offline_sync_endpoint": "/api/merchant-erp/offline-sync",
+                    "products_endpoint": "/api/merchant-erp/products",
+                    "product_command_endpoint": "/api/merchant-erp/product-command",
+                    "labels_endpoint": "/api/merchant-erp/labels",
+                    "label_job_endpoint": "/api/merchant-erp/label-job",
+                    "reports_endpoint": "/api/merchant-erp/reports",
+                    "report_query_endpoint": "/api/merchant-erp/report-query",
+                    "branches_endpoint": "/api/merchant-erp/branches",
+                    "branch_command_endpoint": "/api/merchant-erp/branch-command",
+                    "integration_blueprint_endpoint": "/api/merchant-erp/integration-blueprint",
+                    "integration_event_endpoint": "/api/merchant-erp/integration-event",
+                    "nfe_import_endpoint": "/api/merchant-erp/nfe-import",
+                    "service_schedule_endpoint": "/api/merchant-erp/service-schedule",
+                    "service_booking_endpoint": "/api/merchant-erp/service-booking",
+                    "delivery_tracking_endpoint": "/api/merchant-erp/delivery-tracking",
+                    "delivery_event_endpoint": "/api/merchant-erp/delivery-event",
                 },
                 "privileges": {
                     "staff_total": len(privilege_store.get("staff_members") if isinstance(privilege_store.get("staff_members"), list) else []),
@@ -5178,7 +6765,7 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                     "sync_endpoint": "/api/merchant-erp/offline-sync",
                 },
                 "modules": modules,
-                "recent_events": load_jsonl_tail(MERCHANT_ERP_EVENTS_PATH, limit=10),
+                "recent_events": self._merchant_erp_jsonl_tail_for_tenant(MERCHANT_ERP_EVENTS_PATH, public_user, limit=10),
             },
         )
 
@@ -5226,22 +6813,21 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 return 0.0
 
         public_user = self._auth_public_user(auth_user)
+        safe_payload, tenant_scope = self._merchant_erp_scope_payload(self._merchant_erp_safe_payload(payload), public_user)
         event = {
             "event_id": str(uuid.uuid4()),
             "received_at_utc": utc_now_iso(),
             "service": "valley-merchant-erp-action",
-            "release_version": "v051",
+            "release_version": "v056",
             "module_key": module_key,
             "action": action,
             "user_id": public_user["user_id"],
+            "merchant_user_id": tenant_scope["merchant_user_id"],
             "merchant_slug": public_user["merchant_slug"],
             "merchant_code": public_user["merchant_code"],
+            "tenant_scope": tenant_scope,
             "session_id": str(auth_session.get("session_id") or ""),
-            "payload": {
-                key: value
-                for key, value in payload.items()
-                if key not in {"password", "token", "session_token"}
-            },
+            "payload": safe_payload,
         }
         self._append_jsonl(MERCHANT_ERP_EVENTS_PATH, event)
 
@@ -5264,11 +6850,13 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 "received_at_utc": event["received_at_utc"],
                 "service": "valley-merchant-erp-pdv",
                 "parent_event_id": event["event_id"],
-                "release_version": "v051",
+                "release_version": "v056",
                 "module_key": module_key,
                 "action": action,
                 "user_id": public_user["user_id"],
+                "merchant_user_id": tenant_scope["merchant_user_id"],
                 "merchant_slug": public_user["merchant_slug"],
+                "tenant_scope": tenant_scope,
                 "terminal_provider": str(payload.get("terminal_provider") or "valley_plug").strip(),
                 "terminal_id": str(payload.get("terminal_id") or f"PDV-{public_user['merchant_code']}").strip(),
                 "payment_method": str(payload.get("payment_method") or "card_terminal").strip(),
@@ -5297,11 +6885,13 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 "received_at_utc": event["received_at_utc"],
                 "service": "valley-merchant-erp-banking",
                 "parent_event_id": event["event_id"],
-                "release_version": "v051",
+                "release_version": "v056",
                 "module_key": module_key,
                 "action": action,
                 "user_id": public_user["user_id"],
+                "merchant_user_id": tenant_scope["merchant_user_id"],
                 "merchant_slug": public_user["merchant_slug"],
+                "tenant_scope": tenant_scope,
                 "connector_key": str(payload.get("connector_key") or "banking_api_slot").strip(),
                 "bank_environment": str(payload.get("bank_environment") or "sandbox_and_production_ready").strip(),
                 "banking_contract": {
@@ -5512,9 +7102,23 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
         inventory_value = as_float(summary_payload.get("inventory_value_brl"))
         margin_value = as_float(summary_payload.get("margin_potential_brl"))
         items_total = int(as_float(summary_payload.get("items_total")))
-        event_count = len(load_jsonl_tail(MERCHANT_ERP_EVENTS_PATH, limit=1000))
-        pdv_events = load_jsonl_tail(MERCHANT_ERP_PDV_EVENTS_PATH, limit=12)
-        banking_events = load_jsonl_tail(MERCHANT_ERP_BANKING_EVENTS_PATH, limit=12)
+        tenant_scope = self._merchant_erp_tenant_scope(public_user)
+        tenant_events = self._merchant_erp_jsonl_tail_for_tenant(MERCHANT_ERP_EVENTS_PATH, public_user, limit=1000)
+        event_count = len(tenant_events)
+        pdv_events = self._merchant_erp_jsonl_tail_for_tenant(MERCHANT_ERP_PDV_EVENTS_PATH, public_user, limit=12)
+        banking_events = self._merchant_erp_jsonl_tail_for_tenant(MERCHANT_ERP_BANKING_EVENTS_PATH, public_user, limit=12)
+        product_events = self._merchant_erp_jsonl_tail_for_tenant(MERCHANT_ERP_PRODUCT_EVENTS_PATH, public_user, limit=12)
+        report_events = self._merchant_erp_jsonl_tail_for_tenant(MERCHANT_ERP_REPORT_EVENTS_PATH, public_user, limit=12)
+        connector_events = self._merchant_erp_jsonl_tail_for_tenant(MERCHANT_ERP_CONNECTOR_EVENTS_PATH, public_user, limit=12)
+        nfe_events = self._merchant_erp_jsonl_tail_for_tenant(MERCHANT_ERP_NFE_IMPORTS_PATH, public_user, limit=12)
+        label_events = self._merchant_erp_jsonl_tail_for_tenant(MERCHANT_ERP_LABEL_EVENTS_PATH, public_user, limit=12)
+        service_bookings = self._merchant_erp_jsonl_tail_for_tenant(MERCHANT_ERP_SERVICE_BOOKINGS_PATH, public_user, limit=12)
+        delivery_events = self._merchant_erp_jsonl_tail_for_tenant(MERCHANT_ERP_DELIVERY_EVENTS_PATH, public_user, limit=12)
+        _, branch_store = self._ensure_merchant_branch_store(public_user)
+        branches = branch_store.get("branches") if isinstance(branch_store.get("branches"), list) else []
+        stock_policies = branch_store.get("stock_policies") if isinstance(branch_store.get("stock_policies"), list) else []
+        external_catalog = self._merchant_erp_connector_catalog()
+        external_providers = external_catalog.get("providers") if isinstance(external_catalog.get("providers"), list) else []
         banking_connectors = (
             banking_connectors_payload.get("connectors")
             if isinstance(banking_connectors_payload.get("connectors"), list)
@@ -5579,8 +7183,179 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 )
             return records
 
+        def product_management_records() -> list[dict[str, str]]:
+            records = [
+                record("PROD-CREATE", "Cadastro de produto com SKU, categoria, preco, foto e filial", owner="Produtos"),
+                record("PROD-EDIT", "Edicao auditavel de descricao, categoria, preco e estoque", owner="Produtos"),
+                record("PROD-SUSP", "Suspensao e restauracao sem apagar historico", owner="Produtos"),
+                record("PROD-DEL", "Exclusao logica com rastreio de usuario, periodo e filial", owner="Produtos"),
+            ]
+            for product_event in product_events[:6]:
+                records.append(
+                    record(
+                        f"PROD-{str(product_event.get('event_id') or uuid.uuid4())[:8].upper()}",
+                        f"{product_event.get('action') or 'produto'} - {product_event.get('sku') or product_event.get('product_id') or 'sku'}",
+                        status="ATENCAO" if str(product_event.get("next_status") or "") in {"DELETED", "SUSPENDED"} else "OK",
+                        owner=str(product_event.get("branch_key") or "global"),
+                        updated_at=str(product_event.get("received_at_utc") or now),
+                    )
+                )
+            return records
+
+        def report_records() -> list[dict[str, str]]:
+            records = [
+                record("REP-PER", "Filtro por periodo: dia, semana, mes, intervalo livre", owner="Relatorios"),
+                record("REP-USER", "Filtro por usuario, vendedor, operador ou entregador", owner="Relatorios"),
+                record("REP-PROD", "Filtro por produto, SKU, categoria e fornecedor", owner="Relatorios"),
+                record("REP-BRANCH", "Filtro por matriz, filial, estoque global, regional ou local", owner="Relatorios"),
+            ]
+            for report_event in report_events[:4]:
+                records.append(
+                    record(
+                        f"REP-{str(report_event.get('event_id') or uuid.uuid4())[:8].upper()}",
+                        str(report_event.get("report_key") or "consulta de relatorio"),
+                        status="OK",
+                        owner="Relatorios",
+                        updated_at=str(report_event.get("received_at_utc") or now),
+                    )
+                )
+            return records
+
+        def integration_records() -> list[dict[str, str]]:
+            records: list[dict[str, str]] = []
+            for provider in external_providers[:12]:
+                if not isinstance(provider, dict):
+                    continue
+                status_text = str(provider.get("status") or "").lower()
+                records.append(
+                    record(
+                        f"INT-{str(provider.get('key') or 'provider')[:8].upper()}",
+                        f"{provider.get('label') or provider.get('key')} - {provider.get('family') or 'canal'}",
+                        status="ATENCAO" if status_text in {"external_auth_pending", "homologation_required", "contract_required"} else "OK",
+                        owner="Integracoes",
+                    )
+                )
+            for connector_event in connector_events[:4]:
+                records.append(
+                    record(
+                        f"INT-{str(connector_event.get('event_id') or uuid.uuid4())[:8].upper()}",
+                        f"{connector_event.get('provider_key') or 'provider'} - {connector_event.get('object_type') or 'evento'}",
+                        status=str(connector_event.get("event_status") or "OK"),
+                        owner="Integracoes",
+                        updated_at=str(connector_event.get("received_at_utc") or now),
+                    )
+                )
+            return records
+
+        def fiscal_records() -> list[dict[str, str]]:
+            records = [
+                record("NFE-XML", "Importacao NF-e por XML, chave de 44 digitos ou certificado A1", owner="Fiscal"),
+                record("NFE-STK", "Itens da nota geram fila de movimento de estoque", owner="Fiscal"),
+                record("NFE-CFOP", "CFOP, NCM, CNPJ emitente e destinatario preservados", owner="Fiscal"),
+            ]
+            for nfe_event in nfe_events[:5]:
+                records.append(
+                    record(
+                        f"NFE-{str(nfe_event.get('access_key') or nfe_event.get('import_id') or uuid.uuid4())[:8].upper()}",
+                        f"{nfe_event.get('items_total') or 0} itens importados para estoque",
+                        status=str(nfe_event.get("stock_update_status") or "QUEUED"),
+                        owner="Fiscal",
+                        updated_at=str(nfe_event.get("received_at_utc") or now),
+                    )
+                )
+            return records
+
+        def label_records() -> list[dict[str, str]]:
+            records = [
+                record("LBL-QR", "Geracao de etiqueta QR Code para produto, lote, picking e entrega", owner="Etiquetas"),
+                record("LBL-EAN13", "Geracao de codigo de barras EAN-13 validado por digito verificador", owner="Etiquetas"),
+                record("LBL-ENT", "Etiqueta de entrada de estoque por NF-e, lote, validade e filial", owner="Estoque"),
+                record("LBL-PRC", "Etiqueta de preco e gondola pronta para impressao A4 ou termica", owner="Produtos"),
+            ]
+            for label_event in label_events[:6]:
+                records.append(
+                    record(
+                        f"LBL-{str(label_event.get('event_id') or uuid.uuid4())[:8].upper()}",
+                        f"{label_event.get('job_type') or 'etiqueta'} - {label_event.get('barcode_type') or 'QR_CODE'} · {label_event.get('labels_total') or 0} itens",
+                        status="OK",
+                        owner=str(label_event.get("branch_key") or "matriz"),
+                        updated_at=str(label_event.get("received_at_utc") or now),
+                    )
+                )
+            return records
+
+        def schedule_records() -> list[dict[str, str]]:
+            records = [
+                record("AGD-BTN", "Botao Agenda abre slots por filial, recurso e profissional", owner="Agenda"),
+                record("AGD-CUST", "Cliente visualiza agenda disponivel e solicita horario", owner="Agenda"),
+                record("AGD-MERCH", "Lojista confirma, remarca, cancela e conclui atendimento", owner="Agenda"),
+            ]
+            for booking in service_bookings[:6]:
+                records.append(
+                    record(
+                        f"AGD-{str(booking.get('booking_id') or uuid.uuid4())[:8].upper()}",
+                        f"{booking.get('service_label') or 'Servico'} - {booking.get('customer_name') or 'cliente'}",
+                        status=str(booking.get("booking_status") or "REQUESTED"),
+                        owner=str(booking.get("branch_key") or "matriz"),
+                        updated_at=str(booking.get("received_at_utc") or now),
+                    )
+                )
+            return records
+
+        def branch_records() -> list[dict[str, str]]:
+            records: list[dict[str, str]] = []
+            for branch in branches:
+                if not isinstance(branch, dict):
+                    continue
+                records.append(
+                    record(
+                        f"FIL-{str(branch.get('branch_key') or 'filial')[:8].upper()}",
+                        f"{branch.get('display_name') or branch.get('branch_key')} - estoque {branch.get('stock_scope') or 'LOCAL'}",
+                        status="OK" if str(branch.get("status") or "ACTIVE") == "ACTIVE" else "ATENCAO",
+                        owner=str(branch.get("region_code") or "BR"),
+                    )
+                )
+            for policy in stock_policies[:4]:
+                if not isinstance(policy, dict):
+                    continue
+                records.append(
+                    record(
+                        f"FIL-POL-{str(policy.get('policy_key') or 'policy')[:5].upper()}",
+                        f"{policy.get('source_branch_key') or 'matriz'} -> {policy.get('target_branch_key') or '*'} ({policy.get('visibility_mode') or 'LOCAL'})",
+                        status="OK",
+                        owner="Politica de estoque",
+                    )
+                )
+            return records or [record("FIL-MATRIX", "Matriz pronta para criar e sincronizar filiais", owner="Filiais")]
+
+        def tracking_records() -> list[dict[str, str]]:
+            records = [
+                record("MAP-TOGGLE", "Botao Rastreio oculta ou exibe mini mapa por filial", owner="Rastreio"),
+                record("MAP-LIVE", "Atualizacao em tempo real pelo app do entregador", owner="Rastreio"),
+                record("MAP-ORDER", "Entregador vinculado ao pedido, filial e destinatario", owner="Rastreio"),
+            ]
+            for event in delivery_events[:6]:
+                records.append(
+                    record(
+                        f"MAP-{str(event.get('tracking_code') or event.get('event_id') or uuid.uuid4())[:8].upper()}",
+                        f"{event.get('delivery_status') or 'rota'} - {event.get('branch_key') or 'filial'}",
+                        status=str(event.get("delivery_status") or "IN_TRANSIT"),
+                        owner=str(event.get("courier_user_id") or "Entregador"),
+                        updated_at=str(event.get("received_at_utc") or now),
+                    )
+                )
+            return records
+
         pdv_recs = pdv_records()
         banking_recs = banking_records()
+        product_management_recs = product_management_records()
+        report_recs = report_records()
+        integration_recs = integration_records()
+        fiscal_recs = fiscal_records()
+        label_recs = label_records()
+        schedule_recs = schedule_records()
+        branch_recs = branch_records()
+        tracking_recs = tracking_records()
 
         return [
             {
@@ -5595,11 +7370,38 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             {
                 "key": "products",
                 "label": "Produtos",
-                "subtitle": f"{len(product_recs)} SKUs prontos a partir do catalogo importado",
+                "subtitle": "Cadastro, edicao, exclusao logica, suspensao e publicacao por filial",
                 "icon": "inventory",
                 "color": "#2563EB",
                 "status": "active",
-                "records": product_recs or [record("SKU-RUNTIME", "Catalogo de produtos conectado ao runtime", owner="Produtos")],
+                "records": [
+                    *product_management_recs,
+                    *label_recs[:2],
+                    *(product_recs or [record("SKU-RUNTIME", "Catalogo de produtos conectado ao runtime", owner="Produtos")]),
+                ],
+                "actions": {
+                    "list_endpoint": "/api/merchant-erp/products",
+                    "command_endpoint": "/api/merchant-erp/product-command",
+                    "labels_endpoint": "/api/merchant-erp/labels",
+                    "label_job_endpoint": "/api/merchant-erp/label-job",
+                    "supported": [
+                        "create",
+                        "edit",
+                        "delete_soft",
+                        "suspend",
+                        "restore",
+                        "publish",
+                        "unpublish",
+                        "price_update",
+                        "stock_update",
+                        "category_update",
+                        "variant_create",
+                        "variant_update",
+                        "kit_create",
+                        "kit_update",
+                        "label_generate",
+                    ],
+                },
             },
             {
                 "key": "stock",
@@ -5608,7 +7410,16 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 "icon": "qr_code",
                 "color": "#7C3AED",
                 "status": "active",
-                "records": stock_recs or [record("EST-RUNTIME", "Estoque runtime disponivel para leitura", owner="Estoque")],
+                "records": [
+                    *(stock_recs or [record("EST-RUNTIME", "Estoque runtime disponivel para leitura", owner="Estoque")]),
+                    *label_recs[2:],
+                    record("EST-ALERT", "Ponto minimo/maximo e inventario ciclico preparados", owner="Estoque"),
+                ],
+                "actions": {
+                    "labels_endpoint": "/api/merchant-erp/labels",
+                    "label_job_endpoint": "/api/merchant-erp/label-job",
+                    "label_jobs": ["stock_receiving", "shelf_location", "inventory_count", "branch_transfer"],
+                },
             },
             {
                 "key": "orders",
@@ -5663,14 +7474,37 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             {
                 "key": "delivery",
                 "label": "Entregas",
-                "subtitle": "Frete, etiqueta e rastreio por fornecedor",
+                "subtitle": "Frete, etiqueta, entregador e mini mapa de rastreio por filial",
                 "icon": "local_shipping",
                 "color": "#DC2626",
                 "status": "active",
                 "records": [
                     record("FRT-QUOTE", "Cotacao de frete ativa em /api/actions/shipping-quote", owner="Logistica"),
+                    *tracking_recs[:5],
                     *order_recs[:4],
                 ],
+                "actions": {
+                    "tracking_endpoint": "/api/merchant-erp/delivery-tracking",
+                    "event_endpoint": "/api/merchant-erp/delivery-event",
+                    "mini_map_toggle": True,
+                    "branch_filter": True,
+                },
+            },
+            {
+                "key": "tracking",
+                "label": "Rastreio",
+                "subtitle": "Mini mapa ocultavel com entregas em tempo real da filial selecionada",
+                "icon": "map",
+                "color": "#EA580C",
+                "status": "active",
+                "records": tracking_recs,
+                "actions": {
+                    "button": "toggle-mini-map",
+                    "default_visible": False,
+                    "tracking_endpoint": "/api/merchant-erp/delivery-tracking",
+                    "event_endpoint": "/api/merchant-erp/delivery-event",
+                    "refresh_seconds": 15,
+                },
             },
             {
                 "key": "marketplace",
@@ -5679,20 +7513,113 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 "icon": "hub",
                 "color": "#9333EA",
                 "status": "active",
-                "records": provider_recs,
+                "records": [*integration_recs, *provider_recs],
+                "actions": {
+                    "blueprint_endpoint": "/api/merchant-erp/integration-blueprint",
+                    "event_endpoint": "/api/merchant-erp/integration-event",
+                    "providers": [str(provider.get("key") or "") for provider in external_providers if isinstance(provider, dict)],
+                },
+            },
+            {
+                "key": "integrations",
+                "label": "Integracoes",
+                "subtitle": "Shopee, Mercado Livre, OLX, Ze Delivery, iFood e canais sugeridos",
+                "icon": "sync_alt",
+                "color": "#6D28D9",
+                "status": "active",
+                "records": integration_recs,
+                "actions": {
+                    "blueprint_endpoint": "/api/merchant-erp/integration-blueprint",
+                    "event_endpoint": "/api/merchant-erp/integration-event",
+                    "bidirectional": True,
+                },
+            },
+            {
+                "key": "fiscal",
+                "label": "Fiscal/NF-e",
+                "subtitle": "Importacao de NF-e para lancamento fiscal e atualizacao de estoque",
+                "icon": "article",
+                "color": "#0E7490",
+                "status": "active",
+                "records": fiscal_recs,
+                "actions": {
+                    "nfe_import_endpoint": "/api/merchant-erp/nfe-import",
+                    "sources": ["xml_upload", "access_key_44_digits", "dfe_distribution_with_certificate_a1"],
+                },
+            },
+            {
+                "key": "schedule",
+                "label": "Agenda",
+                "subtitle": "Agenda generica bidirecional para empresas de servicos",
+                "icon": "calendar_month",
+                "color": "#15803D",
+                "status": "active",
+                "records": schedule_recs,
+                "actions": {
+                    "schedule_endpoint": "/api/merchant-erp/service-schedule",
+                    "booking_endpoint": "/api/merchant-erp/service-booking",
+                    "customer_available_slots": True,
+                    "merchant_confirm_reschedule_cancel": True,
+                },
+            },
+            {
+                "key": "branches",
+                "label": "Filiais",
+                "subtitle": "Matriz gerencia lojas, estoque global/regional/local, financeiro e cadastros",
+                "icon": "storefront",
+                "color": "#BE123C",
+                "status": "active",
+                "records": branch_recs,
+                "actions": {
+                    "branches_endpoint": "/api/merchant-erp/branches",
+                    "command_endpoint": "/api/merchant-erp/branch-command",
+                    "stock_visibility_modes": ["GLOBAL", "REGIONAL", "LOCAL"],
+                    "auto_sync": ["cadastro", "preco", "estoque", "financeiro", "operacoes"],
+                },
+            },
+            {
+                "key": "labels",
+                "label": "Etiquetas",
+                "subtitle": "QR Code, EAN-13, preco, entrada de estoque, picking, envio e transferencia",
+                "icon": "qr_code_2",
+                "color": "#334155",
+                "status": "active",
+                "records": label_recs,
+                "actions": {
+                    "labels_endpoint": "/api/merchant-erp/labels",
+                    "label_job_endpoint": "/api/merchant-erp/label-job",
+                    "barcode_types": ["QR_CODE", "EAN13", "BOTH"],
+                    "job_types": [
+                        "product_identification",
+                        "price_tag",
+                        "stock_receiving",
+                        "shelf_location",
+                        "picking",
+                        "shipping",
+                        "branch_transfer",
+                        "inventory_count",
+                    ],
+                },
             },
             {
                 "key": "reports",
                 "label": "Relatorios",
-                "subtitle": "Margem, ruptura e ranking calculados do runtime",
+                "subtitle": "Filtros por periodo, usuario, produto, categoria e filial",
                 "icon": "bar_chart",
                 "color": "#475569",
                 "status": "active",
                 "records": [
+                    *report_recs,
                     record("REL-ITENS", f"{items_total} itens consolidados", owner="Relatorios"),
                     record("REL-STOCK", f"Modulo STOCK: {stock_module.get('items_total') or 0} itens", owner="Relatorios"),
                     record("REL-EVENT", f"{event_count} acoes recentes do ERP", owner="Auditoria"),
                 ],
+                "actions": {
+                    "reports_endpoint": "/api/merchant-erp/reports",
+                    "query_endpoint": "/api/merchant-erp/report-query",
+                    "filters": ["period_from", "period_to", "user_id", "product_id", "category", "branch_key"],
+                    "exports": ["json", "csv", "pdf"],
+                },
             },
             {
                 "key": "settings",

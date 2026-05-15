@@ -11,7 +11,13 @@ $ErrorActionPreference = 'Stop'
 $root = Resolve-Path (Join-Path $PSScriptRoot '..')
 $runtime = Join-Path $root 'tmp\runtime'
 $log = Join-Path $runtime 'termius-ngrok-tcp.log'
+$errLog = Join-Path $runtime 'termius-ngrok-tcp.err.log'
 $envFile = Join-Path $root '.env'
+$hiddenProcessScript = Join-Path $PSScriptRoot 'valley_hidden_process.ps1'
+
+if (Test-Path -LiteralPath $hiddenProcessScript -PathType Leaf) {
+    . $hiddenProcessScript
+}
 
 if (Test-Path -LiteralPath $envFile) {
     foreach ($line in Get-Content -LiteralPath $envFile) {
@@ -45,10 +51,19 @@ else {
     }
 }
 
-Start-Process `
-    -FilePath $ngrok.Source `
-    -ArgumentList @('tcp', $LocalPort.ToString(), '--log', $log) `
-    -WorkingDirectory $root `
-    -WindowStyle Minimized
+if (Get-Command Start-ValleyHiddenProcess -ErrorAction SilentlyContinue) {
+    Start-ValleyHiddenProcess `
+        -FilePath $ngrok.Source `
+        -ArgumentList @('tcp', $LocalPort.ToString(), '--log', $log) `
+        -WorkingDirectory $root `
+        -StdoutLog $log `
+        -StderrLog $errLog | Out-Null
+} else {
+    Start-Process `
+        -FilePath $ngrok.Source `
+        -ArgumentList @('tcp', $LocalPort.ToString(), '--log', $log) `
+        -WorkingDirectory $root `
+        -WindowStyle Hidden | Out-Null
+}
 
 Write-Host "ngrok TCP iniciado para localhost:$LocalPort. Consulte o endpoint no log/API local do ngrok."

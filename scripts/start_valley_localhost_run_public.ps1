@@ -23,9 +23,17 @@ $TunnelOutLog = Join-Path $RuntimeDir 'valley-localhost-run.out.log'
 $TunnelErrLog = Join-Path $RuntimeDir 'valley-localhost-run.err.log'
 $ServeScript = Join-Path $RepoRoot 'scripts\serve_valley_admin.py'
 $TaskName = 'ValleyLocalhostRunPublicRuntime'
-$StartupShortcut = Join-Path ([Environment]::GetFolderPath('Startup')) 'ValleyLocalhostRunPublicRuntime.cmd'
+$StartupShortcut = Join-Path ([Environment]::GetFolderPath('Startup')) 'ValleyLocalhostRunPublicRuntime.vbs'
+$HiddenProcessScript = Join-Path $PSScriptRoot 'valley_hidden_process.ps1'
+$HiddenTaskRunner = Join-Path $PSScriptRoot 'valley_hidden_task_runner.vbs'
 
 New-Item -ItemType Directory -Path $RuntimeDir -Force | Out-Null
+
+if (Test-Path -LiteralPath $HiddenProcessScript -PathType Leaf) {
+    . $HiddenProcessScript
+} else {
+    throw "Launcher oculto nao encontrado: $HiddenProcessScript"
+}
 
 function Write-Step {
     param([string]$Message)
@@ -111,13 +119,12 @@ function Ensure-LocalApi {
     Write-Step ("Subindo API local em {0}" -f $LocalBaseUrl)
     Set-Content -LiteralPath $ApiOutLog -Value '' -Encoding UTF8
     Set-Content -LiteralPath $ApiErrLog -Value '' -Encoding UTF8
-    Start-Process `
+    Start-ValleyHiddenProcess `
         -FilePath $Python `
         -ArgumentList @('-u', $ServeScript, '--host', '127.0.0.1', '--port', $ApiPort.ToString()) `
         -WorkingDirectory $RepoRoot `
-        -RedirectStandardOutput $ApiOutLog `
-        -RedirectStandardError $ApiErrLog `
-        -WindowStyle Hidden | Out-Null
+        -StdoutLog $ApiOutLog `
+        -StderrLog $ApiErrLog | Out-Null
 
     $Deadline = (Get-Date).AddSeconds(45)
     do {
@@ -244,7 +251,7 @@ function Start-LocalhostRunTunnel {
     Set-Content -LiteralPath $TunnelOutLog -Value '' -Encoding UTF8
     Set-Content -LiteralPath $TunnelErrLog -Value '' -Encoding UTF8
     Write-Step ("Subindo localhost.run -> localhost:{0}" -f $ApiPort)
-    Start-Process `
+    Start-ValleyHiddenProcess `
         -FilePath $Ssh `
         -ArgumentList @(
             '-o', 'ServerAliveInterval=30',
@@ -254,9 +261,8 @@ function Start-LocalhostRunTunnel {
             'nokey@localhost.run'
         ) `
         -WorkingDirectory $RepoRoot `
-        -RedirectStandardOutput $TunnelOutLog `
-        -RedirectStandardError $TunnelErrLog `
-        -WindowStyle Hidden | Out-Null
+        -StdoutLog $TunnelOutLog `
+        -StderrLog $TunnelErrLog | Out-Null
 
     $Deadline = (Get-Date).AddSeconds(75)
     do {
@@ -274,15 +280,23 @@ function Start-LocalhostRunTunnel {
 
 function Install-RuntimeTask {
     try {
+        $CommandLine = 'powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "' + $PSCommandPath + '" -ReplaceStale'
+        $Execute = if (Test-Path -LiteralPath $HiddenTaskRunner -PathType Leaf) { Join-Path $env:WINDIR 'System32\wscript.exe' } else { 'powershell.exe' }
+        $Arguments = if (Test-Path -LiteralPath $HiddenTaskRunner -PathType Leaf) {
+            '"' + $HiddenTaskRunner + '" "' + $RepoRoot + '" "' + $CommandLine + '"'
+        } else {
+            '-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "' + $PSCommandPath + '" -ReplaceStale'
+        }
         $Action = New-ScheduledTaskAction `
-            -Execute 'powershell.exe' `
-            -Argument ("-NoProfile -ExecutionPolicy Bypass -File `"{0}`" -ReplaceStale" -f $PSCommandPath)
+            -Execute $Execute `
+            -Argument $Arguments
         $Trigger = New-ScheduledTaskTrigger -AtLogOn
         $Settings = New-ScheduledTaskSettingsSet `
             -AllowStartIfOnBatteries `
             -DontStopIfGoingOnBatteries `
             -RestartCount 999 `
-            -RestartInterval (New-TimeSpan -Minutes 1)
+            -RestartInterval (New-TimeSpan -Minutes 1) `
+            -Hidden
         Register-ScheduledTask `
             -TaskName $TaskName `
             -Action $Action `
@@ -296,8 +310,7 @@ function Install-RuntimeTask {
         Write-Step ("Scheduled Task indisponivel neste usuario: {0}" -f $_.Exception.Message)
     }
 
-    $StartupCommand = '@echo off' + [Environment]::NewLine +
-        ('powershell.exe -NoProfile -ExecutionPolicy Bypass -File "{0}" -ReplaceStale' -f $PSCommandPath) + [Environment]::NewLine
+    $StartupCommand = 'CreateObject("WScript.Shell").Run "powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File ""' + $PSCommandPath.Replace('"', '""') + '"" -ReplaceStale", 0, False' + [Environment]::NewLine
     Set-Content -LiteralPath $StartupShortcut -Value $StartupCommand -Encoding ASCII
     Write-Step ("Fallback persistente instalado no Startup: {0}" -f $StartupShortcut)
 }

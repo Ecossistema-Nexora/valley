@@ -19,8 +19,13 @@ $RuntimeDir = Join-Path $RepoRoot 'tmp\runtime'
 $StatusPath = Join-Path $RuntimeDir 'valley-module-activity-automation-status.json'
 $LedgerPath = Join-Path $RuntimeDir 'valley-module-activity-automation-ledger.jsonl'
 $EnginePath = Join-Path $RepoRoot 'scripts\automacao_sincronizador_modulos.py'
+$HiddenProcessScript = Join-Path $PSScriptRoot 'valley_hidden_process.ps1'
 
 New-Item -ItemType Directory -Path $RuntimeDir -Force | Out-Null
+
+if (Test-Path -LiteralPath $HiddenProcessScript -PathType Leaf) {
+    . $HiddenProcessScript
+}
 
 function Get-PythonCommand {
     $Command = Get-Command python -ErrorAction SilentlyContinue | Select-Object -First 1
@@ -78,15 +83,26 @@ foreach ($Command in (Get-ModeCommands -SelectedMode $Mode)) {
     $OutputFile = Join-Path $RuntimeDir ("valley-module-automation-{0}-{1}.out.log" -f $Command, ([guid]::NewGuid().ToString('N')))
     $ErrorFile = Join-Path $RuntimeDir ("valley-module-automation-{0}-{1}.err.log" -f $Command, ([guid]::NewGuid().ToString('N')))
 
-    $Process = Start-Process `
-        -FilePath $Python `
-        -ArgumentList @($EnginePath, $Command) `
-        -WorkingDirectory $RepoRoot `
-        -RedirectStandardOutput $OutputFile `
-        -RedirectStandardError $ErrorFile `
-        -NoNewWindow `
-        -PassThru `
-        -Wait
+    if (Get-Command Start-ValleyHiddenProcess -ErrorAction SilentlyContinue) {
+        $Process = Start-ValleyHiddenProcess `
+            -FilePath $Python `
+            -ArgumentList @($EnginePath, $Command) `
+            -WorkingDirectory $RepoRoot `
+            -StdoutLog $OutputFile `
+            -StderrLog $ErrorFile `
+            -PassThru `
+            -Wait
+    } else {
+        $Process = Start-Process `
+            -FilePath $Python `
+            -ArgumentList @($EnginePath, $Command) `
+            -WorkingDirectory $RepoRoot `
+            -RedirectStandardOutput $OutputFile `
+            -RedirectStandardError $ErrorFile `
+            -WindowStyle Hidden `
+            -PassThru `
+            -Wait
+    }
 
     $Stdout = if (Test-Path -LiteralPath $OutputFile) { Get-Content -Raw -LiteralPath $OutputFile } else { '' }
     $Stderr = if (Test-Path -LiteralPath $ErrorFile) { Get-Content -Raw -LiteralPath $ErrorFile } else { '' }

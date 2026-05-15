@@ -11,6 +11,13 @@ $runtime = Join-Path $root 'tmp\runtime'
 $outLog = Join-Path $runtime 'termius-cloudflared.out.log'
 $errLog = Join-Path $runtime 'termius-cloudflared.err.log'
 $envFile = Join-Path $root '.env'
+$hiddenProcessScript = Join-Path $PSScriptRoot 'valley_hidden_process.ps1'
+
+if (Test-Path -LiteralPath $hiddenProcessScript -PathType Leaf) {
+    . $hiddenProcessScript
+} else {
+    throw "Launcher oculto nao encontrado: $hiddenProcessScript"
+}
 
 if (Test-Path -LiteralPath $envFile) {
     foreach ($line in Get-Content -LiteralPath $envFile) {
@@ -36,12 +43,11 @@ if ([string]::IsNullOrWhiteSpace($env:CLOUDFLARED_TOKEN)) {
 
 $cloudflared = Get-Command cloudflared -ErrorAction Stop
 
-Start-Process `
+Start-ValleyHiddenProcess `
     -FilePath $cloudflared.Source `
     -ArgumentList @('tunnel', 'run', '--token', $env:CLOUDFLARED_TOKEN) `
     -WorkingDirectory $root `
-    -WindowStyle Minimized `
-    -RedirectStandardOutput $outLog `
-    -RedirectStandardError $errLog
+    -StdoutLog $outLog `
+    -StderrLog $errLog | Out-Null
 
 Write-Host "Cloudflare Tunnel iniciado em background. Logs=$outLog $errLog"

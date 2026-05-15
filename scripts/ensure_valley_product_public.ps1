@@ -30,8 +30,16 @@ $CloudflareErrLog = Join-Path $RuntimeDir 'valley-product-cloudflare.err.log'
 $ManifestPath = Join-Path $RuntimeDir 'valley-product-public-runtime.json'
 $PublicationPath = Join-Path $RuntimeDir 'valley-product-web-publication.json'
 $TaskName = 'ValleyProductPublicRuntime'
+$HiddenProcessScript = Join-Path $PSScriptRoot 'valley_hidden_process.ps1'
+$HiddenTaskRunner = Join-Path $PSScriptRoot 'valley_hidden_task_runner.vbs'
 
 New-Item -ItemType Directory -Path $RuntimeDir -Force | Out-Null
+
+if (Test-Path -LiteralPath $HiddenProcessScript -PathType Leaf) {
+    . $HiddenProcessScript
+} else {
+    throw "Launcher oculto nao encontrado: $HiddenProcessScript"
+}
 
 function Write-Step {
     param([string]$Message)
@@ -298,13 +306,12 @@ function Ensure-LocalApi {
     }
 
     Write-Step ("Subindo API em http://127.0.0.1:{0}" -f $ApiPort)
-    Start-Process `
+    Start-ValleyHiddenProcess `
         -FilePath $script:Python `
         -ArgumentList @('scripts\serve_valley_admin.py', '--host', '127.0.0.1', '--port', $ApiPort.ToString()) `
         -WorkingDirectory $RepoRoot `
-        -RedirectStandardOutput $ApiOutLog `
-        -RedirectStandardError $ApiErrLog `
-        -WindowStyle Hidden
+        -StdoutLog $ApiOutLog `
+        -StderrLog $ApiErrLog | Out-Null
 
     $Deadline = (Get-Date).AddSeconds(30)
     do {
@@ -340,13 +347,12 @@ function Try-StartNgrok {
     }
 
     Write-Step ("Subindo ngrok {0} -> 127.0.0.1:{1}" -f $PublicUrl, $ApiPort)
-    Start-Process `
+    Start-ValleyHiddenProcess `
         -FilePath $script:Ngrok `
         -ArgumentList @('http', '--url', $PublicUrl, "127.0.0.1:$ApiPort") `
         -WorkingDirectory $RepoRoot `
-        -RedirectStandardOutput $NgrokOutLog `
-        -RedirectStandardError $NgrokErrLog `
-        -WindowStyle Hidden
+        -StdoutLog $NgrokOutLog `
+        -StderrLog $NgrokErrLog | Out-Null
 
     $Deadline = (Get-Date).AddSeconds(30)
     do {
@@ -391,13 +397,12 @@ function Try-StartCloudflareQuickTunnel {
     }
 
     Write-Step ("Subindo Cloudflare Quick Tunnel -> 127.0.0.1:{0}" -f $ApiPort)
-    Start-Process `
+    Start-ValleyHiddenProcess `
         -FilePath $script:Cloudflared `
         -ArgumentList @('tunnel', '--url', "http://127.0.0.1:$ApiPort") `
         -WorkingDirectory $RepoRoot `
-        -RedirectStandardOutput $CloudflareOutLog `
-        -RedirectStandardError $CloudflareErrLog `
-        -WindowStyle Hidden
+        -StdoutLog $CloudflareOutLog `
+        -StderrLog $CloudflareErrLog | Out-Null
 
     $Deadline = (Get-Date).AddSeconds(45)
     do {
@@ -455,13 +460,12 @@ function Try-StartCloudflareNamedTunnel {
     }
 
     Write-Step ("Subindo Cloudflare named tunnel -> {0}" -f $PublicUrl)
-    Start-Process `
+    Start-ValleyHiddenProcess `
         -FilePath $script:Cloudflared `
         -ArgumentList @('tunnel', 'run', '--token', $Token) `
         -WorkingDirectory $RepoRoot `
-        -RedirectStandardOutput $CloudflareOutLog `
-        -RedirectStandardError $CloudflareErrLog `
-        -WindowStyle Hidden
+        -StdoutLog $CloudflareOutLog `
+        -StderrLog $CloudflareErrLog | Out-Null
 
     $Deadline = (Get-Date).AddSeconds(45)
     do {
@@ -512,7 +516,16 @@ function Start-ProductRuntime {
     $LocalhostRunScript = Join-Path $PSScriptRoot 'start_valley_localhost_run_public.ps1'
     if (Test-Path -LiteralPath $LocalhostRunScript -PathType Leaf) {
         Write-Step "Cloudflare indisponivel; acionando fallback persistente localhost.run."
-        & powershell -NoProfile -ExecutionPolicy Bypass -File $LocalhostRunScript
+        if (Get-Command Start-ValleyHiddenProcess -ErrorAction SilentlyContinue) {
+            Start-ValleyHiddenProcess `
+                -FilePath 'powershell.exe' `
+                -ArgumentList @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-WindowStyle', 'Hidden', '-File', $LocalhostRunScript) `
+                -WorkingDirectory $RepoRoot `
+                -StdoutLog (Join-Path $RuntimeDir 'valley-localhost-run-bootstrap.out.log') `
+                -StderrLog (Join-Path $RuntimeDir 'valley-localhost-run-bootstrap.err.log') | Out-Null
+        } else {
+            & powershell -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File $LocalhostRunScript
+        }
         return
     }
 
@@ -525,7 +538,12 @@ function Install-RuntimeTask {
         throw "Wrapper de inicializacao nao encontrado: $Wrapper"
     }
 
-    $TaskCommand = '"' + $Wrapper + '"'
+    $CommandLine = 'powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "' + (Join-Path $PSScriptRoot 'ensure_valley_product_public.ps1') + '" -Watch -ReplaceStale'
+    $TaskCommand = if (Test-Path -LiteralPath $HiddenTaskRunner -PathType Leaf) {
+        'wscript.exe "' + $HiddenTaskRunner + '" "' + $RepoRoot + '" "' + $CommandLine + '"'
+    } else {
+        $CommandLine
+    }
 
     $PreviousErrorActionPreference = $ErrorActionPreference
     $ErrorActionPreference = 'Continue'
@@ -542,8 +560,8 @@ function Install-RuntimeTask {
     }
 
     $StartupDir = [Environment]::GetFolderPath('Startup')
-    $StartupCommand = Join-Path $StartupDir 'ValleyProductPublicRuntime.cmd'
-    $StartupContent = "@echo off`r`ncall `"$Wrapper`"`r`n"
+    $StartupCommand = Join-Path $StartupDir 'ValleyProductPublicRuntime.vbs'
+    $StartupContent = 'CreateObject("WScript.Shell").Run "powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File ""' + $PSCommandPath.Replace('"', '""') + '"" -Watch -ReplaceStale", 0, False' + "`r`n"
     Set-Content -LiteralPath $StartupCommand -Value $StartupContent -Encoding ASCII -NoNewline
 
     Write-Step ("Sem permissao para schtasks; fallback instalado em: {0}" -f $StartupCommand)

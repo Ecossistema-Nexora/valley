@@ -31,8 +31,15 @@ $ServeStdoutLog = Join-Path $RuntimeDir 'valley-admin-http.live.out.log'
 $ServeStderrLog = Join-Path $RuntimeDir 'valley-admin-http.live.err.log'
 $CloudflareStdoutLog = Join-Path $RuntimeDir 'valley-admin-cloudflare.live.out.log'
 $CloudflareStderrLog = Join-Path $RuntimeDir 'valley-admin-cloudflare.live.err.log'
+$HiddenProcessScript = Join-Path $PSScriptRoot 'valley_hidden_process.ps1'
 
 New-Item -ItemType Directory -Path $RuntimeDir -Force | Out-Null
+
+if (Test-Path -LiteralPath $HiddenProcessScript -PathType Leaf) {
+    . $HiddenProcessScript
+} else {
+    throw "Launcher oculto nao encontrado: $HiddenProcessScript"
+}
 
 function Write-Step {
     param([string]$Message)
@@ -438,7 +445,12 @@ if (-not ($HealthPayload -and $HealthPayload.service -eq 'valley-admin')) {
         '--startup-file', $HttpStartupManifest
     )
 
-    Start-Process -FilePath $PythonLauncher.FilePath -ArgumentList $ServeArgs -WorkingDirectory $RepoRoot -RedirectStandardOutput $ServeStdoutLog -RedirectStandardError $ServeStderrLog -WindowStyle Hidden | Out-Null
+    Start-ValleyHiddenProcess `
+        -FilePath $PythonLauncher.FilePath `
+        -ArgumentList $ServeArgs `
+        -WorkingDirectory $RepoRoot `
+        -StdoutLog $ServeStdoutLog `
+        -StderrLog $ServeStderrLog | Out-Null
     $HealthPayload = Wait-JsonEndpoint -Url $LocalHealthUrl -Attempts 30 -DelayMs 1000
     if (-not ($HealthPayload -and $HealthPayload.service -eq 'valley-admin')) {
         throw "Servidor local nao respondeu em $LocalHealthUrl"
@@ -451,13 +463,12 @@ $CloudflareStderrLog = Prepare-LogPath -Path $CloudflareStderrLog
 
 if (-not [string]::IsNullOrWhiteSpace($CloudflaredToken) -and -not [string]::IsNullOrWhiteSpace($PublicBaseUrl)) {
     Write-Step ("Subindo Cloudflare named tunnel para {0}" -f $PublicBaseUrl)
-    Start-Process `
+    Start-ValleyHiddenProcess `
         -FilePath $Cloudflared `
         -ArgumentList @('tunnel', 'run', '--token', $CloudflaredToken) `
         -WorkingDirectory $RepoRoot `
-        -RedirectStandardOutput $CloudflareStdoutLog `
-        -RedirectStandardError $CloudflareStderrLog `
-        -WindowStyle Hidden | Out-Null
+        -StdoutLog $CloudflareStdoutLog `
+        -StderrLog $CloudflareStderrLog | Out-Null
 
     $Deadline = (Get-Date).AddSeconds(45)
     do {
@@ -474,13 +485,12 @@ if (-not [string]::IsNullOrWhiteSpace($CloudflaredToken) -and -not [string]::IsN
 }
 
 Write-Step ("Subindo Cloudflare Quick Tunnel -> {0}" -f $LocalBaseUrl)
-Start-Process `
+Start-ValleyHiddenProcess `
     -FilePath $Cloudflared `
     -ArgumentList @('tunnel', '--url', $LocalBaseUrl) `
     -WorkingDirectory $RepoRoot `
-    -RedirectStandardOutput $CloudflareStdoutLog `
-    -RedirectStandardError $CloudflareStderrLog `
-    -WindowStyle Hidden | Out-Null
+    -StdoutLog $CloudflareStdoutLog `
+    -StderrLog $CloudflareStderrLog | Out-Null
 
 $QuickTunnelUrl = $null
 $Deadline = (Get-Date).AddSeconds(60)

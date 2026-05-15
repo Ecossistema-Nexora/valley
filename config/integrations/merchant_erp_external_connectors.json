@@ -1,0 +1,499 @@
+{
+  "version": "1.0.0",
+  "service": "valley-merchant-erp-external-connectors",
+  "purpose": "Catalogo sem segredos para integracoes bidirecionais do ERP Lojista Valley com marketplaces, delivery, agenda, fiscal e comunicacao.",
+  "security_rules": [
+    "Nunca gravar client_secret, access_token, refresh_token, certificado A1 ou senha neste arquivo.",
+    "Usar apenas secretRef, tokenRef, certificateRef ou runtime:// para material protegido.",
+    "Quando o provedor exigir homologacao, manter status external_auth_pending ate aprovacao e teste oficial.",
+    "Nao usar scraping como fallback de producao."
+  ],
+  "bidirectional_contract": {
+    "inbound": [
+      "order_import",
+      "catalog_status_import",
+      "inventory_snapshot_import",
+      "financial_event_import",
+      "booking_import",
+      "delivery_event_import"
+    ],
+    "outbound": [
+      "catalog_publish",
+      "price_update",
+      "stock_update",
+      "order_status_update",
+      "booking_status_update",
+      "delivery_tracking_update"
+    ],
+    "event_policy": "append_only_with_idempotency_key",
+    "secret_policy": "runtime_vault_only"
+  },
+  "providers": [
+    {
+      "key": "mercado_livre",
+      "label": "Mercado Livre",
+      "family": "marketplace",
+      "baseUrl": "https://api.mercadolibre.com",
+      "docsUrl": "https://developers.mercadolivre.com.br/pt_br/api-docs",
+      "authMode": "oauth2",
+      "webhookUrl": "/integrations/mercadolivre/notifications",
+      "capabilities": [
+        "catalog_publish",
+        "listing_status_import",
+        "price_update",
+        "stock_update",
+        "order_import",
+        "order_status_update",
+        "shipping_tracking_import",
+        "financial_reconciliation"
+      ],
+      "secretRefs": {
+        "clientSecret": "vault/marketplaces/mercado_livre/client-secret",
+        "accessToken": "vault/marketplaces/mercado_livre/access-token",
+        "refreshToken": "vault/marketplaces/mercado_livre/refresh-token",
+        "webhookSecret": "vault/marketplaces/mercado_livre/webhook-secret"
+      },
+      "status": "configured_runtime_refreshable"
+    },
+    {
+      "key": "shopee",
+      "label": "Shopee",
+      "family": "marketplace",
+      "baseUrl": "https://partner.shopeemobile.com",
+      "docsUrl": "https://open.shopee.com/developer-guide/",
+      "authMode": "partner_oauth_signed_request",
+      "webhookUrl": "/integrations/shopee/notifications",
+      "capabilities": [
+        "catalog_publish",
+        "category_import",
+        "price_update",
+        "stock_update",
+        "order_import",
+        "shipping_tracking_import",
+        "escrow_financial_import"
+      ],
+      "secretRefs": {
+        "partnerKey": "vault/marketplaces/shopee/partner-key",
+        "accessToken": "vault/marketplaces/shopee/access-token",
+        "refreshToken": "vault/marketplaces/shopee/refresh-token",
+        "webhookSecret": "vault/marketplaces/shopee/webhook-secret"
+      },
+      "status": "external_auth_pending"
+    },
+    {
+      "key": "olx",
+      "label": "OLX",
+      "family": "classifieds_marketplace",
+      "baseUrl": "https://developers.olx.com.br",
+      "docsUrl": "https://developers.olx.com.br/anuncio/api/home.html",
+      "authMode": "oauth2_partner",
+      "webhookUrl": "/integrations/olx/notifications",
+      "capabilities": [
+        "listing_import",
+        "listing_create",
+        "listing_update",
+        "listing_delete",
+        "listing_status_import",
+        "lead_import",
+        "chat_import"
+      ],
+      "secretRefs": {
+        "clientSecret": "vault/marketplaces/olx/client-secret",
+        "accessToken": "vault/marketplaces/olx/access-token",
+        "refreshToken": "vault/marketplaces/olx/refresh-token",
+        "webhookSecret": "vault/marketplaces/olx/webhook-secret"
+      },
+      "status": "homologation_required"
+    },
+    {
+      "key": "ifood",
+      "label": "iFood",
+      "family": "food_delivery",
+      "baseUrl": "https://merchant-api.ifood.com.br",
+      "docsUrl": "https://developer.ifood.com.br/pt-BR/docs/guides/modules/order/events",
+      "authMode": "jwt_bearer",
+      "webhookUrl": "/integrations/ifood/notifications",
+      "pollingCadenceSeconds": 30,
+      "capabilities": [
+        "merchant_presence",
+        "menu_sync",
+        "order_event_polling",
+        "order_event_webhook",
+        "order_acknowledgment",
+        "order_status_update",
+        "delivery_tracking_import",
+        "financial_event_import"
+      ],
+      "secretRefs": {
+        "clientSecret": "vault/delivery/ifood/client-secret",
+        "accessToken": "vault/delivery/ifood/access-token",
+        "webhookSecret": "vault/delivery/ifood/webhook-secret"
+      },
+      "status": "homologation_required"
+    },
+    {
+      "key": "ze_delivery",
+      "label": "Ze Delivery",
+      "family": "beverage_delivery",
+      "baseUrl": "https://seller-public-api.ze.delivery",
+      "docsUrl": "https://seller-public-api.ze.delivery/docs",
+      "authMode": "contract_token",
+      "webhookUrl": "/integrations/ze-delivery/notifications",
+      "capabilities": [
+        "catalog_sync",
+        "availability_sync",
+        "order_import",
+        "order_status_update",
+        "delivery_tracking_import",
+        "delivery_tracking_update",
+        "age_control_metadata"
+      ],
+      "secretRefs": {
+        "accessToken": "vault/delivery/ze_delivery/access-token",
+        "webhookSecret": "vault/delivery/ze_delivery/webhook-secret"
+      },
+      "status": "contract_required"
+    },
+    {
+      "key": "magalu",
+      "label": "Magalu Marketplace",
+      "family": "marketplace",
+      "baseUrl": "https://api.magalu.com",
+      "docsUrl": "https://developer.magalu.com",
+      "authMode": "oauth2",
+      "webhookUrl": "/integrations/magalu/notifications",
+      "capabilities": [
+        "catalog_publish",
+        "price_update",
+        "stock_update",
+        "order_import",
+        "order_status_update",
+        "financial_reconciliation"
+      ],
+      "secretRefs": {
+        "clientSecret": "vault/marketplaces/magalu/client-secret",
+        "accessToken": "vault/marketplaces/magalu/access-token",
+        "refreshToken": "vault/marketplaces/magalu/refresh-token"
+      },
+      "status": "configured_runtime_refreshable"
+    },
+    {
+      "key": "amazon_sp_api",
+      "label": "Amazon Brasil SP-API",
+      "family": "marketplace",
+      "baseUrl": "https://sellingpartnerapi-na.amazon.com",
+      "docsUrl": "https://developer-docs.amazon.com/sp-api",
+      "authMode": "lwa_aws_sigv4",
+      "webhookUrl": "/integrations/amazon/notifications",
+      "capabilities": [
+        "catalog_publish",
+        "feeds",
+        "inventory_update",
+        "order_import",
+        "shipment_status_update",
+        "financial_reconciliation"
+      ],
+      "secretRefs": {
+        "lwaClientSecret": "vault/marketplaces/amazon/lwa-client-secret",
+        "refreshToken": "vault/marketplaces/amazon/refresh-token",
+        "awsAccessKey": "vault/marketplaces/amazon/aws-access-key"
+      },
+      "status": "external_auth_pending"
+    },
+    {
+      "key": "whatsapp_business",
+      "label": "WhatsApp Business Platform",
+      "family": "communication_sales",
+      "baseUrl": "https://graph.facebook.com",
+      "docsUrl": "https://developers.facebook.com/docs/whatsapp/cloud-api",
+      "authMode": "bearer_token",
+      "webhookUrl": "/integrations/whatsapp/notifications",
+      "capabilities": [
+        "catalog_link_message",
+        "order_status_notification",
+        "delivery_tracking_notification",
+        "customer_support_thread"
+      ],
+      "secretRefs": {
+        "accessToken": "vault/communications/whatsapp/access-token",
+        "webhookSecret": "vault/communications/whatsapp/webhook-secret"
+      },
+      "status": "recommended_next_channel"
+    },
+    {
+      "key": "nuvemshop",
+      "label": "Nuvemshop",
+      "family": "storefront",
+      "baseUrl": "https://api.nuvemshop.com.br",
+      "docsUrl": "https://tiendanube.github.io/api-documentation/",
+      "authMode": "oauth2",
+      "webhookUrl": "/integrations/nuvemshop/notifications",
+      "capabilities": [
+        "catalog_publish",
+        "stock_update",
+        "order_import",
+        "order_status_update",
+        "storefront_sync"
+      ],
+      "secretRefs": {
+        "clientSecret": "vault/storefront/nuvemshop/client-secret",
+        "accessToken": "vault/storefront/nuvemshop/access-token"
+      },
+      "status": "suggested"
+    },
+    {
+      "key": "google_business_profile",
+      "label": "Google Business Profile",
+      "family": "local_presence_booking",
+      "baseUrl": "https://mybusinessbusinessinformation.googleapis.com",
+      "docsUrl": "https://developers.google.com/my-business",
+      "authMode": "oauth2",
+      "webhookUrl": "/integrations/google-business/notifications",
+      "capabilities": [
+        "business_profile_sync",
+        "local_service_visibility",
+        "booking_link_publish"
+      ],
+      "secretRefs": {
+        "clientSecret": "vault/local/google_business/client-secret",
+        "accessToken": "vault/local/google_business/access-token"
+      },
+      "status": "suggested"
+    }
+  ],
+  "nfe_import": {
+    "sourceTypes": [
+      "xml_upload",
+      "access_key_44_digits",
+      "dfe_distribution_with_certificate_a1"
+    ],
+    "requiredFields": [
+      "merchant_user_id",
+      "access_key",
+      "issuer_cnpj",
+      "recipient_cnpj",
+      "issued_at",
+      "items"
+    ],
+    "stockPolicy": "create_inventory_movement_per_item",
+    "fiscalPolicy": "append_only_batch_with_payload_hash",
+    "certificateRef": "vault/fiscal/certificate-a1"
+  },
+  "product_management": {
+    "purpose": "Garantir que cadastro, edicao, exclusao logica, suspensao, publicacao e estoque sejam sempre vinculados ao perfil do lojista.",
+    "actions": [
+      "create",
+      "edit",
+      "delete_soft",
+      "suspend",
+      "restore",
+      "publish",
+      "unpublish",
+      "price_update",
+      "stock_update",
+      "category_update",
+      "bulk_branch_sync",
+      "variant_create",
+      "variant_update",
+      "variant_delete",
+      "kit_create",
+      "kit_update",
+      "kit_delete",
+      "label_generate"
+    ],
+    "requiredFields": [
+      "merchant_user_id",
+      "sku",
+      "title",
+      "category",
+      "branch_key",
+      "stock_scope"
+    ],
+    "statusPolicy": "soft_delete_and_suspend_are_auditable_not_physical_delete",
+    "tenantPolicy": "merchant_profile_only"
+  },
+  "labels": {
+    "purpose": "Gerar etiquetas operacionais do lojista para produto, preco, entrada de estoque, enderecamento, separacao, envio e transferencia entre filiais.",
+    "formats": [
+      "QR_CODE",
+      "EAN13",
+      "BOTH"
+    ],
+    "jobTypes": [
+      "product_identification",
+      "price_tag",
+      "stock_receiving",
+      "shelf_location",
+      "picking",
+      "shipping",
+      "branch_transfer",
+      "inventory_count"
+    ],
+    "paperFormats": [
+      "A4_3x10",
+      "thermal_58mm",
+      "thermal_80mm",
+      "zebra_zpl"
+    ],
+    "requiredFields": [
+      "merchant_user_id",
+      "branch_key",
+      "job_type",
+      "barcode_type",
+      "items"
+    ],
+    "itemFields": [
+      "sku",
+      "title",
+      "quantity",
+      "price_brl",
+      "lot",
+      "expires_at",
+      "ean13",
+      "qr_data"
+    ],
+    "rules": [
+      "QR Code deve carregar payload de rastreio interno do Valley por tenant e filial.",
+      "EAN-13 deve ser validado por digito verificador; GTIN oficial deve vir de GS1 ou fornecedor quando aplicavel.",
+      "Entrada de estoque por NF-e pode gerar etiquetas de lote e validade automaticamente.",
+      "Todos os jobs sao auditaveis e visiveis somente ao lojista autenticado."
+    ],
+    "tenantPolicy": "merchant_profile_only"
+  },
+  "stock_operations": {
+    "purpose": "Cobrir rotinas comuns de estoque usadas pelo lojista.",
+    "actions": [
+      "stock_receiving",
+      "stock_adjustment",
+      "cycle_count",
+      "blind_count",
+      "reorder_alert",
+      "branch_transfer",
+      "shelf_location_label",
+      "picking_label"
+    ],
+    "fields": [
+      "branch_key",
+      "sku",
+      "quantity",
+      "minimum_alert_level",
+      "maximum_alert_level",
+      "reorder_quantity",
+      "document_reference",
+      "lot",
+      "expires_at"
+    ],
+    "tenantPolicy": "merchant_profile_only"
+  },
+  "returns_and_finance": {
+    "purpose": "Cobrir trocas, devolucoes, contas a pagar/receber, fluxo de caixa e DRE basico.",
+    "returnStatuses": [
+      "REQUESTED",
+      "AUTHORIZED",
+      "RECEIVED",
+      "INSPECTED",
+      "REFUNDED",
+      "REJECTED",
+      "CANCELLED"
+    ],
+    "financeEntryTypes": [
+      "PAYABLE",
+      "RECEIVABLE",
+      "EXPENSE",
+      "RECEIPT",
+      "REFUND",
+      "ADJUSTMENT"
+    ],
+    "tenantPolicy": "merchant_profile_only"
+  },
+  "reports": {
+    "filters": [
+      "period_from",
+      "period_to",
+      "user_id",
+      "product_id",
+      "category",
+      "branch_key"
+    ],
+    "reportTypes": [
+      "sales_by_period",
+      "sales_by_user",
+      "sales_by_product",
+      "stock_by_category",
+      "branch_finance",
+      "delivery_sla"
+    ],
+    "exportFormats": [
+      "json",
+      "csv",
+      "pdf"
+    ],
+    "tenantPolicy": "merchant_profile_only"
+  },
+  "branches": {
+    "purpose": "Permitir que uma matriz gerencie varias lojas com estoque global, regional ou local.",
+    "branchTypes": [
+      "MATRIX",
+      "BRANCH",
+      "WAREHOUSE",
+      "PICKUP_POINT"
+    ],
+    "stockVisibilityModes": [
+      "GLOBAL",
+      "REGIONAL",
+      "LOCAL"
+    ],
+    "autoSyncTargets": [
+      "cadastro",
+      "preco",
+      "estoque",
+      "financeiro",
+      "operacoes"
+    ],
+    "rules": [
+      "A matriz pode enxergar todas as filiais do mesmo tenant.",
+      "A filial enxerga apenas o estoque permitido pela politica global, regional ou local.",
+      "Atualizacoes de cadastro podem ser propagadas automaticamente conforme politica da matriz."
+    ]
+  },
+  "service_schedule": {
+    "resourceTypes": [
+      "professional",
+      "room",
+      "chair",
+      "equipment"
+    ],
+    "bookingStatuses": [
+      "REQUESTED",
+      "CONFIRMED",
+      "CHECKED_IN",
+      "COMPLETED",
+      "CANCELLED",
+      "NO_SHOW"
+    ],
+    "customerCanBook": true,
+    "providerCanReschedule": true
+  },
+  "delivery_tracking": {
+    "userType": "courier",
+    "assignmentEntity": "order",
+    "eventStatuses": [
+      "ASSIGNED",
+      "ACCEPTED",
+      "PICKED_UP",
+      "IN_TRANSIT",
+      "ARRIVED",
+      "DELIVERED",
+      "FAILED",
+      "RETURNED"
+    ],
+    "locationSource": "courier_app",
+    "proofOfDelivery": [
+      "recipient_name",
+      "document_last4",
+      "photo_ref",
+      "signature_ref",
+      "notes"
+    ]
+  }
+}

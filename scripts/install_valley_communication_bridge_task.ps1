@@ -11,13 +11,18 @@ $ErrorActionPreference = 'Stop'
 
 $root = Split-Path -Parent $PSScriptRoot
 $launcher = Join-Path $root 'scripts\start_valley_communication_bridge.ps1'
+$runner = Join-Path $root 'scripts\valley_hidden_task_runner.vbs'
+$hardener = Join-Path $root 'scripts\register_valley_hidden_runtime_tasks.ps1'
 
 if (-not (Test-Path -LiteralPath $launcher)) {
   throw "Launcher nao encontrado: $launcher"
 }
+if (-not (Test-Path -LiteralPath $runner)) {
+  throw "Runner oculto nao encontrado: $runner"
+}
 
-$escapedLauncher = $launcher.Replace('"', '""')
-$arguments = "-NoProfile -ExecutionPolicy Bypass -File ""$escapedLauncher"" -IntervalSeconds $IntervalSeconds"
+$commandLine = "powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File $launcher -IntervalSeconds $IntervalSeconds"
+$taskCommand = 'wscript.exe "{0}" "{1}" "{2}"' -f $runner, $root, $commandLine
 
 $createArgs = @(
   '/Create',
@@ -25,7 +30,7 @@ $createArgs = @(
   '/SC', 'ONLOGON',
   '/RL', 'LIMITED',
   '/TN', $TaskName,
-  '/TR', ('powershell.exe ' + $arguments)
+  '/TR', $taskCommand
 )
 
 $runArgs = @(
@@ -34,6 +39,9 @@ $runArgs = @(
 )
 
 & schtasks.exe @createArgs | Out-Host
+if (Test-Path -LiteralPath $hardener -PathType Leaf) {
+  & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $hardener | Out-Null
+}
 & schtasks.exe @runArgs | Out-Host
 
 Write-Output "Scheduled task registrada e iniciada: $TaskName"

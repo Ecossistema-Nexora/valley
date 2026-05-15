@@ -173,7 +173,21 @@ try {
         $env:VALLEY_ADMIN_PUBLIC_URL = $PublicBaseUrl
         $Cloudflared = Resolve-Cloudflared
         Write-Step ("cloudflared: {0}" -f $Cloudflared)
-        & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $AdminPublicScript -BindHost 127.0.0.1 -AdminPort $AdminPort -PublicBaseUrl $PublicBaseUrl
+        $HiddenProcessScript = Join-Path $PSScriptRoot 'valley_hidden_process.ps1'
+        if (Test-Path -LiteralPath $HiddenProcessScript -PathType Leaf) {
+            . $HiddenProcessScript
+        }
+        if (Get-Command Start-ValleyHiddenProcess -ErrorAction SilentlyContinue) {
+            Start-ValleyHiddenProcess `
+                -FilePath 'powershell.exe' `
+                -ArgumentList @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-WindowStyle', 'Hidden', '-File', $AdminPublicScript, '-BindHost', '127.0.0.1', '-AdminPort', $AdminPort.ToString(), '-PublicBaseUrl', $PublicBaseUrl) `
+                -WorkingDirectory $RepoRoot `
+                -StdoutLog (Join-Path $RuntimeDir 'valley-cloudflare-repair-start.out.log') `
+                -StderrLog (Join-Path $RuntimeDir 'valley-cloudflare-repair-start.err.log') `
+                -Wait | Out-Null
+        } else {
+            & powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File $AdminPublicScript -BindHost 127.0.0.1 -AdminPort $AdminPort -PublicBaseUrl $PublicBaseUrl
+        }
     }
 } catch {
     Save-RepairStatus @{

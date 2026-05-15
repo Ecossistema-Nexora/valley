@@ -119,6 +119,11 @@ if (-not (Test-Path -LiteralPath $PublishedExe -PathType Leaf)) {
   throw "dotnet publish nao gerou $PublishedExe"
 }
 Copy-Item -LiteralPath $PublishedExe -Destination $WindowsSingle -Force
+$WindowsCheckOutput = & $WindowsSingle --check 2>&1
+if ($LASTEXITCODE -ne 0) {
+  $WindowsCheckText = ($WindowsCheckOutput | Out-String).Trim()
+  throw "Valley-ERP.exe falhou na validacao interna --check. $WindowsCheckText"
+}
 Remove-Item -LiteralPath $PayloadPath -Force
 
 $LinuxPayload = Convert-FileToBase64Lines -Path $LinuxTar
@@ -200,7 +205,8 @@ REGRAS: Usar os links publicos abaixo apenas depois de health HTTP 200 no domini
 
 ## Observacoes
 
-- O Windows `Valley-ERP.exe` embute o pacote desktop e abre `ValleyERP-Lojista.exe`.
+- O Windows `Valley-ERP.exe` e o instalador nativo principal: embute o pacote desktop, valida o payload com `--check`, instala em `%LOCALAPPDATA%\Programs\ValleyERP-Lojista` e registra inicializacao automatica do ERP no Windows via `HKCU\Software\Microsoft\Windows\CurrentVersion\Run`.
+- Comandos nativos do Windows: `Valley-ERP.exe --check`, `Valley-ERP.exe --install-only`, `Valley-ERP.exe --startup-only`, `Valley-ERP.exe --no-startup` e `Valley-ERP.exe --uninstall`.
 - O Linux `Valley-ERP-Linux.run` embute o pacote Linux e tenta instalar/executar o app; quando o host Linux nao tem bundle nativo compilado, cria launcher unico para o runtime publico validado.
 - API base: $ApiBaseUrl
 "@

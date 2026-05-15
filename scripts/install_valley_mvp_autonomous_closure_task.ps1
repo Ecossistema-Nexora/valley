@@ -16,6 +16,8 @@ $RepoRoot = Resolve-Path (Join-Path $PSScriptRoot '..')
 $RuntimeDir = Join-Path $RepoRoot 'tmp\runtime'
 $StatusPath = Join-Path $RuntimeDir 'valley-mvp-autonomous-closure-task.json'
 $ClosureScript = Join-Path $RepoRoot 'scripts\run_valley_mvp_autonomous_closure.ps1'
+$HiddenTaskRunner = Join-Path $RepoRoot 'scripts\valley_hidden_task_runner.vbs'
+$HiddenTaskHardener = Join-Path $RepoRoot 'scripts\register_valley_hidden_runtime_tasks.ps1'
 
 New-Item -ItemType Directory -Force -Path $RuntimeDir | Out-Null
 
@@ -38,6 +40,14 @@ if (-not (Test-Path -LiteralPath $ClosureScript -PathType Leaf)) {
     }
     exit 1
 }
+if (-not (Test-Path -LiteralPath $HiddenTaskRunner -PathType Leaf)) {
+    Save-TaskStatus @{
+        status = 'failed'
+        reason = 'hidden_runner_missing'
+        hidden_runner = $HiddenTaskRunner
+    }
+    exit 1
+}
 
 $NormalizedFolder = $TaskFolder.Trim()
 if ([string]::IsNullOrWhiteSpace($NormalizedFolder) -or $NormalizedFolder -eq '\') {
@@ -45,7 +55,7 @@ if ([string]::IsNullOrWhiteSpace($NormalizedFolder) -or $NormalizedFolder -eq '\
 } else {
     $TaskPath = ($NormalizedFolder.TrimEnd('\') + '\' + $TaskName)
 }
-$TaskCommand = 'powershell.exe -NoProfile -ExecutionPolicy Bypass -File "{0}"' -f $ClosureScript
+$TaskCommand = 'wscript.exe "{0}" "{1}" "{2}"' -f $HiddenTaskRunner, $RepoRoot, ("powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File {0}" -f $ClosureScript)
 
 try {
     $Existed = $false
@@ -59,6 +69,9 @@ try {
     & schtasks.exe /Create /TN $TaskPath /TR $TaskCommand /SC HOURLY /MO $IntervalHours /F | Out-Null
     if ($LASTEXITCODE -ne 0) {
         throw "schtasks create failed with exit code $LASTEXITCODE"
+    }
+    if (Test-Path -LiteralPath $HiddenTaskHardener -PathType Leaf) {
+        & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $HiddenTaskHardener | Out-Null
     }
 
     if ($RunNow) {
@@ -74,6 +87,7 @@ try {
         existed_before = $Existed
         interval_hours = $IntervalHours
         closure_script = $ClosureScript
+        hidden_runner = $HiddenTaskRunner
         command = $TaskCommand
         run_now = [bool]$RunNow
     }

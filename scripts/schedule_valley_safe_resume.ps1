@@ -15,6 +15,7 @@ $RepoRoot = Resolve-Path (Join-Path $PSScriptRoot '..')
 $RuntimeDir = Join-Path $RepoRoot 'tmp\runtime'
 $BudgetPath = Join-Path $RuntimeDir 'codex-token-budget-report.json'
 $Wrapper = Join-Path $PSScriptRoot 'run_valley_safe_autonomous_cycle.cmd'
+$Runner = Join-Path $PSScriptRoot 'valley_hidden_task_runner.vbs'
 $ManifestPath = Join-Path $RuntimeDir 'valley-safe-resume-schedule.json'
 
 if (-not (Test-Path -LiteralPath $Wrapper -PathType Leaf)) {
@@ -33,7 +34,12 @@ if ($LocalResume -le (Get-Date).AddMinutes(1)) {
     $LocalResume = (Get-Date).AddMinutes(5)
 }
 
-$Action = '"' + $Wrapper + '" -TotalTokenBudget ' + $TotalTokenBudget + ' -UsedTokens ' + $UsedTokens
+$CommandLine = 'powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "' + (Join-Path $PSScriptRoot 'run_valley_safe_autonomous_cycle.ps1') + '" -TotalTokenBudget ' + $TotalTokenBudget + ' -UsedTokens ' + $UsedTokens
+$Action = if (Test-Path -LiteralPath $Runner -PathType Leaf) {
+    'wscript.exe "' + $Runner + '" "' + $RepoRoot + '" "' + $CommandLine + '"'
+} else {
+    $CommandLine
+}
 $TimeArg = $LocalResume.ToString('HH:mm')
 $DateArg = $LocalResume.ToString('dd/MM/yyyy')
 
@@ -61,8 +67,8 @@ $Manifest | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath $ManifestPath -En
 
 if ($ExitCode -ne 0) {
     $StartupDir = [Environment]::GetFolderPath('Startup')
-    $StartupCommand = Join-Path $StartupDir 'ValleySafeAutonomousResume.cmd'
-    Set-Content -LiteralPath $StartupCommand -Value ("@echo off`r`ncall {0}`r`n" -f $Action) -Encoding ASCII
+    $StartupCommand = Join-Path $StartupDir 'ValleySafeAutonomousResume.vbs'
+    Set-Content -LiteralPath $StartupCommand -Value ("CreateObject(""WScript.Shell"").Run ""{0}"", 0, False`r`n" -f ($CommandLine.Replace('"', '""'))) -Encoding ASCII
 }
 
 Write-Output ($Manifest | ConvertTo-Json -Depth 5)

@@ -2,4 +2,4 @@
 setlocal
 
 set ROOT=%~dp0..
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%ROOT%\scripts\start_valley_communication_bridge.ps1" -IntervalSeconds 30
+start "" /min powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "%ROOT%\scripts\start_valley_communication_bridge.ps1" -IntervalSeconds 30

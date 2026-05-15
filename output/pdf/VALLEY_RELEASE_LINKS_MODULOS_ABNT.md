@@ -100,8 +100,8 @@ Documento fonte do PDF ABNT com links clicáveis separados em Admin, Lojista e U
 |---|---|---|---|
 | ADMIN | Runtime operacional atual | [https://admin.brasildesconto.com.br](https://admin.brasildesconto.com.br) | Painel web ativo validado para testes externos enquanto o dominio fixo aguarda reparo do tunnel. |
 | USUARIO | Portal público Valley | [brasildesconto.com.br](https://brasildesconto.com.br/) | Entrada oficial da marca e catálogo público |
-| USUARIO | Produto web/mobile operacional atual | [https://admin.brasildesconto.com.br](https://admin.brasildesconto.com.br) | Catálogo, checkout, rastreio e conta do usuário na rota pública validada. |
-| API | API pública operacional atual | [https://admin.brasildesconto.com.br/api/product-shell](https://admin.brasildesconto.com.br/api/product-shell/) | Endpoint público validado para shell de produto e ações do aplicativo. |
+| USUARIO | Produto web/mobile operacional atual | [https://brasildesconto.com.br](https://brasildesconto.com.br) | Catálogo, checkout, rastreio e conta do usuário na rota pública validada. |
+| API | API pública operacional atual | [https://brasildesconto.com.br/api/product-shell](https://brasildesconto.com.br/api/product-shell/) | Endpoint público validado para shell de produto e ações do aplicativo. |
 | USUARIO | Produto web/mobile | [brasildesconto.com.br/product](https://brasildesconto.com.br/product/) | Catálogo, checkout, rastreio e conta do usuário |
 
 ## Templates Stitch

@@ -14,9 +14,16 @@ $runtime = Join-Path $root 'tmp\runtime'
 $log = Join-Path $runtime 'termius-cloudflared-quick.log'
 $endpointPath = Join-Path $runtime 'termius-cloudflare-endpoint.txt'
 $sshConfigPath = Join-Path $runtime 'termius-cloudflare-ssh-config'
+$hiddenProcessScript = Join-Path $PSScriptRoot 'valley_hidden_process.ps1'
 
 if (-not (Test-Path -LiteralPath $runtime)) {
     New-Item -ItemType Directory -Path $runtime | Out-Null
+}
+
+if (Test-Path -LiteralPath $hiddenProcessScript -PathType Leaf) {
+    . $hiddenProcessScript
+} else {
+    throw "Launcher oculto nao encontrado: $hiddenProcessScript"
 }
 
 function Get-QuickTunnelHost {
@@ -36,11 +43,10 @@ $cloudflaredRunning = @(Get-Process cloudflared -ErrorAction SilentlyContinue).C
 
 if (-not $hostName -or -not $cloudflaredRunning) {
     $cloudflared = Get-Command cloudflared -ErrorAction Stop
-    Start-Process `
+    Start-ValleyHiddenProcess `
         -FilePath $cloudflared.Source `
         -ArgumentList @('tunnel', '--url', "ssh://localhost:$LocalPort", '--no-autoupdate', '--loglevel', 'info', '--logfile', $log) `
-        -WorkingDirectory $root `
-        -WindowStyle Minimized
+        -WorkingDirectory $root | Out-Null
 
     $deadline = (Get-Date).AddSeconds($WaitSeconds)
     do {

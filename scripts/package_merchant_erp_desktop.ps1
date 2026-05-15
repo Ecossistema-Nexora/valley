@@ -174,8 +174,16 @@ if (-not $NoShortcuts) {
   $shortcut.WorkingDirectory = $InstallDir
   $shortcut.Description = "Valley ERP Lojista"
   $shortcut.Save()
+
+  $startupShortcut = Join-Path ([Environment]::GetFolderPath("Startup")) "Valley ERP Lojista.lnk"
+  $shortcut = $shell.CreateShortcut($startupShortcut)
+  $shortcut.TargetPath = $exe
+  $shortcut.WorkingDirectory = $InstallDir
+  $shortcut.Description = "Valley ERP Lojista"
+  $shortcut.Save()
 }
 
+New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "Valley ERP Lojista" -Value "`"$exe`"" -PropertyType String -Force | Out-Null
 Write-Host "Valley ERP Lojista instalado em: $InstallDir"
 '@
 Write-Utf8File -Path (Join-Path $windowsPackageRoot "install-valley-erp-lojista-windows.ps1") -Content $windowsInstall
@@ -188,8 +196,11 @@ param(
 $ErrorActionPreference = "Stop"
 $desktopShortcut = Join-Path ([Environment]::GetFolderPath("Desktop")) "Valley ERP Lojista.lnk"
 $startShortcut = Join-Path ([Environment]::GetFolderPath("Programs")) "Valley\Valley ERP Lojista.lnk"
+$startupShortcut = Join-Path ([Environment]::GetFolderPath("Startup")) "Valley ERP Lojista.lnk"
 if (Test-Path -LiteralPath $desktopShortcut) { Remove-Item -LiteralPath $desktopShortcut -Force }
 if (Test-Path -LiteralPath $startShortcut) { Remove-Item -LiteralPath $startShortcut -Force }
+if (Test-Path -LiteralPath $startupShortcut) { Remove-Item -LiteralPath $startupShortcut -Force }
+Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "Valley ERP Lojista" -ErrorAction SilentlyContinue
 if (Test-Path -LiteralPath $InstallDir) { Remove-Item -LiteralPath $InstallDir -Recurse -Force }
 Write-Host "Valley ERP Lojista removido."
 '@
@@ -204,12 +215,15 @@ REGRAS: Use o instalador local sem permissao administrativa; os modulos nao exib
 
 ## Instalar
 
-Abra PowerShell dentro desta pasta e execute:
+Use o instalador nativo principal da release:
 
-````powershell
-Set-ExecutionPolicy -Scope Process Bypass -Force
-.\install-valley-erp-lojista-windows.ps1
+````text
+Valley-ERP.exe
 ````
+
+O instalador nativo instala o ERP, registra a inicializacao automatica no Windows
+e abre o aplicativo. Use `Valley-ERP.exe --check` para validar o pacote sem instalar
+e `Valley-ERP.exe --uninstall` para remover a instalacao nativa.
 
 ## Executar sem instalar
 

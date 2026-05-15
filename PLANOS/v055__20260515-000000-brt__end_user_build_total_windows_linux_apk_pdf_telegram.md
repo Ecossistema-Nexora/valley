@@ -7,12 +7,12 @@ REGRAS: Usar release mode, remover ferramentas de debug, validar links publicos 
 ## Checklist
 
 - [x] Validar politica END-USER-BUILD e ausencia de UI tecnica.
-- [ ] Executar build web em modo producao.
-- [ ] Executar build Android APK split release.
-- [ ] Executar build Windows e Linux com artefatos finais.
-- [ ] Atualizar PDF com links da release.
-- [ ] Encaminhar artefatos finais pelo Telegram, usando link publico quando necessario.
-- [ ] Validar links publicos, release gate e rotina Gemini.
+- [x] Executar build web em modo producao.
+- [x] Executar build Android APK split release.
+- [x] Executar build Windows e Linux com artefatos finais.
+- [x] Atualizar PDF com links da release.
+- [x] Encaminhar artefatos finais pelo Telegram, usando link publico quando necessario.
+- [x] Validar links publicos, release gate e rotina Gemini.
 
 ## Comando Canonico
 
@@ -26,6 +26,14 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts\invoke_end_user_buil
 - `admin/downloads/v055/Valley-ERP-Linux.run`
 - `admin/downloads/v055/app-arm64-v8a-release.apk`
 - `admin/downloads/v055/VALLEY_RELEASE_LINKS_MODULOS_ABNT.pdf`
+
+## Evidencias
+
+- Cloudflare `https://admin.brasildesconto.com.br/`, `/product/` e `/healthz`: HTTP 200 com `Server: cloudflare`.
+- Link Windows: `https://admin.brasildesconto.com.br/downloads/v055/Valley-ERP.exe`.
+- `Valley-ERP.exe --check`: validacao interna executada durante o empacotamento.
+- Release gate: `25/25` checks aprovados.
+- Telegram: Windows enviado como link publico por tamanho; Linux, APK e PDF enviados como documento.
 
 ## Protocolo Telegram
 

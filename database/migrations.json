@@ -269,6 +269,20 @@
       "purpose_ptbr": "Cria a base RBAC do ERP Lojista com catalogo de privilegios, perfis por papel, concessoes por usuario, visao efetiva e auditoria append-only gerenciada pelo administrador lojista.",
       "requires": ["037"],
       "provides": ["merchant_erp_privileges", "merchant_erp_role_profiles", "merchant_erp_role_profile_privileges", "merchant_erp_staff_privilege_grants", "merchant_erp_privilege_audit_events", "v_merchant_erp_staff_effective_privileges"]
+    },
+    {
+      "id": "039",
+      "path": "database/postgres/039_v47_merchant_erp_external_ops_schedule_delivery.sql",
+      "purpose_ptbr": "Adiciona conectores externos bidirecionais, importacao NF-e, ciclo de produtos, relatorios filtraveis, matriz/filiais, agenda de servicos, tipo de usuario entregador e rastreio proprio associado a pedidos no ERP Lojista.",
+      "requires": ["037", "038"],
+      "provides": ["merchant_erp_connector_catalog", "merchant_erp_connector_sync_events", "merchant_erp_nfe_import_batches", "merchant_erp_nfe_items", "merchant_erp_service_resources", "merchant_erp_service_bookings", "merchant_erp_service_booking_events", "merchant_erp_courier_profiles", "merchant_erp_delivery_assignments", "merchant_erp_delivery_tracking_events", "merchant_erp_product_lifecycle_events", "merchant_erp_report_query_events", "merchant_erp_branch_units", "merchant_erp_branch_stock_policies", "merchant_erp_branch_events", "v_merchant_erp_connector_readiness", "v_merchant_erp_service_agenda", "v_merchant_erp_delivery_tracking", "v_merchant_erp_product_lifecycle", "v_merchant_erp_report_query_history", "v_merchant_erp_branch_control"]
+    },
+    {
+      "id": "040",
+      "path": "database/postgres/040_v47_merchant_erp_operations_labels_returns_finance.sql",
+      "purpose_ptbr": "Adiciona operacoes comuns do ERP Lojista: etiquetas QR Code/EAN-13, variantes, kits, inventario ciclico, limiares de estoque, trocas/devolucoes e financeiro AP/AR/DRE com escopo por lojista e filial.",
+      "requires": ["039"],
+      "provides": ["merchant_erp_product_variants", "merchant_erp_product_kits", "merchant_erp_product_kit_items", "merchant_erp_label_templates", "merchant_erp_label_jobs", "merchant_erp_label_job_items", "merchant_erp_inventory_alert_rules", "merchant_erp_cycle_count_jobs", "merchant_erp_cycle_count_items", "merchant_erp_return_authorizations", "merchant_erp_finance_entries", "v_merchant_erp_label_jobs", "v_merchant_erp_product_grade_and_kits", "v_merchant_erp_inventory_replenishment_alerts", "v_merchant_erp_finance_cashflow_dre", "v_merchant_erp_returns_control"]
     }
   ],
   "mongodb": [
