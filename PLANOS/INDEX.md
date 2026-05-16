@@ -11,7 +11,7 @@ REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar 
 
 - Regra: cada item de checklist dos planos conta como uma etapa.
 - Atualize este indice depois de cada acao concluida com `python scripts\update_planos_progress.py`.
-- Etapas concluidas desde o primeiro plano do indice: `391/391`.
+- Etapas concluidas desde o primeiro plano do indice: `418/418`.
 - Produzido desde o Plano 1: `100.0%`.
 - Falta produzir para a conclusao final acumulada: `0.0%`.
 <!-- progresso:fim -->
@@ -79,3 +79,6 @@ REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar 
 | v059 | 2026-05-15 07:16:20 BRT | [v059__20260515-071620-brt__blueprint_banco_hibrido_valley.md](./v059__20260515-071620-brt__blueprint_banco_hibrido_valley.md) | concluido | O usuario determinou entrega total sem confirmacoes tecnicas padrao para finalizar o desenho PostgreSQL + MongoDB. | 11/11 | 100.0% | 0.0% | 2026-05-15 07:36:46 BRT |
 | v060 | 2026-05-15 21:00:00 BRT | [v060__20260515-210000-brt__stitch_zero_project_valley_erp.md](./v060__20260515-210000-brt__stitch_zero_project_valley_erp.md) | concluido | O usuario determinou que a especificacao Markdown atualizada e a logomarca Valley sejam direcionadas ao servidor MCP Stitch para criar um projeto do zero. | 9/9 | 100.0% | 0.0% | 2026-05-15 21:00:58 BRT |
 | v061 | 2026-05-16 00:21:10 BRT | [v061__20260516-002110-brt__stitch_v060_import_rebuild_implantacao.md](./v061__20260516-002110-brt__stitch_v060_import_rebuild_implantacao.md) | concluido | O usuario determinou assumir o controle do Stitch, validar conformidade, importar e aplicar a proposta diretamente no projeto. | 12/12 | 100.0% | 0.0% | 2026-05-16 00:21:36 BRT |
+| v062 | 2026-05-16 01:55:00 BRT | [v062__20260516-015500-brt__release_windows_app_link_chat.md](./v062__20260516-015500-brt__release_windows_app_link_chat.md) | concluido | Gerar aplicativo Windows Valley, empacotar e entregar link local no chat. | 6/6 | 100.0% | 0.0% | 2026-05-16 01:56:00 BRT |
+| v063 | 2026-05-16 02:00:00 BRT | [v063__20260516-020000-brt__windows_app_exe_download.md](./v063__20260516-020000-brt__windows_app_exe_download.md) | concluido | Gerar aplicativo Windows Valley em formato exe unico e entregar link local de download. | 8/8 | 100.0% | 0.0% | 2026-05-16 02:12:00 BRT |
+| v064 | 2026-05-16 02:20:00 BRT | [v064__20260516-022000-brt__android_live_tracking_notifications.md](./v064__20260516-022000-brt__android_live_tracking_notifications.md) | concluido_com_validacao_parcial | Implementar rastreio Android em tempo real com notificacao dinamica, lock screen e mapa por snapshot. | 13/13 | 100.0% | 0.0% | 2026-05-16 03:57:34 BRT |

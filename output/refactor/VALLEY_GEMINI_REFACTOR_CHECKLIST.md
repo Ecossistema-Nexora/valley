@@ -1,9 +1,9 @@
 # Valley - Gemini Refactor Checklist
 
-- Gerado em UTC: `2026-05-16T02:42:31Z`
-- Arquivos varridos: `1347`
-- Pendencias: `0`
-- Digest: `ae177d7f1d19e4965cdaff631e2cf2abe442ed47c7b384f614bc7cb18b7084d8`
+- Gerado em UTC: `2026-05-16T06:12:35Z`
+- Arquivos varridos: `1374`
+- Pendencias: `2`
+- Digest: `39cef0c8a24ae1c88137538ed864050328a3686d95653da18c3ba132b4867715`
 
 ## Regras
 
@@ -14,4 +14,5 @@
 
 ## Checklist
 
-- [x] Nenhuma pendencia estrutural encontrada.
+- [ ] 1. `structured_header_missing` em `scripts/create_valley_windows_exe_installer.ps1` - Headers ausentes: PROPOSITO:, CONTEXTO:, REGRAS: Acao: Adicionar comentario/header no formato correto do arquivo com PROPOSITO, CONTEXTO e REGRAS.
+- [ ] 2. `structured_header_missing` em `scripts/install_valley_windows_bundle.ps1` - Headers ausentes: PROPOSITO:, CONTEXTO:, REGRAS: Acao: Adicionar comentario/header no formato correto do arquivo com PROPOSITO, CONTEXTO e REGRAS.

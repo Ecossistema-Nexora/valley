@@ -1,0 +1,17 @@
+﻿{
+    "generated_at":  "2026-05-16T02:10:17.7054982-03:00",
+    "installer_exe":  "C:\\Users\\ereta\\.codex\\worktrees\\VALLEY\\output\\releases\\ValleySuperAppSetup_v060_20260516_0205_brt.exe",
+    "installer_bytes":  15092224,
+    "installer_sha256":  "57181C08E49633A65CFE72295D4BB07F14E7613DB68931457394FFACAB8CE323",
+    "bundled_zip":  "C:\\Users\\ereta\\.codex\\worktrees\\VALLEY\\output\\releases\\valley_windows_exe_installer_staging\\valley_super_app_windows_bundle.zip",
+    "bundled_zip_bytes":  15078887,
+    "release_dir":  "C:\\Users\\ereta\\.codex\\worktrees\\VALLEY\\frontend\\flutter\\build\\windows\\x64\\runner\\Release",
+    "builder":  "csc_embedded_zip_installer",
+    "policies":  [
+                     "install_to_local_app_data",
+                     "start_menu_shortcut",
+                     "startup_autostart_shortcut",
+                     "taskbar_shortcut_and_shell_pin_attempt",
+                     "launch_after_install"
+                 ]
+}

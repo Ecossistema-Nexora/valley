@@ -2335,7 +2335,7 @@
 
   async function loadMerchantErpRuntime() {
     try {
-      const [privilegeResponse, offlineResponse] = await Promise.all([
+      const [privilegeResponse, offlineResponse, deliveryResponse] = await Promise.all([
         fetch("/api/merchant-erp/privileges", {
           cache: "no-store",
           credentials: "same-origin",
@@ -2346,9 +2346,15 @@
           credentials: "same-origin",
           headers: adminAuthHeaders({ Accept: "application/json" }),
         }),
+        fetch("/api/merchant-erp/delivery-tracking", {
+          cache: "no-store",
+          credentials: "same-origin",
+          headers: adminAuthHeaders({ Accept: "application/json" }),
+        }),
       ]);
       const privileges = await privilegeResponse.json();
       const offline = await offlineResponse.json();
+      const deliveryTracking = await deliveryResponse.json();
       if (!privilegeResponse.ok || privileges.status !== "ok") {
         throw new Error(privileges.detail || privileges.message || `HTTP ${privilegeResponse.status}`);
       }
@@ -2359,6 +2365,7 @@
         loading: false,
         privileges,
         offline,
+        deliveryTracking: deliveryResponse.ok && deliveryTracking.status === "ok" ? deliveryTracking : null,
         error: "",
       };
     } catch (error) {
@@ -2366,6 +2373,7 @@
         loading: false,
         privileges: null,
         offline: null,
+        deliveryTracking: null,
         error: error instanceof Error ? error.message : "falha ao carregar runtime do ERP",
       };
     } finally {
@@ -4509,6 +4517,12 @@
       await runMerchantErpP0Action(String(action).slice(3));
       return;
     }
+    if (action === "refresh-tracking") {
+      await loadMerchantErpRuntime();
+      renderMerchantErp();
+      announce("Rastreio Mapbox atualizado a partir do runtime.");
+      return;
+    }
     if (action === "save") {
       state.merchantErpDraft = { ...(state.merchantErpDraft || {}), lastSavedAt: now };
       persistMerchantErpDraft();
@@ -4557,8 +4571,9 @@
     const runtimeError = state.merchantErpRuntime?.error || "";
     const showPrivilegeControls = ["merchant-team", "merchant-security", "merchant-erp", "merchant-settings"].includes(activeWorkspace?.key);
     const showOfflineControls = activeWorkspace?.key === "merchant-pdv";
+    const showTrackingControls = ["merchant-logistics", "merchant-carrier-cross-docking", "merchant-orders"].includes(activeWorkspace?.key);
 
-    if (!showPrivilegeControls && !showOfflineControls) {
+    if (!showPrivilegeControls && !showOfflineControls && !showTrackingControls) {
       return "";
     }
 
@@ -4584,20 +4599,58 @@
       </tr>
     `).join("");
 
+    const deliveryTracking = state.merchantErpRuntime?.deliveryTracking || {};
+    const mapPoints = Array.isArray(deliveryTracking.map_points) ? deliveryTracking.map_points : [];
+    const assignments = Array.isArray(deliveryTracking.assignments) ? deliveryTracking.assignments : [];
+    const trackingRows = assignments.slice(0, 6).map((assignment) => `
+      <tr>
+        <td>${escapeHtml(assignment.tracking_code || "sem codigo")}</td>
+        <td>${escapeHtml(assignment.order_id || "pedido local")}</td>
+        <td>${escapeHtml(assignment.courier_name || "Entregador")}</td>
+        <td>${escapeHtml(assignment.delivery_status || "ASSIGNED")}</td>
+      </tr>
+    `).join("");
+    const mapPins = mapPoints.slice(-12).map((point, index) => {
+      const left = 8 + ((index * 17) % 82);
+      const top = 16 + ((index * 23) % 66);
+      return `<span class="merchant-map-pin" style="left:${left}%;top:${top}%">${escapeHtml(String(index + 1))}</span>`;
+    }).join("");
+
     return `
       <section class="erp-specific-panel merchant-runtime-guard-panel">
         <div class="erp-specific-head">
           <div>
             <span class="small-label">Runtime persistente</span>
-            <h4>${showOfflineControls ? "PDV offline-first e sync" : "Equipe, seguranca e privilegios efetivos"}</h4>
+            <h4>${showTrackingControls ? "Rastreio Mapbox em tempo real" : showOfflineControls ? "PDV offline-first e sync" : "Equipe, seguranca e privilegios efetivos"}</h4>
             <p class="muted-copy">${escapeHtml(runtimeError || "Contratos online carregados do runtime do ERP lojista.")}</p>
           </div>
           <div class="pill-row">
             ${rowPill(`${formatCount(summary.effectivePrivilegesTotal)} privilegios`, "pill-navy")}
             ${rowPill(`${formatCount(summary.offlineSyncedTotal)} sync PDV`, "pill-accent")}
+            ${showTrackingControls ? rowPill(`${formatCount(assignments.length)} entregas`, "pill-success") : ""}
           </div>
         </div>
-        ${showOfflineControls ? `
+        ${showTrackingControls ? `
+          <div class="merchant-mapbox-panel">
+            <div class="merchant-mapbox-map" aria-label="Mapa operacional Mapbox">
+              <div class="merchant-map-grid"></div>
+              <div class="merchant-map-route"></div>
+              ${mapPins || `<span class="merchant-map-pin" style="left:48%;top:44%">V</span>`}
+            </div>
+            <div class="merchant-mapbox-side">
+              <span class="small-label">Provider ativo</span>
+              <strong>Mapbox SDK / GL JS</strong>
+              <p class="muted-copy">Fallback estrutural: OSM/OSRM. WebSocket: <code>VALLEY_TRACKING_WS_URL</code>.</p>
+              <button type="button" class="secondary-button" data-merchant-action="refresh-tracking">Atualizar rastreio</button>
+            </div>
+          </div>
+          <div class="erp-table-wrap">
+            <table class="erp-data-table">
+              <thead><tr><th>Tracking</th><th>Pedido</th><th>Entregador</th><th>Status</th></tr></thead>
+              <tbody>${trackingRows || `<tr><td colspan="4">Nenhuma entrega ativa no runtime do lojista.</td></tr>`}</tbody>
+            </table>
+          </div>
+        ` : showOfflineControls ? `
           <div class="merchant-p0-action-grid">
             <button type="button" class="merchant-p0-action" data-merchant-action="p0:pdv-sale">
               <strong>Venda offline</strong>

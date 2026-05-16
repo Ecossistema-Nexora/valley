@@ -10,6 +10,9 @@ import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:valley_super_app/src/data/product_api_models.dart';
 import 'package:valley_super_app/src/data/product_api_repository.dart';
+import 'package:valley_super_app/src/data/live_tracking_models.dart';
+import 'package:valley_super_app/src/data/tracking_map_provider.dart';
+import 'package:valley_super_app/src/platform/valley_live_tracking_bridge.dart';
 import 'package:valley_super_app/src/ui/ui_components.dart';
 import 'package:valley_super_app/valley_brand_theme.dart';
 
@@ -647,6 +650,7 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
           result.ok && result.action == 'checkout' && _selectedItem != null
           ? 'Parabéns pela compra de ${_selectedItem!.titlePtBr}. ${result.message}'
           : result.message;
+      await _startLiveTrackingFromCheckout(result);
       if (result.url.isNotEmpty) {
         await launchUrl(
           Uri.parse(result.url),
@@ -668,6 +672,70 @@ class _ValleyProductShellState extends State<ValleyProductShell> {
         setState(() => _busy = false);
       }
     }
+  }
+
+  Future<void> _startLiveTrackingFromCheckout(
+    ProductActionResult result,
+  ) async {
+    if (!result.ok || result.action != 'checkout' || _selectedItem == null) {
+      return;
+    }
+
+    final Map<String, dynamic> tracking =
+        (result.payload['live_tracking'] as Map<dynamic, dynamic>? ??
+                result.payload['tracking'] as Map<dynamic, dynamic>? ??
+                const <dynamic, dynamic>{})
+            .cast<String, dynamic>();
+    final ProductItem item = _selectedItem!;
+    const String mapboxToken = String.fromEnvironment(
+      'VALLEY_MAPBOX_PUBLIC_TOKEN',
+    );
+    final Uri? mapboxSnapshot = const MapboxMapProvider().staticMapSnapshotUrl(
+      courier: ValleyGeoPoint(
+        latitude: (tracking['courier_lat'] as num?)?.toDouble() ?? -23.5615,
+        longitude: (tracking['courier_lng'] as num?)?.toDouble() ?? -46.6550,
+      ),
+      pickup: ValleyGeoPoint(
+        latitude: (tracking['pickup_lat'] as num?)?.toDouble() ?? -23.5650,
+        longitude: (tracking['pickup_lng'] as num?)?.toDouble() ?? -46.6620,
+      ),
+      destination: ValleyGeoPoint(
+        latitude: (tracking['destination_lat'] as num?)?.toDouble() ?? -23.5535,
+        longitude:
+            (tracking['destination_lng'] as num?)?.toDouble() ?? -46.6425,
+      ),
+      accessToken: mapboxToken,
+    );
+    final String orderId =
+        tracking['order_id'] as String? ??
+        result.payload['order_id'] as String? ??
+        result.payload['purchase_id'] as String? ??
+        item.id;
+
+    await ValleyLiveTrackingBridge.startTracking(
+      orderId: orderId,
+      orderLabel: tracking['order_label'] as String? ?? 'Pedido ${item.title}',
+      status: tracking['status'] as String? ?? 'accepted',
+      statusLabel: tracking['status_label'] as String? ?? 'Pedido aceito',
+      courierName:
+          tracking['courier_name'] as String? ?? 'Entregador parceiro Valley',
+      vehicleLabel: tracking['vehicle_label'] as String? ?? 'veiculo em rota',
+      etaMinutes: (tracking['eta_minutes'] as num?)?.toInt() ?? 14,
+      progress: (tracking['progress'] as num?)?.toInt() ?? 8,
+      courierLat: (tracking['courier_lat'] as num?)?.toDouble() ?? -23.5615,
+      courierLng: (tracking['courier_lng'] as num?)?.toDouble() ?? -46.6550,
+      pickupLat: (tracking['pickup_lat'] as num?)?.toDouble() ?? -23.5650,
+      pickupLng: (tracking['pickup_lng'] as num?)?.toDouble() ?? -46.6620,
+      destinationLat:
+          (tracking['destination_lat'] as num?)?.toDouble() ?? -23.5535,
+      destinationLng:
+          (tracking['destination_lng'] as num?)?.toDouble() ?? -46.6425,
+      trackingUrl: tracking['tracking_url'] as String? ?? '',
+      mapSnapshotUrl:
+          tracking['map_snapshot_url'] as String? ??
+          mapboxSnapshot?.toString() ??
+          '',
+    );
   }
 
   List<Map<String, dynamic>> _rawList(String key) {

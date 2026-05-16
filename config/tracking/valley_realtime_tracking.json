@@ -1,0 +1,42 @@
+{
+  "service": "valley-realtime-tracking",
+  "version": "v064",
+  "active_map_provider": "mapbox",
+  "fallback_map_provider": "osm_osrm",
+  "scope": {
+    "module": "MARKETPLACE",
+    "order_origin": "merchant_local_orders_only",
+    "surfaces": ["courier_android", "customer_android", "merchant_erp_web"]
+  },
+  "mapbox": {
+    "token_env": "VALLEY_MAPBOX_PUBLIC_TOKEN",
+    "static_images_base_url": "https://api.mapbox.com/styles/v1/mapbox/streets-v12/static",
+    "directions_base_url": "https://api.mapbox.com/directions/v5/mapbox/driving",
+    "map_matching_base_url": "https://api.mapbox.com/matching/v5/mapbox/driving",
+    "gl_js_url": "https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.js",
+    "gl_css_url": "https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.css"
+  },
+  "osm_osrm": {
+    "directions_base_url": "https://router.project-osrm.org/route/v1/driving",
+    "tile_template": "https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+  },
+  "websocket": {
+    "default_local_url": "ws://127.0.0.1:8765/ws/tracking",
+    "production_env": "VALLEY_TRACKING_WS_URL",
+    "courier_publish_interval_seconds": 3,
+    "customer_update_interval_seconds": 3,
+    "merchant_update_interval_seconds": 5
+  },
+  "noise_filter": {
+    "min_distance_meters": 8,
+    "max_stationary_interval_seconds": 30,
+    "kalman_placeholder_enabled": true
+  },
+  "android": {
+    "foreground_service": true,
+    "lock_screen_visibility": "public",
+    "map_strategy": "mapbox_static_snapshot_or_local_vector_fallback",
+    "interactive_map_in_live_update_supported": false
+  }
+}
+

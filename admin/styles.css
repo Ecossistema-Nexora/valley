@@ -2451,6 +2451,116 @@ kbd {
   border-color: rgba(37, 99, 235, 0.14);
 }
 
+.merchant-mapbox-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(220px, 1fr);
+  gap: 16px;
+  align-items: stretch;
+  margin-bottom: 16px;
+}
+
+.merchant-mapbox-map {
+  position: relative;
+  min-height: 260px;
+  overflow: hidden;
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, rgba(14, 165, 233, 0.18), transparent 46%),
+    linear-gradient(315deg, rgba(34, 197, 94, 0.2), transparent 42%),
+    #ecfeff;
+}
+
+.merchant-map-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(15, 23, 42, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 23, 42, 0.06) 1px, transparent 1px);
+  background-size: 56px 56px;
+  opacity: 0.72;
+}
+
+.merchant-map-route {
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  top: 48%;
+  height: 12px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #0f766e, #22c55e 48%, #0ea5e9);
+  box-shadow: 0 10px 28px rgba(14, 165, 233, 0.22);
+  transform: rotate(-8deg);
+  transform-origin: center;
+}
+
+.merchant-map-route::before,
+.merchant-map-route::after {
+  content: "";
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  top: 50%;
+  border-radius: 50%;
+  border: 4px solid #fff;
+  background: #0f766e;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.18);
+  transform: translateY(-50%);
+}
+
+.merchant-map-route::before {
+  left: -6px;
+}
+
+.merchant-map-route::after {
+  right: -6px;
+  background: #0ea5e9;
+}
+
+.merchant-map-pin {
+  position: absolute;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  background: #14532d;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 900;
+  line-height: 1;
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.22);
+  transform: translate(-50%, -50%);
+}
+
+.merchant-mapbox-side {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+  min-height: 180px;
+  padding: 16px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 8px;
+  background: rgba(248, 250, 252, 0.92);
+}
+
+.merchant-mapbox-side strong {
+  color: #0f172a;
+  font-size: 18px;
+  line-height: 1.2;
+}
+
+.merchant-mapbox-side code {
+  padding: 2px 5px;
+  border-radius: 5px;
+  background: rgba(15, 23, 42, 0.08);
+  color: #0f172a;
+  font-size: 11px;
+}
+
 .merchant-p0-timeline {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -3078,6 +3188,7 @@ kbd {
   .merchant-erp-app-grid,
   .merchant-p0-lane-grid,
   .merchant-p0-action-grid,
+  .merchant-mapbox-panel,
   .merchant-p0-timeline,
   .stitch-kpi-grid,
   .stitch-screen-grid,
@@ -3129,6 +3240,7 @@ kbd {
   .merchant-erp-app-grid,
   .merchant-p0-lane-grid,
   .merchant-p0-action-grid,
+  .merchant-mapbox-panel,
   .merchant-p0-timeline,
   .stitch-kpi-grid,
   .stitch-screen-grid,

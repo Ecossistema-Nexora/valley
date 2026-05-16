@@ -110,6 +110,7 @@ MERCHANT_ERP_NFE_IMPORTS_PATH = RUNTIME_DIR / "valley-merchant-erp-nfe-imports.j
 MERCHANT_ERP_SERVICE_BOOKINGS_PATH = RUNTIME_DIR / "valley-merchant-erp-service-bookings.jsonl"
 MERCHANT_ERP_DELIVERY_EVENTS_PATH = RUNTIME_DIR / "valley-merchant-erp-delivery-events.jsonl"
 MERCHANT_ERP_DELIVERY_ASSIGNMENTS_PATH = RUNTIME_DIR / "valley-merchant-erp-delivery-assignments.json"
+REALTIME_TRACKING_STATE_PATH = RUNTIME_DIR / "valley-realtime-tracking-state.json"
 MERCHANT_ERP_PRODUCT_EVENTS_PATH = RUNTIME_DIR / "valley-merchant-erp-product-events.jsonl"
 MERCHANT_ERP_REPORT_EVENTS_PATH = RUNTIME_DIR / "valley-merchant-erp-report-events.jsonl"
 MERCHANT_ERP_BRANCH_STORE_PATH = RUNTIME_DIR / "valley-merchant-erp-branches.json"
@@ -898,6 +899,10 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
 
         if route == "/api/merchant-erp/delivery-tracking":
             self._write_json(*self._merchant_erp_delivery_tracking_response(query))
+            return
+
+        if route == "/api/live-tracking":
+            self._write_json(HTTPStatus.OK, self._live_tracking_payload(query))
             return
 
         if route == "/api/stock-catalog":
@@ -10605,6 +10610,12 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             "tracking": supplier_order["tracking"],
             "white_label": supplier_payload["white_label"],
         }
+        live_tracking = self._build_live_tracking_payload(
+            supplier_order=supplier_order,
+            item=item,
+            delivery_address=delivery_address,
+        )
+        public_supplier_order["live_tracking"] = live_tracking
 
         attempt["shipping_quote"] = shipping_quote
         success_message = f"Parabens pela compra de {item.get('title') or 'sua oferta'}! O frete da entrega ja foi incluido no checkout."
@@ -10622,6 +10633,7 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                         "delivery_address": delivery_address,
                         "shipping_quote": public_shipping_quote,
                         "supplier_order": public_supplier_order,
+                        "live_tracking": live_tracking,
                     },
                 }
                 attempt.update({
@@ -10700,6 +10712,7 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
                 "delivery_address": delivery_address,
                 "shipping_quote": public_shipping_quote,
                 "supplier_order": public_supplier_order,
+                "live_tracking": live_tracking,
             },
         }
         attempt.update({
@@ -10731,6 +10744,97 @@ class ValleyAdminHandler(SimpleHTTPRequestHandler):
             provider="mercado_livre",
         )
         return result
+
+    def _build_live_tracking_payload(
+        self,
+        *,
+        supplier_order: dict[str, Any],
+        item: dict[str, Any],
+        delivery_address: dict[str, Any],
+    ) -> dict[str, Any]:
+        tracking = supplier_order.get("tracking") if isinstance(supplier_order.get("tracking"), dict) else {}
+        order_id = str(supplier_order.get("supplier_order_id") or uuid.uuid4())
+        tracking_code = str(tracking.get("tracking_code") or f"VALLEY-{uuid.uuid4().hex[:8].upper()}")
+        title = str(item.get("title_pt_br") or item.get("title") or "Pedido Valley")
+        base_url = self._public_admin_base_url().rstrip("/")
+        pickup_lat = -23.5650
+        pickup_lng = -46.6620
+        destination_lat = self._coerce_float(delivery_address.get("latitude"), -23.5535)
+        destination_lng = self._coerce_float(delivery_address.get("longitude"), -46.6425)
+        courier_lat = pickup_lat + ((destination_lat - pickup_lat) * 0.08)
+        courier_lng = pickup_lng + ((destination_lng - pickup_lng) * 0.08)
+        return {
+            "provider": "mapbox",
+            "fallback_provider": "osm_osrm",
+            "order_id": order_id,
+            "tracking_code": tracking_code,
+            "order_label": title,
+            "status": "accepted",
+            "status_label": "Pedido aceito",
+            "courier_name": "Entregador parceiro Valley",
+            "vehicle_label": "veiculo em rota",
+            "eta_minutes": 14,
+            "progress": 8,
+            "courier_lat": round(courier_lat, 6),
+            "courier_lng": round(courier_lng, 6),
+            "pickup_lat": pickup_lat,
+            "pickup_lng": pickup_lng,
+            "destination_lat": destination_lat,
+            "destination_lng": destination_lng,
+            "tracking_url": f"{base_url}/api/live-tracking?order_id={order_id}",
+            "websocket_url": str(os.environ.get("VALLEY_TRACKING_WS_URL") or "ws://127.0.0.1:8765/ws/tracking"),
+            "map_snapshot_url": "",
+            "update_interval_seconds": 3,
+        }
+
+    def _live_tracking_payload(self, query: dict[str, list[str]] | None = None) -> dict[str, Any]:
+        order_id = ""
+        if isinstance(query, dict):
+            order_id = str((query.get("order_id") or [""])[0] or "").strip()
+        state = load_json_file(REALTIME_TRACKING_STATE_PATH) or {}
+        sessions = state.get("sessions") if isinstance(state.get("sessions"), dict) else {}
+        session = sessions.get(order_id) if order_id else None
+        if isinstance(session, dict):
+            return {
+                "status": "ok",
+                "service": "valley-live-tracking",
+                "provider": "mapbox",
+                "fallback_provider": "osm_osrm",
+                "generated_at_utc": utc_now_iso(),
+                "order_id": order_id,
+                "tracking": {
+                    "status": str(session.get("delivery_status") or "IN_TRANSIT"),
+                    "status_label": "Entregador em rota",
+                    "courier_lat": session.get("latitude"),
+                    "courier_lng": session.get("longitude"),
+                    "progress": 55,
+                    "eta_minutes": 8,
+                    "recorded_at_utc": session.get("recorded_at_utc"),
+                },
+            }
+        return {
+            "status": "ok",
+            "service": "valley-live-tracking",
+            "provider": "mapbox",
+            "fallback_provider": "osm_osrm",
+            "generated_at_utc": utc_now_iso(),
+            "order_id": order_id,
+            "tracking": {
+                "status": "accepted",
+                "status_label": "Pedido aceito",
+                "courier_lat": -23.5615,
+                "courier_lng": -46.6550,
+                "progress": 8,
+                "eta_minutes": 14,
+            },
+            "source": "fallback_bootstrap",
+        }
+
+    def _coerce_float(self, value: Any, fallback: float) -> float:
+        try:
+            return float(value)
+        except (TypeError, ValueError):
+            return fallback
 
     def _run_bridge_command(self, command: str, *, action: str) -> dict[str, Any]:
         script_path = ROOT / "scripts" / "valley_communication_bridge.py"
