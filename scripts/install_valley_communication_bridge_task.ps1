@@ -21,27 +21,28 @@ if (-not (Test-Path -LiteralPath $runner)) {
   throw "Runner oculto nao encontrado: $runner"
 }
 
-$commandLine = "powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File $launcher -IntervalSeconds $IntervalSeconds"
-$taskCommand = 'wscript.exe "{0}" "{1}" "{2}"' -f $runner, $root, $commandLine
+$wscript = Join-Path $env:WINDIR 'System32\wscript.exe'
+$commandLine = "powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File `"$launcher`" -HiddenRuntime -IntervalSeconds $IntervalSeconds"
+$runnerArgs = '"{0}" "{1}" "{2}"' -f $runner, $root, $commandLine
 
-$createArgs = @(
-  '/Create',
-  '/F',
-  '/SC', 'ONLOGON',
-  '/RL', 'LIMITED',
-  '/TN', $TaskName,
-  '/TR', $taskCommand
-)
+$action = New-ScheduledTaskAction -Execute $wscript -Argument $runnerArgs
+$trigger = New-ScheduledTaskTrigger -AtLogOn
+$settings = New-ScheduledTaskSettingsSet `
+  -Hidden `
+  -AllowStartIfOnBatteries `
+  -DontStopIfGoingOnBatteries `
+  -StartWhenAvailable
 
-$runArgs = @(
-  '/Run',
-  '/TN', $TaskName
-)
+Register-ScheduledTask `
+  -TaskName $TaskName `
+  -Action $action `
+  -Trigger $trigger `
+  -Settings $settings `
+  -Force | Out-Null
 
-& schtasks.exe @createArgs | Out-Host
 if (Test-Path -LiteralPath $hardener -PathType Leaf) {
   & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $hardener | Out-Null
 }
-& schtasks.exe @runArgs | Out-Host
+Start-ScheduledTask -TaskName $TaskName
 
 Write-Output "Scheduled task registrada e iniciada: $TaskName"

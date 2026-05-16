@@ -283,6 +283,13 @@
       "purpose_ptbr": "Adiciona operacoes comuns do ERP Lojista: etiquetas QR Code/EAN-13, variantes, kits, inventario ciclico, limiares de estoque, trocas/devolucoes e financeiro AP/AR/DRE com escopo por lojista e filial.",
       "requires": ["039"],
       "provides": ["merchant_erp_product_variants", "merchant_erp_product_kits", "merchant_erp_product_kit_items", "merchant_erp_label_templates", "merchant_erp_label_jobs", "merchant_erp_label_job_items", "merchant_erp_inventory_alert_rules", "merchant_erp_cycle_count_jobs", "merchant_erp_cycle_count_items", "merchant_erp_return_authorizations", "merchant_erp_finance_entries", "v_merchant_erp_label_jobs", "v_merchant_erp_product_grade_and_kits", "v_merchant_erp_inventory_replenishment_alerts", "v_merchant_erp_finance_cashflow_dre", "v_merchant_erp_returns_control"]
+    },
+    {
+      "id": "041",
+      "path": "database/postgres/041_v47_valley_hybrid_institutional_contracts.sql",
+      "purpose_ptbr": "Fecha contratos institucionais do banco hibrido Valley: escopo tenant/filial, tabelas canonicas do ERP, Helena, Mobilidade, Visio, Stitch UI, rastreio Android Marketplace e chat Marketplace moderado.",
+      "requires": ["040"],
+      "provides": ["valley_wallet_asset_registry", "valley_user_addresses", "valley_user_document_checks", "merchant_erp_access_policies", "merchant_erp_users", "merchant_erp_products", "merchant_erp_inventory", "merchant_erp_orders", "merchant_erp_deliveries", "merchant_erp_appointments", "helena_user_voice_profiles", "helena_product_sourcing_decisions", "valley_contextual_reward_campaigns", "mobility_realtime_route_sessions", "mobility_idle_agent_dispatch_rules", "mobility_idle_agent_events", "valley_module_availability_checks", "valley_screen_layout_contracts", "marketplace_android_live_tracking_sessions", "marketplace_android_live_tracking_events", "marketplace_chat_moderation_patterns", "chat_moderation_strikes", "chat_moderation_account_actions", "valley_module_data_contracts", "valley_module_user_scope_bindings", "valley_marketplace_api_accounts", "valley_bank_api_connections", "valley_immutable_audit_ledger", "v_valley_hybrid_scope_matrix", "v_valley_user_scope_bindings_active", "v_valley_marketplace_account_health"]
     }
   ],
   "mongodb": [
@@ -320,6 +327,13 @@
       "purpose_ptbr": "Enriquece validators e indices das colecoes centrais de IA, social, influencer e telemetria com campos futuros de moderacao, compliance, monetizacao e operacao realtime.",
       "requires": ["mongo-001", "mongo-002", "mongo-003", "mongo-004"],
       "provides": ["validator:ai_memory:v2", "validator:social_videos:v2", "validator:influencer_metrics:v2", "validator:telemetry_logs:v2"]
+    },
+    {
+      "id": "mongo-006",
+      "path": "database/mongodb/006_v47_valley_hybrid_brain_final_contracts.mongo.js",
+      "purpose_ptbr": "Fecha contratos MongoDB de Helena, integracoes, rastreio, telemetria, Mobilidade, live tracking Android Marketplace e moderacao de chat.",
+      "requires": ["mongo-001", "mongo-002", "mongo-003", "mongo-004", "mongo-005"],
+      "provides": ["helena_ai_context_events", "merchant_integration_payload_logs", "merchant_realtime_delivery_stream", "erp_operational_telemetry_events", "mobility_idle_agent_decisions", "marketplace_android_live_tracking_stream", "marketplace_chat_moderation_events"]
     }
   ]
 }

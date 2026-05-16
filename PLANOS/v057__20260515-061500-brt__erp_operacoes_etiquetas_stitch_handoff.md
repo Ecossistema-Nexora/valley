@@ -15,8 +15,8 @@ REGRAS: Manter tenant/filial obrigatorios, nao expor termos internos de cashback
 - [x] Atualizar catalogo de integracoes com contrato de etiquetas e operacoes comuns.
 - [x] Gerar documento Stitch com campos, botoes, listas, fluxos e banco por modulo.
 - [x] Gerar contrato JSON estruturado para Stitch por modulo.
-- [ ] Validar sintaxe, JSON, orchestrator, endpoints e automacao obrigatoria.
-- [ ] Atualizar INDEX.md.
+- [x] Validar sintaxe, JSON, orchestrator, endpoints e automacao obrigatoria.
+- [x] Atualizar INDEX.md.
 
 ## Evidencia Implementada
 

@@ -1,10 +1,16 @@
 {
   "service": "valley-merchant-erp-stitch-module-layout-contract",
-  "version": "v057",
-  "purpose": "Fonte estruturada para o Stitch gerar templates por modulo do ERP Lojista Valley.",
+  "version": "v060",
+  "purpose": "Fonte estruturada para o Stitch gerar um projeto novo do Valley ERP, incluindo contratos por perfil Admin, Lojista, Usuario APK Android e Entregador, com banco PostgreSQL/MongoDB e cadeia Stitch -> Figma -> Flutter.",
   "global_rules": {
     "tenant_scope": "merchant_profile_only",
     "branch_selector": "required_when_branch_scoped",
+    "mandatory_query_scope": [
+      "tenant_id",
+      "branch_id_when_applicable"
+    ],
+    "br_pro_001": "hide_raw_cost_markup_formula_and_margin_from_end_user",
+    "helena_language": "pt-BR_with_configurable_regional_accent",
     "internal_rewards_visibility": "hidden_from_templates",
     "dead_buttons": "not_allowed",
     "visual_identity": "Valley official design system"
@@ -13,212 +19,1222 @@
     {
       "key": "sales",
       "label": "Vendas / PDV",
-      "input_fields": ["sku_or_barcode", "quantity", "customer", "seller_user", "payment_method", "discount", "terminal_id", "notes"],
-      "buttons": ["add_item", "apply_discount", "confirm_payment", "sync_terminal", "cancel_sale", "open_return"],
-      "lists": ["cart_items", "recent_sales", "pending_payments", "open_returns"],
-      "filters": ["period", "seller_user", "branch_key", "payment_method", "status"],
+      "input_fields": [
+        "sku_or_barcode",
+        "quantity",
+        "customer",
+        "seller_user",
+        "payment_method",
+        "discount",
+        "terminal_id",
+        "notes"
+      ],
+      "buttons": [
+        "add_item",
+        "apply_discount",
+        "confirm_payment",
+        "sync_terminal",
+        "cancel_sale",
+        "open_return"
+      ],
+      "lists": [
+        "cart_items",
+        "recent_sales",
+        "pending_payments",
+        "open_returns"
+      ],
+      "filters": [
+        "period",
+        "seller_user",
+        "branch_key",
+        "payment_method",
+        "status"
+      ],
       "primary_endpoint": "/api/merchant-erp/action",
-      "tables": ["merchant_erp_cash_movements", "orders", "merchant_erp_return_authorizations"]
+      "tables": [
+        "merchant_erp_cash_movements",
+        "orders",
+        "merchant_erp_return_authorizations"
+      ]
     },
     {
       "key": "products",
       "label": "Produtos",
-      "input_fields": ["sku", "ean13", "name", "description", "category", "brand", "base_price", "promotional_price", "branch_key", "stock_scope", "image"],
-      "buttons": ["new_product", "save", "suspend", "restore", "soft_delete", "publish", "create_variant", "create_kit", "generate_label"],
-      "lists": ["products", "variants", "kits", "lifecycle_events", "label_jobs"],
-      "filters": ["category", "status", "branch_key", "sku", "stock_scope"],
+      "input_fields": [
+        "sku",
+        "ean13",
+        "name",
+        "description",
+        "category",
+        "brand",
+        "base_price",
+        "promotional_price",
+        "branch_key",
+        "stock_scope",
+        "image"
+      ],
+      "buttons": [
+        "new_product",
+        "save",
+        "suspend",
+        "restore",
+        "soft_delete",
+        "publish",
+        "create_variant",
+        "create_kit",
+        "generate_label"
+      ],
+      "lists": [
+        "products",
+        "variants",
+        "kits",
+        "lifecycle_events",
+        "label_jobs"
+      ],
+      "filters": [
+        "category",
+        "status",
+        "branch_key",
+        "sku",
+        "stock_scope"
+      ],
       "primary_endpoint": "/api/merchant-erp/products",
-      "tables": ["inventory_items", "merchant_erp_product_lifecycle_events", "merchant_erp_product_variants", "merchant_erp_product_kits"]
+      "tables": [
+        "inventory_items",
+        "merchant_erp_product_lifecycle_events",
+        "merchant_erp_product_variants",
+        "merchant_erp_product_kits"
+      ]
     },
     {
       "key": "stock",
       "label": "Estoque",
-      "input_fields": ["branch_key", "sku", "quantity", "movement_type", "lot", "expires_at", "document_reference", "minimum_alert_level", "maximum_alert_level", "reorder_quantity"],
-      "buttons": ["receive_stock", "stock_out", "transfer", "adjust", "start_cycle_count", "generate_receiving_label", "configure_alert"],
-      "lists": ["stock_balance", "movements", "lots", "divergences", "replenishment_alerts"],
-      "filters": ["branch_key", "sku", "category", "movement_type", "period"],
+      "input_fields": [
+        "branch_key",
+        "sku",
+        "quantity",
+        "movement_type",
+        "lot",
+        "expires_at",
+        "document_reference",
+        "minimum_alert_level",
+        "maximum_alert_level",
+        "reorder_quantity"
+      ],
+      "buttons": [
+        "receive_stock",
+        "stock_out",
+        "transfer",
+        "adjust",
+        "start_cycle_count",
+        "generate_receiving_label",
+        "configure_alert"
+      ],
+      "lists": [
+        "stock_balance",
+        "movements",
+        "lots",
+        "divergences",
+        "replenishment_alerts"
+      ],
+      "filters": [
+        "branch_key",
+        "sku",
+        "category",
+        "movement_type",
+        "period"
+      ],
       "primary_endpoint": "/api/merchant-erp/label-job",
-      "tables": ["inventory_items", "inventory_movements", "merchant_erp_inventory_alert_rules", "merchant_erp_cycle_count_jobs"]
+      "tables": [
+        "inventory_items",
+        "inventory_movements",
+        "merchant_erp_inventory_alert_rules",
+        "merchant_erp_cycle_count_jobs"
+      ]
     },
     {
       "key": "labels",
       "label": "Etiquetas",
-      "input_fields": ["job_type", "barcode_type", "branch_key", "template_key", "sku", "title", "quantity", "price_brl", "lot", "expires_at"],
-      "buttons": ["generate_qr_code", "generate_ean13", "generate_both", "preview", "print", "download_pdf", "send_to_printer"],
-      "lists": ["templates", "recent_jobs", "job_items", "validation_errors"],
-      "filters": ["job_type", "barcode_type", "branch_key", "period"],
+      "input_fields": [
+        "job_type",
+        "barcode_type",
+        "branch_key",
+        "template_key",
+        "sku",
+        "title",
+        "quantity",
+        "price_brl",
+        "lot",
+        "expires_at"
+      ],
+      "buttons": [
+        "generate_qr_code",
+        "generate_ean13",
+        "generate_both",
+        "preview",
+        "print",
+        "download_pdf",
+        "send_to_printer"
+      ],
+      "lists": [
+        "templates",
+        "recent_jobs",
+        "job_items",
+        "validation_errors"
+      ],
+      "filters": [
+        "job_type",
+        "barcode_type",
+        "branch_key",
+        "period"
+      ],
       "primary_endpoint": "/api/merchant-erp/label-job",
-      "tables": ["merchant_erp_label_templates", "merchant_erp_label_jobs", "merchant_erp_label_job_items"]
+      "tables": [
+        "merchant_erp_label_templates",
+        "merchant_erp_label_jobs",
+        "merchant_erp_label_job_items"
+      ]
     },
     {
       "key": "orders",
       "label": "Pedidos",
-      "input_fields": ["order_id", "customer", "branch_key", "status", "priority", "assignee", "notes"],
-      "buttons": ["start_picking", "reserve_stock", "confirm_order", "ship", "cancel", "create_tracking", "generate_picking_label"],
-      "lists": ["orders_by_status", "order_items", "picking_queue", "history"],
-      "filters": ["status", "branch_key", "period", "customer", "priority"],
+      "input_fields": [
+        "order_id",
+        "customer",
+        "branch_key",
+        "status",
+        "priority",
+        "assignee",
+        "notes"
+      ],
+      "buttons": [
+        "start_picking",
+        "reserve_stock",
+        "confirm_order",
+        "ship",
+        "cancel",
+        "create_tracking",
+        "generate_picking_label"
+      ],
+      "lists": [
+        "orders_by_status",
+        "order_items",
+        "picking_queue",
+        "history"
+      ],
+      "filters": [
+        "status",
+        "branch_key",
+        "period",
+        "customer",
+        "priority"
+      ],
       "primary_endpoint": "/api/merchant-erp/action",
-      "tables": ["orders", "merchant_erp_order_pipeline", "merchant_erp_delivery_assignments"]
+      "tables": [
+        "orders",
+        "merchant_erp_order_pipeline",
+        "merchant_erp_delivery_assignments"
+      ]
     },
     {
       "key": "customers",
       "label": "Clientes",
-      "input_fields": ["full_name", "document", "email", "phone", "tags", "address", "notes"],
-      "buttons": ["new_customer", "edit", "add_tag", "view_purchases", "open_support"],
-      "lists": ["customers", "purchase_history", "tags", "addresses", "support_cases"],
-      "filters": ["name", "document", "tag", "period"],
+      "input_fields": [
+        "full_name",
+        "document",
+        "email",
+        "phone",
+        "tags",
+        "address",
+        "notes"
+      ],
+      "buttons": [
+        "new_customer",
+        "edit",
+        "add_tag",
+        "view_purchases",
+        "open_support"
+      ],
+      "lists": [
+        "customers",
+        "purchase_history",
+        "tags",
+        "addresses",
+        "support_cases"
+      ],
+      "filters": [
+        "name",
+        "document",
+        "tag",
+        "period"
+      ],
       "primary_endpoint": "/api/auth/register",
-      "tables": ["users"]
+      "tables": [
+        "users"
+      ]
     },
     {
       "key": "finance",
       "label": "Financeiro",
-      "input_fields": ["entry_type", "category", "description", "amount_brl", "due_date", "settlement_date", "payment_method", "document_reference", "branch_key"],
-      "buttons": ["new_entry", "mark_paid", "reconcile", "refund", "export_dre", "filter_period"],
-      "lists": ["payables", "receivables", "cashflow", "monthly_dre", "reconciliation"],
-      "filters": ["period", "entry_type", "branch_key", "category", "status"],
+      "input_fields": [
+        "entry_type",
+        "category",
+        "description",
+        "amount_brl",
+        "due_date",
+        "settlement_date",
+        "payment_method",
+        "document_reference",
+        "branch_key"
+      ],
+      "buttons": [
+        "new_entry",
+        "mark_paid",
+        "reconcile",
+        "refund",
+        "export_dre",
+        "filter_period"
+      ],
+      "lists": [
+        "payables",
+        "receivables",
+        "cashflow",
+        "monthly_dre",
+        "reconciliation"
+      ],
+      "filters": [
+        "period",
+        "entry_type",
+        "branch_key",
+        "category",
+        "status"
+      ],
       "primary_endpoint": "/api/merchant-erp/action",
-      "tables": ["merchant_erp_finance_entries", "merchant_erp_financial_closures", "merchant_erp_accounting_entries"]
+      "tables": [
+        "merchant_erp_finance_entries",
+        "merchant_erp_financial_closures",
+        "merchant_erp_accounting_entries"
+      ]
     },
     {
       "key": "banking",
       "label": "APIs Bancarias",
-      "input_fields": ["provider", "environment", "pix_key", "account", "webhook", "secret_ref"],
-      "buttons": ["configure_connector", "test_webhook", "sync_statement", "reconcile"],
-      "lists": ["connectors", "bank_events", "signature_failures", "reconciliations"],
-      "filters": ["provider", "environment", "status"],
+      "input_fields": [
+        "provider",
+        "environment",
+        "pix_key",
+        "account",
+        "webhook",
+        "secret_ref"
+      ],
+      "buttons": [
+        "configure_connector",
+        "test_webhook",
+        "sync_statement",
+        "reconcile"
+      ],
+      "lists": [
+        "connectors",
+        "bank_events",
+        "signature_failures",
+        "reconciliations"
+      ],
+      "filters": [
+        "provider",
+        "environment",
+        "status"
+      ],
       "primary_endpoint": "/api/merchant-erp/action",
-      "tables": ["merchant_erp_integration_connections"]
+      "tables": [
+        "merchant_erp_integration_connections"
+      ]
     },
     {
       "key": "checkout",
       "label": "Checkout",
-      "input_fields": ["customer", "delivery_address", "recipient", "payment_method", "terminal_id", "order_reference"],
-      "buttons": ["confirm_checkout", "generate_link", "send_receipt", "retry"],
-      "lists": ["attempts", "pending_payments", "provider_returns"],
-      "filters": ["status", "period", "payment_method"],
+      "input_fields": [
+        "customer",
+        "delivery_address",
+        "recipient",
+        "payment_method",
+        "terminal_id",
+        "order_reference"
+      ],
+      "buttons": [
+        "confirm_checkout",
+        "generate_link",
+        "send_receipt",
+        "retry"
+      ],
+      "lists": [
+        "attempts",
+        "pending_payments",
+        "provider_returns"
+      ],
+      "filters": [
+        "status",
+        "period",
+        "payment_method"
+      ],
       "primary_endpoint": "/api/actions/checkout",
-      "tables": ["orders", "transactions"]
+      "tables": [
+        "orders",
+        "transactions"
+      ]
     },
     {
       "key": "delivery",
       "label": "Entregas",
-      "input_fields": ["order_id", "origin_branch", "destination_address", "recipient", "courier", "sla"],
-      "buttons": ["create_delivery", "assign_courier", "generate_shipping_label", "update_status", "register_proof"],
-      "lists": ["open_deliveries", "couriers", "late_deliveries", "proofs"],
-      "filters": ["branch_key", "courier", "status", "period"],
+      "input_fields": [
+        "order_id",
+        "origin_branch",
+        "destination_address",
+        "recipient",
+        "courier",
+        "sla"
+      ],
+      "buttons": [
+        "create_delivery",
+        "assign_courier",
+        "generate_shipping_label",
+        "update_status",
+        "register_proof"
+      ],
+      "lists": [
+        "open_deliveries",
+        "couriers",
+        "late_deliveries",
+        "proofs"
+      ],
+      "filters": [
+        "branch_key",
+        "courier",
+        "status",
+        "period"
+      ],
       "primary_endpoint": "/api/merchant-erp/delivery-event",
-      "tables": ["merchant_erp_delivery_assignments", "merchant_erp_delivery_tracking_events"]
+      "tables": [
+        "merchant_erp_delivery_assignments",
+        "merchant_erp_delivery_tracking_events"
+      ]
     },
     {
       "key": "tracking",
       "label": "Rastreio",
-      "input_fields": ["branch_key", "tracking_code", "courier", "status"],
-      "buttons": ["show_map", "hide_map", "refresh", "filter_branch"],
-      "lists": ["active_routes", "gps_events", "deliveries_by_status"],
-      "filters": ["branch_key", "status", "courier"],
+      "input_fields": [
+        "branch_key",
+        "tracking_code",
+        "courier",
+        "status"
+      ],
+      "buttons": [
+        "show_map",
+        "hide_map",
+        "refresh",
+        "filter_branch"
+      ],
+      "lists": [
+        "active_routes",
+        "gps_events",
+        "deliveries_by_status"
+      ],
+      "filters": [
+        "branch_key",
+        "status",
+        "courier"
+      ],
       "primary_endpoint": "/api/merchant-erp/delivery-tracking",
-      "tables": ["merchant_erp_delivery_tracking_events"]
+      "tables": [
+        "merchant_erp_delivery_tracking_events",
+        "merchant_erp_deliveries"
+      ]
     },
     {
       "key": "marketplace",
       "label": "Marketplace",
-      "input_fields": ["provider", "category", "sku", "price", "stock", "listing_status"],
-      "buttons": ["publish", "update_price", "update_stock", "import_orders", "sync"],
-      "lists": ["channels", "listings", "imported_orders", "homologation_pending"],
-      "filters": ["provider", "status", "category"],
+      "input_fields": [
+        "provider",
+        "category",
+        "sku",
+        "price",
+        "stock",
+        "listing_status",
+        "neighborhood",
+        "segment",
+        "minimum_rating"
+      ],
+      "buttons": [
+        "publish",
+        "update_price",
+        "update_stock",
+        "import_orders",
+        "sync",
+        "open_map",
+        "filter_neighborhood"
+      ],
+      "lists": [
+        "channels",
+        "listings",
+        "imported_orders",
+        "homologation_pending",
+        "nearby_merchants",
+        "local_categories"
+      ],
+      "filters": [
+        "provider",
+        "status",
+        "category",
+        "neighborhood",
+        "segment",
+        "rating"
+      ],
       "primary_endpoint": "/api/merchant-erp/integration-event",
-      "tables": ["merchant_erp_connector_catalog", "merchant_erp_connector_sync_events"]
+      "tables": [
+        "merchant_erp_connector_catalog",
+        "merchant_erp_connector_sync_events",
+        "valley_screen_layout_contracts"
+      ]
     },
     {
       "key": "integrations",
       "label": "Integracoes",
-      "input_fields": ["provider", "environment", "callback", "secret_ref", "scopes"],
-      "buttons": ["authorize", "test", "sync", "disable", "view_logs"],
-      "lists": ["providers", "statuses", "recent_events", "pending_credentials"],
-      "filters": ["provider", "status", "family"],
+      "input_fields": [
+        "provider",
+        "environment",
+        "callback",
+        "secret_ref",
+        "scopes"
+      ],
+      "buttons": [
+        "authorize",
+        "test",
+        "sync",
+        "disable",
+        "view_logs"
+      ],
+      "lists": [
+        "providers",
+        "statuses",
+        "recent_events",
+        "pending_credentials"
+      ],
+      "filters": [
+        "provider",
+        "status",
+        "family"
+      ],
       "primary_endpoint": "/api/merchant-erp/integration-blueprint",
-      "tables": ["merchant_erp_connector_catalog", "merchant_erp_connector_sync_events"]
+      "tables": [
+        "merchant_erp_connector_catalog",
+        "merchant_erp_connector_sync_events"
+      ]
     },
     {
       "key": "fiscal",
       "label": "Fiscal / NF-e",
-      "input_fields": ["access_key_44", "xml_file", "issuer_cnpj", "recipient_cnpj", "items", "cfop", "ncm"],
-      "buttons": ["import_xml", "query_key", "validate_items", "generate_stock", "generate_receiving_labels"],
-      "lists": ["import_batches", "nfe_items", "divergences", "created_movements"],
-      "filters": ["period", "issuer_cnpj", "branch_key", "status"],
+      "input_fields": [
+        "access_key_44",
+        "xml_file",
+        "issuer_cnpj",
+        "recipient_cnpj",
+        "items",
+        "cfop",
+        "ncm"
+      ],
+      "buttons": [
+        "import_xml",
+        "query_key",
+        "validate_items",
+        "generate_stock",
+        "generate_receiving_labels"
+      ],
+      "lists": [
+        "import_batches",
+        "nfe_items",
+        "divergences",
+        "created_movements"
+      ],
+      "filters": [
+        "period",
+        "issuer_cnpj",
+        "branch_key",
+        "status"
+      ],
       "primary_endpoint": "/api/merchant-erp/nfe-import",
-      "tables": ["merchant_erp_nfe_import_batches", "merchant_erp_nfe_items"]
+      "tables": [
+        "merchant_erp_nfe_import_batches",
+        "merchant_erp_nfe_items"
+      ]
     },
     {
       "key": "schedule",
       "label": "Agenda",
-      "input_fields": ["resource", "service", "customer", "phone", "email", "start_time", "end_time", "branch_key"],
-      "buttons": ["new_slot", "confirm", "reschedule", "cancel", "complete", "block_slot"],
-      "lists": ["daily_agenda", "weekly_agenda", "resources", "bookings", "no_show"],
-      "filters": ["branch_key", "resource", "status", "date"],
+      "input_fields": [
+        "resource",
+        "service",
+        "customer",
+        "phone",
+        "email",
+        "start_time",
+        "end_time",
+        "branch_key"
+      ],
+      "buttons": [
+        "new_slot",
+        "confirm",
+        "reschedule",
+        "cancel",
+        "complete",
+        "block_slot"
+      ],
+      "lists": [
+        "daily_agenda",
+        "weekly_agenda",
+        "resources",
+        "bookings",
+        "no_show"
+      ],
+      "filters": [
+        "branch_key",
+        "resource",
+        "status",
+        "date"
+      ],
       "primary_endpoint": "/api/merchant-erp/service-booking",
-      "tables": ["merchant_erp_service_resources", "merchant_erp_service_bookings"]
+      "tables": [
+        "merchant_erp_service_resources",
+        "merchant_erp_service_bookings"
+      ]
     },
     {
       "key": "branches",
       "label": "Filiais",
-      "input_fields": ["branch_key", "branch_type", "address", "region", "stock_policy", "sync_flags", "finance_visibility"],
-      "buttons": ["new_branch", "save", "suspend", "activate", "set_policy", "sync_catalog"],
-      "lists": ["branches", "policies", "sync_events", "stock_by_scope"],
-      "filters": ["branch_type", "status", "region", "stock_scope"],
+      "input_fields": [
+        "branch_key",
+        "branch_type",
+        "address",
+        "region",
+        "stock_policy",
+        "sync_flags",
+        "finance_visibility"
+      ],
+      "buttons": [
+        "new_branch",
+        "save",
+        "suspend",
+        "activate",
+        "set_policy",
+        "sync_catalog"
+      ],
+      "lists": [
+        "branches",
+        "policies",
+        "sync_events",
+        "stock_by_scope"
+      ],
+      "filters": [
+        "branch_type",
+        "status",
+        "region",
+        "stock_scope"
+      ],
       "primary_endpoint": "/api/merchant-erp/branches",
-      "tables": ["merchant_erp_branch_units", "merchant_erp_branch_stock_policies"]
+      "tables": [
+        "merchant_erp_branch_units",
+        "merchant_erp_branch_stock_policies"
+      ]
     },
     {
       "key": "reports",
       "label": "Relatorios",
-      "input_fields": ["period_from", "period_to", "user_id", "product_id", "category", "branch_key", "format"],
-      "buttons": ["apply_filters", "clear", "export_json", "export_csv", "export_pdf"],
-      "lists": ["results", "aggregates", "top_categories", "query_history"],
-      "filters": ["period", "user_id", "product_id", "category", "branch_key"],
+      "input_fields": [
+        "period_from",
+        "period_to",
+        "user_id",
+        "product_id",
+        "category",
+        "branch_key",
+        "format"
+      ],
+      "buttons": [
+        "apply_filters",
+        "clear",
+        "export_json",
+        "export_csv",
+        "export_pdf"
+      ],
+      "lists": [
+        "results",
+        "aggregates",
+        "top_categories",
+        "query_history"
+      ],
+      "filters": [
+        "period",
+        "user_id",
+        "product_id",
+        "category",
+        "branch_key"
+      ],
       "primary_endpoint": "/api/merchant-erp/report-query",
-      "tables": ["merchant_erp_report_query_events"]
+      "tables": [
+        "merchant_erp_report_query_events"
+      ]
     },
     {
       "key": "settings",
       "label": "Configuracoes",
-      "input_fields": ["store_name", "cnpj", "email", "phone", "preferences", "stock_parameters", "finance_parameters"],
-      "buttons": ["save", "reset", "test_configuration", "export_backup"],
-      "lists": ["parameters", "audit", "recent_changes"],
-      "filters": ["section", "changed_by", "period"],
+      "input_fields": [
+        "store_name",
+        "cnpj",
+        "email",
+        "phone",
+        "preferences",
+        "stock_parameters",
+        "finance_parameters"
+      ],
+      "buttons": [
+        "save",
+        "reset",
+        "test_configuration",
+        "export_backup"
+      ],
+      "lists": [
+        "parameters",
+        "audit",
+        "recent_changes"
+      ],
+      "filters": [
+        "section",
+        "changed_by",
+        "period"
+      ],
       "primary_endpoint": "/api/merchant-erp/action",
-      "tables": ["merchant_erp_workspaces", "merchant_erp_audit_events"]
+      "tables": [
+        "merchant_erp_workspaces",
+        "merchant_erp_audit_events"
+      ]
     },
     {
       "key": "team",
       "label": "Equipe",
-      "input_fields": ["email", "display_name", "role", "branch_key", "status", "extra_privileges"],
-      "buttons": ["invite", "activate", "suspend", "grant_privilege", "revoke"],
-      "lists": ["staff", "roles", "effective_privileges", "audit"],
-      "filters": ["role", "status", "branch_key"],
+      "input_fields": [
+        "email",
+        "display_name",
+        "role",
+        "branch_key",
+        "status",
+        "extra_privileges"
+      ],
+      "buttons": [
+        "invite",
+        "activate",
+        "suspend",
+        "grant_privilege",
+        "revoke"
+      ],
+      "lists": [
+        "staff",
+        "roles",
+        "effective_privileges",
+        "audit"
+      ],
+      "filters": [
+        "role",
+        "status",
+        "branch_key"
+      ],
       "primary_endpoint": "/api/merchant-erp/privileges",
-      "tables": ["merchant_erp_staff_members", "merchant_erp_privileges", "merchant_erp_staff_privilege_grants"]
+      "tables": [
+        "merchant_erp_staff_members",
+        "merchant_erp_privileges",
+        "merchant_erp_staff_privilege_grants"
+      ]
     },
     {
       "key": "security",
       "label": "Seguranca",
-      "input_fields": ["user", "session", "risk_level", "action", "notes"],
-      "buttons": ["revoke_session", "block_user", "release_user", "export_audit"],
-      "lists": ["sessions", "events", "critical_privileges"],
-      "filters": ["risk_level", "user", "period"],
+      "input_fields": [
+        "user",
+        "session",
+        "risk_level",
+        "action",
+        "notes"
+      ],
+      "buttons": [
+        "revoke_session",
+        "block_user",
+        "release_user",
+        "export_audit"
+      ],
+      "lists": [
+        "sessions",
+        "events",
+        "critical_privileges"
+      ],
+      "filters": [
+        "risk_level",
+        "user",
+        "period"
+      ],
       "primary_endpoint": "/api/merchant-erp/action",
-      "tables": ["merchant_erp_security_events", "merchant_erp_audit_events"]
+      "tables": [
+        "merchant_erp_security_events",
+        "merchant_erp_audit_events"
+      ]
+    },
+    {
+      "key": "home",
+      "label": "Home Valley / Dashboard Lojista",
+      "input_fields": [
+        "global_search",
+        "active_branch",
+        "quick_period",
+        "favorite_module"
+      ],
+      "buttons": [
+        "search",
+        "open_profile",
+        "open_support",
+        "open_faq",
+        "edit_shortcuts",
+        "open_module"
+      ],
+      "lists": [
+        "active_deliveries",
+        "favorite_shortcuts",
+        "cart_and_favorites",
+        "operational_banners"
+      ],
+      "filters": [
+        "branch_key",
+        "period",
+        "module"
+      ],
+      "primary_endpoint": "/api/product-shell",
+      "tables": [
+        "valley_screen_layout_contracts",
+        "orders",
+        "shopping_carts",
+        "user_favorites"
+      ],
+      "collections": [
+        "helena_ai_context_events"
+      ],
+      "visibility_rules": {
+        "tracking": "hide_when_no_active_delivery",
+        "finance": "user_can_hide",
+        "internal_rewards": "hidden_until_enabled"
+      }
+    },
+    {
+      "key": "stock_dropshipping",
+      "label": "Stock Dropshipping / Curadoria Helena",
+      "input_fields": [
+        "category",
+        "price_range",
+        "delivery_deadline",
+        "candidate_sku",
+        "provider",
+        "publication_status"
+      ],
+      "buttons": [
+        "apply_filters",
+        "open_product",
+        "request_curation",
+        "publish_approved",
+        "reject",
+        "sync_supplier"
+      ],
+      "lists": [
+        "infinite_product_grid",
+        "approved_products",
+        "rejected_products",
+        "compliance_pending",
+        "helena_decisions"
+      ],
+      "filters": [
+        "category",
+        "price_range",
+        "delivery_deadline",
+        "provider",
+        "publication_status"
+      ],
+      "primary_endpoint": "/api/product-shell",
+      "tables": [
+        "helena_product_sourcing_decisions",
+        "dropshipping_pricing_decisions",
+        "dropshipping_supplier_orders",
+        "valley_screen_layout_contracts"
+      ],
+      "guardrails": [
+        "BR-PRO-001",
+        "merchant_profit_sandbox_hidden_from_customer"
+      ]
+    },
+    {
+      "key": "chat_marketplace",
+      "label": "Chat Marketplace Moderado",
+      "input_fields": [
+        "message",
+        "allowed_attachments",
+        "related_order",
+        "related_product",
+        "channel",
+        "reason",
+        "severe_warning_ack"
+      ],
+      "buttons": [
+        "send",
+        "attach_order",
+        "attach_product",
+        "use_helena_suggestion",
+        "acknowledge_warning",
+        "open_dispute",
+        "escalate_support"
+      ],
+      "lists": [
+        "conversations",
+        "append_only_messages",
+        "attachments",
+        "moderation_strikes",
+        "pending_alerts"
+      ],
+      "filters": [
+        "tenant_id",
+        "branch_key",
+        "channel",
+        "period",
+        "strike_status"
+      ],
+      "primary_endpoint": "/api/merchant-erp/action",
+      "tables": [
+        "chat_messages",
+        "commerce_chat_threads",
+        "marketplace_chat_moderation_patterns",
+        "chat_moderation_strikes",
+        "chat_moderation_account_actions"
+      ],
+      "collections": [
+        "marketplace_chat_moderation_events"
+      ],
+      "rules": [
+        "no_external_contact",
+        "append_only_messages",
+        "three_strikes_suspension_event"
+      ]
+    },
+    {
+      "key": "mobility",
+      "label": "Mobilidade Inteligente",
+      "input_fields": [
+        "origin",
+        "destination",
+        "commitment_time",
+        "preferred_mode",
+        "delay_tolerance",
+        "price_limit",
+        "city_state"
+      ],
+      "buttons": [
+        "start_monitoring",
+        "recalculate_route",
+        "accept_suggestion",
+        "ignore_alert",
+        "view_alternatives",
+        "check_visio"
+      ],
+      "lists": [
+        "monitored_routes",
+        "combined_alternatives",
+        "incidents",
+        "delays",
+        "agent_decisions"
+      ],
+      "filters": [
+        "city_state",
+        "mode",
+        "status",
+        "period"
+      ],
+      "primary_endpoint": "/api/merchant-erp/action",
+      "tables": [
+        "mobility_realtime_route_sessions",
+        "mobility_idle_agent_dispatch_rules",
+        "mobility_idle_agent_events"
+      ],
+      "collections": [
+        "mobility_idle_agent_decisions"
+      ],
+      "rules": [
+        "public_transport_plus_final_ride_when_ride_hailing_expensive",
+        "proactive_recalculation_on_accident_or_delay"
+      ]
+    },
+    {
+      "key": "visio",
+      "label": "Visio / Verificacao de Modulo",
+      "input_fields": [
+        "module_key",
+        "environment",
+        "evidence",
+        "requester_user",
+        "branch_key"
+      ],
+      "buttons": [
+        "check_now",
+        "open_evidence",
+        "mark_pending",
+        "revalidate",
+        "generate_fix_plan"
+      ],
+      "lists": [
+        "recent_checks",
+        "environment_status",
+        "evidence",
+        "pending_items"
+      ],
+      "filters": [
+        "module_key",
+        "environment",
+        "availability_status",
+        "period"
+      ],
+      "primary_endpoint": "/api/merchant-erp/action",
+      "tables": [
+        "valley_module_availability_checks"
+      ],
+      "collections": [
+        "erp_operational_telemetry_events"
+      ]
+    },
+    {
+      "key": "android_live_tracking",
+      "label": "Rastreio Android Marketplace",
+      "input_fields": [
+        "marketplace_order",
+        "tracking_session",
+        "courier",
+        "eta",
+        "status",
+        "fcm_topic",
+        "map_ref"
+      ],
+      "buttons": [
+        "activate_live_tracking",
+        "update_eta",
+        "open_map",
+        "finish_delivery",
+        "resend_silent_push",
+        "view_events"
+      ],
+      "lists": [
+        "active_sessions",
+        "fcm_events",
+        "foreground_events",
+        "map_updates",
+        "failures"
+      ],
+      "filters": [
+        "tenant_id",
+        "branch_key",
+        "status",
+        "courier",
+        "period"
+      ],
+      "primary_endpoint": "/api/merchant-erp/delivery-tracking",
+      "tables": [
+        "marketplace_android_live_tracking_sessions",
+        "marketplace_android_live_tracking_events"
+      ],
+      "collections": [
+        "marketplace_android_live_tracking_stream"
+      ],
+      "rules": [
+        "android_only",
+        "marketplace_orders_only",
+        "stock_origin_forbidden",
+        "foreground_service_fallback_required"
+      ]
     },
     {
       "key": "support",
       "label": "Suporte Helena",
-      "input_fields": ["subject", "description", "module", "priority", "attachments"],
-      "buttons": ["open_case", "reply", "close", "escalate"],
-      "lists": ["cases", "responses", "statuses", "sla"],
-      "filters": ["module", "priority", "status"],
+      "input_fields": [
+        "subject",
+        "description",
+        "module",
+        "priority",
+        "attachments"
+      ],
+      "buttons": [
+        "open_case",
+        "reply",
+        "close",
+        "escalate"
+      ],
+      "lists": [
+        "cases",
+        "responses",
+        "statuses",
+        "sla"
+      ],
+      "filters": [
+        "module",
+        "priority",
+        "status"
+      ],
       "primary_endpoint": "/api/merchant-erp/action",
-      "tables": ["merchant_erp_audit_events"]
+      "tables": [
+        "merchant_erp_audit_events"
+      ]
     }
-  ]
+  ],
+  "zero_project_request": {
+    "project_name": "Valley ERP - Omniverse Operacional",
+    "primary_spec": "docs/specs/valley_erp_zero_project_database_ui_directives.md",
+    "stitch_request": "docs/specs/stitch_zero_project_request_valley_erp.md",
+    "logo_asset": "assets/brand/logo-valley-official.png",
+    "planning_anchor": "PLANOS/v060__20260515-210000-brt__stitch_zero_project_valley_erp.md",
+    "profile_groups": [
+      "admin",
+      "merchant",
+      "customer_android_apk",
+      "courier"
+    ],
+    "downstream_flow": [
+      "Stitch",
+      "Figma",
+      "Flutter"
+    ],
+    "secret_policy": "STITCH_API_KEY local only; never version API keys or OAuth artifacts",
+    "project_id": "12516070127536900621",
+    "project_resource_name": "projects/12516070127536900621",
+    "design_system_doc": "docs/specs/valley_stitch_design_system_v060.md",
+    "stitch_visibility": "PRIVATE",
+    "generated_screens_summary": "docs/specs/stitch_v060_generated_screens_summary.md",
+    "generated_screens_count": 15,
+    "generated_screens": [
+      {
+        "key": "admin_god_mode",
+        "device": "DESKTOP",
+        "title": "Admin Valley - Painel Modo Deus",
+        "screen_id": "6923b1d305cb47cd9c42af70246f8b4a",
+        "size": "2560x2048",
+        "status": "COMPLETE"
+      },
+      {
+        "key": "merchant_login",
+        "device": "DESKTOP",
+        "title": "Valley ERP - Login Lojista",
+        "screen_id": "d1804ade22204fe7b079896d439f93a7",
+        "size": "2560x2048",
+        "status": "COMPLETE"
+      },
+      {
+        "key": "merchant_onboarding",
+        "device": "DESKTOP",
+        "title": "Valley ERP - Cadastro de Empresa e Usuários",
+        "screen_id": "940f2a13151c4b4ea2c71d2f7d1db90f",
+        "size": "2560x2048",
+        "status": "COMPLETE"
+      },
+      {
+        "key": "merchant_dashboard",
+        "device": "DESKTOP",
+        "title": "Valley ERP - Dashboard Operacional Lojista",
+        "screen_id": "fff48b0d29104141867bd1913c6e89f0",
+        "size": "3072x2150",
+        "status": "COMPLETE"
+      },
+      {
+        "key": "merchant_operations",
+        "device": "DESKTOP",
+        "title": "Valley ERP - Produtos, Estoque e Pedidos",
+        "screen_id": "0eb7f89678874a04843619a530782e8e",
+        "size": "2560x2048",
+        "status": "COMPLETE"
+      },
+      {
+        "key": "merchant_finance_agenda_integrations",
+        "device": "DESKTOP",
+        "title": "Valley ERP - Financeiro, Agenda e Integrações",
+        "screen_id": "666045862fbb45ffbf757f46cad662fc",
+        "size": "2560x2048",
+        "status": "COMPLETE"
+      },
+      {
+        "key": "customer_home",
+        "device": "MOBILE",
+        "title": "Valley APK - Home MVP Modular",
+        "screen_id": "6d77f2526e0a40da9eed35fce5122b1b",
+        "size": "780x1772",
+        "status": "COMPLETE"
+      },
+      {
+        "key": "customer_stock_marketplace_checkout",
+        "device": "MOBILE",
+        "title": "Valley APK - Stock e Marketplace",
+        "screen_id": "3e8926d33b4a42bda5b1efb43f31c564",
+        "size": "780x2278",
+        "status": "COMPLETE"
+      },
+      {
+        "key": "customer_stock_marketplace_checkout",
+        "device": "MOBILE",
+        "title": "Valley APK - Checkout e Pagamento",
+        "screen_id": "bf39e83446a1424da9d4def9437ec583",
+        "size": "780x2038",
+        "status": "COMPLETE"
+      },
+      {
+        "key": "customer_stock_marketplace_checkout",
+        "device": "MOBILE",
+        "title": "Valley APK - Minhas Compras e Rastreio",
+        "screen_id": "27735ecc77004cceacf90f490e9ba962",
+        "size": "780x2106",
+        "status": "COMPLETE"
+      },
+      {
+        "key": "customer_support_chat",
+        "device": "MOBILE",
+        "title": "Valley APK - Central de Mensagens",
+        "screen_id": "e06755527e874fb9ace047b86912dfad",
+        "size": "780x1774",
+        "status": "COMPLETE"
+      },
+      {
+        "key": "customer_support_chat",
+        "device": "MOBILE",
+        "title": "Valley APK - Suporte Helena AI",
+        "screen_id": "d72885cb8b874effac850a6f6cc42247",
+        "size": "780x1774",
+        "status": "COMPLETE"
+      },
+      {
+        "key": "customer_support_chat",
+        "device": "MOBILE",
+        "title": "Valley APK - Chat com Lojista",
+        "screen_id": "3c99bfdcc590487aa73df7889f1657b2",
+        "size": "780x1768",
+        "status": "COMPLETE"
+      },
+      {
+        "key": "courier_home",
+        "device": "MOBILE",
+        "title": "Entregador - Home Logística Verde",
+        "screen_id": "461c2d6948d44dc78835a0106b3fc0e3",
+        "size": "780x1932",
+        "status": "COMPLETE"
+      },
+      {
+        "key": "courier_delivery_flow",
+        "device": "MOBILE",
+        "title": "Entregador - Home Logística Verde",
+        "screen_id": "7068f09690d143a295f97eb0cc55c7ba",
+        "size": "780x2116",
+        "status": "COMPLETE"
+      }
+    ]
+  }
 }

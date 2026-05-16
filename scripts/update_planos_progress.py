@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass
+from datetime import datetime
 from pathlib import Path
 
 
@@ -18,6 +19,10 @@ RULE_PATH = PLANOS_DIR / "REGRA_PROGRESSO.md"
 
 CHECK_RE = re.compile(r"^\s*-\s+\[([ xX])\]\s+")
 LINK_RE = re.compile(r"\]\((?:\./)?([^)]+)\)")
+PLAN_FILE_RE = re.compile(
+    r"^(v\d{3})__(\d{8})-(\d{6})-brt__(.+)\.md$",
+    re.IGNORECASE,
+)
 SUMMARY_BEGIN = "<!-- progresso:inicio -->"
 SUMMARY_END = "<!-- progresso:fim -->"
 INDEX_HEADER = "\n".join(
@@ -98,6 +103,58 @@ def checklist_counts(path: Path | None) -> tuple[int, int]:
     return done, total
 
 
+def created_at_from_plan_filename(path: Path) -> tuple[str, str] | None:
+    match = PLAN_FILE_RE.match(path.name)
+    if not match:
+        return None
+    version = match.group(1).lower()
+    raw_date = match.group(2)
+    raw_time = match.group(3)
+    created = (
+        f"{raw_date[0:4]}-{raw_date[4:6]}-{raw_date[6:8]} "
+        f"{raw_time[0:2]}:{raw_time[2:4]}:{raw_time[4:6]} BRT"
+    )
+    return version, created
+
+
+def plan_scope_from_file(path: Path) -> str:
+    for line in path.read_text(encoding="utf-8").splitlines():
+        stripped = line.strip()
+        if stripped.startswith("# "):
+            return re.sub(r"^#\s+v\d{3}\s+-\s+", "", stripped, flags=re.IGNORECASE)
+        if stripped.startswith("CONTEXTO:"):
+            return stripped.removeprefix("CONTEXTO:").strip()
+    return path.stem
+
+
+def mtime_brt_label(path: Path) -> str:
+    return datetime.fromtimestamp(path.stat().st_mtime).strftime("%Y-%m-%d %H:%M:%S BRT")
+
+
+def discover_plan_rows(existing_rows: list[IndexRow]) -> list[IndexRow]:
+    rows_by_version = {row.versao.lower(): row for row in existing_rows}
+    for path in sorted(PLANOS_DIR.glob("v*.md")):
+        parsed = created_at_from_plan_filename(path)
+        if parsed is None:
+            continue
+        version, created = parsed
+        if version in rows_by_version:
+            continue
+        done, total = checklist_counts(path)
+        status = "concluido" if total and done == total else "em_andamento"
+        rows_by_version[version] = IndexRow(
+            versao=version,
+            criado_em_brt=created,
+            arquivo=f"[{path.name}](./{path.name})",
+            status=status,
+            escopo=plan_scope_from_file(path),
+            ultima_atualizacao_brt=mtime_brt_label(path),
+            done=done,
+            total=total,
+        )
+    return sorted(rows_by_version.values(), key=lambda row: row.versao)
+
+
 def read_index_rows() -> list[IndexRow]:
     rows: list[IndexRow] = []
     for line in INDEX_PATH.read_text(encoding="utf-8").splitlines():
@@ -126,7 +183,7 @@ def read_index_rows() -> list[IndexRow]:
                 total=total,
             )
         )
-    return rows
+    return discover_plan_rows(rows)
 
 
 def build_rule(total_done: int, total_steps: int) -> str:

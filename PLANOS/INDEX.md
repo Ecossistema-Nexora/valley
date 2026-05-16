@@ -11,9 +11,9 @@ REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar 
 
 - Regra: cada item de checklist dos planos conta como uma etapa.
 - Atualize este indice depois de cada acao concluida com `python scripts\update_planos_progress.py`.
-- Etapas concluidas desde o primeiro plano do indice: `331/331`.
-- Produzido desde o Plano 1: `100.0%`.
-- Falta produzir para a conclusao final acumulada: `0.0%`.
+- Etapas concluidas desde o primeiro plano do indice: `378/379`.
+- Produzido desde o Plano 1: `99.7%`.
+- Falta produzir para a conclusao final acumulada: `0.3%`.
 <!-- progresso:fim -->
 
 | versao | criado_em_brt | arquivo | status | escopo | etapas | produzido | falta_produzir | ultima_atualizacao_brt |
@@ -73,3 +73,8 @@ REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar 
 | v053 | 2026-05-14 15:12:00 BRT | [v053__20260514-151200-brt__end_user_build_mandatorio.md](./v053__20260514-151200-brt__end_user_build_mandatorio.md) | concluido | END-USER-BUILD mandatorio para build final em modo producao de usuario | 6/6 | 100.0% | 0.0% | 2026-05-14 15:12:00 BRT |
 | v054 | 2026-05-14 15:20:00 BRT | [v054__20260514-152000-brt__end_user_build_artefatos_telegram.md](./v054__20260514-152000-brt__end_user_build_artefatos_telegram.md) | concluido | END-USER-BUILD ampliado para artefatos finais web, Android, Windows, Linux, PDF e Telegram | 6/6 | 100.0% | 0.0% | 2026-05-14 15:20:00 BRT |
 | v055 | 2026-05-15 00:00:00 BRT | [v055__20260515-000000-brt__end_user_build_total_windows_linux_apk_pdf_telegram.md](./v055__20260515-000000-brt__end_user_build_total_windows_linux_apk_pdf_telegram.md) | em_andamento | END-USER-BUILD total para Windows, Linux, APK, PDF e Telegram com fallback por link publico | 7/7 | 100.0% | 0.0% | - |
+| v056 | 2026-05-15 05:09:20 BRT | [v056__20260515-050920-brt__erp_integracoes_agenda_rastreio_nfe.md](./v056__20260515-050920-brt__erp_integracoes_agenda_rastreio_nfe.md) | concluido | O usuario solicitou APIs para Shopee, Mercado Livre, OLX, Ze Delivery, iFood e outros canais, alem de agenda de horarios para empresas de servico e rastreio em tempo real do entregador quando nao houver integracao iFood. | 11/11 | 100.0% | 0.0% | 2026-05-15 05:44:07 BRT |
+| v057 | 2026-05-15 06:15:00 BRT | [v057__20260515-061500-brt__erp_operacoes_etiquetas_stitch_handoff.md](./v057__20260515-061500-brt__erp_operacoes_etiquetas_stitch_handoff.md) | concluido | O usuario pediu preparacao para etiquetas de produto/estoque, QR Code ou codigo de barras EAN-13, listagem completa de modulos/funcoes, fluxos, banco de dados e definicao de campos/botoes/listas para novos templates Stitch. | 11/11 | 100.0% | 0.0% | 2026-05-15 06:34:20 BRT |
+| v058 | 2026-05-15 06:40:00 BRT | [v058__20260515-064000-brt__master_specification_erp_stitch_codex.md](./v058__20260515-064000-brt__master_specification_erp_stitch_codex.md) | concluido | O usuario definiu o titulo "MASTER SPECIFICATION: VALLEY MERCHANT ERP (STITCH & CODEX)" para consolidar o handoff visual, contrato JSON e execucao tecnica. | 6/6 | 100.0% | 0.0% | 2026-05-15 06:52:37 BRT |
+| v059 | 2026-05-15 07:16:20 BRT | [v059__20260515-071620-brt__blueprint_banco_hibrido_valley.md](./v059__20260515-071620-brt__blueprint_banco_hibrido_valley.md) | concluido | O usuario determinou entrega total sem confirmacoes tecnicas padrao para finalizar o desenho PostgreSQL + MongoDB. | 11/11 | 100.0% | 0.0% | 2026-05-15 07:36:46 BRT |
+| v060 | 2026-05-15 21:00:00 BRT | [v060__20260515-210000-brt__stitch_zero_project_valley_erp.md](./v060__20260515-210000-brt__stitch_zero_project_valley_erp.md) | em_andamento | O usuario determinou que a especificacao Markdown atualizada e a logomarca Valley sejam direcionadas ao servidor MCP Stitch para criar um projeto do zero. | 8/9 | 88.9% | 11.1% | 2026-05-15 21:00:58 BRT |

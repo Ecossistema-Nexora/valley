@@ -1,9 +1,9 @@
 # Valley - Gemini Refactor Checklist
 
-- Gerado em UTC: `2026-05-15T09:14:56Z`
-- Arquivos varridos: `1747`
+- Gerado em UTC: `2026-05-16T01:47:28Z`
+- Arquivos varridos: `1762`
 - Pendencias: `0`
-- Digest: `0c82e31c416bbe25076705ed2a98bf4113f0507f6e8377a05d3c3dd525385bbb`
+- Digest: `1d6770df9e75836c667b8ec8ddc149154f03df5fb7bf956092d4e0263691a52e`
 
 ## Regras
 

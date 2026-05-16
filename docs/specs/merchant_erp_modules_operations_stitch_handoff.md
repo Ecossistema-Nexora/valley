@@ -15,6 +15,10 @@ REGRAS: Nao expor regras internas de cashback/recompensa; dados exibidos pertenc
 - Listas devem ter filtros por periodo, status, filial, usuario, produto/SKU e categoria quando aplicavel.
 - Botoes primarios executam comando real; botoes secundarios abrem filtros, exportacao, preview, impressao ou historico.
 - Termos internos de cashback/recompensa nao devem aparecer nos templates por enquanto.
+- Toda consulta, gravacao e relatorio deve carregar `tenant_id`; quando a operacao for por filial, tambem deve carregar `branch_id` ou `branch_key`.
+- Regra `BR-PRO-001`: nao exibir custo bruto, formulas de markup, margem ou simulacao de lucro ao usuario final.
+- Helena deve falar em PT-BR, com sotaque regional configuravel por cidade/UF de nascimento do usuario.
+- Interacoes proativas da Helena devem ser discretas: brilho, destaque ou mensagem contextual, sem pop-up invasivo.
 
 ## Modulos e Operacoes
 
@@ -106,15 +110,15 @@ REGRAS: Nao expor regras internas de cashback/recompensa; dados exibidos pertenc
 - Botoes: `Exibir mapa`, `Ocultar mapa`, `Atualizar`, `Filtrar filial`.
 - Listas: rotas ativas, eventos GPS, entregas por status.
 - Fluxos: entrega criada -> app entregador envia posicao -> mapa atualiza -> prova de entrega.
-- Banco/API: `merchant_erp_delivery_tracking_events`, `/api/merchant-erp/delivery-tracking`.
+- Banco/API: `merchant_erp_delivery_tracking_events`, `merchant_erp_deliveries`, `/api/merchant-erp/delivery-tracking`.
 
 ### 12. Marketplace
 - Objetivo: publicar catalogo, importar pedidos, atualizar preco/estoque e receber status financeiro/logistico.
-- Campos de entrada: provedor, categoria, SKU, preco, estoque, status anuncio.
-- Botoes: `Publicar`, `Atualizar preco`, `Atualizar estoque`, `Importar pedidos`, `Sincronizar`.
-- Listas: canais, anuncios, pedidos importados, pendencias de homologacao.
+- Campos de entrada: provedor, categoria, SKU, preco, estoque, status anuncio, bairro, segmento, avaliacao minima.
+- Botoes: `Publicar`, `Atualizar preco`, `Atualizar estoque`, `Importar pedidos`, `Sincronizar`, `Abrir mapa`, `Filtrar bairro`.
+- Listas: canais, anuncios, pedidos importados, pendencias de homologacao, lojistas proximos, categorias locais.
 - Fluxos: conectar provedor -> mapear catalogo -> publicar -> importar pedidos -> atualizar status.
-- Banco/API: `merchant_erp_connector_catalog`, `merchant_erp_connector_sync_events`, `/api/merchant-erp/integration-event`.
+- Banco/API: `merchant_erp_connector_catalog`, `merchant_erp_connector_sync_events`, `valley_screen_layout_contracts`, `/api/merchant-erp/integration-event`.
 
 ### 13. Integracoes
 - Objetivo: centralizar Shopee, Mercado Livre, OLX, iFood, Ze Delivery, Magalu, Amazon, Nuvemshop, WhatsApp e Google Business.
@@ -188,6 +192,59 @@ REGRAS: Nao expor regras internas de cashback/recompensa; dados exibidos pertenc
 - Fluxos: chamado -> triagem -> resposta -> resolucao -> historico.
 - Banco/API: bridge operacional e eventos runtime.
 
+### 22. Home Valley / Dashboard Lojista
+- Objetivo: tela inicial operacional com identidade Valley, busca global, rastreio ativo, banners contextuais, favoritos/carrinho e navegacao rapida.
+- Campos de entrada: busca global, filial ativa, periodo rapido, modulo favorito.
+- Botoes: `Buscar`, `Abrir perfil`, `Abrir suporte`, `Abrir FAQ`, `Editar atalhos`, `Abrir modulo`.
+- Listas: entregas ativas, atalhos favoritos, carrinho/favoritos, banners operacionais.
+- Regras de visibilidade: bloco de rastreio fica oculto sem entrega ativa; bloco financeiro e informacoes sensiveis sao ocultaveis; beneficios internos ficam escondidos ate liberacao explicita.
+- Fluxos: login -> selecionar filial -> home -> busca/modulo -> acao operacional -> retorno para resumo.
+- Banco/API: `valley_screen_layout_contracts`, `orders`, `shopping_carts`, `user_favorites`, `helena_ai_context_events`.
+
+### 23. Stock Dropshipping / Curadoria Helena
+- Objetivo: grid de produtos via API Valley com filtro por categoria, preco final e prazo, respeitando meta de preco final abaixo do mercado.
+- Campos de entrada: categoria, faixa de preco, prazo de entrega, SKU candidato, provedor, status de publicacao.
+- Botoes: `Aplicar filtros`, `Abrir produto`, `Solicitar curadoria`, `Publicar aprovado`, `Rejeitar`, `Sincronizar fornecedor`.
+- Listas: grid infinito, produtos aprovados, produtos rejeitados, pendencias de compliance, decisoes Helena.
+- Regras: area de simulacao operacional/lucro e interna do lojista e nunca deve aparecer ao cliente final; produto so deve publicar quando cumprir a meta configurada.
+- Fluxos: importar candidato -> comparar mercado -> aprovar/rejeitar -> publicar -> sincronizar estoque/tracking.
+- Banco/API: `helena_product_sourcing_decisions`, `dropshipping_pricing_decisions`, `dropshipping_supplier_orders`, `valley_screen_layout_contracts`.
+
+### 24. Chat Marketplace
+- Objetivo: chat oficial e auditavel entre usuario, lojista local e suporte Helena, sem vazamento para canais externos.
+- Campos de entrada: mensagem, anexos permitidos, pedido/produto relacionado, canal, motivo, aceite de alerta severo.
+- Botoes: `Enviar`, `Anexar pedido`, `Anexar produto`, `Usar resposta Helena`, `Reconhecer alerta`, `Abrir disputa`, `Escalar suporte`.
+- Listas: conversas, mensagens append-only, anexos, strikes de moderacao, alertas pendentes.
+- Regras: mensagens nao podem ser editadas, apagadas ou ocultadas pelo usuario; telefone, email, WhatsApp, Telegram, redes externas e inducao para contato fora do app geram moderacao.
+- Fluxos: abrir conversa -> enviar mensagem -> moderacao em tempo real -> aviso Helena -> segunda advertencia exige aceite -> terceira advertencia gera suspensao/revisao.
+- Banco/API: `chat_messages`, `commerce_chat_threads`, `marketplace_chat_moderation_patterns`, `chat_moderation_strikes`, `chat_moderation_account_actions`, `marketplace_chat_moderation_events`.
+
+### 25. Mobilidade
+- Objetivo: acompanhar trajetos de onibus, metro e transporte por aplicativo em tempo real no Brasil, considerando compromissos do usuario.
+- Campos de entrada: origem, destino, horario do compromisso, modo preferido, tolerancia de atraso, limite de preco, cidade/UF.
+- Botoes: `Iniciar monitoramento`, `Recalcular rota`, `Aceitar sugestao`, `Ignorar alerta`, `Ver alternativas`, `Verificar Visio`.
+- Listas: rotas monitoradas, alternativas combinadas, incidentes, atrasos, decisoes do agente.
+- Regras: se transporte por aplicativo estiver caro, Helena deve sugerir transporte publico + trecho final por aplicativo quando isso economizar tempo ou dinheiro; acidentes e atrasos acionam recalculo proativo.
+- Fluxos: compromisso -> monitorar rotas -> detectar preco/atraso/acidente -> sugerir combinacao -> notificar -> registrar decisao.
+- Banco/API: `mobility_realtime_route_sessions`, `mobility_idle_agent_dispatch_rules`, `mobility_idle_agent_events`, `mobility_idle_agent_decisions`.
+
+### 26. Visio
+- Objetivo: verificar automaticamente se o modulo Visio esta implementado, disponivel e pronto para uso dentro do fluxo de Mobilidade.
+- Campos de entrada: modulo, ambiente, evidencia, usuario solicitante, filial quando aplicavel.
+- Botoes: `Verificar agora`, `Abrir evidencia`, `Marcar pendente`, `Revalidar`, `Gerar plano de correcao`.
+- Listas: checks recentes, status por ambiente, evidencias, pendencias.
+- Fluxos: agente executa check -> classifica como desconhecido/parcial/implementado/degradado -> registra evidencia -> aciona plano se pendente.
+- Banco/API: `valley_module_availability_checks`, `erp_operational_telemetry_events`.
+
+### 27. Rastreio Android Marketplace
+- Objetivo: live tracking premium no Super APK Android para pedidos originados exclusivamente no Marketplace.
+- Campos de entrada: pedido Marketplace, sessao de rastreio, entregador, ETA, status, topico FCM, referencia do mapa.
+- Botoes: `Ativar live tracking`, `Atualizar ETA`, `Abrir mapa`, `Encerrar entrega`, `Reenviar silent push`, `Ver eventos`.
+- Listas: sessoes ativas, eventos FCM, eventos foreground, atualizacoes de mapa, falhas.
+- Regras: nao ativar para Stock, estoque proprio, parceiros fora do Marketplace ou dropshipping; usar Android Live Updates quando disponivel e Foreground Service como fallback.
+- Fluxos: pedido Marketplace aceito -> FCM silent push -> Foreground Service -> notificacao dinamica/lock screen -> mapa/ETA/status -> entregue.
+- Banco/API: `marketplace_android_live_tracking_sessions`, `marketplace_android_live_tracking_events`, `marketplace_android_live_tracking_stream`.
+
 ## Esqueleto de Fluxos Principais
 
 1. Produto: cadastro -> variante/kit -> preco -> etiqueta -> estoque -> publicacao.
@@ -198,6 +255,9 @@ REGRAS: Nao expor regras internas de cashback/recompensa; dados exibidos pertenc
 6. Financeiro: venda/despesa -> conta a receber/pagar -> liquidacao -> conciliacao -> DRE.
 7. Filial: matriz cria filial -> define politica -> sincroniza cadastro/preco/estoque -> monitora relatorios.
 8. Integracao: provedor autorizado -> webhook/polling -> importacao pedido -> atualizacao estoque/status.
+9. Chat Marketplace: conversa -> moderacao -> aviso Helena -> strike -> suspensao/revisao se terceira infracao.
+10. Mobilidade: compromisso -> monitoramento -> preco/atraso/incidente -> rota combinada -> alerta Helena -> decisao.
+11. Android Live Tracking: pedido Marketplace -> FCM -> foreground service -> lock screen -> mapa/ETA -> conclusao.
 
 ## Banco de Dados - Detalhamento Consolidado
 
@@ -268,6 +328,31 @@ REGRAS: Nao expor regras internas de cashback/recompensa; dados exibidos pertenc
 - `v_merchant_erp_finance_cashflow_dre`: fluxo de caixa/DRE.
 - `v_merchant_erp_returns_control`: controle de devolucoes.
 
+### Contratos v041
+- `merchant_erp_access_policies`: regras mandatarias de escopo e exibicao.
+- `merchant_erp_users`: usuarios canonicos do ERP por tenant/filial.
+- `merchant_erp_products`: produtos canonicos do ERP.
+- `merchant_erp_inventory`: saldos canonicos por produto e filial.
+- `merchant_erp_orders`: pedidos canonicos do ERP.
+- `merchant_erp_deliveries`: entregas canonicas com prova e rastreio.
+- `merchant_erp_appointments`: agenda canonica de servicos.
+- `helena_user_voice_profiles`: sotaque e perfil regional da Helena.
+- `helena_product_sourcing_decisions`: decisoes de curadoria e publicacao.
+- `valley_contextual_reward_campaigns`: campanhas internas ocultas por padrao.
+- `mobility_realtime_route_sessions`: sessoes de rota.
+- `mobility_idle_agent_dispatch_rules`: regras do agente autonomo de Mobilidade.
+- `mobility_idle_agent_events`: eventos append-only de Mobilidade.
+- `valley_module_availability_checks`: checks do modulo Visio.
+- `valley_screen_layout_contracts`: contratos HOME/Stock/Marketplace para Stitch.
+- `marketplace_android_live_tracking_sessions`: sessoes Android live tracking Marketplace.
+- `marketplace_android_live_tracking_events`: eventos Android live tracking Marketplace.
+- `marketplace_chat_moderation_patterns`: filtros anti-contato externo.
+- `chat_moderation_strikes`: advertencias do chat.
+- `chat_moderation_account_actions`: acoes de suspensao/revisao.
+- `mobility_idle_agent_decisions`: decisoes volumosas de Mobilidade no MongoDB.
+- `marketplace_android_live_tracking_stream`: stream Android live tracking no MongoDB.
+- `marketplace_chat_moderation_events`: eventos de moderacao no MongoDB.
+
 ## Prompt Base para Stitch
 
 Use este documento como fonte para criar templates executaveis do ERP Lojista Valley. Para cada modulo, gere uma tela operacional com:
@@ -282,3 +367,24 @@ Use este documento como fonte para criar templates executaveis do ERP Lojista Va
 Para automacao, tambem existe a versao estruturada em JSON:
 
 - `docs/specs/merchant_erp_stitch_module_layout_contract.json`
+
+## Solicitacao v060 - Projeto Novo No Stitch
+
+O pacote mandatorio para criar o projeto do zero no Stitch esta em:
+
+- `docs/specs/stitch_zero_project_request_valley_erp.md`
+
+Anexos obrigatorios:
+
+- `docs/specs/valley_erp_zero_project_database_ui_directives.md`
+- `assets/brand/logo-valley-official.png`
+- `docs/specs/merchant_erp_modules_operations_stitch_handoff.md`
+- `docs/specs/merchant_erp_stitch_module_layout_contract.json`
+
+O Stitch deve criar um projeto novo chamado **Valley ERP - Omniverse Operacional**, segmentado por Admin, Lojista, Usuario APK Android e Entregador, preservando a identidade Valley e o fluxo posterior Stitch -> Figma -> Flutter.
+
+Resultado v060:
+
+- Projeto Stitch: `projects/12516070127536900621`.
+- Design system Stitch: `assets/c566fbedbd564135b573140ef520a79f`.
+- Sumario de telas geradas: `docs/specs/stitch_v060_generated_screens_summary.md`.

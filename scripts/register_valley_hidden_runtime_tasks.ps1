@@ -130,7 +130,7 @@ $TaskSpecs = @(
     @{
         name = 'ValleyCommunicationBridge'
         workdir = $RepoRootText
-        command = "powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File $RepoRootText\scripts\start_valley_communication_bridge.ps1 -IntervalSeconds 30"
+        command = "powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File $RepoRootText\scripts\start_valley_communication_bridge.ps1 -HiddenRuntime -IntervalSeconds 30"
     },
     @{
         name = 'ValleyGeminiRefactorLoop'
