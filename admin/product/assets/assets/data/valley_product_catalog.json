@@ -1,7 +1,7 @@
 {
   "status": "ok",
   "service": "valley-product",
-  "generated_at_utc": "2026-05-15T07:48:42.494613Z",
+  "generated_at_utc": "2026-05-16T02:12:32.857933Z",
   "title": "Valley Stock | Catalogo proprietario",
   "subtitle": "Seleção Valley com catálogo real multi-provedor, agrupado por categoria e taxonomia Google, com sincronização de estoque, preço e tracking sem exposição pública da origem operacional.",
   "public_runtime": {
@@ -27,8 +27,8 @@
       "title": "Headphones for gaming gaming",
       "brand": "Valley Pulse",
       "category": "Audio",
-      "price_brl": 43.93,
-      "compare_at_brl": 43.93,
+      "price_brl": 44.68,
+      "compare_at_brl": 44.68,
       "stock": 1,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/20200816/4308771404175.jpg",
@@ -45,7 +45,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para audio com estoque sincronizado. Categoria fonte: Earphones & Headphones. 1 unidades em estoque. 9318 listagens sincronizadas.",
+      "description": "Seleção Valley para audio com estoque sincronizado. Categoria fonte: Earphones & Headphones. 1 unidades em estoque. 9323 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/20200816/4308771404175.jpg"
       ],
@@ -53,7 +53,7 @@
       "features": [
         "Estoque global sincronizado",
         "1 unidades disponíveis",
-        "9318 listagens ativas",
+        "9323 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -77,7 +77,7 @@
       "google_product_category_path": "Electronics > Audio > Audio Components > Headphones & Headsets > Headphones",
       "google_product_category": "Electronics > Audio > Audio Components > Headphones & Headsets > Headphones",
       "price_band": "Ate R$ 99",
-      "offer_count": 9318,
+      "offer_count": 9323,
       "availability_label": "1 em estoque",
       "shipping_free": false
     },
@@ -87,8 +87,8 @@
       "title": "Smart Robot Vacuum Cleaner",
       "brand": "Valley Casa",
       "category": "Casa",
-      "price_brl": 56.93,
-      "compare_at_brl": 56.93,
+      "price_brl": 57.9,
+      "compare_at_brl": 57.9,
       "stock": 24826,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/15431616/2722847583136.jpg",
@@ -105,7 +105,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para casa com estoque sincronizado. Categoria fonte: Home Appliance Parts. 24826 unidades em estoque. 1461 listagens sincronizadas.",
+      "description": "Seleção Valley para casa com estoque sincronizado. Categoria fonte: Home Appliance Parts. 24826 unidades em estoque. 1463 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/15431616/2722847583136.jpg"
       ],
@@ -113,7 +113,7 @@
       "features": [
         "Estoque global sincronizado",
         "24826 unidades disponíveis",
-        "1461 listagens ativas",
+        "1463 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -137,7 +137,7 @@
       "google_product_category_path": "Home & Garden > Household Appliances > Vacuums",
       "google_product_category": "Home & Garden > Household Appliances > Vacuums",
       "price_band": "Ate R$ 99",
-      "offer_count": 1461,
+      "offer_count": 1463,
       "availability_label": "24826 em estoque",
       "shipping_free": false
     },
@@ -147,8 +147,8 @@
       "title": "Led ring light",
       "brand": "Valley Studio",
       "category": "Creator Gear",
-      "price_brl": 17.43,
-      "compare_at_brl": 17.43,
+      "price_brl": 17.73,
+      "compare_at_brl": 17.73,
       "stock": 47654,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/203009/551396807467.jpg",
@@ -164,7 +164,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para creator gear com estoque sincronizado. Categoria fonte: Camera & Photo Accessories. 47654 unidades em estoque. 3954 listagens sincronizadas.",
+      "description": "Seleção Valley para creator gear com estoque sincronizado. Categoria fonte: Camera & Photo Accessories. 47654 unidades em estoque. 3956 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/203009/551396807467.jpg"
       ],
@@ -172,7 +172,7 @@
       "features": [
         "Estoque global sincronizado",
         "47654 unidades disponíveis",
-        "3954 listagens ativas",
+        "3956 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -196,7 +196,7 @@
       "google_product_category_path": "Cameras & Optics > Photography > Lighting & Studio",
       "google_product_category": "Cameras & Optics > Photography > Lighting & Studio",
       "price_band": "Ate R$ 99",
-      "offer_count": 3954,
+      "offer_count": 3956,
       "availability_label": "47654 em estoque",
       "shipping_free": false
     },
@@ -206,8 +206,8 @@
       "title": "Wireless Charger For IPhone Fast Charger For Phone Fast Charging Pad For Phone Watch 6 In 1 Charging Dock Station",
       "brand": "Valley Charge",
       "category": "Premium Tech",
-      "price_brl": 43.73,
-      "compare_at_brl": 43.73,
+      "price_brl": 44.47,
+      "compare_at_brl": 44.47,
       "stock": 168283,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/fff10a96-1ead-4c85-a759-a3de932d9637.jpg",
@@ -224,7 +224,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para premium tech com estoque sincronizado. Categoria fonte: Chargers. 168283 unidades em estoque. 24148 listagens sincronizadas.",
+      "description": "Seleção Valley para premium tech com estoque sincronizado. Categoria fonte: Chargers. 168283 unidades em estoque. 24156 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/fff10a96-1ead-4c85-a759-a3de932d9637.jpg"
       ],
@@ -232,7 +232,7 @@
       "features": [
         "Estoque global sincronizado",
         "168283 unidades disponíveis",
-        "24148 listagens ativas",
+        "24156 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -256,7 +256,7 @@
       "google_product_category_path": "Electronics > Electronics Accessories > Power > Power Adapters & Chargers",
       "google_product_category": "Electronics > Electronics Accessories > Power > Power Adapters & Chargers",
       "price_band": "Ate R$ 99",
-      "offer_count": 24148,
+      "offer_count": 24156,
       "availability_label": "168283 em estoque",
       "shipping_free": false
     },
@@ -266,8 +266,8 @@
       "title": "Astronaut Robot Camera IP Wifi Wireless P2P Security Surveillance Night Vision IR Home Security Robot Baby Monitor",
       "brand": "Valley Sense",
       "category": "Smart Living",
-      "price_brl": 148.18,
-      "compare_at_brl": 148.18,
+      "price_brl": 150.7,
+      "compare_at_brl": 150.7,
       "stock": 23953,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/15096384/3702915589_1056000276.400x400.jpg",
@@ -284,7 +284,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para smart living com estoque sincronizado. Categoria fonte: Surveillance Products. 23953 unidades em estoque. 4024 listagens sincronizadas.",
+      "description": "Seleção Valley para smart living com estoque sincronizado. Categoria fonte: Surveillance Products. 23953 unidades em estoque. 4029 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/15096384/3702915589_1056000276.400x400.jpg"
       ],
@@ -292,7 +292,7 @@
       "features": [
         "Estoque global sincronizado",
         "23953 unidades disponíveis",
-        "4024 listagens ativas",
+        "4029 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -316,7 +316,7 @@
       "google_product_category_path": "Hardware > Power & Electrical Supplies > Home Automation Kits",
       "google_product_category": "Hardware > Power & Electrical Supplies > Home Automation Kits",
       "price_band": "R$ 100-249",
-      "offer_count": 4024,
+      "offer_count": 4029,
       "availability_label": "23953 em estoque",
       "shipping_free": false
     },
@@ -326,8 +326,8 @@
       "title": "DOOGEE S200X Smartphone",
       "brand": "Valley Edge",
       "category": "Smartphones",
-      "price_brl": 1095.8,
-      "compare_at_brl": 1095.8,
+      "price_brl": 1114.39,
+      "compare_at_brl": 1114.39,
       "stock": 38261,
       "merchant_name": "Valley",
       "image_url": "https://oss-cf.cjdropshipping.com/product/2024/12/03/06/f308cb68-1d55-4db4-8d0c-a54e1390dc9b.jpg",
@@ -385,8 +385,8 @@
       "title": "Sports Smart Watch DZ09 Card Phone Watch",
       "brand": "Valley Motion",
       "category": "Wearables",
-      "price_brl": 32.33,
-      "compare_at_brl": 32.33,
+      "price_brl": 32.87,
+      "compare_at_brl": 32.87,
       "stock": 19,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/15196896/5129968453141.jpg?bid=2408240722431925900&cid=2507301254241934301",
@@ -403,7 +403,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para wearables com estoque sincronizado. Categoria fonte: Smart Watches. 19 unidades em estoque. 6351 listagens sincronizadas.",
+      "description": "Seleção Valley para wearables com estoque sincronizado. Categoria fonte: Smart Watches. 19 unidades em estoque. 6353 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/15196896/5129968453141.jpg?bid=2408240722431925900&cid=2507301254241934301"
       ],
@@ -411,7 +411,7 @@
       "features": [
         "Estoque global sincronizado",
         "19 unidades disponíveis",
-        "6351 listagens ativas",
+        "6353 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -435,7 +435,7 @@
       "google_product_category_path": "Apparel & Accessories > Jewelry > Watches",
       "google_product_category": "Apparel & Accessories > Jewelry > Watches",
       "price_band": "Ate R$ 99",
-      "offer_count": 6351,
+      "offer_count": 6353,
       "availability_label": "19 em estoque",
       "shipping_free": false
     },
@@ -445,8 +445,8 @@
       "title": "Headphones Waterproof Sports Bluetooth Wireless Headphones",
       "brand": "Valley Pulse",
       "category": "Audio",
-      "price_brl": 26.9,
-      "compare_at_brl": 26.9,
+      "price_brl": 27.35,
+      "compare_at_brl": 27.35,
       "stock": 2,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/15942240/2435993274459.jpg",
@@ -463,7 +463,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para audio com estoque sincronizado. Categoria fonte: Earphones & Headphones. 2 unidades em estoque. 5436 listagens sincronizadas.",
+      "description": "Seleção Valley para audio com estoque sincronizado. Categoria fonte: Earphones & Headphones. 2 unidades em estoque. 5440 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/15942240/2435993274459.jpg"
       ],
@@ -471,7 +471,7 @@
       "features": [
         "Estoque global sincronizado",
         "2 unidades disponíveis",
-        "5436 listagens ativas",
+        "5440 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -495,7 +495,7 @@
       "google_product_category_path": "Electronics > Audio > Audio Components > Headphones & Headsets > Headphones",
       "google_product_category": "Electronics > Audio > Audio Components > Headphones & Headsets > Headphones",
       "price_band": "Ate R$ 99",
-      "offer_count": 5436,
+      "offer_count": 5440,
       "availability_label": "2 em estoque",
       "shipping_free": false
     },
@@ -505,8 +505,8 @@
       "title": "Intelligent Automatic Sweeping Robot Spray Charging Cleaning Machine Household Vacuum Cleaner",
       "brand": "Valley Casa",
       "category": "Casa",
-      "price_brl": 69.18,
-      "compare_at_brl": 69.18,
+      "price_brl": 70.36,
+      "compare_at_brl": 70.36,
       "stock": 80000,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/1619421580135.jpg",
@@ -564,8 +564,8 @@
       "title": "Microphone set",
       "brand": "Valley Voice",
       "category": "Creator Gear",
-      "price_brl": 75.96,
-      "compare_at_brl": 75.96,
+      "price_brl": 77.25,
+      "compare_at_brl": 77.25,
       "stock": 14097,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/15925824/2595863076092.jpg",
@@ -623,8 +623,8 @@
       "title": "3 In 1 Fast Charging Station Wireless Charger Stand Wireless Quick Charge Dock For Phone Holder",
       "brand": "Valley Charge",
       "category": "Premium Tech",
-      "price_brl": 80.14,
-      "compare_at_brl": 80.14,
+      "price_brl": 81.5,
+      "compare_at_brl": 81.5,
       "stock": 860377,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/203105/714712978808.jpg",
@@ -641,7 +641,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para premium tech com estoque sincronizado. Categoria fonte: Chargers. 860377 unidades em estoque. 9680 listagens sincronizadas.",
+      "description": "Seleção Valley para premium tech com estoque sincronizado. Categoria fonte: Chargers. 860377 unidades em estoque. 9684 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/203105/714712978808.jpg"
       ],
@@ -649,7 +649,7 @@
       "features": [
         "Estoque global sincronizado",
         "860377 unidades disponíveis",
-        "9680 listagens ativas",
+        "9684 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -673,7 +673,7 @@
       "google_product_category_path": "Electronics > Electronics Accessories > Power > Power Adapters & Chargers",
       "google_product_category": "Electronics > Electronics Accessories > Power > Power Adapters & Chargers",
       "price_band": "Ate R$ 99",
-      "offer_count": 9680,
+      "offer_count": 9684,
       "availability_label": "860377 em estoque",
       "shipping_free": false
     },
@@ -683,8 +683,8 @@
       "title": "Bear Camera1080P Wifi IP Camera Auto Tracking IR Night Vision Home Security Camera",
       "brand": "Valley Sense",
       "category": "Smart Living",
-      "price_brl": 74.17,
-      "compare_at_brl": 74.17,
+      "price_brl": 75.42,
+      "compare_at_brl": 75.42,
       "stock": 146429,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/15948288/1359135284748.jpg",
@@ -700,7 +700,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para smart living com estoque sincronizado. Categoria fonte: Surveillance Products. 146429 unidades em estoque. 2342 listagens sincronizadas.",
+      "description": "Seleção Valley para smart living com estoque sincronizado. Categoria fonte: Surveillance Products. 146429 unidades em estoque. 2343 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/15948288/1359135284748.jpg"
       ],
@@ -708,7 +708,7 @@
       "features": [
         "Estoque global sincronizado",
         "146429 unidades disponíveis",
-        "2342 listagens ativas",
+        "2343 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -732,7 +732,7 @@
       "google_product_category_path": "Hardware > Power & Electrical Supplies > Home Automation Kits",
       "google_product_category": "Hardware > Power & Electrical Supplies > Home Automation Kits",
       "price_band": "Ate R$ 99",
-      "offer_count": 2342,
+      "offer_count": 2343,
       "availability_label": "146429 em estoque",
       "shipping_free": false
     },
@@ -742,8 +742,8 @@
       "title": "Android Pocket Dual Camera Smartphone",
       "brand": "Valley Edge",
       "category": "Smartphones",
-      "price_brl": 126.37,
-      "compare_at_brl": 126.37,
+      "price_brl": 128.51,
+      "compare_at_brl": 128.51,
       "stock": 49172,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/quick/product/0ed31174-fb29-4fcc-bd36-7aa5065e7ae6.jpg",
@@ -801,8 +801,8 @@
       "title": "Y90 Smart Watch GPS Blood Pressure Monitoring Health Smart Watch Sports Smart Watch",
       "brand": "Valley Motion",
       "category": "Wearables",
-      "price_brl": 104.1,
-      "compare_at_brl": 104.1,
+      "price_brl": 105.87,
+      "compare_at_brl": 105.87,
       "stock": 294840,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/67aaa855-4c98-496a-901f-ee08b7c4a9cb.jpg",
@@ -818,7 +818,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para wearables com estoque sincronizado. Categoria fonte: Smart Watches. 294840 unidades em estoque. 4956 listagens sincronizadas.",
+      "description": "Seleção Valley para wearables com estoque sincronizado. Categoria fonte: Smart Watches. 294840 unidades em estoque. 4958 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/67aaa855-4c98-496a-901f-ee08b7c4a9cb.jpg"
       ],
@@ -826,7 +826,7 @@
       "features": [
         "Estoque global sincronizado",
         "294840 unidades disponíveis",
-        "4956 listagens ativas",
+        "4958 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -850,7 +850,7 @@
       "google_product_category_path": "Apparel & Accessories > Jewelry > Watches",
       "google_product_category": "Apparel & Accessories > Jewelry > Watches",
       "price_band": "R$ 100-249",
-      "offer_count": 4956,
+      "offer_count": 4958,
       "availability_label": "294840 em estoque",
       "shipping_free": false
     },
@@ -860,8 +860,8 @@
       "title": "Bone Conduction Headphones TWS Earbuds Ear Clip Bluetooth 5.3 Touch Wireless Earphone In-Ear Bass HIFI Sports Headset",
       "brand": "Valley Pulse",
       "category": "Audio",
-      "price_brl": 40.15,
-      "compare_at_brl": 40.15,
+      "price_brl": 40.83,
+      "compare_at_brl": 40.83,
       "stock": 2,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/faf8d7e1-ce9d-442a-a818-8381cd1238a5.jpg",
@@ -878,7 +878,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para audio com estoque sincronizado. Categoria fonte: Earphones & Headphones. 2 unidades em estoque. 5092 listagens sincronizadas.",
+      "description": "Seleção Valley para audio com estoque sincronizado. Categoria fonte: Earphones & Headphones. 2 unidades em estoque. 5094 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/faf8d7e1-ce9d-442a-a818-8381cd1238a5.jpg"
       ],
@@ -886,7 +886,7 @@
       "features": [
         "Estoque global sincronizado",
         "2 unidades disponíveis",
-        "5092 listagens ativas",
+        "5094 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -910,7 +910,7 @@
       "google_product_category_path": "Electronics > Audio > Audio Components > Headphones & Headsets > Headphones",
       "google_product_category": "Electronics > Audio > Audio Components > Headphones & Headsets > Headphones",
       "price_band": "Ate R$ 99",
-      "offer_count": 5092,
+      "offer_count": 5094,
       "availability_label": "2 em estoque",
       "shipping_free": false
     },
@@ -920,8 +920,8 @@
       "title": "Household smart robot vacuum cleaner sweeper",
       "brand": "Valley Casa",
       "category": "Casa",
-      "price_brl": 237.29,
-      "compare_at_brl": 237.29,
+      "price_brl": 241.32,
+      "compare_at_brl": 241.32,
       "stock": 38671,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/16001856/335547328420.jpg",
@@ -979,8 +979,8 @@
       "title": "Microphone Computer Game Voice Microphone Live Recording Condenser Microphone",
       "brand": "Valley Voice",
       "category": "Creator Gear",
-      "price_brl": 72.87,
-      "compare_at_brl": 72.87,
+      "price_brl": 74.11,
+      "compare_at_brl": 74.11,
       "stock": 40000,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/1619574924072.jpg",
@@ -1038,8 +1038,8 @@
       "title": "Wireless Charger Dual Mobile Phone Charger",
       "brand": "Valley Charge",
       "category": "Premium Tech",
-      "price_brl": 23.41,
-      "compare_at_brl": 23.41,
+      "price_brl": 23.81,
+      "compare_at_brl": 23.81,
       "stock": 160000,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/203102/424353541934.jpg",
@@ -1098,8 +1098,8 @@
       "title": "WiFi wireless CCTV IP camera home security monitor",
       "brand": "Valley Sense",
       "category": "Smart Living",
-      "price_brl": 62.26,
-      "compare_at_brl": 62.26,
+      "price_brl": 63.32,
+      "compare_at_brl": 63.32,
       "stock": 200000,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/20200916/2194574152275.jpg",
@@ -1115,7 +1115,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para smart living com estoque sincronizado. Categoria fonte: Surveillance Products. 200000 unidades em estoque. 2153 listagens sincronizadas.",
+      "description": "Seleção Valley para smart living com estoque sincronizado. Categoria fonte: Surveillance Products. 200000 unidades em estoque. 2155 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/20200916/2194574152275.jpg"
       ],
@@ -1123,7 +1123,7 @@
       "features": [
         "Estoque global sincronizado",
         "200000 unidades disponíveis",
-        "2153 listagens ativas",
+        "2155 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -1147,7 +1147,7 @@
       "google_product_category_path": "Hardware > Power & Electrical Supplies > Home Automation Kits",
       "google_product_category": "Hardware > Power & Electrical Supplies > Home Automation Kits",
       "price_band": "Ate R$ 99",
-      "offer_count": 2153,
+      "offer_count": 2155,
       "availability_label": "200000 em estoque",
       "shipping_free": false
     },
@@ -1157,8 +1157,8 @@
       "title": "C24 Unlocked Phone Smartphone 8GB 256GB Android14.0 6800mAh 6.8inch 5G",
       "brand": "Valley Edge",
       "category": "Smartphones",
-      "price_brl": 498.04,
-      "compare_at_brl": 498.04,
+      "price_brl": 506.49,
+      "compare_at_brl": 506.49,
       "stock": 163,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/79925cbb-b6af-49db-9843-9469c4e13ec5.jpg",
@@ -1174,7 +1174,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para smartphones com estoque sincronizado. Categoria fonte: Octa Core. 163 unidades em estoque. 95 listagens sincronizadas.",
+      "description": "Seleção Valley para smartphones com estoque sincronizado. Categoria fonte: Octa Core. 163 unidades em estoque. 96 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/79925cbb-b6af-49db-9843-9469c4e13ec5.jpg"
       ],
@@ -1182,7 +1182,7 @@
       "features": [
         "Estoque global sincronizado",
         "163 unidades disponíveis",
-        "95 listagens ativas",
+        "96 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -1205,8 +1205,8 @@
       "google_product_category_id": "267",
       "google_product_category_path": "Electronics > Communications > Telephony > Mobile Phones",
       "google_product_category": "Electronics > Communications > Telephony > Mobile Phones",
-      "price_band": "R$ 250-499",
-      "offer_count": 95,
+      "price_band": "R$ 500-999",
+      "offer_count": 96,
       "availability_label": "163 em estoque",
       "shipping_free": false
     },
@@ -1216,8 +1216,8 @@
       "title": "Bluetooth smart watch",
       "brand": "Valley Motion",
       "category": "Wearables",
-      "price_brl": 43.63,
-      "compare_at_brl": 43.63,
+      "price_brl": 44.37,
+      "compare_at_brl": 44.37,
       "stock": 47289,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/20200908/1533600115228.jpg",
@@ -1233,7 +1233,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para wearables com estoque sincronizado. Categoria fonte: Smart Watches. 47289 unidades em estoque. 4421 listagens sincronizadas.",
+      "description": "Seleção Valley para wearables com estoque sincronizado. Categoria fonte: Smart Watches. 47289 unidades em estoque. 4423 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/20200908/1533600115228.jpg"
       ],
@@ -1241,7 +1241,7 @@
       "features": [
         "Estoque global sincronizado",
         "47289 unidades disponíveis",
-        "4421 listagens ativas",
+        "4423 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -1265,7 +1265,7 @@
       "google_product_category_path": "Apparel & Accessories > Jewelry > Watches",
       "google_product_category": "Apparel & Accessories > Jewelry > Watches",
       "price_band": "Ate R$ 99",
-      "offer_count": 4421,
+      "offer_count": 4423,
       "availability_label": "47289 em estoque",
       "shipping_free": false
     },
@@ -1275,8 +1275,8 @@
       "title": "Rabbit Ear Headphones Wireless Luminous Extendable Wheat Headphones",
       "brand": "Valley Pulse",
       "category": "Audio",
-      "price_brl": 33.72,
-      "compare_at_brl": 33.72,
+      "price_brl": 34.29,
+      "compare_at_brl": 34.29,
       "stock": 283505,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/d0d425f5-ee88-4aea-81b2-9dafbb689cf2.jpg",
@@ -1293,7 +1293,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para audio com estoque sincronizado. Categoria fonte: Earphones & Headphones. 283505 unidades em estoque. 4359 listagens sincronizadas.",
+      "description": "Seleção Valley para audio com estoque sincronizado. Categoria fonte: Earphones & Headphones. 283505 unidades em estoque. 4363 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/d0d425f5-ee88-4aea-81b2-9dafbb689cf2.jpg"
       ],
@@ -1301,7 +1301,7 @@
       "features": [
         "Estoque global sincronizado",
         "283505 unidades disponíveis",
-        "4359 listagens ativas",
+        "4363 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -1325,48 +1325,48 @@
       "google_product_category_path": "Electronics > Audio > Audio Components > Headphones & Headsets > Headphones",
       "google_product_category": "Electronics > Audio > Audio Components > Headphones & Headsets > Headphones",
       "price_band": "Ate R$ 99",
-      "offer_count": 4359,
+      "offer_count": 4363,
       "availability_label": "283505 em estoque",
       "shipping_free": false
     },
     {
-      "id": "78d500f6-6f95-5def-9b4d-25b3b4549492",
+      "id": "a5921c98-dd97-59af-a949-dc109e2b8bad",
       "module_id": "STOCK",
-      "title": "Lazy Smart Vacuum Cleaner",
+      "title": "Home guardians intelligent cleaning robot large trailer automatic vacuum cleaner, suction and towing gift wholesale OEM S320",
       "brand": "Valley Casa",
       "category": "Casa",
-      "price_brl": 55.19,
-      "compare_at_brl": 55.19,
-      "stock": 65771,
+      "price_brl": 263.35,
+      "compare_at_brl": 263.35,
+      "stock": 10000,
       "merchant_name": "Valley",
-      "image_url": "https://cf.cjdropshipping.com/2048/1831714568728.jpg",
+      "image_url": "https://cf.cjdropshipping.com/15140448/7728915201_1841954553.400x400.jpg",
       "video_url": "",
       "video_count": 0,
-      "status": "65771 em estoque • tracking ativo",
+      "status": "10000 em estoque • tracking ativo",
       "tags": [
         "Catalogo real",
         "Casa",
-        "Home Appliance Parts",
+        "Smart Home Appliances",
         "Operacao ativa"
       ],
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para casa com estoque sincronizado. Categoria fonte: Home Appliance Parts. 65771 unidades em estoque. 323 listagens sincronizadas.",
+      "description": "Seleção Valley para casa com estoque sincronizado. Categoria fonte: Smart Home Appliances. 10000 unidades em estoque. 317 listagens sincronizadas.",
       "gallery_urls": [
-        "https://cf.cjdropshipping.com/2048/1831714568728.jpg"
+        "https://cf.cjdropshipping.com/15140448/7728915201_1841954553.400x400.jpg"
       ],
       "profile_id": "",
       "features": [
         "Estoque global sincronizado",
-        "65771 unidades disponíveis",
-        "323 listagens ativas",
+        "10000 unidades disponíveis",
+        "317 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
         "name": "Loja Valley",
         "headline": "Oferta sincronizada com estoque e tracking automatizados.",
-        "avatar_url": "https://cf.cjdropshipping.com/2048/1831714568728.jpg",
+        "avatar_url": "https://cf.cjdropshipping.com/15140448/7728915201_1841954553.400x400.jpg",
         "rating": 4.7,
         "city": "Operação global"
       },
@@ -1379,13 +1379,13 @@
       },
       "raw_badge": "STOCK",
       "collection_label": "Valley Casa",
-      "model_name": "Home Appliance Parts",
+      "model_name": "Smart Home Appliances",
       "google_product_category_id": "619",
       "google_product_category_path": "Home & Garden > Household Appliances > Vacuums",
       "google_product_category": "Home & Garden > Household Appliances > Vacuums",
-      "price_band": "Ate R$ 99",
-      "offer_count": 323,
-      "availability_label": "65771 em estoque",
+      "price_band": "R$ 250-499",
+      "offer_count": 317,
+      "availability_label": "10000 em estoque",
       "shipping_free": false
     },
     {
@@ -1394,8 +1394,8 @@
       "title": "Compatible with Apple, Tripod Fill Light Live Bracket Beauty Light Set Ring Light",
       "brand": "Valley Studio",
       "category": "Creator Gear",
-      "price_brl": 23.21,
-      "compare_at_brl": 23.21,
+      "price_brl": 23.6,
+      "compare_at_brl": 23.6,
       "stock": 151655,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/2057/10291016253898.jpg",
@@ -1454,8 +1454,8 @@
       "title": "USB Charger Quick Charge 3.0 4 Phone Adapter For Tablet Portable Wall Mobile Charger Fast Charger",
       "brand": "Valley Charge",
       "category": "Premium Tech",
-      "price_brl": 4.18,
-      "compare_at_brl": 4.18,
+      "price_brl": 4.25,
+      "compare_at_brl": 4.25,
       "stock": 235,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/fb4e76ea-fb97-4fef-92e0-ce10a5874816.jpg",
@@ -1472,7 +1472,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para premium tech com estoque sincronizado. Categoria fonte: Chargers. 235 unidades em estoque. 4022 listagens sincronizadas.",
+      "description": "Seleção Valley para premium tech com estoque sincronizado. Categoria fonte: Chargers. 235 unidades em estoque. 4025 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/fb4e76ea-fb97-4fef-92e0-ce10a5874816.jpg"
       ],
@@ -1480,7 +1480,7 @@
       "features": [
         "Estoque global sincronizado",
         "235 unidades disponíveis",
-        "4022 listagens ativas",
+        "4025 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -1504,7 +1504,7 @@
       "google_product_category_path": "Electronics > Electronics Accessories > Power > Power Adapters & Chargers",
       "google_product_category": "Electronics > Electronics Accessories > Power > Power Adapters & Chargers",
       "price_band": "Ate R$ 99",
-      "offer_count": 4022,
+      "offer_count": 4025,
       "availability_label": "235 em estoque",
       "shipping_free": false
     },
@@ -1514,8 +1514,8 @@
       "title": "HD WIFI SLR Camera Digital Flip Screen Camera",
       "brand": "Valley Sense",
       "category": "Smart Living",
-      "price_brl": 201.38,
-      "compare_at_brl": 201.38,
+      "price_brl": 204.79,
+      "compare_at_brl": 204.79,
       "stock": 55758,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/c2286afb-7632-4f3c-bc53-07eafd7b4bd1.jpg",
@@ -1531,7 +1531,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para smart living com estoque sincronizado. Categoria fonte: Digital Cameras. 55758 unidades em estoque. 1916 listagens sincronizadas.",
+      "description": "Seleção Valley para smart living com estoque sincronizado. Categoria fonte: Digital Cameras. 55758 unidades em estoque. 1917 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/c2286afb-7632-4f3c-bc53-07eafd7b4bd1.jpg"
       ],
@@ -1539,7 +1539,7 @@
       "features": [
         "Estoque global sincronizado",
         "55758 unidades disponíveis",
-        "1916 listagens ativas",
+        "1917 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -1563,7 +1563,7 @@
       "google_product_category_path": "Hardware > Power & Electrical Supplies > Home Automation Kits",
       "google_product_category": "Hardware > Power & Electrical Supplies > Home Automation Kits",
       "price_band": "R$ 100-249",
-      "offer_count": 1916,
+      "offer_count": 1917,
       "availability_label": "55758 em estoque",
       "shipping_free": false
     },
@@ -1573,8 +1573,8 @@
       "title": "Non-smartphone Flip Mobile Elder People Mobile",
       "brand": "Valley Edge",
       "category": "Smartphones",
-      "price_brl": 78.45,
-      "compare_at_brl": 78.45,
+      "price_brl": 79.78,
+      "compare_at_brl": 79.78,
       "stock": 120111,
       "merchant_name": "Valley",
       "image_url": "https://oss-cf.cjdropshipping.com/product/2025/09/08/03/e4ede866-b2f7-4b19-8b6a-3a201f66b48f_trans.jpeg",
@@ -1632,8 +1632,8 @@
       "title": "Chivo kw10pro women's smart Watch",
       "brand": "Valley Motion",
       "category": "Wearables",
-      "price_brl": 8.57,
-      "compare_at_brl": 8.57,
+      "price_brl": 8.71,
+      "compare_at_brl": 8.71,
       "stock": 108,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/20200905/2320567008006.jpg",
@@ -1650,7 +1650,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para wearables com estoque sincronizado. Categoria fonte: Smart Watches. 108 unidades em estoque. 3959 listagens sincronizadas.",
+      "description": "Seleção Valley para wearables com estoque sincronizado. Categoria fonte: Smart Watches. 108 unidades em estoque. 3961 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/20200905/2320567008006.jpg"
       ],
@@ -1658,7 +1658,7 @@
       "features": [
         "Estoque global sincronizado",
         "108 unidades disponíveis",
-        "3959 listagens ativas",
+        "3961 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -1682,7 +1682,7 @@
       "google_product_category_path": "Apparel & Accessories > Jewelry > Watches",
       "google_product_category": "Apparel & Accessories > Jewelry > Watches",
       "price_band": "Ate R$ 99",
-      "offer_count": 3959,
+      "offer_count": 3961,
       "availability_label": "108 em estoque",
       "shipping_free": false
     },
@@ -1692,8 +1692,8 @@
       "title": "TV Wireless Headphones On-ear Bass Headphones",
       "brand": "Valley Pulse",
       "category": "Audio",
-      "price_brl": 234.45,
-      "compare_at_brl": 234.45,
+      "price_brl": 238.43,
+      "compare_at_brl": 238.43,
       "stock": 24728,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/14b5d448-2179-4279-a0eb-ca113271f778.jpg",
@@ -1709,7 +1709,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para audio com estoque sincronizado. Categoria fonte: Earphones & Headphones. 24728 unidades em estoque. 3717 listagens sincronizadas.",
+      "description": "Seleção Valley para audio com estoque sincronizado. Categoria fonte: Earphones & Headphones. 24728 unidades em estoque. 3721 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/14b5d448-2179-4279-a0eb-ca113271f778.jpg"
       ],
@@ -1717,7 +1717,7 @@
       "features": [
         "Estoque global sincronizado",
         "24728 unidades disponíveis",
-        "3717 listagens ativas",
+        "3721 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -1741,24 +1741,24 @@
       "google_product_category_path": "Electronics > Audio > Audio Components > Headphones & Headsets > Headphones",
       "google_product_category": "Electronics > Audio > Audio Components > Headphones & Headsets > Headphones",
       "price_band": "R$ 100-249",
-      "offer_count": 3717,
+      "offer_count": 3721,
       "availability_label": "24728 em estoque",
       "shipping_free": false
     },
     {
-      "id": "a5921c98-dd97-59af-a949-dc109e2b8bad",
+      "id": "fd547a54-4a6a-5a4c-bf99-a967ff02a840",
       "module_id": "STOCK",
-      "title": "Home guardians intelligent cleaning robot large trailer automatic vacuum cleaner, suction and towing gift wholesale OEM S320",
+      "title": "Charging Version Automatic Smart Cleaning Robot Dust Sweeper Vacuum Cleaner Auto Machine Cleaner",
       "brand": "Valley Casa",
       "category": "Casa",
-      "price_brl": 258.96,
-      "compare_at_brl": 258.96,
-      "stock": 10000,
+      "price_brl": 26.8,
+      "compare_at_brl": 26.8,
+      "stock": 21393,
       "merchant_name": "Valley",
-      "image_url": "https://cf.cjdropshipping.com/15140448/7728915201_1841954553.400x400.jpg",
+      "image_url": "https://cf.cjdropshipping.com/20200211/1140993389837.png",
       "video_url": "",
       "video_count": 0,
-      "status": "10000 em estoque • tracking ativo",
+      "status": "21393 em estoque • tracking ativo",
       "tags": [
         "Catalogo real",
         "Casa",
@@ -1768,21 +1768,21 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para casa com estoque sincronizado. Categoria fonte: Smart Home Appliances. 10000 unidades em estoque. 317 listagens sincronizadas.",
+      "description": "Seleção Valley para casa com estoque sincronizado. Categoria fonte: Smart Home Appliances. 21393 unidades em estoque. 268 listagens sincronizadas.",
       "gallery_urls": [
-        "https://cf.cjdropshipping.com/15140448/7728915201_1841954553.400x400.jpg"
+        "https://cf.cjdropshipping.com/20200211/1140993389837.png"
       ],
       "profile_id": "",
       "features": [
         "Estoque global sincronizado",
-        "10000 unidades disponíveis",
-        "317 listagens ativas",
+        "21393 unidades disponíveis",
+        "268 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
         "name": "Loja Valley",
         "headline": "Oferta sincronizada com estoque e tracking automatizados.",
-        "avatar_url": "https://cf.cjdropshipping.com/15140448/7728915201_1841954553.400x400.jpg",
+        "avatar_url": "https://cf.cjdropshipping.com/20200211/1140993389837.png",
         "rating": 4.7,
         "city": "Operação global"
       },
@@ -1799,9 +1799,9 @@
       "google_product_category_id": "619",
       "google_product_category_path": "Home & Garden > Household Appliances > Vacuums",
       "google_product_category": "Home & Garden > Household Appliances > Vacuums",
-      "price_band": "R$ 250-499",
-      "offer_count": 317,
-      "availability_label": "10000 em estoque",
+      "price_band": "Ate R$ 99",
+      "offer_count": 268,
+      "availability_label": "21393 em estoque",
       "shipping_free": false
     },
     {
@@ -1810,8 +1810,8 @@
       "title": "Wireless Lavalier Lapel Microphone For IPhone IPad Professional Wireless Clip Mic - Cordless Omnidirectional Condenser Recording Mic For Interview Video Podcast Vlog YouTube",
       "brand": "Valley Voice",
       "category": "Creator Gear",
-      "price_brl": 64.65,
-      "compare_at_brl": 64.65,
+      "price_brl": 65.75,
+      "compare_at_brl": 65.75,
       "stock": 3230,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/8277cbc6-6f4c-4a42-979b-c59de585c33a.jpg",
@@ -1869,8 +1869,8 @@
       "title": "Illuminated 4USB Mobile Phone Charger 3A Charging Head",
       "brand": "Valley Charge",
       "category": "Premium Tech",
-      "price_brl": 4.58,
-      "compare_at_brl": 4.58,
+      "price_brl": 4.66,
+      "compare_at_brl": 4.66,
       "stock": 334791,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/20200228/1182837026752.jpg",
@@ -1929,8 +1929,8 @@
       "title": "Smart home security camera",
       "brand": "Valley Sense",
       "category": "Smart Living",
-      "price_brl": 90.25,
-      "compare_at_brl": 90.25,
+      "price_brl": 91.79,
+      "compare_at_brl": 91.79,
       "stock": 80000,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/2041/128849607092.jpg",
@@ -1946,7 +1946,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para smart living com estoque sincronizado. Categoria fonte: Surveillance Products. 80000 unidades em estoque. 1797 listagens sincronizadas.",
+      "description": "Seleção Valley para smart living com estoque sincronizado. Categoria fonte: Surveillance Products. 80000 unidades em estoque. 1798 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/2041/128849607092.jpg"
       ],
@@ -1954,7 +1954,7 @@
       "features": [
         "Estoque global sincronizado",
         "80000 unidades disponíveis",
-        "1797 listagens ativas",
+        "1798 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -1978,7 +1978,7 @@
       "google_product_category_path": "Hardware > Power & Electrical Supplies > Home Automation Kits",
       "google_product_category": "Hardware > Power & Electrical Supplies > Home Automation Kits",
       "price_band": "Ate R$ 99",
-      "offer_count": 1797,
+      "offer_count": 1798,
       "availability_label": "80000 em estoque",
       "shipping_free": false
     },
@@ -1988,8 +1988,8 @@
       "title": "Mobile Phone Attachment Lens, Mobile Zoom Lens, Mobile Camera And Accessories, 8X, 12X, 20X, Smartphone And Tablet Long Focus Telephoto With Clip, Black",
       "brand": "Valley Edge",
       "category": "Smartphones",
-      "price_brl": 169.05,
-      "compare_at_brl": 169.05,
+      "price_brl": 171.92,
+      "compare_at_brl": 171.92,
       "stock": 690,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/17657568/0463aa45-6022-4177-8924-65d4735a6e93.jpg",
@@ -2047,8 +2047,8 @@
       "title": "P22 smart watch",
       "brand": "Valley Motion",
       "category": "Wearables",
-      "price_brl": 71.03,
-      "compare_at_brl": 71.03,
+      "price_brl": 72.23,
+      "compare_at_brl": 72.23,
       "stock": 1,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/15929280/3695000424108.jpg",
@@ -2064,7 +2064,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para wearables com estoque sincronizado. Categoria fonte: Smart Watches. 1 unidades em estoque. 3655 listagens sincronizadas.",
+      "description": "Seleção Valley para wearables com estoque sincronizado. Categoria fonte: Smart Watches. 1 unidades em estoque. 3657 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/15929280/3695000424108.jpg"
       ],
@@ -2072,7 +2072,7 @@
       "features": [
         "Estoque global sincronizado",
         "1 unidades disponíveis",
-        "3655 listagens ativas",
+        "3657 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -2096,7 +2096,7 @@
       "google_product_category_path": "Apparel & Accessories > Jewelry > Watches",
       "google_product_category": "Apparel & Accessories > Jewelry > Watches",
       "price_band": "Ate R$ 99",
-      "offer_count": 3655,
+      "offer_count": 3657,
       "availability_label": "1 em estoque",
       "shipping_free": false
     },
@@ -2106,8 +2106,8 @@
       "title": "Earbuds wireless bluetooth headset",
       "brand": "Valley Pulse",
       "category": "Audio",
-      "price_brl": 45.53,
-      "compare_at_brl": 45.53,
+      "price_brl": 46.3,
+      "compare_at_brl": 46.3,
       "stock": 60000,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/203207/386132459951.jpg",
@@ -2123,7 +2123,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para audio com estoque sincronizado. Categoria fonte: Earphones & Headphones. 60000 unidades em estoque. 2989 listagens sincronizadas.",
+      "description": "Seleção Valley para audio com estoque sincronizado. Categoria fonte: Earphones & Headphones. 60000 unidades em estoque. 2993 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/203207/386132459951.jpg"
       ],
@@ -2131,7 +2131,7 @@
       "features": [
         "Estoque global sincronizado",
         "60000 unidades disponíveis",
-        "2989 listagens ativas",
+        "2993 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -2155,24 +2155,24 @@
       "google_product_category_path": "Electronics > Audio > Audio Components > Headphones & Headsets > Headphones",
       "google_product_category": "Electronics > Audio > Audio Components > Headphones & Headsets > Headphones",
       "price_band": "Ate R$ 99",
-      "offer_count": 2989,
+      "offer_count": 2993,
       "availability_label": "60000 em estoque",
       "shipping_free": false
     },
     {
-      "id": "fd547a54-4a6a-5a4c-bf99-a967ff02a840",
+      "id": "d2b15d3b-8552-5c92-9edf-8553e4ab2ec0",
       "module_id": "STOCK",
-      "title": "Charging Version Automatic Smart Cleaning Robot Dust Sweeper Vacuum Cleaner Auto Machine Cleaner",
+      "title": "Sweeping Robot Automatic Household Mini Cleaning Machine USB Rechargeable Smart Vacuum Cleaner",
       "brand": "Valley Casa",
       "category": "Casa",
-      "price_brl": 26.35,
-      "compare_at_brl": 26.35,
-      "stock": 21393,
+      "price_brl": 11.09,
+      "compare_at_brl": 11.09,
+      "stock": 31866,
       "merchant_name": "Valley",
-      "image_url": "https://cf.cjdropshipping.com/20200211/1140993389837.png",
+      "image_url": "https://oss-cf.cjdropshipping.com/product/2023/11/04/03/19aa1b05-27db-41d1-9c9c-0e0f7ffa4b04.jpg",
       "video_url": "",
       "video_count": 0,
-      "status": "21393 em estoque • tracking ativo",
+      "status": "31866 em estoque • tracking ativo",
       "tags": [
         "Catalogo real",
         "Casa",
@@ -2182,21 +2182,21 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para casa com estoque sincronizado. Categoria fonte: Smart Home Appliances. 21393 unidades em estoque. 268 listagens sincronizadas.",
+      "description": "Seleção Valley para casa com estoque sincronizado. Categoria fonte: Smart Home Appliances. 31866 unidades em estoque. 264 listagens sincronizadas.",
       "gallery_urls": [
-        "https://cf.cjdropshipping.com/20200211/1140993389837.png"
+        "https://oss-cf.cjdropshipping.com/product/2023/11/04/03/19aa1b05-27db-41d1-9c9c-0e0f7ffa4b04.jpg"
       ],
       "profile_id": "",
       "features": [
         "Estoque global sincronizado",
-        "21393 unidades disponíveis",
-        "268 listagens ativas",
+        "31866 unidades disponíveis",
+        "264 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
         "name": "Loja Valley",
         "headline": "Oferta sincronizada com estoque e tracking automatizados.",
-        "avatar_url": "https://cf.cjdropshipping.com/20200211/1140993389837.png",
+        "avatar_url": "https://oss-cf.cjdropshipping.com/product/2023/11/04/03/19aa1b05-27db-41d1-9c9c-0e0f7ffa4b04.jpg",
         "rating": 4.7,
         "city": "Operação global"
       },
@@ -2214,8 +2214,8 @@
       "google_product_category_path": "Home & Garden > Household Appliances > Vacuums",
       "google_product_category": "Home & Garden > Household Appliances > Vacuums",
       "price_band": "Ate R$ 99",
-      "offer_count": 268,
-      "availability_label": "21393 em estoque",
+      "offer_count": 264,
+      "availability_label": "31866 em estoque",
       "shipping_free": false
     },
     {
@@ -2224,8 +2224,8 @@
       "title": "Clear Full RGB Capacitor Esports Gaming Desktop Microphone Computer Microphone",
       "brand": "Valley Voice",
       "category": "Creator Gear",
-      "price_brl": 31.38,
-      "compare_at_brl": 31.38,
+      "price_brl": 31.91,
+      "compare_at_brl": 31.91,
       "stock": 13953,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/4bea8902-c935-4a4c-bf6d-a8da1cb47e29.jpg",
@@ -2283,8 +2283,8 @@
       "title": "Fast Charge Charger Mobile Phone Charger Charging Head",
       "brand": "Valley Charge",
       "category": "Premium Tech",
-      "price_brl": 24.71,
-      "compare_at_brl": 24.71,
+      "price_brl": 25.12,
+      "compare_at_brl": 25.12,
       "stock": 244462,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/a591dbdc-22a6-451e-89ad-c6a4212e7caf.jpg",
@@ -2300,7 +2300,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para premium tech com estoque sincronizado. Categoria fonte: Chargers. 244462 unidades em estoque. 1747 listagens sincronizadas.",
+      "description": "Seleção Valley para premium tech com estoque sincronizado. Categoria fonte: Chargers. 244462 unidades em estoque. 1749 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/a591dbdc-22a6-451e-89ad-c6a4212e7caf.jpg"
       ],
@@ -2308,7 +2308,7 @@
       "features": [
         "Estoque global sincronizado",
         "244462 unidades disponíveis",
-        "1747 listagens ativas",
+        "1749 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -2332,7 +2332,7 @@
       "google_product_category_path": "Electronics > Electronics Accessories > Power > Power Adapters & Chargers",
       "google_product_category": "Electronics > Electronics Accessories > Power > Power Adapters & Chargers",
       "price_band": "Ate R$ 99",
-      "offer_count": 1747,
+      "offer_count": 1749,
       "availability_label": "244462 em estoque",
       "shipping_free": false
     },
@@ -2342,8 +2342,8 @@
       "title": "WiFi Wireless Baby Monitor Camera",
       "brand": "Valley Sense",
       "category": "Smart Living",
-      "price_brl": 62.26,
-      "compare_at_brl": 62.26,
+      "price_brl": 63.32,
+      "compare_at_brl": 63.32,
       "stock": 50710,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/2061/4603639213962.png",
@@ -2401,14 +2401,14 @@
       "title": "C26 Ultra 5G Unlocked Smartphone, 8GB RAM 256GB Storage Android 15 Cell Phone, 6.9inch FHD Display, 8000mAh Long Battery, Dual SIM, Face & Fingerprint Unlock, GPS, Built-in Stylus",
       "brand": "Valley Edge",
       "category": "Smartphones",
-      "price_brl": 498.04,
-      "compare_at_brl": 498.04,
-      "stock": 593,
+      "price_brl": 506.49,
+      "compare_at_brl": 506.49,
+      "stock": 588,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/b20f0715-52ea-42f0-a8d1-83697c60d242.jpg",
       "video_url": "",
       "video_count": 0,
-      "status": "593 em estoque • tracking ativo",
+      "status": "588 em estoque • tracking ativo",
       "tags": [
         "Catalogo real",
         "Smartphones",
@@ -2418,14 +2418,14 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para smartphones com estoque sincronizado. Categoria fonte: Octa Core. 593 unidades em estoque. 67 listagens sincronizadas.",
+      "description": "Seleção Valley para smartphones com estoque sincronizado. Categoria fonte: Octa Core. 588 unidades em estoque. 67 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/b20f0715-52ea-42f0-a8d1-83697c60d242.jpg"
       ],
       "profile_id": "",
       "features": [
         "Estoque global sincronizado",
-        "593 unidades disponíveis",
+        "588 unidades disponíveis",
         "67 listagens ativas",
         "Tracking automatizado por webhook"
       ],
@@ -2449,9 +2449,9 @@
       "google_product_category_id": "267",
       "google_product_category_path": "Electronics > Communications > Telephony > Mobile Phones",
       "google_product_category": "Electronics > Communications > Telephony > Mobile Phones",
-      "price_band": "R$ 250-499",
+      "price_band": "R$ 500-999",
       "offer_count": 67,
-      "availability_label": "593 em estoque",
+      "availability_label": "588 em estoque",
       "shipping_free": false
     },
     {
@@ -2460,8 +2460,8 @@
       "title": "Smart waterproof watch",
       "brand": "Valley Motion",
       "category": "Wearables",
-      "price_brl": 68.54,
-      "compare_at_brl": 68.54,
+      "price_brl": 69.7,
+      "compare_at_brl": 69.7,
       "stock": 46514,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/f95a371a-232c-4da3-9236-e776e071ff2e.jpg?bid=2407310600171941600",
@@ -2477,7 +2477,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para wearables com estoque sincronizado. Categoria fonte: Smart Watches. 46514 unidades em estoque. 2810 listagens sincronizadas.",
+      "description": "Seleção Valley para wearables com estoque sincronizado. Categoria fonte: Smart Watches. 46514 unidades em estoque. 2811 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/f95a371a-232c-4da3-9236-e776e071ff2e.jpg?bid=2407310600171941600"
       ],
@@ -2485,7 +2485,7 @@
       "features": [
         "Estoque global sincronizado",
         "46514 unidades disponíveis",
-        "2810 listagens ativas",
+        "2811 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -2509,7 +2509,7 @@
       "google_product_category_path": "Apparel & Accessories > Jewelry > Watches",
       "google_product_category": "Apparel & Accessories > Jewelry > Watches",
       "price_band": "Ate R$ 99",
-      "offer_count": 2810,
+      "offer_count": 2811,
       "availability_label": "46514 em estoque",
       "shipping_free": false
     },
@@ -2519,8 +2519,8 @@
       "title": "T11 Wireless Bluetooth Headset 5.0 Earbuds",
       "brand": "Valley Pulse",
       "category": "Audio",
-      "price_brl": 76.86,
-      "compare_at_brl": 76.86,
+      "price_brl": 78.16,
+      "compare_at_brl": 78.16,
       "stock": 43018,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/cb09e5f1-69e2-4ea8-9085-54e0a5b113b7.jpg",
@@ -2536,7 +2536,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para audio com estoque sincronizado. Categoria fonte: Earphones & Headphones. 43018 unidades em estoque. 2934 listagens sincronizadas.",
+      "description": "Seleção Valley para audio com estoque sincronizado. Categoria fonte: Earphones & Headphones. 43018 unidades em estoque. 2939 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/cb09e5f1-69e2-4ea8-9085-54e0a5b113b7.jpg"
       ],
@@ -2544,7 +2544,7 @@
       "features": [
         "Estoque global sincronizado",
         "43018 unidades disponíveis",
-        "2934 listagens ativas",
+        "2939 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -2568,48 +2568,48 @@
       "google_product_category_path": "Electronics > Audio > Audio Components > Headphones & Headsets > Headphones",
       "google_product_category": "Electronics > Audio > Audio Components > Headphones & Headsets > Headphones",
       "price_band": "Ate R$ 99",
-      "offer_count": 2934,
+      "offer_count": 2939,
       "availability_label": "43018 em estoque",
       "shipping_free": false
     },
     {
-      "id": "d2b15d3b-8552-5c92-9edf-8553e4ab2ec0",
+      "id": "75feb488-d24b-59a2-8cb7-777b41927568",
       "module_id": "STOCK",
-      "title": "Sweeping Robot Automatic Household Mini Cleaning Machine USB Rechargeable Smart Vacuum Cleaner",
+      "title": "Intelligent Cleaning Robot Cleaning Machine Lazy Household Vacuum Cleaner",
       "brand": "Valley Casa",
       "category": "Casa",
-      "price_brl": 10.91,
-      "compare_at_brl": 10.91,
-      "stock": 31866,
+      "price_brl": 16.11,
+      "compare_at_brl": 16.11,
+      "stock": 1,
       "merchant_name": "Valley",
-      "image_url": "https://oss-cf.cjdropshipping.com/product/2023/11/04/03/19aa1b05-27db-41d1-9c9c-0e0f7ffa4b04.jpg",
+      "image_url": "https://oss-cf.cjdropshipping.com/product/2025/02/19/09/6ecc287e-a4fc-4106-b44a-fa0a756a6d06_trans.jpeg",
       "video_url": "",
       "video_count": 0,
-      "status": "31866 em estoque • tracking ativo",
+      "status": "1 em estoque • tracking ativo",
       "tags": [
         "Catalogo real",
         "Casa",
-        "Smart Home Appliances",
+        "Cleaning Appliances",
         "Operacao ativa"
       ],
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para casa com estoque sincronizado. Categoria fonte: Smart Home Appliances. 31866 unidades em estoque. 264 listagens sincronizadas.",
+      "description": "Seleção Valley para casa com estoque sincronizado. Categoria fonte: Cleaning Appliances. 1 unidades em estoque. 264 listagens sincronizadas.",
       "gallery_urls": [
-        "https://oss-cf.cjdropshipping.com/product/2023/11/04/03/19aa1b05-27db-41d1-9c9c-0e0f7ffa4b04.jpg"
+        "https://oss-cf.cjdropshipping.com/product/2025/02/19/09/6ecc287e-a4fc-4106-b44a-fa0a756a6d06_trans.jpeg"
       ],
       "profile_id": "",
       "features": [
         "Estoque global sincronizado",
-        "31866 unidades disponíveis",
+        "1 unidades disponíveis",
         "264 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
         "name": "Loja Valley",
         "headline": "Oferta sincronizada com estoque e tracking automatizados.",
-        "avatar_url": "https://oss-cf.cjdropshipping.com/product/2023/11/04/03/19aa1b05-27db-41d1-9c9c-0e0f7ffa4b04.jpg",
+        "avatar_url": "https://oss-cf.cjdropshipping.com/product/2025/02/19/09/6ecc287e-a4fc-4106-b44a-fa0a756a6d06_trans.jpeg",
         "rating": 4.7,
         "city": "Operação global"
       },
@@ -2622,13 +2622,13 @@
       },
       "raw_badge": "STOCK",
       "collection_label": "Valley Casa",
-      "model_name": "Smart Home Appliances",
+      "model_name": "Cleaning Appliances",
       "google_product_category_id": "619",
       "google_product_category_path": "Home & Garden > Household Appliances > Vacuums",
       "google_product_category": "Home & Garden > Household Appliances > Vacuums",
       "price_band": "Ate R$ 99",
       "offer_count": 264,
-      "availability_label": "31866 em estoque",
+      "availability_label": "1 em estoque",
       "shipping_free": false
     },
     {
@@ -2637,8 +2637,8 @@
       "title": "Wireless Lavalier Microphone Drag Two Outdoor",
       "brand": "Valley Voice",
       "category": "Creator Gear",
-      "price_brl": 3.98,
-      "compare_at_brl": 3.98,
+      "price_brl": 4.05,
+      "compare_at_brl": 4.05,
       "stock": 19,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/40830246-5be9-4831-9039-6cee860a3b25.jpg",
@@ -2696,8 +2696,8 @@
       "title": "USB Wireless Charger Portable Watch Fast Charging",
       "brand": "Valley Charge",
       "category": "Premium Tech",
-      "price_brl": 10.46,
-      "compare_at_brl": 10.46,
+      "price_brl": 10.64,
+      "compare_at_brl": 10.64,
       "stock": 180000,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/1612491044433.jpg",
@@ -2714,7 +2714,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para premium tech com estoque sincronizado. Categoria fonte: Chargers. 180000 unidades em estoque. 1452 listagens sincronizadas.",
+      "description": "Seleção Valley para premium tech com estoque sincronizado. Categoria fonte: Chargers. 180000 unidades em estoque. 1453 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/1612491044433.jpg"
       ],
@@ -2722,7 +2722,7 @@
       "features": [
         "Estoque global sincronizado",
         "180000 unidades disponíveis",
-        "1452 listagens ativas",
+        "1453 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -2746,7 +2746,7 @@
       "google_product_category_path": "Electronics > Electronics Accessories > Power > Power Adapters & Chargers",
       "google_product_category": "Electronics > Electronics Accessories > Power > Power Adapters & Chargers",
       "price_band": "Ate R$ 99",
-      "offer_count": 1452,
+      "offer_count": 1453,
       "availability_label": "180000 em estoque",
       "shipping_free": false
     },
@@ -2756,8 +2756,8 @@
       "title": "Small Eye Dash Cam Car DVR Recorder Camera With Wifi Full HD",
       "brand": "Valley Sense",
       "category": "Smart Living",
-      "price_brl": 148.68,
-      "compare_at_brl": 148.68,
+      "price_brl": 151.2,
+      "compare_at_brl": 151.2,
       "stock": 33681,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/1135f7f6-24d6-4d57-99ab-25d67672169e.png",
@@ -2774,7 +2774,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para smart living com estoque sincronizado. Categoria fonte: DVR & Dash Camera. 33681 unidades em estoque. 1538 listagens sincronizadas.",
+      "description": "Seleção Valley para smart living com estoque sincronizado. Categoria fonte: DVR & Dash Camera. 33681 unidades em estoque. 1542 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/1135f7f6-24d6-4d57-99ab-25d67672169e.png"
       ],
@@ -2782,7 +2782,7 @@
       "features": [
         "Estoque global sincronizado",
         "33681 unidades disponíveis",
-        "1538 listagens ativas",
+        "1542 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -2806,7 +2806,7 @@
       "google_product_category_path": "Hardware > Power & Electrical Supplies > Home Automation Kits",
       "google_product_category": "Hardware > Power & Electrical Supplies > Home Automation Kits",
       "price_band": "R$ 100-249",
-      "offer_count": 1538,
+      "offer_count": 1542,
       "availability_label": "33681 em estoque",
       "shipping_free": false
     },
@@ -2816,8 +2816,8 @@
       "title": "C24 Ultra 5G Unlocked Smartphone Android 14 Phone, 12GB 512GB 6800mAh 6.8in",
       "brand": "Valley Edge",
       "category": "Smartphones",
-      "price_brl": 498.04,
-      "compare_at_brl": 498.04,
+      "price_brl": 506.49,
+      "compare_at_brl": 506.49,
       "stock": 300,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/117d23da-adad-41d2-9238-275d395cfddf.jpg",
@@ -2833,7 +2833,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para smartphones com estoque sincronizado. Categoria fonte: Octa Core. 300 unidades em estoque. 66 listagens sincronizadas.",
+      "description": "Seleção Valley para smartphones com estoque sincronizado. Categoria fonte: Octa Core. 300 unidades em estoque. 67 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/117d23da-adad-41d2-9238-275d395cfddf.jpg"
       ],
@@ -2841,7 +2841,7 @@
       "features": [
         "Estoque global sincronizado",
         "300 unidades disponíveis",
-        "66 listagens ativas",
+        "67 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -2864,8 +2864,8 @@
       "google_product_category_id": "267",
       "google_product_category_path": "Electronics > Communications > Telephony > Mobile Phones",
       "google_product_category": "Electronics > Communications > Telephony > Mobile Phones",
-      "price_band": "R$ 250-499",
-      "offer_count": 66,
+      "price_band": "R$ 500-999",
+      "offer_count": 67,
       "availability_label": "300 em estoque",
       "shipping_free": false
     },
@@ -2875,8 +2875,8 @@
       "title": "Smart Bluetooth Call Offline Payment Watch",
       "brand": "Valley Motion",
       "category": "Wearables",
-      "price_brl": 79.3,
-      "compare_at_brl": 79.3,
+      "price_brl": 80.64,
+      "compare_at_brl": 80.64,
       "stock": 160000,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/1615434977505.jpg",
@@ -2892,7 +2892,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para wearables com estoque sincronizado. Categoria fonte: Smart Watches. 160000 unidades em estoque. 2460 listagens sincronizadas.",
+      "description": "Seleção Valley para wearables com estoque sincronizado. Categoria fonte: Smart Watches. 160000 unidades em estoque. 2462 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/1615434977505.jpg"
       ],
@@ -2900,7 +2900,7 @@
       "features": [
         "Estoque global sincronizado",
         "160000 unidades disponíveis",
-        "2460 listagens ativas",
+        "2462 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -2924,7 +2924,7 @@
       "google_product_category_path": "Apparel & Accessories > Jewelry > Watches",
       "google_product_category": "Apparel & Accessories > Jewelry > Watches",
       "price_band": "Ate R$ 99",
-      "offer_count": 2460,
+      "offer_count": 2462,
       "availability_label": "160000 em estoque",
       "shipping_free": false
     },
@@ -2934,8 +2934,8 @@
       "title": "Headset sports headphones gaming wired headphones",
       "brand": "Valley Pulse",
       "category": "Audio",
-      "price_brl": 19.03,
-      "compare_at_brl": 19.03,
+      "price_brl": 19.35,
+      "compare_at_brl": 19.35,
       "stock": 50407,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/15949152/223348415850.jpg",
@@ -2951,7 +2951,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para audio com estoque sincronizado. Categoria fonte: Earphones & Headphones. 50407 unidades em estoque. 2790 listagens sincronizadas.",
+      "description": "Seleção Valley para audio com estoque sincronizado. Categoria fonte: Earphones & Headphones. 50407 unidades em estoque. 2793 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/15949152/223348415850.jpg"
       ],
@@ -2959,7 +2959,7 @@
       "features": [
         "Estoque global sincronizado",
         "50407 unidades disponíveis",
-        "2790 listagens ativas",
+        "2793 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -2983,48 +2983,48 @@
       "google_product_category_path": "Electronics > Audio > Audio Components > Headphones & Headsets > Headphones",
       "google_product_category": "Electronics > Audio > Audio Components > Headphones & Headsets > Headphones",
       "price_band": "Ate R$ 99",
-      "offer_count": 2790,
+      "offer_count": 2793,
       "availability_label": "50407 em estoque",
       "shipping_free": false
     },
     {
-      "id": "cd214a1f-5ceb-5699-873b-5fbb3a59c4d9",
+      "id": "3341ca5f-cf8c-5e56-aad5-c7cbb8cf024a",
       "module_id": "STOCK",
-      "title": "Handy vacuum cleaner",
+      "title": "Intelligent Vacuum Cleaner Remote-Controlled By Sweeping Robot App",
       "brand": "Valley Casa",
       "category": "Casa",
-      "price_brl": 104.6,
-      "compare_at_brl": 104.6,
-      "stock": 30000,
+      "price_brl": 46.45,
+      "compare_at_brl": 46.45,
+      "stock": 80000,
       "merchant_name": "Valley",
-      "image_url": "https://cf.cjdropshipping.com/16046784/1670731027373.jpg",
+      "image_url": "https://cf.cjdropshipping.com/e28410f6-8a86-4b4e-8d02-adf4abfc6e8d.jpg",
       "video_url": "",
       "video_count": 0,
-      "status": "30000 em estoque • tracking ativo",
+      "status": "80000 em estoque • tracking ativo",
       "tags": [
         "Catalogo real",
         "Casa",
-        "Personal Care Appliances",
+        "Smart Home Appliances",
         "Operacao ativa"
       ],
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para casa com estoque sincronizado. Categoria fonte: Personal Care Appliances. 30000 unidades em estoque. 263 listagens sincronizadas.",
+      "description": "Seleção Valley para casa com estoque sincronizado. Categoria fonte: Smart Home Appliances. 80000 unidades em estoque. 228 listagens sincronizadas.",
       "gallery_urls": [
-        "https://cf.cjdropshipping.com/16046784/1670731027373.jpg"
+        "https://cf.cjdropshipping.com/e28410f6-8a86-4b4e-8d02-adf4abfc6e8d.jpg"
       ],
       "profile_id": "",
       "features": [
         "Estoque global sincronizado",
-        "30000 unidades disponíveis",
-        "263 listagens ativas",
+        "80000 unidades disponíveis",
+        "228 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
         "name": "Loja Valley",
         "headline": "Oferta sincronizada com estoque e tracking automatizados.",
-        "avatar_url": "https://cf.cjdropshipping.com/16046784/1670731027373.jpg",
+        "avatar_url": "https://cf.cjdropshipping.com/e28410f6-8a86-4b4e-8d02-adf4abfc6e8d.jpg",
         "rating": 4.7,
         "city": "Operação global"
       },
@@ -3037,13 +3037,13 @@
       },
       "raw_badge": "STOCK",
       "collection_label": "Valley Casa",
-      "model_name": "Personal Care Appliances",
+      "model_name": "Smart Home Appliances",
       "google_product_category_id": "619",
       "google_product_category_path": "Home & Garden > Household Appliances > Vacuums",
       "google_product_category": "Home & Garden > Household Appliances > Vacuums",
-      "price_band": "R$ 100-249",
-      "offer_count": 263,
-      "availability_label": "30000 em estoque",
+      "price_band": "Ate R$ 99",
+      "offer_count": 228,
+      "availability_label": "80000 em estoque",
       "shipping_free": false
     },
     {
@@ -3052,8 +3052,8 @@
       "title": "Lavalier microphone microphone",
       "brand": "Valley Voice",
       "category": "Creator Gear",
-      "price_brl": 2.14,
-      "compare_at_brl": 2.14,
+      "price_brl": 2.18,
+      "compare_at_brl": 2.18,
       "stock": 14104,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/20200727/1852402698180.jpg",
@@ -3111,8 +3111,8 @@
       "title": "Three-In-one Wireless Charger Watch Headset Wireless Charger Bracket",
       "brand": "Valley Charge",
       "category": "Premium Tech",
-      "price_brl": 15.34,
-      "compare_at_brl": 15.34,
+      "price_brl": 15.6,
+      "compare_at_brl": 15.6,
       "stock": 160000,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/1618485545959.jpg",
@@ -3128,7 +3128,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para premium tech com estoque sincronizado. Categoria fonte: Chargers. 160000 unidades em estoque. 1347 listagens sincronizadas.",
+      "description": "Seleção Valley para premium tech com estoque sincronizado. Categoria fonte: Chargers. 160000 unidades em estoque. 1348 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/1618485545959.jpg"
       ],
@@ -3136,7 +3136,7 @@
       "features": [
         "Estoque global sincronizado",
         "160000 unidades disponíveis",
-        "1347 listagens ativas",
+        "1348 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -3160,7 +3160,7 @@
       "google_product_category_path": "Electronics > Electronics Accessories > Power > Power Adapters & Chargers",
       "google_product_category": "Electronics > Electronics Accessories > Power > Power Adapters & Chargers",
       "price_band": "Ate R$ 99",
-      "offer_count": 1347,
+      "offer_count": 1348,
       "availability_label": "160000 em estoque",
       "shipping_free": false
     },
@@ -3170,8 +3170,8 @@
       "title": "Solar Powered Wireless WiFi Surveillance Camera",
       "brand": "Valley Sense",
       "category": "Smart Living",
-      "price_brl": 15.34,
-      "compare_at_brl": 15.34,
+      "price_brl": 15.6,
+      "compare_at_brl": 15.6,
       "stock": 3,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/1618135125962.jpg",
@@ -3187,7 +3187,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para smart living com estoque sincronizado. Categoria fonte: Camera Drones. 3 unidades em estoque. 1453 listagens sincronizadas.",
+      "description": "Seleção Valley para smart living com estoque sincronizado. Categoria fonte: Camera Drones. 3 unidades em estoque. 1455 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/1618135125962.jpg"
       ],
@@ -3195,7 +3195,7 @@
       "features": [
         "Estoque global sincronizado",
         "3 unidades disponíveis",
-        "1453 listagens ativas",
+        "1455 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -3219,7 +3219,7 @@
       "google_product_category_path": "Hardware > Power & Electrical Supplies > Home Automation Kits",
       "google_product_category": "Hardware > Power & Electrical Supplies > Home Automation Kits",
       "price_band": "Ate R$ 99",
-      "offer_count": 1453,
+      "offer_count": 1455,
       "availability_label": "3 em estoque",
       "shipping_free": false
     },
@@ -3229,8 +3229,8 @@
       "title": "6.3inch HOT40 Unlocked Phone Dual SIM 4G Phone, Android Smartphone 4GB 128GB Rom",
       "brand": "Valley Edge",
       "category": "Smartphones",
-      "price_brl": 348.61,
-      "compare_at_brl": 348.61,
+      "price_brl": 354.53,
+      "compare_at_brl": 354.53,
       "stock": 133,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/4428c2b8-7d35-47e4-b2d6-5dea879a6b6f.jpg",
@@ -3288,8 +3288,8 @@
       "title": "Q9 Pro Smart Bracelet Multi-function Watch",
       "brand": "Valley Motion",
       "category": "Wearables",
-      "price_brl": 48.71,
-      "compare_at_brl": 48.71,
+      "price_brl": 49.54,
+      "compare_at_brl": 49.54,
       "stock": 3,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/b4cd8807-acc9-48e6-8b4a-d5ecff9857d9.jpg",
@@ -3305,7 +3305,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para wearables com estoque sincronizado. Categoria fonte: Smart Watches. 3 unidades em estoque. 2434 listagens sincronizadas.",
+      "description": "Seleção Valley para wearables com estoque sincronizado. Categoria fonte: Smart Watches. 3 unidades em estoque. 2435 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/b4cd8807-acc9-48e6-8b4a-d5ecff9857d9.jpg"
       ],
@@ -3313,7 +3313,7 @@
       "features": [
         "Estoque global sincronizado",
         "3 unidades disponíveis",
-        "2434 listagens ativas",
+        "2435 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -3337,7 +3337,7 @@
       "google_product_category_path": "Apparel & Accessories > Jewelry > Watches",
       "google_product_category": "Apparel & Accessories > Jewelry > Watches",
       "price_band": "Ate R$ 99",
-      "offer_count": 2434,
+      "offer_count": 2435,
       "availability_label": "3 em estoque",
       "shipping_free": false
     },
@@ -3347,8 +3347,8 @@
       "title": "Wireless sports headphones",
       "brand": "Valley Pulse",
       "category": "Audio",
-      "price_brl": 22.46,
-      "compare_at_brl": 22.46,
+      "price_brl": 22.84,
+      "compare_at_brl": 22.84,
       "stock": 13358,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/20200830/1643452044629.jpg?cid=2507310901531929500",
@@ -3364,7 +3364,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para audio com estoque sincronizado. Categoria fonte: Earphones & Headphones. 13358 unidades em estoque. 2744 listagens sincronizadas.",
+      "description": "Seleção Valley para audio com estoque sincronizado. Categoria fonte: Earphones & Headphones. 13358 unidades em estoque. 2745 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/20200830/1643452044629.jpg?cid=2507310901531929500"
       ],
@@ -3372,7 +3372,7 @@
       "features": [
         "Estoque global sincronizado",
         "13358 unidades disponíveis",
-        "2744 listagens ativas",
+        "2745 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -3396,48 +3396,48 @@
       "google_product_category_path": "Electronics > Audio > Audio Components > Headphones & Headsets > Headphones",
       "google_product_category": "Electronics > Audio > Audio Components > Headphones & Headsets > Headphones",
       "price_band": "Ate R$ 99",
-      "offer_count": 2744,
+      "offer_count": 2745,
       "availability_label": "13358 em estoque",
       "shipping_free": false
     },
     {
-      "id": "75feb488-d24b-59a2-8cb7-777b41927568",
+      "id": "45b63731-ea25-5f47-a21d-01fe0d3d5da9",
       "module_id": "STOCK",
-      "title": "Intelligent Cleaning Robot Cleaning Machine Lazy Household Vacuum Cleaner",
+      "title": "Mini Desktop Robot Vacuum Cleaner Smart Vacuum Cleaner Auto Obstacle Avoidance Keyboard Vacuum Sweeper Barrendero Kehrmaschine",
       "brand": "Valley Casa",
       "category": "Casa",
-      "price_brl": 15.84,
-      "compare_at_brl": 15.84,
-      "stock": 1,
+      "price_brl": 34.95,
+      "compare_at_brl": 34.95,
+      "stock": 80000,
       "merchant_name": "Valley",
-      "image_url": "https://oss-cf.cjdropshipping.com/product/2025/02/19/09/6ecc287e-a4fc-4106-b44a-fa0a756a6d06_trans.jpeg",
+      "image_url": "https://cf.cjdropshipping.com/ddff2484-1b9a-4fe3-abc1-20b0cabac4f5.jpg",
       "video_url": "",
       "video_count": 0,
-      "status": "1 em estoque • tracking ativo",
+      "status": "80000 em estoque • tracking ativo",
       "tags": [
         "Catalogo real",
         "Casa",
-        "Cleaning Appliances",
+        "Smart Home Appliances",
         "Operacao ativa"
       ],
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para casa com estoque sincronizado. Categoria fonte: Cleaning Appliances. 1 unidades em estoque. 263 listagens sincronizadas.",
+      "description": "Seleção Valley para casa com estoque sincronizado. Categoria fonte: Smart Home Appliances. 80000 unidades em estoque. 214 listagens sincronizadas.",
       "gallery_urls": [
-        "https://oss-cf.cjdropshipping.com/product/2025/02/19/09/6ecc287e-a4fc-4106-b44a-fa0a756a6d06_trans.jpeg"
+        "https://cf.cjdropshipping.com/ddff2484-1b9a-4fe3-abc1-20b0cabac4f5.jpg"
       ],
       "profile_id": "",
       "features": [
         "Estoque global sincronizado",
-        "1 unidades disponíveis",
-        "263 listagens ativas",
+        "80000 unidades disponíveis",
+        "214 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
         "name": "Loja Valley",
         "headline": "Oferta sincronizada com estoque e tracking automatizados.",
-        "avatar_url": "https://oss-cf.cjdropshipping.com/product/2025/02/19/09/6ecc287e-a4fc-4106-b44a-fa0a756a6d06_trans.jpeg",
+        "avatar_url": "https://cf.cjdropshipping.com/ddff2484-1b9a-4fe3-abc1-20b0cabac4f5.jpg",
         "rating": 4.7,
         "city": "Operação global"
       },
@@ -3450,13 +3450,13 @@
       },
       "raw_badge": "STOCK",
       "collection_label": "Valley Casa",
-      "model_name": "Cleaning Appliances",
+      "model_name": "Smart Home Appliances",
       "google_product_category_id": "619",
       "google_product_category_path": "Home & Garden > Household Appliances > Vacuums",
       "google_product_category": "Home & Garden > Household Appliances > Vacuums",
       "price_band": "Ate R$ 99",
-      "offer_count": 263,
-      "availability_label": "1 em estoque",
+      "offer_count": 214,
+      "availability_label": "80000 em estoque",
       "shipping_free": false
     },
     {
@@ -3465,8 +3465,8 @@
       "title": "Desktop Microphone Live Conference Microphone",
       "brand": "Valley Voice",
       "category": "Creator Gear",
-      "price_brl": 141.76,
-      "compare_at_brl": 141.76,
+      "price_brl": 144.16,
+      "compare_at_brl": 144.16,
       "stock": 13531,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/a09d4f0d-2641-4a83-9da9-58e22e5d8d55.jpg",
@@ -3524,8 +3524,8 @@
       "title": "Magic circle wireless charger",
       "brand": "Valley Charge",
       "category": "Premium Tech",
-      "price_brl": 74.22,
-      "compare_at_brl": 74.22,
+      "price_brl": 75.47,
+      "compare_at_brl": 75.47,
       "stock": 62786,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/c02a1654-8acf-476a-9352-1d7e999b6ea1.jpg",
@@ -3584,8 +3584,8 @@
       "title": "Bulb Shaking Head Machine Yilot APP Wireless WIFI Camera Home Security Monitoring",
       "brand": "Valley Sense",
       "category": "Smart Living",
-      "price_brl": 92.79,
-      "compare_at_brl": 92.79,
+      "price_brl": 94.37,
+      "compare_at_brl": 94.37,
       "stock": 32220,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/da72cf77-30ba-48c6-a550-38635d6cc2cd.jpg",
@@ -3643,8 +3643,8 @@
       "title": "C25 Ultra Unlocked Phone,5G Smartphone 8GB 256GB 7.3-inch Android 14 Cell Phone 6800mAh Large Battery Dual SIM Face GPS",
       "brand": "Valley Edge",
       "category": "Smartphones",
-      "price_brl": 547.85,
-      "compare_at_brl": 547.85,
+      "price_brl": 557.14,
+      "compare_at_brl": 557.14,
       "stock": 80,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/98efe319-d82e-4c1b-bd16-31bd595901d9.png",
@@ -3660,7 +3660,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para smartphones com estoque sincronizado. Categoria fonte: Octa Core. 80 unidades em estoque. 59 listagens sincronizadas.",
+      "description": "Seleção Valley para smartphones com estoque sincronizado. Categoria fonte: Octa Core. 80 unidades em estoque. 60 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/98efe319-d82e-4c1b-bd16-31bd595901d9.png"
       ],
@@ -3668,7 +3668,7 @@
       "features": [
         "Estoque global sincronizado",
         "80 unidades disponíveis",
-        "59 listagens ativas",
+        "60 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -3692,7 +3692,7 @@
       "google_product_category_path": "Electronics > Communications > Telephony > Mobile Phones",
       "google_product_category": "Electronics > Communications > Telephony > Mobile Phones",
       "price_band": "R$ 500-999",
-      "offer_count": 59,
+      "offer_count": 60,
       "availability_label": "80 em estoque",
       "shipping_free": false
     },
@@ -3702,8 +3702,8 @@
       "title": "Smart Watch Card Call Smart Reminder Bluetooth Device",
       "brand": "Valley Motion",
       "category": "Wearables",
-      "price_brl": 23.41,
-      "compare_at_brl": 23.41,
+      "price_brl": 23.81,
+      "compare_at_brl": 23.81,
       "stock": 1,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/75089fc5-4953-41ea-9ee1-844d6bcc628f.jpg",
@@ -3719,7 +3719,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para wearables com estoque sincronizado. Categoria fonte: Smart Watches. 1 unidades em estoque. 2011 listagens sincronizadas.",
+      "description": "Seleção Valley para wearables com estoque sincronizado. Categoria fonte: Smart Watches. 1 unidades em estoque. 2013 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/75089fc5-4953-41ea-9ee1-844d6bcc628f.jpg"
       ],
@@ -3727,7 +3727,7 @@
       "features": [
         "Estoque global sincronizado",
         "1 unidades disponíveis",
-        "2011 listagens ativas",
+        "2013 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -3751,7 +3751,7 @@
       "google_product_category_path": "Apparel & Accessories > Jewelry > Watches",
       "google_product_category": "Apparel & Accessories > Jewelry > Watches",
       "price_band": "Ate R$ 99",
-      "offer_count": 2011,
+      "offer_count": 2013,
       "availability_label": "1 em estoque",
       "shipping_free": false
     },
@@ -3761,8 +3761,8 @@
       "title": "OneOdio headphones",
       "brand": "Valley Pulse",
       "category": "Audio",
-      "price_brl": 86.72,
-      "compare_at_brl": 86.72,
+      "price_brl": 88.19,
+      "compare_at_brl": 88.19,
       "stock": 33312,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/20200509/1549747151840.jpg",
@@ -3778,7 +3778,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para audio com estoque sincronizado. Categoria fonte: Earphones & Headphones. 33312 unidades em estoque. 2639 listagens sincronizadas.",
+      "description": "Seleção Valley para audio com estoque sincronizado. Categoria fonte: Earphones & Headphones. 33312 unidades em estoque. 2642 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/20200509/1549747151840.jpg"
       ],
@@ -3786,7 +3786,7 @@
       "features": [
         "Estoque global sincronizado",
         "33312 unidades disponíveis",
-        "2639 listagens ativas",
+        "2642 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -3810,24 +3810,24 @@
       "google_product_category_path": "Electronics > Audio > Audio Components > Headphones & Headsets > Headphones",
       "google_product_category": "Electronics > Audio > Audio Components > Headphones & Headsets > Headphones",
       "price_band": "Ate R$ 99",
-      "offer_count": 2639,
+      "offer_count": 2642,
       "availability_label": "33312 em estoque",
       "shipping_free": false
     },
     {
-      "id": "e102a3b1-b1bd-5737-b7ec-52266818f73b",
+      "id": "b7bedb91-754c-5188-a2b6-1e807f13e975",
       "module_id": "STOCK",
-      "title": "Car vacuum cleaner",
+      "title": "Home Cleaning Vacuum Cleaner Mini Sweeping Robot",
       "brand": "Valley Casa",
       "category": "Casa",
-      "price_brl": 157.0,
-      "compare_at_brl": 157.0,
-      "stock": 80000,
+      "price_brl": 16.97,
+      "compare_at_brl": 16.97,
+      "stock": 9,
       "merchant_name": "Valley",
-      "image_url": "https://cf.cjdropshipping.com/20200314/1889179895364.png",
+      "image_url": "https://oss-cf.cjdropshipping.com/product/2024/08/05/09/aba8a0ee-aa24-42aa-9536-3c07434b0a45.jpg",
       "video_url": "",
       "video_count": 0,
-      "status": "80000 em estoque • tracking ativo",
+      "status": "9 em estoque • tracking ativo",
       "tags": [
         "Catalogo real",
         "Casa",
@@ -3837,21 +3837,21 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para casa com estoque sincronizado. Categoria fonte: Smart Home Appliances. 80000 unidades em estoque. 248 listagens sincronizadas.",
+      "description": "Seleção Valley para casa com estoque sincronizado. Categoria fonte: Smart Home Appliances. 9 unidades em estoque. 206 listagens sincronizadas.",
       "gallery_urls": [
-        "https://cf.cjdropshipping.com/20200314/1889179895364.png"
+        "https://oss-cf.cjdropshipping.com/product/2024/08/05/09/aba8a0ee-aa24-42aa-9536-3c07434b0a45.jpg"
       ],
       "profile_id": "",
       "features": [
         "Estoque global sincronizado",
-        "80000 unidades disponíveis",
-        "248 listagens ativas",
+        "9 unidades disponíveis",
+        "206 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
         "name": "Loja Valley",
         "headline": "Oferta sincronizada com estoque e tracking automatizados.",
-        "avatar_url": "https://cf.cjdropshipping.com/20200314/1889179895364.png",
+        "avatar_url": "https://oss-cf.cjdropshipping.com/product/2024/08/05/09/aba8a0ee-aa24-42aa-9536-3c07434b0a45.jpg",
         "rating": 4.7,
         "city": "Operação global"
       },
@@ -3868,9 +3868,9 @@
       "google_product_category_id": "619",
       "google_product_category_path": "Home & Garden > Household Appliances > Vacuums",
       "google_product_category": "Home & Garden > Household Appliances > Vacuums",
-      "price_band": "R$ 100-249",
-      "offer_count": 248,
-      "availability_label": "80000 em estoque",
+      "price_band": "Ate R$ 99",
+      "offer_count": 206,
+      "availability_label": "9 em estoque",
       "shipping_free": false
     },
     {
@@ -3879,8 +3879,8 @@
       "title": "Video Conference 4 Inch Fill Light Computer Live Photography Light LED Selfie Light USB Powered Round Camera Lamp Dimmable LED Ring Light With Phone Holder",
       "brand": "Valley Studio",
       "category": "Creator Gear",
-      "price_brl": 17.18,
-      "compare_at_brl": 17.18,
+      "price_brl": 17.48,
+      "compare_at_brl": 17.48,
       "stock": 1,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/5b8b30f3-b847-48bc-bbc7-b943a43d29c4.jpg",
@@ -3897,7 +3897,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para creator gear com estoque sincronizado. Categoria fonte: Camera & Photo Accessories. 1 unidades em estoque. 496 listagens sincronizadas.",
+      "description": "Seleção Valley para creator gear com estoque sincronizado. Categoria fonte: Camera & Photo Accessories. 1 unidades em estoque. 497 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/5b8b30f3-b847-48bc-bbc7-b943a43d29c4.jpg"
       ],
@@ -3905,7 +3905,7 @@
       "features": [
         "Estoque global sincronizado",
         "1 unidades disponíveis",
-        "496 listagens ativas",
+        "497 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -3929,7 +3929,7 @@
       "google_product_category_path": "Cameras & Optics > Photography > Lighting & Studio",
       "google_product_category": "Cameras & Optics > Photography > Lighting & Studio",
       "price_band": "Ate R$ 99",
-      "offer_count": 496,
+      "offer_count": 497,
       "availability_label": "1 em estoque",
       "shipping_free": false
     },
@@ -3939,8 +3939,8 @@
       "title": "Wireless charger Three-in-one wireless charger for phones and watches",
       "brand": "Valley Charge",
       "category": "Premium Tech",
-      "price_brl": 53.94,
-      "compare_at_brl": 53.94,
+      "price_brl": 54.86,
+      "compare_at_brl": 54.86,
       "stock": 80000,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/2049/988972328750.jpg",
@@ -3998,8 +3998,8 @@
       "title": "2.4 Inch Security Smart Doorbell Peephole Camera Electronic Cat Eye",
       "brand": "Valley Sense",
       "category": "Smart Living",
-      "price_brl": 72.17,
-      "compare_at_brl": 72.17,
+      "price_brl": 73.4,
+      "compare_at_brl": 73.4,
       "stock": 14890,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/20190228/717926012011.png",
@@ -4057,8 +4057,8 @@
       "title": "C25 Unlocked Phone Smartphone 8GB 256GB Android14.0 6800mAh 6.8inch 5G",
       "brand": "Valley Edge",
       "category": "Smartphones",
-      "price_brl": 547.85,
-      "compare_at_brl": 547.85,
+      "price_brl": 557.14,
+      "compare_at_brl": 557.14,
       "stock": 194,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/4c88e7f4-ea34-49d8-a4a2-a98faa28b660.jpg",
@@ -4116,8 +4116,8 @@
       "title": "Z60 smart watch Bluetooth smart wear card phone watch",
       "brand": "Valley Motion",
       "category": "Wearables",
-      "price_brl": 38.4,
-      "compare_at_brl": 38.4,
+      "price_brl": 39.05,
+      "compare_at_brl": 39.05,
       "stock": 100380,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/202907/901628333020.jpg",
@@ -4133,7 +4133,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para wearables com estoque sincronizado. Categoria fonte: Smart Watches. 100380 unidades em estoque. 1796 listagens sincronizadas.",
+      "description": "Seleção Valley para wearables com estoque sincronizado. Categoria fonte: Smart Watches. 100380 unidades em estoque. 1798 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/202907/901628333020.jpg"
       ],
@@ -4141,7 +4141,7 @@
       "features": [
         "Estoque global sincronizado",
         "100380 unidades disponíveis",
-        "1796 listagens ativas",
+        "1798 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -4165,7 +4165,7 @@
       "google_product_category_path": "Apparel & Accessories > Jewelry > Watches",
       "google_product_category": "Apparel & Accessories > Jewelry > Watches",
       "price_band": "Ate R$ 99",
-      "offer_count": 1796,
+      "offer_count": 1798,
       "availability_label": "100380 em estoque",
       "shipping_free": false
     },
@@ -4175,8 +4175,8 @@
       "title": "Wireless Earbuds Earphone BlueTooth Headphone Waterproof",
       "brand": "Valley Pulse",
       "category": "Audio",
-      "price_brl": 56.23,
-      "compare_at_brl": 56.23,
+      "price_brl": 57.19,
+      "compare_at_brl": 57.19,
       "stock": 47545,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/580771dd-9a82-43c1-8bbd-f0f7fd853985.jpg",
@@ -4192,7 +4192,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para audio com estoque sincronizado. Categoria fonte: Earphones & Headphones. 47545 unidades em estoque. 1929 listagens sincronizadas.",
+      "description": "Seleção Valley para audio com estoque sincronizado. Categoria fonte: Earphones & Headphones. 47545 unidades em estoque. 1933 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/580771dd-9a82-43c1-8bbd-f0f7fd853985.jpg"
       ],
@@ -4200,7 +4200,7 @@
       "features": [
         "Estoque global sincronizado",
         "47545 unidades disponíveis",
-        "1929 listagens ativas",
+        "1933 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -4224,24 +4224,24 @@
       "google_product_category_path": "Electronics > Audio > Audio Components > Headphones & Headsets > Headphones",
       "google_product_category": "Electronics > Audio > Audio Components > Headphones & Headsets > Headphones",
       "price_band": "Ate R$ 99",
-      "offer_count": 1929,
+      "offer_count": 1933,
       "availability_label": "47545 em estoque",
       "shipping_free": false
     },
     {
-      "id": "3341ca5f-cf8c-5e56-aad5-c7cbb8cf024a",
+      "id": "78b0491c-9b01-54a6-bf3a-b6ba94fa068a",
       "module_id": "STOCK",
-      "title": "Intelligent Vacuum Cleaner Remote-Controlled By Sweeping Robot App",
+      "title": "Sweeper Robot Intelligent Household Lazy Vacuum Cleaner",
       "brand": "Valley Casa",
       "category": "Casa",
-      "price_brl": 45.67,
-      "compare_at_brl": 45.67,
-      "stock": 80000,
+      "price_brl": 39.05,
+      "compare_at_brl": 39.05,
+      "stock": 40000,
       "merchant_name": "Valley",
-      "image_url": "https://cf.cjdropshipping.com/e28410f6-8a86-4b4e-8d02-adf4abfc6e8d.jpg",
+      "image_url": "https://cf.cjdropshipping.com/16114176/7702668602070.jpg",
       "video_url": "",
       "video_count": 0,
-      "status": "80000 em estoque • tracking ativo",
+      "status": "40000 em estoque • tracking ativo",
       "tags": [
         "Catalogo real",
         "Casa",
@@ -4251,21 +4251,21 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para casa com estoque sincronizado. Categoria fonte: Smart Home Appliances. 80000 unidades em estoque. 228 listagens sincronizadas.",
+      "description": "Seleção Valley para casa com estoque sincronizado. Categoria fonte: Smart Home Appliances. 40000 unidades em estoque. 176 listagens sincronizadas.",
       "gallery_urls": [
-        "https://cf.cjdropshipping.com/e28410f6-8a86-4b4e-8d02-adf4abfc6e8d.jpg"
+        "https://cf.cjdropshipping.com/16114176/7702668602070.jpg"
       ],
       "profile_id": "",
       "features": [
         "Estoque global sincronizado",
-        "80000 unidades disponíveis",
-        "228 listagens ativas",
+        "40000 unidades disponíveis",
+        "176 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
         "name": "Loja Valley",
         "headline": "Oferta sincronizada com estoque e tracking automatizados.",
-        "avatar_url": "https://cf.cjdropshipping.com/e28410f6-8a86-4b4e-8d02-adf4abfc6e8d.jpg",
+        "avatar_url": "https://cf.cjdropshipping.com/16114176/7702668602070.jpg",
         "rating": 4.7,
         "city": "Operação global"
       },
@@ -4283,8 +4283,8 @@
       "google_product_category_path": "Home & Garden > Household Appliances > Vacuums",
       "google_product_category": "Home & Garden > Household Appliances > Vacuums",
       "price_band": "Ate R$ 99",
-      "offer_count": 228,
-      "availability_label": "80000 em estoque",
+      "offer_count": 176,
+      "availability_label": "40000 em estoque",
       "shipping_free": false
     },
     {
@@ -4293,8 +4293,8 @@
       "title": "Wireless Lavalier Microphone Dual Core Noise Cancelling Microphone",
       "brand": "Valley Voice",
       "category": "Creator Gear",
-      "price_brl": 99.62,
-      "compare_at_brl": 99.62,
+      "price_brl": 101.31,
+      "compare_at_brl": 101.31,
       "stock": 168735,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/cec76796-595b-4b63-8fd1-806864f8f426.jpg",
@@ -4341,7 +4341,7 @@
       "google_product_category_id": "234",
       "google_product_category_path": "Electronics > Audio > Audio Components > Microphones",
       "google_product_category": "Electronics > Audio > Audio Components > Microphones",
-      "price_band": "Ate R$ 99",
+      "price_band": "R$ 100-249",
       "offer_count": 487,
       "availability_label": "168735 em estoque",
       "shipping_free": false
@@ -4352,8 +4352,8 @@
       "title": "10W Wireless Car Phone Charger",
       "brand": "Valley Charge",
       "category": "Premium Tech",
-      "price_brl": 26.45,
-      "compare_at_brl": 26.45,
+      "price_brl": 26.9,
+      "compare_at_brl": 26.9,
       "stock": 53162,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/203104/1692728099084.jpg",
@@ -4411,8 +4411,8 @@
       "title": "1080P Wireless Camera Outdoor Security Network Hd Remote Wifi Monitoring Home Camera",
       "brand": "Valley Sense",
       "category": "Smart Living",
-      "price_brl": 77.7,
-      "compare_at_brl": 77.7,
+      "price_brl": 79.02,
+      "compare_at_brl": 79.02,
       "stock": 160000,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/1619661652068.jpg",
@@ -4428,7 +4428,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para smart living com estoque sincronizado. Categoria fonte: Surveillance Products. 160000 unidades em estoque. 1194 listagens sincronizadas.",
+      "description": "Seleção Valley para smart living com estoque sincronizado. Categoria fonte: Surveillance Products. 160000 unidades em estoque. 1195 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/1619661652068.jpg"
       ],
@@ -4436,7 +4436,7 @@
       "features": [
         "Estoque global sincronizado",
         "160000 unidades disponíveis",
-        "1194 listagens ativas",
+        "1195 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -4460,7 +4460,7 @@
       "google_product_category_path": "Hardware > Power & Electrical Supplies > Home Automation Kits",
       "google_product_category": "Hardware > Power & Electrical Supplies > Home Automation Kits",
       "price_band": "Ate R$ 99",
-      "offer_count": 1194,
+      "offer_count": 1195,
       "availability_label": "160000 em estoque",
       "shipping_free": false
     },
@@ -4470,8 +4470,8 @@
       "title": "XS15 Portable Mini Phone 35-inch 2GB16GB Android Smartphone",
       "brand": "Valley Edge",
       "category": "Smartphones",
-      "price_brl": 122.23,
-      "compare_at_brl": 122.23,
+      "price_brl": 124.3,
+      "compare_at_brl": 124.3,
       "stock": 39987,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/quick/product/c31f793d-63be-4925-9014-11de5285257e.jpg",
@@ -4529,8 +4529,8 @@
       "title": "Lige's New Smart Watch Upgrade Smart Wearable Watch",
       "brand": "Valley Motion",
       "category": "Wearables",
-      "price_brl": 101.56,
-      "compare_at_brl": 101.56,
+      "price_brl": 103.28,
+      "compare_at_brl": 103.28,
       "stock": 57662,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/1622272310837.jpg",
@@ -4546,7 +4546,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para wearables com estoque sincronizado. Categoria fonte: Smart Watches. 57662 unidades em estoque. 1520 listagens sincronizadas.",
+      "description": "Seleção Valley para wearables com estoque sincronizado. Categoria fonte: Smart Watches. 57662 unidades em estoque. 1521 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/1622272310837.jpg"
       ],
@@ -4554,7 +4554,7 @@
       "features": [
         "Estoque global sincronizado",
         "57662 unidades disponíveis",
-        "1520 listagens ativas",
+        "1521 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -4578,7 +4578,7 @@
       "google_product_category_path": "Apparel & Accessories > Jewelry > Watches",
       "google_product_category": "Apparel & Accessories > Jewelry > Watches",
       "price_band": "R$ 100-249",
-      "offer_count": 1520,
+      "offer_count": 1521,
       "availability_label": "57662 em estoque",
       "shipping_free": false
     },
@@ -4588,8 +4588,8 @@
       "title": "LED Light Cat Ear Headphones Wireless Bluetooth 5.0 Headset Portable Foldable Kids Headphone With Microphone Best Gift",
       "brand": "Valley Pulse",
       "category": "Audio",
-      "price_brl": 39.55,
-      "compare_at_brl": 39.55,
+      "price_brl": 40.22,
+      "compare_at_brl": 40.22,
       "stock": 180873,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/00494394-6be7-42e3-bd5f-6d6b9c5cb4f9.jpg",
@@ -4606,7 +4606,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para audio com estoque sincronizado. Categoria fonte: Earphones & Headphones. 180873 unidades em estoque. 1920 listagens sincronizadas.",
+      "description": "Seleção Valley para audio com estoque sincronizado. Categoria fonte: Earphones & Headphones. 180873 unidades em estoque. 1922 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/00494394-6be7-42e3-bd5f-6d6b9c5cb4f9.jpg"
       ],
@@ -4614,7 +4614,7 @@
       "features": [
         "Estoque global sincronizado",
         "180873 unidades disponíveis",
-        "1920 listagens ativas",
+        "1922 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -4638,24 +4638,24 @@
       "google_product_category_path": "Electronics > Audio > Audio Components > Headphones & Headsets > Headphones",
       "google_product_category": "Electronics > Audio > Audio Components > Headphones & Headsets > Headphones",
       "price_band": "Ate R$ 99",
-      "offer_count": 1920,
+      "offer_count": 1922,
       "availability_label": "180873 em estoque",
       "shipping_free": false
     },
     {
-      "id": "45b63731-ea25-5f47-a21d-01fe0d3d5da9",
+      "id": "3f616d5a-1a64-5f74-a0e0-d9669fddb75f",
       "module_id": "STOCK",
-      "title": "Mini Desktop Robot Vacuum Cleaner Smart Vacuum Cleaner Auto Obstacle Avoidance Keyboard Vacuum Sweeper Barrendero Kehrmaschine",
+      "title": "Sweeping Robot Automatic Household Ultra-thin Smart Vacuum Cleaner",
       "brand": "Valley Casa",
       "category": "Casa",
-      "price_brl": 34.37,
-      "compare_at_brl": 34.37,
-      "stock": 80000,
+      "price_brl": 26.54,
+      "compare_at_brl": 26.54,
+      "stock": 23,
       "merchant_name": "Valley",
-      "image_url": "https://cf.cjdropshipping.com/ddff2484-1b9a-4fe3-abc1-20b0cabac4f5.jpg",
+      "image_url": "https://cf.cjdropshipping.com/40b3113c-3f65-4b96-bc53-0b40c583ad64.jpg",
       "video_url": "",
       "video_count": 0,
-      "status": "80000 em estoque • tracking ativo",
+      "status": "23 em estoque • tracking ativo",
       "tags": [
         "Catalogo real",
         "Casa",
@@ -4665,21 +4665,21 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para casa com estoque sincronizado. Categoria fonte: Smart Home Appliances. 80000 unidades em estoque. 214 listagens sincronizadas.",
+      "description": "Seleção Valley para casa com estoque sincronizado. Categoria fonte: Smart Home Appliances. 23 unidades em estoque. 164 listagens sincronizadas.",
       "gallery_urls": [
-        "https://cf.cjdropshipping.com/ddff2484-1b9a-4fe3-abc1-20b0cabac4f5.jpg"
+        "https://cf.cjdropshipping.com/40b3113c-3f65-4b96-bc53-0b40c583ad64.jpg"
       ],
       "profile_id": "",
       "features": [
         "Estoque global sincronizado",
-        "80000 unidades disponíveis",
-        "214 listagens ativas",
+        "23 unidades disponíveis",
+        "164 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
         "name": "Loja Valley",
         "headline": "Oferta sincronizada com estoque e tracking automatizados.",
-        "avatar_url": "https://cf.cjdropshipping.com/ddff2484-1b9a-4fe3-abc1-20b0cabac4f5.jpg",
+        "avatar_url": "https://cf.cjdropshipping.com/40b3113c-3f65-4b96-bc53-0b40c583ad64.jpg",
         "rating": 4.7,
         "city": "Operação global"
       },
@@ -4697,8 +4697,8 @@
       "google_product_category_path": "Home & Garden > Household Appliances > Vacuums",
       "google_product_category": "Home & Garden > Household Appliances > Vacuums",
       "price_band": "Ate R$ 99",
-      "offer_count": 214,
-      "availability_label": "80000 em estoque",
+      "offer_count": 164,
+      "availability_label": "23 em estoque",
       "shipping_free": false
     },
     {
@@ -4707,8 +4707,8 @@
       "title": "Mini mobile phone microphone mobile phone recording sing small microphone small microphone",
       "brand": "Valley Voice",
       "category": "Creator Gear",
-      "price_brl": 3.44,
-      "compare_at_brl": 3.44,
+      "price_brl": 3.5,
+      "compare_at_brl": 3.5,
       "stock": 50479,
       "merchant_name": "Valley",
       "image_url": "https://cf.cjdropshipping.com/20180913/2262032170855.png",
@@ -4986,7 +4986,7 @@
     }
   ],
   "summary": {
-    "products": 1204,
+    "products": 1197,
     "visible_products": 84,
     "real_supplier_products": 1209,
     "marketplace_merchants": 4,

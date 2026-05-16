@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Valley ERP - Login Lojista</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-variant": "#e7e0f0",
+                      "on-secondary": "#ffffff",
+                      "on-primary-fixed": "#21005e",
+                      "on-tertiary": "#ffffff",
+                      "courier-green": "#0F7A4A",
+                      "on-secondary-fixed-variant": "#004e60",
+                      "secondary-fixed": "#b7eaff",
+                      "inverse-on-surface": "#f5eefe",
+                      "error-container": "#ffdad6",
+                      "error": "#ba1a1a",
+                      "on-secondary-container": "#00586d",
+                      "surface-container": "#f2ebfb",
+                      "surface-tint": "#6a23fa",
+                      "on-tertiary-container": "#ffd7c6",
+                      "primary-fixed": "#e8ddff",
+                      "secondary-container": "#38d4ff",
+                      "warning-amber": "#C98205",
+                      "lilac": "#BB8CFF",
+                      "on-tertiary-fixed": "#351000",
+                      "secondary-fixed-dim": "#4cd6ff",
+                      "surface-container-low": "#f8f1ff",
+                      "on-surface": "#1d1a25",
+                      "inverse-primary": "#cebdff",
+                      "on-secondary-fixed": "#001f28",
+                      "night": "#07051F",
+                      "surface-container-highest": "#e7e0f0",
+                      "surface": "#fdf7ff",
+                      "on-error": "#ffffff",
+                      "on-tertiary-fixed-variant": "#7c2e00",
+                      "tertiary-fixed-dim": "#ffb595",
+                      "ink": "#15151D",
+                      "surface-bright": "#fdf7ff",
+                      "on-error-container": "#93000a",
+                      "surface-dim": "#ded7e7",
+                      "primary": "#5600da",
+                      "tertiary-fixed": "#ffdbcc",
+                      "on-primary": "#ffffff",
+                      "success-green": "#1E8A5A",
+                      "inverse-surface": "#322f3b",
+                      "primary-fixed-dim": "#cebdff",
+                      "critical-red": "#D04437",
+                      "on-background": "#1d1a25",
+                      "surface-container-high": "#ece5f5",
+                      "tertiary-container": "#a94200",
+                      "on-primary-container": "#e5daff",
+                      "tertiary": "#823100",
+                      "outline": "#7a7488",
+                      "muted-ink": "#667085",
+                      "work-surface": "#F6F8FB",
+                      "outline-variant": "#cbc3d9",
+                      "surface-container-lowest": "#ffffff",
+                      "secondary": "#00677f",
+                      "background": "#fdf7ff",
+                      "on-primary-fixed-variant": "#5100cf",
+                      "cosmic": "#151047",
+                      "snow": "#FFFFFF",
+                      "primary-container": "#6f2cff",
+                      "line": "#D9DEE8",
+                      "on-surface-variant": "#494456"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "gutter": "16px",
+                      "control-compact": "36px",
+                      "container-margin": "24px",
+                      "unit": "4px",
+                      "control-default": "44px"
+              },
+              "fontFamily": {
+                      "headline-sm": ["Inter"],
+                      "body-md": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "headline-lg": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "body-sm": ["Inter"],
+                      "label-md": ["Inter"],
+                      "data-table": ["Inter"],
+                      "label-sm": ["Inter"]
+              },
+              "fontSize": {
+                      "headline-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                      "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-lg": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "body-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                      "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0", "fontWeight": "500"}],
+                      "data-table": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                      "label-sm": ["11px", {"lineHeight": "14px", "letterSpacing": "0", "fontWeight": "500"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-surface-container-lowest text-on-surface antialiased min-h-screen flex flex-col md:flex-row">
+<!-- Left/Center Panel: Login Form Area -->
+<main class="flex-1 flex flex-col justify-center items-center px-6 py-12 relative overflow-y-auto">
+<!-- Header / Brand -->
+<div class="w-full max-w-[420px] mb-8">
+<div class="flex items-center gap-2 mb-8">
+<div class="w-8 h-8 rounded bg-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary icon-fill" style="font-size: 20px;">layers</span>
+</div>
+<span class="font-headline-md text-headline-md text-on-surface tracking-tight">Valley</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface mb-2">Acesso restrito ao lojista</h1>
+<div class="flex items-center gap-2 text-muted-ink">
+<span class="material-symbols-outlined" style="font-size: 16px;">shield_lock</span>
+<p class="font-body-md text-body-md">Ambiente monitorado <span class="font-mono text-[11px] opacity-70 ml-1">(tenant_id: val_m_829x)</span></p>
+</div>
+</div>
+<!-- Login Card Container -->
+<div class="w-full max-w-[420px] bg-surface-container-lowest">
+<!-- Auth Method Tabs -->
+<div class="flex p-1 bg-surface-variant rounded-lg mb-6 border border-line">
+<button class="flex-1 h-[32px] rounded bg-surface-container-lowest shadow-sm border border-line flex items-center justify-center gap-2 font-label-md text-label-md text-on-surface transition-all">
+<span class="material-symbols-outlined" style="font-size: 16px;">mail</span>
+                    E-mail
+                </button>
+<button class="flex-1 h-[32px] rounded flex items-center justify-center gap-2 font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-all">
+<span class="material-symbols-outlined" style="font-size: 16px;">smartphone</span>
+                    Telefone
+                </button>
+</div>
+<!-- Form -->
+<form class="flex flex-col gap-5">
+<!-- Email Field -->
+<div class="flex flex-col gap-1">
+<label class="font-label-md text-label-md text-on-surface" for="email">E-mail corporativo ou Usuário</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-ink">
+<span class="material-symbols-outlined" style="font-size: 18px;">person</span>
+</div>
+<input autocomplete="username" class="w-full h-control-default pl-10 pr-3 border border-line rounded bg-surface-container-lowest font-body-md text-body-md text-on-surface placeholder:text-muted-ink focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-shadow" id="email" placeholder="admin@loja.com.br" type="text"/>
+</div>
+</div>
+<!-- Password Field -->
+<div class="flex flex-col gap-1">
+<div class="flex justify-between items-center">
+<label class="font-label-md text-label-md text-on-surface" for="password">Senha de acesso</label>
+<a class="font-label-sm text-label-sm text-primary hover:text-primary-container hover:underline transition-colors" href="#">Esqueci minha senha</a>
+</div>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-ink">
+<span class="material-symbols-outlined" style="font-size: 18px;">key</span>
+</div>
+<input autocomplete="current-password" class="w-full h-control-default pl-10 pr-10 border border-line rounded bg-surface-container-lowest font-body-md text-body-md text-on-surface placeholder:text-muted-ink focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-shadow" id="password" placeholder="••••••••" type="password"/>
+<button class="absolute inset-y-0 right-0 pr-3 flex items-center text-muted-ink hover:text-on-surface transition-colors" type="button">
+<span class="material-symbols-outlined" style="font-size: 18px;">visibility_off</span>
+</button>
+</div>
+<!-- MFA Hint Placeholder -->
+<div class="mt-1 flex items-center gap-1.5 text-secondary">
+<span class="material-symbols-outlined icon-fill" style="font-size: 14px;">verified_user</span>
+<span class="font-label-sm text-label-sm">Autenticação MFA requerida no próximo passo</span>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex flex-col gap-3 mt-4">
+<button class="w-full h-control-default bg-primary text-on-primary rounded font-label-md text-label-md hover:bg-primary-container focus:ring-2 focus:ring-offset-2 focus:ring-primary outline-none transition-all flex items-center justify-center gap-2 group relative overflow-hidden" type="submit">
+<span>Entrar no Dashboard</span>
+<span class="material-symbols-outlined group-hover:translate-x-1 transition-transform" style="font-size: 18px;">arrow_forward</span>
+</button>
+<button class="w-full h-control-default bg-surface-container-lowest border border-line text-on-surface rounded font-label-md text-label-md hover:bg-surface-variant focus:ring-2 focus:ring-offset-2 focus:ring-line outline-none transition-colors" type="button">
+                        Cadastre-se
+                    </button>
+</div>
+</form>
+<!-- Status Indicator (Subtle Loading/Auth State) -->
+<div class="mt-8 flex justify-center items-center gap-2 text-muted-ink opacity-60 hover:opacity-100 transition-opacity cursor-default">
+<span class="material-symbols-outlined animate-spin" style="font-size: 16px; display: none;">progress_activity</span>
+<span class="material-symbols-outlined" style="font-size: 16px;">lock</span>
+<span class="font-label-sm text-label-sm">Aguardando credenciais...</span>
+</div>
+<!-- Example of Connected state (Hidden by default for visual reference) -->
+<!--
+            <div class="mt-8 flex justify-center items-center gap-2 text-success-green">
+                <span class="material-symbols-outlined icon-fill" style="font-size: 16px;">check_circle</span>
+                <span class="font-label-sm text-label-sm">Autenticação segura estabelecida</span>
+            </div>
+            -->
+</div>
+<!-- Minimal Footer inside Canvas -->
+<div class="absolute bottom-6 left-0 right-0 flex justify-center">
+<span class="font-label-sm text-label-sm text-muted-ink">© 2024 Valley ERP. Todos os direitos reservados.</span>
+</div>
+</main>
+<!-- Right Panel: Operational Signals -->
+<aside class="hidden md:flex w-[380px] lg:w-[440px] bg-work-surface border-l border-line p-8 lg:p-12 flex-col justify-between relative overflow-hidden">
+<!-- Subtle Background Accent (CSS Pattern instead of image to keep it sober) -->
+<div class="absolute inset-0 opacity-[0.03] pointer-events-none" style="background-image: radial-gradient(var(--tw-colors-on-surface) 1px, transparent 1px); background-size: 24px 24px;"></div>
+<div class="relative z-10">
+<!-- System Status Indicator -->
+<div class="inline-flex items-center gap-2 bg-surface-container-lowest border border-line rounded-full px-3 py-1.5 mb-10 shadow-sm">
+<div class="w-2 h-2 rounded-full bg-success-green animate-pulse"></div>
+<span class="font-label-sm text-label-sm text-on-surface font-medium">Status do Sistema: Operacional</span>
+</div>
+<div class="flex flex-col gap-6">
+<!-- Signal Card 1 -->
+<div class="bg-surface-container-lowest border border-line rounded-lg p-5 shadow-sm hover:shadow-md transition-shadow">
+<div class="w-10 h-10 rounded bg-primary-fixed flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-primary" style="font-size: 20px;">support_agent</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-1">Suporte 24/7</h3>
+<p class="font-body-sm text-body-sm text-muted-ink">Nossa equipe de especialistas está monitorando a infraestrutura continuamente para garantir estabilidade operacional.</p>
+</div>
+<!-- Signal Card 2 -->
+<div class="bg-surface-container-lowest border border-line rounded-lg p-5 shadow-sm hover:shadow-md transition-shadow">
+<div class="w-10 h-10 rounded bg-secondary-fixed flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-secondary" style="font-size: 20px;">security</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-1">Segurança V-Coin</h3>
+<p class="font-body-sm text-body-sm text-muted-ink">Todas as transações e dados de lojistas são criptografados de ponta a ponta com padrões bancários.</p>
+</div>
+</div>
+</div>
+<div class="relative z-10 mt-12 pt-6 border-t border-line">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary opacity-80" style="font-size: 20px;">info</span>
+<p class="font-label-sm text-label-sm text-on-surface-variant leading-relaxed">
+                    Este ambiente é restrito e auditable. O acesso não autorizado é estritamente proibido. Suas ações estão sendo registradas no tenant atual.
+                </p>
+</div>
+</div>
+</aside>
+</body></html>

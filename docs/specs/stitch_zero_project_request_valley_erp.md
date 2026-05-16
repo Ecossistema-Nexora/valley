@@ -81,5 +81,11 @@ Siga integralmente a especificacao mestre anexada, com foco em:
 - O projeto privado foi criado no Stitch como `projects/12516070127536900621`.
 - O design system Stitch foi criado como `assets/c566fbedbd564135b573140ef520a79f`.
 - As telas geradas foram registradas em `docs/specs/stitch_v060_generated_screens_summary.md`.
+- A publicacao ativa foi aplicada como `20260516_valley_erp_v060`.
+- Galeria ativa: `/stitch/20260516_valley_erp_v060/`.
+- Manifesto ativo: `/stitch/20260516_valley_erp_v060/manifest.json`.
+- Inventario ativo: `docs/design/stitch_valley_erp_v060_inventory.json`.
+- Fonte de verdade ativa: `config/design/valley_stitch_source_of_truth.json`.
+- Artefatos antigos `20260513_valley_erp_v2` foram removidos da galeria/export ativos e mantidos apenas como referencia obsoleta em metadados.
 - A chave Stitch deve permanecer somente como `STITCH_API_KEY` local; nenhum segredo deve entrar em git.
-- O proximo passo obrigatorio e encaminhar as telas para Figma e depois Flutter.
+- O handoff Figma fica versionado nos documentos acima e o Flutter ja consome `20260516_valley_erp_v060`.

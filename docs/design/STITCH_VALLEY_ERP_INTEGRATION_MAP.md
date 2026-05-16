@@ -1,51 +1,42 @@
 # Stitch Valley ERP Integration Map
 
 <!--
-PROPOSITO: Mapear a conversao das telas Stitch para Valley.
+PROPOSITO: Mapear a conversao das telas Stitch v060 para Valley.
 CONTEXTO: Este mapa orienta Figma handoff, Flutter e admin web a partir da fonte Stitch ativa.
-REGRAS: Implementar por ondas, validar em browser/Flutter e manter tokens Valley/Helena/V-Coin.
+REGRAS: Implementar por superficies reais, validar runtime e manter tokens Valley/Helena/V-Coin.
 -->
 
 ## Decisao
 
-- Fonte primaria de design: export Stitch `stitch_valley_erp (2).zip`.
-- Assets brutos versionados: `docs/design/stitch_exports/20260513_valley_erp_v2/`.
-- Staging local ignorado: `tmp/stitch-import/`.
-- Handoff de design: promover P0 para Figma antes de codificar grandes superficies.
-- Implementacao: converter componentes e fluxos, mantendo HTML bruto como galeria de referencia e fonte ativa de inspecao.
+- Fonte primaria de design: projeto Stitch `projects/12516070127536900621`.
+- Assets brutos versionados: `docs/design/stitch_exports/20260516_valley_erp_v060/stitch_valley_erp`.
+- Galeria ativa: `/stitch/20260516_valley_erp_v060/`.
+- Handoff de design: consumir `docs/design/STITCH_VALLEY_V060_PUBLICATION.md` e `docs/specs/stitch_v060_generated_screens_summary.md` no Figma.
+- Implementacao: admin web e Flutter devem consumir `config/design/valley_stitch_source_of_truth.json`.
 
-## Onda 1 - P0
+## P0 v060
 
-| Tela Stitch | Superficie Valley | Alvo tecnico | Criterio de aceite |
-| --- | --- | --- | --- |
-| `valley_admin_central_1` | admin_web | admin/app.js + admin/styles.css | Sem botao morto, responsivo e validado em browser/mobile |
-| `valley_admin_central_2` | admin_web | admin/app.js + admin/styles.css | Sem botao morto, responsivo e validado em browser/mobile |
-| `valley_erp_cadastro_de_sku` | erp_lojista | admin/app.js merchant ERP tabs | Sem botao morto, responsivo e validado em browser/mobile |
-| `valley_erp_cadastro_de_sku_mobile` | flutter_mobile | frontend/flutter/lib/src/ui | Sem botao morto, responsivo e validado em browser/mobile |
-| `valley_erp_cadastro_de_sku_mobile_pt_br` | flutter_mobile | frontend/flutter/lib/src/ui | Sem botao morto, responsivo e validado em browser/mobile |
-| `valley_erp_checkout_e_faturas_pt_br` | usuario_publico | frontend/flutter/lib/src/ui | Sem botao morto, responsivo e validado em browser/mobile |
-| `valley_erp_checkout_lojista_pt_br` | usuario_publico | frontend/flutter/lib/src/ui | Sem botao morto, responsivo e validado em browser/mobile |
-| `valley_erp_checkout_mobile_pt_br` | usuario_publico | frontend/flutter/lib/src/ui | Sem botao morto, responsivo e validado em browser/mobile |
-| `valley_erp_do_lojista` | erp_lojista | admin/app.js merchant ERP tabs | Sem botao morto, responsivo e validado em browser/mobile |
-| `valley_erp_gest_o_de_estoque_mobile` | flutter_mobile | frontend/flutter/lib/src/ui | Sem botao morto, responsivo e validado em browser/mobile |
-| `valley_erp_gest_o_de_estoque_mobile_pt_br` | flutter_mobile | frontend/flutter/lib/src/ui | Sem botao morto, responsivo e validado em browser/mobile |
-| `valley_erp_gest_o_de_pedidos_pt_br` | erp_lojista | admin/app.js merchant ERP tabs | Sem botao morto, responsivo e validado em browser/mobile |
-| `valley_erp_painel_de_controle_lojista` | erp_lojista | admin/app.js merchant ERP tabs | Sem botao morto, responsivo e validado em browser/mobile |
-| `valley_gest_o_de_estoque_pt_br` | shared_design | docs/design handoff | Sem botao morto, responsivo e validado em browser/mobile |
-| `valley_login` | flutter_mobile | frontend/flutter/lib/src/ui | Sem botao morto, responsivo e validado em browser/mobile |
-| `valley_login_e_cadastro_mobile` | flutter_mobile | frontend/flutter/lib/src/ui | Sem botao morto, responsivo e validado em browser/mobile |
-| `valley_login_lojista` | flutter_mobile | frontend/flutter/lib/src/ui | Sem botao morto, responsivo e validado em browser/mobile |
-| `valley_login_pt_br` | flutter_mobile | frontend/flutter/lib/src/ui | Sem botao morto, responsivo e validado em browser/mobile |
-| `valley_portal_p_blico_pt_br` | usuario_publico | frontend/flutter/lib/src/ui | Sem botao morto, responsivo e validado em browser/mobile |
-
-## Onda 2 - P1
-
-- Financeiro, logistica, marketplace, relatorios, configuracoes, suporte e auditoria.
-- Depois da Onda 1, aplicar os mesmos componentes base para evitar duplicacao visual.
+| Tela Stitch | Grupo | Superficie Valley | Alvo tecnico | Criterio de aceite |
+| --- | --- | --- | --- | --- |
+| `admin_god_mode` | admin | admin_web | admin/app.js + admin/styles.css | Sem botao morto, responsivo e validado no runtime local |
+| `courier_delivery_flow_green` | entregador | courier_mobile | frontend/flutter/lib/src/ui | Sem botao morto, responsivo e validado no runtime local |
+| `courier_home_green` | entregador | courier_mobile | frontend/flutter/lib/src/ui | Sem botao morto, responsivo e validado no runtime local |
+| `merchant_dashboard` | lojista | merchant_erp | admin/app.js merchant ERP + Flutter handoff | Sem botao morto, responsivo e validado no runtime local |
+| `merchant_finance_agenda_integrations` | lojista | merchant_erp | admin/app.js merchant ERP + Flutter handoff | Sem botao morto, responsivo e validado no runtime local |
+| `merchant_login` | lojista | merchant_erp | admin/app.js merchant ERP + Flutter handoff | Sem botao morto, responsivo e validado no runtime local |
+| `merchant_onboarding` | lojista | merchant_erp | admin/app.js merchant ERP + Flutter handoff | Sem botao morto, responsivo e validado no runtime local |
+| `merchant_operations` | lojista | merchant_erp | admin/app.js merchant ERP + Flutter handoff | Sem botao morto, responsivo e validado no runtime local |
+| `customer_checkout_payment` | usuario | customer_mobile | frontend/flutter/lib/src/ui | Sem botao morto, responsivo e validado no runtime local |
+| `customer_helena_support` | usuario | customer_mobile | frontend/flutter/lib/src/ui | Sem botao morto, responsivo e validado no runtime local |
+| `customer_home` | usuario | customer_mobile | frontend/flutter/lib/src/ui | Sem botao morto, responsivo e validado no runtime local |
+| `customer_merchant_chat` | usuario | customer_mobile | frontend/flutter/lib/src/ui | Sem botao morto, responsivo e validado no runtime local |
+| `customer_messages` | usuario | customer_mobile | frontend/flutter/lib/src/ui | Sem botao morto, responsivo e validado no runtime local |
+| `customer_purchases_tracking` | usuario | customer_mobile | frontend/flutter/lib/src/ui | Sem botao morto, responsivo e validado no runtime local |
+| `customer_stock_marketplace` | usuario | customer_mobile | frontend/flutter/lib/src/ui | Sem botao morto, responsivo e validado no runtime local |
 
 ## Guardrails
 
 - Nao introduzir referencias proibidas de produto; usar Valley, Helena e V-Coin.
-- Manter assets brutos versionados e publicados como referencia de handoff e fonte ativa de inspecao.
-- Nao quebrar o APK v038 nem o gate Cloudflare validado.
-- Rodar Playwright/browser para admin web e build Flutter quando tocar UI executavel.
+- Manter assets v060 publicados como referencia de handoff e fonte ativa de inspecao.
+- Nao reintroduzir pacotes 20260513 como fonte ativa.
+- Rodar validacao browser/HTTP para admin web e build Flutter quando tocar UI executavel.

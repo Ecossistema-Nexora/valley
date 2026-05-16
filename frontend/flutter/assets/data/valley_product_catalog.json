@@ -1,7 +1,7 @@
 {
   "status": "ok",
   "service": "valley-product",
-  "generated_at_utc": "2026-05-16T01:38:36.548520Z",
+  "generated_at_utc": "2026-05-16T03:25:52.671172Z",
   "title": "Valley Stock | Catalogo proprietario",
   "subtitle": "Seleção Valley com catálogo real multi-provedor, agrupado por categoria e taxonomia Google, com sincronização de estoque, preço e tracking sem exposição pública da origem operacional.",
   "public_runtime": {
@@ -1174,7 +1174,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para smartphones com estoque sincronizado. Categoria fonte: Octa Core. 163 unidades em estoque. 96 listagens sincronizadas.",
+      "description": "Seleção Valley para smartphones com estoque sincronizado. Categoria fonte: Octa Core. 163 unidades em estoque. 97 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/79925cbb-b6af-49db-9843-9469c4e13ec5.jpg"
       ],
@@ -1182,7 +1182,7 @@
       "features": [
         "Estoque global sincronizado",
         "163 unidades disponíveis",
-        "96 listagens ativas",
+        "97 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -1206,7 +1206,7 @@
       "google_product_category_path": "Electronics > Communications > Telephony > Mobile Phones",
       "google_product_category": "Electronics > Communications > Telephony > Mobile Phones",
       "price_band": "R$ 500-999",
-      "offer_count": 96,
+      "offer_count": 97,
       "availability_label": "163 em estoque",
       "shipping_free": false
     },
@@ -1389,44 +1389,43 @@
       "shipping_free": false
     },
     {
-      "id": "6d651f04-69dd-5f57-8262-1f6c5b4e96c6",
+      "id": "06d39315-35ee-54e2-b749-7636f96809ac",
       "module_id": "STOCK",
-      "title": "Compatible with Apple, Tripod Fill Light Live Bracket Beauty Light Set Ring Light",
-      "brand": "Valley Studio",
+      "title": "Wireless Lavalier Lapel Microphone For IPhone IPad Professional Wireless Clip Mic - Cordless Omnidirectional Condenser Recording Mic For Interview Video Podcast Vlog YouTube",
+      "brand": "Valley Voice",
       "category": "Creator Gear",
-      "price_brl": 23.6,
-      "compare_at_brl": 23.6,
-      "stock": 151655,
+      "price_brl": 65.75,
+      "compare_at_brl": 65.75,
+      "stock": 3230,
       "merchant_name": "Valley",
-      "image_url": "https://cf.cjdropshipping.com/2057/10291016253898.jpg",
-      "video_url": "27dac0c2bb87412b9145ac0cb89c7e09",
-      "video_count": 1,
-      "status": "151655 em estoque • tracking ativo",
+      "image_url": "https://cf.cjdropshipping.com/8277cbc6-6f4c-4a42-979b-c59de585c33a.jpg",
+      "video_url": "",
+      "video_count": 0,
+      "status": "3230 em estoque • tracking ativo",
       "tags": [
         "Catalogo real",
         "Creator Gear",
-        "Camera & Photo Accessories",
-        "Video",
+        "Microphones",
         "Alta demanda"
       ],
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para creator gear com estoque sincronizado. Categoria fonte: Camera & Photo Accessories. 151655 unidades em estoque. 971 listagens sincronizadas.",
+      "description": "Seleção Valley para creator gear com estoque sincronizado. Categoria fonte: Microphones. 3230 unidades em estoque. 756 listagens sincronizadas.",
       "gallery_urls": [
-        "https://cf.cjdropshipping.com/2057/10291016253898.jpg"
+        "https://cf.cjdropshipping.com/8277cbc6-6f4c-4a42-979b-c59de585c33a.jpg"
       ],
       "profile_id": "",
       "features": [
         "Estoque global sincronizado",
-        "151655 unidades disponíveis",
-        "971 listagens ativas",
+        "3230 unidades disponíveis",
+        "756 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
         "name": "Loja Valley",
         "headline": "Oferta sincronizada com estoque e tracking automatizados.",
-        "avatar_url": "https://cf.cjdropshipping.com/2057/10291016253898.jpg",
+        "avatar_url": "https://cf.cjdropshipping.com/8277cbc6-6f4c-4a42-979b-c59de585c33a.jpg",
         "rating": 4.7,
         "city": "Operação global"
       },
@@ -1438,14 +1437,14 @@
         "eta": "Prazo dinâmico na etapa de pedido"
       },
       "raw_badge": "STOCK",
-      "collection_label": "Valley Studio",
-      "model_name": "Camera & Photo Accessories",
-      "google_product_category_id": "42",
-      "google_product_category_path": "Cameras & Optics > Photography > Lighting & Studio",
-      "google_product_category": "Cameras & Optics > Photography > Lighting & Studio",
+      "collection_label": "Valley Voice",
+      "model_name": "Microphones",
+      "google_product_category_id": "234",
+      "google_product_category_path": "Electronics > Audio > Audio Components > Microphones",
+      "google_product_category": "Electronics > Audio > Audio Components > Microphones",
       "price_band": "Ate R$ 99",
-      "offer_count": 971,
-      "availability_label": "151655 em estoque",
+      "offer_count": 756,
+      "availability_label": "3230 em estoque",
       "shipping_free": false
     },
     {
@@ -1805,19 +1804,19 @@
       "shipping_free": false
     },
     {
-      "id": "06d39315-35ee-54e2-b749-7636f96809ac",
+      "id": "58576945-f006-5114-bfb8-68122a2f3f96",
       "module_id": "STOCK",
-      "title": "Wireless Lavalier Lapel Microphone For IPhone IPad Professional Wireless Clip Mic - Cordless Omnidirectional Condenser Recording Mic For Interview Video Podcast Vlog YouTube",
+      "title": "Clear Full RGB Capacitor Esports Gaming Desktop Microphone Computer Microphone",
       "brand": "Valley Voice",
       "category": "Creator Gear",
-      "price_brl": 65.75,
-      "compare_at_brl": 65.75,
-      "stock": 3230,
+      "price_brl": 31.91,
+      "compare_at_brl": 31.91,
+      "stock": 13953,
       "merchant_name": "Valley",
-      "image_url": "https://cf.cjdropshipping.com/8277cbc6-6f4c-4a42-979b-c59de585c33a.jpg",
+      "image_url": "https://cf.cjdropshipping.com/4bea8902-c935-4a4c-bf6d-a8da1cb47e29.jpg",
       "video_url": "",
       "video_count": 0,
-      "status": "3230 em estoque • tracking ativo",
+      "status": "13953 em estoque • tracking ativo",
       "tags": [
         "Catalogo real",
         "Creator Gear",
@@ -1827,21 +1826,21 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para creator gear com estoque sincronizado. Categoria fonte: Microphones. 3230 unidades em estoque. 756 listagens sincronizadas.",
+      "description": "Seleção Valley para creator gear com estoque sincronizado. Categoria fonte: Microphones. 13953 unidades em estoque. 751 listagens sincronizadas.",
       "gallery_urls": [
-        "https://cf.cjdropshipping.com/8277cbc6-6f4c-4a42-979b-c59de585c33a.jpg"
+        "https://cf.cjdropshipping.com/4bea8902-c935-4a4c-bf6d-a8da1cb47e29.jpg"
       ],
       "profile_id": "",
       "features": [
         "Estoque global sincronizado",
-        "3230 unidades disponíveis",
-        "756 listagens ativas",
+        "13953 unidades disponíveis",
+        "751 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
         "name": "Loja Valley",
         "headline": "Oferta sincronizada com estoque e tracking automatizados.",
-        "avatar_url": "https://cf.cjdropshipping.com/8277cbc6-6f4c-4a42-979b-c59de585c33a.jpg",
+        "avatar_url": "https://cf.cjdropshipping.com/4bea8902-c935-4a4c-bf6d-a8da1cb47e29.jpg",
         "rating": 4.7,
         "city": "Operação global"
       },
@@ -1859,8 +1858,8 @@
       "google_product_category_path": "Electronics > Audio > Audio Components > Microphones",
       "google_product_category": "Electronics > Audio > Audio Components > Microphones",
       "price_band": "Ate R$ 99",
-      "offer_count": 756,
-      "availability_label": "3230 em estoque",
+      "offer_count": 751,
+      "availability_label": "13953 em estoque",
       "shipping_free": false
     },
     {
@@ -2219,19 +2218,19 @@
       "shipping_free": false
     },
     {
-      "id": "58576945-f006-5114-bfb8-68122a2f3f96",
+      "id": "f755093d-6618-5961-8629-b08539e04db8",
       "module_id": "STOCK",
-      "title": "Clear Full RGB Capacitor Esports Gaming Desktop Microphone Computer Microphone",
+      "title": "Wireless Lavalier Microphone Drag Two Outdoor",
       "brand": "Valley Voice",
       "category": "Creator Gear",
-      "price_brl": 31.91,
-      "compare_at_brl": 31.91,
-      "stock": 13953,
+      "price_brl": 4.05,
+      "compare_at_brl": 4.05,
+      "stock": 19,
       "merchant_name": "Valley",
-      "image_url": "https://cf.cjdropshipping.com/4bea8902-c935-4a4c-bf6d-a8da1cb47e29.jpg",
+      "image_url": "https://cf.cjdropshipping.com/40830246-5be9-4831-9039-6cee860a3b25.jpg",
       "video_url": "",
       "video_count": 0,
-      "status": "13953 em estoque • tracking ativo",
+      "status": "19 em estoque • tracking ativo",
       "tags": [
         "Catalogo real",
         "Creator Gear",
@@ -2241,21 +2240,21 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para creator gear com estoque sincronizado. Categoria fonte: Microphones. 13953 unidades em estoque. 751 listagens sincronizadas.",
+      "description": "Seleção Valley para creator gear com estoque sincronizado. Categoria fonte: Microphones. 19 unidades em estoque. 598 listagens sincronizadas.",
       "gallery_urls": [
-        "https://cf.cjdropshipping.com/4bea8902-c935-4a4c-bf6d-a8da1cb47e29.jpg"
+        "https://cf.cjdropshipping.com/40830246-5be9-4831-9039-6cee860a3b25.jpg"
       ],
       "profile_id": "",
       "features": [
         "Estoque global sincronizado",
-        "13953 unidades disponíveis",
-        "751 listagens ativas",
+        "19 unidades disponíveis",
+        "598 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
         "name": "Loja Valley",
         "headline": "Oferta sincronizada com estoque e tracking automatizados.",
-        "avatar_url": "https://cf.cjdropshipping.com/4bea8902-c935-4a4c-bf6d-a8da1cb47e29.jpg",
+        "avatar_url": "https://cf.cjdropshipping.com/40830246-5be9-4831-9039-6cee860a3b25.jpg",
         "rating": 4.7,
         "city": "Operação global"
       },
@@ -2273,8 +2272,8 @@
       "google_product_category_path": "Electronics > Audio > Audio Components > Microphones",
       "google_product_category": "Electronics > Audio > Audio Components > Microphones",
       "price_band": "Ate R$ 99",
-      "offer_count": 751,
-      "availability_label": "13953 em estoque",
+      "offer_count": 598,
+      "availability_label": "19 em estoque",
       "shipping_free": false
     },
     {
@@ -2418,7 +2417,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para smartphones com estoque sincronizado. Categoria fonte: Octa Core. 588 unidades em estoque. 67 listagens sincronizadas.",
+      "description": "Seleção Valley para smartphones com estoque sincronizado. Categoria fonte: Octa Core. 588 unidades em estoque. 68 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/b20f0715-52ea-42f0-a8d1-83697c60d242.jpg"
       ],
@@ -2426,7 +2425,7 @@
       "features": [
         "Estoque global sincronizado",
         "588 unidades disponíveis",
-        "67 listagens ativas",
+        "68 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -2450,7 +2449,7 @@
       "google_product_category_path": "Electronics > Communications > Telephony > Mobile Phones",
       "google_product_category": "Electronics > Communications > Telephony > Mobile Phones",
       "price_band": "R$ 500-999",
-      "offer_count": 67,
+      "offer_count": 68,
       "availability_label": "588 em estoque",
       "shipping_free": false
     },
@@ -2632,19 +2631,19 @@
       "shipping_free": false
     },
     {
-      "id": "f755093d-6618-5961-8629-b08539e04db8",
+      "id": "b1994c36-dfaf-55fa-95aa-38704c1fe13c",
       "module_id": "STOCK",
-      "title": "Wireless Lavalier Microphone Drag Two Outdoor",
+      "title": "Lavalier microphone microphone",
       "brand": "Valley Voice",
       "category": "Creator Gear",
-      "price_brl": 4.05,
-      "compare_at_brl": 4.05,
-      "stock": 19,
+      "price_brl": 2.18,
+      "compare_at_brl": 2.18,
+      "stock": 14104,
       "merchant_name": "Valley",
-      "image_url": "https://cf.cjdropshipping.com/40830246-5be9-4831-9039-6cee860a3b25.jpg",
+      "image_url": "https://cf.cjdropshipping.com/20200727/1852402698180.jpg",
       "video_url": "",
       "video_count": 0,
-      "status": "19 em estoque • tracking ativo",
+      "status": "14104 em estoque • tracking ativo",
       "tags": [
         "Catalogo real",
         "Creator Gear",
@@ -2654,21 +2653,21 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para creator gear com estoque sincronizado. Categoria fonte: Microphones. 19 unidades em estoque. 598 listagens sincronizadas.",
+      "description": "Seleção Valley para creator gear com estoque sincronizado. Categoria fonte: Microphones. 14104 unidades em estoque. 525 listagens sincronizadas.",
       "gallery_urls": [
-        "https://cf.cjdropshipping.com/40830246-5be9-4831-9039-6cee860a3b25.jpg"
+        "https://cf.cjdropshipping.com/20200727/1852402698180.jpg"
       ],
       "profile_id": "",
       "features": [
         "Estoque global sincronizado",
-        "19 unidades disponíveis",
-        "598 listagens ativas",
+        "14104 unidades disponíveis",
+        "525 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
         "name": "Loja Valley",
         "headline": "Oferta sincronizada com estoque e tracking automatizados.",
-        "avatar_url": "https://cf.cjdropshipping.com/40830246-5be9-4831-9039-6cee860a3b25.jpg",
+        "avatar_url": "https://cf.cjdropshipping.com/20200727/1852402698180.jpg",
         "rating": 4.7,
         "city": "Operação global"
       },
@@ -2686,8 +2685,8 @@
       "google_product_category_path": "Electronics > Audio > Audio Components > Microphones",
       "google_product_category": "Electronics > Audio > Audio Components > Microphones",
       "price_band": "Ate R$ 99",
-      "offer_count": 598,
-      "availability_label": "19 em estoque",
+      "offer_count": 525,
+      "availability_label": "14104 em estoque",
       "shipping_free": false
     },
     {
@@ -2833,7 +2832,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para smartphones com estoque sincronizado. Categoria fonte: Octa Core. 300 unidades em estoque. 67 listagens sincronizadas.",
+      "description": "Seleção Valley para smartphones com estoque sincronizado. Categoria fonte: Octa Core. 300 unidades em estoque. 68 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/117d23da-adad-41d2-9238-275d395cfddf.jpg"
       ],
@@ -2841,7 +2840,7 @@
       "features": [
         "Estoque global sincronizado",
         "300 unidades disponíveis",
-        "67 listagens ativas",
+        "68 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -2865,7 +2864,7 @@
       "google_product_category_path": "Electronics > Communications > Telephony > Mobile Phones",
       "google_product_category": "Electronics > Communications > Telephony > Mobile Phones",
       "price_band": "R$ 500-999",
-      "offer_count": 67,
+      "offer_count": 68,
       "availability_label": "300 em estoque",
       "shipping_free": false
     },
@@ -3047,19 +3046,19 @@
       "shipping_free": false
     },
     {
-      "id": "b1994c36-dfaf-55fa-95aa-38704c1fe13c",
+      "id": "5fab9ca7-cef5-59e4-86d2-8d5f037e1a29",
       "module_id": "STOCK",
-      "title": "Lavalier microphone microphone",
+      "title": "Desktop Microphone Live Conference Microphone",
       "brand": "Valley Voice",
       "category": "Creator Gear",
-      "price_brl": 2.18,
-      "compare_at_brl": 2.18,
-      "stock": 14104,
+      "price_brl": 144.16,
+      "compare_at_brl": 144.16,
+      "stock": 13531,
       "merchant_name": "Valley",
-      "image_url": "https://cf.cjdropshipping.com/20200727/1852402698180.jpg",
+      "image_url": "https://cf.cjdropshipping.com/a09d4f0d-2641-4a83-9da9-58e22e5d8d55.jpg",
       "video_url": "",
       "video_count": 0,
-      "status": "14104 em estoque • tracking ativo",
+      "status": "13531 em estoque • tracking ativo",
       "tags": [
         "Catalogo real",
         "Creator Gear",
@@ -3069,21 +3068,21 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para creator gear com estoque sincronizado. Categoria fonte: Microphones. 14104 unidades em estoque. 525 listagens sincronizadas.",
+      "description": "Seleção Valley para creator gear com estoque sincronizado. Categoria fonte: Microphones. 13531 unidades em estoque. 516 listagens sincronizadas.",
       "gallery_urls": [
-        "https://cf.cjdropshipping.com/20200727/1852402698180.jpg"
+        "https://cf.cjdropshipping.com/a09d4f0d-2641-4a83-9da9-58e22e5d8d55.jpg"
       ],
       "profile_id": "",
       "features": [
         "Estoque global sincronizado",
-        "14104 unidades disponíveis",
-        "525 listagens ativas",
+        "13531 unidades disponíveis",
+        "516 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
         "name": "Loja Valley",
         "headline": "Oferta sincronizada com estoque e tracking automatizados.",
-        "avatar_url": "https://cf.cjdropshipping.com/20200727/1852402698180.jpg",
+        "avatar_url": "https://cf.cjdropshipping.com/a09d4f0d-2641-4a83-9da9-58e22e5d8d55.jpg",
         "rating": 4.7,
         "city": "Operação global"
       },
@@ -3100,9 +3099,9 @@
       "google_product_category_id": "234",
       "google_product_category_path": "Electronics > Audio > Audio Components > Microphones",
       "google_product_category": "Electronics > Audio > Audio Components > Microphones",
-      "price_band": "Ate R$ 99",
-      "offer_count": 525,
-      "availability_label": "14104 em estoque",
+      "price_band": "R$ 100-249",
+      "offer_count": 516,
+      "availability_label": "13531 em estoque",
       "shipping_free": false
     },
     {
@@ -3246,7 +3245,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para smartphones com estoque sincronizado. Categoria fonte: Octa Core. 133 unidades em estoque. 63 listagens sincronizadas.",
+      "description": "Seleção Valley para smartphones com estoque sincronizado. Categoria fonte: Octa Core. 133 unidades em estoque. 64 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/4428c2b8-7d35-47e4-b2d6-5dea879a6b6f.jpg"
       ],
@@ -3254,7 +3253,7 @@
       "features": [
         "Estoque global sincronizado",
         "133 unidades disponíveis",
-        "63 listagens ativas",
+        "64 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -3278,7 +3277,7 @@
       "google_product_category_path": "Electronics > Communications > Telephony > Mobile Phones",
       "google_product_category": "Electronics > Communications > Telephony > Mobile Phones",
       "price_band": "R$ 250-499",
-      "offer_count": 63,
+      "offer_count": 64,
       "availability_label": "133 em estoque",
       "shipping_free": false
     },
@@ -3460,43 +3459,44 @@
       "shipping_free": false
     },
     {
-      "id": "5fab9ca7-cef5-59e4-86d2-8d5f037e1a29",
+      "id": "261c6b4f-ab6e-5046-b7fd-eb08426bc8b7",
       "module_id": "STOCK",
-      "title": "Desktop Microphone Live Conference Microphone",
-      "brand": "Valley Voice",
+      "title": "Video Conference 4 Inch Fill Light Computer Live Photography Light LED Selfie Light USB Powered Round Camera Lamp Dimmable LED Ring Light With Phone Holder",
+      "brand": "Valley Studio",
       "category": "Creator Gear",
-      "price_brl": 144.16,
-      "compare_at_brl": 144.16,
-      "stock": 13531,
+      "price_brl": 17.48,
+      "compare_at_brl": 17.48,
+      "stock": 1,
       "merchant_name": "Valley",
-      "image_url": "https://cf.cjdropshipping.com/a09d4f0d-2641-4a83-9da9-58e22e5d8d55.jpg",
-      "video_url": "",
-      "video_count": 0,
-      "status": "13531 em estoque • tracking ativo",
+      "image_url": "https://cf.cjdropshipping.com/5b8b30f3-b847-48bc-bbc7-b943a43d29c4.jpg",
+      "video_url": "ad60cc3377c24fa28fa8c480265ab8ef",
+      "video_count": 1,
+      "status": "1 em estoque • tracking ativo",
       "tags": [
         "Catalogo real",
         "Creator Gear",
-        "Microphones",
-        "Alta demanda"
+        "Camera & Photo Accessories",
+        "Video",
+        "Operacao ativa"
       ],
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para creator gear com estoque sincronizado. Categoria fonte: Microphones. 13531 unidades em estoque. 516 listagens sincronizadas.",
+      "description": "Seleção Valley para creator gear com estoque sincronizado. Categoria fonte: Camera & Photo Accessories. 1 unidades em estoque. 497 listagens sincronizadas.",
       "gallery_urls": [
-        "https://cf.cjdropshipping.com/a09d4f0d-2641-4a83-9da9-58e22e5d8d55.jpg"
+        "https://cf.cjdropshipping.com/5b8b30f3-b847-48bc-bbc7-b943a43d29c4.jpg"
       ],
       "profile_id": "",
       "features": [
         "Estoque global sincronizado",
-        "13531 unidades disponíveis",
-        "516 listagens ativas",
+        "1 unidades disponíveis",
+        "497 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
         "name": "Loja Valley",
         "headline": "Oferta sincronizada com estoque e tracking automatizados.",
-        "avatar_url": "https://cf.cjdropshipping.com/a09d4f0d-2641-4a83-9da9-58e22e5d8d55.jpg",
+        "avatar_url": "https://cf.cjdropshipping.com/5b8b30f3-b847-48bc-bbc7-b943a43d29c4.jpg",
         "rating": 4.7,
         "city": "Operação global"
       },
@@ -3508,14 +3508,14 @@
         "eta": "Prazo dinâmico na etapa de pedido"
       },
       "raw_badge": "STOCK",
-      "collection_label": "Valley Voice",
-      "model_name": "Microphones",
-      "google_product_category_id": "234",
-      "google_product_category_path": "Electronics > Audio > Audio Components > Microphones",
-      "google_product_category": "Electronics > Audio > Audio Components > Microphones",
-      "price_band": "R$ 100-249",
-      "offer_count": 516,
-      "availability_label": "13531 em estoque",
+      "collection_label": "Valley Studio",
+      "model_name": "Camera & Photo Accessories",
+      "google_product_category_id": "42",
+      "google_product_category_path": "Cameras & Optics > Photography > Lighting & Studio",
+      "google_product_category": "Cameras & Optics > Photography > Lighting & Studio",
+      "price_band": "Ate R$ 99",
+      "offer_count": 497,
+      "availability_label": "1 em estoque",
       "shipping_free": false
     },
     {
@@ -3660,7 +3660,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para smartphones com estoque sincronizado. Categoria fonte: Octa Core. 80 unidades em estoque. 60 listagens sincronizadas.",
+      "description": "Seleção Valley para smartphones com estoque sincronizado. Categoria fonte: Octa Core. 80 unidades em estoque. 61 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/98efe319-d82e-4c1b-bd16-31bd595901d9.png"
       ],
@@ -3668,7 +3668,7 @@
       "features": [
         "Estoque global sincronizado",
         "80 unidades disponíveis",
-        "60 listagens ativas",
+        "61 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -3692,7 +3692,7 @@
       "google_product_category_path": "Electronics > Communications > Telephony > Mobile Phones",
       "google_product_category": "Electronics > Communications > Telephony > Mobile Phones",
       "price_band": "R$ 500-999",
-      "offer_count": 60,
+      "offer_count": 61,
       "availability_label": "80 em estoque",
       "shipping_free": false
     },
@@ -3874,44 +3874,43 @@
       "shipping_free": false
     },
     {
-      "id": "261c6b4f-ab6e-5046-b7fd-eb08426bc8b7",
+      "id": "37849011-3baa-5a2d-8196-5ff72e740bb8",
       "module_id": "STOCK",
-      "title": "Video Conference 4 Inch Fill Light Computer Live Photography Light LED Selfie Light USB Powered Round Camera Lamp Dimmable LED Ring Light With Phone Holder",
-      "brand": "Valley Studio",
+      "title": "Wireless Lavalier Microphone Dual Core Noise Cancelling Microphone",
+      "brand": "Valley Voice",
       "category": "Creator Gear",
-      "price_brl": 17.48,
-      "compare_at_brl": 17.48,
-      "stock": 1,
+      "price_brl": 101.31,
+      "compare_at_brl": 101.31,
+      "stock": 168735,
       "merchant_name": "Valley",
-      "image_url": "https://cf.cjdropshipping.com/5b8b30f3-b847-48bc-bbc7-b943a43d29c4.jpg",
-      "video_url": "ad60cc3377c24fa28fa8c480265ab8ef",
-      "video_count": 1,
-      "status": "1 em estoque • tracking ativo",
+      "image_url": "https://cf.cjdropshipping.com/cec76796-595b-4b63-8fd1-806864f8f426.jpg",
+      "video_url": "",
+      "video_count": 0,
+      "status": "168735 em estoque • tracking ativo",
       "tags": [
         "Catalogo real",
         "Creator Gear",
-        "Camera & Photo Accessories",
-        "Video",
+        "Microphones",
         "Operacao ativa"
       ],
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para creator gear com estoque sincronizado. Categoria fonte: Camera & Photo Accessories. 1 unidades em estoque. 497 listagens sincronizadas.",
+      "description": "Seleção Valley para creator gear com estoque sincronizado. Categoria fonte: Microphones. 168735 unidades em estoque. 487 listagens sincronizadas.",
       "gallery_urls": [
-        "https://cf.cjdropshipping.com/5b8b30f3-b847-48bc-bbc7-b943a43d29c4.jpg"
+        "https://cf.cjdropshipping.com/cec76796-595b-4b63-8fd1-806864f8f426.jpg"
       ],
       "profile_id": "",
       "features": [
         "Estoque global sincronizado",
-        "1 unidades disponíveis",
-        "497 listagens ativas",
+        "168735 unidades disponíveis",
+        "487 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
         "name": "Loja Valley",
         "headline": "Oferta sincronizada com estoque e tracking automatizados.",
-        "avatar_url": "https://cf.cjdropshipping.com/5b8b30f3-b847-48bc-bbc7-b943a43d29c4.jpg",
+        "avatar_url": "https://cf.cjdropshipping.com/cec76796-595b-4b63-8fd1-806864f8f426.jpg",
         "rating": 4.7,
         "city": "Operação global"
       },
@@ -3923,14 +3922,14 @@
         "eta": "Prazo dinâmico na etapa de pedido"
       },
       "raw_badge": "STOCK",
-      "collection_label": "Valley Studio",
-      "model_name": "Camera & Photo Accessories",
-      "google_product_category_id": "42",
-      "google_product_category_path": "Cameras & Optics > Photography > Lighting & Studio",
-      "google_product_category": "Cameras & Optics > Photography > Lighting & Studio",
-      "price_band": "Ate R$ 99",
-      "offer_count": 497,
-      "availability_label": "1 em estoque",
+      "collection_label": "Valley Voice",
+      "model_name": "Microphones",
+      "google_product_category_id": "234",
+      "google_product_category_path": "Electronics > Audio > Audio Components > Microphones",
+      "google_product_category": "Electronics > Audio > Audio Components > Microphones",
+      "price_band": "R$ 100-249",
+      "offer_count": 487,
+      "availability_label": "168735 em estoque",
       "shipping_free": false
     },
     {
@@ -3956,7 +3955,7 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para premium tech com estoque sincronizado. Categoria fonte: Chargers. 80000 unidades em estoque. 977 listagens sincronizadas.",
+      "description": "Seleção Valley para premium tech com estoque sincronizado. Categoria fonte: Chargers. 80000 unidades em estoque. 978 listagens sincronizadas.",
       "gallery_urls": [
         "https://cf.cjdropshipping.com/2049/988972328750.jpg"
       ],
@@ -3964,7 +3963,7 @@
       "features": [
         "Estoque global sincronizado",
         "80000 unidades disponíveis",
-        "977 listagens ativas",
+        "978 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
@@ -3988,7 +3987,7 @@
       "google_product_category_path": "Electronics > Electronics Accessories > Power > Power Adapters & Chargers",
       "google_product_category": "Electronics > Electronics Accessories > Power > Power Adapters & Chargers",
       "price_band": "Ate R$ 99",
-      "offer_count": 977,
+      "offer_count": 978,
       "availability_label": "80000 em estoque",
       "shipping_free": false
     },
@@ -4288,19 +4287,19 @@
       "shipping_free": false
     },
     {
-      "id": "37849011-3baa-5a2d-8196-5ff72e740bb8",
+      "id": "80060648-f5b3-5b66-9a8e-55ea0cbb770b",
       "module_id": "STOCK",
-      "title": "Wireless Lavalier Microphone Dual Core Noise Cancelling Microphone",
+      "title": "Mini mobile phone microphone mobile phone recording sing small microphone small microphone",
       "brand": "Valley Voice",
       "category": "Creator Gear",
-      "price_brl": 101.31,
-      "compare_at_brl": 101.31,
-      "stock": 168735,
+      "price_brl": 3.5,
+      "compare_at_brl": 3.5,
+      "stock": 50479,
       "merchant_name": "Valley",
-      "image_url": "https://cf.cjdropshipping.com/cec76796-595b-4b63-8fd1-806864f8f426.jpg",
+      "image_url": "https://cf.cjdropshipping.com/20180913/2262032170855.png",
       "video_url": "",
       "video_count": 0,
-      "status": "168735 em estoque • tracking ativo",
+      "status": "50479 em estoque • tracking ativo",
       "tags": [
         "Catalogo real",
         "Creator Gear",
@@ -4310,21 +4309,21 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para creator gear com estoque sincronizado. Categoria fonte: Microphones. 168735 unidades em estoque. 487 listagens sincronizadas.",
+      "description": "Seleção Valley para creator gear com estoque sincronizado. Categoria fonte: Microphones. 50479 unidades em estoque. 472 listagens sincronizadas.",
       "gallery_urls": [
-        "https://cf.cjdropshipping.com/cec76796-595b-4b63-8fd1-806864f8f426.jpg"
+        "https://cf.cjdropshipping.com/20180913/2262032170855.png"
       ],
       "profile_id": "",
       "features": [
         "Estoque global sincronizado",
-        "168735 unidades disponíveis",
-        "487 listagens ativas",
+        "50479 unidades disponíveis",
+        "472 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
         "name": "Loja Valley",
         "headline": "Oferta sincronizada com estoque e tracking automatizados.",
-        "avatar_url": "https://cf.cjdropshipping.com/cec76796-595b-4b63-8fd1-806864f8f426.jpg",
+        "avatar_url": "https://cf.cjdropshipping.com/20180913/2262032170855.png",
         "rating": 4.7,
         "city": "Operação global"
       },
@@ -4341,9 +4340,9 @@
       "google_product_category_id": "234",
       "google_product_category_path": "Electronics > Audio > Audio Components > Microphones",
       "google_product_category": "Electronics > Audio > Audio Components > Microphones",
-      "price_band": "R$ 100-249",
-      "offer_count": 487,
-      "availability_label": "168735 em estoque",
+      "price_band": "Ate R$ 99",
+      "offer_count": 472,
+      "availability_label": "50479 em estoque",
       "shipping_free": false
     },
     {
@@ -4702,19 +4701,19 @@
       "shipping_free": false
     },
     {
-      "id": "80060648-f5b3-5b66-9a8e-55ea0cbb770b",
+      "id": "7817957c-1dc7-546b-bfbc-4c57e09b51ec",
       "module_id": "STOCK",
-      "title": "Mini mobile phone microphone mobile phone recording sing small microphone small microphone",
+      "title": "Short Video Shooting Mobile Phone Live Broadcast Wireless Lavalier Microphone",
       "brand": "Valley Voice",
       "category": "Creator Gear",
-      "price_brl": 3.5,
-      "compare_at_brl": 3.5,
-      "stock": 50479,
+      "price_brl": 16.97,
+      "compare_at_brl": 16.97,
+      "stock": 1,
       "merchant_name": "Valley",
-      "image_url": "https://cf.cjdropshipping.com/20180913/2262032170855.png",
+      "image_url": "https://cf.cjdropshipping.com/3305a741-d3c8-440a-b1e0-7c9163db906a.jpg",
       "video_url": "",
       "video_count": 0,
-      "status": "50479 em estoque • tracking ativo",
+      "status": "1 em estoque • tracking ativo",
       "tags": [
         "Catalogo real",
         "Creator Gear",
@@ -4724,21 +4723,21 @@
       "cta_label": "Abrir",
       "cta_path": "",
       "media_path": "",
-      "description": "Seleção Valley para creator gear com estoque sincronizado. Categoria fonte: Microphones. 50479 unidades em estoque. 472 listagens sincronizadas.",
+      "description": "Seleção Valley para creator gear com estoque sincronizado. Categoria fonte: Microphones. 1 unidades em estoque. 440 listagens sincronizadas.",
       "gallery_urls": [
-        "https://cf.cjdropshipping.com/20180913/2262032170855.png"
+        "https://cf.cjdropshipping.com/3305a741-d3c8-440a-b1e0-7c9163db906a.jpg"
       ],
       "profile_id": "",
       "features": [
         "Estoque global sincronizado",
-        "50479 unidades disponíveis",
-        "472 listagens ativas",
+        "1 unidades disponíveis",
+        "440 listagens ativas",
         "Tracking automatizado por webhook"
       ],
       "seller": {
         "name": "Loja Valley",
         "headline": "Oferta sincronizada com estoque e tracking automatizados.",
-        "avatar_url": "https://cf.cjdropshipping.com/20180913/2262032170855.png",
+        "avatar_url": "https://cf.cjdropshipping.com/3305a741-d3c8-440a-b1e0-7c9163db906a.jpg",
         "rating": 4.7,
         "city": "Operação global"
       },
@@ -4756,8 +4755,8 @@
       "google_product_category_path": "Electronics > Audio > Audio Components > Microphones",
       "google_product_category": "Electronics > Audio > Audio Components > Microphones",
       "price_band": "Ate R$ 99",
-      "offer_count": 472,
-      "availability_label": "50479 em estoque",
+      "offer_count": 440,
+      "availability_label": "1 em estoque",
       "shipping_free": false
     },
     {
@@ -4986,7 +4985,7 @@
     }
   ],
   "summary": {
-    "products": 1197,
+    "products": 1192,
     "visible_products": 84,
     "real_supplier_products": 1209,
     "marketplace_merchants": 4,

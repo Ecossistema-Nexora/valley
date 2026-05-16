@@ -4,7 +4,7 @@
     "provider":  "cloudflare_named_tunnel",
     "public_url":  "https://admin.brasildesconto.com.br",
     "local_url":  "http://127.0.0.1:8085",
-    "generated_at_utc":  "2026-05-16T01:47:12Z",
+    "generated_at_utc":  "2026-05-16T03:31:51Z",
     "temporary":  false,
     "permanence":  "release_gate_validated_persistent",
     "provider_status":  "healthy",

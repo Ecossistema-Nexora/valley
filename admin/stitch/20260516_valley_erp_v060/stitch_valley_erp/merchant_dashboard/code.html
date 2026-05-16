@@ -1,0 +1,525 @@
+<!DOCTYPE html><html lang="pt-BR"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Valley ERP - Dashboard Operacional Lojista</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "secondary": "#00677f",
+                      "on-secondary-container": "#00586d",
+                      "cosmic": "#151047",
+                      "outline": "#7a7488",
+                      "on-surface-variant": "#494456",
+                      "error-container": "#ffdad6",
+                      "snow": "#FFFFFF",
+                      "on-secondary": "#ffffff",
+                      "night": "#07051F",
+                      "surface-container-lowest": "#ffffff",
+                      "on-secondary-fixed-variant": "#004e60",
+                      "inverse-surface": "#322f3b",
+                      "outline-variant": "#cbc3d9",
+                      "secondary-container": "#38d4ff",
+                      "on-tertiary-container": "#ffd7c6",
+                      "on-primary-fixed-variant": "#5100cf",
+                      "surface-container-low": "#f8f1ff",
+                      "on-background": "#1d1a25",
+                      "surface": "#fdf7ff",
+                      "surface-tint": "#6a23fa",
+                      "primary-fixed-dim": "#cebdff",
+                      "courier-green": "#0F7A4A",
+                      "surface-container-high": "#ece5f5",
+                      "surface-dim": "#ded7e7",
+                      "tertiary-fixed": "#ffdbcc",
+                      "on-primary-container": "#e5daff",
+                      "muted-ink": "#667085",
+                      "tertiary-container": "#a94200",
+                      "tertiary": "#823100",
+                      "secondary-fixed-dim": "#4cd6ff",
+                      "ink": "#15151D",
+                      "on-error": "#ffffff",
+                      "line": "#D9DEE8",
+                      "primary": "#5600da",
+                      "surface-bright": "#fdf7ff",
+                      "on-primary": "#ffffff",
+                      "on-primary-fixed": "#21005e",
+                      "work-surface": "#F6F8FB",
+                      "critical-red": "#D04437",
+                      "secondary-fixed": "#b7eaff",
+                      "on-secondary-fixed": "#001f28",
+                      "on-tertiary-fixed": "#351000",
+                      "success-green": "#1E8A5A",
+                      "primary-container": "#6f2cff",
+                      "on-error-container": "#93000a",
+                      "inverse-primary": "#cebdff",
+                      "lilac": "#BB8CFF",
+                      "on-surface": "#1d1a25",
+                      "surface-container": "#f2ebfb",
+                      "surface-container-highest": "#e7e0f0",
+                      "on-tertiary-fixed-variant": "#7c2e00",
+                      "tertiary-fixed-dim": "#ffb595",
+                      "on-tertiary": "#ffffff",
+                      "surface-variant": "#e7e0f0",
+                      "warning-amber": "#C98205",
+                      "primary-fixed": "#e8ddff",
+                      "error": "#ba1a1a",
+                      "inverse-on-surface": "#f5eefe",
+                      "background": "#fdf7ff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "gutter": "16px",
+                      "unit": "4px",
+                      "control-default": "44px",
+                      "control-compact": "36px",
+                      "container-margin": "24px"
+              },
+              "fontFamily": {
+                      "label-sm": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "data-table": [
+                              "Inter"
+                      ],
+                      "headline-lg": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "body-sm": [
+                              "Inter"
+                      ],
+                      "label-md": [
+                              "Inter"
+                      ],
+                      "headline-sm": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "label-sm": [
+                              "11px",
+                              {
+                                      "lineHeight": "14px",
+                                      "letterSpacing": "0",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-lg": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "data-table": [
+                              "13px",
+                              {
+                                      "lineHeight": "18px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-md": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-md": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-sm": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+</head>
+<body class="bg-work-surface text-ink font-body-md text-body-md antialiased min-h-screen">
+<!-- SideNavBar -->
+<aside class="bg-night dark:bg-night text-secondary dark:text-secondary-fixed-dim font-body-md text-body-md h-screen w-64 fixed left-0 top-0 border-r border-line dark:border-on-surface-variant flex flex-col h-full p-4 gap-2 z-50">
+<div class="mb-8 px-2 mt-2 flex flex-col items-start">
+<img src="{{DATA:IMAGE:IMAGE_8}}" alt="Valley ERP" class="h-12 w-auto object-contain mb-2">
+
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 bg-secondary-container text-on-secondary-container font-semibold rounded-lg scale-95 duration-150 transition-all" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-secondary-fixed-variant hover:bg-on-secondary-variant hover:bg-on-secondary-fixed-variant/10 transition-colors rounded-lg scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">precision_manufacturing</span>
+                Operations
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-secondary-fixed-variant hover:bg-on-secondary-variant hover:bg-on-secondary-fixed-variant/10 transition-colors rounded-lg scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+                Inventory
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-secondary-fixed-variant hover:bg-on-secondary-variant hover:bg-on-secondary-fixed-variant/10 transition-colors rounded-lg scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">payments</span>
+                Finance
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-secondary-fixed-variant hover:bg-on-secondary-variant hover:bg-on-secondary-fixed-variant/10 transition-colors rounded-lg scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">groups</span>
+                HR
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-secondary-fixed-variant hover:bg-on-secondary-variant hover:bg-on-secondary-fixed-variant/10 transition-colors rounded-lg scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">settings</span>
+                Settings
+            </a>
+</nav>
+<div class="mt-auto space-y-1">
+<button class="w-full flex items-center justify-center gap-2 bg-primary text-snow px-4 h-control-compact rounded-lg font-label-md text-label-md hover:bg-primary-fixed-dim transition-colors mb-4">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                New Operation
+            </button>
+<a class="flex items-center gap-3 px-3 py-2 text-on-secondary-fixed-variant hover:bg-on-secondary-variant hover:bg-on-secondary-fixed-variant/10 transition-colors rounded-lg scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">help</span>
+                Help Center
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-secondary-fixed-variant hover:bg-on-secondary-variant hover:bg-on-secondary-fixed-variant/10 transition-colors rounded-lg scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">support_agent</span>
+                Contact Support
+            </a>
+</div>
+</aside>
+<!-- Main Content Wrapper -->
+<main class="ml-64 pt-control-default min-h-screen pb-24">
+<!-- TopNavBar -->
+<header class="bg-snow dark:bg-night text-primary dark:text-primary-fixed-dim font-label-md text-label-md fixed top-0 right-0 w-[calc(100%-16rem)] border-b border-line dark:border-on-surface-variant flex items-center justify-between px-gutter h-control-default z-40 opacity-80 hover:opacity-100 transition-opacity">
+<div class="flex items-center gap-6">
+<h2 class="font-headline-sm text-headline-sm font-black text-night dark:text-snow">Omniverse Operacional</h2>
+<nav class="flex items-center gap-4 hidden md:flex">
+<a class="text-primary border-b-2 border-primary pb-1 hover:text-primary transition-colors" href="#">Main Branch</a>
+<a class="text-muted-ink dark:text-outline-variant hover:text-primary transition-colors" href="#">Tenant Alpha</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex items-center gap-2 text-primary-container bg-surface-container py-1 px-3 rounded-full hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[16px]">smart_toy</span>
+                    Helena AI
+                 </button>
+<div class="flex items-center gap-3 text-muted-ink">
+<button class="hover:text-primary transition-colors"><span class="material-symbols-outlined">notifications</span></button>
+<button class="hover:text-primary transition-colors"><span class="material-symbols-outlined">account_circle</span></button>
+</div>
+</div>
+</header>
+<div class="p-container-margin max-w-[1600px] mx-auto">
+<!-- Page Header -->
+<div class="flex items-center justify-between mb-6">
+<div class="flex items-center gap-3">
+<h1 class="font-headline-lg text-headline-lg text-night">Dashboard Operacional</h1>
+<span class="bg-surface-variant text-on-surface-variant px-2 py-0.5 rounded font-label-sm text-label-sm border border-line">ID: branch_88</span>
+</div>
+</div>
+<!-- Quick Actions Bar -->
+<div class="flex flex-wrap gap-3 mb-8">
+<button class="bg-primary text-snow px-4 h-control-compact rounded-lg font-label-md text-label-md hover:bg-primary-container transition-colors flex items-center gap-2 shadow-sm">
+<span class="material-symbols-outlined text-[18px]">add_circle</span>
+                    Novo produto
+                </button>
+<button class="bg-snow text-ink border border-line px-4 h-control-compact rounded-lg font-label-md text-label-md hover:bg-work-surface transition-colors flex items-center gap-2 shadow-sm">
+<span class="material-symbols-outlined text-[18px]">point_of_sale</span>
+                    Abrir PDV
+                </button>
+<button class="bg-snow text-ink border border-line px-4 h-control-compact rounded-lg font-label-md text-label-md hover:bg-work-surface transition-colors flex items-center gap-2 shadow-sm">
+<span class="material-symbols-outlined text-[18px]">list_alt</span>
+                    Ver pedidos
+                </button>
+<button class="bg-snow text-ink border border-line px-4 h-control-compact rounded-lg font-label-md text-label-md hover:bg-work-surface transition-colors flex items-center gap-2 shadow-sm">
+<span class="material-symbols-outlined text-[18px]">label</span>
+                    Gerar etiqueta
+                </button>
+<button class="bg-snow text-ink border border-line px-4 h-control-compact rounded-lg font-label-md text-label-md hover:bg-work-surface transition-colors flex items-center gap-2 shadow-sm">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+                    Agenda
+                </button>
+<button class="bg-snow text-ink border border-line px-4 h-control-compact rounded-lg font-label-md text-label-md hover:bg-work-surface transition-colors flex items-center gap-2 shadow-sm">
+<span class="material-symbols-outlined text-[18px]">extension</span>
+                    Integrações
+                </button>
+</div>
+<!-- Stats Row -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+<div class="bg-snow p-4 rounded-xl border border-line shadow-sm">
+<p class="text-muted-ink font-label-sm text-label-sm mb-1 uppercase tracking-wider">Vendas Hoje</p>
+<div class="flex items-end justify-between">
+<h3 class="font-headline-md text-headline-md text-night">R$ 12.450,80</h3>
+<span class="flex items-center text-success-green font-label-sm text-label-sm bg-surface-container py-0.5 px-1.5 rounded">
+<span class="material-symbols-outlined text-[14px]">arrow_upward</span>
+                            4.2%
+                        </span>
+</div>
+</div>
+<div class="bg-snow p-4 rounded-xl border border-line shadow-sm border-l-4 border-l-warning-amber">
+<p class="text-muted-ink font-label-sm text-label-sm mb-1 uppercase tracking-wider">Pedidos Pendentes</p>
+<div class="flex items-end justify-between">
+<h3 class="font-headline-md text-headline-md text-night">24</h3>
+<span class="material-symbols-outlined text-warning-amber">pending_actions</span>
+</div>
+</div>
+<div class="bg-snow p-4 rounded-xl border border-line shadow-sm border-l-4 border-l-critical-red">
+<p class="text-muted-ink font-label-sm text-label-sm mb-1 uppercase tracking-wider flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-critical-red">warning</span>
+                        Estoque Crítico
+                    </p>
+<div class="flex items-end justify-between">
+<h3 class="font-headline-md text-headline-md text-night">8 itens</h3>
+<a class="text-primary font-label-sm text-label-sm hover:underline" href="#">Ver itens</a>
+</div>
+</div>
+<div class="bg-snow p-4 rounded-xl border border-line shadow-sm">
+<p class="text-muted-ink font-label-sm text-label-sm mb-1 uppercase tracking-wider flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-primary">toll</span>
+                        V-Coins Acumulados
+                    </p>
+<div class="flex items-end justify-between">
+<h3 class="font-headline-md text-headline-md text-night">1.250</h3>
+<span class="text-muted-ink font-body-sm text-body-sm">Tokens</span>
+</div>
+</div>
+</div>
+<!-- Two-Column Operational View -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Left Column (Main) -->
+<div class="lg:col-span-2 space-y-6">
+<!-- Recent Orders Table -->
+<div class="bg-snow rounded-xl border border-line shadow-sm overflow-hidden">
+<div class="p-4 border-b border-line flex items-center justify-between bg-surface-bright">
+<h3 class="font-headline-sm text-headline-sm text-night">Pedidos Recentes</h3>
+<button class="text-primary font-label-sm text-label-sm hover:underline">Ver todos</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-work-surface border-b border-line">
+<th class="p-3 font-label-sm text-label-sm text-muted-ink uppercase tracking-wider">ID</th>
+<th class="p-3 font-label-sm text-label-sm text-muted-ink uppercase tracking-wider">Cliente</th>
+<th class="p-3 font-label-sm text-label-sm text-muted-ink uppercase tracking-wider">Status</th>
+<th class="p-3 font-label-sm text-label-sm text-muted-ink uppercase tracking-wider text-right">Valor</th>
+</tr>
+</thead>
+<tbody class="font-data-table text-data-table text-ink">
+<tr class="border-b border-line hover:bg-surface-bright transition-colors">
+<td class="p-3 font-medium text-night">#ORD-9921</td>
+<td class="p-3">Maria Silva</td>
+<td class="p-3">
+<span class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px]">autorenew</span>
+                                                Processando
+                                            </span>
+</td>
+<td class="p-3 text-right">R$ 345,90</td>
+</tr>
+<tr class="border-b border-line hover:bg-surface-bright transition-colors">
+<td class="p-3 font-medium text-night">#ORD-9920</td>
+<td class="p-3">João Souza Ltd.</td>
+<td class="p-3">
+<span class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-surface-container-high text-success-green font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+                                                Concluído
+                                            </span>
+</td>
+<td class="p-3 text-right">R$ 1.250,00</td>
+</tr>
+<tr class="border-b border-line hover:bg-surface-bright transition-colors">
+<td class="p-3 font-medium text-night">#ORD-9919</td>
+<td class="p-3">Ana Costa</td>
+<td class="p-3">
+<span class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-error-container text-on-error-container font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px]">error</span>
+                                                Pagamento Falhou
+                                            </span>
+</td>
+<td class="p-3 text-right">R$ 89,90</td>
+</tr>
+<tr class="hover:bg-surface-bright transition-colors">
+<td class="p-3 font-medium text-night">#ORD-9918</td>
+<td class="p-3">Carlos Mendes</td>
+<td class="p-3">
+<span class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-surface-container-high text-success-green font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+                                                Concluído
+                                            </span>
+</td>
+<td class="p-3 text-right">R$ 450,00</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Integrated Agenda -->
+<div class="bg-snow rounded-xl border border-line shadow-sm overflow-hidden">
+<div class="p-4 border-b border-line flex items-center justify-between bg-surface-bright">
+<h3 class="font-headline-sm text-headline-sm text-night">Agenda de Operações (Hoje)</h3>
+<div class="flex gap-2">
+<button class="text-muted-ink hover:text-night"><span class="material-symbols-outlined">chevron_left</span></button>
+<button class="text-muted-ink hover:text-night"><span class="material-symbols-outlined">chevron_right</span></button>
+</div>
+</div>
+<div class="p-0">
+<div class="flex border-b border-line hover:bg-work-surface transition-colors p-3">
+<div class="w-20 text-right pr-4 text-muted-ink font-label-md text-label-md pt-1">09:00</div>
+<div class="flex-1 bg-surface-container-low border-l-4 border-primary p-3 rounded-r-lg">
+<h4 class="font-headline-sm text-headline-sm text-night text-[14px]">Recebimento de Fornecedor A</h4>
+<p class="text-muted-ink font-body-sm text-body-sm mt-1 flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">local_shipping</span> Doca 2</p>
+</div>
+</div>
+<div class="flex border-b border-line hover:bg-work-surface transition-colors p-3">
+<div class="w-20 text-right pr-4 text-muted-ink font-label-md text-label-md pt-1">11:30</div>
+<div class="flex-1 bg-surface-container-low border-l-4 border-courier-green p-3 rounded-r-lg">
+<h4 class="font-headline-sm text-headline-sm text-night text-[14px]">Coleta Logística (Lote 45)</h4>
+<p class="text-muted-ink font-body-sm text-body-sm mt-1 flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">package</span> Área de Expedição</p>
+</div>
+</div>
+<div class="flex hover:bg-work-surface transition-colors p-3">
+<div class="w-20 text-right pr-4 text-muted-ink font-label-md text-label-md pt-1">14:00</div>
+<div class="flex-1 bg-surface-container-low border-l-4 border-secondary p-3 rounded-r-lg opacity-60">
+<h4 class="font-headline-sm text-headline-sm text-night text-[14px]">Reunião de Alinhamento de Estoque</h4>
+<p class="text-muted-ink font-body-sm text-body-sm mt-1 flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">groups</span> Sala 1</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column (Sidebar) -->
+<div class="space-y-6">
+<!-- Helena Contextual Assistant -->
+<div class="bg-surface-container rounded-xl p-4 border border-primary-fixed-dim relative overflow-hidden">
+<div class="absolute -right-4 -top-4 w-16 h-16 bg-primary-container rounded-full blur-2xl opacity-20"></div>
+<div class="flex items-start gap-3 relative z-10">
+<span class="material-symbols-outlined text-primary-container text-[24px]">smart_toy</span>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-night mb-1">Insights da Helena</h3>
+<p class="text-on-surface-variant font-body-sm text-body-sm mb-3">Sugestão: O "Cabo USB-C" está com giro alto e o estoque atual de 8 unidades deve durar apenas mais 2 dias.</p>
+<button class="text-primary font-label-md text-label-md hover:underline flex items-center gap-1">
+                                    Repor estoque agora <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Alertas Operacionais -->
+<div class="bg-snow rounded-xl border border-line shadow-sm p-4">
+<h3 class="font-headline-sm text-headline-sm text-night mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-warning-amber">campaign</span>
+                            Alertas Operacionais
+                        </h3>
+<ul class="space-y-3">
+<li class="flex items-start gap-3 pb-3 border-b border-line last:border-0 last:pb-0">
+<span class="material-symbols-outlined text-critical-red mt-0.5 text-[18px]">error</span>
+<div>
+<p class="font-body-sm text-body-sm text-night font-medium">Falha na Sincronização PDV 03</p>
+<p class="text-muted-ink font-label-sm text-label-sm mt-0.5">Há 15 min</p>
+</div>
+</li>
+<li class="flex items-start gap-3 pb-3 border-b border-line last:border-0 last:pb-0">
+<span class="material-symbols-outlined text-warning-amber mt-0.5 text-[18px]">warning</span>
+<div>
+<p class="font-body-sm text-body-sm text-night font-medium">Capacidade de Expedição a 90%</p>
+<p class="text-muted-ink font-label-sm text-label-sm mt-0.5">Há 1 hora</p>
+</div>
+</li>
+</ul>
+</div>
+<!-- Histórico de Auditoria -->
+<div class="bg-snow rounded-xl border border-line shadow-sm p-4">
+<h3 class="font-headline-sm text-headline-sm text-night mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-muted-ink">history</span>
+                            Histórico Recente
+                        </h3>
+<div class="space-y-4 relative before:absolute before:inset-0 before:ml-2.5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-line before:to-transparent">
+<div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+<div class="flex items-center justify-center w-5 h-5 rounded-full border border-line bg-surface-bright text-muted-ink shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2">
+<div class="w-1.5 h-1.5 bg-primary rounded-full"></div>
+</div>
+<div class="w-[calc(100%-2rem)] md:w-[calc(50%-1.5rem)] ml-3 pl-3 md:ml-0 md:pl-0 border-l border-line md:border-l-0 md:group-odd:text-right">
+<div class="flex flex-col">
+<p class="font-body-sm text-body-sm text-night">Preço alterado no Item X</p>
+<time class="text-muted-ink font-label-sm text-label-sm">Por Ana S. • 10:45</time>
+</div>
+</div>
+</div>
+<div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
+<div class="flex items-center justify-center w-5 h-5 rounded-full border border-line bg-surface-bright text-muted-ink shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2">
+<div class="w-1.5 h-1.5 bg-muted-ink rounded-full"></div>
+</div>
+<div class="w-[calc(100%-2rem)] md:w-[calc(50%-1.5rem)] ml-3 pl-3 md:ml-0 md:pl-0 border-l border-line md:border-l-0 md:group-odd:text-right">
+<div class="flex flex-col">
+<p class="font-body-sm text-body-sm text-night">Estoque ajustado PDV 01</p>
+<time class="text-muted-ink font-label-sm text-label-sm">Por Sistema • 09:30</time>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-work-surface dark:bg-night text-muted-ink font-body-sm text-body-sm w-full ml-64 border-t border-line dark:border-on-surface-variant flat no shadows flex justify-between items-center py-unit px-gutter w-[calc(100%-16rem)] fixed bottom-0 z-30">
+<div class="font-label-sm text-label-sm text-ink">
+            © 2024 Valley ERP Omniverse
+        </div>
+<div class="flex items-center gap-4">
+<a class="text-muted-ink hover:text-ink underline transition-all" href="#">Documentation</a>
+<a class="text-muted-ink hover:text-ink underline transition-all" href="#">Support</a>
+<a class="text-muted-ink hover:text-ink underline transition-all" href="#">System Status</a>
+<a class="text-muted-ink hover:text-ink underline transition-all" href="#">Terms</a>
+</div>
+</footer>
+
+
+</body></html>

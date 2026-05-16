@@ -1,5 +1,5 @@
 window.VALLEY_ADMIN_DATA = {
-  "generated_at_utc": "2026-05-14T17:16:48.718987+00:00",
+  "generated_at_utc": "2026-05-16T02:19:25.312880+00:00",
   "registry_name": "Valley Omniverse V47 - Registro Canonico de Modulos",
   "source": "Esquema Consolidado do Valley Omniverse v47.pdf",
   "language_policy": "pt-BR simples com termos tecnicos em ingles quando forem padroes",
@@ -467,15 +467,15 @@ window.VALLEY_ADMIN_DATA = {
     "path": "../tmp/runtime/valley-admin-public-runtime.json",
     "status": "ok",
     "public_url": "https://admin.brasildesconto.com.br",
-    "permanence": "fixed_external",
+    "permanence": "release_gate_validated_persistent",
     "smoke_endpoints": {
       "healthz": "https://admin.brasildesconto.com.br/healthz",
       "admin_data": "https://admin.brasildesconto.com.br/api/admin-data"
     }
   },
   "database_summary": {
-    "postgres_migrations": 38,
-    "mongodb_scripts": 5,
+    "postgres_migrations": 41,
+    "mongodb_scripts": 6,
     "postgres_items": [
       {
         "id": "001",
@@ -1227,6 +1227,105 @@ window.VALLEY_ADMIN_DATA = {
           "merchant_erp_privilege_audit_events",
           "v_merchant_erp_staff_effective_privileges"
         ]
+      },
+      {
+        "id": "039",
+        "path": "database/postgres/039_v47_merchant_erp_external_ops_schedule_delivery.sql",
+        "purpose_ptbr": "Adiciona conectores externos bidirecionais, importacao NF-e, ciclo de produtos, relatorios filtraveis, matriz/filiais, agenda de servicos, tipo de usuario entregador e rastreio proprio associado a pedidos no ERP Lojista.",
+        "requires": [
+          "037",
+          "038"
+        ],
+        "provides": [
+          "merchant_erp_connector_catalog",
+          "merchant_erp_connector_sync_events",
+          "merchant_erp_nfe_import_batches",
+          "merchant_erp_nfe_items",
+          "merchant_erp_service_resources",
+          "merchant_erp_service_bookings",
+          "merchant_erp_service_booking_events",
+          "merchant_erp_courier_profiles",
+          "merchant_erp_delivery_assignments",
+          "merchant_erp_delivery_tracking_events",
+          "merchant_erp_product_lifecycle_events",
+          "merchant_erp_report_query_events",
+          "merchant_erp_branch_units",
+          "merchant_erp_branch_stock_policies",
+          "merchant_erp_branch_events",
+          "v_merchant_erp_connector_readiness",
+          "v_merchant_erp_service_agenda",
+          "v_merchant_erp_delivery_tracking",
+          "v_merchant_erp_product_lifecycle",
+          "v_merchant_erp_report_query_history",
+          "v_merchant_erp_branch_control"
+        ]
+      },
+      {
+        "id": "040",
+        "path": "database/postgres/040_v47_merchant_erp_operations_labels_returns_finance.sql",
+        "purpose_ptbr": "Adiciona operacoes comuns do ERP Lojista: etiquetas QR Code/EAN-13, variantes, kits, inventario ciclico, limiares de estoque, trocas/devolucoes e financeiro AP/AR/DRE com escopo por lojista e filial.",
+        "requires": [
+          "039"
+        ],
+        "provides": [
+          "merchant_erp_product_variants",
+          "merchant_erp_product_kits",
+          "merchant_erp_product_kit_items",
+          "merchant_erp_label_templates",
+          "merchant_erp_label_jobs",
+          "merchant_erp_label_job_items",
+          "merchant_erp_inventory_alert_rules",
+          "merchant_erp_cycle_count_jobs",
+          "merchant_erp_cycle_count_items",
+          "merchant_erp_return_authorizations",
+          "merchant_erp_finance_entries",
+          "v_merchant_erp_label_jobs",
+          "v_merchant_erp_product_grade_and_kits",
+          "v_merchant_erp_inventory_replenishment_alerts",
+          "v_merchant_erp_finance_cashflow_dre",
+          "v_merchant_erp_returns_control"
+        ]
+      },
+      {
+        "id": "041",
+        "path": "database/postgres/041_v47_valley_hybrid_institutional_contracts.sql",
+        "purpose_ptbr": "Fecha contratos institucionais do banco hibrido Valley: escopo tenant/filial, tabelas canonicas do ERP, Helena, Mobilidade, Visio, Stitch UI, rastreio Android Marketplace e chat Marketplace moderado.",
+        "requires": [
+          "040"
+        ],
+        "provides": [
+          "valley_wallet_asset_registry",
+          "valley_user_addresses",
+          "valley_user_document_checks",
+          "merchant_erp_access_policies",
+          "merchant_erp_users",
+          "merchant_erp_products",
+          "merchant_erp_inventory",
+          "merchant_erp_orders",
+          "merchant_erp_deliveries",
+          "merchant_erp_appointments",
+          "helena_user_voice_profiles",
+          "helena_product_sourcing_decisions",
+          "valley_contextual_reward_campaigns",
+          "mobility_realtime_route_sessions",
+          "mobility_idle_agent_dispatch_rules",
+          "mobility_idle_agent_events",
+          "valley_module_availability_checks",
+          "valley_screen_layout_contracts",
+          "marketplace_android_live_tracking_sessions",
+          "marketplace_android_live_tracking_events",
+          "marketplace_chat_moderation_patterns",
+          "chat_moderation_strikes",
+          "chat_moderation_account_actions",
+          "valley_module_data_contracts",
+          "valley_module_user_scope_bindings",
+          "valley_marketplace_api_accounts",
+          "valley_bank_api_connections",
+          "valley_immutable_audit_ledger",
+          "v_valley_hybrid_scope_matrix",
+          "v_valley_user_scope_bindings_active",
+          "v_valley_marketplace_account_health"
+        ]
       }
     ],
     "mongodb_items": [
@@ -1308,6 +1407,27 @@ window.VALLEY_ADMIN_DATA = {
           "validator:influencer_metrics:v2",
           "validator:telemetry_logs:v2"
         ]
+      },
+      {
+        "id": "mongo-006",
+        "path": "database/mongodb/006_v47_valley_hybrid_brain_final_contracts.mongo.js",
+        "purpose_ptbr": "Fecha contratos MongoDB de Helena, integracoes, rastreio, telemetria, Mobilidade, live tracking Android Marketplace e moderacao de chat.",
+        "requires": [
+          "mongo-001",
+          "mongo-002",
+          "mongo-003",
+          "mongo-004",
+          "mongo-005"
+        ],
+        "provides": [
+          "helena_ai_context_events",
+          "merchant_integration_payload_logs",
+          "merchant_realtime_delivery_stream",
+          "erp_operational_telemetry_events",
+          "mobility_idle_agent_decisions",
+          "marketplace_android_live_tracking_stream",
+          "marketplace_chat_moderation_events"
+        ]
       }
     ]
   },
@@ -1334,7 +1454,7 @@ window.VALLEY_ADMIN_DATA = {
   "governance": {
     "path": "../MANUAL_ONLINE/NORMA_UNIFICADA_V47.md",
     "json_path": "../config/valley_governance.json",
-    "preview": "# Norma Unificada V47\nEsta norma consolida os PDFs oficiais do Valley Omniverse e resolve conflitos de diretriz pela regra que mais protege estabilidade, seguranca, continuidade de entrega, privacidade e coerencia arquitetural.\n## Hierarquia De Decisao\n1. Seguranca, privacidade, integridade do repositorio e conformidade legal vencem autonomia, velocidade ou conveniencia.\n2. Contratos canonicos de dados vencem preferencias locais de implementacao.\n3. Continuidade de entrega com estado real reportado vence simulacao de saude ou promessa otimista.\n4. Automacao deve existir, mas nunca para vazar segredo, misturar dominios sensiveis ou corromper trilha auditavel.\n5. Quando dois caminhos forem possiveis, torna-se norma o que maximiza mantenabilidade documentada e reduz retrabalho.\n## Fontes Canonicas\n1. `Valley Omniverse — Regras Consolidadas do Codex.pdf`\n2. `Valley Omniverse – Regras Consolidadas para o Gemini Code Assist (v47).pdf`\n3. `Painel Web Admin — Especificação Consolidada (v47).pdf`\n4. `Esquema Consolidado do Valley Omniverse v47.pdf`\n5. `Valley Omniverse v47 – Esquema de Banco de Dados.pdf`\n6. `Valley Omniverse v47 – Esquema de Banco de Dados  2.pdf`\n7. `Valley Omniverse – Mapeamento de Módulos (v47).pdf`\n..."
+    "preview": "<!--\nPROPOSITO: Documentar NORMA UNIFICADA V47 no escopo operacional do Valley.\nCONTEXTO: Este arquivo registra orientacoes, decisoes ou plano associado ao caminho MANUAL_ONLINE/NORMA_UNIFICADA_V47.md.\nREGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar ao mudar a rotina correspondente.\n-->\n# Norma Unificada V47\nEsta norma consolida os PDFs oficiais do Valley Omniverse e resolve conflitos de diretriz pela regra que mais protege estabilidade, seguranca, continuidade de entrega, privacidade e coerencia arquitetural.\n## Hierarquia De Decisao\n1. Seguranca, privacidade, integridade do repositorio e conformidade legal vencem autonomia, velocidade ou conveniencia.\n2. Contratos canonicos de dados vencem preferencias locais de implementacao.\n3. Continuidade de entrega com estado real reportado vence simulacao de saude ou promessa otimista.\n4. Automacao deve existir, mas nunca para vazar segredo, misturar dominios sensiveis ou corromper trilha auditavel.\n5. Quando dois caminhos forem possiveis, torna-se norma o que maximiza mantenabilidade documentada e reduz retrabalho.\n## Fontes Canonicas\n1. `Valley Omniverse — Regras Consolidadas do Codex.pdf`\n2. `Valley Omniverse – Regras Consolidadas para o Gemini Code Assist (v47).pdf`\n..."
   },
   "admin_commands": [
     "python scripts/serve_valley_admin.py --port 8080",

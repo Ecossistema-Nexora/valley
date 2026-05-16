@@ -48,7 +48,7 @@
   const MODULE_WORKSPACE_TAB_STORAGE_KEY = "valley.moduleWorkspaceTabs.v1";
   const ADMIN_SURFACE_TAB_STORAGE_KEY = "valley.adminSurfaceTab.v1";
   const STITCH_VISIBLE_RELEASE_KEY = "valley.stitchSourceTruth.visibleRelease.v1";
-  const STITCH_VISIBLE_RELEASE_VERSION = "v044-stitch-v2-mandatory";
+  const STITCH_VISIBLE_RELEASE_VERSION = "v060-stitch-zero-project-mandatory";
   const MERCHANT_ERP_STORAGE_KEY = "valley.merchantErp.v1";
   const MERCHANT_ERP_SECTION_ID = "merchantErpSection";
   const ADMIN_SURFACE_TABS = [
@@ -60,8 +60,8 @@
     },
     {
       key: "stitch",
-      label: "Stitch P0",
-      description: "Admin Central e ERP Lojista convertidos para operacao real.",
+      label: "Stitch v060",
+      description: "Admin, lojista, usuario Android e entregador importados do Stitch.",
       sectionIds: ["stitchP0ExecutionSection"],
     },
     {
@@ -288,63 +288,135 @@
   ];
   const STITCH_P0_WEB_SCREENS = [
     {
-      key: "valley_admin_central_1",
-      title: "Admin Central 1",
-      target: "Visao operacional",
+      key: "admin_god_mode",
+      title: "Admin Valley - Painel Modo Deus",
+      target: "Admin",
       pane: "overview",
       action: "open-admin-central",
-      detail: "Dashboard, KPIs, fila rapida, links publicos e leitura executiva.",
+      detail: "Governanca total de modulos, regras, APIs, tokens, usuarios, auditoria e Modo Deus.",
     },
     {
-      key: "valley_admin_central_2",
-      title: "Admin Central 2",
-      target: "Controle executivo",
-      pane: "performance",
-      action: "open-executive",
-      detail: "Desempenho por modulo, sinais de crescimento, pressao operacional e workspaces.",
+      key: "merchant_login",
+      title: "Valley ERP - Login Lojista",
+      target: "Lojista",
+      pane: "merchant",
+      action: "open-merchant-login",
+      detail: "Login Valley ERP com entrada de acesso e botao Cadastre-se para onboarding empresarial.",
     },
     {
-      key: "valley_erp_do_lojista",
-      title: "ERP do Lojista",
-      target: "Painel marketplace",
+      key: "merchant_onboarding",
+      title: "Valley ERP - Cadastro de Empresa e Usuarios",
+      target: "Lojista",
+      pane: "merchant",
+      action: "open-onboarding",
+      detail: "Empresa, representante legal, Super Admin, perfis iniciais e convites por departamento.",
+    },
+    {
+      key: "merchant_dashboard",
+      title: "Valley ERP - Dashboard Operacional Lojista",
+      target: "Lojista",
       pane: "merchant",
       action: "open-erp",
-      detail: "Pedidos, SKU, estoque, PDV, financeiro, integracoes e rotinas salvas.",
+      detail: "Controle individual do ERP por perfil de lojista, filiais, regras, modulos e servicos.",
     },
     {
-      key: "valley_erp_cadastro_de_sku",
-      title: "Cadastro de SKU",
-      target: "ERP lojista",
-      pane: "merchant",
-      action: "open-sku",
-      detail: "Cadastro, preco, foto, variacao, estoque minimo e publicacao.",
+      key: "merchant_operations",
+      title: "Valley ERP - Produtos, Estoque e Pedidos",
+      target: "Lojista",
+      pane: "catalog",
+      action: "open-pricing",
+      detail: "Produtos, Stock, Marketplace, pedidos, inventario, etiquetas e rotinas operacionais.",
     },
     {
-      key: "valley_erp_gest_o_de_pedidos_pt_br",
-      title: "Gestao de pedidos",
-      target: "ERP lojista",
-      pane: "merchant",
+      key: "merchant_finance_agenda_integrations",
+      title: "Valley ERP - Financeiro, Agenda e Integracoes",
+      target: "Lojista",
+      pane: "finance",
+      action: "open-merchant-finance",
+      detail: "Financeiro, agenda, integracoes, bancos, conectores externos e repasses.",
+    },
+    {
+      key: "customer_home",
+      title: "Valley APK - Home MVP Modular",
+      target: "Usuario Android",
+      pane: "overview",
+      action: "open-customer-home",
+      detail: "Visibilidade modular MVP, perfil proprio, favoritos, financas e acesso aos modulos ativos.",
+    },
+    {
+      key: "customer_stock_marketplace",
+      title: "Valley APK - Stock e Marketplace",
+      target: "Usuario Android",
+      pane: "catalog",
+      action: "open-mobile-stock",
+      detail: "Compra no Stock e Marketplace, favoritos, lista de produtos e contexto de loja.",
+    },
+    {
+      key: "customer_checkout_payment",
+      title: "Valley APK - Checkout e Pagamento",
+      target: "Usuario Android",
+      pane: "overview",
+      action: "open-checkout",
+      detail: "Checkout Stock/Marketplace, endereco, frete, pagamento e confirmacao de pedido.",
+    },
+    {
+      key: "customer_purchases_tracking",
+      title: "Valley APK - Minhas Compras e Rastreio",
+      target: "Usuario Android",
+      pane: "catalog",
       action: "open-orders",
-      detail: "Pedido, separacao, pagamento, etiqueta, cancelamento e pos-venda.",
+      detail: "Historico de compras, rastreio, status de pedido, suporte e pos-venda.",
     },
     {
-      key: "valley_erp_painel_de_controle_lojista",
-      title: "Painel de controle lojista",
-      target: "ERP lojista",
+      key: "customer_messages",
+      title: "Valley APK - Central de Mensagens",
+      target: "Usuario Android",
+      pane: "integrations",
+      action: "open-support",
+      detail: "Central de mensagens para suporte Stock, Marketplace e lojistas.",
+    },
+    {
+      key: "customer_helena_support",
+      title: "Valley APK - Suporte Helena AI",
+      target: "Usuario Android",
+      pane: "integrations",
+      action: "open-support",
+      detail: "Atendimento Helena no APK com contexto de pedidos, perfil e modulos disponiveis.",
+    },
+    {
+      key: "customer_merchant_chat",
+      title: "Valley APK - Chat com Lojista",
+      target: "Usuario Android",
       pane: "merchant",
-      action: "open-inventory",
-      detail: "Estoque, ruptura, reserva, integracoes, financeiro e indicadores.",
+      action: "open-support",
+      detail: "Chat do cliente com lojista para Marketplace, pedido, agenda e suporte operacional.",
+    },
+    {
+      key: "courier_home_green",
+      title: "Entregador - Home Logistica Verde",
+      target: "Entregador",
+      pane: "merchant",
+      action: "open-courier-home",
+      detail: "Tema verde, veiculo, coleta, comissoes, historico e bloqueio de enderecos.",
+    },
+    {
+      key: "courier_delivery_flow_green",
+      title: "Entregador - Fluxo de Entrega Verde",
+      target: "Entregador",
+      pane: "merchant",
+      action: "open-courier-flow",
+      detail: "Aceite, coleta, ocorrencias manuais, status de entrega e avaliacao privada do cliente.",
     },
   ];
   const STITCH_SOURCE_OF_TRUTH = {
-    version: "20260513_valley_erp_v2",
+    version: "20260516_valley_erp_v060",
     mode: "mandatory",
-    templatesTotal: 121,
-    p0Total: 19,
-    publicManifestPath: "/stitch/20260513_valley_erp_v2/manifest.json",
-    publicGalleryPath: "/stitch/20260513_valley_erp_v2/",
-    sourceExportDir: "docs/design/stitch_exports/20260513_valley_erp_v2/stitch_valley_erp",
-    rule: "Templates Stitch sao a fonte da verdade ativa para paineis web e APK; variacoes anteriores ficam descartadas como referencia ativa.",
+    templatesTotal: 15,
+    p0Total: 15,
+    publicManifestPath: "/stitch/20260516_valley_erp_v060/manifest.json",
+    publicGalleryPath: "/stitch/20260516_valley_erp_v060/",
+    sourceExportDir: "docs/design/stitch_exports/20260516_valley_erp_v060/stitch_valley_erp",
+    rule: "Stitch v060 e a fonte ativa obrigatoria para paineis web, ERP lojista, APK usuario e APK entregador; pacotes 20260513 ficam descartados como referencia ativa.",
   };
   const PRICING_EDITABLE_FIELDS = [
     "target_net_revenue_pct",
@@ -3380,11 +3452,11 @@
 
   function stitchOperationalRows(summary) {
     return [
-      ["Admin Central 1", "Home executiva", `${formatCount(summary.modulesCompleted)}/${formatCount(summary.modulesTotal)} módulos`, "Aberto no painel"],
-      ["Admin Central 2", "Desempenho", `${formatCount(summary.catalogModulesTotal)} módulos no catálogo`, "Pronto para revisão"],
-      ["ERP do Lojista", "Marketplace", `${formatCount(summary.itemsTotal)} itens`, `${formatCount(summary.reviewTotal)} em revisão`],
-      ["Checkout", "Jornada de compra", summary.checkoutReady ? "Operacional" : "Pendente", summary.checkoutReady ? "Liberado" : "Revisar credenciais"],
-      ["Integrações", "Fornecedores e canais", `${formatCount(summary.activeIntegrations)}/${formatCount(MARKETPLACE_API_PROVIDERS.length)} ativos`, `${formatCount(summary.suppliersTotal)} fornecedores`],
+      ["Admin Modo Deus", "Governanca total", `${formatCount(summary.modulesCompleted)}/${formatCount(summary.modulesTotal)} modulos`, "Fonte v060 ativa"],
+      ["Lojista", "Login e onboarding", `${formatCount(summary.catalogModulesTotal)} modulos no catalogo`, "Cadastro empresarial incluido"],
+      ["Produtos e pedidos", "Stock e Marketplace", `${formatCount(summary.itemsTotal)} itens`, `${formatCount(summary.reviewTotal)} em revisao`],
+      ["Usuario APK", "Checkout e compras", summary.checkoutReady ? "Operacional" : "Pendente", summary.checkoutReady ? "Liberado" : "Revisar credenciais"],
+      ["Entregador", "Coletas e ocorrencias", `${formatCount(summary.activeIntegrations)}/${formatCount(MARKETPLACE_API_PROVIDERS.length)} conectores ativos`, "Tema verde aplicado"],
     ];
   }
 
@@ -3412,17 +3484,17 @@
         </div>
         <div class="stitch-execution-hero">
           <div>
-            <span class="small-label">Admin Central, ERP lojista e mobile</span>
-            <h3>Templates Stitch assumidos como fonte ativa</h3>
+            <span class="small-label">Admin, lojista, usuario Android e entregador</span>
+            <h3>Entrega Stitch v060 assumida como fonte ativa</h3>
             <p>
-              KPIs, workspaces, checkout, catalogo, integracoes e ERP lojista ficam amarrados ao pacote Stitch publicado.
-              Qualquer tela anterior deixa de ser referencia de produto e passa a ser apenas legado tecnico.
+              Governanca total, onboarding lojista, Stock, Marketplace, checkout, chats de suporte e operacao do entregador ficam amarrados ao projeto Stitch v060 publicado.
+              Pacotes 20260513 deixam de ser referencia de produto e passam a legado tecnico.
             </p>
             <div class="pill-row">
-              ${rowPill(`${formatCount(summary.templatesTotal)} templates publicados`, "pill-navy")}
+              ${rowPill(`${formatCount(summary.templatesTotal)} telas publicadas`, "pill-navy")}
               ${rowPill(`${formatCount(summary.p0Total)} P0`, "pill-accent")}
-              ${rowPill(`${formatCount(summary.webConverted)} web executaveis`, "pill-warn")}
-              ${rowPill("variacoes antigas descartadas", "pill-danger")}
+              ${rowPill(`${formatCount(summary.webConverted)} referencias executaveis`, "pill-warn")}
+              ${rowPill("20260513 descartado", "pill-danger")}
             </div>
           </div>
           <div class="stitch-url-stack">
@@ -3445,7 +3517,7 @@
           </div>
         </div>
         <div class="stitch-kpi-grid">
-          ${summaryTileMarkup("Templates", formatCount(summary.templatesTotal), `${formatCount(summary.p0Total)} P0 como fonte`)}
+          ${summaryTileMarkup("Telas", formatCount(summary.templatesTotal), `${formatCount(summary.p0Total)} P0 como fonte`)}
           ${summaryTileMarkup("Módulos", `${formatCount(summary.modulesCompleted)}/${formatCount(summary.modulesTotal)}`, "release operacional")}
           ${summaryTileMarkup("Catálogo", formatCount(summary.itemsTotal), `${formatCount(summary.approvedTotal)} aprovados`)}
           ${summaryTileMarkup("Checkout", summary.checkoutReady ? "Pronto" : "Pendente", "gate de compra")}
@@ -3536,7 +3608,7 @@
         loadCheckoutHealth();
         loadMarketplaceApiConfig();
         loadImportedPricing();
-        announce("Dados da Onda 1 Stitch atualizados.");
+        announce("Dados da entrega Stitch v060 atualizados.");
         return;
       case "copy-release":
         copyText(
@@ -3549,7 +3621,7 @@
             null,
             2,
           ),
-          "Resumo da Onda 1 Stitch",
+          "Resumo Stitch v060",
         );
         return;
       case "open-gallery":
@@ -3568,6 +3640,16 @@
         openAdminPaneSection("merchant", "merchantErpSection");
         setActiveMerchantErpFeature("merchant-erp");
         announce("ERP do lojista aberto.");
+        return;
+      case "open-merchant-login":
+        openAdminPaneSection("merchant", "merchantErpSection");
+        setActiveMerchantErpFeature("merchant-login");
+        announce("Login do lojista aberto.");
+        return;
+      case "open-onboarding":
+        openAdminPaneSection("merchant", "merchantErpSection");
+        setActiveMerchantErpFeature("merchant-registration");
+        announce("Onboarding empresarial aberto.");
         return;
       case "open-sku":
         openAdminPaneSection("merchant", "merchantErpSection");
@@ -3589,9 +3671,36 @@
         openAdminPaneSection("integrations", "settingsSection");
         announce("Integrações abertas.");
         return;
+      case "open-merchant-finance":
+        openAdminPaneSection("finance", "financialDashboard");
+        setActiveMerchantErpFeature("merchant-finance");
+        announce("Financeiro do lojista aberto.");
+        return;
       case "open-checkout":
         openAdminPaneSection("overview", "checkoutHealthPanel");
         announce("Checkout aberto.");
+        return;
+      case "open-customer-home":
+        openAdminPaneSection("overview", "adminLaunchpadSection");
+        announce("Home modular do usuario aberta no contexto do produto.");
+        return;
+      case "open-mobile-stock":
+        openAdminPaneSection("catalog", "importedPricingSection");
+        announce("Stock e Marketplace abertos.");
+        return;
+      case "open-support":
+        openAdminPaneSection("integrations", "settingsSection");
+        announce("Central de suporte e conversas aberta.");
+        return;
+      case "open-courier-home":
+        openAdminPaneSection("merchant", "merchantErpSection");
+        setActiveMerchantErpFeature("merchant-logistics");
+        announce("Home do entregador aberta em Logistica.");
+        return;
+      case "open-courier-flow":
+        openAdminPaneSection("merchant", "merchantErpSection");
+        setActiveMerchantErpFeature("merchant-carrier-cross-docking");
+        announce("Fluxo de entrega aberto.");
         return;
       case "open-workspaces":
         openAdminPaneSection("modules", "moduleWorkspaceDirectory");
@@ -5842,7 +5951,7 @@
         elements.heroSubcopy.textContent = `${workspace.copy} O painel permanece conectado ao manifesto, ao runtime publico e aos dashboards comerciais sem trocar de shell.`;
       } else {
         elements.heroTitle.textContent = "Stitch Valley ERP e a tela ativa do painel";
-        elements.heroSubcopy.textContent = "O pacote Stitch 20260513 Valley ERP v2 substitui as variacoes antigas como referencia visual e funcional. A entrada padrao abre os templates P0 executaveis, com botoes conectados para ERP, SKU, pedidos, estoque, checkout e integracoes.";
+        elements.heroSubcopy.textContent = "A entrega Stitch v060 substitui os pacotes 20260513 como referencia visual e funcional. A entrada padrao abre as telas de Admin, Lojista, Usuario Android e Entregador, com botoes conectados ao runtime do painel.";
       }
     }
 

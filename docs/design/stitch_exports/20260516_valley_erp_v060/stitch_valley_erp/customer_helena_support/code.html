@@ -1,0 +1,294 @@
+<!DOCTYPE html><html class="light" lang="pt-BR"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Suporte Helena - Valley ERP</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "cosmic": "#151047",
+                        "tertiary-container": "#a94200",
+                        "background": "#fdf7ff",
+                        "surface": "#fdf7ff",
+                        "outline": "#7a7488",
+                        "secondary": "#00677f",
+                        "surface-container-low": "#f8f1ff",
+                        "surface-container-high": "#ece5f5",
+                        "on-secondary": "#ffffff",
+                        "surface-tint": "#6a23fa",
+                        "inverse-primary": "#cebdff",
+                        "work-surface": "#F6F8FB",
+                        "inverse-on-surface": "#f5eefe",
+                        "error-container": "#ffdad6",
+                        "surface-container": "#f2ebfb",
+                        "on-tertiary-fixed-variant": "#7c2e00",
+                        "success-green": "#1E8A5A",
+                        "on-secondary-fixed": "#001f28",
+                        "night": "#07051F",
+                        "primary-fixed": "#e8ddff",
+                        "muted-ink": "#667085",
+                        "surface-container-highest": "#e7e0f0",
+                        "secondary-container": "#38d4ff",
+                        "outline-variant": "#cbc3d9",
+                        "on-primary-fixed-variant": "#5100cf",
+                        "on-primary-fixed": "#21005e",
+                        "primary": "#5600da",
+                        "warning-amber": "#C98205",
+                        "on-secondary-container": "#00586d",
+                        "primary-fixed-dim": "#cebdff",
+                        "secondary-fixed": "#b7eaff",
+                        "on-surface": "#1d1a25",
+                        "secondary-fixed-dim": "#4cd6ff",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed-dim": "#ffb595",
+                        "critical-red": "#D04437",
+                        "on-surface-variant": "#494456",
+                        "ink": "#15151D",
+                        "surface-bright": "#fdf7ff",
+                        "on-tertiary-container": "#ffd7c6",
+                        "on-error": "#ffffff",
+                        "snow": "#FFFFFF",
+                        "on-tertiary-fixed": "#351000",
+                        "on-primary-container": "#e5daff",
+                        "surface-dim": "#ded7e7",
+                        "inverse-surface": "#322f3b",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed": "#ffdbcc",
+                        "surface-container-lowest": "#ffffff",
+                        "courier-green": "#0F7A4A",
+                        "on-tertiary": "#ffffff",
+                        "tertiary": "#823100",
+                        "on-background": "#1d1a25",
+                        "line": "#D9DEE8",
+                        "on-secondary-fixed-variant": "#004e60",
+                        "surface-variant": "#e7e0f0",
+                        "primary-container": "#6f2cff",
+                        "on-primary": "#ffffff",
+                        "lilac": "#BB8CFF"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    spacing: {
+                        "control-compact": "36px",
+                        "container-margin": "24px",
+                        "unit": "4px",
+                        "control-default": "44px",
+                        "gutter": "16px"
+                    },
+                    fontFamily: {
+                        "label-md": ["Inter"],
+                        "data-table": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    fontSize: {
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0", "fontWeight": "500" }],
+                        "data-table": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+                        "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-lg": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0", "fontWeight": "500" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .helena-glow {
+            box-shadow: 0 4px 24px -6px rgba(76, 214, 255, 0.25), 0 0 12px -2px rgba(187, 140, 255, 0.15);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-work-surface text-on-surface font-body-md h-screen flex flex-col overflow-hidden antialiased">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-night w-full top-0 sticky border-b border-line dark:border-outline-variant flex items-center justify-between px-container-margin h-control-default z-40">
+<div class="flex items-center gap-4">
+<button class="text-primary dark:text-lilac hover:bg-surface-container-high dark:hover:bg-cosmic transition-colors duration-200 p-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<h1 class="font-headline-lg text-headline-lg font-bold text-primary dark:text-lilac">Valley ERP</h1>
+</div>
+<button class="text-primary dark:text-lilac hover:bg-surface-container-high dark:hover:bg-cosmic transition-colors duration-200 p-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</header>
+<!-- Chat Header (Contextual Override) -->
+<div class="bg-surface border-b border-line px-container-margin py-3 flex items-center gap-3 shrink-0">
+<div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center border border-primary-fixed ring-2 ring-surface">
+<span class="material-symbols-outlined text-primary" data-icon="smart_toy">smart_toy</span>
+</div>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Suporte Helena</h2>
+<p class="font-label-sm text-label-sm text-success-green flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-success-green inline-block"></span> Online
+            </p>
+</div>
+</div>
+<!-- Chat Canvas -->
+<main class="flex-1 overflow-y-auto p-container-margin space-y-6 flex flex-col pb-32 md:pb-container-margin relative">
+<!-- Date Divider -->
+<div class="flex justify-center">
+<span class="font-label-sm text-label-sm text-muted-ink bg-surface-container-low px-3 py-1 rounded-full border border-line">Hoje</span>
+</div>
+<!-- Helena Initial Greeting -->
+<div class="flex gap-3 max-w-[85%] md:max-w-[60%]">
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center shrink-0 mt-1">
+<span class="material-symbols-outlined text-primary text-[18px]" data-icon="smart_toy">smart_toy</span>
+</div>
+<div class="bg-surface-container-lowest rounded-xl rounded-tl-sm border border-line p-4 shadow-sm flex flex-col gap-3">
+<p class="font-body-md text-body-md text-on-surface">
+                    Olá! Sou a Helena, assistente inteligente do Valley. Como posso ajudar com sua operação hoje?
+                </p>
+<div class="flex flex-wrap gap-2 mt-1">
+<button class="font-label-md text-label-md text-primary bg-surface border border-line hover:border-primary-fixed hover:bg-surface-container-low transition-colors px-3 py-1.5 rounded-full whitespace-nowrap">
+                        Rastrear Pedido
+                    </button>
+<button class="font-label-md text-label-md text-primary bg-surface border border-line hover:border-primary-fixed hover:bg-surface-container-low transition-colors px-3 py-1.5 rounded-full whitespace-nowrap">
+                        Problema com Pagamento
+                    </button>
+<button class="font-label-md text-label-md text-primary bg-surface border border-line hover:border-primary-fixed hover:bg-surface-container-low transition-colors px-3 py-1.5 rounded-full whitespace-nowrap">
+                        Falar com Atendente
+                    </button>
+</div>
+</div>
+</div>
+<!-- User Message -->
+<div class="flex gap-3 max-w-[85%] md:max-w-[60%] self-end flex-row-reverse">
+<div class="w-8 h-8 rounded-full bg-surface-variant flex items-center justify-center shrink-0 mt-1">
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]" data-icon="person">person</span>
+</div>
+<div class="bg-primary text-on-primary rounded-xl rounded-tr-sm p-4 shadow-sm">
+<p class="font-body-md text-body-md">
+                    Gostaria de saber o status da minha disputa de pagamento recente.
+                </p>
+</div>
+</div>
+<!-- Helena Active Dispute Status (Highlighted Glow) -->
+<div class="flex gap-3 max-w-[90%] md:max-w-[70%]">
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center shrink-0 mt-1 relative">
+<div class="absolute inset-0 rounded-full bg-secondary-container animate-pulse opacity-50"></div>
+<span class="material-symbols-outlined text-on-secondary-container text-[18px] relative z-10" data-icon="smart_toy">smart_toy</span>
+</div>
+<div class="bg-surface-container-lowest rounded-xl rounded-tl-sm border border-secondary-fixed-dim/40 helena-glow p-5 flex flex-col gap-4 relative overflow-hidden">
+<!-- Subtle background accent -->
+<div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-secondary-container/10 to-lilac/10 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none"></div>
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-secondary text-[20px]" data-icon="gavel" style="font-variation-settings: 'FILL' 1;">gavel</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Atualização de Disputa <span class="text-muted-ink font-normal text-sm">#88291-BR</span></h3>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed relative z-10">
+                    Sua disputa referente à transação <strong>TXN-99302</strong> no valor de <strong class="text-on-surface">R$ 1.250,00</strong> está atualmente em <span class="font-medium text-warning-amber">Análise de Risco</span>.
+                </p>
+<div class="bg-surface border border-line rounded-lg p-3 relative z-10">
+<div class="flex items-center justify-between mb-2">
+<span class="font-label-sm text-label-sm text-muted-ink">Progresso da Disputa</span>
+<span class="font-label-sm text-label-sm text-on-surface font-medium">Etapa 2 de 4</span>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-1.5 mb-3">
+<div class="bg-secondary h-1.5 rounded-full" style="width: 50%"></div>
+</div>
+<ul class="space-y-2">
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-success-green text-[16px] mt-0.5" data-icon="check_circle">check_circle</span>
+<span class="font-body-sm text-body-sm text-on-surface">Documentação recebida (Ontem)</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-warning-amber text-[16px] mt-0.5" data-icon="pending">pending</span>
+<span class="font-body-sm text-body-sm text-on-surface font-medium">Análise da adquirente em andamento</span>
+</li>
+</ul>
+</div>
+<p class="font-body-sm text-body-sm text-muted-ink relative z-10">
+                    O prazo estimado para resolução é de 3 a 5 dias úteis. Precisa de intervenção imediata?
+                </p>
+<div class="pt-2 border-t border-line/50 mt-1 relative z-10">
+<button class="w-full sm:w-auto flex items-center justify-center gap-2 bg-surface border border-outline hover:bg-error-container hover:border-error hover:text-on-error-container text-on-surface font-label-md text-label-md px-4 py-2 rounded-lg transition-colors duration-200 group"><span class="material-symbols-outlined text-[18px] group-hover:text-error transition-colors" data-icon="support_agent">support_agent</span>Falar com Atendente</button>
+</div>
+</div>
+</div>
+</main>
+<!-- Chat Input Area -->
+<div class="bg-surface border-t border-line p-3 md:px-container-margin fixed bottom-[60px] md:bottom-0 w-full z-40 flex items-center gap-2">
+<button class="p-2 text-muted-ink hover:text-primary transition-colors rounded-full hover:bg-surface-container-low flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
+</button>
+<div class="flex-1 relative">
+<input class="w-full bg-work-surface border border-line rounded-full pl-4 pr-10 py-2.5 font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-shadow placeholder:text-muted-ink" placeholder="Digite sua mensagem para Helena..." type="text">
+<button class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 text-primary hover:text-primary-container transition-colors rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="mic" style="font-variation-settings: 'FILL' 1;">mic</span>
+</button>
+</div>
+<button class="w-10 h-10 bg-primary text-on-primary rounded-full flex items-center justify-center shrink-0 hover:bg-primary-container transition-colors shadow-sm">
+<span class="material-symbols-outlined" data-icon="send" style="font-variation-settings: 'FILL' 1;">send</span>
+</button>
+</div>
+<!-- BottomNavBar (Mobile Only per design system standard for main shell, but here we include it to match JSON and instructions) -->
+<nav class="bg-snow dark:bg-night fixed bottom-0 w-full z-50 rounded-t-xl border-t border-line dark:border-outline-variant shadow-md flex justify-around items-center px-2 py-2 h-control-default md:hidden">
+<button class="flex flex-col items-center justify-center text-muted-ink dark:text-outline px-3 py-1 hover:text-primary dark:hover:text-lilac active:scale-95 transition-transform duration-150">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-md text-label-md">Início</span>
+</button>
+<button class="flex flex-col items-center justify-center text-muted-ink dark:text-outline px-3 py-1 hover:text-primary dark:hover:text-lilac active:scale-95 transition-transform duration-150">
+<span class="material-symbols-outlined" data-icon="storefront">storefront</span>
+<span class="font-label-md text-label-md">Market</span>
+</button>
+<button class="flex flex-col items-center justify-center text-muted-ink dark:text-outline px-3 py-1 hover:text-primary dark:hover:text-lilac active:scale-95 transition-transform duration-150">
+<span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+<span class="font-label-md text-label-md">Carrinho</span>
+</button>
+<button class="flex flex-col items-center justify-center text-muted-ink dark:text-outline px-3 py-1 hover:text-primary dark:hover:text-lilac active:scale-95 transition-transform duration-150">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+<span class="font-label-md text-label-md">Pedidos</span>
+</button>
+<!-- Active Tab: Chat -->
+<button class="flex flex-col items-center justify-center bg-primary-container dark:bg-cosmic text-on-primary-container dark:text-lilac rounded-xl px-3 py-1 hover:text-primary dark:hover:text-lilac active:scale-95 transition-transform duration-150">
+<span class="material-symbols-outlined" data-icon="chat">chat</span>
+<span class="font-label-md text-label-md">Chat</span>
+</button>
+</nav>
+<!-- Desktop Side Nav Placeholder (Hidden on Mobile) to fulfill "Platform & Layout" intent if viewed on larger screen -->
+<div class="hidden md:flex fixed left-0 top-0 h-full w-64 bg-surface border-r border-line flex-col pt-[60px] z-30">
+<!-- Replicating Bottom Nav links for desktop sidebar structure -->
+<div class="p-4 flex flex-col gap-2">
+<button class="flex items-center gap-3 text-on-surface-variant px-4 py-3 rounded-lg hover:bg-surface-container-low transition-colors w-full text-left">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-md text-label-md">Home</span>
+</button>
+<button class="flex items-center gap-3 text-on-surface-variant px-4 py-3 rounded-lg hover:bg-surface-container-low transition-colors w-full text-left">
+<span class="material-symbols-outlined" data-icon="storefront">storefront</span>
+<span class="font-label-md text-label-md">Market</span>
+</button>
+<button class="flex items-center gap-3 bg-primary-container text-on-primary-container px-4 py-3 rounded-lg w-full text-left">
+<span class="material-symbols-outlined" data-icon="chat">chat</span>
+<span class="font-label-md text-label-md font-bold">Chat</span>
+</button>
+</div>
+</div>
+<!-- Spacer for desktop layout -->
+<div class="hidden md:block w-64 shrink-0 absolute left-0 h-full z-0 pointer-events-none"></div>
+
+
+</body></html>

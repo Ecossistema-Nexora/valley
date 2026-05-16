@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Gestão de Produtos e Logística - Valley ERP</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+                  "work-surface": "#F6F8FB",
+                  "muted-ink": "#667085",
+                  "surface-container-lowest": "#ffffff",
+                  "outline-variant": "#cbc3d9",
+                  "tertiary-container": "#a94200",
+                  "tertiary": "#823100",
+                  "outline": "#7a7488",
+                  "on-primary-container": "#e5daff",
+                  "secondary": "#00677f",
+                  "background": "#fdf7ff",
+                  "cosmic": "#151047",
+                  "on-primary-fixed-variant": "#5100cf",
+                  "on-surface-variant": "#494456",
+                  "line": "#D9DEE8",
+                  "snow": "#FFFFFF",
+                  "primary-container": "#6f2cff",
+                  "tertiary-fixed": "#ffdbcc",
+                  "success-green": "#1E8A5A",
+                  "inverse-surface": "#322f3b",
+                  "on-primary": "#ffffff",
+                  "primary-fixed-dim": "#cebdff",
+                  "critical-red": "#D04437",
+                  "surface-container-high": "#ece5f5",
+                  "on-background": "#1d1a25",
+                  "surface-container-low": "#f8f1ff",
+                  "secondary-fixed-dim": "#4cd6ff",
+                  "on-secondary-fixed": "#001f28",
+                  "night": "#07051F",
+                  "on-surface": "#1d1a25",
+                  "inverse-primary": "#cebdff",
+                  "on-error": "#ffffff",
+                  "tertiary-fixed-dim": "#ffb595",
+                  "ink": "#15151D",
+                  "on-tertiary-fixed-variant": "#7c2e00",
+                  "surface": "#fdf7ff",
+                  "surface-container-highest": "#e7e0f0",
+                  "primary": "#5600da",
+                  "surface-dim": "#ded7e7",
+                  "surface-bright": "#fdf7ff",
+                  "on-error-container": "#93000a",
+                  "on-secondary-fixed-variant": "#004e60",
+                  "on-tertiary": "#ffffff",
+                  "courier-green": "#0F7A4A",
+                  "secondary-fixed": "#b7eaff",
+                  "surface-variant": "#e7e0f0",
+                  "on-secondary": "#ffffff",
+                  "on-primary-fixed": "#21005e",
+                  "error-container": "#ffdad6",
+                  "inverse-on-surface": "#f5eefe",
+                  "surface-tint": "#6a23fa",
+                  "on-tertiary-container": "#ffd7c6",
+                  "on-secondary-container": "#00586d",
+                  "error": "#ba1a1a",
+                  "surface-container": "#f2ebfb",
+                  "on-tertiary-fixed": "#351000",
+                  "lilac": "#BB8CFF",
+                  "secondary-container": "#38d4ff",
+                  "primary-fixed": "#e8ddff",
+                  "warning-amber": "#C98205"
+          },
+          "borderRadius": {
+                  "DEFAULT": "0.25rem",
+                  "lg": "0.5rem",
+                  "xl": "0.75rem",
+                  "full": "9999px"
+          },
+          "spacing": {
+                  "control-default": "44px",
+                  "unit": "4px",
+                  "container-margin": "24px",
+                  "gutter": "16px",
+                  "control-compact": "36px"
+          },
+          "fontFamily": {
+                  "body-lg": ["Inter"],
+                  "body-md": ["Inter"],
+                  "headline-sm": ["Inter"],
+                  "headline-lg": ["Inter"],
+                  "label-md": ["Inter"],
+                  "data-table": ["Inter"],
+                  "headline-md": ["Inter"],
+                  "body-sm": ["Inter"],
+                  "label-sm": ["Inter"]
+          },
+          "fontSize": {
+                  "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                  "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                  "headline-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                  "headline-lg": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                  "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0", "fontWeight": "500"}],
+                  "data-table": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                  "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                  "body-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                  "label-sm": ["11px", {"lineHeight": "14px", "letterSpacing": "0", "fontWeight": "500"}]
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-work-surface font-body-md text-body-md text-ink flex min-h-screen">
+<!-- SideNavBar -->
+<aside class="bg-night h-screen w-64 flex flex-col fixed left-0 top-0 border-r border-line dark:border-night z-50">
+<div class="px-6 py-6 border-b border-line/20">
+<div class="font-headline-md text-headline-md font-bold text-snow">Valley ERP</div>
+<div class="font-label-md text-label-md text-muted-ink mt-1">Merchant Workspace</div>
+<div class="flex items-center gap-2 mt-4 font-label-sm text-label-sm text-muted-ink bg-surface-variant/5 p-2 rounded">
+<span class="material-symbols-outlined text-[14px]">domain</span>
+<span>tenant_id: val_m_829x</span>
+</div>
+</div>
+<nav class="flex-1 py-4 flex flex-col gap-1">
+<a class="flex items-center gap-3 px-4 py-3 text-muted-ink hover:text-snow transition-colors hover:bg-cosmic" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-secondary-fixed bg-surface-variant/10 border-r-4 border-secondary-fixed hover:bg-cosmic transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">precision_manufacturing</span>
+<span class="font-label-md text-label-md">Operations</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-muted-ink hover:text-snow transition-colors hover:bg-cosmic" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-label-md text-label-md">Inventory</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-muted-ink hover:text-snow transition-colors hover:bg-cosmic" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-label-md text-label-md">Finance</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-muted-ink hover:text-snow transition-colors hover:bg-cosmic" href="#">
+<span class="material-symbols-outlined">groups</span>
+<span class="font-label-md text-label-md">HR</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-muted-ink hover:text-snow transition-colors hover:bg-cosmic" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</nav>
+<div class="p-4 border-t border-line/20">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-variant/20 flex items-center justify-center text-snow">
+<span class="material-symbols-outlined text-[16px]">person</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-snow">Admin User</span>
+<span class="font-label-sm text-label-sm text-muted-ink">admin@valley.com</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Wrapper -->
+<div class="flex-1 ml-64 flex flex-col min-h-screen">
+<!-- TopNavBar -->
+<header class="bg-surface dark:bg-night h-[44px] w-full sticky top-0 z-40 border-b border-line flex items-center justify-between px-gutter">
+<div class="flex items-center gap-6">
+<span class="font-headline-sm text-headline-sm font-bold text-primary dark:text-primary-fixed">Valley ERP</span>
+<div class="flex items-center gap-4">
+<a class="text-primary font-bold border-b-2 border-primary pb-1 font-body-sm text-body-sm hover:text-primary transition-colors scale-95 active:scale-100" href="#">Matriz</a>
+<a class="text-muted-ink font-medium font-body-sm text-body-sm hover:text-primary transition-colors scale-95 active:scale-100" href="#">Filial</a>
+<span class="font-label-sm text-label-sm text-muted-ink ml-2 bg-surface-variant/20 px-2 py-0.5 rounded">branch_id: matriz_01</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden md:block">
+<span class="material-symbols-outlined absolute left-2 top-1/2 -translate-y-1/2 text-muted-ink text-[16px]">search</span>
+<input class="h-control-compact pl-8 pr-8 w-64 border border-line rounded bg-snow text-ink font-body-sm text-body-sm placeholder:text-muted-ink focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" placeholder="Buscar em Operações..." type="text"/>
+<span class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-primary text-[18px] animate-pulse cursor-help" title="Helena AI Assistant">auto_awesome</span>
+</div>
+<button class="text-primary dark:text-primary-fixed hover:text-primary-container transition-colors">
+<span class="material-symbols-outlined">auto_awesome</span>
+</button>
+<button class="text-primary dark:text-primary-fixed hover:text-primary-container transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-critical-red rounded-full"></span>
+</button>
+<button class="text-primary dark:text-primary-fixed hover:text-primary-container transition-colors">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="flex-1 p-container-margin flex flex-col gap-6 max-w-[1600px] w-full mx-auto">
+<!-- Page Header & Tabs -->
+<div class="flex flex-col gap-4">
+<div class="flex justify-between items-end">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-ink">Gestão de Produtos e Logística</h1>
+<p class="font-body-md text-body-md text-muted-ink mt-1">Gerencie o catálogo, inventário e fluxo de separação.</p>
+</div>
+<div class="flex gap-2">
+<button class="h-control-compact px-4 border border-line bg-snow text-ink font-label-md text-label-md rounded flex items-center gap-2 hover:bg-surface-variant/20 transition-colors">
+<span class="material-symbols-outlined text-[16px]">download</span>
+              Exportar
+            </button>
+<button class="h-control-compact px-4 bg-primary text-snow font-label-md text-label-md rounded flex items-center gap-2 hover:bg-primary-container transition-colors">
+<span class="material-symbols-outlined text-[16px]">add</span>
+              Novo Produto
+            </button>
+</div>
+</div>
+<!-- Horizontal Tabs -->
+<div class="flex border-b border-line gap-6">
+<button class="pb-2 border-b-2 border-primary text-primary font-label-md text-label-md">Produtos</button>
+<button class="pb-2 border-b-2 border-transparent text-muted-ink hover:text-ink font-label-md text-label-md">Estoque</button>
+<button class="pb-2 border-b-2 border-transparent text-muted-ink hover:text-ink font-label-md text-label-md">Pedidos</button>
+<button class="pb-2 border-b-2 border-transparent text-muted-ink hover:text-ink font-label-md text-label-md">Etiquetas</button>
+</div>
+</div>
+<!-- Content Area: Produtos (Active) -->
+<div class="flex gap-6 h-full">
+<!-- Main Table Area -->
+<div class="flex-1 bg-snow border border-line rounded flex flex-col">
+<div class="p-4 border-b border-line flex justify-between items-center bg-surface-container-lowest">
+<div class="flex gap-2">
+<button class="h-control-compact px-3 border border-line bg-snow text-ink font-label-sm text-label-sm rounded flex items-center gap-1 hover:bg-surface-variant/20">
+<span class="material-symbols-outlined text-[14px]">filter_list</span>
+                Filtros
+              </button>
+<button class="h-control-compact px-3 border border-line bg-snow text-ink font-label-sm text-label-sm rounded flex items-center gap-1 hover:bg-surface-variant/20">
+<span class="material-symbols-outlined text-[14px]">category</span>
+                Categoria
+              </button>
+</div>
+<div class="flex gap-2">
+<button class="h-control-compact px-3 border border-line bg-snow text-ink font-label-sm text-label-sm rounded flex items-center gap-1 hover:bg-surface-variant/20">
+<span class="material-symbols-outlined text-[14px]">layers</span>
+                Criar Variante
+              </button>
+<button class="h-control-compact px-3 border border-line bg-snow text-ink font-label-sm text-label-sm rounded flex items-center gap-1 hover:bg-surface-variant/20">
+<span class="material-symbols-outlined text-[14px]">deployed_code</span>
+                Criar Kit
+              </button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left font-data-table text-data-table border-collapse">
+<thead>
+<tr class="border-b border-line bg-work-surface text-muted-ink font-label-md text-label-md">
+<th class="p-3 font-medium">SKU</th>
+<th class="p-3 font-medium">EAN-13</th>
+<th class="p-3 font-medium">Nome do Produto</th>
+<th class="p-3 font-medium">Categoria</th>
+<th class="p-3 font-medium text-center">Variantes</th>
+<th class="p-3 font-medium text-right">Preço Venda</th>
+<th class="p-3 font-medium text-center">Status</th>
+<th class="p-3 font-medium text-center">Ações</th>
+</tr>
+</thead>
+<tbody class="text-ink">
+<tr class="border-b border-line hover:bg-surface-container-lowest transition-colors">
+<td class="p-3 font-medium">VAL-1001</td>
+<td class="p-3 text-muted-ink">7891234567890</td>
+<td class="p-3">Teclado Mecânico Pro</td>
+<td class="p-3">Periféricos</td>
+<td class="p-3 text-center"><span class="bg-surface-variant px-2 py-0.5 rounded text-label-sm">3</span></td>
+<td class="p-3 text-right">R$ 450,00</td>
+<td class="p-3 text-center"><span class="text-success-green font-medium flex items-center justify-center gap-1"><span class="w-2 h-2 rounded-full bg-success-green"></span>Ativo</span></td>
+<td class="p-3 text-center">
+<button class="text-muted-ink hover:text-primary"><span class="material-symbols-outlined text-[18px]">more_vert</span></button>
+</td>
+</tr>
+<tr class="border-b border-line hover:bg-surface-container-lowest transition-colors">
+<td class="p-3 font-medium">VAL-1002</td>
+<td class="p-3 text-muted-ink">7891234567891</td>
+<td class="p-3">Mouse Wireless Ergonomic</td>
+<td class="p-3">Periféricos</td>
+<td class="p-3 text-center"><span class="bg-surface-variant px-2 py-0.5 rounded text-label-sm">1</span></td>
+<td class="p-3 text-right">R$ 220,00</td>
+<td class="p-3 text-center"><span class="text-success-green font-medium flex items-center justify-center gap-1"><span class="w-2 h-2 rounded-full bg-success-green"></span>Ativo</span></td>
+<td class="p-3 text-center">
+<button class="text-muted-ink hover:text-primary"><span class="material-symbols-outlined text-[18px]">more_vert</span></button>
+</td>
+</tr>
+<tr class="border-b border-line hover:bg-surface-container-lowest transition-colors bg-error-container/10">
+<td class="p-3 font-medium">VAL-1003</td>
+<td class="p-3 text-muted-ink">7891234567892</td>
+<td class="p-3">Monitor Ultrawide 34"</td>
+<td class="p-3">Monitores</td>
+<td class="p-3 text-center">-</td>
+<td class="p-3 text-right">R$ 3.200,00</td>
+<td class="p-3 text-center"><span class="text-critical-red font-medium flex items-center justify-center gap-1"><span class="w-2 h-2 rounded-full bg-critical-red"></span>Inativo</span></td>
+<td class="p-3 text-center">
+<button class="text-muted-ink hover:text-primary"><span class="material-symbols-outlined text-[18px]">more_vert</span></button>
+</td>
+</tr>
+<tr class="border-b border-line hover:bg-surface-container-lowest transition-colors">
+<td class="p-3 font-medium">VAL-1004</td>
+<td class="p-3 text-muted-ink">7891234567893</td>
+<td class="p-3">Cadeira Office Mesh</td>
+<td class="p-3">Móveis</td>
+<td class="p-3 text-center"><span class="bg-surface-variant px-2 py-0.5 rounded text-label-sm">2</span></td>
+<td class="p-3 text-right">R$ 1.150,00</td>
+<td class="p-3 text-center"><span class="text-success-green font-medium flex items-center justify-center gap-1"><span class="w-2 h-2 rounded-full bg-success-green"></span>Ativo</span></td>
+<td class="p-3 text-center">
+<button class="text-muted-ink hover:text-primary"><span class="material-symbols-outlined text-[18px]">more_vert</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-4 border-t border-line flex justify-between items-center bg-work-surface mt-auto">
+<span class="font-label-sm text-label-sm text-muted-ink">Mostrando 1-4 de 128 produtos</span>
+<div class="flex gap-1">
+<button class="w-8 h-8 flex items-center justify-center border border-line rounded text-muted-ink hover:bg-line"><span class="material-symbols-outlined text-[16px]">chevron_left</span></button>
+<button class="w-8 h-8 flex items-center justify-center border border-primary bg-primary-container/10 text-primary rounded font-label-md text-label-md">1</button>
+<button class="w-8 h-8 flex items-center justify-center border border-line rounded text-ink hover:bg-line font-label-md text-label-md">2</button>
+<button class="w-8 h-8 flex items-center justify-center border border-line rounded text-ink hover:bg-line font-label-md text-label-md">3</button>
+<button class="w-8 h-8 flex items-center justify-center border border-line rounded text-muted-ink hover:bg-line"><span class="material-symbols-outlined text-[16px]">chevron_right</span></button>
+</div>
+</div>
+</div>
+<!-- Sidebar Form (Ações Rápidas) -->
+<aside class="w-80 bg-snow border border-line rounded flex flex-col shrink-0">
+<div class="p-4 border-b border-line flex justify-between items-center bg-work-surface">
+<h2 class="font-headline-sm text-headline-sm text-ink">Novo Produto / Editar</h2>
+<button class="text-muted-ink hover:text-ink"><span class="material-symbols-outlined text-[18px]">close</span></button>
+</div>
+<div class="p-4 flex-1 overflow-y-auto flex flex-col gap-4">
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-ink font-medium">Nome do Produto <span class="text-critical-red">*</span></label>
+<input class="h-control-compact border border-line rounded px-3 font-body-sm text-body-sm text-ink focus:border-primary focus:ring-1 focus:ring-primary w-full" placeholder="Ex: Teclado Mecânico Pro" type="text"/>
+</div>
+<div class="flex gap-3">
+<div class="flex flex-col gap-1 flex-1">
+<label class="font-label-sm text-label-sm text-ink font-medium">SKU <span class="text-critical-red">*</span></label>
+<input class="h-control-compact border border-line rounded px-3 font-body-sm text-body-sm text-ink focus:border-primary focus:ring-1 focus:ring-primary w-full" placeholder="VAL-0000" type="text"/>
+</div>
+<div class="flex flex-col gap-1 flex-1">
+<label class="font-label-sm text-label-sm text-ink font-medium">Preço (R$) <span class="text-critical-red">*</span></label>
+<input class="h-control-compact border border-line rounded px-3 font-body-sm text-body-sm text-ink focus:border-primary focus:ring-1 focus:ring-primary w-full" placeholder="0,00" type="text"/>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-ink font-medium">Categoria</label>
+<select class="h-control-compact border border-line rounded px-3 font-body-sm text-body-sm text-ink focus:border-primary focus:ring-1 focus:ring-primary w-full bg-snow">
+<option>Selecione uma categoria</option>
+<option>Periféricos</option>
+<option>Monitores</option>
+<option>Móveis</option>
+</select>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-ink font-medium">EAN-13</label>
+<div class="relative">
+<input class="h-control-compact border border-line rounded pl-3 pr-8 font-body-sm text-body-sm text-ink focus:border-primary focus:ring-1 focus:ring-primary w-full" placeholder="Opcional" type="text"/>
+<button class="absolute right-2 top-1/2 -translate-y-1/2 text-muted-ink hover:text-primary"><span class="material-symbols-outlined text-[16px]">qr_code_scanner</span></button>
+</div>
+</div>
+<div class="mt-4 p-3 bg-surface-container-low border border-outline-variant/30 rounded flex gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]">auto_awesome</span>
+<p class="font-body-sm text-body-sm text-ink">Helena sugere categorizar como "Eletrônicos" com base no nome do produto.</p>
+</div>
+</div>
+<div class="p-4 border-t border-line bg-work-surface flex gap-2 justify-end">
+<button class="h-control-compact px-4 border border-line bg-snow text-ink font-label-md text-label-md rounded hover:bg-surface-variant/20 transition-colors">Cancelar</button>
+<button class="h-control-compact px-4 bg-primary text-snow font-label-md text-label-md rounded hover:bg-primary-container transition-colors">Salvar Produto</button>
+</div>
+</aside>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-work-surface dark:bg-night w-full py-4 px-gutter mt-auto border-t border-line flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-muted-ink">© 2024 Valley ERP. All rights reserved.</span>
+<div class="flex gap-4">
+<a class="font-label-sm text-label-sm text-muted-ink hover:text-ink hover:underline opacity-80 hover:opacity-100 transition-all" href="#">Documentation</a>
+<a class="font-label-sm text-label-sm text-muted-ink hover:text-ink hover:underline opacity-80 hover:opacity-100 transition-all" href="#">Support Center</a>
+<a class="font-label-sm text-label-sm text-muted-ink hover:text-ink hover:underline opacity-80 hover:opacity-100 transition-all" href="#">Release Notes</a>
+</div>
+</footer>
+</div>
+</body></html>

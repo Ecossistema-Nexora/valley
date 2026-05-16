@@ -1,0 +1,279 @@
+<!DOCTYPE html><html lang="pt-BR"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Valley ERP - Central de Mensagens</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "cosmic": "#151047",
+                        "tertiary-container": "#a94200",
+                        "background": "#fdf7ff",
+                        "surface": "#fdf7ff",
+                        "outline": "#7a7488",
+                        "secondary": "#00677f",
+                        "surface-container-low": "#f8f1ff",
+                        "surface-container-high": "#ece5f5",
+                        "on-secondary": "#ffffff",
+                        "surface-tint": "#6a23fa",
+                        "inverse-primary": "#cebdff",
+                        "work-surface": "#F6F8FB",
+                        "inverse-on-surface": "#f5eefe",
+                        "error-container": "#ffdad6",
+                        "surface-container": "#f2ebfb",
+                        "on-tertiary-fixed-variant": "#7c2e00",
+                        "success-green": "#1E8A5A",
+                        "on-secondary-fixed": "#001f28",
+                        "night": "#07051F",
+                        "primary-fixed": "#e8ddff",
+                        "muted-ink": "#667085",
+                        "surface-container-highest": "#e7e0f0",
+                        "secondary-container": "#38d4ff",
+                        "outline-variant": "#cbc3d9",
+                        "on-primary-fixed-variant": "#5100cf",
+                        "on-primary-fixed": "#21005e",
+                        "primary": "#5600da",
+                        "warning-amber": "#C98205",
+                        "on-secondary-container": "#00586d",
+                        "primary-fixed-dim": "#cebdff",
+                        "secondary-fixed": "#b7eaff",
+                        "on-surface": "#1d1a25",
+                        "secondary-fixed-dim": "#4cd6ff",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed-dim": "#ffb595",
+                        "critical-red": "#D04437",
+                        "on-surface-variant": "#494456",
+                        "ink": "#15151D",
+                        "surface-bright": "#fdf7ff",
+                        "on-tertiary-container": "#ffd7c6",
+                        "on-error": "#ffffff",
+                        "snow": "#FFFFFF",
+                        "on-tertiary-fixed": "#351000",
+                        "on-primary-container": "#e5daff",
+                        "surface-dim": "#ded7e7",
+                        "inverse-surface": "#322f3b",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed": "#ffdbcc",
+                        "surface-container-lowest": "#ffffff",
+                        "courier-green": "#0F7A4A",
+                        "on-tertiary": "#ffffff",
+                        "tertiary": "#823100",
+                        "on-background": "#1d1a25",
+                        "line": "#D9DEE8",
+                        "on-secondary-fixed-variant": "#004e60",
+                        "surface-variant": "#e7e0f0",
+                        "primary-container": "#6f2cff",
+                        "on-primary": "#ffffff",
+                        "lilac": "#BB8CFF"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "control-compact": "36px",
+                        "container-margin": "24px",
+                        "unit": "4px",
+                        "control-default": "44px",
+                        "gutter": "16px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "data-table": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0", "fontWeight": "500" }],
+                        "data-table": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+                        "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-lg": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0", "fontWeight": "500" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-work-surface text-on-surface font-body-md antialiased min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="bg-surface w-full top-0 sticky border-b border-line flex items-center justify-between px-container-margin h-control-default z-40">
+<div class="flex items-center gap-3">
+<button class="text-primary hover:bg-surface-container-high transition-colors duration-200 rounded-full p-1 -ml-1">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">menu</span>
+</button>
+<div class="flex flex-col">
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary">Valley ERP</h1>
+<span class="font-label-sm text-label-sm text-muted-ink">BR-SP-001</span>
+</div>
+</div>
+<button class="text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200 rounded-full p-1 -mr-1">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">notifications</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 pb-24">
+<!-- Controls Header -->
+<section class="px-container-margin pt-4 pb-2 space-y-4 bg-surface border-b border-line">
+<!-- Search Input -->
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-muted-ink" style="font-size: 20px;">search</span>
+<input class="w-full h-control-default pl-10 pr-4 rounded-lg border border-line bg-snow font-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none placeholder:text-muted-ink transition-shadow" placeholder="Buscar conversas, pedidos ou itens..." type="text">
+</div>
+<!-- Filter Chips -->
+<div class="flex gap-2 overflow-x-auto scrollbar-hide pb-2">
+<button class="px-4 h-8 rounded-full border border-primary bg-primary-container text-on-primary-container font-label-md text-label-md whitespace-nowrap flex items-center shrink-0">
+                    Todos
+                </button>
+<button class="px-4 h-8 rounded-full border border-line bg-snow text-on-surface hover:bg-surface-container-low transition-colors font-label-md text-label-md whitespace-nowrap flex items-center shrink-0">
+                    Estoque
+                </button>
+<button class="px-4 h-8 rounded-full border border-line bg-snow text-on-surface hover:bg-surface-container-low transition-colors font-label-md text-label-md whitespace-nowrap flex items-center shrink-0">
+                    Marketplace
+                </button>
+<button class="px-4 h-8 rounded-full border border-primary-fixed-dim bg-surface-container text-primary hover:bg-surface-container-high transition-colors font-label-md text-label-md whitespace-nowrap flex items-center gap-1.5 shrink-0">
+<span class="material-symbols-outlined text-[16px]">smart_toy</span>
+                    Suporte
+                </button>
+</div>
+</section>
+<!-- Chat List Container -->
+<section class="p-container-margin space-y-3">
+<!-- Thread Item: Marketplace (Unread) -->
+<div class="bg-snow rounded-lg border border-line p-3 flex gap-3 cursor-pointer hover:shadow-sm hover:border-primary-fixed-dim transition-all">
+<!-- Avatar -->
+<div class="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">storefront</span>
+</div>
+<!-- Content -->
+<div class="flex-1 min-w-0 flex flex-col justify-center">
+<div class="flex justify-between items-baseline mb-0.5">
+<h3 class="font-headline-sm text-headline-sm text-on-surface truncate">Comercial Silva &amp; Cia</h3>
+<span class="font-label-sm text-label-sm text-primary font-bold shrink-0 ml-2">10:42</span>
+</div>
+<div class="flex items-center gap-2 mb-1">
+<span class="px-1.5 py-0.5 rounded bg-surface-variant text-on-surface-variant font-label-sm text-[10px] tracking-wide">Pedido #1234</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface font-bold truncate">O cliente está perguntando sobre o prazo de entrega da remessa.</p>
+</div>
+<!-- Unread Indicator -->
+<div class="flex flex-col items-end shrink-0 pt-1">
+<div class="w-2.5 h-2.5 rounded-full bg-primary"></div>
+</div>
+</div>
+<!-- Thread Item: Suporte Helena AI (Highlighted Context) -->
+<div class="bg-surface rounded-lg border border-primary-fixed-dim shadow-[0_0_15px_rgba(106,35,250,0.08)] p-3 flex gap-3 cursor-pointer hover:bg-surface-container-low transition-all relative overflow-hidden">
+<!-- Subtle AI Glow Effect Background -->
+<div class="absolute inset-0 bg-gradient-to-r from-primary-container/20 to-transparent pointer-events-none"></div>
+<div class="w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center shrink-0 z-10 shadow-sm">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+</div>
+<div class="flex-1 min-w-0 flex flex-col justify-center z-10">
+<div class="flex justify-between items-baseline mb-0.5">
+<h3 class="font-headline-sm text-headline-sm text-primary truncate">Helena AI</h3>
+<span class="font-label-sm text-label-sm text-primary shrink-0 ml-2">09:15</span>
+</div>
+<div class="flex items-center gap-2 mb-1">
+<span class="px-1.5 py-0.5 rounded bg-error-container text-on-error-container font-label-sm text-[10px] tracking-wide border border-error/20">Item em Falta</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">Analisei o estoque. Encontrei 3 alternativas compatíveis para o SKU-992 no CD Sul.</p>
+</div>
+</div>
+<!-- Thread Item: Estoque (Read) -->
+<div class="bg-snow rounded-lg border border-line p-3 flex gap-3 cursor-pointer hover:shadow-sm hover:border-outline-variant transition-all opacity-90">
+<div class="w-10 h-10 rounded-full bg-surface-variant text-on-surface-variant flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">inventory_2</span>
+</div>
+<div class="flex-1 min-w-0 flex flex-col justify-center">
+<div class="flex justify-between items-baseline mb-0.5">
+<h3 class="font-headline-sm text-headline-sm text-on-surface truncate">Carlos Mendes (Op. Logística)</h3>
+<span class="font-label-sm text-label-sm text-muted-ink shrink-0 ml-2">Ontem</span>
+</div>
+<div class="flex items-center gap-2 mb-1">
+<span class="px-1.5 py-0.5 rounded bg-surface-variant text-on-surface-variant font-label-sm text-[10px] tracking-wide">Transferência #882</span>
+</div>
+<p class="font-body-sm text-body-sm text-muted-ink truncate">A carga já foi liberada na doca 4. Segue o comprovante assinado.</p>
+</div>
+</div>
+<!-- Thread Item: Marketplace (Read) -->
+<div class="bg-snow rounded-lg border border-line p-3 flex gap-3 cursor-pointer hover:shadow-sm hover:border-outline-variant transition-all opacity-90">
+<div class="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">storefront</span>
+</div>
+<div class="flex-1 min-w-0 flex flex-col justify-center">
+<div class="flex justify-between items-baseline mb-0.5">
+<h3 class="font-headline-sm text-headline-sm text-on-surface truncate">Distribuidora Alfa</h3>
+<span class="font-label-sm text-label-sm text-muted-ink shrink-0 ml-2">Segunda</span>
+</div>
+<div class="flex items-center gap-2 mb-1">
+<span class="px-1.5 py-0.5 rounded bg-surface-variant text-on-surface-variant font-label-sm text-[10px] tracking-wide">Dúvida Fiscal</span>
+</div>
+<p class="font-body-sm text-body-sm text-muted-ink truncate">Precisamos da chave de acesso da NFe para dar entrada no sistema.</p>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Mobile Shell) -->
+<nav class="fixed bottom-0 w-full z-50 bg-snow shadow-[0_-2px_10px_rgba(0,0,0,0.05)] md:hidden">
+<div class="flex justify-around items-center w-full px-2 py-2 h-control-default">
+<!-- Inactive: Home -->
+<button class="flex flex-col items-center justify-center text-muted-ink px-3 py-1 hover:text-primary transition-colors duration-150 active:scale-95">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">home</span>
+<span class="font-label-sm text-[10px] mt-0.5">Início</span>
+</button>
+<!-- Inactive: Market -->
+<button class="flex flex-col items-center justify-center text-muted-ink px-3 py-1 hover:text-primary transition-colors duration-150 active:scale-95">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">storefront</span>
+<span class="font-label-sm text-[10px] mt-0.5">Market</span>
+</button>
+<!-- Inactive: Cart -->
+<button class="flex flex-col items-center justify-center text-muted-ink px-3 py-1 hover:text-primary transition-colors duration-150 active:scale-95">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">shopping_cart</span>
+<span class="font-label-sm text-[10px] mt-0.5">Carrinho</span>
+</button>
+<!-- Inactive: Orders -->
+<button class="flex flex-col items-center justify-center text-muted-ink px-3 py-1 hover:text-primary transition-colors duration-150 active:scale-95">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">receipt_long</span>
+<span class="font-label-sm text-[10px] mt-0.5">Pedidos</span>
+</button>
+<!-- Active: Chat -->
+<button class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-4 py-1 transition-transform duration-150 active:scale-95">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">chat</span>
+<span class="font-label-sm text-[10px] mt-0.5 font-bold">Chat</span>
+</button>
+</div>
+</nav>
+
+
+</body></html>

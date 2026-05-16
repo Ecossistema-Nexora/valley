@@ -1,0 +1,440 @@
+<!DOCTYPE html><html class="dark" lang="pt-BR"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-width=1.0" name="viewport">
+<title>Valley ERP - Admin Console | God Mode</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed-variant": "#004e60",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-container": "#ffd7c6",
+                        "primary": "#5600da",
+                        "critical-red": "#D04437",
+                        "warning-amber": "#C98205",
+                        "tertiary-container": "#a94200",
+                        "on-primary-fixed-variant": "#5100cf",
+                        "on-surface": "#1d1a25",
+                        "primary-fixed": "#e8ddff",
+                        "error-container": "#ffdad6",
+                        "surface-container": "#f2ebfb",
+                        "cosmic": "#151047",
+                        "tertiary": "#823100",
+                        "success-green": "#1E8A5A",
+                        "on-primary-container": "#e5daff",
+                        "surface-dim": "#ded7e7",
+                        "surface-container-high": "#ece5f5",
+                        "tertiary-fixed": "#ffdbcc",
+                        "on-tertiary-fixed-variant": "#7c2e00",
+                        "on-secondary-container": "#00586d",
+                        "surface": "#fdf7ff",
+                        "inverse-surface": "#322f3b",
+                        "work-surface": "#F6F8FB",
+                        "on-error": "#ffffff",
+                        "inverse-on-surface": "#f5eefe",
+                        "secondary-fixed": "#b7eaff",
+                        "lilac": "#BB8CFF",
+                        "outline": "#7a7488",
+                        "tertiary-fixed-dim": "#ffb595",
+                        "ink": "#15151D",
+                        "courier-green": "#0F7A4A",
+                        "surface-bright": "#fdf7ff",
+                        "inverse-primary": "#cebdff",
+                        "snow": "#FFFFFF",
+                        "on-tertiary-fixed": "#351000",
+                        "on-background": "#1d1a25",
+                        "secondary-fixed-dim": "#4cd6ff",
+                        "primary-container": "#6f2cff",
+                        "secondary-container": "#38d4ff",
+                        "night": "#07051F",
+                        "secondary": "#00677f",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "background": "#fdf7ff",
+                        "primary-fixed-dim": "#cebdff",
+                        "outline-variant": "#cbc3d9",
+                        "line": "#D9DEE8",
+                        "on-surface-variant": "#494456",
+                        "on-secondary-fixed": "#001f28",
+                        "surface-container-low": "#f8f1ff",
+                        "surface-variant": "#e7e0f0",
+                        "muted-ink": "#667085",
+                        "on-error-container": "#93000a",
+                        "on-primary-fixed": "#21005e",
+                        "error": "#ba1a1a",
+                        "surface-tint": "#6a23fa",
+                        "on-secondary": "#ffffff",
+                        "surface-container-highest": "#e7e0f0"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-margin": "24px",
+                        "control-default": "44px",
+                        "unit": "4px",
+                        "control-compact": "36px",
+                        "gutter": "16px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "data-table": ["Inter"],
+                        "body-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0", "fontWeight": "500" }],
+                        "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0", "fontWeight": "500" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-lg": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "data-table": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+                        "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-surface text-on-surface h-screen w-screen overflow-hidden flex flex-col font-body-md dark:bg-background dark:text-on-background">
+<!-- TopAppBar -->
+<header class="bg-surface-container-lowest dark:bg-night border-b border-line dark:border-outline flex justify-between items-center w-full px-gutter h-control-default z-50 flat no shadows docked full-width top-0 shrink-0">
+<div class="flex items-center gap-4">
+<span class="font-headline-lg text-headline-lg font-bold text-primary dark:text-lilac">Valley Admin</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2 px-3 py-1 bg-surface-container dark:bg-surface-container-high rounded-full border border-line dark:border-outline-variant">
+<span class="material-symbols-outlined text-primary dark:text-inverse-primary text-[18px]">neurology</span>
+<span class="font-label-md text-label-md text-primary dark:text-inverse-primary">Helena AI</span>
+</div>
+<div class="flex items-center gap-2 border-l border-line dark:border-outline-variant pl-6">
+<span class="material-symbols-outlined text-on-surface-variant dark:text-outline-variant text-[18px]">apartment</span>
+<span class="font-label-md text-label-md text-on-surface-variant dark:text-outline-variant">Matriz - São Paulo</span>
+</div>
+<div class="flex items-center gap-4 ml-4">
+<button class="text-on-surface-variant dark:text-outline-variant hover:bg-surface-container dark:hover:bg-surface-container-high transition-colors p-1 rounded-full opacity-80 duration-100">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-on-surface-variant dark:text-outline-variant hover:bg-surface-container dark:hover:bg-surface-container-high transition-colors p-1 rounded-full opacity-80 duration-100">
+<span class="material-symbols-outlined">help</span>
+</button>
+<button class="text-on-surface-variant dark:text-outline-variant hover:bg-surface-container dark:hover:bg-surface-container-high transition-colors p-1 rounded-full opacity-80 duration-100">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden">
+<!-- SideNavBar -->
+<nav class="bg-work-surface dark:bg-night docked h-full left-0 w-64 border-r border-line dark:border-outline flex flex-col h-screen py-gutter px-2 border-r border-line dark:border-outline-variant flat no shadows shrink-0">
+<div class="px-4 mb-6">
+<div class="w-10 h-10 bg-primary/10 dark:bg-primary-fixed/20 rounded-lg flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-primary dark:text-lilac" style="font-variation-settings: 'FILL' 1;">hexagon</span>
+</div>
+<h2 class="font-headline-md text-headline-md font-black text-primary">Valley ERP</h2>
+<p class="font-label-md text-label-md text-on-surface-variant dark:text-outline-variant">Admin Console</p>
+<button class="mt-6 w-full bg-primary text-on-primary hover:bg-primary/90 h-control-compact rounded flex items-center justify-center gap-2 font-label-md text-label-md transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                    Novo Chamado
+                </button>
+</div>
+<div class="flex-1 overflow-y-auto">
+<ul class="space-y-1">
+<li class="">
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-high dark:hover:bg-surface-container-highest hover:translate-x-1 transition-all duration-200 rounded-lg font-label-md text-label-md group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary dark:group-hover:text-lilac">extension</span>
+                            Módulos
+                        </a>
+</li>
+<li class="">
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-high dark:hover:bg-surface-container-highest hover:translate-x-1 transition-all duration-200 rounded-lg font-label-md text-label-md group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary dark:group-hover:text-lilac">rule</span>
+                            Regras
+                        </a>
+</li>
+<li class="">
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-high dark:hover:bg-surface-container-highest hover:translate-x-1 transition-all duration-200 rounded-lg font-label-md text-label-md group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary dark:group-hover:text-lilac">api</span>
+                            APIs
+                        </a>
+</li>
+<li class="">
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-high dark:hover:bg-surface-container-highest hover:translate-x-1 transition-all duration-200 rounded-lg font-label-md text-label-md group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary dark:group-hover:text-lilac">group_work</span>
+                            Usuários
+                        </a>
+</li>
+<li class="">
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-high dark:hover:bg-surface-container-highest hover:translate-x-1 transition-all duration-200 rounded-lg font-label-md text-label-md group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary dark:group-hover:text-lilac">history</span>
+                            Auditoria
+                        </a>
+</li>
+<li class="">
+<a class="flex items-center gap-3 px-4 py-2 bg-primary-fixed text-on-primary-fixed-variant dark:bg-primary-container dark:text-on-primary-container rounded-lg font-bold font-label-md text-label-md hover:translate-x-1 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">terminal</span>
+                            God Mode
+                        </a>
+</li>
+</ul>
+</div>
+<div class="mt-auto border-t border-line dark:border-outline-variant pt-4 pb-20">
+<ul class="space-y-1">
+<li class="">
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-high dark:hover:bg-surface-container-highest hover:translate-x-1 transition-all duration-200 rounded-lg font-label-md text-label-md group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary dark:group-hover:text-lilac">settings</span>
+                            Configurações
+                        </a>
+</li>
+<li class="">
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-high dark:hover:bg-surface-container-highest hover:translate-x-1 transition-all duration-200 rounded-lg font-label-md text-label-md group text-critical-red" href="#">
+<span class="material-symbols-outlined text-critical-red">logout</span>
+                            Sair
+                        </a>
+</li>
+</ul>
+</div>
+</nav>
+<!-- Main Workspace -->
+<main class="flex-1 bg-work-surface dark:bg-night overflow-y-auto p-gutter relative">
+<!-- Global Risk Alert (God Mode) -->
+<div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-critical-red via-primary to-secondary z-10"></div>
+<!-- Context Header -->
+<div class="mb-6 flex justify-between items-end">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="px-2 py-0.5 bg-critical-red/10 border border-critical-red/30 rounded text-critical-red font-label-sm text-label-sm tracking-wider uppercase">MODO DEUS ATIVO</span>
+<span class="font-label-sm text-label-sm text-muted-ink">tenant_id: val_prod_99x</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg font-bold text-on-surface dark:text-snow">Painel Modo Deus</h1>
+</div>
+<button class="bg-surface-container dark:bg-surface-container-high border border-critical-red/50 text-critical-red hover:bg-critical-red/10 h-control-compact px-4 rounded font-label-md text-label-md flex items-center gap-2 transition-colors"><span class="material-symbols-outlined text-[18px]">power_settings_new</span>\n                    Encerrar sessão Modo Deus</button>
+</div>
+<!-- KPI Strip -->
+<div class="grid grid-cols-4 gap-4 mb-6">
+<div class="bg-surface dark:bg-surface-container-lowest border border-line dark:border-outline-variant rounded-lg p-4 flex flex-col">
+<span class="font-label-sm text-label-sm text-muted-ink uppercase tracking-wider mb-1">MÓDULOS ATIVOS</span>
+<div class="flex items-end gap-2 mt-auto">
+<span class="font-headline-lg text-headline-lg font-bold text-on-surface dark:text-snow">24</span>
+<span class="font-label-sm text-label-sm text-success-green mb-1 flex items-center"><span class="material-symbols-outlined text-[14px]">arrow_upward</span> 100%</span>
+</div>
+</div>
+<div class="bg-surface dark:bg-surface-container-lowest border border-line dark:border-outline-variant rounded-lg p-4 flex flex-col">
+<span class="font-label-sm text-label-sm text-muted-ink uppercase tracking-wider mb-1">APIS ONLINE (SLA)</span>
+<div class="flex items-end gap-2 mt-auto">
+<span class="font-headline-lg text-headline-lg font-bold text-on-surface dark:text-snow">99.8%</span>
+<span class="font-label-sm text-label-sm text-warning-amber mb-1 flex items-center"><span class="material-symbols-outlined text-[14px]">warning</span> Degraded</span>
+</div>
+</div>
+<div class="bg-critical-red/5 border border-critical-red/20 rounded-lg p-4 flex flex-col">
+<span class="font-label-sm text-label-sm text-critical-red uppercase tracking-wider mb-1">RISCOS ABERTOS</span>
+<div class="flex items-end gap-2 mt-auto">
+<span class="font-headline-lg text-headline-lg font-bold text-critical-red">2</span>
+<span class="font-label-sm text-label-sm text-critical-red mb-1">Ação requerida</span>
+</div>
+</div>
+<div class="bg-surface dark:bg-surface-container-lowest border border-line dark:border-outline-variant rounded-lg p-4 flex flex-col">
+<span class="font-label-sm text-label-sm text-muted-ink uppercase tracking-wider mb-1">AUDITORIA RECENTE</span>
+<div class="flex items-end gap-2 mt-auto">
+<span class="font-headline-md text-headline-md font-bold text-on-surface dark:text-snow">14 min atrás</span>
+<span class="font-label-sm text-label-sm text-muted-ink mb-1">Por admin@valley</span>
+</div>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-6 pb-8">
+<!-- Left Column (Wider) -->
+<div class="col-span-8 flex flex-col gap-6">
+<!-- Table: Active Modules -->
+<div class="bg-surface dark:bg-surface-container-lowest border border-line dark:border-outline-variant rounded-lg overflow-hidden flex flex-col">
+<div class="px-4 py-3 border-b border-line dark:border-outline-variant flex justify-between items-center bg-surface-container-lowest dark:bg-night">
+<h3 class="font-headline-sm text-headline-sm font-semibold flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">extension</span>
+                                Governança de Módulos
+                            </h3>
+<div class="relative w-64">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-muted-ink text-[18px]">search</span>
+<input class="w-full h-control-compact pl-9 pr-3 rounded border border-line dark:border-outline-variant bg-transparent font-body-sm text-body-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none" placeholder="Filtrar módulos..." type="text">
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left font-data-table text-data-table border-collapse">
+<thead class="bg-surface-container-lowest dark:bg-night border-b border-line dark:border-outline-variant">
+<tr>
+<th class="px-4 py-2 font-medium text-muted-ink uppercase tracking-wider text-[11px]">MÓDULO ID</th>
+<th class="px-4 py-2 font-medium text-muted-ink uppercase tracking-wider text-[11px]">STATUS</th>
+<th class="px-4 py-2 font-medium text-muted-ink uppercase tracking-wider text-[11px]">USO CPU/MEM</th>
+<th class="px-4 py-2 font-medium text-muted-ink uppercase tracking-wider text-[11px] text-right">AÇÃO CATEGÓRICA</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-line dark:divide-outline-variant">
+<tr class="hover:bg-surface-container-lowest dark:hover:bg-surface-container/5">
+<td class="px-4 py-3 font-medium">mod_financeiro_v2</td>
+<td class="px-4 py-3">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-success-green/10 text-success-green text-[11px] font-medium border border-success-green/20">
+<span class="w-1.5 h-1.5 rounded-full bg-success-green"></span> Ativo
+                                            </span>
+</td>
+<td class="px-4 py-3 text-muted-ink">14% / 2.1GB</td>
+<td class="px-4 py-3 text-right">
+<button class="text-critical-red hover:bg-critical-red/10 px-3 py-1 rounded border border-transparent hover:border-critical-red/30 transition-colors font-label-md text-label-md">Suspender módulo</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest dark:hover:bg-surface-container/5">
+<td class="px-4 py-3 font-medium">mod_logistica_core</td>
+<td class="px-4 py-3">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-warning-amber/10 text-warning-amber text-[11px] font-medium border border-warning-amber/20">
+<span class="w-1.5 h-1.5 rounded-full bg-warning-amber"></span> Instável
+                                            </span>
+</td>
+<td class="px-4 py-3 text-muted-ink">89% / 8.4GB</td>
+<td class="px-4 py-3 text-right">
+<button class="text-critical-red hover:bg-critical-red/10 px-3 py-1 rounded border border-transparent hover:border-critical-red/30 transition-colors font-label-md text-label-md">Suspender módulo</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest dark:hover:bg-surface-container/5">
+<td class="px-4 py-3 font-medium">mod_auth_sso</td>
+<td class="px-4 py-3">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-success-green/10 text-success-green text-[11px] font-medium border border-success-green/20">
+<span class="w-1.5 h-1.5 rounded-full bg-success-green"></span> Ativo
+                                            </span>
+</td>
+<td class="px-4 py-3 text-muted-ink">4% / 512MB</td>
+<td class="px-4 py-3 text-right">
+<button class="text-critical-red hover:bg-critical-red/10 px-3 py-1 rounded border border-transparent hover:border-critical-red/30 transition-colors font-label-md text-label-md">Suspender módulo</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- API Token Management -->
+<div class="bg-surface dark:bg-surface-container-lowest border border-line dark:border-outline-variant rounded-lg overflow-hidden p-4">
+<div class="flex justify-between items-center mb-4">
+<h3 class="font-headline-sm text-headline-sm font-semibold flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[20px]">key</span>
+                                Tokens de API (Root)
+                            </h3>
+<button class="bg-surface-container dark:bg-surface-container-high border border-line dark:border-outline-variant hover:bg-surface-container-high px-3 py-1.5 rounded font-label-md text-label-md transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">add</span> Novo Token
+                            </button>
+</div>
+<div class="space-y-3">
+<div class="flex items-center justify-between p-3 border border-line dark:border-outline-variant rounded bg-surface-container-lowest dark:bg-night/50">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="font-label-md text-label-md font-bold">integ_bancaria_v3</span>
+<span class="px-1.5 py-0.5 bg-surface-variant dark:bg-surface-container-highest rounded text-[10px] text-muted-ink font-mono border border-line dark:border-outline-variant">tok_99x...a8f2</span>
+</div>
+<p class="font-body-sm text-body-sm text-muted-ink">Último uso: 2s atrás • Escopo: Total</p>
+</div>
+<button class="text-warning-amber hover:bg-warning-amber/10 border border-warning-amber/30 px-3 py-1.5 rounded font-label-md text-label-md transition-colors flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">autorenew</span> Rotacionar token</button>
+</div>
+<div class="flex items-center justify-between p-3 border border-line dark:border-outline-variant rounded bg-surface-container-lowest dark:bg-night/50">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="font-label-md text-label-md font-bold">sync_erp_legado</span>
+<span class="px-1.5 py-0.5 bg-surface-variant dark:bg-surface-container-highest rounded text-[10px] text-muted-ink font-mono border border-line dark:border-outline-variant">tok_44v...c1b9</span>
+</div>
+<p class="font-body-sm text-body-sm text-muted-ink">Último uso: 5m atrás • Escopo: Leitura</p>
+</div>
+<button class="text-warning-amber hover:bg-warning-amber/10 border border-warning-amber/30 px-3 py-1.5 rounded font-label-md text-label-md transition-colors flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">autorenew</span> Rotacionar token</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column (Narrower) -->
+<div class="col-span-4 flex flex-col gap-6">
+<!-- Rules Engine -->
+<div class="bg-surface dark:bg-surface-container-lowest border border-line dark:border-outline-variant rounded-lg p-4">
+<div class="flex justify-between items-center mb-4">
+<h3 class="font-headline-sm text-headline-sm font-semibold flex items-center gap-2"><span class="material-symbols-outlined text-tertiary-container text-[20px]">rule</span>\n                                Regras de Negócio</h3>
+</div>
+<button class="w-full bg-primary/10 text-primary hover:bg-primary/20 border border-primary/20 h-control-compact rounded font-label-md text-label-md flex items-center justify-center gap-2 transition-colors mb-4"><span class="material-symbols-outlined text-[18px]">add</span>\n                            Criar regra</button>
+<div class="space-y-2">
+<div class="p-2 border border-line dark:border-outline-variant rounded flex justify-between items-start bg-surface-container-lowest dark:bg-night/30 hover:border-primary/50 transition-colors cursor-pointer">
+<div>
+<span class="font-label-md text-label-md block mb-0.5">Bloqueio Fraude &gt; 10k</span>
+<span class="font-body-sm text-body-sm text-muted-ink">Gatilho: Transação DOC/TED</span>
+</div>
+<span class="material-symbols-outlined text-muted-ink text-[16px]">chevron_right</span>
+</div>
+<div class="p-2 border border-line dark:border-outline-variant rounded flex justify-between items-start bg-surface-container-lowest dark:bg-night/30 hover:border-primary/50 transition-colors cursor-pointer">
+<div>
+<span class="font-label-md text-label-md block mb-0.5">Rate Limit API Externa</span>
+<span class="font-body-sm text-body-sm text-muted-ink">Gatilho: &gt; 100 req/s</span>
+</div>
+<span class="material-symbols-outlined text-muted-ink text-[16px]">chevron_right</span>
+</div>
+</div>
+</div>
+<!-- Helena AI / Audit Timeline -->
+<div class="bg-gradient-to-b from-surface to-primary/5 dark:from-surface-container-lowest dark:to-primary-fixed/5 border border-line dark:border-outline-variant rounded-lg p-4 flex-1 flex flex-col relative overflow-hidden">
+<!-- Subtle Glow -->
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-3xl pointer-events-none"></div>
+<div class="flex justify-between items-center mb-4 relative z-10">
+<h3 class="font-headline-sm text-headline-sm font-semibold flex items-center gap-2"><span class="material-symbols-outlined text-primary text-[20px]">history</span>\n                                Timeline de Auditoria</h3>
+<span class="material-symbols-outlined text-primary text-[20px] animate-pulse">neurology</span>
+</div>
+<div class="flex-1 space-y-4 relative z-10 font-body-sm text-body-sm">
+<!-- Timeline Item -->
+<div class="flex gap-3">
+<div class="flex flex-col items-center">
+<div class="w-2 h-2 rounded-full bg-critical-red mt-1.5"></div>
+<div class="w-px h-full bg-line dark:bg-outline-variant my-1"></div>
+</div>
+<div>
+<span class="text-muted-ink block text-[10px] uppercase tracking-wide">14:32:01 • ID: evt_882</span>
+<span class="font-medium text-on-surface dark:text-snow">Alerta Crítico: mod_logistica_core</span>
+<p class="text-muted-ink mt-0.5">Consumo de RAM atingiu 89%. Helena sugere suspensão preventiva.</p>
+</div>
+</div>
+<!-- Timeline Item -->
+<div class="flex gap-3">
+<div class="flex flex-col items-center">
+<div class="w-2 h-2 rounded-full bg-primary mt-1.5"></div>
+<div class="w-px h-full bg-line dark:bg-outline-variant my-1"></div>
+</div>
+<div>
+<span class="text-muted-ink block text-[10px] uppercase tracking-wide">14:15:22 • ID: evt_881</span>
+<span class="font-medium text-on-surface dark:text-snow">Regra Atualizada</span>
+<p class="text-muted-ink mt-0.5">Admin (root) alterou 'Rate Limit API Externa' de 50 para 100 req/s.</p>
+</div>
+</div>
+<!-- Timeline Item -->
+<div class="flex gap-3">
+<div class="flex flex-col items-center">
+<div class="w-2 h-2 rounded-full bg-surface-variant dark:bg-outline-variant mt-1.5"></div>
+</div>
+<div>
+<span class="text-muted-ink block text-[10px] uppercase tracking-wide">13:00:00 • ID: evt_880</span>
+<span class="font-medium text-on-surface dark:text-snow">Sessão Modo Deus Iniciada</span>
+<p class="text-muted-ink mt-0.5">tenant_id: val_prod_99x. MFA verificado.</p>
+</div>
+</div>
+</div>
+<button class="mt-4 w-full bg-surface-container dark:bg-surface-container-high border border-line dark:border-outline-variant hover:bg-surface-container-high h-control-compact rounded font-label-md text-label-md flex items-center justify-center gap-2 transition-colors relative z-10">\n                            Abrir auditoria\n                            <span class="material-symbols-outlined text-[16px]">open_in_new</span>\n</button>
+</div>
+</div>
+</div>
+</main>
+</div>
+
+
+</body></html>

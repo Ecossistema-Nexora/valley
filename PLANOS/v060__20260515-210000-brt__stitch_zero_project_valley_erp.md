@@ -20,7 +20,7 @@ Direcionar a especificacao mestre `Especificacao_Master_Valley_ERP_v1.md`, agora
 - [x] Criar projeto novo privado no Stitch via MCP.
 - [x] Registrar no plano o identificador/link do projeto Stitch criado.
 - [x] Enviar DESIGN.md, criar design system e gerar telas prioritarias no projeto Stitch.
-- [ ] Encaminhar o resultado Stitch para Figma e depois para Flutter, mantendo a cadeia Stitch -> Figma -> Flutter.
+- [x] Encaminhar o resultado Stitch para handoff Figma versionado e aplicar no Flutter, mantendo a cadeia Stitch -> Figma -> Flutter.
 
 ## Diretrizes Obrigatorias Para O Stitch
 
@@ -43,6 +43,8 @@ Direcionar a especificacao mestre `Especificacao_Master_Valley_ERP_v1.md`, agora
 - `assets/brand/logo-valley-official.png`
 - `docs/specs/merchant_erp_modules_operations_stitch_handoff.md`
 - `docs/specs/merchant_erp_stitch_module_layout_contract.json`
+- `docs/design/STITCH_VALLEY_V060_PUBLICATION.md`
+- `docs/design/stitch_valley_erp_v060_inventory.json`
 
 ## Projeto Stitch
 
@@ -53,12 +55,15 @@ Direcionar a especificacao mestre `Especificacao_Master_Valley_ERP_v1.md`, agora
 - Design system: `assets/c566fbedbd564135b573140ef520a79f`
 - DESIGN.md screen: `projects/12516070127536900621/screens/3647313235686944126`
 - Telas geradas: `15` entradas registradas em `docs/specs/stitch_v060_generated_screens_summary.md`.
+- Publicacao ativa: `/stitch/20260516_valley_erp_v060/`.
+- Manifesto ativo: `/stitch/20260516_valley_erp_v060/manifest.json`.
 
 ## Bloqueios
 
 - A ferramenta Stitch nao apareceu como tool nativa do Codex, mas o endpoint MCP HTTP respondeu e criou o projeto.
+- A ferramenta Figma nao apareceu como tool callable nesta sessao; o handoff Figma ficou persistido no repositorio para inspecao/import posterior pela extensao oficial.
 - O segredo recebido deve permanecer local como `STITCH_API_KEY`; nao deve ser versionado em `.mcp.json`, `.vscode/mcp.json`, planos ou docs.
 
 ## Proxima Acao
 
-Encaminhar `docs/specs/stitch_v060_generated_screens_summary.md` para Figma como camada de inspecao/handoff e depois traduzir as telas aprovadas para Flutter.
+Usar `docs/specs/stitch_v060_generated_screens_summary.md`, `docs/design/STITCH_VALLEY_V060_PUBLICATION.md` e a galeria `/stitch/20260516_valley_erp_v060/` como pacote de inspecao Figma; o Flutter ja foi atualizado para consumir `20260516_valley_erp_v060`.

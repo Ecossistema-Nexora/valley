@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Valley Stitch v060</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f8fb;
+      --panel: #ffffff;
+      --ink: #15151d;
+      --muted: #667085;
+      --line: #d9dee8;
+      --night: #07051f;
+      --violet: #6f2cff;
+      --green: #0f7a4a;
+      --cyan: #20c8f3;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Inter, Arial, sans-serif;
+    }
+    header {
+      padding: 24px clamp(18px, 4vw, 52px);
+      background: var(--night);
+      color: #fff;
+      border-bottom: 4px solid var(--violet);
+    }
+    h1 { margin: 0 0 8px; font-size: clamp(26px, 4vw, 40px); letter-spacing: 0; }
+    header p { margin: 0; max-width: 980px; color: #e8eaf2; }
+    main { padding: 24px clamp(18px, 4vw, 52px) 48px; }
+    .stats, .grid { display: grid; gap: 14px; }
+    .stats { grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); margin-bottom: 24px; }
+    .stat, .card, table {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+    .stat { padding: 14px 16px; }
+    .stat strong { display: block; font-size: 24px; }
+    .stat span, .card small { color: var(--muted); font-size: 13px; }
+    h2 { margin: 24px 0 12px; font-size: 20px; letter-spacing: 0; }
+    .grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+    .card a { display: block; padding: 10px; color: inherit; text-decoration: none; }
+    .card img {
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 1px solid var(--line);
+      background: #eef1f5;
+    }
+    .card strong { display: block; margin-top: 10px; font-size: 14px; }
+    .pill {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: #eaf7f1;
+      color: var(--green);
+      font-weight: 700;
+      font-size: 12px;
+    }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; min-width: 760px; }
+    th, td { padding: 9px 10px; border-bottom: 1px solid var(--line); text-align: left; font-size: 13px; }
+    th { background: #eef2f7; }
+    a { color: #0645ad; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Valley Stitch v060</h1>
+    <p>Entrega ativa gerada no projeto privado Stitch para Admin, Lojista, Usuario Android e Entregador.</p>
+  </header>
+  <main>
+    <section class="stats">
+      <article class="stat"><strong>15</strong><span>telas publicadas</span></article>
+      <article class="stat"><strong>v060</strong><span>fonte ativa obrigatoria</span></article>
+      <article class="stat"><strong>2026-05-16T03:26:44Z</strong><span>gerado em UTC</span></article>
+      <article class="stat"><strong>{&quot;admin&quot;: 1, &quot;entregador&quot;: 2, &quot;lojista&quot;: 5, &quot;usuario&quot;: 7}</strong><span>grupos cobertos</span></article>
+    </section>
+    <h2>Galeria</h2>
+    <section class="grid">
+      
+            <article class="card">
+              <a href="stitch_valley_erp/admin_god_mode/code.html" target="_blank" rel="noopener">
+                <img src="stitch_valley_erp/admin_god_mode/screen.png" alt="Admin Valley - Painel Modo Deus" loading="lazy" />
+                <span class="pill">admin</span>
+                <strong>Admin Valley - Painel Modo Deus</strong>
+                <small>admin_web / desktop / admin_god_mode</small>
+              </a>
+            </article>
+            
+            <article class="card">
+              <a href="stitch_valley_erp/courier_delivery_flow_green/code.html" target="_blank" rel="noopener">
+                <img src="stitch_valley_erp/courier_delivery_flow_green/screen.png" alt="Entregador - Home Logística Verde" loading="lazy" />
+                <span class="pill">entregador</span>
+                <strong>Entregador - Home Logística Verde</strong>
+                <small>courier_mobile / mobile / courier_delivery_flow_green</small>
+              </a>
+            </article>
+            
+            <article class="card">
+              <a href="stitch_valley_erp/courier_home_green/code.html" target="_blank" rel="noopener">
+                <img src="stitch_valley_erp/courier_home_green/screen.png" alt="Entregador - Home Logística Verde" loading="lazy" />
+                <span class="pill">entregador</span>
+                <strong>Entregador - Home Logística Verde</strong>
+                <small>courier_mobile / mobile / courier_home_green</small>
+              </a>
+            </article>
+            
+            <article class="card">
+              <a href="stitch_valley_erp/merchant_dashboard/code.html" target="_blank" rel="noopener">
+                <img src="stitch_valley_erp/merchant_dashboard/screen.png" alt="Valley ERP - Dashboard Operacional Lojista" loading="lazy" />
+                <span class="pill">lojista</span>
+                <strong>Valley ERP - Dashboard Operacional Lojista</strong>
+                <small>merchant_erp / desktop / merchant_dashboard</small>
+              </a>
+            </article>
+            
+            <article class="card">
+              <a href="stitch_valley_erp/merchant_finance_agenda_integrations/code.html" target="_blank" rel="noopener">
+                <img src="stitch_valley_erp/merchant_finance_agenda_integrations/screen.png" alt="Valley ERP - Financeiro, Agenda e Integrações" loading="lazy" />
+                <span class="pill">lojista</span>
+                <strong>Valley ERP - Financeiro, Agenda e Integrações</strong>
+                <small>merchant_erp / desktop / merchant_finance_agenda_integrations</small>
+              </a>
+            </article>
+            
+            <article class="card">
+              <a href="stitch_valley_erp/merchant_login/code.html" target="_blank" rel="noopener">
+                <img src="stitch_valley_erp/merchant_login/screen.png" alt="Valley ERP - Login Lojista" loading="lazy" />
+                <span class="pill">lojista</span>
+                <strong>Valley ERP - Login Lojista</strong>
+                <small>merchant_erp / desktop / merchant_login</small>
+              </a>
+            </article>
+            
+            <article class="card">
+              <a href="stitch_valley_erp/merchant_onboarding/code.html" target="_blank" rel="noopener">
+                <img src="stitch_valley_erp/merchant_onboarding/screen.png" alt="Valley ERP - Cadastro de Empresa e Usuários" loading="lazy" />
+                <span class="pill">lojista</span>
+                <strong>Valley ERP - Cadastro de Empresa e Usuários</strong>
+                <small>merchant_erp / desktop / merchant_onboarding</small>
+              </a>
+            </article>
+            
+            <article class="card">
+              <a href="stitch_valley_erp/merchant_operations/code.html" target="_blank" rel="noopener">
+                <img src="stitch_valley_erp/merchant_operations/screen.png" alt="Valley ERP - Produtos, Estoque e Pedidos" loading="lazy" />
+                <span class="pill">lojista</span>
+                <strong>Valley ERP - Produtos, Estoque e Pedidos</strong>
+                <small>merchant_erp / desktop / merchant_operations</small>
+              </a>
+            </article>
+            
+            <article class="card">
+              <a href="stitch_valley_erp/customer_checkout_payment/code.html" target="_blank" rel="noopener">
+                <img src="stitch_valley_erp/customer_checkout_payment/screen.png" alt="Valley APK - Checkout e Pagamento" loading="lazy" />
+                <span class="pill">usuario</span>
+                <strong>Valley APK - Checkout e Pagamento</strong>
+                <small>customer_mobile / mobile / customer_checkout_payment</small>
+              </a>
+            </article>
+            
+            <article class="card">
+              <a href="stitch_valley_erp/customer_helena_support/code.html" target="_blank" rel="noopener">
+                <img src="stitch_valley_erp/customer_helena_support/screen.png" alt="Valley APK - Suporte Helena AI" loading="lazy" />
+                <span class="pill">usuario</span>
+                <strong>Valley APK - Suporte Helena AI</strong>
+                <small>customer_mobile / mobile / customer_helena_support</small>
+              </a>
+            </article>
+            
+            <article class="card">
+              <a href="stitch_valley_erp/customer_home/code.html" target="_blank" rel="noopener">
+                <img src="stitch_valley_erp/customer_home/screen.png" alt="Valley APK - Home MVP Modular" loading="lazy" />
+                <span class="pill">usuario</span>
+                <strong>Valley APK - Home MVP Modular</strong>
+                <small>customer_mobile / mobile / customer_home</small>
+              </a>
+            </article>
+            
+            <article class="card">
+              <a href="stitch_valley_erp/customer_merchant_chat/code.html" target="_blank" rel="noopener">
+                <img src="stitch_valley_erp/customer_merchant_chat/screen.png" alt="Valley APK - Chat com Lojista" loading="lazy" />
+                <span class="pill">usuario</span>
+                <strong>Valley APK - Chat com Lojista</strong>
+                <small>customer_mobile / mobile / customer_merchant_chat</small>
+              </a>
+            </article>
+            
+            <article class="card">
+              <a href="stitch_valley_erp/customer_messages/code.html" target="_blank" rel="noopener">
+                <img src="stitch_valley_erp/customer_messages/screen.png" alt="Valley APK - Central de Mensagens" loading="lazy" />
+                <span class="pill">usuario</span>
+                <strong>Valley APK - Central de Mensagens</strong>
+                <small>customer_mobile / mobile / customer_messages</small>
+              </a>
+            </article>
+            
+            <article class="card">
+              <a href="stitch_valley_erp/customer_purchases_tracking/code.html" target="_blank" rel="noopener">
+                <img src="stitch_valley_erp/customer_purchases_tracking/screen.png" alt="Valley APK - Minhas Compras e Rastreio" loading="lazy" />
+                <span class="pill">usuario</span>
+                <strong>Valley APK - Minhas Compras e Rastreio</strong>
+                <small>customer_mobile / mobile / customer_purchases_tracking</small>
+              </a>
+            </article>
+            
+            <article class="card">
+              <a href="stitch_valley_erp/customer_stock_marketplace/code.html" target="_blank" rel="noopener">
+                <img src="stitch_valley_erp/customer_stock_marketplace/screen.png" alt="Valley APK - Stock e Marketplace" loading="lazy" />
+                <span class="pill">usuario</span>
+                <strong>Valley APK - Stock e Marketplace</strong>
+                <small>customer_mobile / mobile / customer_stock_marketplace</small>
+              </a>
+            </article>
+            
+    </section>
+    <h2>Manifesto</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Grupo</th><th>Tela</th><th>Superficie</th><th>Formato</th><th>PNG</th></tr></thead>
+        <tbody>
+            <tr>
+              <td>admin</td>
+              <td><a href="stitch_valley_erp/admin_god_mode/code.html" target="_blank" rel="noopener">Admin Valley - Painel Modo Deus</a></td>
+              <td>admin_web</td>
+              <td>desktop</td>
+              <td><a href="stitch_valley_erp/admin_god_mode/screen.png" target="_blank" rel="noopener">PNG</a></td>
+            </tr>
+            
+            <tr>
+              <td>entregador</td>
+              <td><a href="stitch_valley_erp/courier_delivery_flow_green/code.html" target="_blank" rel="noopener">Entregador - Home Logística Verde</a></td>
+              <td>courier_mobile</td>
+              <td>mobile</td>
+              <td><a href="stitch_valley_erp/courier_delivery_flow_green/screen.png" target="_blank" rel="noopener">PNG</a></td>
+            </tr>
+            
+            <tr>
+              <td>entregador</td>
+              <td><a href="stitch_valley_erp/courier_home_green/code.html" target="_blank" rel="noopener">Entregador - Home Logística Verde</a></td>
+              <td>courier_mobile</td>
+              <td>mobile</td>
+              <td><a href="stitch_valley_erp/courier_home_green/screen.png" target="_blank" rel="noopener">PNG</a></td>
+            </tr>
+            
+            <tr>
+              <td>lojista</td>
+              <td><a href="stitch_valley_erp/merchant_dashboard/code.html" target="_blank" rel="noopener">Valley ERP - Dashboard Operacional Lojista</a></td>
+              <td>merchant_erp</td>
+              <td>desktop</td>
+              <td><a href="stitch_valley_erp/merchant_dashboard/screen.png" target="_blank" rel="noopener">PNG</a></td>
+            </tr>
+            
+            <tr>
+              <td>lojista</td>
+              <td><a href="stitch_valley_erp/merchant_finance_agenda_integrations/code.html" target="_blank" rel="noopener">Valley ERP - Financeiro, Agenda e Integrações</a></td>
+              <td>merchant_erp</td>
+              <td>desktop</td>
+              <td><a href="stitch_valley_erp/merchant_finance_agenda_integrations/screen.png" target="_blank" rel="noopener">PNG</a></td>
+            </tr>
+            
+            <tr>
+              <td>lojista</td>
+              <td><a href="stitch_valley_erp/merchant_login/code.html" target="_blank" rel="noopener">Valley ERP - Login Lojista</a></td>
+              <td>merchant_erp</td>
+              <td>desktop</td>
+              <td><a href="stitch_valley_erp/merchant_login/screen.png" target="_blank" rel="noopener">PNG</a></td>
+            </tr>
+            
+            <tr>
+              <td>lojista</td>
+              <td><a href="stitch_valley_erp/merchant_onboarding/code.html" target="_blank" rel="noopener">Valley ERP - Cadastro de Empresa e Usuários</a></td>
+              <td>merchant_erp</td>
+              <td>desktop</td>
+              <td><a href="stitch_valley_erp/merchant_onboarding/screen.png" target="_blank" rel="noopener">PNG</a></td>
+            </tr>
+            
+            <tr>
+              <td>lojista</td>
+              <td><a href="stitch_valley_erp/merchant_operations/code.html" target="_blank" rel="noopener">Valley ERP - Produtos, Estoque e Pedidos</a></td>
+              <td>merchant_erp</td>
+              <td>desktop</td>
+              <td><a href="stitch_valley_erp/merchant_operations/screen.png" target="_blank" rel="noopener">PNG</a></td>
+            </tr>
+            
+            <tr>
+              <td>usuario</td>
+              <td><a href="stitch_valley_erp/customer_checkout_payment/code.html" target="_blank" rel="noopener">Valley APK - Checkout e Pagamento</a></td>
+              <td>customer_mobile</td>
+              <td>mobile</td>
+              <td><a href="stitch_valley_erp/customer_checkout_payment/screen.png" target="_blank" rel="noopener">PNG</a></td>
+            </tr>
+            
+            <tr>
+              <td>usuario</td>
+              <td><a href="stitch_valley_erp/customer_helena_support/code.html" target="_blank" rel="noopener">Valley APK - Suporte Helena AI</a></td>
+              <td>customer_mobile</td>
+              <td>mobile</td>
+              <td><a href="stitch_valley_erp/customer_helena_support/screen.png" target="_blank" rel="noopener">PNG</a></td>
+            </tr>
+            
+            <tr>
+              <td>usuario</td>
+              <td><a href="stitch_valley_erp/customer_home/code.html" target="_blank" rel="noopener">Valley APK - Home MVP Modular</a></td>
+              <td>customer_mobile</td>
+              <td>mobile</td>
+              <td><a href="stitch_valley_erp/customer_home/screen.png" target="_blank" rel="noopener">PNG</a></td>
+            </tr>
+            
+            <tr>
+              <td>usuario</td>
+              <td><a href="stitch_valley_erp/customer_merchant_chat/code.html" target="_blank" rel="noopener">Valley APK - Chat com Lojista</a></td>
+              <td>customer_mobile</td>
+              <td>mobile</td>
+              <td><a href="stitch_valley_erp/customer_merchant_chat/screen.png" target="_blank" rel="noopener">PNG</a></td>
+            </tr>
+            
+            <tr>
+              <td>usuario</td>
+              <td><a href="stitch_valley_erp/customer_messages/code.html" target="_blank" rel="noopener">Valley APK - Central de Mensagens</a></td>
+              <td>customer_mobile</td>
+              <td>mobile</td>
+              <td><a href="stitch_valley_erp/customer_messages/screen.png" target="_blank" rel="noopener">PNG</a></td>
+            </tr>
+            
+            <tr>
+              <td>usuario</td>
+              <td><a href="stitch_valley_erp/customer_purchases_tracking/code.html" target="_blank" rel="noopener">Valley APK - Minhas Compras e Rastreio</a></td>
+              <td>customer_mobile</td>
+              <td>mobile</td>
+              <td><a href="stitch_valley_erp/customer_purchases_tracking/screen.png" target="_blank" rel="noopener">PNG</a></td>
+            </tr>
+            
+            <tr>
+              <td>usuario</td>
+              <td><a href="stitch_valley_erp/customer_stock_marketplace/code.html" target="_blank" rel="noopener">Valley APK - Stock e Marketplace</a></td>
+              <td>customer_mobile</td>
+              <td>mobile</td>
+              <td><a href="stitch_valley_erp/customer_stock_marketplace/screen.png" target="_blank" rel="noopener">PNG</a></td>
+            </tr>
+            </tbody>
+      </table>
+    </div>
+  </main>
+</body>
+</html>

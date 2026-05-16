@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Valley ERP - Chat Lojista</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "cosmic": "#151047",
+                      "tertiary-container": "#a94200",
+                      "background": "#fdf7ff",
+                      "surface": "#fdf7ff",
+                      "outline": "#7a7488",
+                      "secondary": "#00677f",
+                      "surface-container-low": "#f8f1ff",
+                      "surface-container-high": "#ece5f5",
+                      "on-secondary": "#ffffff",
+                      "surface-tint": "#6a23fa",
+                      "inverse-primary": "#cebdff",
+                      "work-surface": "#F6F8FB",
+                      "inverse-on-surface": "#f5eefe",
+                      "error-container": "#ffdad6",
+                      "surface-container": "#f2ebfb",
+                      "on-tertiary-fixed-variant": "#7c2e00",
+                      "success-green": "#1E8A5A",
+                      "on-secondary-fixed": "#001f28",
+                      "night": "#07051F",
+                      "primary-fixed": "#e8ddff",
+                      "muted-ink": "#667085",
+                      "surface-container-highest": "#e7e0f0",
+                      "secondary-container": "#38d4ff",
+                      "outline-variant": "#cbc3d9",
+                      "on-primary-fixed-variant": "#5100cf",
+                      "on-primary-fixed": "#21005e",
+                      "primary": "#5600da",
+                      "warning-amber": "#C98205",
+                      "on-secondary-container": "#00586d",
+                      "primary-fixed-dim": "#cebdff",
+                      "secondary-fixed": "#b7eaff",
+                      "on-surface": "#1d1a25",
+                      "secondary-fixed-dim": "#4cd6ff",
+                      "error": "#ba1a1a",
+                      "tertiary-fixed-dim": "#ffb595",
+                      "critical-red": "#D04437",
+                      "on-surface-variant": "#494456",
+                      "ink": "#15151D",
+                      "surface-bright": "#fdf7ff",
+                      "on-tertiary-container": "#ffd7c6",
+                      "on-error": "#ffffff",
+                      "snow": "#FFFFFF",
+                      "on-tertiary-fixed": "#351000",
+                      "on-primary-container": "#e5daff",
+                      "surface-dim": "#ded7e7",
+                      "inverse-surface": "#322f3b",
+                      "on-error-container": "#93000a",
+                      "tertiary-fixed": "#ffdbcc",
+                      "surface-container-lowest": "#ffffff",
+                      "courier-green": "#0F7A4A",
+                      "on-tertiary": "#ffffff",
+                      "tertiary": "#823100",
+                      "on-background": "#1d1a25",
+                      "line": "#D9DEE8",
+                      "on-secondary-fixed-variant": "#004e60",
+                      "surface-variant": "#e7e0f0",
+                      "primary-container": "#6f2cff",
+                      "on-primary": "#ffffff",
+                      "lilac": "#BB8CFF"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "control-compact": "36px",
+                      "container-margin": "24px",
+                      "unit": "4px",
+                      "control-default": "44px",
+                      "gutter": "16px"
+              },
+              "fontFamily": {
+                      "label-md": [
+                              "Inter"
+                      ],
+                      "data-table": [
+                              "Inter"
+                      ],
+                      "body-sm": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "headline-lg": [
+                              "Inter"
+                      ],
+                      "headline-sm": [
+                              "Inter"
+                      ],
+                      "label-sm": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "label-md": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "data-table": [
+                              "13px",
+                              {
+                                      "lineHeight": "18px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-lg": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-md": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-sm": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-sm": [
+                              "11px",
+                              {
+                                      "lineHeight": "14px",
+                                      "letterSpacing": "0",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+    </script>
+<style>
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-work-surface text-on-surface font-body-md min-h-screen flex flex-col relative overflow-hidden">
+<!-- TopAppBar -->
+<header class="bg-surface w-full top-0 sticky border-b border-line flex items-center justify-between px-container-margin h-control-default z-40 transition-colors duration-200">
+<div class="flex items-center gap-3">
+<button class="text-primary hover:bg-surface-container-high rounded-full p-1 transition-colors duration-200">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center overflow-hidden border border-line">
+<img alt="Merchant Avatar" class="w-full h-full object-cover" data-alt="A close up portrait of a professional storefront owner in a modern retail setting. The lighting is bright and inviting, highlighting a friendly, trustworthy expression. The style is modern corporate, utilizing a bright, clean aesthetic with neutral background tones to emphasize reliability and professionalism in the Valley ERP ecosystem." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBF8nx96VFyr1p3EZp2x005t7Rfx9zC59Zg27pWsP62VJSSLLzTxNX9OIYzsZq2f_NfnuFJmy9Dfjpb5QXasdrpt1IvLjnhjFIOx_IZ8zKpfFb5qPa8GpwZLcwa1i6YSoGgMAgsfjxnKBHj2tr6rPaHzVggkdm7lGsbFFIKHuEEdDHXXjDjtbgdT0jNH1sT_YYCYLmtPHVhKbAUGdPDziWXyK79OdlPmp6qHQ9E1zzvJSYOsz24OmSyGVXAjKmdO7vO3qVybWGFX0IH"/>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-primary">TechStore Lojista</span>
+<span class="font-label-sm text-label-sm text-success-green flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-success-green block"></span> Online
+                    </span>
+</div>
+</div>
+</div>
+<button class="text-on-surface-variant hover:bg-surface-container-high rounded-full p-2 transition-colors duration-200">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</header>
+<!-- Chat Canvas -->
+<main class="flex-1 overflow-y-auto hide-scrollbar flex flex-col pb-24 pt-4 px-4 md:px-container-margin">
+<!-- Order Context Card -->
+<div class="bg-snow border border-line rounded-lg p-3 mb-6 shadow-sm flex items-center justify-between mx-auto w-full max-w-md">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Pedido #8842</h3>
+<p class="font-body-sm text-body-sm text-warning-amber flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-[14px]" data-icon="pending">pending</span> Em Separação
+                    </p>
+</div>
+</div>
+<button class="text-primary font-label-md text-label-md hover:underline">Ver Detalhes</button>
+</div>
+<!-- Chat History -->
+<div class="flex flex-col gap-4 w-full max-w-2xl mx-auto">
+<!-- Date Divider -->
+<div class="flex items-center justify-center my-2">
+<span class="bg-surface-variant text-on-surface-variant font-label-sm text-label-sm px-3 py-1 rounded-full">Hoje</span>
+</div>
+<!-- Merchant Message -->
+<div class="flex justify-start w-full pr-12">
+<div class="flex flex-col items-start max-w-[85%]">
+<div class="bg-snow border border-line text-on-surface rounded-2xl rounded-tl-sm p-3 shadow-sm">
+<p class="font-body-md text-body-md">Olá! Recebemos o seu pedido #8842. Estamos preparando tudo com cuidado.</p>
+</div>
+<span class="font-label-sm text-label-sm text-muted-ink mt-1 ml-1">10:14</span>
+</div>
+</div>
+<!-- User Message -->
+<div class="flex justify-end w-full pl-12">
+<div class="flex flex-col items-end max-w-[85%]">
+<div class="bg-primary text-on-primary rounded-2xl rounded-tr-sm p-3 shadow-sm">
+<p class="font-body-md text-body-md">Ótimo! Tem previsão de quando será despachado?</p>
+</div>
+<div class="flex items-center gap-1 mt-1 mr-1">
+<span class="font-label-sm text-label-sm text-muted-ink">10:16</span>
+<span class="material-symbols-outlined text-[14px] text-primary" data-icon="done_all">done_all</span>
+</div>
+</div>
+</div>
+<!-- Merchant Message -->
+<div class="flex justify-start w-full pr-12">
+<div class="flex flex-col items-start max-w-[85%]">
+<div class="bg-snow border border-line text-on-surface rounded-2xl rounded-tl-sm p-3 shadow-sm">
+<p class="font-body-md text-body-md">Pretendemos enviar ainda hoje à tarde. Assim que o entregador coletar, você receberá uma notificação.</p>
+</div>
+<span class="font-label-sm text-label-sm text-muted-ink mt-1 ml-1">10:18</span>
+</div>
+</div>
+<!-- User Message -->
+<div class="flex justify-end w-full pl-12">
+<div class="flex flex-col items-end max-w-[85%]">
+<div class="bg-primary text-on-primary rounded-2xl rounded-tr-sm p-3 shadow-sm">
+<p class="font-body-md text-body-md">Perfeito, muito obrigado! Fico no aguardo.</p>
+</div>
+<div class="flex items-center gap-1 mt-1 mr-1">
+<span class="font-label-sm text-label-sm text-muted-ink">10:20</span>
+<span class="material-symbols-outlined text-[14px] text-muted-ink" data-icon="done">done</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Message Composer Bottom Area -->
+<div class="fixed bottom-0 w-full z-50 bg-snow border-t border-line px-4 py-3 flex items-center gap-3">
+<button class="text-on-surface-variant hover:text-primary transition-colors flex-shrink-0 p-2 rounded-full hover:bg-surface-container-low">
+<span class="material-symbols-outlined" data-icon="attach_file">attach_file</span>
+</button>
+<div class="flex-1 bg-work-surface border border-line rounded-full flex items-center px-4 h-11 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-all">
+<input class="w-full bg-transparent border-none focus:ring-0 text-on-surface font-body-md placeholder:text-muted-ink h-full p-0" placeholder="Mensagem..." type="text"/>
+</div>
+<button class="bg-primary text-on-primary h-11 w-11 rounded-full flex items-center justify-center hover:bg-surface-tint transition-colors flex-shrink-0 shadow-sm active:scale-95">
+<span class="material-symbols-outlined" data-icon="send" data-weight="fill" style="font-variation-settings: 'FILL' 1;">send</span>
+</button>
+</div>
+</body></html>

@@ -45,46 +45,58 @@ Color _mediaStageColor(BuildContext context) => _useLightTemplate(context)
     ? const Color(0xFFF4F7FF)
     : const Color(0xFF0E1323);
 
-const String _stitchSourceVersion = '20260513_valley_erp_v2';
+const String _stitchSourceVersion = '20260516_valley_erp_v060';
 const String _stitchSourceRule =
-    'Stitch e a fonte da verdade ativa; variacoes anteriores ficam como legado.';
+    'Stitch v060 e a fonte ativa; pacotes 20260513 ficam descartados como legado.';
 
 const List<_StitchP0MobileStep> _stitchP0MobileSteps = <_StitchP0MobileStep>[
   _StitchP0MobileStep(
-    key: 'login',
-    icon: Icons.login_rounded,
-    title: 'Login',
-    detail: 'sessão segura',
+    key: 'customer_home',
+    icon: Icons.dashboard_customize_rounded,
+    title: 'Home MVP',
+    detail: 'módulos visíveis',
   ),
   _StitchP0MobileStep(
-    key: 'checkout',
+    key: 'customer_stock_marketplace',
+    icon: Icons.storefront_rounded,
+    title: 'Stock',
+    detail: 'marketplace',
+  ),
+  _StitchP0MobileStep(
+    key: 'customer_checkout_payment',
     icon: Icons.shopping_cart_checkout_rounded,
     title: 'Checkout',
     detail: 'frete e pagamento',
   ),
   _StitchP0MobileStep(
-    key: 'purchases',
+    key: 'customer_purchases_tracking',
     icon: Icons.receipt_long_rounded,
     title: 'Compras',
-    detail: 'pedidos salvos',
+    detail: 'rastreio',
   ),
   _StitchP0MobileStep(
-    key: 'tracking',
-    icon: Icons.local_shipping_rounded,
-    title: 'Rastreio',
-    detail: 'linha da entrega',
+    key: 'customer_messages',
+    icon: Icons.forum_rounded,
+    title: 'Mensagens',
+    detail: 'suporte',
   ),
   _StitchP0MobileStep(
-    key: 'sku',
-    icon: Icons.inventory_2_rounded,
-    title: 'SKU',
-    detail: 'cadastro lojista',
+    key: 'customer_helena_support',
+    icon: Icons.support_agent_rounded,
+    title: 'Helena',
+    detail: 'assistência',
   ),
   _StitchP0MobileStep(
-    key: 'inventory',
-    icon: Icons.qr_code_scanner_rounded,
-    title: 'Estoque',
-    detail: 'inventario e reserva',
+    key: 'courier_home_green',
+    icon: Icons.delivery_dining_rounded,
+    title: 'Entregador',
+    detail: 'tema verde',
+  ),
+  _StitchP0MobileStep(
+    key: 'courier_delivery_flow_green',
+    icon: Icons.route_rounded,
+    title: 'Entrega',
+    detail: 'ocorrências',
   ),
 ];
 
@@ -5361,7 +5373,7 @@ class _CheckoutScreenState extends State<_CheckoutScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               _StitchP0MobileRail(
-                activeKeys: const <String>{'checkout'},
+                activeKeys: const <String>{'customer_checkout_payment'},
                 title: 'Checkout mobile',
                 subtitle: widget.authRequired
                     ? 'Login necessário antes do pagamento seguro.'
@@ -5458,16 +5470,16 @@ class _StitchMandatoryHomeScreen extends StatelessWidget {
         children: <Widget>[
           _StitchP0MobileRail(
             activeKeys: const <String>{
-              'login',
-              'checkout',
-              'purchases',
-              'tracking',
-              'sku',
-              'inventory',
+              'customer_home',
+              'customer_stock_marketplace',
+              'customer_checkout_payment',
+              'customer_purchases_tracking',
+              'customer_messages',
+              'customer_helena_support',
             },
-            title: 'Templates Stitch ativos no APK',
+            title: 'Stitch v060 ativo no APK',
             subtitle:
-                'Login, checkout, compras, rastreio, SKU e estoque abrem como primeira experiencia da release.',
+                'Home modular, Stock, Marketplace, checkout, compras e suporte abrem como primeira experiência da release.',
           ),
           const SizedBox(height: 20),
           Text(
@@ -6399,7 +6411,7 @@ class _IdentityTrustScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         _StitchP0MobileRail(
-          activeKeys: const <String>{'login'},
+          activeKeys: const <String>{'customer_home'},
           title: authSession == null ? 'Entrada Valley' : 'Sessão ativa',
           subtitle: authSession == null
               ? 'Login e cadastro liberam checkout, compras e rastreio.'

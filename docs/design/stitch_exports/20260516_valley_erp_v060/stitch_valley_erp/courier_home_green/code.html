@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Entregador - Home Logística Verde</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "secondary-fixed": "#b7eaff",
+                      "secondary": "#00677f",
+                      "tertiary": "#823100",
+                      "outline": "#7a7488",
+                      "secondary-fixed-dim": "#4cd6ff",
+                      "secondary-container": "#38d4ff",
+                      "on-primary-fixed": "#21005e",
+                      "inverse-primary": "#cebdff",
+                      "tertiary-fixed-dim": "#ffb595",
+                      "on-tertiary-fixed-variant": "#7c2e00",
+                      "success-green": "#1E8A5A",
+                      "surface": "#fdf7ff",
+                      "snow": "#FFFFFF",
+                      "tertiary-fixed": "#ffdbcc",
+                      "on-tertiary": "#ffffff",
+                      "on-secondary-fixed": "#001f28",
+                      "on-secondary": "#ffffff",
+                      "surface-container-high": "#ece5f5",
+                      "primary-fixed": "#e8ddff",
+                      "inverse-on-surface": "#f5eefe",
+                      "surface-dim": "#ded7e7",
+                      "surface-tint": "#6a23fa",
+                      "lilac": "#BB8CFF",
+                      "on-tertiary-container": "#ffd7c6",
+                      "line": "#D9DEE8",
+                      "surface-container": "#f2ebfb",
+                      "surface-container-lowest": "#ffffff",
+                      "on-secondary-container": "#00586d",
+                      "on-primary-fixed-variant": "#5100cf",
+                      "on-error-container": "#93000a",
+                      "on-secondary-fixed-variant": "#004e60",
+                      "work-surface": "#F6F8FB",
+                      "on-surface": "#1d1a25",
+                      "ink": "#15151D",
+                      "on-background": "#1d1a25",
+                      "night": "#07051F",
+                      "critical-red": "#D04437",
+                      "primary": "#5600da",
+                      "error": "#ba1a1a",
+                      "courier-green": "#0F7A4A",
+                      "inverse-surface": "#322f3b",
+                      "background": "#fdf7ff",
+                      "on-error": "#ffffff",
+                      "warning-amber": "#C98205",
+                      "surface-container-low": "#f8f1ff",
+                      "tertiary-container": "#a94200",
+                      "on-primary-container": "#e5daff",
+                      "surface-container-highest": "#e7e0f0",
+                      "on-surface-variant": "#494456",
+                      "error-container": "#ffdad6",
+                      "surface-variant": "#e7e0f0",
+                      "surface-bright": "#fdf7ff",
+                      "muted-ink": "#667085",
+                      "on-primary": "#ffffff",
+                      "primary-container": "#6f2cff",
+                      "outline-variant": "#cbc3d9",
+                      "primary-fixed-dim": "#cebdff",
+                      "cosmic": "#151047",
+                      "on-tertiary-fixed": "#351000"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "gutter": "16px",
+                      "container-margin": "24px",
+                      "control-compact": "36px",
+                      "control-default": "44px",
+                      "unit": "4px"
+              },
+              "fontFamily": {
+                      "label-sm": ["Inter"],
+                      "headline-sm": ["Inter"],
+                      "body-md": ["Inter"],
+                      "label-md": ["Inter"],
+                      "headline-lg": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "body-sm": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "data-table": ["Inter"]
+              },
+              "fontSize": {
+                      "label-sm": ["11px", {"lineHeight": "14px", "letterSpacing": "0", "fontWeight": "500"}],
+                      "headline-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                      "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0", "fontWeight": "500"}],
+                      "headline-lg": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "body-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                      "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "data-table": ["13px", {"lineHeight": "18px", "fontWeight": "400"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-work-surface min-h-screen text-on-surface font-body-md antialiased md:max-w-md md:mx-auto md:border-x md:border-line md:shadow-lg relative pb-20">
+<!-- TopAppBar (From JSON) -->
+<header class="bg-surface dark:bg-surface-dim border-b border-line dark:border-outline-variant flex items-center justify-between px-gutter h-control-default w-full z-50 sticky top-0">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full overflow-hidden bg-surface-container-highest shrink-0">
+<img alt="Courier profile photo" class="w-full h-full object-cover" data-alt="A close up portrait of a male courier driver wearing a green uniform cap, looking determined and professional. Soft, natural daylight highlights his features. The background is a slightly blurred street scene. The overall aesthetic is clean, professional, and corporate modern." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBg9frh2MpomVWajgyP9PZn1bEOy1iq2M0LoJ7JwZQ-puabfwS2iMe62D0ijdCt5ssMxAwGy0DvBvYr7sMgeIHRcpgkKqEE7vmDNJ8CFGaqnz0kQxOeeskLzuwRuionFZROjYI3RdM_5r9A6KV6k3tUjU89QKJepYTNXZu2vX0hqX8tfTQmxOGNtuTs9SV8-Eg3-ZtF_YX2nBtYYx81fef4MRYIdKWWJgzlkB8JSCTVDWcWDRVdcqmWWcE8T5yMye11E1dfr6JnrDsv"/>
+</div>
+<h1 class="font-headline-sm text-headline-sm font-bold text-courier-green">Valley Logistics</h1>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-label-md text-label-md text-courier-green">Online</span>
+<div class="w-8 h-4 bg-courier-green rounded-full relative flex items-center">
+<div class="w-3 h-3 bg-snow rounded-full absolute right-0.5"></div>
+</div>
+</div>
+</header>
+<main class="p-4 flex flex-col gap-4">
+<!-- Status Card -->
+<section class="bg-snow rounded-lg border border-line p-4 flex justify-between items-center shadow-sm">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="local_shipping">local_shipping</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-muted-ink uppercase tracking-wider">Veículo Ativo</p>
+<p class="font-headline-sm text-headline-sm text-on-surface">Fiorino - ABC-1234</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-label-sm text-label-sm text-muted-ink uppercase tracking-wider">Hoje</p>
+<p class="font-headline-md text-headline-md text-success-green">V$ 185,50</p>
+</div>
+</section>
+<!-- Active Pickup Request -->
+<section class="bg-courier-green rounded-lg shadow-md p-4 text-snow">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-warning-amber" data-icon="notifications_active">notifications_active</span>
+<h2 class="font-headline-sm text-headline-sm font-semibold">Nova Solicitação</h2>
+</div>
+<span class="font-label-sm text-label-sm bg-surface/20 px-2 py-1 rounded">00:45</span>
+</div>
+<div class="space-y-2 mb-4">
+<div class="flex items-start gap-2">
+<span class="material-symbols-outlined text-snow/70 text-sm mt-0.5" data-icon="storefront">storefront</span>
+<div>
+<p class="font-label-sm text-label-sm text-snow/70 uppercase">Coleta em</p>
+<p class="font-body-md text-body-md font-medium">TechStore Matriz</p>
+</div>
+</div>
+<div class="flex items-start gap-2">
+<span class="material-symbols-outlined text-snow/70 text-sm mt-0.5" data-icon="route">route</span>
+<div>
+<p class="font-label-sm text-label-sm text-snow/70 uppercase">Distância</p>
+<p class="font-body-md text-body-md font-medium">1.2km</p>
+</div>
+</div>
+</div>
+<div class="flex gap-2 mt-4">
+<button class="flex-1 h-control-default bg-snow text-courier-green font-label-md text-label-md rounded-DEFAULT flex items-center justify-center font-bold">
+                    Aceitar coleta
+                </button>
+<button class="flex-1 h-control-default bg-transparent border border-snow/30 text-snow font-label-md text-label-md rounded-DEFAULT flex items-center justify-center hover:bg-snow/10">
+                    Recusar
+                </button>
+</div>
+</section>
+<!-- Route Status -->
+<section class="bg-snow rounded-lg border border-line p-4 flex justify-between items-center shadow-sm border-l-4 border-l-warning-amber">
+<div>
+<p class="font-label-sm text-label-sm text-muted-ink uppercase tracking-wider">Status Atual</p>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-warning-amber text-sm" data-icon="local_shipping">local_shipping</span>
+<p class="font-headline-sm text-headline-sm text-on-surface">Em Rota: 3/5 entregas</p>
+</div>
+</div>
+<button class="h-control-compact px-4 bg-surface-container text-on-surface font-label-md text-label-md rounded-DEFAULT flex items-center gap-2 hover:bg-surface-container-high transition-colors">
+                Abrir rota
+                <span class="material-symbols-outlined text-sm" data-icon="chevron_right">chevron_right</span>
+</button>
+</section>
+<!-- Quick Actions -->
+<section class="grid grid-cols-2 gap-3">
+<button class="bg-snow border border-line rounded-lg p-3 flex flex-col items-center justify-center gap-2 text-on-surface hover:bg-surface-container-lowest transition-colors h-24">
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-critical-red">
+<span class="material-symbols-outlined text-lg" data-icon="block">block</span>
+</div>
+<span class="font-label-sm text-label-sm text-center">Bloquear endereço</span>
+</button>
+<button class="bg-snow border border-line rounded-lg p-3 flex flex-col items-center justify-center gap-2 text-on-surface hover:bg-surface-container-lowest transition-colors h-24">
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-muted-ink">
+<span class="material-symbols-outlined text-lg" data-icon="power_settings_new">power_settings_new</span>
+</div>
+<span class="font-label-sm text-label-sm text-center">Ficar offline</span>
+</button>
+</section>
+<!-- Recent History -->
+<section class="mt-2">
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-3 px-1">Últimas Entregas</h3>
+<div class="bg-snow rounded-lg border border-line overflow-hidden shadow-sm">
+<!-- Item 1 -->
+<div class="p-3 border-b border-line flex justify-between items-center last:border-0">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-success-green">
+<span class="material-symbols-outlined text-sm" data-icon="check_circle">check_circle</span>
+</div>
+<div>
+<p class="font-body-sm text-body-sm font-medium text-on-surface">Pedido #8821</p>
+<p class="font-label-sm text-label-sm text-success-green">Entregue</p>
+</div>
+</div>
+<span class="font-label-sm text-label-sm text-muted-ink">14:32</span>
+</div>
+<!-- Item 2 -->
+<div class="p-3 border-b border-line flex justify-between items-center last:border-0">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-success-green">
+<span class="material-symbols-outlined text-sm" data-icon="check_circle">check_circle</span>
+</div>
+<div>
+<p class="font-body-sm text-body-sm font-medium text-on-surface">Pedido #8819</p>
+<p class="font-label-sm text-label-sm text-success-green">Entregue</p>
+</div>
+</div>
+<span class="font-label-sm text-label-sm text-muted-ink">13:15</span>
+</div>
+<!-- Item 3 -->
+<div class="p-3 border-b border-line flex justify-between items-center last:border-0">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-success-green">
+<span class="material-symbols-outlined text-sm" data-icon="check_circle">check_circle</span>
+</div>
+<div>
+<p class="font-body-sm text-body-sm font-medium text-on-surface">Pedido #8805</p>
+<p class="font-label-sm text-label-sm text-success-green">Entregue</p>
+</div>
+</div>
+<span class="font-label-sm text-label-sm text-muted-ink">11:40</span>
+</div>
+</div>
+</section>
+<!-- Metadata Footer -->
+<footer class="mt-4 pb-8 flex justify-center gap-4 opacity-50">
+<span class="font-label-sm text-label-sm text-muted-ink">ID: val_m_829x</span>
+<span class="font-label-sm text-label-sm text-muted-ink">BR-SP-001</span>
+</footer>
+</main>
+<!-- BottomNavBar (From JSON) -->
+<nav class="bg-surface dark:bg-surface-dim border-t border-line dark:border-outline-variant fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 shadow-lg dark:shadow-none rounded-t-xl md:max-w-md md:left-auto">
+<!-- Active: Home -->
+<button class="flex flex-col items-center justify-center text-courier-green dark:text-courier-green bg-surface-container-high dark:bg-surface-variant rounded-full px-4 py-1 scale-90 transition-all duration-200">
+<span class="material-symbols-outlined" data-icon="home" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label-sm text-label-sm mt-1">Home</span>
+</button>
+<!-- Inactive: Deliveries -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline px-4 py-1 hover:bg-surface-container-low dark:hover:bg-surface-container-lowest rounded-full">
+<span class="material-symbols-outlined" data-icon="local_shipping">local_shipping</span>
+<span class="font-label-sm text-label-sm mt-1">Deliveries</span>
+</button>
+<!-- Inactive: Earnings -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline px-4 py-1 hover:bg-surface-container-low dark:hover:bg-surface-container-lowest rounded-full">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span class="font-label-sm text-label-sm mt-1">Earnings</span>
+</button>
+<!-- Inactive: Profile -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline px-4 py-1 hover:bg-surface-container-low dark:hover:bg-surface-container-lowest rounded-full">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm mt-1">Profile</span>
+</button>
+</nav>
+</body></html>

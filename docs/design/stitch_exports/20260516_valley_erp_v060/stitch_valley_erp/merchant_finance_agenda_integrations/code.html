@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Valley ERP - Financeiro</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "work-surface": "#F6F8FB",
+                      "tertiary": "#823100",
+                      "secondary-fixed-dim": "#4cd6ff",
+                      "error": "#ba1a1a",
+                      "inverse-primary": "#cebdff",
+                      "surface-container-high": "#ece5f5",
+                      "ink": "#15151D",
+                      "lilac": "#BB8CFF",
+                      "surface": "#fdf7ff",
+                      "primary-fixed": "#e8ddff",
+                      "primary-fixed-dim": "#cebdff",
+                      "line": "#D9DEE8",
+                      "primary": "#5600da",
+                      "on-error-container": "#93000a",
+                      "success-green": "#1E8A5A",
+                      "tertiary-container": "#a94200",
+                      "critical-red": "#D04437",
+                      "surface-tint": "#6a23fa",
+                      "primary-container": "#6f2cff",
+                      "tertiary-fixed-dim": "#ffb595",
+                      "on-secondary-fixed-variant": "#004e60",
+                      "on-surface-variant": "#494456",
+                      "on-tertiary-fixed": "#351000",
+                      "on-primary-fixed": "#21005e",
+                      "surface-bright": "#fdf7ff",
+                      "on-error": "#ffffff",
+                      "warning-amber": "#C98205",
+                      "snow": "#FFFFFF",
+                      "surface-container-highest": "#e7e0f0",
+                      "on-tertiary-fixed-variant": "#7c2e00",
+                      "error-container": "#ffdad6",
+                      "outline-variant": "#cbc3d9",
+                      "on-tertiary": "#ffffff",
+                      "muted-ink": "#667085",
+                      "surface-container-lowest": "#ffffff",
+                      "cosmic": "#151047",
+                      "surface-dim": "#ded7e7",
+                      "inverse-surface": "#322f3b",
+                      "on-primary-container": "#e5daff",
+                      "courier-green": "#0F7A4A",
+                      "secondary-container": "#38d4ff",
+                      "on-secondary-fixed": "#001f28",
+                      "on-secondary": "#ffffff",
+                      "on-secondary-container": "#00586d",
+                      "on-primary-fixed-variant": "#5100cf",
+                      "on-tertiary-container": "#ffd7c6",
+                      "night": "#07051F",
+                      "surface-container-low": "#f8f1ff",
+                      "tertiary-fixed": "#ffdbcc",
+                      "outline": "#7a7488",
+                      "inverse-on-surface": "#f5eefe",
+                      "surface-container": "#f2ebfb",
+                      "surface-variant": "#e7e0f0",
+                      "secondary": "#00677f",
+                      "on-primary": "#ffffff",
+                      "on-surface": "#1d1a25",
+                      "background": "#fdf7ff",
+                      "secondary-fixed": "#b7eaff",
+                      "on-background": "#1d1a25"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "unit": "4px",
+                      "gutter": "16px",
+                      "container-margin": "24px",
+                      "control-default": "44px",
+                      "control-compact": "36px"
+              },
+              "fontFamily": {
+                      "body-lg": ["Inter"],
+                      "label-sm": ["Inter"],
+                      "headline-lg": ["Inter"],
+                      "body-md": ["Inter"],
+                      "data-table": ["Inter"],
+                      "label-md": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "headline-sm": ["Inter"],
+                      "body-sm": ["Inter"]
+              },
+              "fontSize": {
+                      "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "label-sm": ["11px", {"lineHeight": "14px", "letterSpacing": "0", "fontWeight": "500"}],
+                      "headline-lg": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "data-table": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                      "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0", "fontWeight": "500"}],
+                      "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "headline-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                      "body-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #F6F8FB; color: #1d1a25; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .icon-fill { font-variation-settings: 'FILL' 1; }
+        
+        /* Custom scrollbar for tables */
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #D9DEE8; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #cbc3d9; }
+    </style>
+</head>
+<body class="bg-work-surface min-h-screen flex text-on-surface">
+<!-- SideNavBar -->
+<nav class="fixed left-0 top-0 h-full flex flex-col border-r border-line/10 bg-night dark:bg-night w-64 flex-shrink-0 z-50">
+<div class="p-6 flex items-center gap-4">
+<div class="w-10 h-10 bg-primary-container rounded-lg flex items-center justify-center text-snow font-headline-md">V</div>
+<div>
+<h1 class="text-headline-md font-headline-md font-black text-snow dark:text-snow">Valley ERP</h1>
+<p class="text-label-sm font-label-sm text-lilac dark:text-lilac opacity-80">Omniverse v0.60</p>
+</div>
+</div>
+<div class="flex-1 flex flex-col gap-2 mt-4 overflow-y-auto custom-scrollbar">
+<a class="flex items-center gap-3 text-muted-ink hover:text-snow px-4 py-2 mx-2 hover:bg-primary/20 transition-colors duration-150 rounded-lg" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-label-md font-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 text-muted-ink hover:text-snow px-4 py-2 mx-2 hover:bg-primary/20 transition-colors duration-150 rounded-lg" href="#">
+<span class="material-symbols-outlined">precision_manufacturing</span>
+<span class="text-label-md font-label-md">Operations</span>
+</a>
+<a class="flex items-center gap-3 text-muted-ink hover:text-snow px-4 py-2 mx-2 hover:bg-primary/20 transition-colors duration-150 rounded-lg" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="text-label-md font-label-md">Inventory</span>
+</a>
+<a class="flex items-center gap-3 bg-primary-container text-snow rounded-lg px-4 py-2 mx-2 opacity-90 scale-[0.99] transition-transform" href="#">
+<span class="material-symbols-outlined icon-fill">payments</span>
+<span class="text-label-md font-label-md">Finance</span>
+</a>
+<a class="flex items-center gap-3 text-muted-ink hover:text-snow px-4 py-2 mx-2 hover:bg-primary/20 transition-colors duration-150 rounded-lg" href="#">
+<span class="material-symbols-outlined">groups</span>
+<span class="text-label-md font-label-md">HR</span>
+</a>
+<a class="flex items-center gap-3 text-muted-ink hover:text-snow px-4 py-2 mx-2 hover:bg-primary/20 transition-colors duration-150 rounded-lg mt-auto mb-4" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-label-md font-label-md">Settings</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-1 ml-64 flex flex-col min-h-screen">
+<!-- TopNavBar -->
+<header class="flex justify-between items-center h-control-default px-gutter w-full border-b border-line dark:border-outline-variant bg-snow dark:bg-night sticky top-0 z-40">
+<div class="flex items-center gap-4">
+<h2 class="text-headline-sm font-headline-sm font-bold text-cosmic dark:text-snow">Valley ERP - Omniverse Operacional</h2>
+<div class="h-4 w-px bg-line mx-2"></div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-muted-ink text-[16px]">location_on</span>
+<span class="text-label-md font-label-md text-on-surface-variant dark:text-outline border-b-2 border-primary font-bold text-primary dark:text-primary-fixed-dim pb-1 mt-1">Matriz - São Paulo</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 bg-work-surface px-3 py-1.5 rounded border border-line">
+<span class="material-symbols-outlined text-muted-ink text-[16px]">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-sm font-body-sm w-48 text-on-surface placeholder:text-muted-ink outline-none p-0" placeholder="Buscar..." type="text"/>
+</div>
+<div class="flex items-center gap-3 text-muted-ink">
+<button class="hover:bg-work-surface p-1 rounded transition-colors relative group">
+<span class="material-symbols-outlined text-lilac">auto_awesome</span>
+<div class="absolute right-0 top-full mt-2 w-64 bg-snow border border-line rounded-lg shadow-lg hidden group-hover:block p-3 z-50">
+<div class="flex items-start gap-2">
+<span class="material-symbols-outlined text-lilac icon-fill">auto_awesome</span>
+<div>
+<h4 class="text-label-md font-label-md text-cosmic font-bold">Helena AI Insights</h4>
+<p class="text-body-sm font-body-sm text-muted-ink mt-1">Projeção de caixa positivo nos próximos 15 dias baseado no histórico de recebimentos. Recomenda-se antecipação de pagamentos da categoria 'Logística'.</p>
+</div>
+</div>
+</div>
+</button>
+<button class="hover:bg-work-surface p-1 rounded transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-0.5 right-0.5 w-2 h-2 bg-critical-red rounded-full"></span>
+</button>
+<button class="hover:bg-work-surface p-1 rounded transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Page Context & Tabs -->
+<div class="px-container-margin pt-6 bg-snow border-b border-line pb-0">
+<div class="flex justify-between items-end mb-6">
+<div>
+<div class="flex items-center gap-2 text-label-sm font-label-sm text-muted-ink mb-1 uppercase tracking-wider">
+<span>Tenant: T-9982A</span>
+<span>•</span>
+<span>Branch: B-01-SP</span>
+</div>
+<h1 class="text-headline-lg font-headline-lg text-cosmic">Gestão Financeira</h1>
+</div>
+<div class="flex items-center gap-2">
+<div class="flex items-center gap-1 px-2 py-1 bg-success-green/10 text-success-green rounded text-label-sm font-label-sm">
+<span class="material-symbols-outlined text-[14px]">cloud_done</span>
+                        Saved
+                    </div>
+<button class="h-control-compact px-4 bg-snow border border-line text-on-surface text-label-md font-label-md font-semibold rounded hover:bg-work-surface transition-colors">
+                        Exportar DRE
+                    </button>
+<button class="h-control-compact px-4 bg-primary text-snow text-label-md font-label-md font-semibold rounded hover:bg-primary-container transition-colors shadow-sm">
+                        Nova Conta
+                    </button>
+</div>
+</div>
+<!-- Tab Navigation -->
+<div class="flex gap-6 -mb-px">
+<button class="text-label-md font-label-md font-bold text-primary border-b-2 border-primary pb-3 px-1">Financeiro</button>
+<button class="text-label-md font-label-md text-muted-ink hover:text-on-surface border-b-2 border-transparent hover:border-line pb-3 px-1 transition-colors">Agenda</button>
+<button class="text-label-md font-label-md text-muted-ink hover:text-on-surface border-b-2 border-transparent hover:border-line pb-3 px-1 transition-colors">Integrações</button>
+<button class="text-label-md font-label-md text-muted-ink hover:text-on-surface border-b-2 border-transparent hover:border-line pb-3 px-1 transition-colors">Fiscal</button>
+</div>
+</div>
+<!-- Main Workspace Canvas -->
+<main class="flex-1 p-container-margin overflow-y-auto">
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-4">
+<!-- KPIs Row -->
+<div class="col-span-12 grid grid-cols-4 gap-4">
+<!-- Receitas -->
+<div class="bg-snow border border-line rounded-lg p-4 shadow-sm flex flex-col justify-between">
+<div class="flex justify-between items-start mb-2">
+<span class="text-label-md font-label-md text-muted-ink">Contas a Receber (Hoje)</span>
+<span class="material-symbols-outlined text-success-green bg-success-green/10 p-1 rounded text-[16px]">trending_up</span>
+</div>
+<div class="flex items-baseline gap-2">
+<h3 class="text-headline-lg font-headline-lg text-cosmic">R$ 142.500,00</h3>
+</div>
+</div>
+<!-- Despesas -->
+<div class="bg-snow border border-line rounded-lg p-4 shadow-sm flex flex-col justify-between">
+<div class="flex justify-between items-start mb-2">
+<span class="text-label-md font-label-md text-muted-ink">Contas a Pagar (Hoje)</span>
+<span class="material-symbols-outlined text-warning-amber bg-warning-amber/10 p-1 rounded text-[16px]">trending_down</span>
+</div>
+<div class="flex items-baseline gap-2">
+<h3 class="text-headline-lg font-headline-lg text-cosmic">R$ 48.210,00</h3>
+</div>
+</div>
+<!-- Saldo -->
+<div class="bg-snow border border-line rounded-lg p-4 shadow-sm flex flex-col justify-between">
+<div class="flex justify-between items-start mb-2">
+<span class="text-label-md font-label-md text-muted-ink">Saldo Previsto do Dia</span>
+<span class="material-symbols-outlined text-primary bg-primary/10 p-1 rounded text-[16px]">account_balance</span>
+</div>
+<div class="flex items-baseline gap-2">
+<h3 class="text-headline-lg font-headline-lg text-cosmic">R$ 94.290,00</h3>
+</div>
+</div>
+<!-- Helena Context Card -->
+<div class="bg-surface-container-high border border-inverse-primary/30 rounded-lg p-4 flex flex-col justify-between relative overflow-hidden">
+<div class="absolute -right-4 -top-4 w-16 h-16 bg-lilac/20 rounded-full blur-xl"></div>
+<div class="flex justify-between items-start mb-2 relative z-10">
+<span class="text-label-sm font-label-sm text-primary font-semibold flex items-center gap-1 uppercase tracking-wider">
+<span class="material-symbols-outlined text-[14px]">auto_awesome</span>
+                                Helena AI
+                            </span>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant relative z-10">Fluxo de caixa saudável. O recebimento pendente da 'Shopee' de R$12k tem 94% de chance de liquidação hoje.</p>
+</div>
+</div>
+<!-- Main Data Table -->
+<div class="col-span-12 bg-snow border border-line rounded-lg shadow-sm flex flex-col mt-2">
+<div class="px-4 py-3 border-b border-line flex justify-between items-center bg-work-surface/50 rounded-t-lg">
+<h3 class="text-headline-sm font-headline-sm text-cosmic">Transações Recentes</h3>
+<div class="flex gap-2">
+<div class="flex items-center bg-snow border border-line rounded px-2 h-8">
+<span class="material-symbols-outlined text-muted-ink text-[14px] mr-1">filter_list</span>
+<span class="text-label-sm font-label-sm text-muted-ink">Filtrar</span>
+</div>
+</div>
+</div>
+<div class="overflow-x-auto custom-scrollbar">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-work-surface border-b border-line">
+<th class="py-2 px-4 text-label-sm font-label-sm text-muted-ink font-semibold w-12">ID</th>
+<th class="py-2 px-4 text-label-sm font-label-sm text-muted-ink font-semibold">Data</th>
+<th class="py-2 px-4 text-label-sm font-label-sm text-muted-ink font-semibold">Descrição</th>
+<th class="py-2 px-4 text-label-sm font-label-sm text-muted-ink font-semibold">Categoria</th>
+<th class="py-2 px-4 text-label-sm font-label-sm text-muted-ink font-semibold text-right">Valor (R$)</th>
+<th class="py-2 px-4 text-label-sm font-label-sm text-muted-ink font-semibold">Status</th>
+<th class="py-2 px-4 text-label-sm font-label-sm text-muted-ink font-semibold text-right">Ações</th>
+</tr>
+</thead>
+<tbody class="text-data-table font-data-table">
+<!-- Row 1 -->
+<tr class="border-b border-line/50 hover:bg-work-surface/50 transition-colors group">
+<td class="py-2.5 px-4 text-muted-ink">TR-1029</td>
+<td class="py-2.5 px-4 text-on-surface">12/Oct/2023</td>
+<td class="py-2.5 px-4 font-medium text-cosmic">Repasse Mercado Livre Lote 44</td>
+<td class="py-2.5 px-4"><span class="bg-surface-dim px-2 py-0.5 rounded text-label-sm font-label-sm text-on-surface-variant">Marketplace</span></td>
+<td class="py-2.5 px-4 text-right text-success-green font-medium">+ 45.000,00</td>
+<td class="py-2.5 px-4">
+<div class="flex items-center gap-1 text-warning-amber">
+<span class="w-1.5 h-1.5 rounded-full bg-warning-amber"></span>
+<span>Pendente</span>
+</div>
+</td>
+<td class="py-2.5 px-4 text-right">
+<div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="text-label-sm font-label-sm text-primary font-semibold hover:underline">Conciliar</button>
+<button class="text-muted-ink hover:text-cosmic" title="Histórico"><span class="material-symbols-outlined text-[16px]">history</span></button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="border-b border-line/50 hover:bg-work-surface/50 transition-colors group">
+<td class="py-2.5 px-4 text-muted-ink">TR-1028</td>
+<td class="py-2.5 px-4 text-on-surface">12/Oct/2023</td>
+<td class="py-2.5 px-4 font-medium text-cosmic">Pagamento Fornecedor - Embalagens S/A</td>
+<td class="py-2.5 px-4"><span class="bg-surface-dim px-2 py-0.5 rounded text-label-sm font-label-sm text-on-surface-variant">Insumos</span></td>
+<td class="py-2.5 px-4 text-right text-critical-red">- 12.450,00</td>
+<td class="py-2.5 px-4">
+<div class="flex items-center gap-1 text-success-green">
+<span class="w-1.5 h-1.5 rounded-full bg-success-green"></span>
+<span>Liquidado</span>
+</div>
+</td>
+<td class="py-2.5 px-4 text-right">
+<div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="text-muted-ink hover:text-cosmic" title="Histórico"><span class="material-symbols-outlined text-[16px]">history</span></button>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="border-b border-line/50 hover:bg-work-surface/50 transition-colors group">
+<td class="py-2.5 px-4 text-muted-ink">TR-1027</td>
+<td class="py-2.5 px-4 text-on-surface">11/Oct/2023</td>
+<td class="py-2.5 px-4 font-medium text-cosmic">Folha de Pagamento - Adiantamento</td>
+<td class="py-2.5 px-4"><span class="bg-surface-dim px-2 py-0.5 rounded text-label-sm font-label-sm text-on-surface-variant">RH</span></td>
+<td class="py-2.5 px-4 text-right text-critical-red">- 85.000,00</td>
+<td class="py-2.5 px-4">
+<div class="flex items-center gap-1 text-success-green">
+<span class="w-1.5 h-1.5 rounded-full bg-success-green"></span>
+<span>Liquidado</span>
+</div>
+</td>
+<td class="py-2.5 px-4 text-right">
+<div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="text-muted-ink hover:text-cosmic" title="Histórico"><span class="material-symbols-outlined text-[16px]">history</span></button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="px-4 py-2 border-t border-line flex justify-end items-center bg-work-surface/50 rounded-b-lg">
+<span class="text-label-sm font-label-sm text-muted-ink">Exibindo 3 de 142 registros</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="flex justify-between items-center py-2 px-container-margin w-full border-t border-line dark:border-outline-variant bg-work-surface dark:bg-night mt-auto">
+<span class="text-label-sm font-label-sm text-muted-ink dark:text-outline-variant">© 2024 Valley Omniverse Operacional</span>
+<div class="flex gap-4">
+<a class="text-label-sm font-label-sm text-muted-ink dark:text-outline-variant hover:text-primary dark:hover:text-lilac transition-colors" href="#">Documentation</a>
+<a class="text-label-sm font-label-sm text-muted-ink dark:text-outline-variant hover:text-primary dark:hover:text-lilac transition-colors" href="#">Support</a>
+<a class="text-label-sm font-label-sm text-muted-ink dark:text-outline-variant hover:text-primary dark:hover:text-lilac transition-colors" href="#">Release Notes</a>
+</div>
+</footer>
+</div>
+</body></html>

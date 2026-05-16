@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Valley APK - Stock &amp; Marketplace</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-on-surface": "#f5eefe",
+                    "error": "#ba1a1a",
+                    "tertiary": "#823100",
+                    "surface-variant": "#e7e0f0",
+                    "muted-ink": "#667085",
+                    "critical-red": "#D04437",
+                    "surface-container": "#f2ebfb",
+                    "night": "#07051F",
+                    "on-primary": "#ffffff",
+                    "on-primary-fixed": "#21005e",
+                    "on-secondary-fixed-variant": "#004e60",
+                    "on-primary-fixed-variant": "#5100cf",
+                    "background": "#fdf7ff",
+                    "primary-fixed-dim": "#cebdff",
+                    "surface-tint": "#6a23fa",
+                    "on-primary-container": "#e5daff",
+                    "surface-bright": "#fdf7ff",
+                    "secondary-container": "#38d4ff",
+                    "primary": "#5600da",
+                    "on-tertiary": "#ffffff",
+                    "on-error": "#ffffff",
+                    "primary-fixed": "#e8ddff",
+                    "cosmic": "#151047",
+                    "on-tertiary-fixed-variant": "#7c2e00",
+                    "outline": "#7a7488",
+                    "secondary": "#00677f",
+                    "courier-green": "#0F7A4A",
+                    "on-surface-variant": "#494456",
+                    "on-secondary": "#ffffff",
+                    "ink": "#15151D",
+                    "surface-container-low": "#f8f1ff",
+                    "tertiary-container": "#a94200",
+                    "surface-container-lowest": "#ffffff",
+                    "lilac": "#BB8CFF",
+                    "surface-dim": "#ded7e7",
+                    "surface-container-high": "#ece5f5",
+                    "primary-container": "#6f2cff",
+                    "tertiary-fixed": "#ffdbcc",
+                    "on-background": "#1d1a25",
+                    "line": "#D9DEE8",
+                    "inverse-primary": "#cebdff",
+                    "inverse-surface": "#322f3b",
+                    "on-tertiary-fixed": "#351000",
+                    "secondary-fixed-dim": "#4cd6ff",
+                    "surface-container-highest": "#e7e0f0",
+                    "on-secondary-container": "#00586d",
+                    "snow": "#FFFFFF",
+                    "on-tertiary-container": "#ffd7c6",
+                    "success-green": "#1E8A5A",
+                    "error-container": "#ffdad6",
+                    "outline-variant": "#cbc3d9",
+                    "on-surface": "#1d1a25",
+                    "on-secondary-fixed": "#001f28",
+                    "work-surface": "#F6F8FB",
+                    "warning-amber": "#C98205",
+                    "secondary-fixed": "#b7eaff",
+                    "surface": "#fdf7ff",
+                    "on-error-container": "#93000a",
+                    "tertiary-fixed-dim": "#ffb595"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container-margin": "24px",
+                    "unit": "4px",
+                    "gutter": "16px",
+                    "control-default": "44px",
+                    "control-compact": "36px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "label-md": ["Inter"],
+                    "headline-sm": ["Inter"],
+                    "data-table": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "body-md": ["Inter"]
+            },
+            "fontSize": {
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-sm": ["11px", {"lineHeight": "14px", "letterSpacing": "0", "fontWeight": "500"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0", "fontWeight": "500"}],
+                    "headline-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "data-table": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                    "headline-lg": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Hide scrollbar for clean horizontal scrolls */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-work-surface text-on-surface font-body-md antialiased min-h-screen flex flex-col pb-[80px]">
+<!-- TopAppBar Shared Component -->
+<header class="bg-surface dark:bg-surface-dim font-headline-sm text-headline-sm docked full-width top-0 sticky z-50 border-b border-line dark:border-outline-variant flat no shadows flex justify-between items-center px-container-margin h-control-default w-full">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed-dim">store</span>
+<span class="font-headline-lg text-headline-lg font-bold text-primary dark:text-primary-fixed-dim">Valley ERP</span>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden sm:flex items-center gap-1 px-2 py-1 bg-surface-container rounded-md border border-line">
+<span class="w-2 h-2 rounded-full bg-success-green"></span>
+<span class="font-label-sm text-label-sm text-muted-ink">BR-SP-001</span>
+</div>
+<button class="flex items-center justify-center relative hover:bg-surface-container dark:hover:bg-surface-container-high transition-colors active:opacity-80 transition-opacity p-1 rounded-full">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed-dim" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+<!-- Helena AI active indicator -->
+<span class="absolute top-0 right-0 w-2.5 h-2.5 bg-secondary-container border-2 border-surface rounded-full"></span>
+</button>
+</div>
+</header>
+<!-- Mobile Branch Context Strip (Visible only on small screens) -->
+<div class="sm:hidden px-container-margin py-2 bg-surface-container-lowest border-b border-line flex justify-between items-center">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-muted-ink">location_on</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Filial: BR-SP-001</span>
+</div>
+<span class="font-label-sm text-label-sm text-success-green flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">check_circle</span> Operante
+        </span>
+</div>
+<!-- Main Content Canvas -->
+<main class="flex-1 overflow-y-auto px-container-margin py-6 flex flex-col gap-8">
+<!-- Search Bar -->
+<div class="relative w-full">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-muted-ink">search</span>
+</div>
+<input class="block w-full pl-10 pr-3 h-control-default bg-surface-container-lowest border border-line rounded-lg text-body-md placeholder-muted-ink focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-shadow" placeholder="Buscar produtos, SKUs ou serviços..." type="text"/>
+</div>
+<!-- Promotional Banner (Bento Style) -->
+<section class="w-full bg-gradient-to-br from-primary to-surface-tint rounded-xl p-5 text-on-primary relative overflow-hidden shadow-sm">
+<div class="absolute -right-6 -top-6 opacity-20">
+<span class="material-symbols-outlined text-[120px]">monetization_on</span>
+</div>
+<div class="relative z-10">
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-primary-container">Programa de Benefícios</span>
+</div>
+<h2 class="font-headline-md text-headline-md mb-2">Cashback com V-Coin</h2>
+<p class="font-body-sm text-body-sm text-on-primary-container max-w-[80%] mb-4">Acumule pontos em compras operacionais e troque por descontos em serviços.</p>
+<button class="bg-surface-container-lowest text-primary font-label-md text-label-md px-4 py-2 rounded-md hover:bg-surface-container transition-colors shadow-sm">
+                    Ver Saldo
+                </button>
+</div>
+</section>
+<!-- Stock Section (Product Grid) -->
+<section class="flex flex-col gap-4">
+<div class="flex justify-between items-end">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Estoque Operacional</h3>
+<button class="font-label-sm text-label-sm text-primary flex items-center gap-1 hover:underline">
+                    Ver catálogo completo <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</button>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<!-- Product Card 1 -->
+<article class="bg-surface-container-lowest border border-line rounded-lg overflow-hidden flex flex-col hover:border-outline-variant transition-colors group">
+<div class="h-32 bg-surface-container flex items-center justify-center p-2 relative">
+<img alt="Product Image" class="max-h-full object-contain mix-blend-multiply opacity-90 group-hover:opacity-100 transition-opacity" data-alt="A professional, high-resolution product photography shot of a single green electronic circuit board component used in industrial control systems. The component is placed on a stark white background to emphasize its technical nature. The lighting is bright and even, highlighting the metallic pins, microchips, and printed circuits. The overall aesthetic is clean, clinical, and suitable for a modern ERP inventory catalog." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAYm8ymaj9JkbWEBF8fmj2wfLiNU0DhCa2huknhAL1KbkprYsl87yn-cmDz5y-WgwXn9c0PoGrtTn51xdsUtnwfj7xq-nWLf2nuzx3w-yRzOA5Zqv8lNtsye1xsh1Ki5DNzSkm3lHEuicf3zGPD_B5MSCBpi8AABUOWIrrBHdqE3Z94unnZt9aMkPOQfc8HZ2cesVpZWe7eCeZtF_dknVLDTBH4P_gtzh8AI28UfW6Wy2KLMto4BwscdworPr3xpypJ_80gwyPB5sY8"/>
+<span class="absolute top-2 left-2 bg-success-green/10 text-success-green font-label-sm text-label-sm px-2 py-0.5 rounded-full border border-success-green/20">
+                            Em estoque
+                        </span>
+</div>
+<div class="p-3 flex flex-col flex-1">
+<span class="font-label-sm text-label-sm text-muted-ink mb-1">SKU: REL-5V-001</span>
+<h4 class="font-body-sm text-body-sm text-on-surface line-clamp-2 mb-2 flex-1">Módulo Relé 5V 1 Canal Alta Potência</h4>
+<div class="flex flex-col gap-2 mt-auto">
+<span class="font-headline-sm text-headline-sm text-primary">V$ 45,00</span>
+<button class="w-full bg-surface text-primary border border-primary hover:bg-primary hover:text-on-primary font-label-md text-label-md py-1.5 rounded flex items-center justify-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-[16px]">add_shopping_cart</span> Adicionar
+                            </button>
+</div>
+</div>
+</article>
+<!-- Product Card 2 -->
+<article class="bg-surface-container-lowest border border-line rounded-lg overflow-hidden flex flex-col hover:border-outline-variant transition-colors group">
+<div class="h-32 bg-surface-container flex items-center justify-center p-2 relative">
+<img alt="Product Image" class="max-h-full object-contain mix-blend-multiply opacity-90 group-hover:opacity-100 transition-opacity" data-alt="A detailed close-up shot of an electronic sensor component with wiring, suitable for industrial automation. It is centered on a sterile, light grey background, indicative of a modern parts catalog. The lighting is crisp and casts minimal shadows, ensuring all technical details, wires, and metallic surfaces are clearly visible. The mood is utilitarian, precise, and highly professional." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDCDGwEeoUG4ZeD0LCNTwqGBLyirPwELJodQUu0TNAKU5MPar2VXGACpofM9zZSoQaLg8k4oMdUeG7v1VJxGl0TL3Tf1yKT1JtWL6LOaEE51BrLimSSyYwA654YIu3lffjC2pxieiggbRX_qySAc-teoehLoP-OiehRCi1G1jXbV9IVoqK9JpA3Bn1oWvvBAFY9534egTU6vmYykZTEoTLHxFNEAEoEoUewZNlWx6mamylIbNfnxUHtW8fFhN0FX6Ngcc3fKpTFPIrI"/>
+<span class="absolute top-2 left-2 bg-success-green/10 text-success-green font-label-sm text-label-sm px-2 py-0.5 rounded-full border border-success-green/20">
+                            Em estoque
+                        </span>
+</div>
+<div class="p-3 flex flex-col flex-1">
+<span class="font-label-sm text-label-sm text-muted-ink mb-1">SKU: SENS-US-04</span>
+<h4 class="font-body-sm text-body-sm text-on-surface line-clamp-2 mb-2 flex-1">Sensor Ultrassônico de Distância HC-SR04</h4>
+<div class="flex flex-col gap-2 mt-auto">
+<span class="font-headline-sm text-headline-sm text-primary">V$ 28,50</span>
+<button class="w-full bg-surface text-primary border border-primary hover:bg-primary hover:text-on-primary font-label-md text-label-md py-1.5 rounded flex items-center justify-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-[16px]">add_shopping_cart</span> Adicionar
+                            </button>
+</div>
+</div>
+</article>
+</div>
+</section>
+<!-- Marketplace Section (Horizontal Scroll) -->
+<section class="flex flex-col gap-4">
+<div class="flex justify-between items-end">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Serviços Locais &amp; Manutenção</h3>
+<span class="material-symbols-outlined text-muted-ink text-[18px]">more_horiz</span>
+</div>
+<div class="flex overflow-x-auto gap-4 pb-4 snap-x no-scrollbar -mx-container-margin px-container-margin">
+<!-- Service Card 1 -->
+<article class="min-w-[280px] w-[280px] snap-center bg-surface-container-lowest border border-line rounded-xl overflow-hidden flex flex-col shadow-sm">
+<div class="h-24 bg-surface-variant relative overflow-hidden">
+<div class="absolute inset-0 bg-secondary/80 mix-blend-multiply z-10"></div>
+<img alt="Service Image" class="w-full h-full object-cover" data-alt="A professional, cinematic lifestyle shot showing a gloved technician's hands working on a complex electrical panel. The scene is brightly lit with a slight cool tone, conveying reliability and modern operational standards. The focus is sharp on the precision tools and the wiring, while the background gently blurs. The aesthetic aligns with a corporate, high-quality industrial service offering within a sophisticated ERP marketplace." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBOLWzTXNCUY9sO-WQ0xMO1TlL_l5kJU-DZaVJreNxdlqz-e9pZxD8Ri1KANL5CcyuHPFlfJs1rtnN_PyGJb6vRKZoYfD0pVZLiXiyhfvpdCMbuhBWeYqdqdadUYlN9nUUr8dUC9q5nP0E5OhA8GtITmJ1um-V4aVk1BQz314N99SB8aG9PCUjKSXPY2oAxGXlIYHxlRLACMFwb_8N459blu-GnU06oEBNUwcG8mzdGVUR1gQ6yfZEX43rfoGoQpGgYZ-R2hk9bJg_Q"/>
+<div class="absolute bottom-2 left-3 z-20 flex items-center gap-2 text-on-primary">
+<span class="material-symbols-outlined">electrical_services</span>
+<span class="font-label-md text-label-md font-semibold">Instalação Elétrica</span>
+</div>
+</div>
+<div class="p-4 flex flex-col gap-3">
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">Adequação de painéis elétricos e infraestrutura para novos equipamentos industriais.</p>
+<div class="flex items-center gap-2 mt-1">
+<span class="material-symbols-outlined text-[14px] text-warning-amber" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-sm text-label-sm text-on-surface">4.9 (12 avaliações)</span>
+</div>
+<div class="grid grid-cols-2 gap-2 mt-2">
+<button class="bg-surface border border-line text-on-surface-variant hover:bg-surface-container font-label-md text-label-md py-2 rounded-md transition-colors text-center">
+                                Cotar Frete
+                            </button>
+<button class="bg-secondary text-on-secondary hover:bg-secondary/90 font-label-md text-label-md py-2 rounded-md transition-colors text-center">
+                                Agendar
+                            </button>
+</div>
+</div>
+</article>
+<!-- Service Card 2 -->
+<article class="min-w-[280px] w-[280px] snap-center bg-surface-container-lowest border border-line rounded-xl overflow-hidden flex flex-col shadow-sm">
+<div class="h-24 bg-surface-variant relative overflow-hidden">
+<div class="absolute inset-0 bg-primary/80 mix-blend-multiply z-10"></div>
+<img alt="Service Image" class="w-full h-full object-cover" data-alt="A clean, modern photograph of a commercial HVAC unit maintenance process. A technician in a neat uniform is using a digital diagnostic tool on the equipment. The setting is a clean, well-lit utility room. The lighting is artificial but bright, emphasizing safety, technological integration, and high operational standards typical of a premium corporate service provider in an enterprise app." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDHmAQnvBn62hycJMjf_olioheRZ3_8iw8XCDeVR8LT5i5pasEPTV5cTYRBvpJ1f-IzhEkbImyPvyWSP2o1qABqZbwLnOst57JDbVpAElcUfXFE1uZs7OAkSdGdDPjYF6NHWJwwYSt1Tt23xKoxf9L4fX7lypuqVMw_LU9uMbKGWQx4VGsmX3W23ATFFe2QgD6os0jRcCHXhDWbpsUn25_foWtSVuCsA0sbmNb8Pzo07BbNYunt8cWhqbgfDtbXDMbBQ7IFwCLng1m0"/>
+<div class="absolute bottom-2 left-3 z-20 flex items-center gap-2 text-on-primary">
+<span class="material-symbols-outlined">plumbing</span>
+<span class="font-label-md text-label-md font-semibold">Manutenção Preventiva</span>
+</div>
+</div>
+<div class="p-4 flex flex-col gap-3">
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">Revisão periódica de sistemas de refrigeração e caldeiras industriais. Evite paradas.</p>
+<div class="flex items-center gap-2 mt-1">
+<span class="material-symbols-outlined text-[14px] text-warning-amber" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-sm text-label-sm text-on-surface">5.0 (8 avaliações)</span>
+</div>
+<div class="grid grid-cols-2 gap-2 mt-2">
+<button class="bg-surface border border-line text-on-surface-variant hover:bg-surface-container font-label-md text-label-md py-2 rounded-md transition-colors text-center">
+                                Cotar Serviço
+                            </button>
+<button class="bg-primary text-on-primary hover:bg-primary/90 font-label-md text-label-md py-2 rounded-md transition-colors text-center">
+                                Agendar
+                            </button>
+</div>
+</div>
+</article>
+</div>
+</section>
+</main>
+<!-- BottomNavBar Shared Component -->
+<nav class="bg-surface dark:bg-surface-dim font-label-md text-label-md fixed bottom-0 w-full z-50 border-t border-line dark:border-outline-variant flat no shadows flex justify-around items-center h-[64px] px-2 w-full">
+<!-- Active Item: Home -->
+<button class="flex flex-col items-center justify-center bg-primary-container dark:bg-primary-container text-on-primary-container dark:text-on-primary-container rounded-lg px-3 py-1 hover:bg-surface-container-low dark:hover:bg-surface-container-high transition-all active:scale-95 transition-transform duration-150 w-16">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="mt-1">Home</span>
+</button>
+<!-- Inactive Items -->
+<button class="flex flex-col items-center justify-center text-muted-ink dark:text-outline px-3 py-1 hover:bg-surface-container-low dark:hover:bg-surface-container-high transition-all active:scale-95 transition-transform duration-150 w-16">
+<span class="material-symbols-outlined">storefront</span>
+<span class="mt-1">Market</span>
+</button>
+<button class="flex flex-col items-center justify-center text-muted-ink dark:text-outline px-3 py-1 hover:bg-surface-container-low dark:hover:bg-surface-container-high transition-all active:scale-95 transition-transform duration-150 w-16 relative">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span class="mt-1">Cart</span>
+<!-- Optional Notification Badge -->
+<span class="absolute top-1 right-2 w-2 h-2 bg-critical-red rounded-full"></span>
+</button>
+<button class="flex flex-col items-center justify-center text-muted-ink dark:text-outline px-3 py-1 hover:bg-surface-container-low dark:hover:bg-surface-container-high transition-all active:scale-95 transition-transform duration-150 w-16">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="mt-1">Orders</span>
+</button>
+</nav>
+</body></html>

@@ -1235,6 +1235,45 @@
         "size": "780x2116",
         "status": "COMPLETE"
       }
-    ]
+    ],
+    "active_publication": {
+      "version": "20260516_valley_erp_v060",
+      "public_gallery_path": "/stitch/20260516_valley_erp_v060/",
+      "public_manifest_path": "/stitch/20260516_valley_erp_v060/manifest.json",
+      "source_export_dir": "docs/design/stitch_exports/20260516_valley_erp_v060/stitch_valley_erp",
+      "publication_doc": "docs/design/STITCH_VALLEY_V060_PUBLICATION.md",
+      "inventory_json": "docs/design/stitch_valley_erp_v060_inventory.json",
+      "runtime_status": "tmp/runtime/valley-stitch-v060-publication.json",
+      "template_count": 15,
+      "p0_total": 15,
+      "by_group": {
+        "admin": 1,
+        "entregador": 2,
+        "lojista": 5,
+        "usuario": 7
+      },
+      "published_keys": [
+        "admin_god_mode",
+        "courier_delivery_flow_green",
+        "courier_home_green",
+        "merchant_dashboard",
+        "merchant_finance_agenda_integrations",
+        "merchant_login",
+        "merchant_onboarding",
+        "merchant_operations",
+        "customer_checkout_payment",
+        "customer_helena_support",
+        "customer_home",
+        "customer_merchant_chat",
+        "customer_messages",
+        "customer_purchases_tracking",
+        "customer_stock_marketplace"
+      ],
+      "obsolete_versions": [
+        "20260513_valley_erp",
+        "20260513_valley_erp_v2"
+      ],
+      "rule": "Stitch v060 e a fonte ativa obrigatoria para paineis web, ERP lojista, APK usuario e APK entregador. Artefatos 20260513 foram descartados como referencia ativa."
+    }
   }
 }

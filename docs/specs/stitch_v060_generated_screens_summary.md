@@ -31,4 +31,11 @@ REGRAS: Nao incluir segredos; usar estes IDs para Figma/Flutter e validacao post
 
 ## Proxima Etapa
 
-Encaminhar os screens para Figma como camada de inspecao/handoff e depois traduzir para Flutter, mantendo a cadeia obrigatoria Stitch -> Figma -> Flutter.
+Os screens foram importados como fonte ativa do projeto:
+
+- Galeria: `/stitch/20260516_valley_erp_v060/`
+- Manifesto: `/stitch/20260516_valley_erp_v060/manifest.json`
+- Publicacao: `docs/design/STITCH_VALLEY_V060_PUBLICATION.md`
+- Inventario: `docs/design/stitch_valley_erp_v060_inventory.json`
+
+O handoff Figma fica versionado nestes arquivos e a aplicacao Flutter passou a consumir `20260516_valley_erp_v060`.

@@ -388,3 +388,15 @@ Resultado v060:
 - Projeto Stitch: `projects/12516070127536900621`.
 - Design system Stitch: `assets/c566fbedbd564135b573140ef520a79f`.
 - Sumario de telas geradas: `docs/specs/stitch_v060_generated_screens_summary.md`.
+
+## Publicacao Ativa v060
+
+A entrega Stitch v060 foi importada para o projeto e substituiu o pacote ativo antigo `20260513_valley_erp_v2`.
+
+- Galeria ativa: `/stitch/20260516_valley_erp_v060/`.
+- Manifesto ativo: `/stitch/20260516_valley_erp_v060/manifest.json`.
+- Inventario ativo: `docs/design/stitch_valley_erp_v060_inventory.json`.
+- Publicacao documentada: `docs/design/STITCH_VALLEY_V060_PUBLICATION.md`.
+- Fonte de verdade: `config/design/valley_stitch_source_of_truth.json`.
+- Superficies aplicadas: `admin/app.js`, `admin/index.html`, `frontend/flutter/lib/src/ui/valley_product_shell.dart` e `admin/product`.
+- Grupos publicados: Admin `1`, Lojista `5`, Usuario Android `7`, Entregador `2`.

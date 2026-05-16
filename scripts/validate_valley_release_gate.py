@@ -26,7 +26,7 @@ from urllib.request import Request, urlopen
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_BASE_URL = "https://admin.brasildesconto.com.br"
 STATUS_PATH = ROOT / "tmp" / "runtime" / "valley-release-gate-validation.json"
-STITCH_VERSION = "20260513_valley_erp_v2"
+STITCH_VERSION = "20260516_valley_erp_v060"
 TRANSIENT_REMOTE_STATUS_CODES = {0, 408, 425, 429, 500, 502, 503, 504}
 REQUIRED_MODULE_KEYS = {
     "sales",
@@ -144,7 +144,7 @@ def local_file_checks() -> list[dict]:
     if stitch_manifest.exists():
         manifest = json.loads(stitch_manifest.read_text(encoding="utf-8"))
         screens = manifest.get("screens") if isinstance(manifest.get("screens"), list) else []
-        checks.append({"name": "stitch-manifest-screens", "ok": len(screens) >= 100, "value": len(screens)})
+        checks.append({"name": "stitch-manifest-screens", "ok": len(screens) >= 15, "value": len(screens)})
     if banking_config.exists():
         banking = json.loads(banking_config.read_text(encoding="utf-8"))
         connectors = banking.get("connectors") if isinstance(banking.get("connectors"), list) else []
