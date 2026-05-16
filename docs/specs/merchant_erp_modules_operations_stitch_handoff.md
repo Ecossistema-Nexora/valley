@@ -377,6 +377,8 @@ O pacote mandatorio para criar o projeto do zero no Stitch esta em:
 Anexos obrigatorios:
 
 - `docs/specs/valley_erp_zero_project_database_ui_directives.md`
+- `docs/specs/valley-operational-spec-admin-erp-user-rider.md`
+- `docs/specs/valley-screen-technical-spec-admin-erp-user-rider.md`
 - `assets/brand/logo-valley-official.png`
 - `docs/specs/merchant_erp_modules_operations_stitch_handoff.md`
 - `docs/specs/merchant_erp_stitch_module_layout_contract.json`
@@ -400,3 +402,19 @@ A entrega Stitch v060 foi importada para o projeto e substituiu o pacote ativo a
 - Fonte de verdade: `config/design/valley_stitch_source_of_truth.json`.
 - Superficies aplicadas: `admin/app.js`, `admin/index.html`, `frontend/flutter/lib/src/ui/valley_product_shell.dart` e `admin/product`.
 - Grupos publicados: Admin `1`, Lojista `5`, Usuario Android `7`, Entregador `2`.
+
+## Complemento v065 - Especificacoes Fechadas Por Persona
+
+O pacote Stitch/Figma/Flutter passa a tratar os dois documentos abaixo como fonte canonica complementar ao blueprint de banco/UI:
+
+- `docs/specs/valley-operational-spec-admin-erp-user-rider.md`: contrato operacional por persona, modulos, fluxos, responsabilidades, estados e auditoria para Admin, Lojista, Usuario APK Android e Entregador APK Android.
+- `docs/specs/valley-screen-technical-spec-admin-erp-user-rider.md`: contrato tecnico fechado por tela, incluindo wireframe textual, campos, validacoes frontend/backend, permissoes, APIs, eventos, tabelas, notificacoes, estados e compliance.
+- `config/design/valley_persona_design_system.json`: tokens estruturados por persona e componentes compartilhados para Admin, Lojista, Usuario e Entregador.
+- `frontend/flutter/lib/src/ui/valley_shared_components.dart`: primitivas Flutter para `TopAppBar`, `BottomNavBar` e `NavigationDrawer`.
+
+Regras de aplicacao:
+
+- Toda nova tela Stitch deve mapear explicitamente persona, permissao, estados vazios/loading/erro/sucesso e APIs da especificacao por tela.
+- Toda evolucao Flutter/Web deve preservar os fluxos operacionais da especificacao por persona antes de criar novos atalhos visuais.
+- Toda tela deve usar o tema visual correto: Admin preto/neon, Lojista ciano, Usuario claro/Helena e Entregador chumbo/alto contraste.
+- A logomarca Valley validada pelo usuario permanece `assets/brand/logo-valley-official.png`; o arquivo enviado possui hash identico ao asset versionado.

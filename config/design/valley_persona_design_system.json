@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "product": "Valley",
+  "assistant": "Helena",
+  "currency": "V-Coin",
+  "locale": "pt-BR",
+  "logo_asset": "assets/brand/logo-valley-official.png",
+  "logo_sha256": "53E4158D234EF25AE845083C4F0A1356E1BF37BA3E10DCB84BDB9BACCB18EADA",
+  "terminology": {
+    "reward_points": "Pepitas",
+    "courier_profile": "Rider",
+    "kyc": "KYC",
+    "kyb": "KYB"
+  },
+  "personas": {
+    "admin": {
+      "label": "Admin",
+      "surface": "web",
+      "background": "#05050A",
+      "surface_color": "#0B1020",
+      "primary": "#7C3AED",
+      "secondary": "#00E5FF",
+      "accent": "#B8FF4D",
+      "text": "#F8FAFC",
+      "muted_text": "#A7B0C2",
+      "line": "#263044",
+      "intent": "Governanca, auditoria, Modo Deus, regras, modulos, APIs e tokens."
+    },
+    "merchant": {
+      "label": "Lojista / ERP",
+      "surface": "web",
+      "background": "#E9FBFF",
+      "surface_color": "#FFFFFF",
+      "primary": "#027C92",
+      "secondary": "#10B6D0",
+      "accent": "#14532D",
+      "text": "#082F49",
+      "muted_text": "#486878",
+      "line": "#BEEAF2",
+      "intent": "Produtividade empresarial, estoque, pedidos, agenda, financeiro e integracoes."
+    },
+    "customer": {
+      "label": "Usuario",
+      "surface": "android_apk",
+      "background": "#F8FAFC",
+      "surface_color": "#FFFFFF",
+      "primary": "#5B21B6",
+      "secondary": "#0EA5E9",
+      "accent": "#14B8A6",
+      "text": "#111827",
+      "muted_text": "#667085",
+      "line": "#E5E7EB",
+      "intent": "Consumo, Helena, compras, favoritos, checkout, carteira e perfil."
+    },
+    "courier": {
+      "label": "Entregador",
+      "surface": "android_apk",
+      "background": "#171C1B",
+      "surface_color": "#232B29",
+      "primary": "#22C55E",
+      "secondary": "#86EFAC",
+      "accent": "#FACC15",
+      "text": "#F8FAFC",
+      "muted_text": "#B7C8C0",
+      "line": "#3C4A45",
+      "intent": "Alta legibilidade em transito, ofertas, coleta, rota, ocorrencias e ganhos."
+    }
+  },
+  "components": {
+    "TopAppBar": {
+      "description": "Barra superior adaptavel ao modulo e persona.",
+      "required_slots": ["logo", "module_context", "status", "actions"]
+    },
+    "BottomNavBar": {
+      "description": "Navegacao mobile principal.",
+      "items": ["Inicio", "Pedidos", "Carteira", "Helena", "Perfil"]
+    },
+    "NavigationDrawer": {
+      "description": "Acessos administrativos, configuracoes globais e modulos secundarios.",
+      "required_slots": ["persona_header", "module_links", "settings", "audit_or_help"]
+    }
+  },
+  "rules": [
+    "Todo texto de interface deve estar em portugues do Brasil.",
+    "Nao criar botoes mortos: toda acao precisa de estado vazio, carregando, erro, sucesso e historico quando aplicavel.",
+    "Admin usa fundo preto com acentos neon apenas como sinalizacao operacional.",
+    "ERP lojista usa ciano como apoio de produtividade, sem ficar monocromatico.",
+    "Usuario usa fundo claro e Helena como assistente contextual.",
+    "Entregador usa chumbo e verde com contraste alto para leitura em movimento."
+  ]
+}

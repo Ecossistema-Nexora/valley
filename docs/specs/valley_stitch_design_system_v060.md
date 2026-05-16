@@ -63,6 +63,35 @@ Use Night, Snow and Ink as the base. Violet and Cyan are brand accents, not the 
 - Customer Android: modular MVP home, Stock, Marketplace, checkout, purchases, favorites, profile and support chats.
 - Courier Android: green logistics theme, pickup requests, delivery status, incidents, customer private rating, commissions and blocked addresses.
 
+## Persona Themes v066
+
+The design system now has four mandatory persona themes:
+
+| Persona | Base | Accent | Product intent |
+| --- | --- | --- | --- |
+| Admin | Black / near-black | Neon violet, cyan and alert lime | Governance, audit, Modo Deus, rules, modules, APIs and tokens. |
+| Lojista / ERP | Cyan productivity surface | Deep teal and operational green | Business productivity, stock, orders, agenda, finance and integrations. |
+| Usuario | Light background | Valley violet, sky blue and Helena teal | Consumption, Helena, purchases, favorites, checkout, wallet and profile. |
+| Entregador | Charcoal / high contrast | Route green and attention amber | Readability in transit, offers, pickup, route, incidents and earnings. |
+
+Structured token source:
+
+- `config/design/valley_persona_design_system.json`
+
+## Shared Components v066
+
+The following components are mandatory shared primitives for generated screens and Flutter implementation:
+
+- `TopAppBar`: module context, logo/identity, status and right-side commands.
+- `BottomNavBar`: `Inicio`, `Pedidos`, `Carteira`, `Helena`, `Perfil`.
+- `NavigationDrawer`: persona header, module links, settings and audit/help entry.
+
+Flutter component source:
+
+- `frontend/flutter/lib/src/ui/valley_shared_components.dart`
+
+All component copy must remain in Brazilian Portuguese. Terms such as Pepitas, Rider, KYC and KYB are accepted product/technical vocabulary and must not be translated inconsistently.
+
 ## Data Rules
 
 - Every screen must respect `tenant_id`.

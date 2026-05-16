@@ -11,7 +11,7 @@ REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar 
 
 - Regra: cada item de checklist dos planos conta como uma etapa.
 - Atualize este indice depois de cada acao concluida com `python scripts\update_planos_progress.py`.
-- Etapas concluidas desde o primeiro plano do indice: `418/418`.
+- Etapas concluidas desde o primeiro plano do indice: `431/431`.
 - Produzido desde o Plano 1: `100.0%`.
 - Falta produzir para a conclusao final acumulada: `0.0%`.
 <!-- progresso:fim -->
@@ -82,3 +82,5 @@ REGRAS: Manter informacao rastreavel, preservar nomenclatura Valley e atualizar 
 | v062 | 2026-05-16 01:55:00 BRT | [v062__20260516-015500-brt__release_windows_app_link_chat.md](./v062__20260516-015500-brt__release_windows_app_link_chat.md) | concluido | Gerar aplicativo Windows Valley, empacotar e entregar link local no chat. | 6/6 | 100.0% | 0.0% | 2026-05-16 01:56:00 BRT |
 | v063 | 2026-05-16 02:00:00 BRT | [v063__20260516-020000-brt__windows_app_exe_download.md](./v063__20260516-020000-brt__windows_app_exe_download.md) | concluido | Gerar aplicativo Windows Valley em formato exe unico e entregar link local de download. | 8/8 | 100.0% | 0.0% | 2026-05-16 02:12:00 BRT |
 | v064 | 2026-05-16 02:20:00 BRT | [v064__20260516-022000-brt__android_live_tracking_notifications.md](./v064__20260516-022000-brt__android_live_tracking_notifications.md) | concluido_com_validacao_parcial | Implementar rastreio Android em tempo real com notificacao dinamica, lock screen e mapa por snapshot. | 13/13 | 100.0% | 0.0% | 2026-05-16 03:57:34 BRT |
+| v065 | 2026-05-16 04:10:00 BRT | [v065__20260516-041000-brt__import_specs_logo_stitch_contract.md](./v065__20260516-041000-brt__import_specs_logo_stitch_contract.md) | concluido | O usuario anexou duas especificacoes Markdown e a logomarca Valley para consolidacao no pacote Stitch/Figma/Flutter. | 8/8 | 100.0% | 0.0% | 2026-05-16 04:50:33 BRT |
+| v066 | 2026-05-16 04:20:00 BRT | [v066__20260516-042000-brt__persona_design_system_components.md](./v066__20260516-042000-brt__persona_design_system_components.md) | concluido | O usuario trouxe a fundacao visual com Design_System, Components, dialeto PT-BR e paletas por Admin/Lojista/Usuario/Entregador. | 5/5 | 100.0% | 0.0% | 2026-05-16 04:50:44 BRT |

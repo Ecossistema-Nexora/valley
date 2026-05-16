@@ -18,8 +18,14 @@ Criar um projeto novo no Stitch, do zero, para o ecossistema Valley ERP, usando 
   `assets/brand/logo-valley-official.png`
 - Design system para upload no Stitch:
   `docs/specs/valley_stitch_design_system_v060.md`
+- Tokens estruturados por persona:
+  `config/design/valley_persona_design_system.json`
 - Handoff operacional de modulos:
   `docs/specs/merchant_erp_modules_operations_stitch_handoff.md`
+- Especificacao operacional por persona:
+  `docs/specs/valley-operational-spec-admin-erp-user-rider.md`
+- Especificacao tecnica fechada por tela:
+  `docs/specs/valley-screen-technical-spec-admin-erp-user-rider.md`
 - Contrato estruturado:
   `docs/specs/merchant_erp_stitch_module_layout_contract.json`
 
@@ -36,6 +42,8 @@ Siga integralmente a especificacao mestre anexada, com foco em:
 - Usuario APK Android: modulos MVP, perfil limitado, finanças visiveis, compras, favoritos, Stock, Marketplace, agendamentos, checkout e chats de suporte.
 - Entregador: cadastro, veiculo, associacao de veiculo, coletas, entregas, ocorrencias, classificacao privada de cliente, comissoes, historico e bloqueio de enderecos.
 - Banco de dados: respeitar os grupos PostgreSQL e MongoDB definidos no documento mestre, usando UUID, `tenant_id`, `branch_id`, auditoria, ledgers append-only e segregacao de visibilidade.
+- Especificacao operacional: respeitar fluxos, componentes, estados, permissao, auditoria, notificacoes e responsabilidades por persona definidos em `valley-operational-spec-admin-erp-user-rider.md`.
+- Especificacao por tela: para cada tela gerada, obedecer wireframe textual, campos, validacoes frontend/backend, APIs, eventos, tabelas impactadas, estados e compliance de `valley-screen-technical-spec-admin-erp-user-rider.md`.
 
 ## Telas Prioritarias
 
@@ -54,6 +62,12 @@ Siga integralmente a especificacao mestre anexada, com foco em:
 ## Regras Visuais
 
 - PT-BR em todas as telas.
+- Aplicar as quatro bases visuais mandatarias:
+  - Admin em preto com acentos neon para governanca.
+  - Lojista / ERP em ciano produtivo para operacao empresarial.
+  - Usuario em fundo claro para consumo, compras e Helena.
+  - Entregador em chumbo com alto contraste para leitura em transito.
+- Usar os componentes compartilhados `TopAppBar`, `BottomNavBar` e `NavigationDrawer` como primitivas de navegacao.
 - Interface densa, sobria e operacional para ERP; nada de hero marketing no produto interno.
 - Telas do entregador com tema verde, contraste alto e comandos principais sempre visiveis.
 - Helena deve aparecer como assistente contextual, sem pop-ups invasivos.
@@ -81,6 +95,8 @@ Siga integralmente a especificacao mestre anexada, com foco em:
 - O projeto privado foi criado no Stitch como `projects/12516070127536900621`.
 - O design system Stitch foi criado como `assets/c566fbedbd564135b573140ef520a79f`.
 - As telas geradas foram registradas em `docs/specs/stitch_v060_generated_screens_summary.md`.
+- As especificacoes operacional e tecnica por tela foram importadas para `docs/specs/` como anexos obrigatorios de continuidade.
+- A logomarca enviada pelo usuario foi validada contra `assets/brand/logo-valley-official.png` com SHA256 identico `53E4158D234EF25AE845083C4F0A1356E1BF37BA3E10DCB84BDB9BACCB18EADA`.
 - A publicacao ativa foi aplicada como `20260516_valley_erp_v060`.
 - Galeria ativa: `/stitch/20260516_valley_erp_v060/`.
 - Manifesto ativo: `/stitch/20260516_valley_erp_v060/manifest.json`.

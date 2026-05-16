@@ -1093,8 +1093,18 @@
   "zero_project_request": {
     "project_name": "Valley ERP - Omniverse Operacional",
     "primary_spec": "docs/specs/valley_erp_zero_project_database_ui_directives.md",
+    "operational_persona_spec": "docs/specs/valley-operational-spec-admin-erp-user-rider.md",
+    "screen_technical_spec": "docs/specs/valley-screen-technical-spec-admin-erp-user-rider.md",
     "stitch_request": "docs/specs/stitch_zero_project_request_valley_erp.md",
     "logo_asset": "assets/brand/logo-valley-official.png",
+    "logo_sha256": "53E4158D234EF25AE845083C4F0A1356E1BF37BA3E10DCB84BDB9BACCB18EADA",
+    "canonical_specs": [
+      "docs/specs/valley_erp_zero_project_database_ui_directives.md",
+      "docs/specs/valley-operational-spec-admin-erp-user-rider.md",
+      "docs/specs/valley-screen-technical-spec-admin-erp-user-rider.md",
+      "docs/specs/merchant_erp_modules_operations_stitch_handoff.md",
+      "docs/specs/merchant_erp_stitch_module_layout_contract.json"
+    ],
     "planning_anchor": "PLANOS/v060__20260515-210000-brt__stitch_zero_project_valley_erp.md",
     "profile_groups": [
       "admin",
@@ -1111,6 +1121,19 @@
     "project_id": "12516070127536900621",
     "project_resource_name": "projects/12516070127536900621",
     "design_system_doc": "docs/specs/valley_stitch_design_system_v060.md",
+    "persona_design_system": "config/design/valley_persona_design_system.json",
+    "flutter_shared_components": "frontend/flutter/lib/src/ui/valley_shared_components.dart",
+    "shared_components": [
+      "TopAppBar",
+      "BottomNavBar",
+      "NavigationDrawer"
+    ],
+    "persona_visual_contract": {
+      "admin": "black governance interface with neon accents",
+      "merchant": "cyan productivity ERP surface",
+      "customer": "light consumer Android surface with Helena context",
+      "courier": "charcoal high-contrast delivery surface"
+    },
     "stitch_visibility": "PRIVATE",
     "generated_screens_summary": "docs/specs/stitch_v060_generated_screens_summary.md",
     "generated_screens_count": 15,
