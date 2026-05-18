@@ -23,6 +23,24 @@ Escopo exclusivo: ERP do lojista local para Windows Desktop (.exe).
 8. Relatórios master.
 9. Configurações locais do ERP.
 
+## Stitch MCP via OpenCode
+
+O modelo seguro está em `.opencode/config.example.json`.
+
+Nunca grave a chave real no repositório. Configure localmente:
+
+```bash
+set STITCH_GOOGLE_API_KEY=sua_chave_local
+```
+
+Depois copie o exemplo para o local esperado pelo OpenCode:
+
+```bash
+copy .opencode\\config.example.json .opencode\\config.json
+```
+
+A chave deve ser injetada por variável de ambiente ou secret manager.
+
 ## Build
 
 ```bash
