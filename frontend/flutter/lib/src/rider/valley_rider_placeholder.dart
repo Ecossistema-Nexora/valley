@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:valley_super_app/src/rider/rider_job_card.dart';
+import 'package:valley_super_app/src/rider/rider_map_card.dart';
 
 class ValleyRiderPlaceholder extends StatelessWidget {
   const ValleyRiderPlaceholder({super.key});
@@ -8,10 +10,16 @@ class ValleyRiderPlaceholder extends StatelessWidget {
     return MaterialApp(
       title: 'Valley Rider',
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(useMaterial3: true, brightness: Brightness.dark),
       home: Scaffold(
         appBar: AppBar(title: const Text('VALLEY RIDER')),
-        body: const Center(
-          child: Text('Valley Rider - Logistics'),
+        body: ListView(
+          padding: const EdgeInsets.all(16),
+          children: <Widget>[
+            const RiderMapCard(),
+            const SizedBox(height: 16),
+            RiderJobCard(onAccept: () {}),
+          ],
         ),
       ),
     );
