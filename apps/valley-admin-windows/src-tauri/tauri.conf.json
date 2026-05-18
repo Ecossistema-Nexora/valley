@@ -1,0 +1,41 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Valley Admin",
+  "version": "0.1.0",
+  "identifier": "br.com.nexora.valley.admin",
+  "build": {
+    "beforeDevCommand": "npm run dev -- --host 127.0.0.1 --port 1420",
+    "devUrl": "http://127.0.0.1:1420",
+    "beforeBuildCommand": "npm run build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "Valley Admin | Central Master",
+        "width": 1600,
+        "height": 950,
+        "minWidth": 1366,
+        "minHeight": 768,
+        "resizable": true,
+        "fullscreen": false,
+        "center": true
+      }
+    ],
+    "security": { "csp": null }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["nsis", "msi"],
+    "icon": ["icons/icon.ico"],
+    "resources": ["../public/assets/*"]
+  },
+  "plugins": {
+    "updater": {
+      "active": true,
+      "endpoints": ["https://updates.valley.nexora.app/admin/windows/{{target}}/{{arch}}/{{current_version}}"],
+      "dialog": false,
+      "pubkey": "REPLACE_WITH_TAURI_UPDATER_PUBLIC_KEY"
+    }
+  }
+}
