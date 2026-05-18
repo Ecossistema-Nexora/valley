@@ -5,9 +5,14 @@ class ValleyRiderPlaceholder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text('Valley Rider'),
+    return MaterialApp(
+      title: 'Valley Rider',
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        appBar: AppBar(title: const Text('VALLEY RIDER')),
+        body: const Center(
+          child: Text('Valley Rider'),
+        ),
       ),
     );
   }
