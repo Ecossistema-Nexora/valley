@@ -11,7 +11,7 @@ class ValleyRiderPlaceholder extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(title: const Text('VALLEY RIDER')),
         body: const Center(
-          child: Text('Valley Rider'),
+          child: Text('Valley Rider - Logistics'),
         ),
       ),
     );
