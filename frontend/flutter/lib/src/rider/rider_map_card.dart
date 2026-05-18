@@ -11,10 +11,11 @@ class RiderMapCard extends StatelessWidget {
         height: 300,
         child: Stack(
           children: <Widget>[
-            const Center(child: Icon(Icons.route, size: 120)),
+            Center(child: Icon(Icons.route, size: 132, color: primary)),
             Positioned(left: 24, top: 72, child: Icon(Icons.storefront, size: 42, color: primary)),
             Positioned(right: 24, bottom: 72, child: Icon(Icons.flag, size: 42, color: primary)),
             const Positioned(left: 18, right: 18, top: 18, child: Text('Mapa operacional', textAlign: TextAlign.center)),
+            Positioned(left: 18, right: 18, bottom: 18, child: FilledButton.icon(onPressed: null, icon: Icon(Icons.navigation), label: Text('Abrir Waze/Google Maps'))),
           ],
         ),
       ),
