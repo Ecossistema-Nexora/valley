@@ -7,7 +7,17 @@ import 'package:valley_super_app/src/data/valley_models.dart';
 class ValleyRepository {
   const ValleyRepository();
 
-  static const String _serverBaseUrl = 'https://valley-alpha.vercel.app';
+  /// Base HTTP oficial do produto Valley.
+  ///
+  /// Justificativa:
+  /// - Remove dependencia da infraestrutura Vercel.
+  /// - Centraliza o consumo na API/host final do ecossistema Valley.
+  ///
+  /// Integracao:
+  /// - Este host e usado para carregar os JSONs remotos do app (manifest,
+  ///   modulos e resumo de release).
+  static const String _serverBaseUrl =
+      'https://admin.brasildesconto.com.br';
 
   Future<ValleyAppData> load() async {
     final String manifestText = await _loadText(
