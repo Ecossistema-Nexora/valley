@@ -61,3 +61,13 @@ Os pacotes `20260513_valley_erp` e `20260513_valley_erp_v2` ficam obsoletos e na
   - `Convite e sincronizacao executados em modo autonomo para manter paridade entre Stitch, banco de dados, APIs e interfaces Valley.`
 - Ação obrigatória a cada evolução de template: atualizar contratos JSON, adequar banco (migrations), revisar APIs e ajustar UI para manter paridade funcional.
 - Escopo contínuo: `projects/8342788809405803455` (Rider) e `projects/8793272644730679456` (ERP Lojista).
+
+
+## Automacao autonoma de commit e sincronizacao
+
+- Estado: **habilitado** e **persistente**.
+- Regra operacional: não pedir confirmação para commit e sincronização após mudanças relacionadas ao Stitch e contratos de integração.
+- Comentário padrão automático:
+  - `Commit e sincronizacao executados em modo autonomo para manter contratos, banco, APIs e interfaces Valley alinhados ao Stitch.`
+- Checagens mínimas obrigatórias antes do commit: validação dos contratos JSON, revisão do manual técnico e revisão de status Git.
+- Escopo: alterações de source-of-truth, políticas stitch-first, adequações de banco/API/UI e documentação operacional em PT-BR.

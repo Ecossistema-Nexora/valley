@@ -184,5 +184,21 @@
       "sincronizacao de contratos JSON",
       "atualizacao do manual tecnico"
     ]
+  },
+  "autonomous_commit_and_sync": {
+    "status": "enabled",
+    "mode": "persistent",
+    "rule_ptbr": "Nao solicitar confirmacoes para commit e sincronizacao. Registrar comentario operacional e executar commit/sync imediatamente apos validacoes tecnicas.",
+    "default_comment_ptbr": "Commit e sincronizacao executados em modo autonomo para manter contratos, banco, APIs e interfaces Valley alinhados ao Stitch.",
+    "required_checks": [
+      "json_contract_validation",
+      "manual_update_check",
+      "git_status_review"
+    ],
+    "integration_targets": [
+      "git commit",
+      "git synchronization workflow",
+      "manual tecnico em PT-BR"
+    ]
   }
 }
