@@ -33,3 +33,12 @@ Os pacotes `20260513_valley_erp` e `20260513_valley_erp_v2` ficam obsoletos e na
 2. Web/admin deve validar manifesto e DOM local antes de release.
 3. APK release final deve ser gerado pelo fluxo `END-USER-BUILD` quando solicitado.
 4. Figma deve consumir o handoff v060 versionado antes de novas codificacoes grandes.
+
+
+## Regra definitiva APK Valley Rider (Stitch)
+
+- Fonte da verdade obrigatória: `projects/8342788809405803455`
+- URL de referência: `https://stitch.withgoogle.com/projects/8342788809405803455`
+- Escopo: APK Valley Rider (fluxos de entregador, logística, roteirização, status de corrida, comprovantes e suporte).
+- Regra de evolução: se o template Stitch incluir novas tabelas, campos, passos de fluxo ou componentes de tela, o projeto deve sofrer adequação (migrations, contratos de API e UI) para manter alinhamento total.
+- Política de dados: modelo de banco orientado ao Stitch Rider (stitch-first), priorizando compatibilidade com menor custo de manutenção e rollout incremental.
