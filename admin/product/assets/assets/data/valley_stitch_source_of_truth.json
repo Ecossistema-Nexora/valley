@@ -135,5 +135,39 @@
       "public_html_url": "https://admin.brasildesconto.com.br/stitch/20260516_valley_erp_v060/stitch_valley_erp/customer_stock_marketplace/code.html",
       "public_screen_url": "https://admin.brasildesconto.com.br/stitch/20260516_valley_erp_v060/stitch_valley_erp/customer_stock_marketplace/screen.png"
     }
-  ]
+  ],
+  "rider_source_of_truth": {
+    "status": "active",
+    "mandatory": true,
+    "scope": "apk_valley_rider",
+    "source_project": "projects/8342788809405803455",
+    "source_url": "https://stitch.withgoogle.com/projects/8342788809405803455",
+    "rule_ptbr": "Fonte definitiva obrigatoria para o APK Valley Rider. Sempre que o Stitch adicionar campos, fluxos, tabelas ou templates, o banco e o app devem ser adequados para manter paridade funcional."
+  },
+  "database_alignment_policy": {
+    "mode": "stitch_first",
+    "rule_ptbr": "Estrutura de dados deve se adaptar ao Stitch Rider. Novas entidades/campos do template exigem migracoes e adequacoes no backend/frontend.",
+    "integration_targets": [
+      "backend schema/migrations",
+      "apis rider",
+      "flutter rider ui modules"
+    ]
+  },
+  "merchant_erp_source_of_truth": {
+    "status": "active",
+    "mandatory": true,
+    "scope": "apk_valley_erp_lojista",
+    "source_project": "projects/8793272644730679456",
+    "source_url": "https://stitch.withgoogle.com/projects/8793272644730679456",
+    "rule_ptbr": "Fonte definitiva obrigatoria para o APK Valley ERP Lojista. Sempre que o Stitch adicionar campos, fluxos, tabelas ou templates, o banco e o app devem ser adequados para manter paridade funcional."
+  },
+  "database_alignment_policy_merchant_erp": {
+    "mode": "stitch_first",
+    "rule_ptbr": "Estrutura de dados do ERP lojista deve se adaptar ao Stitch. Novas entidades/campos do template exigem migracoes, adequacoes de APIs e atualizacao da UI.",
+    "integration_targets": [
+      "backend schema/migrations",
+      "apis merchant erp",
+      "flutter/admin ui modules"
+    ]
+  }
 }
