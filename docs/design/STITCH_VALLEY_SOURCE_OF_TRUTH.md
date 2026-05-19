@@ -51,3 +51,13 @@ Os pacotes `20260513_valley_erp` e `20260513_valley_erp_v2` ficam obsoletos e na
 - Escopo: APK Valley ERP Lojista (cadastro, onboarding, catálogo, estoque, pedidos, financeiro, agenda, integrações e operação diária).
 - Regra de evolução: se o template Stitch incluir novas tabelas, campos, passos de fluxo ou componentes de tela, o projeto deve sofrer adequação (migrations, contratos de API e UI) para manter alinhamento total.
 - Política de dados: modelo de banco orientado ao Stitch ERP Lojista (stitch-first), priorizando compatibilidade, baixo retrabalho e rollout incremental.
+
+
+## Automacao autonoma de convite e sincronizacao
+
+- Estado: **habilitado** e **persistente**.
+- Regra operacional: não pedir confirmação para convite/sincronização dos fluxos Stitch oficiais (Rider e ERP Lojista).
+- Comentário padrão automático:
+  - `Convite e sincronizacao executados em modo autonomo para manter paridade entre Stitch, banco de dados, APIs e interfaces Valley.`
+- Ação obrigatória a cada evolução de template: atualizar contratos JSON, adequar banco (migrations), revisar APIs e ajustar UI para manter paridade funcional.
+- Escopo contínuo: `projects/8342788809405803455` (Rider) e `projects/8793272644730679456` (ERP Lojista).

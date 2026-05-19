@@ -169,5 +169,20 @@
       "apis merchant erp",
       "flutter/admin ui modules"
     ]
+  },
+  "autonomous_invite_and_sync": {
+    "status": "enabled",
+    "mode": "persistent",
+    "scope": [
+      "apk_valley_rider",
+      "apk_valley_erp_lojista"
+    ],
+    "rule_ptbr": "Nao solicitar confirmacoes. Gerar comentario operacional automaticamente e executar convite/sincronizacao sempre que houver atualizacao de templates Stitch nos projetos oficiais.",
+    "default_comment_ptbr": "Convite e sincronizacao executados em modo autonomo para manter paridade entre Stitch, banco de dados, APIs e interfaces Valley.",
+    "integration_targets": [
+      "workflow de release",
+      "sincronizacao de contratos JSON",
+      "atualizacao do manual tecnico"
+    ]
   }
 }
