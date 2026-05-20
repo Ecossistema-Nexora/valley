@@ -1,0 +1,241 @@
+openapi: 3.1.0
+info:
+  title: Valley Rider Sheet Source API
+  version: 1.0.0
+  description: API produtiva do APK Valley Rider consumindo o Sheet/Stitch como fonte da verdade.
+servers:
+  - url: https://api.valley.local
+    description: Produção lógica / gateway
+paths:
+  /api/rider/home:
+    get:
+      summary: Home produtiva Rider
+      operationId: getRiderHome
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Estado da home Rider
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RiderHomeResponse'
+  /api/rider/sheet/deliveries/active:
+    get:
+      summary: Entregas ativas vindas do Sheet
+      operationId: listRiderSheetActiveDeliveries
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de entregas ativas
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items]
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/RiderSheetDelivery'
+  /api/rider/sheet/deliveries/{shipment_id}/accept:
+    post:
+      summary: Aceitar entrega espelhada do Sheet
+      operationId: acceptRiderSheetDelivery
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/ShipmentId'
+      responses:
+        '200':
+          description: Entrega aceita
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RiderActionResponse'
+  /api/rider/sheet/deliveries/{shipment_id}/pickup:
+    post:
+      summary: Confirmar coleta e retroalimentar Sheet
+      operationId: pickupRiderSheetDelivery
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/ShipmentId'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RiderGeoRequest'
+      responses:
+        '200':
+          description: Coleta confirmada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RiderActionResponse'
+  /api/rider/sheet/deliveries/{shipment_id}/deliver:
+    post:
+      summary: Finalizar entrega e retroalimentar Sheet
+      operationId: deliverRiderSheetDelivery
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/ShipmentId'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RiderDeliveryProofRequest'
+      responses:
+        '200':
+          description: Entrega finalizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RiderActionResponse'
+  /api/rider/sheet/pepitas:
+    get:
+      summary: Pepitas pós-entrega vindas do Sheet
+      operationId: listRiderSheetPepitas
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de pepitas vinculadas ao Rider/pedido
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items]
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/RiderSheetPepita'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    ShipmentId:
+      name: shipment_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  schemas:
+    RiderHomeResponse:
+      type: object
+      required: [online, active_deliveries, pepitas]
+      properties:
+        online:
+          type: boolean
+        active_deliveries:
+          type: array
+          items:
+            $ref: '#/components/schemas/RiderSheetDelivery'
+        pepitas:
+          type: array
+          items:
+            $ref: '#/components/schemas/RiderSheetPepita'
+    RiderSheetDelivery:
+      type: object
+      required:
+        - shipment_id
+        - order_id
+        - shipment_status
+        - sale_number
+        - freight_status
+        - rider_visible_delivery_fee_brl
+      properties:
+        shipment_id:
+          type: string
+          format: uuid
+        order_id:
+          type: string
+          format: uuid
+        sheet_freight_id:
+          type: string
+          format: uuid
+        sheet_sale_id:
+          type: string
+          format: uuid
+        shipment_status:
+          type: string
+        sale_number:
+          type: string
+        tracking_code:
+          type: string
+          nullable: true
+        freight_status:
+          type: string
+        pickup_address_json:
+          type: object
+        dropoff_address_json:
+          type: object
+        package_count:
+          type: integer
+        declared_value_brl:
+          type: string
+        rider_visible_delivery_fee_brl:
+          type: string
+        route_distance_km:
+          type: string
+          nullable: true
+        route_duration_sec:
+          type: integer
+          nullable: true
+    RiderSheetPepita:
+      type: object
+      required: [sheet_pepita_gift_id, pepita_quantity, nominal_value_brl, gift_status]
+      properties:
+        sheet_pepita_gift_id:
+          type: string
+          format: uuid
+        sheet_sale_id:
+          type: string
+          format: uuid
+        order_id:
+          type: string
+          format: uuid
+          nullable: true
+        pepita_quantity:
+          type: integer
+          enum: [1, 10, 100]
+        nominal_value_brl:
+          type: string
+        gift_status:
+          type: string
+        confirmation_required:
+          type: boolean
+    RiderGeoRequest:
+      type: object
+      properties:
+        geo_json:
+          type: object
+    RiderDeliveryProofRequest:
+      type: object
+      properties:
+        geo_json:
+          type: object
+        proof_document_id:
+          type: string
+          format: uuid
+          nullable: true
+    RiderActionResponse:
+      type: object
+      required: [ok, shipment_id]
+      properties:
+        ok:
+          type: boolean
+        shipment_id:
+          type: string
+          format: uuid
+        trace_id:
+          type: string
